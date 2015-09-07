@@ -1,2 +1,2 @@
-s='jenkins test'
+s='jenkins test
 print s
