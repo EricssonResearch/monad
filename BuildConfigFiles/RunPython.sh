@@ -1,5 +1,7 @@
 #!/bin/bash
-pwd
+
 cd ..
+pwd
 python -m compileall *.py
-python -m compileall UsersDB/*.py
+python -m compileall */*.py
+python -m compileall /*/*.py
