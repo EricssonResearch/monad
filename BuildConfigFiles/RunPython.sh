@@ -1,4 +1,4 @@
 #!/bin/bash
-cd $WORKSPACE
 
-python *.py
+
+python -m compileall *.py
