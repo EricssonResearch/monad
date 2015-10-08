@@ -4,9 +4,9 @@ cd $WORKSPACE
 pwd
 python -m compileall *.py
 python -m compileall */*.py
-python -m compileall /*/*.py
-
-ls
+python -m compileall */*/*.py
+python -m compileall */*/*/*.py
+python -m compileall */*/*/*/*.py
 
 cd MoNADClient
 gradle build
