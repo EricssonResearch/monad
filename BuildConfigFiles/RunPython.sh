@@ -1,6 +1,6 @@
 #!/bin/bash
 
-cd ..
+cd $WORKSPACE
 pwd
 python -m compileall *.py
 python -m compileall */*.py
