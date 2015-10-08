@@ -6,5 +6,8 @@ python -m compileall *.py
 python -m compileall */*.py
 python -m compileall /*/*.py
 
+ls
+pwd
 cd MoNADClient
-gradle build
+pwd
+
