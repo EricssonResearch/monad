@@ -16,11 +16,14 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.google.android.gms.common.SignInButton;
+
 public class LoginActivity extends AppCompatActivity {
 
     private EditText usernameField;
     private EditText passwordField;
     private TextView wrongCredentials;
+    private SignInButton googleLogInButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,10 +36,17 @@ public class LoginActivity extends AppCompatActivity {
         usernameField = (EditText) findViewById(R.id.field_username);
         passwordField = (EditText) findViewById(R.id.field_password);
         Button logInButton = (Button) findViewById(R.id.button_login);
-        Button googleLogInButton = (Button) findViewById(R.id.button_googlelogin);
         wrongCredentials = (TextView) findViewById(R.id.wrong_credentials);
         TextView forgotPasswordTextView = (TextView) findViewById(R.id.forgotpassword_text_view);
         TextView registerTextView = (TextView) findViewById(R.id.textview_register);
+        googleLogInButton = (SignInButton) findViewById(R.id.google_login_button);
+
+        googleLogInButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                LoginActivity.this.startActivity(new Intent(LoginActivity.this, GoogleLogIn.class));
+            }
+        });
 
         logInButton.setOnClickListener(new View.OnClickListener() {
             @Override
