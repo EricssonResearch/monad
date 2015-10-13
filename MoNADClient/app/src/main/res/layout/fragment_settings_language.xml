@@ -1,15 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--android.support.v7.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/language_list"
-    android:layout_width="match_parent"
+<android.support.v7.widget.RecyclerView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/recycler_view"
+    android:layout_width="wrap_content"
     android:layout_height="match_parent"
-    /-->
-
-
-<TextView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:text="LANGUAGES FRAGMENT"
-    android:gravity="center"
-    android:id="@+id/langtxt"
+    android:padding="@dimen/activity_horizontal_margin"
+    android:layout_gravity="center"
     />

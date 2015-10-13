@@ -2,7 +2,6 @@ package se.uu.csproject.monadclient;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -19,13 +18,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import se.uu.csproject.monadclient.recyclerviewlanguage.LanguageRecyclerViewAdapter;
 import se.uu.csproject.monadclient.tabs.SlidingTabLayout;
+import se.uu.csproject.monadclient.recyclerviewlanguage.Language;
 
 public class SettingsActivity extends AppCompatActivity {
 
@@ -147,7 +147,13 @@ public class SettingsActivity extends AppCompatActivity {
 
             if(page == 1){
                 layout = inflater.inflate(R.layout.fragment_settings_language,container,false);
-                TextView textView = (TextView) layout.findViewById(R.id.langtxt);
+                List<Language> languages = new ArrayList<>();
+                RecyclerView recyclerView = (RecyclerView) layout.findViewById(R.id.recycler_view);
+                LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
+                recyclerView.setLayoutManager(linearLayoutManager);
+                initializeLanguages(languages);
+                LanguageRecyclerViewAdapter adapter = new LanguageRecyclerViewAdapter(languages);
+                recyclerView.setAdapter(adapter);
             }
             else if(page == 2){
                 layout = inflater.inflate(R.layout.fragment_settings_alerts,container,false);
@@ -163,6 +169,15 @@ public class SettingsActivity extends AppCompatActivity {
                 textView.setText("DEFAULT FRAGMENT FROM THEME");
             }
             return layout;
+        }
+
+        private void initializeLanguages(List<Language> languages){
+            languages.add(new Language("English", "en", R.drawable.lang_en));
+            languages.add(new Language("Svenska", "sv", R.drawable.lang_sv));
+            languages.add(new Language("Dansk", "dk", R.drawable.lang_dk));
+            languages.add(new Language("Deutsch", "de", R.drawable.lang_de));
+            languages.add(new Language("Norsk", "nr", R.drawable.lang_nr));
+            languages.add(new Language("Suomi", "fi", R.drawable.lang_fi));
         }
     }
 
