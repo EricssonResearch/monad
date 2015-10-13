@@ -116,8 +116,8 @@
                     android:layout_weight="1"
                     />
 
-                <Button
-                    android:id="@+id/button_googlelogin"
+                <com.google.android.gms.common.SignInButton
+                    android:id="@+id/google_login_button"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/label_login_googlelogin"
