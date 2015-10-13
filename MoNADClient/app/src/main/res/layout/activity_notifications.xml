@@ -16,6 +16,7 @@
         android:layout_below="@id/actionToolBar"
         android:layout_alignParentBottom="true"
         android:id="@+id/notificationlayout"
+        android:padding="@dimen/layout_padding"
         >
         <android.support.v7.widget.CardView
             xmlns:card_view="http://schemas.android.com/apk/res-auto"
@@ -35,15 +36,14 @@
                 android:layout_below="@+id/first_notification"
                 android:orientation="horizontal"
                 android:background="@color/white"
+                android:padding="@dimen/medium_padding"
                 >
 
                 <ImageView
-                    android:layout_width="@dimen/activity_notification_iconsize"
-                    android:layout_height="@dimen/activity_notification_iconsize"
+                    android:layout_width="@dimen/icon_medium"
+                    android:layout_height="@dimen/icon_medium"
                     android:src="@drawable/ic_assistant_photo_black_24dp"
                     android:layout_gravity="center_vertical"
-                    android:layout_marginStart="@dimen/activity_notification_margin"
-                    android:layout_marginLeft="@dimen/activity_notification_margin"
                     android:contentDescription="@string/label_notification_cancelcontentdescription"
                     />
 
@@ -53,10 +53,10 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="4"
-                    android:textSize="@dimen/activity_notification_textsize"
+                    android:textSize="@dimen/medium_text"
                     android:text="@string/label_notification_one"
+                    android:padding="@dimen/medium_padding"
                     style="@style/importantText"
-                    android:padding="@dimen/layout_padding"
                     android:layout_gravity="center_vertical"
                     />
 
@@ -64,7 +64,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:textSize="@dimen/activity_notification_textsize"
+                    android:textSize="@dimen/medium_text"
                     android:text="@string/label_tripsactivity_fromtime"
                     android:layout_gravity="bottom"
                     android:textColor="@color/primaryColorDark"
@@ -72,12 +72,10 @@
                     />
 
                 <ImageView
-                    android:layout_width="@dimen/activity_notification_cancelsize"
-                    android:layout_height="@dimen/activity_notification_cancelsize"
+                    android:layout_width="@dimen/cancel_size"
+                    android:layout_height="@dimen/cancel_size"
                     android:src="@drawable/ic_clear_black_24dp"
                     android:layout_gravity="center_vertical"
-                    android:layout_marginRight="@dimen/activity_notification_margin"
-                    android:layout_marginEnd="@dimen/activity_notification_margin"
                     android:contentDescription="@string/label_notification_cancelcontentdescription"
                     android:onClick="removeNotification"
                     />
@@ -103,15 +101,14 @@
                 android:layout_below="@+id/first_notification"
                 android:orientation="horizontal"
                 android:background="@color/white"
+                android:padding="@dimen/medium_padding"
                 >
 
                 <ImageView
-                    android:layout_width="@dimen/activity_notification_iconsize"
-                    android:layout_height="@dimen/activity_notification_iconsize"
+                    android:layout_width="@dimen/icon_medium"
+                    android:layout_height="@dimen/icon_medium"
                     android:src="@drawable/ic_alarm_black_24dp"
                     android:layout_gravity="center_vertical"
-                    android:layout_marginStart="@dimen/activity_notification_margin"
-                    android:layout_marginLeft="@dimen/activity_notification_margin"
                     android:contentDescription="@string/label_notification_cancelcontentdescription"
                     />
 
@@ -121,10 +118,10 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="4"
-                    android:textSize="@dimen/activity_notification_textsize"
+                    android:textSize="@dimen/medium_text"
                     android:text="@string/label_notification_two"
                     style="@style/importantText"
-                    android:padding="@dimen/layout_padding"
+                    android:padding="@dimen/medium_padding"
                     android:layout_gravity="center_vertical"
                     />
 
@@ -132,7 +129,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:textSize="@dimen/activity_notification_textsize"
+                    android:textSize="@dimen/medium_text"
                     android:text="@string/label_tripsactivity_fromtime"
                     android:layout_gravity="bottom"
                     android:textColor="@color/primaryColorDark"
@@ -140,12 +137,10 @@
                     />
 
                 <ImageView
-                    android:layout_width="@dimen/activity_notification_cancelsize"
-                    android:layout_height="@dimen/activity_notification_cancelsize"
+                    android:layout_width="@dimen/cancel_size"
+                    android:layout_height="@dimen/cancel_size"
                     android:src="@drawable/ic_clear_black_24dp"
                     android:layout_gravity="center_vertical"
-                    android:layout_marginRight="@dimen/activity_notification_margin"
-                    android:layout_marginEnd="@dimen/activity_notification_margin"
                     android:contentDescription="@string/label_notification_cancelcontentdescription"
                     android:onClick="removeNotification"
                     />
@@ -169,15 +164,14 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:background="@color/white"
+                android:padding="@dimen/medium_padding"
                 >
 
                 <ImageView
-                    android:layout_width="@dimen/activity_notification_iconsize"
-                    android:layout_height="@dimen/activity_notification_iconsize"
+                    android:layout_width="@dimen/icon_medium"
+                    android:layout_height="@dimen/icon_medium"
                     android:src="@drawable/ic_feedback_black_24dp"
                     android:layout_gravity="center_vertical"
-                    android:layout_marginStart="@dimen/activity_notification_margin"
-                    android:layout_marginLeft="@dimen/activity_notification_margin"
                     android:contentDescription="@string/label_notification_iconcontentdescription"
                     />
 
@@ -186,10 +180,10 @@
                     android:layout_width="0dip"
                     android:layout_height="wrap_content"
                     android:layout_weight="4"
-                    android:textSize="@dimen/activity_notification_textsize"
+                    android:textSize="@dimen/medium_text"
                     android:text="@string/label_notification_one"
                     style="@style/importantText"
-                    android:padding="@dimen/layout_padding"
+                    android:padding="@dimen/medium_padding"
                     android:layout_gravity="center_vertical"
                     />
 
@@ -197,21 +191,17 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:textSize="@dimen/activity_notification_textsize"
+                    android:textSize="@dimen/medium_text"
                     android:text="@string/label_tripsactivity_fromtime"
                     android:textColor="@color/primaryColorDark"
                     android:layout_gravity="bottom"
-                    android:layout_marginStart="@dimen/activity_notification_margin"
-                    android:layout_marginLeft="@dimen/activity_notification_margin"
                     />
 
                 <ImageView
-                    android:layout_width="@dimen/activity_notification_cancelsize"
-                    android:layout_height="@dimen/activity_notification_cancelsize"
+                    android:layout_width="@dimen/cancel_size"
+                    android:layout_height="@dimen/cancel_size"
                     android:src="@drawable/ic_clear_black_24dp"
                     android:layout_gravity="center_vertical"
-                    android:layout_marginRight="@dimen/activity_notification_margin"
-                    android:layout_marginEnd="@dimen/activity_notification_margin"
                     android:contentDescription="@string/label_notification_cancelcontentdescription"
                     android:onClick="removeNotification"
                     />
@@ -237,15 +227,14 @@
                 android:layout_below="@+id/second_notification"
                 android:orientation="horizontal"
                 android:background="@color/white"
+                android:padding="@dimen/medium_padding"
                 >
 
                 <ImageView
-                    android:layout_width="@dimen/activity_notification_iconsize"
-                    android:layout_height="@dimen/activity_notification_iconsize"
+                    android:layout_width="@dimen/icon_medium"
+                    android:layout_height="@dimen/icon_medium"
                     android:src="@drawable/ic_assistant_photo_black_24dp"
                     android:layout_gravity="center_vertical"
-                    android:layout_marginStart="@dimen/activity_notification_margin"
-                    android:layout_marginLeft="@dimen/activity_notification_margin"
                     android:contentDescription="@string/label_notification_iconcontentdescription"
                     android:onClick="rescheduleTrip"
                     android:id="@+id/alerticon" />
@@ -255,33 +244,29 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="4"
-                    android:textSize="@dimen/activity_notification_textsize"
+                    android:textSize="@dimen/medium_text"
                     android:text="@string/label_notification_reschedule"
                     style="@style/importantText"
                     android:layout_gravity="center_vertical"
-                    android:padding="@dimen/layout_padding"
+                    android:padding="@dimen/medium_padding"
                     />
 
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:textSize="@dimen/activity_notification_textsize"
+                    android:textSize="@dimen/medium_text"
                     android:text="@string/label_tripsactivity_fromtime"
                     android:textColor="@color/primaryColorDark"
                     android:layout_gravity="bottom"
-                    android:layout_marginStart="@dimen/activity_notification_margin"
-                    android:layout_marginLeft="@dimen/activity_notification_margin"
                     />
 
 
                 <ImageView
-                    android:layout_width="@dimen/activity_notification_cancelsize"
-                    android:layout_height="@dimen/activity_notification_cancelsize"
+                    android:layout_width="@dimen/cancel_size"
+                    android:layout_height="@dimen/cancel_size"
                     android:src="@drawable/ic_clear_black_24dp"
                     android:layout_gravity="center_vertical"
-                    android:layout_marginRight="@dimen/activity_notification_margin"
-                    android:layout_marginEnd="@dimen/activity_notification_margin"
                     android:contentDescription="@string/label_notification_iconcontentdescription"
                     android:onClick="removeNotification"
                     />
