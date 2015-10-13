@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import struct
 import time
+import random
 from dbConnection import DB
 from deap import base
 from deap import creator
@@ -8,6 +9,11 @@ from deap import tools
 from datetime import datetime, timedelta
 from itertools import repeat
 from collections import Sequence
+import mutation 
+
+
+MUTPB = 0.5
+
 # Initialize the look ahead class
 lookAhead = DB()
 creator.create("FitnessMax", base.Fitness, weights=(1.0,))
@@ -71,6 +77,8 @@ def evalIndividual(individual):
         diffMinutes += minDiff.total_seconds() / 60.0
         # print diffMinutes
         minDiff = timedelta.max  # Reset minDiff for the next request time
+
+    # TODO: mutation may produce individuals with overlapping times, penalize such individuals
     return diffMinutes,
 # Define the genes on every chromosome
 toolbox.register("attribute", lookAhead.generateTripTimeTable, 2)
@@ -80,6 +88,7 @@ toolbox.register("population", tools.initRepeat, list, toolbox.individual, 100)
 # Operator registering
 toolbox.register("evaluate", evalIndividual)
 toolbox.register("mate", tools.cxOnePoint)
+toolbox.register("mutate", mutation.mutUniformTime)
 toolbox.register("select", tools.selTournament, tournsize=3)
 # ind = toolbox.individual()
 # print ind
@@ -98,6 +107,21 @@ print offspring
 offspring = list(map(toolbox.clone, offspring))
 print offspring
 '''
+
+# Testing mutation
+for mutant in pop:
+    if random.random() < MUTPB:
+        toolbox.mutate(mutant)
+        del mutant.fitness.values
+'''
+invalids = [ind for ind in pop if not ind.fitness.valid]
+fitnesses = toolbox.map(toolbox.evaluate, invalids)
+for ind, fit in zip(invalids, fitnesses):
+    ind.fitness.values = fit
+
+'''
+print " Mutation done"
+
 # for child1, child2 in zip(pop[::2], pop[1::2]):
     # print "Child 1"
     # print len(child1)
