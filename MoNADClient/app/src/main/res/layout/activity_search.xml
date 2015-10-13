@@ -1,0 +1,345 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="se.uu.csproject.monadclient.LoginActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_above="@+id/search_search_button"
+        android:layout_marginBottom="2dp">
+
+        <include
+            android:id="@+id/actionToolBar"
+            layout="@layout/app_bar" />
+
+        <TextView
+            android:id="@+id/search_from_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/label_search_from"
+            android:layout_marginLeft="2dp"
+
+            />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/position_edittext"
+                android:layout_width="0dp"
+                android:layout_weight="7"
+                android:layout_height="wrap_content"
+                android:hint="@string/label_search_hint_your_position"
+                android:layout_marginTop="6dp"
+                android:textSize="24sp"
+                android:textColor="@color/black"
+                android:textColorHint="@drawable/hint_hide_selector" />
+
+            <ImageView
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:background="@color/primaryColor"
+                android:src="@drawable/ic_location_on_white_48dp" />
+        </LinearLayout>
+
+
+        <TextView
+            android:id="@+id/search_destination_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/label_search_destination"
+            android:layout_marginLeft="2dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/destination_edittext"
+                android:layout_width="0dp"
+                android:layout_weight="7"
+                android:layout_height="wrap_content"
+                android:hint="@string/label_search_hint_your_destination"
+                android:layout_marginTop="6dp"
+                android:textSize="24sp"
+                android:textColor="@color/black"
+                android:textColorHint="@drawable/hint_hide_selector" />
+
+            <ImageView
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:background="@color/primaryColor"
+                android:src="@drawable/ic_location_on_white_48dp" />
+        </LinearLayout>
+
+
+        <RadioGroup
+            android:id="@+id/trip_time_radio_group"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginLeft="2dp">
+
+            <RadioButton
+                android:layout_weight="1"
+                android:id="@+id/departure_time_radio_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/label_search_depature" />
+
+            <RadioButton
+                android:layout_weight="1"
+                android:id="@+id/arrival_time_radio_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/label_search_arrival" />
+
+        </RadioGroup>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_below="@+id/trip_time_radio_group">
+
+            <TextView
+                android:id="@+id/trip_time_date_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Fri, Oct. 2"
+                android:layout_weight="1"
+                android:layout_marginLeft="8dp"
+                style="@style/Widget.AppCompat.EditText"
+                android:textColor="@color/black"
+                android:gravity="center_horizontal" />
+
+            <!--DatePicker
+                android:id="@+id/date_picker"
+                android:layout_weight="1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                /-->
+
+            <EditText
+                android:id="@+id/trip_time_hour_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="11:45 AM"
+                android:layout_weight="1"
+                android:textColor="@color/black"
+                android:layout_marginRight="8dp"
+                android:gravity="center_horizontal" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/priority_text_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/label_search_priority"
+            android:layout_marginLeft="2dp" />
+
+        <RadioGroup
+            android:id="@+id/priority_radio_group"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_below="@+id/priority_text_view">
+
+            <RadioButton
+                android:layout_weight="1"
+                android:id="@+id/priority_trip_distance_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/label_search_shortest_trip_distance" />
+
+            <RadioButton
+                android:layout_weight="1"
+                android:id="@+id/priority_trip_time_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/label_search_shortest_trip_time" />
+
+        </RadioGroup>
+
+        <TextView
+            android:id="@+id/search_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/label_search_results"
+            android:textAllCaps="true"
+            android:textStyle="bold"
+            android:layout_marginTop="16dp"
+            android:layout_marginLeft="8dp"
+            android:textColor="@color/primaryColor" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/primaryColor"
+            android:layout_below="@+id/layout_of_trip_text"
+            android:layout_marginBottom="2dp"></View>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="fill_parent"
+            android:layout_above="@+id/search_search_button"
+            android:orientation="vertical">
+
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="fill_parent"
+                android:fillViewport="true">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:background="@color/gray">
+
+                        <TextView
+                            android:id="@+id/search_result_time_1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="30dp"
+                            android:text="18:30 - 19:00 (30min)"
+                            android:gravity="center"
+                            android:textStyle="bold"
+                            android:layout_marginLeft="5dp" />
+
+                        <TextView
+                            android:id="@+id/search_result_stop_1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="30dp"
+                            android:layout_alignParentBottom="true"
+                            android:text="Uppsala Centrastation to Flogstavägen"
+                            android:gravity="center"
+                            android:layout_marginLeft="5dp" />
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_toRightOf="@+id/search_result_time_1"
+                            android:src="@drawable/ic_directions_run_black_18dp"
+                            android:layout_marginTop="5dp"
+                            android:layout_marginLeft="8dp"
+                            android:background="@color/primaryColor" />
+
+                        <ImageButton
+                            android:id="@+id/search_detail_button1"
+                            android:layout_width="68dp"
+                            android:layout_height="match_parent"
+                            android:src="@drawable/ic_arrow_forward_white_24dp"
+                            android:background="@color/primaryColor"
+                            android:layout_alignParentRight="true"
+                            android:onClick="openTripDetail" />
+
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:layout_marginTop="2dp"
+                        android:layout_marginBottom="2dp"
+                        android:background="@color/gray">
+
+                        <TextView
+                            android:id="@+id/search_result_time_2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="30dp"
+                            android:text="13:10 - 13:55 (45min)"
+                            android:gravity="center"
+                            android:textStyle="bold"
+                            android:layout_marginLeft="5dp" />
+
+                        <TextView
+                            android:id="@+id/search_result_stop_2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="30dp"
+                            android:layout_alignParentBottom="true"
+                            android:text="Polacksbacken to Ultuna"
+                            android:gravity="center"
+                            android:layout_marginLeft="5dp" />
+
+                        <ImageButton
+                            android:id="@+id/search_detail_button2"
+                            android:layout_width="68dp"
+                            android:layout_height="match_parent"
+                            android:src="@drawable/ic_arrow_forward_white_24dp"
+                            android:background="@color/primaryColor"
+                            android:layout_alignParentRight="true"
+                            android:onClick="openTripDetail" />
+
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:background="@color/gray">
+
+                        <TextView
+                            android:id="@+id/search_result_time_3"
+                            android:layout_width="wrap_content"
+                            android:layout_height="30dp"
+                            android:text="09:20 - 10:10 (50min)"
+                            android:gravity="center"
+                            android:textStyle="bold"
+                            android:layout_marginLeft="5dp" />
+
+                        <TextView
+                            android:id="@+id/search_result_stop_3"
+                            android:layout_width="wrap_content"
+                            android:layout_height="30dp"
+                            android:layout_alignParentBottom="true"
+                            android:text="Gottsunda to Övre Slottsgatan"
+                            android:gravity="center"
+                            android:layout_marginLeft="5dp" />
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_toRightOf="@+id/search_result_time_3"
+                            android:src="@drawable/ic_directions_bus_black_18dp"
+                            android:layout_marginLeft="8dp"
+                            android:layout_marginTop="5dp"
+                            android:background="@color/primaryColor" />
+
+                        <ImageButton
+                            android:id="@+id/search_detail_button3"
+                            android:layout_width="68dp"
+                            android:layout_height="match_parent"
+                            android:src="@drawable/ic_arrow_forward_white_24dp"
+                            android:background="@color/primaryColor"
+                            android:layout_alignParentRight="true"
+                            android:onClick="openTripDetail" />
+
+                    </RelativeLayout>
+                </LinearLayout>
+
+            </ScrollView>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/search_search_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/label_search_button_search"
+        android:textColor="#ffffff"
+        android:background="@color/primaryColor"
+        android:layout_alignParentBottom="true" />
+
+
+</RelativeLayout>

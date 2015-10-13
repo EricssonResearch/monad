@@ -8,9 +8,16 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
-public class TripsActivity extends AppCompatActivity {
+import android.view.View;
+import android.widget.ImageButton;
 
+
+public class TripsActivity extends AppCompatActivity {
+    ImageButton detailsButton1;
+    ImageButton cancelButton1;
+    ImageButton imgButton;
     Toolbar toolbar;
+    ImageButton button;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,6 +28,31 @@ public class TripsActivity extends AppCompatActivity {
 
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+    }
+
+    public void cancelTrip1(View view) {
+        Intent intent = new Intent(this, TripCancelPopup.class);
+        cancelButton1 = (ImageButton) findViewById(R.id.cancel1);
+        startActivity(intent);
+    }
+
+    public void cancelTrip2(View view) {
+        Intent intent = new Intent(this, TripCancelPopup.class);
+        cancelButton1 = (ImageButton) findViewById(R.id.cancel2);
+        startActivity(intent);
+    }
+
+    public void viewTripDetails1(View view) {
+        Intent intent = new Intent(this, RouteActivity.class);
+        detailsButton1 = (ImageButton) findViewById(R.id.button1);
+        startActivity(intent);
+    }
+
+    public void viewTripDetails2(View view) {
+        Intent intent = new Intent(this, RouteActivity.class);
+        detailsButton1 = (ImageButton) findViewById(R.id.button2);
+        startActivity(intent);
     }
 
     @Override
@@ -36,8 +68,8 @@ public class TripsActivity extends AppCompatActivity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-        
-        if(id == android.R.id.home){
+
+        if (id == android.R.id.home) {
             NavUtils.navigateUpFromSameTask(this);
         }
 

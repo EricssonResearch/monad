@@ -3,12 +3,22 @@
 
     <string name="hello_world">Hello world!</string>
     <!--Activity titles (label displayed on the Toolbar)-->
+    <string name="title_activity_about_us">AboutUsActivity</string>
     <string name="title_activity_login" translatable="false">MoNAD</string>
     <string name="title_activity_main">Search</string>
     <string name="title_activity_notifications">Notifications</string>
-    <string name="title_activity_trips">My Trips</string>
     <string name="title_activity_profile">Profile</string>
+    <string name="title_activity_register">Register</string>
+    <string name="title_activity_reset_password">Reset Password</string>
+    <string name="title_activity_route">Route Information</string>
+    <string name="title_activity_route_success">Success!</string>
     <string name="title_activity_settings">Settings</string>
+    <string name="title_activity_search">Search</string>
+    <string name="title_activity_trips">My Trips</string>
+    <string name="title_activity_confirm_code_popup">Activation Code</string>
+    <string name="title_activity_forgot_password_popup">Enter Your Email</string>
+    <string name="title_activity_route_confirm_popup">Confirm?</string>
+    <string name="title_activity_trip_cancel_popup">Cancel?</string>
 
     <!--Toolbar/Actionbar menu items-->
     <string name="action_search">Search</string>
@@ -19,27 +29,119 @@
     <string name="action_aboutus">About Us</string>
     <string name="action_signout">Sign Out</string>
 
-<!--Activity strings (content)-->
+    <!--Activity strings (content)-->
+    <!--Activity - AboutUs-->
+
+
     <!--Activity - Login-->
     <string name="label_login_login">Log In</string>
     <string name="label_login_username">Username</string>
     <string name="label_login_password">Password</string>
     <string name="label_login_anonymous">Stay anonymous</string>
     <string name="label_login_newuser">New user? Create an account</string>
+    <string name="label_login_forgottenpassword">Forgot your password?</string>
+    <string name="label_login_wrongcredentials">Login failed. Please try again</string>
 
     <!--Activity - Main (Search view)-->
-    <string name="label_main_destination">Destination</string>
+    <string name="label_search_with_recommendation_where">Where do you want to go ?</string>
+    <string name="label_main_recommendations">Recommendations</string>
 
     <!--Activity - Notifications-->
     <string name="label_notifications_recent">Recent</string>
 
-    <!--Activity - My Trips-->
-    <string name="label_trips_current">Active Trips</string>
-
     <!--Activity - Profile-->
     <string name="label_profile_information">Current Information</string>
 
+    <!--Activity -Register-->
+    <string name="label_register_newaccount">New Account</string>
+    <string name="label_register_username">Username</string>
+    <string name="label_register_password">Password</string>
+    <string name="label_register_verifypassword">Verify Password</string>
+    <string name="label_register_email">Email</string>
+    <string name="label_register_mobilenumber">Mobile Number</string>
+    <string name="label_register_register">Register</string>
+
+    <!--Activity - Reset Password-->
+
+    <!--Activity - Route -->
+    <string name="label_trips_info">Walk 100m to Polacksbacken Bus stop</string>
+    <string name="label_trips_info2">Board Bus No 801</string>
+    <string name="label_trips_info3">Walk 100m to Ultuna Bus stop</string>
+    <string name="label_trips_img">IMG here</string>
+    <string name="label_trips_time">12:00</string>
+    <string name="label_trips_time2">12:05</string>
+    <string name="label_trips_button_join">Join Trip</string>
+
+    <!--Activity - Route Success-->
+    <string name="label_routesuccess_arrivaltime">13:55</string>
+
+    <!--Activity - Search-->
+    <string name="label_search_from">From</string>
+    <string name="label_search_hint_your_position">Your position</string>
+    <string name="label_search_destination">Destination</string>
+    <string name="label_search_hint_your_destination">Your destination</string>
+    <string name="label_search_depature">Depature</string>
+    <string name="label_search_arrival">Arrival</string>
+    <string name="label_search_priority">Priority</string>
+    <string name="label_search_shortest_trip_time">Shortest trip time</string>
+    <string name="label_search_shortest_trip_distance">Shortest trip distance</string>
+    <string name="label_search_results">Results</string>
+    <string name="label_search_button_search">Search</string>
+
     <!--Activity - Settings-->
     <string name="label_settings_selectlanguage">Please select your language</string>
+
+    <!--Activity - Trips-->
+    <string name="label_trips_current">Active Trips</string>
+    <string name="label_trips_expired">Past Trips</string>
+    <string name="label_trips_random">Random Trips</string>
+    <string name="label_trips_from">From</string>
+    <string name="label_trips_to">To</string>
+    <string name="label_trips_from_origin">Polacksbacken</string>
+    <string name="label_trips_to_destination">Flogsta</string>
+    <string name="label_trips_from_time">12:36</string>
+    <string name="label_trips_to_time">12:51</string>
+    <string name="label_trips_day">TODAY</string>
+    <string name="label_trips_countdown">00:05:38</string>
+    <string name="label_trips_bus_content_description">Bus</string>
+    <string name="label_trips_clock_content_description">Clock</string>
+    <string name="label_trips_cancel_content_description">Cancel</string>
+    <string name="label_trips_button_content_description">Button</string>
+    <string name="label_trips_date">05/10/15</string>
+
+    <!--Popup - Confirmation Code -->
+    <string name="label_confirmcode_codesent">Confirmation code sent!</string>
+    <string name="label_confirmcode_entercode">Please enter the code to reset your password</string>
+    <string name="label_confirmcode_code">Confirmation code</string>
+    <string name="label_confirmcode_codehint">000000</string>
+    <string name="label_confirmcode_submit">Submit</string>
+
+    <!--Popup - Forgotten Password -->
+    <string name="label_forgotpassword_enteremail">Please enter your email</string>
+    <string name="label_forgotpassword_emailhint">somebody@example.com</string>
+    <string name="label_forgotpassword_email">Email Address</string>
+    <string name="label_forgotpassword_submit">Submit</string>
+
+    <!--Popup - Route Confirmation -->
+    <string name="label_trips_tv_back">Cancel</string>
+    <string name="label_trip_confirmation">Confirm your Trip</string>
+    <string name="label_trip_depart">Depart:</string>
+    <string name="label_trip_departName">Polacksbacken 12:05</string>
+    <string name="label_trip_arrive">Arrive:</string>
+    <string name="label_trip_ariveName">Flogsta Centrum 12:20</string>
+    <string name="label_trip_busInfo">Bus 1234</string>
+    <string name="label_trip_button_confirm">Confirm</string>
+
+    <!--Popup - Trip Cancellation -->
+    <string name="label_trips_button_back">Back</string>
+    <string name="label_trips_button_cancel">Drop Trip</string>
+    <string name="label_trip_cancellation">Confirm your Cancellation</string>
+    <string name="label_resetpassword_resetpassword">Reset Password</string>
+    <string name="label_resetpassword_enternewpassword">Enter your new password</string>
+    <string name="label_resetpassword_confirmnewpassword">Confirm your new password</string>
+    <string name="label_resetpassword_resetbutton">Reset</string>
+
+
+    <!-- UNPROCESSED -->
 
 </resources>

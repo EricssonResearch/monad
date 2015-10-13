@@ -2,6 +2,19 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="se.uu.csproject.monadclient" >
 
+    <!--added by functionality team-->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.USE_CREDENTIALS" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
+    <!--it specifies google play services version with which our application was build.-->
+    <meta-data
+        android:name="com.google.android.gms.version"
+        android:value="@integer/google_play_services_version" />
+    <!--added by functionality team-->
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -24,6 +37,13 @@
                 android:value=".LoginActivity" />
         </activity>
         <activity
+            android:name=".SearchActivity"
+            android:label="@string/title_activity_search">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity" />
+        </activity>
+        <activity
             android:name=".NotificationsActivity"
             android:label="@string/title_activity_notifications" >
             <meta-data
@@ -38,6 +58,13 @@
                 android:value=".MainActivity" />
         </activity>
         <activity
+            android:name=".RouteSuccessActivity"
+            android:label="@string/title_activity_route_success">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".TripsActivity" />
+        </activity>
+        <activity
             android:name=".ProfileActivity"
             android:label="@string/title_activity_profile" >
             <meta-data
@@ -50,6 +77,52 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity" />
+        </activity>
+        <activity
+            android:name=".TripCancelPopup"
+            android:label="@string/title_activity_trip_cancel_popup"
+            android:theme="@style/AppTheme.CustomDialog">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity" />
+        </activity>
+        <activity
+            android:name=".RouteActivity"
+            android:label="@string/title_activity_route">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity" />
+        </activity>
+        <activity
+            android:name=".RegisterActivity"
+            android:label="@string/title_activity_register">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".LoginActivity" />
+        </activity>
+        <activity
+            android:name=".RouteConfirmPopup"
+            android:label="@string/title_activity_route_confirm_popup"
+            android:theme="@style/AppTheme.CustomDialog"></activity>
+        <activity
+            android:name=".AboutUsActivity"
+            android:label="@string/title_activity_about_us"></activity>
+        <activity
+            android:name=".ForgotPasswordPopup"
+            android:label="@string/title_activity_forgot_password_popup"
+            android:theme="@style/AppTheme.CustomDialog">
+            >
+        </activity>
+        <activity
+            android:name=".ConfirmCodePopup"
+            android:label="@string/title_activity_confirm_code_popup"
+            android:theme="@style/AppTheme.CustomDialog"></activity>
+        <activity
+            android:name=".ResetPasswordActivity"
+            android:label="@string/title_activity_reset_password"></activity>
+        <activity
+            android:name=".GoogleLogIn"
+            android:label="Google Log In">
         </activity>
     </application>
 

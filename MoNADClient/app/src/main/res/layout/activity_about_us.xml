@@ -1,0 +1,176 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="se.uu.csproject.monadclient.MainActivity">
+
+    <include
+        android:id="@+id/actionToolBar"
+        layout="@layout/app_bar" />
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/linearlayout"
+        xmlns:tools="http://schemas.android.com/tools"
+        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/actionToolBar"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true">
+
+        <!--1st card, it is active and bus will come in near future -->
+        <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/card_view1"
+            android:layout_gravity="center"
+            android:layout_width="350dp"
+            android:layout_height="137dp"
+            card_view:cardCornerRadius="4dp"
+            android:layout_marginTop="7dp">
+
+            <!--cancel icon -->
+            <ImageButton
+                android:id="@+id/cancel1"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_marginTop="2dp"
+                android:layout_marginRight="2dp"
+                android:layout_marginEnd="2dp"
+                android:layout_gravity="end"
+                android:background="#ffffff"
+                android:src="@drawable/ic_clear_red_24dp"
+                android:contentDescription="@string/label_trips_cancel_content_description"
+                android:onClick="cancelTrip1" />
+
+            <!--tripDetails icon-->
+            <ImageButton
+                android:id="@+id/button1"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_marginTop="77dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_gravity="end"
+                android:background="?attr/colorPrimary"
+                android:src="@drawable/ic_arrow_forward_white_24dp"
+                android:contentDescription="@string/label_trips_button_content_description"
+                android:onClick="viewTripDetails1" />
+
+            <!--bus icon-->
+            <ImageView
+                android:id="@+id/bus1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:cropToPadding="false"
+                android:src="@drawable/ic_directions_bus_black_24dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="25dp"
+                android:contentDescription="@string/label_trips_bus_content_description" />
+
+            <!--text: to from -->
+            <TextView
+                android:id="@+id/info_text_from1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#000000"
+                android:text="@string/label_trips_from"
+                android:textSize="12sp"
+                android:layout_marginLeft="12dp"
+                android:layout_marginStart="12dp"
+                android:layout_marginTop="5dp" />
+
+            <TextView
+                android:id="@+id/info_text_to1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#000000"
+                android:text="@string/label_trips_to"
+                android:textSize="12sp"
+                android:layout_marginLeft="187dp"
+                android:layout_marginStart="187dp"
+                android:layout_marginTop="5dp" />
+
+            <TextView
+                android:id="@+id/info_origin1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#000000"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:layout_marginLeft="32dp"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="20dp"
+                android:text="@string/label_trips_from_origin" />
+
+            <TextView
+                android:id="@+id/info_destination1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#000000"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:layout_marginLeft="207dp"
+                android:layout_marginStart="207dp"
+                android:layout_marginTop="20dp"
+                android:text="@string/label_trips_to_destination" />
+
+            <TextView
+                android:id="@+id/info_origin_time1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#000000"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:layout_marginLeft="32dp"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="40dp"
+                android:text="@string/label_trips_from_time" />
+
+            <TextView
+                android:id="@+id/info_destination_time1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#000000"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:layout_marginLeft="207dp"
+                android:layout_marginStart="207dp"
+                android:layout_marginTop="40dp"
+                android:text="@string/label_trips_to_time" />
+
+            <!--clock icon-->
+            <ImageView
+                android:id="@+id/clock1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:cropToPadding="false"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="59dp"
+                android:src="@drawable/ic_access_alarms_red_24dp"
+                android:contentDescription="@string/label_trips_clock_content_description" />
+
+            <!--text: countdown info-->
+            <TextView
+                android:id="@+id/info_date1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="84dp"
+                android:text="@string/label_trips_day"
+                android:textColor="@color/warnColor" />
+
+            <TextView
+                android:id="@+id/countdown1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="24sp"
+                android:layout_marginTop="104dp"
+                android:layout_gravity="center_horizontal"
+                android:text="@string/label_trips_countdown"
+                android:textColor="@color/warnColor" />
+
+        </android.support.v7.widget.CardView>
+
+    </LinearLayout>
+
+</RelativeLayout>
