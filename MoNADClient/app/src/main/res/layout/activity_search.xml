@@ -36,8 +36,9 @@
                 android:layout_weight="5"
                 android:textColor="@color/black"
                 android:hint="@string/label_search_hintposition"
-                android:textSize="@dimen/activity_search_hinttextsize"
-                android:textColorHint="@drawable/hint_hide_selector" />
+                android:textSize="@dimen/header_textlarge"
+                android:textColorHint="@drawable/hint_hide_selector"
+                android:gravity="bottom"/>
 
             <ImageView
                 android:layout_width="wrap_content"

@@ -17,11 +17,13 @@
 
         <TextView
             android:text="@string/label_profile_information"
-            style="?android:attr/listSeparatorTextViewStyle"
+            style="@style/headerText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/textView_profile_info"
-            android:textColor="@color/primaryColor"/>
+            android:textColor="@color/primaryColor"
+            android:padding="@dimen/medium_padding"/>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -75,11 +77,12 @@
 
             <TextView
                 android:text="@string/label_profile_contactinformation"
-                style="?android:attr/listSeparatorTextViewStyle"
+                style="@style/headerText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/textView_profile_contactinfo"
-                android:textColor="@color/primaryColor" />
+                android:textColor="@color/primaryColor"
+                android:padding="@dimen/medium_padding"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
