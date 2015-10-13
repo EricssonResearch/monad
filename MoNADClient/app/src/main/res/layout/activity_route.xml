@@ -122,9 +122,9 @@
             android:textSize="@dimen/medium_text"
             android:background="@color/primaryColor"
             android:id="@+id/btn_join_trips"
-            android:padding="16dp"
             android:layout_below="@+id/triptable"
-            android:layout_centerHorizontal="true" />
+            android:layout_centerHorizontal="true"
+            android:padding="@dimen/small_padding"/>
 
 
     </RelativeLayout>

@@ -2,23 +2,20 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="se.uu.csproject.monadclient.tripDetails"
-    android:padding="@dimen/layout_padding"
-    >
+    tools:context="se.uu.csproject.monadclient.tripDetails">
 
-    <android.support.v7.widget.CardView
-        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    <RelativeLayout
         android:id="@+id/popupinfo"
         android:layout_gravity="center"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        card_view:cardCornerRadius="@dimen/cardview_default_radius"
         android:layout_centerInParent="true"
-        card_view:cardBackgroundColor="@color/primaryColor">
+        android:background="@color/primaryColor">
 
         <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:padding="@dimen/layout_padding"
             >
             <RelativeLayout
                 android:layout_width="wrap_content"
@@ -42,7 +39,6 @@
                     android:background="?android:selectableItemBackground"
                     android:src="@drawable/ic_clear_black_24dp"
                     android:contentDescription="@string/label_tripsactivity_cancelcontentdescription"
-                    android:onClick="cancelTrip"
                     android:layout_alignParentTop="true"
                     android:layout_alignParentRight="true"
                     android:layout_alignParentEnd="true" />
@@ -131,13 +127,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/middle"
+                android:padding="@dimen/medium_padding"
                 >
 
                 <RelativeLayout
                     android:id="@+id/buslayout"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="4"
+                    android:layout_weight="5"
                     android:gravity="center_horizontal"
                     android:padding="@dimen/medium_padding">
 
@@ -162,6 +159,7 @@
                         android:layout_centerVertical="true"
                         android:padding="@dimen/medium_padding"/>
                 </RelativeLayout>
+
                 <Button
                     android:id="@+id/button_trip_confirm"
                     android:text="@string/label_trip_button_confirm"
@@ -169,11 +167,10 @@
                     android:layout_height="@dimen/button_sizelarge"
                     android:textStyle="bold"
                     android:layout_gravity="center_vertical"
-                    android:layout_marginRight="30dp"
                     android:layout_weight="1"/>
 
 
             </LinearLayout>
         </RelativeLayout>
-    </android.support.v7.widget.CardView>
+    </RelativeLayout>
 </RelativeLayout>
