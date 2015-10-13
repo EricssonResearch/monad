@@ -1,0 +1,239 @@
+<resources>
+    <string name="app_name">MoNAD - Ready Set GO!</string>
+
+    <string name="hello_world">Hello world!</string>
+    <!--Activity titles (label displayed on the Toolbar)-->
+    <string name="title_activity_about_us">AboutUsActivity</string>
+    <string name="title_activity_login" translatable="false">MoNAD</string>
+    <string name="title_activity_main">Search</string>
+    <string name="title_activity_notifications">Notifications</string>
+    <string name="title_activity_profile">Profile</string>
+    <string name="title_activity_register">Register</string>
+    <string name="title_activity_reset_password">Reset Password</string>
+    <string name="title_activity_route">Route Information</string>
+    <string name="title_activity_route_success">Success!</string>
+    <string name="title_activity_settings">Settings</string>
+    <string name="title_activity_search">Search</string>
+    <string name="title_activity_trips">My Trips</string>
+    <string name="title_activity_confirm_code_popup">Activation Code</string>
+    <string name="title_activity_forgot_password_popup">Enter Your Email</string>
+    <string name="title_activity_route_confirm_popup">Confirm?</string>
+    <string name="title_activity_trip_cancel_popup">Cancel?</string>
+
+    <!--Toolbar/Actionbar menu items-->
+    <string name="action_search">Search</string>
+    <string name="action_notifications">Notifications</string>
+    <string name="action_mytrips">My Trips</string>
+    <string name="action_profile">Profile</string>
+    <string name="action_settings">Settings</string>
+    <string name="action_aboutus">About Us</string>
+    <string name="action_signout">Sign Out</string>
+
+    <!--Activity strings (content)-->
+    <!--Activity - AboutUs /yonatan -->
+    <string name="label_aboutus_projectName">Project Name</string>
+    <string name="label_aboutus_project">Uppsala Student Project CS 2015 (MoNAD)</string>
+    <string name="label_aboutus_productowner">Product Owner</string>
+    <string name="label_aboutus_product">Ericsson</string>
+    <string name="label_aboutus_description">Description</string>
+    <string name="label_aboutus_texttitle">About Us</string>
+    <string name="label_aboutus_descriptiontext">MoNAD is a project which is under development by Uppsala University CS Master students. It is an app ......</string>
+
+
+    <!--Activity - Login-->
+    <string name="label_login_login">Log In</string>
+    <string name="label_login_username">Username</string>
+    <string name="label_login_password">Password</string>
+    <string name="label_login_anonymous">Stay anonymous</string>
+    <string name="label_login_newuser">New user? Create an account</string>
+    <string name="label_login_forgottenpassword">Forgot your password?</string>
+    <string name="label_login_wrongcredentials">Login failed. Please try again</string>
+
+    <!--Activity - Main (Search view)-->
+    <!--Activity - Main (Search view) /yonatan-->
+    <string name="label_main_searchtext">Where do you want to go ?</string>
+    <string name="label_main_recommendations">Recommendations</string>
+    <string name="label_main_resulttime1">18:30 - 19:00 (30min)</string>
+    <string name="label_main_resultstop1">Uppsala Centrastation to Flogstavägen</string>
+    <string name="label_main_resulttime2">13:10 - 13:55 (45min)</string>
+    <string name="label_main_resultstop2">Polacksbacken to Ultuna</string>
+    <string name="label_main_resulttime3">09:20 - 10:10 (50min)</string>
+    <string name="label_main_resultstop3">Gottsunda to Övre Slottsgatan</string>
+    <string name="label_main_resulttime4">08:00 - 08:30 (30min)</string>
+    <string name="label_main_resultstop4">Flogstavägen to Uppsala Centralstation</string>
+
+    <!--Activity - Notifications-->
+    <!--Activity - Notifications- MALIN -->
+    <string name="label_notifications_recent">Recent</string>
+    <string name="label_notification_one">Bus 801: 5 min lateness</string>
+    <string name="label_notification_two">Bus 801: 5 min to departure</string>
+    <string name="label_notification_three">Bus 801 at destination</string>
+    <string name="label_notification_cancelcontentdescription">Cancel</string>
+    <string name="label_notification_iconcontentdescription">Icon</string>
+    <string name="label_notification_time">13:55</string>
+    <string name="label_notification_reschedule">Bus 805: Delayed 20 min, click the icon to reschedule the trip</string>
+
+    <!--Activity - Profile-->
+    <string name="label_profile_information">General Information</string>
+    <string name="label_profile_contactinformation">Contact Information</string>
+    <string name="label_profile_username">Username:</string>
+    <string name="label_profile_user">userXYZ</string>
+    <string name="label_profile_phoneno">Phone No.:</string>
+    <string name="label_profile_phone">076123456</string>
+    <string name="label_profile_emailadd">E-Mail:</string>
+    <string name="label_profile_email">userxyz@example.com</string>
+    <string name="label_main_imagedescription">directions</string>
+    <string name="label_main_imagebuttondescription">image button</string>
+
+    <!--Activity -Register-->
+    <string name="label_register_newaccount">New Account</string>
+    <string name="label_register_username">Username</string>
+    <string name="label_register_password">Password</string>
+    <string name="label_register_verifypassword">Verify Password</string>
+    <string name="label_register_email">Email</string>
+    <string name="label_register_mobilenumber">Mobile Number</string>
+    <string name="label_register_register">Register</string>
+
+    <!--Activity - Reset Password-->
+    <string name="label_resetpassword_resetpassword">Reset Password</string>
+    <string name="label_resetpassword_enternewpassword">Enter your new password</string>
+    <string name="label_resetpassword_confirmnewpassword">Confirm your new password</string>
+    <string name="label_resetpassword_resetbutton">Reset</string>
+
+    <!--Activity - Route -->
+    <string name="label_trips_info">Walk 100m to Polacksbacken Bus stop</string>
+    <string name="label_trips_info2">Board Bus No 801</string>
+    <string name="label_trips_info3">Walk 100m to Ultuna Bus stop</string>
+    <string name="label_trips_img">IMG here</string>
+    <string name="label_trips_time">12:00</string>
+    <string name="label_trips_time2">12:05</string>
+    <string name="label_trips_join">Join Trip</string>
+    <string name="label_route_mapcontentdescription">Map</string>
+    <string name="label_route_iconcontentdescription">Icon</string>
+
+    <!--Activity - Route Success- MALIN -->
+    <string name="label_routesuccess_arrivaltime">13:55</string>
+    <string name="label_routesuccess_success">Your booking was successful.</string>
+    <string name="label_routesuccess_depart">Depart:</string>
+    <string name="label_routesuccess_arrive">Arrive:  </string>
+    <string name="label_routesuccess_instruction">Walk to Polacksbacken</string>
+    <string name="label_routesuccess_businfo">Bus 801</string>
+    <string name="label_routesuccess_countdowntext">Countdown to Departure</string>
+    <string name="label_routesuccess_pinpointcontentdescription">Pinpoint</string>
+    <string name="label_routesuccess_iconcontentdescription">Icon</string>
+
+    <!--Activity - Search-->
+    <string name="label_search_from">From</string>
+    <string name="label_search_hintposition">Your position</string>
+    <string name="label_search_destination">Destination</string>
+    <string name="label_search_hintdestination">Your destination</string>
+    <string name="label_search_depature">Depature</string>
+    <string name="label_search_arrival">Arrival</string>
+    <string name="label_search_priority">Priority</string>
+    <string name="label_search_triptimedate">Fri, Oct. 2</string>
+    <string name="label_search_triptimehour">11:45 AM</string>
+    <string name="label_search_shortesttriptime">Shortest trip time</string>
+    <string name="label_search_shortesttripdistance">Shortest trip distance</string>
+    <string name="label_search_results">Results</string>
+    <string name="label_search_buttonsearch">Search</string>
+    <!--Activity - Search /yonatan-->
+    <string name="label_search_imagebuttondescription">image button decsription</string>
+    <string name="label_search_imagedescription">image view description</string>
+    <string name="label_search_resulttime1">18:30 - 19:00 (30min)</string>
+    <string name="label_search_resultstop1">Uppsala Centrastation to Flogstavägen</string>
+    <string name="label_search_resulttime2">13:10 - 13:55 (45min)</string>
+    <string name="label_search_resultstop2">Polacksbacken to Ultuna</string>
+    <string name="label_search_resulttime3">09:20 - 10:10 (50min)</string>
+    <string name="label_search_resultstop3">Gottsunda to Övre Slottsgatan</string>
+
+    <string name="label_search_imgbuttondescription">image button decsription</string>
+    <string name="label_search_imgdescription">image view description</string>
+
+    <!--Activity - Settings-->
+    <string-array name="settings_tab_titles">
+        <item>Language</item>
+        <item>Alerts</item>
+        <item>Theme</item>
+    </string-array>
+    <string name="label_settings_selectlanguage">Please select your language</string>
+
+    <!--Activity - Trips-->
+    <string name="label_trips_current">Active Trips</string>
+    <string name="label_trips_expired">Past Trips</string>
+    <string name="label_trips_random">Random Trips</string>
+    <string name="label_trips_from">From</string>
+    <string name="label_trips_to">To</string>
+    <string name="label_trips_from_origin">Polacksbacken</string>
+    <string name="label_trips_to_destination">Flogsta</string>
+    <string name="label_trips_from_time">12:36</string>
+    <string name="label_trips_to_time">12:51</string>
+    <string name="label_trips_day">TODAY</string>
+    <string name="label_trips_countdown">00:05:38</string>
+    <string name="label_trips_bus_content_description">Bus</string>
+    <string name="label_trips_clock_content_description">Clock</string>
+    <string name="label_trips_cancel_content_description">Cancel</string>
+    <string name="label_trips_button_content_description">Button</string>
+    <string name="label_trips_date">05/10/15</string>
+
+    <!--Popup - Confirmation Code -->
+    <string name="label_confirmcode_codesent">Confirmation code sent!</string>
+    <string name="label_confirmcode_entercode">Please enter the code to reset your password</string>
+    <string name="label_confirmcode_code">Confirmation code</string>
+    <string name="label_confirmcode_codehint">000000</string>
+    <string name="label_confirmcode_submit">Submit</string>
+
+    <!--Popup - Forgotten Password -->
+    <string name="label_forgotpassword_enteremail">Please enter your email</string>
+    <string name="label_forgotpassword_emailhint">somebody@example.com</string>
+    <string name="label_forgotpassword_email">Email Address</string>
+    <string name="label_forgotpassword_submit">Submit</string>
+
+    <!-- Popup - EditProfile /yonatan -->
+    <string name="label_editprofile_editText">Edit Profile</string>
+    <string name="label_editprofile_textname">Username</string>
+    <string name="label_editprofile_editname">xyz</string>
+    <string name="label_editprofile_btnok">OK</string>
+    <string name="label_editprofile_btncancel">Cancel</string>
+
+    <!--Popup - Route Confirmation -->
+    <string name="label_trips_tv_back">Cancel</string>
+    <string name="label_trip_confirmation">Confirm your Trip</string>
+    <string name="label_trip_depart">Depart:</string>
+    <string name="label_trip_departName">Polacksbacken 12:05</string>
+    <string name="label_trip_arrive">Arrive:</string>
+    <string name="label_trip_ariveName">Flogsta Centrum 12:20</string>
+    <string name="label_trip_busInfo">Bus 1234</string>
+    <string name="label_trip_button_confirm">Confirm</string>
+    <string name="label_tripsactivity_current">Active Trips</string>
+    <string name="label_tripsactivity_expired">Past Trips</string>
+    <string name="label_tripsactivity_random">Random Trips</string>
+    <string name="label_tripsactivity_from">From</string>
+    <string name="label_tripsactivity_to">To</string>
+    <string name="label_tripsactivity_fromorigin">Polacksbacken</string>
+    <string name="label_tripsactivity_todestination">Flogsta</string>
+    <string name="label_tripsactivity_fromtime">12:36</string>
+    <string name="label_tripsactivity_totime">12:51</string>
+    <string name="label_tripsactivity_day">TODAY</string>
+    <string name="label_tripsactivity_countdown">00:05:38</string>
+    <string name="label_tripsactivity_buscontentdescription">Bus</string>
+    <string name="label_tripsactivity_clockcontentdescription">Clock</string>
+    <string name="label_tripsactivity_cancelcontentdescription">Cancel</string>
+    <string name="label_tripsactivity_buttoncontentdescription">Button</string>
+    <string name="label_tripsactivity_date">05/10/15</string>
+
+    <!--Popup - Trip Cancellation -->
+    <!--Popup - MALIN EDITING Trip Cancellation -->
+    <string name="label_tripcancel_buttonback">Back</string>
+    <string name="label_tripcancel_buttoncancel">Cancel Trip</string>
+    <string name="label_tripcancel_cancellation">Confirm your cancellation</string>
+    <string name="label_tripcancel_buscontentdescription">Bus</string>
+    <string name="label_tripcancel_clockcontentdescription">Clock</string>
+    <string name="label_tripcancel_cancelcontentdescription">Cancel</string>
+    <string name="label_tripcancel_buttoncontentdescription">Button</string>
+    <string name="title_activity_profile_edit_popup">ProfileEditPopup</string>
+    <string name="label_login_googlelogin">Log In with Google</string>
+
+
+    <!-- UNPROCESSED -->
+
+</resources>

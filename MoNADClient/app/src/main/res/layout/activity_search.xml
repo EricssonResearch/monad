@@ -1,0 +1,368 @@
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="se.uu.csproject.monadclient.LoginActivity">
+
+
+
+    <include
+        android:id="@+id/actionToolBar"
+        layout="@layout/app_bar" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_below="@+id/actionToolBar">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/textview_search_from"
+            android:text="@string/label_search_from"
+            android:layout_marginLeft="@dimen/activity_search_smallleftstartmargin"
+            android:layout_marginStart="@dimen/activity_search_smallleftstartmargin"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/edittext_search_position"
+                android:layout_weight="5"
+                android:textColor="@color/black"
+                android:hint="@string/label_search_hintposition"
+                android:textSize="@dimen/activity_search_hinttextsize"
+                android:textColorHint="@drawable/hint_hide_selector" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0"
+                android:background="@color/primaryColor"
+                android:contentDescription="@string/label_search_imagedescription"
+                android:src="@drawable/ic_location_on_white_48dp"/>
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/textview_search_destination"
+            android:text="@string/label_search_destination"
+            android:layout_marginLeft="@dimen/activity_search_smallleftstartmargin"
+            android:layout_marginStart="@dimen/activity_search_smallleftstartmargin"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/edittext_search_destination"
+                android:layout_weight="5"
+                android:textColor="@color/black"
+                android:hint="@string/label_search_hintdestination"
+                android:layout_marginTop="@dimen/activity_search_mediumleftstartmargin"
+                android:textSize="@dimen/activity_search_hinttextsize"
+                android:textColorHint="@drawable/hint_hide_selector"/>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0"
+                android:background="@color/primaryColor"
+                android:contentDescription="@string/label_search_imagedescription"
+                android:src="@drawable/ic_location_on_white_48dp"/>
+
+        </LinearLayout>
+
+        <RadioGroup
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/radiogroup_search_triptime"
+            android:orientation="horizontal"
+            android:layout_marginLeft="@dimen/activity_search_smallleftstartmargin"
+            android:layout_marginStart="@dimen/activity_search_smallleftstartmargin">
+
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:id="@+id/radiobutton_search_departuretime"
+                android:text="@string/label_search_depature"/>
+
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:id="@+id/radiobutton_search_arrivaltime"
+                android:text="@string/label_search_arrival"/>
+
+        </RadioGroup>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:id="@+id/textview_search_tripdatetime"
+                android:text="@string/label_search_triptimedate"
+                android:layout_marginLeft="@dimen/activity_search_smallleftstartmargin"
+                android:layout_marginStart="@dimen/activity_search_smallleftstartmargin"
+                style="@style/Widget.AppCompat.EditText"
+                android:textColor="@color/black"
+                android:gravity="center_horizontal"/>
+
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:id="@+id/textview_search_triptimehour"
+                android:text="@string/label_search_triptimehour"
+                android:textColor="@color/black"
+                android:gravity="center_horizontal"
+                android:layout_marginRight="@dimen/activity_search_smallrightendmargin"
+                android:layout_marginEnd="@dimen/activity_search_smallrightendmargin"/>
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/textview_search_priority"
+            android:text="@string/label_search_priority"
+            android:layout_marginLeft="@dimen/activity_search_smallleftstartmargin"
+            android:layout_marginStart="@dimen/activity_search_smallleftstartmargin"/>
+
+        <RadioGroup
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/radiogroup_search_priority"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:id="@+id/radiobutton_search_prioritytripdistance"
+                android:text="@string/label_search_shortesttripdistance"/>
+
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:id="@+id/radiobutton_search_prioritytriptime"
+                android:text="@string/label_search_shortesttriptime"/>
+
+        </RadioGroup>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/textview_search"
+            android:text="@string/label_search_results"
+            android:textAllCaps="true"
+            android:textStyle="bold"
+            android:layout_marginTop="@dimen/layout_mediummargintop"
+            android:layout_marginLeft="@dimen/activity_search_smallleftstartmargin"
+            android:layout_marginStart="@dimen/activity_search_smallleftstartmargin"
+            android:textColor="@color/primaryColor"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/activity_search_separatorheight"
+            android:background="@color/primaryColor"
+            android:layout_marginBottom="@dimen/layout_smallmargintop">
+        </View>
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fillViewport="true">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/activity_search_customheight"
+                    android:background="@color/gray">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/textview_search_resulttime1"
+                        android:text="@string/label_search_resulttime1"
+                        android:gravity="center"
+                        android:textStyle="bold"
+                        android:layout_marginTop="@dimen/activity_search_custommargintop"
+                        android:layout_marginLeft="@dimen/activity_search_smallleftstartmargin"
+                        android:layout_marginStart="@dimen/activity_search_smallleftstartmargin"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/textview_search_resultstop1"
+                        android:text="@string/label_search_resultstop1"
+                        android:gravity="center"
+                        android:layout_below="@+id/textview_search_resulttime1"
+                        android:layout_marginTop="@dimen/activity_search_custommargintop"
+                        android:layout_marginLeft="@dimen/activity_search_smallleftstartmargin"
+                        android:layout_marginStart="@dimen/activity_search_smallleftstartmargin"/>
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_directions_run_black_18dp"
+                        android:background="@color/primaryColor"
+                        android:layout_toRightOf="@+id/textview_search_resulttime1"
+                        android:layout_toEndOf="@+id/textview_search_resulttime1"
+                        android:layout_marginTop="@dimen/activity_search_mediummargintop"
+                        android:layout_marginLeft="@dimen/activity_search_mediumleftstartmargin"
+                        android:layout_marginStart="@dimen/activity_search_mediumleftstartmargin"
+                        android:contentDescription="@string/label_search_imagedescription"/>
+
+                    <ImageButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:id="@+id/imagebutton_search_detail1"
+                        android:src="@drawable/ic_arrow_forward_white_24dp"
+                        android:background="@color/primaryColor"
+                        android:layout_alignParentRight="true"
+                        android:layout_alignParentEnd="true"
+                        android:paddingRight="@dimen/activity_search_custompadding"
+                        android:paddingLeft="@dimen/activity_search_custompadding"
+                        android:contentDescription="@string/label_search_imagebuttondescription"
+                        android:onClick="openTripDetail"/>
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/layout_customheight"
+                    android:layout_marginTop="@dimen/activity_search_smallmargintopbottom"
+                    android:layout_marginBottom="@dimen/activity_search_smallmargintopbottom"
+                    android:background="@color/gray">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/textview_search_resulttime2"
+                        android:text="@string/label_search_resulttime2"
+                        android:gravity="center"
+                        android:textStyle="bold"
+                        android:layout_marginTop="@dimen/activity_search_custommargintop"
+                        android:layout_marginLeft="@dimen/activity_search_mediumleftstartmargin"
+                        android:layout_marginStart="@dimen/activity_search_mediumleftstartmargin"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/textview_search_resultstop2"
+                        android:text="@string/label_search_resultstop2"
+                        android:gravity="center"
+                        android:layout_below="@+id/textview_search_resulttime2"
+                        android:layout_marginTop="@dimen/activity_search_custommargintop"
+                        android:layout_marginLeft="@dimen/activity_search_mediumleftstartmargin"
+                        android:layout_marginStart="@dimen/activity_search_mediumleftstartmargin"/>
+
+                    <ImageButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:id="@+id/imagebutton_search_detail2"
+                        android:src="@drawable/ic_arrow_forward_white_24dp"
+                        android:background="@color/primaryColor"
+                        android:layout_alignParentRight="true"
+                        android:layout_alignParentEnd="true"
+                        android:paddingRight="@dimen/activity_search_custompadding"
+                        android:paddingLeft="@dimen/activity_search_custompadding"
+                        android:contentDescription="@string/label_search_imagebuttondescription"
+                        android:onClick="openTripDetail"/>
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/layout_customheight"
+                    android:background="@color/gray">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/textview_search_resulttime3"
+                        android:text="@string/label_search_resulttime3"
+                        android:gravity="center"
+                        android:textStyle="bold"
+                        android:layout_marginTop="@dimen/activity_search_custommargintop"
+                        android:layout_marginLeft="@dimen/activity_search_mediumleftstartmargin"
+                        android:layout_marginStart="@dimen/activity_search_mediumleftstartmargin"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/textview_search_resultstop3"
+                        android:text="@string/label_search_resultstop3"
+                        android:gravity="center"
+                        android:layout_below="@+id/textview_search_resulttime3"
+                        android:layout_marginTop="@dimen/activity_search_custommargintop"
+                        android:layout_marginLeft="@dimen/activity_search_smallrightendmargin"
+                        android:layout_marginStart="@dimen/activity_search_smallrightendmargin"/>
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_directions_bus_black_18dp"
+                        android:layout_toRightOf="@+id/textview_search_resulttime3"
+                        android:layout_toEndOf="@+id/textview_search_resulttime3"
+                        android:layout_marginLeft="@dimen/activity_search_mediumleftstartmargin"
+                        android:layout_marginStart="@dimen/activity_search_mediumleftstartmargin"
+                        android:layout_marginTop="@dimen/activity_search_mediummargintop"
+                        android:contentDescription="@string/label_search_imagedescription"
+                        android:background="@color/primaryColor"/>
+
+                    <ImageButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:id="@+id/imagebutton_search_detail3"
+                        android:src="@drawable/ic_arrow_forward_white_24dp"
+                        android:background="@color/primaryColor"
+                        android:layout_alignParentRight="true"
+                        android:layout_alignParentEnd="true"
+                        android:paddingRight="@dimen/activity_search_custompadding"
+                        android:paddingLeft="@dimen/activity_search_custompadding"
+                        android:contentDescription="@string/label_search_imagebuttondescription"
+                        android:onClick="openTripDetail"/>
+
+                </RelativeLayout>
+
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/button_search_searchbtn"
+                    android:text="@string/label_search_buttonsearch"
+                    android:textColor="@color/white"
+                    android:background="@color/primaryColor"
+                    android:layout_gravity="bottom"
+                    android:layout_marginTop="@dimen/layout_mediummargintop"
+                    />
+
+            </LinearLayout>
+
+        </ScrollView>
+
+    </LinearLayout>
+
+</RelativeLayout>

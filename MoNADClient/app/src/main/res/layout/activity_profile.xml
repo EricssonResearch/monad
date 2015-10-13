@@ -1,0 +1,180 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="se.uu.csproject.monadclient.MainActivity">
+
+    <include
+        android:id="@+id/actionToolBar"
+        layout="@layout/app_bar" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:paddingTop="@dimen/activity_vertical_margin"
+        android:layout_below="@id/actionToolBar">
+
+        <TextView
+            android:text="@string/label_profile_information"
+            style="?android:attr/listSeparatorTextViewStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView_profile_info"
+            android:textColor="@color/primaryColor"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/activity_profile_customlinearheight"
+                android:layout_marginTop="@dimen/activity_profile_smallmargintop"
+                android:layout_marginBottom="@dimen/activity_profile_smallmarginbottom"
+                android:paddingLeft="@dimen/popup_editprofile_smallmarginstartleft"
+                android:paddingStart="@dimen/popup_editprofile_smallmarginstartleft"
+                android:background="@color/gray"
+                android:layout_gravity="center_vertical">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/label_profile_username"
+                    android:id="@+id/textView_profile_username"
+                    android:textColor="@color/black"
+                    android:layout_gravity="center"
+                    android:layout_weight="2" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="5"
+                    android:text="@string/label_profile_user"
+                    android:id="@+id/textView_profile_user"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/activity_profile_textsize"
+                    android:layout_gravity="center"/>
+
+                <View
+                    android:layout_width="@dimen/activity_profile_separatorwidth"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white">
+                </View>
+
+                <ImageButton
+                    android:layout_width="50dp"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/ic_edit_white_24dp"
+                    android:id="@+id/imagebutton_profile_editusername"
+                    android:background="@color/primaryColor"
+                    android:contentDescription="@string/label_main_imagebuttondescription"
+                    android:onClick="editProfileUser"/>
+
+            </LinearLayout>
+
+            <TextView
+                android:text="@string/label_profile_contactinformation"
+                style="?android:attr/listSeparatorTextViewStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/textView_profile_contactinfo"
+                android:textColor="@color/primaryColor" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/activity_profile_customlinearheight"
+                android:layout_marginTop="@dimen/activity_profile_smallmargintop"
+                android:layout_marginBottom="@dimen/activity_profile_smallmarginbottom"
+                android:paddingLeft="@dimen/popup_editprofile_smallmarginstartleft"
+                android:paddingStart="@dimen/popup_editprofile_smallmarginstartleft"
+                android:background="@color/gray"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/textView_profile_phoneno"
+                    android:text="Phone:"
+                    android:textColor="@color/black"
+                    android:layout_gravity="center"
+                    android:layout_weight="2" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="5"
+                    android:id="@+id/textView_profile_phone"
+                    android:text="@string/label_profile_phone"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/activity_profile_textsize"
+                    android:layout_gravity="center"/>
+                <View
+                    android:layout_width="@dimen/activity_profile_separatorwidth"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white">
+                </View>
+
+                <ImageButton
+                    android:layout_width="50dp"
+                    android:layout_height="match_parent"
+
+                    android:src="@drawable/ic_edit_white_24dp"
+                    android:id="@+id/imagebutton_profile_editphoneno"
+                    android:background="@color/primaryColor"
+                    android:contentDescription="@string/label_main_imagebuttondescription"
+                    android:onClick="editProfilePhone"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/activity_profile_customlinearheight"
+                android:layout_marginTop="@dimen/activity_profile_smallmargintop"
+                android:layout_marginBottom="@dimen/activity_profile_smallmarginbottom"
+                android:paddingLeft="@dimen/popup_editprofile_smallmarginstartleft"
+                android:paddingStart="@dimen/popup_editprofile_smallmarginstartleft"
+                android:background="@color/gray"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/label_profile_emailadd"
+                    android:id="@+id/textView_profile_emailaddress"
+                    android:textColor="@color/black"
+                    android:layout_gravity="center"
+                    android:layout_weight="2" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="5"
+                    android:id="@+id/textView_profile_email"
+                    android:text="@string/label_profile_email"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/activity_profile_textsize"
+                    android:layout_gravity="center"/>
+
+                <View
+                    android:layout_width="@dimen/activity_profile_separatorwidth"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white">
+                </View>
+
+                <ImageButton
+                    android:layout_width="50dp"
+                    android:layout_height="match_parent"
+                    android:id="@+id/imagebutton_profile_editemail"
+                    android:src="@drawable/ic_edit_white_24dp"
+                    android:background="@color/primaryColor"
+                    android:contentDescription="@string/label_main_imagebuttondescription"
+                    android:onClick="editProfileEmail"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</RelativeLayout>

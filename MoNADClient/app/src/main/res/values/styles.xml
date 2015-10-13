@@ -1,0 +1,50 @@
+<resources>
+
+    <!-- Base application theme. -->
+
+    <style name="AppTheme" parent="AppTheme.Base">
+        <!-- Customize your theme here. -->
+    </style>
+
+    <style name="AppTheme.Base" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">@color/primaryColor</item>
+        <item name="colorPrimaryDark">@color/primaryColorDark</item>
+        <item name="colorAccent">@color/accentColor</item>
+    </style>
+
+    <style name="ToolbarTheme" parent="ThemeOverlay.AppCompat.Dark">
+    </style>
+
+    <!-- Theme for all underlined TextView titles -->
+    <style name="headerText">
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/primaryColor</item>
+        <item name="android:textAllCaps">true</item>
+    </style>
+
+    <!-- Theme for all EditText -->
+    <style name="inputText">
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <!-- Theme for all black TextViews -->
+    <style name="importantText">
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="whiteText">
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <!-- Theme for Dialog -->
+    <style name="AppTheme.CustomDialog">
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowCloseOnTouchOutside">true</item>
+        <item name="android:windowIsFloating">true</item>
+    </style>
+
+    <style name="TabColor" parent="Widget.Design.TabLayout">
+        <item name="android:background">?attr/colorPrimary</item>
+    </style>
+
+</resources>

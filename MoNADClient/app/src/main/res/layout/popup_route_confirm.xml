@@ -1,0 +1,170 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id = "@+id/relativelayout1"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="se.uu.csproject.monadclient.RouteConfirmPopup"
+    android:layout_width="@dimen/activity_tripsactivity_cardwidth"
+    android:layout_height="@dimen/activity_routeconfirm_popupsize"
+    android:layout_centerInParent="true"
+    android:layout_centerVertical="true"
+    android:layout_alignParentLeft="true"
+    android:layout_alignParentStart="true"
+    android:background="@color/primaryColor"
+    >
+
+
+    <TextView
+        android:id="@+id/header"
+        android:text="@string/label_trip_confirmation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/whiteText"
+        android:textSize="@dimen/activity_routeconfirm_largetext"
+        android:textStyle="italic"
+        android:paddingTop="@dimen/activity_routeconfirm_paddingmedium"
+        android:paddingLeft="@dimen/activity_routeconfirm_paddingsmall"
+        android:paddingBottom="@dimen/layout_padding"/>
+
+    <TextView
+        android:id="@+id/departlabel"
+        android:text="@string/label_trip_depart"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/whiteText"
+        android:textSize="@dimen/activity_routeconfirm_mediumtext"
+        android:paddingTop="@dimen/activity_routeconfirm_paddingtop"
+        android:paddingLeft="@dimen/layout_padding"
+        android:paddingBottom="@dimen/activity_routeconfirm_padding"
+        android:paddingRight="@dimen/activity_routeconfirm_padding"
+        android:layout_alignLeft="@id/header"
+        android:layout_below="@id/header"
+        />
+
+    <TextView
+        android:id="@+id/departname"
+        android:text="@string/label_tripsactivity_fromorigin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/whiteText"
+        android:textSize="@dimen/activity_routeconfirm_mediumtext"
+        android:paddingTop="@dimen/activity_routeconfirm_paddingtop"
+        android:paddingLeft="32dp"
+        android:paddingBottom="@dimen/activity_routeconfirm_padding"
+        android:paddingRight="@dimen/activity_routeconfirm_padding"
+        android:layout_alignTop="@+id/departlabel"
+        android:layout_toRightOf="@id/departlabel"
+        />
+
+    <TextView
+        android:id="@+id/departtime"
+        android:text="@string/label_tripsactivity_fromtime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/whiteText"
+        android:textSize="@dimen/activity_routeconfirm_mediumtext"
+        android:paddingTop="@dimen/activity_routeconfirm_paddingtop"
+        android:paddingLeft="@dimen/activity_routeconfirm_padding"
+        android:paddingBottom="@dimen/activity_routeconfirm_padding"
+        android:paddingRight="@dimen/activity_routeconfirm_padding"
+        android:layout_below="@+id/header"
+        android:layout_toRightOf="@+id/departname"
+        android:layout_toEndOf="@+id/departname"
+        android:layout_marginLeft="23dp"
+        android:layout_marginStart="23dp" />
+
+    <TextView
+        android:id="@+id/arrivelabel"
+        android:text="@string/label_trip_arrive"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/whiteText"
+        android:textSize="@dimen/activity_routeconfirm_mediumtext"
+        android:paddingTop="@dimen/activity_routeconfirm_paddingtop"
+        android:paddingLeft="@dimen/layout_padding"
+        android:paddingBottom="@dimen/activity_routeconfirm_padding"
+        android:paddingRight="@dimen/activity_routeconfirm_padding"
+        android:layout_alignLeft="@id/departlabel"
+        android:layout_below="@id/departlabel"/>
+
+    <TextView
+        android:id="@+id/arrivename"
+        android:text="@string/label_tripsactivity_todestination"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/whiteText"
+        android:textSize="@dimen/activity_routeconfirm_mediumtext"
+        android:paddingTop="@dimen/activity_routeconfirm_paddingtop"
+        android:paddingLeft="32dp"
+        android:paddingBottom="@dimen/activity_routeconfirm_padding"
+        android:paddingRight="@dimen/activity_routeconfirm_padding"
+        android:layout_alignLeft="@+id/departname"
+        android:layout_below="@+id/departname" />
+
+    <TextView
+        android:id="@+id/arrivetime"
+        android:text="@string/label_tripsactivity_totime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/whiteText"
+        android:textSize="@dimen/activity_routeconfirm_mediumtext"
+        android:paddingTop="@dimen/activity_routeconfirm_paddingtop"
+        android:paddingLeft="@dimen/activity_routeconfirm_padding"
+        android:paddingBottom="@dimen/activity_routeconfirm_padding"
+        android:paddingRight="@dimen/activity_routeconfirm_padding"
+        android:layout_alignLeft="@+id/departtime"
+        android:layout_below="@+id/departtime"/>
+
+    <ImageButton
+        android:id="@+id/cancelbutton"
+        android:layout_width="@dimen/activity_tripsactivity_cancelsize"
+        android:layout_height="@dimen/activity_tripsactivity_cancelsize"
+        android:background="?android:selectableItemBackground"
+        android:src="@drawable/ic_clear_black_24dp"
+        android:contentDescription="@string/label_tripsactivity_cancelcontentdescription"
+        android:onClick="cancelTrip"
+        android:paddingLeft="@dimen/activity_tripsactivity_nopadding"
+        android:paddingRight="@dimen/activity_tripsactivity_paddingsmall"
+        android:paddingEnd="@dimen/activity_tripsactivity_paddingsmall"
+        android:layout_alignParentTop="true"
+        android:layout_alignRight="@+id/departtime"
+        android:layout_alignEnd="@+id/departtime"
+        android:layout_marginTop="17dp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/arrivetime">
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:cropToPadding="false"
+            android:src="@drawable/ic_directions_bus_white_24dp"
+            android:contentDescription="@string/label_tripsactivity_buscontentdescription"
+            android:padding="16dp"
+            android:layout_gravity="center_vertical" />
+
+
+        <TextView
+            android:id="@+id/businfo"
+            android:text="@string/label_routesuccess_businfo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/gray"
+            android:paddingLeft="0dp"
+            android:paddingRight="112dp"
+            android:textSize="@dimen/activity_routeconfirm_mediumtext"
+            android:layout_gravity="center_vertical"/>
+
+        <Button
+            android:id="@+id/button_trip_confirm"
+            android:text="@string/label_trip_button_confirm"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/activity_routeconfirm_buttonheight"
+            android:textStyle="bold"
+            android:layout_gravity="center_vertical"
+            android:layout_marginRight="30dp"/>
+
+
+    </LinearLayout>
+</RelativeLayout>

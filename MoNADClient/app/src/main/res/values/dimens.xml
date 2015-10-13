@@ -1,0 +1,136 @@
+<resources>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="underline_width">100dp</dimen>
+    <dimen name="login_vertical_margin">32dp</dimen>
+    <dimen name="edittext_vertical_margin">16dp</dimen>
+    <dimen name="layout_padding">16dp</dimen>
+    <dimen name="small_margin">2dp</dimen>
+
+    <!--Activity- Route - MALIN ADDITIONS-->
+    <dimen name="activity_route_arealarge">50dp</dimen>
+    <dimen name="activity_route_areaverylarge">150dp</dimen>
+    <dimen name="activity_route_iconsize">24dp</dimen>
+
+    <!--Activity- RouteConfirm - MALIN ADDITIONS-->
+
+    <dimen name="activity_routeconfirm_popupsize">240dp</dimen>
+    <dimen name="activity_routeconfirm_mediumtext">16sp</dimen>
+    <dimen name="activity_routeconfirm_largetext">22sp</dimen>
+    <dimen name="activity_routeconfirm_paddingtop">5dp</dimen>
+    <dimen name="activity_routeconfirm_padding">10dp</dimen>
+    <dimen name="activity_routeconfirm_paddingsmall">20dp</dimen>
+    <dimen name="activity_routeconfirm_paddingmedium">30dp</dimen>
+    <dimen name="activity_routeconfirm_paddinglarge">175dp</dimen>
+    <dimen name="activity_routeconfirm_buttonwidth">120dp</dimen>
+    <dimen name="activity_routeconfirm_buttonheight">50dp</dimen>
+    <!-- from Malin's file-->
+    <!--Activity- Trips-->
+    <dimen name="activity_tripsactivity_cardwidth">350dp</dimen>
+    <dimen name="activity_tripsactivity_cardheight">137dp</dimen>
+    <dimen name="activity_tripsactivity_nopadding">0dp</dimen>
+    <dimen name="activity_tripsactivity_paddingsmall">3dp</dimen>
+    <dimen name="activity_tripsactivity_paddingtop">5dp</dimen>
+    <dimen name="activity_tripsactivity_paddingleft">32dp</dimen>
+    <dimen name="activity_tripsactivity_marginleft">12dp</dimen>
+    <dimen name="activity_tripsactivity_marginright">12dp</dimen>
+    <dimen name="activity_tripsactivity_margintop">7dp</dimen>
+    <dimen name="activity_tripsactivity_buttonsize">48dp</dimen>
+    <dimen name="activity_tripsactivity_cancelsize">24dp</dimen>
+    <dimen name="activity_tripsactivity_largetext">24sp</dimen>
+    <dimen name="activity_tripsactivity_smalltext">12sp</dimen>
+
+    <!-- Activity - Route Success-->
+    <dimen name="activity_routesuccess_arealarge">50dp</dimen>
+    <dimen name="activity_routesuccess_iconmedium">32dp</dimen>
+    <dimen name="activity_routesuccess_iconlarge">48dp</dimen>
+    <dimen name="activity_routesuccess_paddingsmall">3dp</dimen>
+    <dimen name="activity_routesuccess_textmedium">16sp</dimen>
+    <dimen name="activity_routesuccess_height">32dp</dimen>
+    <dimen name="activity_routesuccess_textlarge">20sp</dimen>
+    <dimen name="activity_routesuccess_paddingmedium">8dp</dimen>
+
+    <!--Activity- PopUpTripCancel- MALIN ADDITIONS-->
+    <dimen name="activity_tripcancel_popupsize">240dp</dimen>
+    <dimen name="activity_tripcancel_largetext">22sp</dimen>
+    <dimen name="activity_tripcancel_padding">12dp</dimen>
+    <dimen name="activity_tripcancel_buttonwidth">100dp</dimen>
+    <dimen name="activity_tripcancel_margin">50dp</dimen>
+    <dimen name="activity_tripcancel_buttonbarheight">65dp</dimen>
+    <dimen name="activity_tripcancel_smallpadding">5dp</dimen>
+    <dimen name="activity_tripcancel_buttonheight">55dp</dimen>
+    <dimen name="activity_tripcancel_paddingtop">3dp</dimen>
+    <dimen name="activity_tripcancel_cardheight">130dp</dimen>
+    <dimen name="activity_tripcancel_ratingbarheight">16dp</dimen>
+
+    <!-- Activity - Notifications-->
+    <dimen name="activity_notification_height">50dp</dimen>
+    <dimen name="activity_notification_iconsize">32dp</dimen>
+    <dimen name="activity_notification_cancelsize">24dp</dimen>
+    <dimen name="activity_notification_margin">10dp</dimen>
+    <dimen name="activity_notification_textsize">16sp</dimen>
+
+    <!-- activity profile /yonatan -->
+    <dimen name="activity_profile_customlinearheight">50dp</dimen>
+    <dimen name="activity_profile_smallmargintop">2dp</dimen>
+    <dimen name="activity_profile_smallmarginbottom">2dp</dimen>
+    <dimen name="activity_profile_textsize">16sp</dimen>
+    <dimen name="activity_profile_marginleftstart">16dp</dimen>
+    <dimen name="activity_profile_separatorwidth">1dp</dimen>
+
+    <!-- Popup Edit Profile  /yonatan -->
+    <dimen name="popup_editprofile_customheight">230dp</dimen>
+    <dimen name="popup_editprofile_customlinearheight">110dp</dimen>
+    <dimen name="popup_editprofile_textsize">16sp</dimen>
+    <dimen name="popup_editprofile_marginstart">12dp</dimen>
+    <dimen name="popup_editprofile_smallmarginstartleft">8dp</dimen>
+    <dimen name="popup_editprofile_marginleft">12dp</dimen>
+    <dimen name="popup_editprofile_mediummarginstart">30dp</dimen>
+    <dimen name="popup_editprofile_margintop">12dp</dimen>
+
+    <!-- activity about us /yonatan -->
+    <dimen name="activity_aboutus_margintop">8dp</dimen>
+    <dimen name="activity_aboutus_leftrightmargin">5dp</dimen>
+    <dimen name="activity_aboutus_mediumleftrightmargin">8dp</dimen>
+    <dimen name="activity_aboutus_separatorheight">1dp</dimen>
+    <dimen name="activity_aboutus_smallmargintop">2dp</dimen>
+    <dimen name="activity_aboutus_cornerradiuscard">4dp</dimen>
+    <dimen name="activity_aboutus_padding">2dp</dimen>
+    <dimen name="activity_aboutus_paddingRight">100dp</dimen>
+    <dimen name="activity_aboutus_largepaddingRight">200dp</dimen>
+
+    <!-- activity main /yonatan -->
+    <dimen name="activity_main_separatorheight">1dp</dimen>
+    <dimen name="activity_main_verticalmargintop">30dp</dimen>
+    <dimen name="activity_main_custommargintop">5dp</dimen>
+    <dimen name="activity_main_custompadding">20dp</dimen>
+    <dimen name="activity_main_smallmargintopbottom">2dp</dimen>
+    <dimen name="activity_main_smallleftstartmargin">5dp</dimen>
+    <dimen name="activity_main_verticalmargin">16dp</dimen>
+    <dimen name="activity_main_mediumleftstartmargin">8dp</dimen>
+    <dimen name="activity_main_imagebuttoncustomwidth">60dp</dimen>
+    <dimen name="activity_main_customheight">50dp</dimen>
+
+    <!-- activity search /yonatan -->
+    <dimen name="activity_search_custompadding">25dp</dimen>
+    <dimen name="activity_search_imagebuttoncustomwidth">60dp</dimen>
+    <dimen name="activity_search_separatorheight">1dp</dimen>
+    <dimen name="activity_search_custommargintop">5dp</dimen>
+    <dimen name="activity_search_smallmargintopbottom">2dp</dimen>
+    <dimen name="activity_search_mediummargintop">5dp</dimen>
+    <dimen name="activity_search_smallrightendmargin">5dp</dimen>
+    <dimen name="activity_search_smallleftstartmargin">5dp</dimen>
+    <dimen name="activity_search_mediumleftstartmargin">8dp</dimen>
+    <dimen name="activity_search_customheight">50dp</dimen>
+    <dimen name="activity_search_hinttextsize">24sp</dimen>
+    <dimen name="main_layout_search">48dp</dimen>
+    <dimen name="layout_smallmargintop">2dp</dimen>
+    <dimen name="layout_mediummargintop">5dp</dimen>
+    <dimen name="layout_smallleftstartmargin">5dp</dimen>
+    <dimen name="layout_mediumleftstartmargin">8dp</dimen>
+    <dimen name="layout_customheight">50dp</dimen>
+
+    <!--Activity- Trips /yonatan-->
+    <dimen name="activity_trips_separatorheight">1dp</dimen>
+</resources>

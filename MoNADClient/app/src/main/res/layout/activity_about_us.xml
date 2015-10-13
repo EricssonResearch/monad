@@ -1,0 +1,154 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="se.uu.csproject.monadclient.MainActivity">
+
+    <include
+        android:id="@+id/actionToolBar"
+        layout="@layout/app_bar" />
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/linearlayout"
+        xmlns:tools="http://schemas.android.com/tools"
+        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/actionToolBar">
+
+        <!--card view, for about us -->
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/activity_aboutus_margintop"
+            android:text="@string/label_aboutus_texttitle"
+            style="@style/headerText"
+            android:textAllCaps="true"
+            android:textStyle="bold"
+            android:textColor="@color/primaryColor" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/activity_aboutus_separatorheight"
+            android:background="@color/primaryColor"
+            android:layout_marginTop="@dimen/activity_aboutus_smallmargintop"/>
+
+        <android.support.v7.widget.CardView
+            xmlns:card_view="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/card_view1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            card_view:cardCornerRadius="@dimen/activity_aboutus_cornerradiuscard"
+            android:layout_marginTop="@dimen/activity_aboutus_margintop">
+
+            <TableLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:orientation="vertical">
+                <TableRow
+                    android:id="@+id/activity_aboutus_tableRow1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/activity_aboutus_padding">
+
+                    <!--text: Project name -->
+                    <TextView
+                        android:id="@+id/textview_aboutus_projectname"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/black"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:text="@string/label_aboutus_projectName"
+                        android:layout_marginLeft="@dimen/activity_aboutus_leftrightmargin"
+                        android:layout_marginStart="@dimen/activity_aboutus_leftrightmargin"
+                        android:layout_marginTop="@dimen/activity_aboutus_margintop"
+                        android:layout_gravity="center_vertical"/>
+
+                    <TextView
+                        android:id="@+id/textview_aboutus_project"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/black"
+                        android:textAppearance="?android:attr/textAppearanceSmall"
+                        android:text="@string/label_aboutus_project"
+                        android:layout_marginLeft="@dimen/activity_aboutus_mediumleftrightmargin"
+                        android:layout_marginStart="@dimen/activity_aboutus_mediumleftrightmargin"
+                        android:layout_marginTop="@dimen/activity_aboutus_margintop"
+                        android:paddingRight="@dimen/activity_aboutus_largepaddingRight" />
+
+                </TableRow>
+
+                <TableRow
+                    android:id="@+id/activity_aboutus_tableRow2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/activity_aboutus_padding">
+
+                    <!--text: product owner -->
+                    <TextView
+                        android:id="@+id/textview_aboutus_productowner"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/black"
+                        android:gravity="center_vertical"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:layout_marginLeft="@dimen/activity_aboutus_leftrightmargin"
+                        android:layout_marginStart="@dimen/activity_aboutus_leftrightmargin"
+                        android:layout_marginTop="@dimen/activity_aboutus_margintop"
+                        android:text="@string/label_aboutus_productowner"/>
+
+                    <TextView
+                        android:id="@+id/textview_aboutus_product"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/black"
+                        android:textAppearance="?android:attr/textAppearanceSmall"
+                        android:layout_marginLeft="@dimen/activity_aboutus_mediumleftrightmargin"
+                        android:layout_marginStart="@dimen/activity_aboutus_mediumleftrightmargin"
+                        android:layout_marginTop="@dimen/activity_aboutus_margintop"
+                        android:paddingRight="@dimen/activity_aboutus_paddingRight"
+                        android:text="@string/label_aboutus_product"/>
+
+                </TableRow>
+                <TableRow
+                    android:id="@+id/activity_aboutus_tableRow3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/activity_aboutus_padding">
+
+                    <!--text: Description -->
+                    <TextView
+                        android:id="@+id/textview_aboutus_description"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/black"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:layout_marginLeft="@dimen/activity_aboutus_leftrightmargin"
+                        android:layout_marginStart="@dimen/activity_aboutus_leftrightmargin"
+                        android:layout_marginTop="@dimen/activity_aboutus_margintop"
+                        android:layout_gravity="center_vertical"
+                        android:text="@string/label_aboutus_description" />
+
+                    <TextView
+                        android:id="@+id/textview_aboutus_descriptiontext"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/black"
+                        android:textAppearance="?android:attr/textAppearanceSmall"
+                        android:layout_marginLeft="@dimen/activity_aboutus_mediumleftrightmargin"
+                        android:layout_marginStart="@dimen/activity_aboutus_mediumleftrightmargin"
+                        android:layout_marginTop="@dimen/activity_aboutus_margintop"
+                        android:paddingRight="@dimen/activity_aboutus_paddingRight"
+                        android:text="@string/label_aboutus_descriptiontext"/>
+                </TableRow>
+
+            </TableLayout>
+
+        </android.support.v7.widget.CardView>
+
+    </LinearLayout>
+
+</RelativeLayout>

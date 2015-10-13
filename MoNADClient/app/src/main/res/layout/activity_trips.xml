@@ -1,0 +1,499 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="se.uu.csproject.monadclient.MainActivity">
+
+    <include
+        android:id="@+id/actionToolBar"
+        layout="@layout/app_bar"
+        />
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/linearlayout"
+        xmlns:tools="http://schemas.android.com/tools"
+        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/actionToolBar"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
+
+        <!--1st card, it is active and bus will come in near future -->
+        <android.support.v7.widget.CardView
+            xmlns:card_view="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/card_view1"
+            android:layout_gravity="center"
+            android:layout_width="@dimen/activity_tripsactivity_cardwidth"
+            android:layout_height="@dimen/activity_tripsactivity_cardheight"
+            card_view:cardCornerRadius="@dimen/cardview_default_radius"
+            android:layout_marginTop="@dimen/activity_tripsactivity_margintop">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <!--cancel icon -->
+                <ImageButton
+                    android:id="@+id/cancel1"
+                    android:layout_width="@dimen/activity_tripsactivity_cancelsize"
+                    android:layout_height="@dimen/activity_tripsactivity_cancelsize"
+                    android:background="?android:selectableItemBackground"
+                    android:src="@drawable/ic_clear_red_24dp"
+                    android:contentDescription="@string/label_tripsactivity_cancelcontentdescription"
+                    android:onClick="cancelTrip"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentEnd="true"
+                    android:paddingLeft="@dimen/activity_tripsactivity_nopadding"
+                    android:paddingRight="@dimen/activity_tripsactivity_paddingsmall"
+                    android:paddingEnd="@dimen/activity_tripsactivity_paddingsmall"
+                    />
+
+                <!--text: to from -->
+                <TextView
+                    android:id="@+id/info_text_from1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/label_tripsactivity_from"
+                    android:textSize="@dimen/activity_tripsactivity_smalltext"
+                    android:paddingLeft="@dimen/activity_tripsactivity_marginleft"
+                    android:paddingRight="@dimen/activity_tripsactivity_nopadding"
+                    android:paddingEnd="@dimen/activity_tripsactivity_nopadding"
+                    android:paddingTop="@dimen/activity_tripsactivity_margintop"
+                    />
+
+                <TextView
+                    android:id="@+id/info_origin1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/importantText"
+                    android:text="@string/label_tripsactivity_fromorigin"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:paddingTop="@dimen/activity_tripsactivity_paddingtop"
+                    android:paddingLeft="@dimen/activity_tripsactivity_paddingleft"
+                    android:paddingRight="@dimen/activity_tripsactivity_nopadding"
+                    android:paddingEnd="@dimen/activity_tripsactivity_nopadding"
+                    android:layout_below="@id/info_text_from1"
+                    />
+
+
+                <!--bus icon-->
+                <ImageView
+                    android:id="@+id/bus1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:cropToPadding="false"
+                    android:src="@drawable/ic_directions_bus_black_24dp"
+                    android:contentDescription="@string/label_tripsactivity_buscontentdescription"
+                    android:layout_centerHorizontal="true"
+                    android:layout_alignTop="@id/info_origin1"
+                    />
+
+                <TextView
+                    android:id="@+id/info_text_to1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/label_tripsactivity_to"
+                    android:textSize="@dimen/activity_tripsactivity_smalltext"
+                    android:paddingTop="@dimen/activity_tripsactivity_margintop"
+                    android:layout_toEndOf="@id/bus1"
+                    android:layout_toRightOf="@id/bus1"
+                    />
+
+                <TextView
+                    android:id="@+id/info_destination1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/importantText"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:text="@string/label_tripsactivity_todestination"
+                    android:paddingTop="@dimen/activity_tripsactivity_paddingtop"
+                    android:paddingLeft="@dimen/layout_padding"
+                    android:paddingRight="@dimen/activity_tripsactivity_nopadding"
+                    android:paddingEnd="@dimen/activity_tripsactivity_nopadding"
+                    android:layout_below="@id/info_text_to1"
+                    android:layout_toRightOf="@id/bus1"
+                    android:layout_toEndOf="@id/bus1"
+                    />
+
+                <TextView
+                    android:id="@+id/info_origin_time1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/importantText"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="@string/label_tripsactivity_fromtime"
+                    android:paddingTop="@dimen/activity_tripsactivity_paddingtop"
+                    android:paddingLeft="@dimen/activity_tripsactivity_paddingleft"
+                    android:paddingRight="@dimen/activity_tripsactivity_nopadding"
+                    android:paddingEnd="@dimen/activity_tripsactivity_nopadding"
+                    android:layout_below="@id/info_origin1"
+                    />
+
+                <TextView
+                    android:id="@+id/info_destination_time1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/importantText"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="@string/label_tripsactivity_totime"
+                    android:paddingTop="@dimen/activity_tripsactivity_paddingtop"
+                    android:paddingLeft="@dimen/layout_padding"
+                    android:paddingRight="@dimen/activity_tripsactivity_nopadding"
+                    android:paddingEnd="@dimen/activity_tripsactivity_nopadding"
+                    android:layout_below="@id/info_destination1"
+                    android:layout_toRightOf="@id/bus1"
+                    android:layout_toEndOf="@id/bus1"
+                    />
+
+
+
+                <!--clock icon-->
+                <ImageView
+                    android:id="@+id/clock1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:cropToPadding="false"
+                    android:src="@drawable/ic_access_alarms_red_24dp"
+                    android:contentDescription="@string/label_tripsactivity_clockcontentdescription"
+                    android:paddingTop="@dimen/activity_tripsactivity_paddingtop"
+                    android:layout_centerHorizontal="true"
+                    android:layout_below="@id/bus1"
+                    />
+
+                <!--text: countdown info-->
+                <TextView
+                    android:id="@+id/info_date1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="@string/label_tripsactivity_day"
+                    android:textColor="@color/warnColor"
+                    android:paddingTop="@dimen/activity_tripsactivity_paddingtop"
+                    android:layout_centerHorizontal="true"
+                    android:layout_below="@id/clock1"
+                    />
+
+                <TextView
+                    android:id="@+id/countdown1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/activity_tripsactivity_largetext"
+                    android:text="@string/label_tripsactivity_countdown"
+                    android:textColor="@color/warnColor"
+                    android:layout_centerHorizontal="true"
+                    android:layout_below="@id/info_date1"
+                    />
+
+                <!--tripDetails icon-->
+                <ImageButton
+                    android:id="@+id/button1"
+                    android:layout_width="@dimen/activity_tripsactivity_buttonsize"
+                    android:layout_height="@dimen/activity_tripsactivity_buttonsize"
+                    android:background="?attr/colorPrimary"
+                    android:src="@drawable/ic_arrow_forward_white_24dp"
+                    android:contentDescription="@string/label_tripsactivity_buttoncontentdescription"
+                    android:onClick="viewTripDetails"
+                    android:layout_alignTop="@id/info_date1"
+                    android:layout_below="@id/info_destination_time1"
+                    android:layout_toLeftOf="@id/cancel1"
+                    android:layout_toStartOf="@id/cancel1"
+                    />
+
+            </RelativeLayout>
+
+        </android.support.v7.widget.CardView>
+
+        <!--Separator -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="?attr/colorPrimary"
+            android:layout_marginTop="@dimen/activity_tripsactivity_margintop"
+            />
+
+        <!--3rd card, it is inactive,editing-->
+        <android.support.v7.widget.CardView
+            xmlns:card_view="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/card_view3"
+            android:layout_gravity="center"
+            android:layout_width="@dimen/activity_tripsactivity_cardwidth"
+            android:layout_height="wrap_content"
+            card_view:cardCornerRadius="@dimen/cardview_default_radius"
+            android:layout_marginTop="@dimen/activity_tripsactivity_margintop"
+            card_view:cardBackgroundColor="?attr/colorAccent">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <!--bus icon-->
+                <ImageView
+                    android:id="@+id/bus3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:cropToPadding="false"
+                    android:src="@drawable/ic_directions_bus_white_24dp"
+                    android:layout_centerInParent="true"
+                    android:contentDescription="@string/label_tripsactivity_buscontentdescription"
+                    />
+
+                <!--text: from to-->
+                <TextView
+                    android:id="@+id/info_tripsactivity_from3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/label_tripsactivity_from"
+                    android:textSize="@dimen/activity_tripsactivity_smalltext"
+                    android:paddingLeft="@dimen/activity_tripsactivity_marginleft"
+                    android:paddingRight="@dimen/activity_tripsactivity_nopadding"
+                    android:paddingEnd="@dimen/activity_tripsactivity_nopadding"
+                    android:paddingTop="@dimen/activity_tripsactivity_paddingtop"
+                    />
+
+                <TextView
+                    android:id="@+id/info_tripsactivity_to3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/label_tripsactivity_to"
+                    android:textSize="@dimen/activity_tripsactivity_smalltext"
+                    android:paddingTop="@dimen/activity_tripsactivity_paddingtop"
+                    android:layout_toEndOf="@id/bus3"
+                    android:layout_toRightOf="@id/bus3"
+                    />
+
+                <TextView
+                    android:id="@+id/info_origin3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/importantText"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:text="@string/label_tripsactivity_fromorigin"
+                    android:paddingTop="@dimen/activity_tripsactivity_paddingsmall"
+                    android:paddingLeft="@dimen/activity_tripsactivity_paddingleft"
+                    android:paddingRight="@dimen/activity_tripsactivity_nopadding"
+                    android:paddingEnd="@dimen/activity_tripsactivity_nopadding"
+                    android:layout_below="@id/info_tripsactivity_from3"
+                    />
+
+                <TextView
+                    android:id="@+id/info_destination3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/importantText"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:text="@string/label_tripsactivity_todestination"
+                    android:paddingTop="@dimen/activity_tripsactivity_paddingsmall"
+                    android:paddingLeft="@dimen/layout_padding"
+                    android:paddingRight="@dimen/activity_tripsactivity_nopadding"
+                    android:paddingEnd="@dimen/activity_tripsactivity_nopadding"
+                    android:layout_below="@id/info_tripsactivity_to3"
+                    android:layout_toRightOf="@id/bus3"
+                    android:layout_toEndOf="@id/bus3"
+                    />
+
+                <TextView
+                    android:id="@+id/info_origin_time3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/importantText"
+                    android:text="@string/label_tripsactivity_fromtime"
+                    android:paddingTop="@dimen/activity_tripsactivity_paddingsmall"
+                    android:paddingLeft="@dimen/activity_tripsactivity_paddingleft"
+                    android:paddingRight="@dimen/activity_tripsactivity_nopadding"
+                    android:paddingEnd="@dimen/activity_tripsactivity_nopadding"
+                    android:layout_below="@id/info_origin3"
+                    />
+
+                <TextView
+                    android:id="@+id/info_destination_time3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/importantText"
+                    android:text="@string/label_tripsactivity_totime"
+                    android:paddingTop="@dimen/activity_tripsactivity_paddingsmall"
+                    android:paddingLeft="@dimen/layout_padding"
+                    android:paddingRight="@dimen/activity_tripsactivity_nopadding"
+                    android:paddingEnd="@dimen/activity_tripsactivity_nopadding"
+                    android:layout_below="@id/info_destination3"
+                    android:layout_toRightOf="@id/bus3"
+                    android:layout_toEndOf="@id/bus3"
+                    />
+
+                <TextView
+                    android:id="@+id/info_date3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/activity_tripsactivity_smalltext"
+                    android:layout_gravity="end"
+                    android:text="@string/label_tripsactivity_date"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:paddingTop="@dimen/activity_tripsactivity_paddingtop"
+                    android:paddingLeft="@dimen/activity_tripsactivity_nopadding"
+                    android:paddingEnd="@dimen/activity_tripsactivity_marginright"
+                    android:paddingRight="@dimen/activity_tripsactivity_marginright"
+                    />
+
+                <!--ratings-->
+
+                <RatingBar android:progressDrawable="@drawable/ratingbar_gold"
+                    android:id="@+id/ratingBar1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/activity_tripcancel_ratingbarheight"
+                    android:isIndicator="false"
+                    android:layout_alignRight="@id/info_date3"
+                    android:layout_alignBottom="@id/info_destination_time3"
+                    android:numStars="5"
+                    android:rating="4"
+                    />
+
+            </RelativeLayout>
+
+        </android.support.v7.widget.CardView>
+
+        <!--4th card, it is inactive,editing-->
+        <android.support.v7.widget.CardView
+            xmlns:card_view="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/card_view4"
+            android:layout_gravity="center"
+            android:layout_width="@dimen/activity_tripsactivity_cardwidth"
+            android:layout_height="wrap_content"
+            card_view:cardCornerRadius="@dimen/cardview_default_radius"
+            android:layout_marginTop="@dimen/activity_tripsactivity_margintop"
+            card_view:cardBackgroundColor="?attr/colorAccent"
+            >
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <!--bus icon-->
+                <ImageView
+                    android:id="@+id/bus4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:cropToPadding="false"
+                    android:src="@drawable/ic_directions_bus_white_24dp"
+                    android:layout_centerInParent="true"
+                    android:contentDescription="@string/label_tripsactivity_buscontentdescription"
+                    />
+
+                <!--text: from to-->
+                <TextView
+                    android:id="@+id/info_tripsactivity_from4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/label_tripsactivity_from"
+                    android:textSize="@dimen/activity_tripsactivity_smalltext"
+                    android:paddingLeft="@dimen/activity_tripsactivity_marginleft"
+                    android:paddingRight="@dimen/activity_tripsactivity_nopadding"
+                    android:paddingEnd="@dimen/activity_tripsactivity_nopadding"
+                    android:paddingTop="@dimen/activity_tripsactivity_paddingtop"
+                    />
+
+                <TextView
+                    android:id="@+id/info_tripsactivity_to4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/label_tripsactivity_to"
+                    android:textSize="@dimen/activity_tripsactivity_smalltext"
+                    android:paddingTop="@dimen/activity_tripsactivity_paddingtop"
+                    android:layout_toEndOf="@id/bus4"
+                    android:layout_toRightOf="@id/bus4"
+                    />
+
+                <TextView
+                    android:id="@+id/info_origin4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/importantText"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:text="@string/label_tripsactivity_fromorigin"
+                    android:paddingTop="@dimen/activity_tripsactivity_paddingsmall"
+                    android:paddingLeft="@dimen/activity_tripsactivity_paddingleft"
+                    android:paddingRight="@dimen/activity_tripsactivity_nopadding"
+                    android:paddingEnd="@dimen/activity_tripsactivity_nopadding"
+                    android:layout_below="@id/info_tripsactivity_from4"
+
+                    />
+
+                <TextView
+                    android:id="@+id/info_destination4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/importantText"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:text="@string/label_tripsactivity_todestination"
+                    android:paddingTop="@dimen/activity_tripsactivity_paddingsmall"
+                    android:paddingLeft="@dimen/layout_padding"
+                    android:paddingRight="@dimen/activity_tripsactivity_nopadding"
+                    android:paddingEnd="@dimen/activity_tripsactivity_nopadding"
+                    android:layout_below="@id/info_tripsactivity_to4"
+                    android:layout_toRightOf="@id/bus4"
+                    android:layout_toEndOf="@id/bus4"
+                    />
+
+                <TextView
+                    android:id="@+id/info_origin_time4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/importantText"
+                    android:text="@string/label_tripsactivity_fromtime"
+                    android:paddingTop="@dimen/activity_tripsactivity_paddingsmall"
+                    android:paddingLeft="@dimen/activity_tripsactivity_paddingleft"
+                    android:paddingRight="@dimen/activity_tripsactivity_nopadding"
+                    android:paddingEnd="@dimen/activity_tripsactivity_nopadding"
+                    android:layout_below="@id/info_origin4"
+                    />
+
+                <TextView
+                    android:id="@+id/info_destination_time4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/importantText"
+                    android:paddingTop="@dimen/activity_tripsactivity_paddingsmall"
+                    android:text="@string/label_tripsactivity_totime"
+                    android:paddingLeft="@dimen/layout_padding"
+                    android:paddingRight="@dimen/activity_tripsactivity_nopadding"
+                    android:paddingEnd="@dimen/activity_tripsactivity_nopadding"
+                    android:layout_below="@id/info_destination4"
+                    android:layout_toRightOf="@id/bus4"
+                    android:layout_toEndOf="@id/bus4"
+
+                    />
+
+                <TextView
+                    android:id="@+id/info_date4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/activity_tripsactivity_smalltext"
+                    android:layout_gravity="end"
+                    android:text="@string/label_tripsactivity_date"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:paddingTop="@dimen/activity_tripsactivity_paddingtop"
+                    android:paddingLeft="@dimen/activity_tripsactivity_nopadding"
+                    android:paddingEnd="@dimen/activity_tripsactivity_marginright"
+                    android:paddingRight="@dimen/activity_tripsactivity_marginright"
+                    />
+
+                <!--ratings-->
+                <RatingBar android:progressDrawable="@drawable/ratingbar_gold"
+                    android:id="@+id/ratingBar2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/activity_tripcancel_ratingbarheight"
+                    android:isIndicator="false"
+                    android:layout_alignRight="@id/info_date4"
+                    android:layout_alignBottom="@id/info_destination_time4"
+                    android:numStars="5"
+                    android:rating="0.5"
+                    />
+
+            </RelativeLayout>
+
+        </android.support.v7.widget.CardView>
+
+    </LinearLayout>
+
+</RelativeLayout>

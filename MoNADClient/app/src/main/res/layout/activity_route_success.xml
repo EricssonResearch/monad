@@ -1,0 +1,291 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="se.uu.csproject.monadclient.MainActivity"
+    android:weightSum="1">
+
+    <include
+        android:id="@+id/actionToolBar"
+        layout="@layout/app_bar" />
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/actionToolBar"
+        android:layout_alignParentBottom="true">
+
+        <LinearLayout
+            android:id="@+id/searchbar"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/activity_routesuccess_iconlarge"
+            android:layout_centerHorizontal="true"
+            android:gravity="center_horizontal"
+            android:focusable="true"
+            android:layout_marginTop="@dimen/activity_vertical_margin">
+
+            <EditText
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:hint="@string/label_main_searchtext"
+                style="@style/whiteText"
+                android:textColorHint="#ffffff"
+                android:textStyle="italic"
+                android:background="@color/black"
+                android:paddingLeft="@dimen/activity_routesuccess_paddingmedium"
+                android:paddingRight="@dimen/activity_routesuccess_paddingsmall"
+                android:paddingEnd="@dimen/activity_routesuccess_paddingsmall"
+                android:id="@+id/editText"
+                android:imeActionLabel="Go"/>
+
+            <ImageButton
+                android:id="@+id/imageButton"
+                android:layout_width="@dimen/activity_routesuccess_iconlarge"
+                android:layout_height="@dimen/activity_routesuccess_iconlarge"
+                android:background="@color/primaryColor"
+                android:src="@drawable/ic_location_on_white_48dp"
+                android:onClick="linkToSearch"
+                android:contentDescription="@string/label_routesuccess_iconcontentdescription"/>
+
+        </LinearLayout>
+
+        <android.support.v7.widget.CardView
+            xmlns:card_view="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/successcard"
+            android:layout_gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/activity_routesuccess_arealarge"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_marginRight="@dimen/activity_horizontal_margin"
+            card_view:cardCornerRadius="@dimen/cardview_default_radius"
+            card_view:cardUseCompatPadding="true"
+            card_view:cardElevation="10dp"
+            android:layout_centerHorizontal="true"
+            android:orientation="vertical"
+            android:layout_below="@+id/searchbar"
+            card_view:cardBackgroundColor="@color/primaryColor"
+            android:gravity="center_horizontal"
+            >
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <!--your booking was successful-->
+                <TextView
+                    android:id="@+id/booking_successful"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/activity_routesuccess_textlarge"
+                    android:text="@string/label_routesuccess_success"
+                    style="@style/whiteText"
+                    android:textStyle="italic"
+                    android:layout_marginBottom="@dimen/activity_vertical_margin"
+                    android:gravity="center_horizontal"
+                    />
+
+                <!--firstline-->
+                <LinearLayout
+                    android:id="@+id/layout_firstline"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    android:layout_below="@+id/booking_successful"
+                    android:orientation="horizontal"
+                    >
+                    <TextView
+                        android:id="@+id/trip_depart"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/label_routesuccess_depart"
+                        android:textSize="@dimen/activity_routesuccess_textmedium"
+                        style="@style/whiteText"
+                        android:gravity="end"
+
+                        />
+
+                    <TextView
+                        android:id="@+id/trip_departstopname"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="2"
+                        android:text="@string/label_trips_from_origin"
+                        android:textSize="@dimen/activity_routesuccess_textmedium"
+                        style="@style/whiteText"
+                        android:gravity="center"
+                        />
+
+                    <TextView
+                        android:id="@+id/trip_depart_time"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:text="@string/label_trips_from_time"
+                        android:textSize="@dimen/activity_routesuccess_textmedium"
+                        style="@style/whiteText"
+                        />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/layout_second_line"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/activity_vertical_margin"
+                    android:layout_below="@+id/layout_firstline"
+                    android:orientation="horizontal"
+                    >
+                    <TextView
+                        android:id="@+id/trip_arrive_text_view"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:text="@string/label_routesuccess_arrive"
+                        android:textSize="@dimen/activity_routesuccess_textmedium"
+                        style="@style/whiteText"
+                        android:layout_weight="1"
+                        android:gravity="end"
+                        />
+
+                    <TextView
+                        android:id="@+id/trip_arrive_stop_name_text_view"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:text="@string/label_trips_to_destination"
+                        android:textSize="@dimen/activity_routesuccess_textmedium"
+                        style="@style/whiteText"
+                        android:layout_weight="2"
+                        android:gravity="center"
+                        />
+
+                    <TextView
+                        android:id="@+id/trip_arrive_time"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:text="@string/label_trips_to_time"
+                        android:textSize="@dimen/activity_routesuccess_textmedium"
+                        style="@style/whiteText"
+                        />
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/black"
+                    android:id="@+id/separator"
+                    android:layout_above="@+id/layout_third_line"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true">
+                </View>
+
+                <LinearLayout
+                    android:id="@+id/layout_third_line"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/activity_routesuccess_paddingmedium"
+                    android:layout_below="@+id/layout_second_line"
+                    android:orientation="horizontal"
+                    android:paddingTop="@dimen/activity_routesuccess_paddingmedium">
+
+                    <ImageView
+                        android:id="@+id/walking_sign_image_view"
+                        android:layout_width="@dimen/activity_routesuccess_iconmedium"
+                        android:layout_height="@dimen/activity_routesuccess_iconmedium"
+                        android:src="@drawable/ic_directions_walk_black_24dp"
+                        android:layout_weight="1"
+                        android:contentDescription="@string/label_routesuccess_iconcontentdescription"
+                        />
+
+                    <TextView
+                        android:id="@+id/trip_more_information_text_view"
+                        android:layout_width="0dp"
+                        android:layout_height="@dimen/activity_routesuccess_iconmedium"
+                        android:layout_weight="3"
+                        android:text="@string/label_routesuccess_instruction"
+                        android:textSize="@dimen/activity_routesuccess_textmedium"
+                        style="@style/whiteText"
+                        android:gravity="center_vertical"
+                        android:onClick="linkToTripDetails"
+                        />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/layout_fourth_line"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/layout_third_line"
+                    android:orientation="horizontal"   >
+
+                    <ImageView
+                        android:id="@+id/bus_sign_image_view"
+                        android:layout_width="@dimen/activity_routesuccess_iconmedium"
+                        android:layout_height="@dimen/activity_routesuccess_iconmedium"
+                        android:src="@drawable/ic_directions_bus_black_24dp"
+                        android:layout_weight="1"
+                        android:paddingBottom="@dimen/activity_routesuccess_paddingsmall"
+                        android:contentDescription="@string/label_routesuccess_iconcontentdescription"
+                        />
+
+                    <TextView
+                        android:id="@+id/trip_bus_number_text_view"
+                        android:layout_width="0dp"
+                        android:layout_height="@dimen/activity_routesuccess_iconmedium"
+                        android:layout_weight="3"
+                        android:text="@string/label_routesuccess_businfo"
+                        android:textSize="@dimen/activity_routesuccess_textmedium"
+                        style="@style/whiteText"
+                        android:gravity="center_vertical"
+                        android:paddingBottom="@dimen/activity_routesuccess_paddingsmall"
+                        />
+                </LinearLayout>
+
+            </RelativeLayout>
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView
+            xmlns:card_view="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/countdowncard"
+            android:layout_gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            card_view:cardCornerRadius="@dimen/cardview_default_radius"
+            card_view:cardUseCompatPadding="true"
+            card_view:cardElevation="@dimen/cardview_default_elevation"
+            android:layout_below="@+id/successcard"
+            android:layout_marginTop="@dimen/activity_routesuccess_arealarge"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_marginRight="@dimen/activity_horizontal_margin"
+            android:layout_centerHorizontal="true"
+            android:orientation="vertical"
+            >
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <TextView
+                    android:id="@+id/countdown_textview"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/label_routesuccess_countdowntext"
+                    android:textSize="@dimen/activity_routesuccess_textmedium"
+                    android:textColor="@color/warnColor"
+                    android:gravity="center_horizontal"
+                    android:padding="5dp"
+                    />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/activity_routesuccess_paddingmedium"
+                    android:text="@string/label_trips_countdown"
+                    android:textSize="@dimen/activity_routesuccess_textlarge"
+                    android:layout_centerHorizontal="true"
+                    android:textColor="@color/warnColor"
+                    android:layout_below="@id/countdown_textview"
+                    />
+            </RelativeLayout>
+        </android.support.v7.widget.CardView>
+
+    </RelativeLayout>
+</RelativeLayout>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">MoNAD - Ready Set GO!</string>
+    <string name="action_aboutus">A Propos</string>
+    <string name="action_mytrips">Mes Voyages</string>
+    <string name="action_notifications">Notifications</string>
+    <string name="action_profile">Profil</string>
+    <string name="action_search">Recherche</string>
+    <string name="action_settings">Parametres</string>
+    <string name="action_signout">Deconnexion</string>
+    <string name="hello_world">Wesh tout l\'monde!</string>
+    <string name="label_login_anonymous">Rester anonyme</string>
+    <string name="label_login_login">Connexion</string>
+    <string name="label_login_newuser">Nouvel Utilisateur? Creer un compte</string>
+    <string name="label_login_password">Mot de Passe</string>
+    <string name="label_login_username">Nom d\'Utilisateur</string>
+    <string name="label_main_destination">Destination</string>
+    <string name="label_notifications_recent">Recent</string>
+    <string name="label_profile_information">Information Actuelle</string>
+    <string name="label_settings_selectlanguage">Veuillez choisir votre langue</string>
+    <string name="label_trips_current">Voyages Actifs</string>
+    <string name="title_activity_main">Recherche</string>
+    <string name="title_activity_notifications">Notifications</string>
+    <string name="title_activity_profile">Profil</string>
+    <string name="title_activity_settings">Parametres</string>
+    <string name="title_activity_trips">Mes Voyages</string>
+</resources>
