@@ -107,7 +107,7 @@ for ind, fit in zip(pop, fitnesses):
 
 print len(pop)
 offspring = toolbox.select(pop, len(pop))
-
+print offspring
 offspring = list(map(toolbox.clone, offspring))
 print offspring
 

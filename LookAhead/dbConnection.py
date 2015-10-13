@@ -46,7 +46,7 @@ class DB():
                 return document
         else:
             for document in data:
-            	return document[column]
+                return document[column]
                 
     # Travel Requests
     def getTravelRequestCount(self):
@@ -64,7 +64,7 @@ class DB():
         req = self.db.TravelRequest.find({"_id": ObjectId(object)})
         return self.retrieveData(req, column)
         
-	# Routes
+    # Routes
     def populateRoute(self, route):
         # route5 = {"line": 5, "durationTime":39, routeStop2}
         # routeStop5 = ["Stenhagenskolan","Herrhagens Byväg","Kiselvägen","Stenhagens Centrum","Stenröset","Stenhällen","Gatstenen","Hedensbergsvägen","Flogsta centrum","Rickomberga","Studentstaden","Ekonomikum","Götgatan","Skolgatan","Stadshuset","Centralstationen","Samariterhemmet","Strandbodgatan","Kungsängsesplanaden","Vimpelgatan","Lilla Ultuna","Kuggebro","Vilan","Nämndemansvägen","Lapplandsresan","Ölandsresan","Daneport","Västgötaresan","Gotlandsresan","Smålandsvägen"]
@@ -84,12 +84,12 @@ class DB():
         self.db.route.drop()
 
     def getTripDay(self, line):
-    	tripDay = self.db.route.find( { "line" : line  }, {"tripDay" : 1} )
-    	return self.retrieveData(tripDay, "tripDay")
+        tripDay = self.db.route.find( { "line" : line  }, {"tripDay" : 1} )
+        return self.retrieveData(tripDay, "tripDay")
     
     def getRouteStop(self, line):
         routeStop = self.db.route.find( { "line" : line  }, {"stop" : 1} )
-    	return self.retrieveData(routeStop, "stop")
+        return self.retrieveData(routeStop, "stop")
     
     # Bus
     # https://www.ul.se/en/About-UL/About-our-public-function/
@@ -164,7 +164,7 @@ class DB():
         for i in range(numberStop):
             minuteSeed = minuteSeed + busStop[i][1]
             if minuteSeed > DB.minutesDay:
-            	minuteSeed = minuteSeed - DB.minutesDay;
+                minuteSeed = minuteSeed - DB.minutesDay;
             # tripTimeTable.append([busStop[i][0],self.generateTime(minuteSeed)])
             # tripTimeTable.append([self.generateTime(minuteSeed)])
             tripTimeTable.append(self.generateTime(minuteSeed))
@@ -179,7 +179,7 @@ class DB():
         for i in range(tripDay):
             #timeTable.append([self.getRoute("line"),self.getRandomBus("plate"),self.generateTripTimeTable(self.mergeRandomTime(self.getRandomHour(),self.getRandomMinute()),self.getRouteStop(line))])
             timeTable.append(self.generateTripTimeTable(line))
-        print timeTable
+        # print timeTable
         return timeTable
     
     def flatten(self, l):
