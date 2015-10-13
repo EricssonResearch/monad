@@ -71,7 +71,7 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:padding="@dimen/medium_padding">
+                android:padding="@dimen/small_padding">
                 <!--your booking was successful-->
                 <TextView
                     android:id="@+id/booking_successful"
