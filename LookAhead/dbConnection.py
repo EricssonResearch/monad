@@ -29,7 +29,7 @@ class DB():
     database = "monad"
     timeSeparator = ":"
     minutesDay = 1440
-    hoursDay = 24
+    hoursDay = 23
     minutesHour = 60
 
     # Constructor
@@ -149,6 +149,8 @@ class DB():
 
     def generateTime(self, time):
         hours, minutes = divmod(time, DB.minutesHour)
+        if hours==24:
+            hours=0
         return self.mergeRandomTime(hours, minutes)
 
     # Trip
