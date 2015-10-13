@@ -1,3 +1,18 @@
+# Copyright 2015 Ericsson AB
+#
+# Licensed under the Apache License, Version 2.0 (the "License"); you may not 
+# use this file except in compliance with the License. You may obtain a copy 
+# of the License at
+#
+#    http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software 
+# distributed under the License is distributed on an "AS IS" BASIS, WITHOUT 
+# WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the 
+# License for the specific language governing permissions and limitations 
+# under the License.
+
+
 import pymongo
 import datetime
 
@@ -99,8 +114,6 @@ class TravelPlanner:
                         self.endingWaypoint.append(i)
                     break
 
-#TODO: include algorithm for either shortest travel time or shortest waiting time
-#TODO: currently it decides on the route based on fastest arrival and shortest travel time
     def _findBestRoute(self):
         self.bestRoute = self.fittingRoutes[0]
         self.counter = 0
@@ -134,7 +147,7 @@ class TravelPlanner:
         if (self.fittingRoutes == []):
             return None
 
-        self._findBestRoute() 
+        self._findBestRoute()
 
         self._updateRequestDB()
         self._updateTimeTableDB()
