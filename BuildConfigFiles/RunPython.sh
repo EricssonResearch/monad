@@ -11,4 +11,5 @@ python -m compileall */*/*.py
 python -m compileall */*/*/*.py
 python -m compileall */*/*/*/*.py
 
-erl -compile **/*.erl
+#uncomment this when erlang script are uploaded
+#erl -compile **/*.erl
