@@ -10,7 +10,7 @@
 
         <RelativeLayout
             android:id="@+id/cancelpopupheader"
-            android:layout_width="@dimen/activity_tripsactivity_cardwidth"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/grayDark"
             android:layout_centerHorizontal="true"
@@ -23,8 +23,8 @@
                 android:layout_height="wrap_content"
                 style="@style/whiteText"
                 android:textStyle="italic"
-                android:textSize="@dimen/activity_tripcancel_largetext"
-                android:padding="@dimen/activity_tripcancel_smallpadding"
+                android:textSize="@dimen/header_textlarge"
+                android:padding="3dp"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
                 android:layout_centerVertical="true"
@@ -35,188 +35,171 @@
         <android.support.v7.widget.CardView
             xmlns:card_view="http://schemas.android.com/apk/res-auto"
             android:id="@+id/popupinfo"
-            android:layout_gravity="center"
-            android:layout_width="@dimen/activity_tripsactivity_cardwidth"
-            android:layout_height="@dimen/activity_tripcancel_cardheight"
-            card_view:cardCornerRadius="@dimen/cardview_default_radius"
             android:layout_below="@id/cancelpopupheader"
-            android:layout_centerInParent="true">
+            android:layout_gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            card_view:cardCornerRadius="@dimen/cardview_default_radius">
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_alignParentTop="true"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true">
-
-
+                android:layout_height="wrap_content"
+                android:padding="@dimen/medium_padding"
+                >
 
                 <!--text: to from -->
                 <TextView
-                    android:id="@+id/info_text_from"
+                    android:id="@+id/info_text_from1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/label_tripsactivity_from"
-                    android:textSize="@dimen/activity_tripsactivity_smalltext"
-                    android:paddingLeft="@dimen/activity_tripsactivity_marginleft"
-                    android:paddingRight="@dimen/activity_tripsactivity_nopadding"
-                    android:paddingEnd="@dimen/activity_tripsactivity_nopadding"
-                    android:paddingTop="@dimen/activity_tripcancel_paddingtop"
+                    android:textSize="@dimen/small_text"
                     />
+
                 <TextView
-                    android:id="@+id/info_origin"
+                    android:id="@+id/info_origin1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     style="@style/importantText"
                     android:text="@string/label_tripsactivity_fromorigin"
                     android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:paddingTop="@dimen/activity_tripcancel_paddingtop"
-                    android:paddingLeft="@dimen/activity_tripsactivity_paddingleft"
-                    android:paddingRight="@dimen/activity_tripsactivity_nopadding"
-                    android:paddingEnd="@dimen/activity_tripsactivity_nopadding"
-                    android:layout_below="@id/info_text_from"
+                    android:paddingTop="3dp"
+                    android:paddingLeft="@dimen/layout_padding"
+                    android:layout_below="@id/info_text_from1"
                     />
+
                 <!--bus icon-->
                 <ImageView
-                    android:id="@+id/bus"
+                    android:id="@+id/bus1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:cropToPadding="false"
                     android:src="@drawable/ic_directions_bus_black_24dp"
                     android:contentDescription="@string/label_tripsactivity_buscontentdescription"
                     android:layout_centerHorizontal="true"
-                    android:layout_alignTop="@id/info_origin"
+                    android:layout_alignTop="@id/info_origin1"
+                    android:padding="3dp"
                     />
 
                 <TextView
-                    android:id="@+id/info_text_to"
+                    android:id="@+id/info_text_to1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/label_tripsactivity_to"
-                    android:textSize="@dimen/activity_tripsactivity_smalltext"
-                    android:paddingTop="@dimen/activity_tripcancel_paddingtop"
-                    android:layout_toEndOf="@id/bus"
-                    android:layout_toRightOf="@id/bus"
+                    android:textSize="@dimen/small_text"
+                    android:layout_toEndOf="@id/bus1"
+                    android:layout_toRightOf="@id/bus1"
                     />
 
-
-
                 <TextView
-                    android:id="@+id/info_destination"
+                    android:id="@+id/info_destination1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     style="@style/importantText"
                     android:textAppearance="?android:attr/textAppearanceSmall"
                     android:text="@string/label_tripsactivity_todestination"
-                    android:paddingTop="@dimen/activity_tripcancel_paddingtop"
+                    android:paddingTop="3dp"
                     android:paddingLeft="@dimen/layout_padding"
-                    android:paddingRight="@dimen/activity_tripsactivity_nopadding"
-                    android:paddingEnd="@dimen/activity_tripsactivity_nopadding"
-                    android:layout_below="@id/info_text_to"
-                    android:layout_toRightOf="@id/bus"
-                    android:layout_toEndOf="@id/bus"
+                    android:layout_below="@id/info_text_to1"
+                    android:layout_toRightOf="@id/bus1"
+                    android:layout_toEndOf="@id/bus1"
                     />
 
                 <TextView
-                    android:id="@+id/info_origin_time"
+                    android:id="@+id/info_origin_time1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     style="@style/importantText"
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:text="@string/label_tripsactivity_fromtime"
-                    android:paddingTop="@dimen/activity_tripsactivity_paddingtop"
-                    android:paddingLeft="@dimen/activity_tripsactivity_paddingleft"
-                    android:paddingRight="@dimen/activity_tripsactivity_nopadding"
-                    android:paddingEnd="@dimen/activity_tripsactivity_nopadding"
-                    android:layout_below="@id/info_origin"
+                    android:paddingTop="3dp"
+                    android:paddingLeft="@dimen/layout_padding"
+                    android:layout_below="@id/info_origin1"
                     />
 
                 <TextView
-                    android:id="@+id/info_destination_time"
+                    android:id="@+id/info_destination_time1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     style="@style/importantText"
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:text="@string/label_tripsactivity_totime"
-                    android:paddingTop="@dimen/activity_tripcancel_paddingtop"
+                    android:paddingTop="3dp"
                     android:paddingLeft="@dimen/layout_padding"
-                    android:paddingRight="@dimen/activity_tripsactivity_nopadding"
-                    android:paddingEnd="@dimen/activity_tripsactivity_nopadding"
-                    android:layout_below="@id/info_destination"
-                    android:layout_toRightOf="@id/bus"
-                    android:layout_toEndOf="@id/bus"
+                    android:layout_below="@id/info_destination1"
+                    android:layout_toRightOf="@id/bus1"
+                    android:layout_toEndOf="@id/bus1"
                     />
 
                 <!--clock icon-->
                 <ImageView
-                    android:id="@+id/clock"
+                    android:id="@+id/clock1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:cropToPadding="false"
                     android:src="@drawable/ic_alarm_black_24dp"
                     android:contentDescription="@string/label_tripsactivity_clockcontentdescription"
-                    android:paddingTop="@dimen/activity_tripcancel_paddingtop"
+                    android:padding="3dp"
                     android:layout_centerHorizontal="true"
-                    android:layout_below="@id/bus"
+                    android:layout_below="@id/bus1"
                     />
 
                 <!--text: countdown info-->
                 <TextView
-                    android:id="@+id/info_date"
+                    android:id="@+id/info_date1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:text="@string/label_tripsactivity_day"
-                    android:textColor="@color/black"
-                    android:paddingTop="@dimen/activity_tripcancel_paddingtop"
+                    android:padding="3dp"
                     android:layout_centerHorizontal="true"
-                    android:layout_below="@id/clock"
+                    android:layout_below="@id/clock1"
+                    style="@style/importantText"
                     />
 
                 <TextView
-                    android:id="@+id/countdown"
+                    android:id="@+id/countdown1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="@dimen/activity_tripsactivity_largetext"
+                    android:textSize="@dimen/header_textlarge"
                     android:text="@string/label_tripsactivity_countdown"
-                    android:textColor="@color/black"
                     android:layout_centerHorizontal="true"
-                    android:layout_below="@id/info_date"
-                    />
+                    style="@style/importantText"
+                    android:layout_below="@id/info_date1"/>
 
             </RelativeLayout>
 
         </android.support.v7.widget.CardView>
 
-        <RelativeLayout
+        <LinearLayout
             android:id="@+id/buttonbar"
-            android:layout_width="@dimen/activity_tripsactivity_cardwidth"
-            android:layout_height="@dimen/activity_tripcancel_buttonbarheight"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:background="@color/grayDark"
             android:layout_below="@id/popupinfo"
             android:layout_centerHorizontal="true">
+
             <Button
                 android:id="@+id/button_trip_back"
-                android:layout_width="@dimen/activity_tripcancel_buttonwidth"
-                android:layout_height="@dimen/activity_tripcancel_buttonheight"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/button_sizelarge"
                 android:text="@string/label_tripcancel_buttonback"
-                android:layout_alignParentLeft="true"
-                android:layout_marginLeft="@dimen/activity_tripcancel_margin"
-                android:layout_centerVertical="true"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="1"
                 />
+
             <Button
                 android:id="@+id/button_trip_cancel"
-                android:layout_width="@dimen/activity_tripcancel_buttonwidth"
-                android:layout_height="@dimen/activity_tripcancel_buttonheight"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/button_sizelarge"
                 android:text="@string/label_tripcancel_buttoncancel"
-                android:layout_alignParentRight="true"
-                android:layout_marginRight="@dimen/activity_tripcancel_margin"
-                android:layout_centerVertical="true"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="1"
                 android:textColor="@color/warnColor"
                 android:onClick="dropTrip"
                 />
 
-        </RelativeLayout>
+        </LinearLayout>
 
     </RelativeLayout>
 

@@ -191,15 +191,17 @@
             android:layout_height="match_parent"
             android:fillViewport="true">
 
-            <LinearLayout
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                >
 
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/activity_search_customheight"
-                    android:background="@color/gray">
+                    android:background="@color/gray"
+                    android:id="@+id/result1">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -255,7 +257,9 @@
                     android:layout_height="@dimen/layout_customheight"
                     android:layout_marginTop="@dimen/activity_search_smallmargintopbottom"
                     android:layout_marginBottom="@dimen/activity_search_smallmargintopbottom"
-                    android:background="@color/gray">
+                    android:background="@color/gray"
+                    android:id="@+id/result2"
+                    android:layout_below="@id/result1">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -297,7 +301,9 @@
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/layout_customheight"
-                    android:background="@color/gray">
+                    android:background="@color/gray"
+                    android:id="@+id/result3"
+                    android:layout_below="@id/result2">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -350,16 +356,17 @@
 
                 <Button
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:id="@+id/button_search_searchbtn"
                     android:text="@string/label_search_buttonsearch"
                     android:textColor="@color/white"
                     android:background="@color/primaryColor"
                     android:layout_gravity="bottom"
                     android:layout_marginTop="@dimen/layout_mediummargintop"
+                    android:layout_alignParentBottom="true"
                     />
 
-            </LinearLayout>
+            </RelativeLayout>
 
         </ScrollView>
 

@@ -11,7 +11,8 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/actionToolBar">
+        android:layout_below="@id/actionToolBar"
+        >
 
         <ImageView
             android:layout_width="match_parent"
@@ -37,8 +38,8 @@
                 android:layout_height="wrap_content"
                 android:padding="@dimen/layout_padding">
                 <ImageView
-                    android:layout_width="@dimen/activity_route_iconsize"
-                    android:layout_height="@dimen/activity_route_iconsize"
+                    android:layout_width="@dimen/icon_small"
+                    android:layout_height="@dimen/icon_small"
                     android:src="@drawable/ic_directions_walk_black_24dp"
                     android:contentDescription="@string/label_route_iconcontentdescription"
                     android:layout_weight="1"/>
@@ -64,8 +65,8 @@
                 android:layout_height="wrap_content"
                 android:padding="@dimen/layout_padding">
                 <ImageView
-                    android:layout_width="@dimen/activity_route_iconsize"
-                    android:layout_height="@dimen/activity_route_iconsize"
+                    android:layout_width="@dimen/icon_small"
+                    android:layout_height="@dimen/icon_small"
                     android:src="@drawable/ic_directions_bus_black_18dp"
                     android:contentDescription="@string/label_route_iconcontentdescription"
                     android:layout_weight="1"/>
@@ -91,8 +92,8 @@
                 android:layout_height="wrap_content"
                 android:padding="@dimen/layout_padding">
                 <ImageView
-                    android:layout_width="@dimen/activity_route_iconsize"
-                    android:layout_height="@dimen/activity_route_iconsize"
+                    android:layout_width="@dimen/icon_small"
+                    android:layout_height="@dimen/icon_small"
                     android:src="@drawable/ic_directions_walk_black_18dp"
                     android:contentDescription="@string/label_route_iconcontentdescription"
                     android:layout_weight="1"/>
@@ -114,15 +115,16 @@
         </TableLayout>
 
         <Button
-            android:layout_width="@dimen/activity_route_areaverylarge"
-            android:layout_height="@dimen/activity_route_arealarge"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/button_sizelarge"
             android:text="@string/label_trips_join"
             style="@style/whiteText"
-            android:textSize="16sp"
+            android:textSize="@dimen/medium_text"
             android:background="@color/primaryColor"
             android:id="@+id/btn_join_trips"
-            android:layout_centerHorizontal="true"
-            android:layout_below="@+id/triptable"/>
+            android:padding="16dp"
+            android:layout_below="@+id/triptable"
+            android:layout_centerHorizontal="true" />
 
 
     </RelativeLayout>
