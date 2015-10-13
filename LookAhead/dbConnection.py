@@ -145,6 +145,8 @@ class DB():
 
     def generateMinute(self, time):
         hours, minutes = time.split(DB.timeSeparator)
+        if int(hours)==24:
+            hours="0"
         return int(hours) * DB.minutesHour + int(minutes)
 
     def generateTime(self, time):
