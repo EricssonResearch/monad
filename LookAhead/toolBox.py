@@ -39,7 +39,7 @@ creator.create("Individual", list, fitness=creator.FitnessMin)
 toolbox = base.Toolbox()
 
 # Register the operations to be used in the toolbox
-toolbox.register("attribute", databaseClass.generateTripTimeTable, BUS_LINE)
+toolbox.register("attribute", databaseClass.generateStartingTripTime)
 toolbox.register("individual", tools.initRepeat, creator.Individual,
                  toolbox.attribute, INDIVIDUAL_SIZE)
 toolbox.register("population", tools.initRepeat, list, toolbox.individual,
