@@ -14,6 +14,18 @@ specific language governing permissions and limitations under the License.
 """
 import struct
 import time
+import random
+from dbConnection import DB
+from deap import base
+from deap import creator
+from deap import tools
+from datetime import datetime, timedelta
+from itertools import repeat
+from collections import Sequence
+import mutation 
+
+
+MUTPB = 0.5
 from deap import base, creator, tools
 from itertools import repeat
 from collections import Sequence
@@ -38,6 +50,7 @@ toolbox.register("population", tools.initRepeat, list, toolbox.individual, 10)
 # Operator registering
 toolbox.register("evaluate", fitness.evalIndividual)
 toolbox.register("mate", tools.cxOnePoint)
+toolbox.register("mutate", mutation.mutUniformTime)
 toolbox.register("select", tools.selTournament, tournsize=3)
 # ind = toolbox.individual()
 # print ind
@@ -55,6 +68,27 @@ offspring = toolbox.select(pop, len(pop))
 print offspring
 offspring = list(map(toolbox.clone, offspring))
 print offspring
+'''
+
+# Testing mutation
+for mutant in pop:
+    if random.random() < MUTPB:
+        toolbox.mutate(mutant)
+        del mutant.fitness.values
+'''
+invalids = [ind for ind in pop if not ind.fitness.valid]
+fitnesses = toolbox.map(toolbox.evaluate, invalids)
+for ind, fit in zip(invalids, fitnesses):
+    ind.fitness.values = fit
+
+'''
+print " Mutation done"
+
+# for child1, child2 in zip(pop[::2], pop[1::2]):
+    # print "Child 1"
+    # print len(child1)
+    # print "Child 2"
+    # print len(child2)
 
 for child1, child2 in zip(pop[::2], pop[1::2]):
     print "Child 1"
@@ -62,3 +96,4 @@ for child1, child2 in zip(pop[::2], pop[1::2]):
     print "Child 2"
     print len(child2)
     #print(toolbox.mate(child1, child2))
+    '''

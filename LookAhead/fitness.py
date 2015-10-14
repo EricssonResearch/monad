@@ -15,8 +15,9 @@ See the License for the specific language governing permissions and limitations 
 """
 from datetime import datetime, timedelta
 
+
 class Fitness():
-    
+
     # Main variables
     formatString = '%H:%M'
     secondMinute = 60.0
@@ -76,4 +77,3 @@ class Fitness():
             # print diffMinutes
             minDiff = timedelta.max  # Reset minDiff for the next request time
         return diffMinutes,
-       
