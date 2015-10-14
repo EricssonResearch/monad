@@ -160,7 +160,26 @@ class DB():
 
     # Trip
     # Generate TT from seed random starting time
-    def generateTripTimeTable(self, line):
+    def generateStartingTripTime(self):
+        return list([self.getRoute("line"), self.generateRandomCapacity(), self.generateTime(self.generateMinute(self.mergeRandomTime(self.getRandomHour(),self.getRandomMinute())))])
+
+    def generateTripTimeTable(self, timetable):
+        timeTable = []
+        for i in range(len(timetable)):
+            busStop = self.getRouteStop(timetable[i][0])
+            numberStop = len(busStop)
+            # print numberStop
+            minuteSeed = self.generateMinute(timetable[i][2])
+            tripTimeTable = []
+            for j in range(numberStop):
+                minuteSeed = minuteSeed + busStop[j][1]
+                if minuteSeed > DB.minutesDay:
+                    minuteSeed = minuteSeed - DB.minutesDay
+                tripTimeTable.append(self.generateTime(minuteSeed))
+            timeTable.append([timetable[i][0], timetable[i][1], list(self.flatten(tripTimeTable))])
+        print timeTable
+        
+    def generateTripTimeTable2(self, line):
         tripTimeTable = []
         seed = self.mergeRandomTime(self.getRandomHour(),self.getRandomMinute())
         busStop = self.getRouteStop(line)
@@ -171,7 +190,7 @@ class DB():
             if minuteSeed > DB.minutesDay:
                 minuteSeed = minuteSeed - DB.minutesDay
             tripTimeTable.append(self.generateTime(minuteSeed))
-        return list(self.flatten([self.getRoute("line"), self.getRandomBus("plate"), list(self.flatten(tripTimeTable))]))
+        return list(self.flatten([self.getRoute("line"), self.generateRandomCapacity(), list(self.flatten(tripTimeTable))]))
 
     def generateTimeTable(self, line):
         timeTable = []

@@ -12,14 +12,13 @@ under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
 CONDITIONS OF ANY KIND, either express or implied. See the License for the 
 specific language governing permissions and limitations under the License.
 """
-from deap import base
-from deap import creator
 from deap import tools
+from dbConnection import DB
 import toolBox
 import random
 # Variables
 MUTPB = 0.5
-NGEN = 5
+NGEN = 2
 CXPB = 0.5
 
 # Generate the population
@@ -49,10 +48,10 @@ def main():
     # The Best Individual found
     best_ind = tools.selBest(pop, 1)[0]
     print("Best individual is %s, %s" % (best_ind, best_ind.fitness.values))
+    generateTimeTable(best_ind)
 
 
 def crossover(offspring):
-
     # Apply Crossover
     for child1, child2 in zip(offspring[::2], offspring[1::2]):
         if random.random() < CXPB:
@@ -75,24 +74,24 @@ def invalidfitness(offspring):
     fitnesses = map(toolBox.toolbox.evaluate, invalid_ind)
     for ind, fit in zip(invalid_ind, fitnesses):
         ind.fitness.values = fit
-
     print("  Evaluated %i individuals" % len(invalid_ind))
-
     # The population is entirely replaced by the offspring
     pop[:] = offspring
-
     # Gather all the fitnesses in one list and print the stats
     fits = [ind.fitness.values[0] for ind in pop]
-
     length = len(pop)
     mean = sum(fits) / length
     sum2 = sum(x*x for x in fits)
     std = abs(sum2 / length - mean**2)**0.5
-
     print("  Min %s" % min(fits))
     print("  Max %s" % max(fits))
     print("  Avg %s" % mean)
     print("  Std %s" % std)
+
+
+def generateTimeTable(individual):
+    databaseClass = DB()
+    databaseClass.generateTripTimeTable(individual)
 
 
 
