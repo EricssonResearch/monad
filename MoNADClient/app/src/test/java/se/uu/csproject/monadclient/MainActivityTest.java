@@ -9,7 +9,7 @@ import org.robolectric.annotation.Config;
 import static org.assertj.core.api.Assertions.*;
 
 @RunWith(RobolectricGradleTestRunner.class)
-@Config(constants = BuildConfig.class)
+@Config(constants = MainActivityTest.BuildConfig.class)
 public class MainActivityTest {
 
   @Test
