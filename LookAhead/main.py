@@ -14,11 +14,13 @@ specific language governing permissions and limitations under the License.
 """
 import struct
 import time
-from dbConnection import DB
-from fitness import Fitness
 from deap import base, creator, tools
 from itertools import repeat
 from collections import Sequence
+
+from dbConnection import DB
+from fitness import Fitness
+
 # Initialize the look ahead class
 lookAhead = DB()
 fitness = Fitness()
