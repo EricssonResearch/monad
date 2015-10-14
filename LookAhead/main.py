@@ -1,6 +1,20 @@
 # -*- coding: utf-8 -*-
+"""Copyright 2015 Ericsson AB
+
+Licensed under the Apache License, Version 2.0 (the "License"); you may not use
+this file except in compliance with the License. You may obtain a copy of the 
+License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software distributed
+under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR 
+CONDITIONS OF ANY KIND, either express or implied. See the License for the 
+specific language governing permissions and limitations under the License.
+"""
 import struct
 import time
+<<<<<<< HEAD
 import random
 from dbConnection import DB
 from deap import base
@@ -13,15 +27,25 @@ import mutation
 
 
 MUTPB = 0.5
+=======
+from deap import base, creator, tools
+from itertools import repeat
+from collections import Sequence
+
+from dbConnection import DB
+from fitness import Fitness
+>>>>>>> 35b9abc6e11e4c13d876bcb92a2ff022aca0d61d
 
 # Initialize the look ahead class
 lookAhead = DB()
+fitness = Fitness()
 creator.create("FitnessMax", base.Fitness, weights=(1.0,))
 creator.create("Individual", list, fitness=creator.FitnessMax)
 # Register genes on the toolbox
 toolbox = base.Toolbox()
 # toolbox.register("line", lookAhead.getRoute, "line")
 # The parameter here is the number of the line
+<<<<<<< HEAD
 
 
 def timeDiff(time1, time2):
@@ -80,13 +104,15 @@ def evalIndividual(individual):
 
     # TODO: mutation may produce individuals with overlapping times, penalize such individuals
     return diffMinutes,
+=======
+>>>>>>> 35b9abc6e11e4c13d876bcb92a2ff022aca0d61d
 # Define the genes on every chromosome
 toolbox.register("attribute", lookAhead.generateTripTimeTable, 2)
 toolbox.register("individual", tools.initRepeat, creator.Individual,
-                 toolbox.attribute, 24)
-toolbox.register("population", tools.initRepeat, list, toolbox.individual, 100)
+                 toolbox.attribute, 5)
+toolbox.register("population", tools.initRepeat, list, toolbox.individual, 10)
 # Operator registering
-toolbox.register("evaluate", evalIndividual)
+toolbox.register("evaluate", fitness.evalIndividual)
 toolbox.register("mate", tools.cxOnePoint)
 toolbox.register("mutate", mutation.mutUniformTime)
 toolbox.register("select", tools.selTournament, tournsize=3)
@@ -99,13 +125,14 @@ pop = toolbox.population()
 fitnesses = list(map(toolbox.evaluate, pop))
 for ind, fit in zip(pop, fitnesses):
     ind.fitness.values = fit
-print("  Evaluated %i individuals" % len(pop))
-'''
+#print("  Evaluated %i individuals" % len(pop))
+
 print len(pop)
 offspring = toolbox.select(pop, len(pop))
 print offspring
 offspring = list(map(toolbox.clone, offspring))
 print offspring
+<<<<<<< HEAD
 '''
 
 # Testing mutation
@@ -127,4 +154,12 @@ print " Mutation done"
     # print len(child1)
     # print "Child 2"
     # print len(child2)
+=======
+
+for child1, child2 in zip(pop[::2], pop[1::2]):
+    print "Child 1"
+    print len(child1)
+    print "Child 2"
+    print len(child2)
+>>>>>>> 35b9abc6e11e4c13d876bcb92a2ff022aca0d61d
     #print(toolbox.mate(child1, child2))

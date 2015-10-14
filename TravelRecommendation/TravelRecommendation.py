@@ -79,8 +79,8 @@ myRdd = myRdd.map(lambda x: (x[0], x[1], x[2], x[3],
                              toCoordinates(toSeconds(x[5]))))
 # Normalize all the values between 0 and 1
 myRdd = myRdd.map(lambda (x1, x2, x3, x4, (x5, x6), (x7, x8)):
-                         (latNormalizer(x1), latNormalizer(x2),
-                          lonNormalizer(x3), lonNormalizer(x4),
+                         (latNormalizer(x1), lonNormalizer(x2),
+                          latNormalizer(x3), lonNormalizer(x4),
                           timeNormalizer(x5), timeNormalizer(x6),
                           timeNormalizer(x7), timeNormalizer(x8)))
 
@@ -137,8 +137,8 @@ myRoutes = myRoutes.map(lambda (y,x): (y, (x[0], x[1], x[2], x[3],
                              toCoordinates(toSeconds(x[5])))))
 # Normalize all the values between 0 and 1
 myRoutes = myRoutes.map(lambda (y, (x1, x2, x3, x4, (x5, x6), (x7, x8))):
-                         (y, (latNormalizer(x1), latNormalizer(x2),
-                              lonNormalizer(x3), lonNormalizer(x4),
+                         (y, (latNormalizer(x1), lonNormalizer(x2),
+                              latNormalizer(x3), lonNormalizer(x4),
                               timeNormalizer(x5),timeNormalizer(x6),
                               timeNormalizer(x7),timeNormalizer(x8))))
 
