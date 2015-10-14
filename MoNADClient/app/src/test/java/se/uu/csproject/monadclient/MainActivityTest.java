@@ -18,6 +18,6 @@ public class MainActivityTest {
 
   @Test
   public void testSomething() throws Exception {
-    assertEquals(150, 150);
+    assertFalse(false);
   }
 }
