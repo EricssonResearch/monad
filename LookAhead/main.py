@@ -14,7 +14,6 @@ specific language governing permissions and limitations under the License.
 """
 import struct
 import time
-<<<<<<< HEAD
 import random
 from dbConnection import DB
 from deap import base
@@ -27,14 +26,12 @@ import mutation
 
 
 MUTPB = 0.5
-=======
 from deap import base, creator, tools
 from itertools import repeat
 from collections import Sequence
 
 from dbConnection import DB
 from fitness import Fitness
->>>>>>> 35b9abc6e11e4c13d876bcb92a2ff022aca0d61d
 
 # Initialize the look ahead class
 lookAhead = DB()
@@ -45,7 +42,6 @@ creator.create("Individual", list, fitness=creator.FitnessMax)
 toolbox = base.Toolbox()
 # toolbox.register("line", lookAhead.getRoute, "line")
 # The parameter here is the number of the line
-<<<<<<< HEAD
 
 
 def timeDiff(time1, time2):
@@ -104,8 +100,7 @@ def evalIndividual(individual):
 
     # TODO: mutation may produce individuals with overlapping times, penalize such individuals
     return diffMinutes,
-=======
->>>>>>> 35b9abc6e11e4c13d876bcb92a2ff022aca0d61d
+
 # Define the genes on every chromosome
 toolbox.register("attribute", lookAhead.generateTripTimeTable, 2)
 toolbox.register("individual", tools.initRepeat, creator.Individual,
@@ -132,7 +127,6 @@ offspring = toolbox.select(pop, len(pop))
 print offspring
 offspring = list(map(toolbox.clone, offspring))
 print offspring
-<<<<<<< HEAD
 '''
 
 # Testing mutation
@@ -154,12 +148,11 @@ print " Mutation done"
     # print len(child1)
     # print "Child 2"
     # print len(child2)
-=======
 
 for child1, child2 in zip(pop[::2], pop[1::2]):
     print "Child 1"
     print len(child1)
     print "Child 2"
     print len(child2)
->>>>>>> 35b9abc6e11e4c13d876bcb92a2ff022aca0d61d
     #print(toolbox.mate(child1, child2))
+    '''
