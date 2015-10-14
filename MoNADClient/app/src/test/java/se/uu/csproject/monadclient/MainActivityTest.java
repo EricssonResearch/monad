@@ -2,7 +2,7 @@ package se.uu.csproject.monadclient;
 
 import android.app.Activity;
 
-import se.uu.csproject.BuildConfig;
+//import se.uu.csproject.BuildConfig;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
