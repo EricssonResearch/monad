@@ -22,52 +22,33 @@ from deap import tools
 from datetime import datetime, timedelta
 from itertools import repeat
 from collections import Sequence
-import mutation 
-
-
-MUTPB = 0.5
+import mutation
+import toolBox
 from deap import base, creator, tools
 from itertools import repeat
 from collections import Sequence
-
 from dbConnection import DB
 from fitness import Fitness
 
+MUTPB = 0.5
 # Initialize the look ahead class
 lookAhead = DB()
 fitness = Fitness()
-creator.create("FitnessMax", base.Fitness, weights=(1.0,))
-creator.create("Individual", list, fitness=creator.FitnessMax)
-# Register genes on the toolbox
-toolbox = base.Toolbox()
-# toolbox.register("line", lookAhead.getRoute, "line")
-# The parameter here is the number of the line
-# Define the genes on every chromosome
-toolbox.register("attribute", lookAhead.generateTripTimeTable, 2)
-toolbox.register("individual", tools.initRepeat, creator.Individual,
-                 toolbox.attribute, 5)
-toolbox.register("population", tools.initRepeat, list, toolbox.individual, 10)
-# Operator registering
-toolbox.register("evaluate", fitness.evalIndividual)
-toolbox.register("mate", tools.cxOnePoint)
-toolbox.register("mutate", mutation.mutUniformTime)
-toolbox.register("select", tools.selTournament, tournsize=3)
-# ind = toolbox.individual()
-# print ind
+
 # Generate the population
-pop = toolbox.population()
+pop = toolBox.toolbox.population()
 # print pop
 # Evaluate the entire population
-fitnesses = list(map(toolbox.evaluate, pop))
+fitnesses = list(map(toolBox.toolbox.evaluate, pop))
 for ind, fit in zip(pop, fitnesses):
     ind.fitness.values = fit
 #print("  Evaluated %i individuals" % len(pop))
 
-print len(pop)
-offspring = toolbox.select(pop, len(pop))
-print offspring
-offspring = list(map(toolbox.clone, offspring))
-print offspring
+print(len(pop))
+offspring = toolBox.toolbox.select(pop, len(pop))
+print(offspring)
+offspring = list(map(toolBox.toolbox.clone, offspring))
+print(offspring)
 '''
 
 # Testing mutation
@@ -77,7 +58,7 @@ for mutant in pop:
         del mutant.fitness.values
 '''
 invalids = [ind for ind in pop if not ind.fitness.valid]
-fitnesses = toolbox.map(toolbox.evaluate, invalids)
+fitnesses = toolBox.toolbox.map(toolBox.toolbox.evaluate, invalids)
 for ind, fit in zip(invalids, fitnesses):
     ind.fitness.values = fit
 
