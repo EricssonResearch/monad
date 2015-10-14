@@ -16,6 +16,6 @@ public class MainActivityTest {
 
   @Test
   public void testSomething() throws Exception {
-    assertThat("test".isEqualTo("test"));
+    assertThat("test").isEqualTo("test");
   }
 }
