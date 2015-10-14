@@ -1,7 +1,4 @@
 import multiprocessing
-import pymongo
-
-from pymongo import MongoClient
 
 bind = "127.0.0.1:2000"
 workers = multiprocessing.cpu_count() * 2 + 1
