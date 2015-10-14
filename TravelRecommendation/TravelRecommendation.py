@@ -32,7 +32,7 @@ MAX_LONGITUDE = 17.75
 MIN_COORDINATE = -13750
 MAX_COORDINATE = 13750
 CIRCLE_CONVERTER = math.pi / 43200
-NUMBER_OF_RECOMMENDATIONS = 3
+NUMBER_OF_RECOMMENDATIONS = 1
 
 # Converting time object to seconds
 def toSeconds(dt):
@@ -85,29 +85,40 @@ myRdd = myRdd.map(lambda (x1, x2, x3, x4, (x5, x6), (x7, x8)):
                           timeNormalizer(x7), timeNormalizer(x8)))
 
 # Function that implements the kmeans algorithm to group users requests
-def kmeans(NUM_OF_IT):
+def kmeans(iterations):
     def error(point):
         center = clusters.centers[clusters.predict(point)]
         return sqrt(sum([x**2 for x in (point - center)]))
-    clusters = KMeans.train(myRdd, NUM_OF_IT, maxIterations=10,
+    clusters = KMeans.train(myRdd, iterations, maxIterations=10,
             runs=10, initializationMode="random")
     WSSSE = myRdd.map(lambda point: error(point)).reduce(lambda x, y: x + y)
     return WSSSE, clusters
 
 # Function that runs iteratively the kmeans algorithm to find the best number
 # of clusters to group the user's request
-def optimalk(results, NUM_OF_IT):
+def optimalk():
     results = []
     for i in range(NUM_OF_IT):
-        results.append(kmeans(i+2)[0])
+        results.append(kmeans(i+1)[0])
+    print results
     optimal = []
     for i in range(NUM_OF_IT-1):
         optimal.append(results[i] - results[i+1])
-    return (optimal.index(max(optimal)) + 3)
+    print optimal
+    optimal1 = []
+    for i in range(NUM_OF_IT-2):
+        optimal1.append(optimal[i] - optimal[i+1])
+    print optimal1
+    return (optimal1.index(max(optimal1)) + 2)
 
 # Printing the clusters
 # TODO Maybe we need an RDD for that
-selected_centroids = kmeans(optimalk(results, NUM_OF_IT))[1].centers
+selected_centroids = kmeans(optimalk())[1].centers
+#print myRdd.collect
+#selected_centroids = kmeans(8)[1].centers
+
+for centroid in selected_centroids:
+    print centroid
 
 # TODO Retrieves the whole timetable as desired. However has to be done
 # directly from MongoDB
@@ -172,8 +183,13 @@ for sug in finalRecommendation:
     for i in range(len(sug)):
         recommendations.append(sug[i])
 
+# Keeping only the ids and remove duplicates
+recommendations = map(lambda x: x[0], recommendations)
+recommendations = set(recommendations)
+recommendations = list(recommendations)
+
 # Prints the recommendations
 # TODO Change that to return the final recommendations instead of just printing
 for sug in recommendations:
-    print TimeTable.find_one({"_id": sug[0]}, {"StartBusstop":1, "EndBusstop":1,
+    print TimeTable.find_one({"_id": sug}, {"StartBusstop":1, "EndBusstop":1,
                               "StartTime":1, "EndTime":1})

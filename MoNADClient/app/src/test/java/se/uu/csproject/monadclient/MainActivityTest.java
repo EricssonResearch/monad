@@ -1,8 +1,9 @@
-package se.uu.csproject.monadclient;
+// Waiting for robolectric to add support for API 23
 
-import android.app.Activity;
 
-//import se.uu.csproject.BuildConfig;
+/*package se.uu.csproject.monadclient;
+
+import se.uu.csproject.monadclient.BuildConfig;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -10,7 +11,7 @@ import org.robolectric.Robolectric;
 import org.robolectric.RobolectricGradleTestRunner;
 import org.robolectric.annotation.Config;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.*;
 
 @RunWith(RobolectricGradleTestRunner.class)
 @Config(constants = BuildConfig.class)
@@ -18,6 +19,6 @@ public class MainActivityTest {
 
   @Test
   public void testSomething() throws Exception {
-    assertFalse(false);
+    //assertThat("test").isEqualTo("test");
   }
-}
+}*/
