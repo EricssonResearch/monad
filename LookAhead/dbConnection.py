@@ -15,11 +15,9 @@ See the License for the specific language governing permissions and limitations 
 """
 import random
 import string
-import datetime
 import collections
 from pymongo import MongoClient
 from bson.objectid import ObjectId
-
 
 
 class DB():
@@ -39,7 +37,7 @@ class DB():
 
     def createCollection(self, name):
         self.db.createCollection(name)
-    
+
     def retrieveData(self, data, column):
         if column is None:
             for document in data:
@@ -47,7 +45,7 @@ class DB():
         else:
             for document in data:
                 return document[column]
-                
+
     # Travel Requests
     def getTravelRequestCount(self):
         return self.db.TravelRequest.count()
@@ -59,11 +57,12 @@ class DB():
     def getRandomTravelRequest(self, column):
         req = self.db.TravelRequest.find(
             {"_id": ObjectId(self.getRandomTravelRequestId())})
+        return req
 
     def getTravelRequest(self, object, column):
         req = self.db.TravelRequest.find({"_id": ObjectId(object)})
         return self.retrieveData(req, column)
-        
+
     # Routes
     def populateRoute(self, route):
         # route5 = {"line": 5, "durationTime":39, routeStop2}
@@ -84,13 +83,13 @@ class DB():
         self.db.route.drop()
 
     def getTripDay(self, line):
-        tripDay = self.db.route.find( { "line" : line  }, {"tripDay" : 1} )
+        tripDay = self.db.route.find({"line": line}, {"tripDay": 1})
         return self.retrieveData(tripDay, "tripDay")
-    
+
     def getRouteStop(self, line):
-        routeStop = self.db.route.find( { "line" : line  }, {"stop" : 1} )
+        routeStop = self.db.route.find({"line": line}, {"stop": 1})
         return self.retrieveData(routeStop, "stop")
-    
+
     # Bus
     # https://www.ul.se/en/About-UL/About-our-public-function/
     # In total we deploy around 125 city buses, 250 regional buses and 11
@@ -114,7 +113,7 @@ class DB():
     def populateBus(self, size):
         for x in range(0, size):
             bus = {"capacity": self.generateRandomCapacity(), "plate": self.generatePlate()}
-            bus_id = self.db.bus.insert_one(bus).inserted_id
+            self.db.bus.insert_one(bus)
 
     def getBusCount(self):
         return self.db.bus.count()
@@ -140,19 +139,19 @@ class DB():
     def getRandomMinute(self):
         return random.randrange(DB.minutesHour)
 
-    def mergeRandomTime(self,hour,minute):
+    def mergeRandomTime(self, hour, minute):
         return str(hour) + DB.timeSeparator + str(minute)
 
     def generateMinute(self, time):
         hours, minutes = time.split(DB.timeSeparator)
-        if int(hours)==24:
-            hours="0"
+        if int(hours) == 24:
+            hours = "0"
         return int(hours) * DB.minutesHour + int(minutes)
 
     def generateTime(self, time):
         hours, minutes = divmod(time, DB.minutesHour)
-        if hours==24:
-            hours=0
+        if hours == 24:
+            hours = 0
         return self.mergeRandomTime(hours, minutes)
 
     # Trip
@@ -166,24 +165,17 @@ class DB():
         for i in range(numberStop):
             minuteSeed = minuteSeed + busStop[i][1]
             if minuteSeed > DB.minutesDay:
-                minuteSeed = minuteSeed - DB.minutesDay;
-            # tripTimeTable.append([busStop[i][0],self.generateTime(minuteSeed)])
-            # tripTimeTable.append([self.generateTime(minuteSeed)])
+                minuteSeed = minuteSeed - DB.minutesDay
             tripTimeTable.append(self.generateTime(minuteSeed))
-        #print list(self.flatten([self.getRoute("line"),self.getRandomBus("plate"),self.flatten(tripTimeTable)]))
-        #return list(self.flatten([self.getRoute("line"),self.getRandomBus("plate"),self.flatten(tripTimeTable)]))
-        #print list([self.getRoute("line"),self.getRandomBus("plate"),self.flatten(tripTimeTable)])
         return list(self.flatten([self.getRoute("line"), self.getRandomBus("plate"), list(self.flatten(tripTimeTable))]))
 
     def generateTimeTable(self, line):
         timeTable = []
         tripDay = int(self.getTripDay(line))
         for i in range(tripDay):
-            #timeTable.append([self.getRoute("line"),self.getRandomBus("plate"),self.generateTripTimeTable(self.mergeRandomTime(self.getRandomHour(),self.getRandomMinute()),self.getRouteStop(line))])
             timeTable.append(self.generateTripTimeTable(line))
-        # print timeTable
         return timeTable
-    
+
     def flatten(self, l):
         for el in l:
             if isinstance(el, collections.Iterable) and not isinstance(el, basestring):
