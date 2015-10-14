@@ -291,6 +291,26 @@ class RouteHandler(handler.ContentHandler):
         path, cost = self.aStar(stopA, stopB)
         return cost[stopB]
 
+class AStar:
+    pass
+
+class Map:
+    
+    def __init__(self, omsfilepath):
+        self.omsfile = omsfilepath
+    
+    def parsData(self):
+        print "Loading data... (parsing xml)"
+        handler = RouteHandler()
+        parser = make_parser()
+        parser.setContentHandler(handler)
+        parser.parse(self.omsfile)
+        
+
+    def draw(self, imageName):                                               
+        print "draw map!! NO"
+
+    def 
 
 if __name__ == '__main__':
     """
@@ -299,22 +319,30 @@ if __name__ == '__main__':
     roads.
     -- python router.py map.png map.osm <ID> <ID>
     If the IDs are left out it will only drae the map.
-    """"
+    """
     print "router.py"
+
+
+    myMap = Map(sys.argv[2])
+
     omsfilepath = sys.argv[2]
     print "file: " + omsfilepath 
     timer = time.time()
     print "Loading data ..."
-    handler = RouteHandler()
-    parser = make_parser()
-    parser.setContentHandler(handler)
-    parser.parse(omsfilepath)
+    #handler = RouteHandler()
+    #parser = make_parser()
+    #parser.setContentHandler(handler)
+    #parser.parse(omsfilepath)
+    myMap.parsData()
     print "Data loaded in: %f sec" % (time.time() - timer)
     
     print "Draw image ..."
+    
+    myMap.draw(sys.argv[1])
     # check if the 
-    if len(sys.argv) != 5:
-        handler.draw([],0,0)
+    if len(sys.argv) < 5:
+        #handler.draw([],0,0)
+        myMap.draw("2.png")
     else:
         busstopa = int(sys.argv[3])
         busstopb = int(sys.argv[4])
