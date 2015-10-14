@@ -1,84 +1,45 @@
 package se.uu.csproject.monadclient;
 
-import android.content.Intent;
-import android.support.v4.app.NavUtils;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import se.uu.csproject.monadclient.recyclerviews.NotificationRecyclerViewAdapter;
+import se.uu.csproject.monadclient.recyclerviews.Notify;
 
 public class NotificationsActivity extends AppCompatActivity {
 
-    private Toolbar toolbar;
+    public List<Notify> notifications;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_notifications);
-        toolbar = (Toolbar) findViewById(R.id.actionToolBar);
-        setSupportActionBar(toolbar);
 
-        getSupportActionBar().setHomeButtonEnabled(true);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        RecyclerView rv =(RecyclerView)findViewById(R.id.rv);
+
+        LinearLayoutManager llm = new LinearLayoutManager(this);
+        rv.setLayoutManager(llm);
+        rv.setHasFixedSize(true);
+
+        initializeData();
+        NotificationRecyclerViewAdapter adapter = new NotificationRecyclerViewAdapter(notifications);
+        rv.setAdapter(adapter);
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        if(id == android.R.id.home){
-            NavUtils.navigateUpFromSameTask(this);
-        }
-
-        if (id == R.id.action_search) {
-            startActivity(new Intent(this, MainActivity.class));
-        }
-
-        if (id == R.id.action_notifications) {
-            return true;
-        }
-
-        if (id == R.id.action_mytrips) {
-            startActivity(new Intent(this, TripsActivity.class));
-        }
-
-        if (id == R.id.action_profile) {
-            startActivity(new Intent(this, ProfileActivity.class));
-        }
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            startActivity(new Intent(this, SettingsActivity.class));
-        }
-
-        if (id == R.id.action_aboutus) {
-            //TODO: Create a toaster with text about the MoNAD project and team
-        }
-
-        if (id == R.id.action_signout) {
-            startActivity(new Intent(this, LoginActivity.class));
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-    public void rescheduleTrip(View view) {
-        startActivity(new Intent(this, MainActivity.class));
-    }
-
-    public void removeNotification(View view) {
-        startActivity(new Intent(this, MainActivity.class));
+    private void initializeData(){
+        notifications = new ArrayList<>();
+        notifications.add(new Notify("Bus 805: 5 min delay", "15:59", R.drawable.ic_assistant_photo_black_24dp));
+        notifications.add(new Notify("Bus 805: Coming in 5 min", "15:43", R.drawable.ic_feedback_black_24dp));
+        notifications.add(new Notify("Bus 805: Departing now", "15:38", R.drawable.ic_alarm_black_24dp));
+        notifications.add(new Notify("Bus 801: 5 min delay", "15:15", R.drawable.ic_assistant_photo_black_24dp));
+        notifications.add(new Notify("Bus 801: Coming in 5 min", "15:11", R.drawable.ic_feedback_black_24dp));
+        notifications.add(new Notify("Bus 801: Departing now", "15:06", R.drawable.ic_alarm_black_24dp));
     }
 
 }
