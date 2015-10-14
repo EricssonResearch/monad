@@ -3,7 +3,7 @@
 
     <string name="hello_world">Hello world!</string>
     <!--Activity titles (label displayed on the Toolbar)-->
-    <string name="title_activity_about_us">AboutUsActivity</string>
+    <string name="title_activity_about_us">About Us</string>
     <string name="title_activity_login" translatable="false">MoNAD</string>
     <string name="title_activity_main">Search</string>
     <string name="title_activity_notifications">Notifications</string>
@@ -34,7 +34,7 @@
     <string name="label_aboutus_projectName">Project Name</string>
     <string name="label_aboutus_project">Uppsala Student Project CS 2015 (MoNAD)</string>
     <string name="label_aboutus_productowner">Product Owner</string>
-    <string name="label_aboutus_product">Ericsson</string>
+    <string name="label_aboutus_product" translatable="false">Ericsson</string>
     <string name="label_aboutus_description">Description</string>
     <string name="label_aboutus_texttitle">About Us</string>
     <string name="label_aboutus_descriptiontext">MoNAD is a project which is under development by Uppsala University CS Master students. It is an app ......</string>
@@ -82,8 +82,8 @@
     <string name="label_profile_phone">076123456</string>
     <string name="label_profile_emailadd">E-Mail:</string>
     <string name="label_profile_email">userxyz@example.com</string>
-    <string name="label_main_imagedescription">directions</string>
-    <string name="label_main_imagebuttondescription">image button</string>
+    <string name="label_main_imagedescription" translatable="false">directions</string>
+    <string name="label_main_imagebuttondescription" translatable="false">image button</string>
 
     <!--Activity -Register-->
     <string name="label_register_newaccount">New Account</string>
@@ -164,9 +164,9 @@
     <string name="label_trips_from">From</string>
     <string name="label_trips_to">To</string>
     <string name="label_trips_from_origin">Polacksbacken</string>
-    <string name="label_trips_to_destination">Flogsta</string>
+    <string name="label_trips_to_destination" translatable="false">Flogsta</string>
     <string name="label_trips_from_time">12:36</string>
-    <string name="label_trips_to_time">12:51</string>
+    <string name="label_trips_to_time" translatable="false">12:51</string>
     <string name="label_trips_day">TODAY</string>
     <string name="label_trips_countdown">00:05:38</string>
     <string name="label_trips_bus_content_description">Bus</string>
@@ -179,19 +179,19 @@
     <string name="label_confirmcode_codesent">Confirmation code sent!</string>
     <string name="label_confirmcode_entercode">Please enter the code to reset your password</string>
     <string name="label_confirmcode_code">Confirmation code</string>
-    <string name="label_confirmcode_codehint">000000</string>
+    <string name="label_confirmcode_codehint" translatable="false">000000</string>
     <string name="label_confirmcode_submit">Submit</string>
 
     <!--Popup - Forgotten Password -->
     <string name="label_forgotpassword_enteremail">Please enter your email</string>
-    <string name="label_forgotpassword_emailhint">somebody@example.com</string>
+    <string name="label_forgotpassword_emailhint" translatable="false">somebody@example.com</string>
     <string name="label_forgotpassword_email">Email Address</string>
     <string name="label_forgotpassword_submit">Submit</string>
 
     <!-- Popup - EditProfile /yonatan -->
     <string name="label_editprofile_editText">Edit Profile</string>
     <string name="label_editprofile_textname">Username</string>
-    <string name="label_editprofile_editname">xyz</string>
+    <string name="label_editprofile_editname" translatable="false">xyz</string>
     <string name="label_editprofile_btnok">OK</string>
     <string name="label_editprofile_btncancel">Cancel</string>
 
@@ -209,17 +209,17 @@
     <string name="label_tripsactivity_random">Random Trips</string>
     <string name="label_tripsactivity_from">From</string>
     <string name="label_tripsactivity_to">To</string>
-    <string name="label_tripsactivity_fromorigin">Polacksbacken</string>
-    <string name="label_tripsactivity_todestination">Flogsta</string>
-    <string name="label_tripsactivity_fromtime">12:36</string>
-    <string name="label_tripsactivity_totime">12:51</string>
+    <string name="label_tripsactivity_fromorigin" translatable="false">Polacksbacken</string>
+    <string name="label_tripsactivity_todestination" translatable="false">Flogsta</string>
+    <string name="label_tripsactivity_fromtime" translatable="false">12:36</string>
+    <string name="label_tripsactivity_totime" translatable="false">12:51</string>
     <string name="label_tripsactivity_day">TODAY</string>
-    <string name="label_tripsactivity_countdown">00:05:38</string>
+    <string name="label_tripsactivity_countdown" translatable="false">00:05:38</string>
     <string name="label_tripsactivity_buscontentdescription">Bus</string>
     <string name="label_tripsactivity_clockcontentdescription">Clock</string>
     <string name="label_tripsactivity_cancelcontentdescription">Cancel</string>
     <string name="label_tripsactivity_buttoncontentdescription">Button</string>
-    <string name="label_tripsactivity_date">05/10/15</string>
+    <string name="label_tripsactivity_date" translatable="false">05/10/15</string>
 
     <!--Popup - Trip Cancellation -->
     <!--Popup - MALIN EDITING Trip Cancellation -->
@@ -230,9 +230,10 @@
     <string name="label_tripcancel_clockcontentdescription">Clock</string>
     <string name="label_tripcancel_cancelcontentdescription">Cancel</string>
     <string name="label_tripcancel_buttoncontentdescription">Button</string>
-    <string name="title_activity_profile_edit_popup">ProfileEditPopup</string>
+    <string name="title_activity_profile_edit_popup" translatable="false">ProfileEditPopup</string>
     <string name="label_login_googlelogin">Log In with Google</string>
     <string name="img_description">Icon Missing</string>
+    <string name="non_available">n/a</string>
 
 
     <!-- UNPROCESSED -->

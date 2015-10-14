@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/card_view1"
+    android:layout_gravity="center"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    card_view:cardCornerRadius="@dimen/cardview_default_radius">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/medium_padding"
+        >
+
+        <!--cancel icon -->
+        <ImageButton
+            android:id="@+id/cancel1"
+            android:layout_width="@dimen/cancel_size"
+            android:layout_height="@dimen/cancel_size"
+            android:background="?android:selectableItemBackground"
+            android:src="@drawable/ic_clear_red_24dp"
+            android:contentDescription="@string/label_tripsactivity_cancelcontentdescription"
+            android:onClick="cancelTrip"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            />
+
+        <!--text: to from -->
+        <TextView
+            android:id="@+id/info_text_from1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/label_tripsactivity_from"
+            android:textSize="@dimen/small_text"
+            />
+
+        <TextView
+            android:id="@+id/label_origin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/importantText"
+            android:text="@string/label_tripsactivity_fromorigin"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:paddingTop="@dimen/small_padding"
+            android:paddingLeft="@dimen/layout_padding"
+            android:layout_below="@id/info_text_from1"
+            />
+
+
+        <!--bus icon-->
+        <ImageView
+            android:id="@+id/bus1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:cropToPadding="false"
+            android:src="@drawable/ic_directions_bus_black_24dp"
+            android:contentDescription="@string/label_tripsactivity_buscontentdescription"
+            android:layout_centerHorizontal="true"
+            android:layout_alignTop="@id/label_origin"
+            android:padding="@dimen/small_padding"
+            />
+
+        <TextView
+            android:id="@+id/info_text_to1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/label_tripsactivity_to"
+            android:textSize="@dimen/small_text"
+            android:layout_toEndOf="@id/bus1"
+            android:layout_toRightOf="@id/bus1"
+            />
+
+        <TextView
+            android:id="@+id/label_destination"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/importantText"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text="@string/label_tripsactivity_todestination"
+            android:paddingTop="@dimen/small_padding"
+            android:paddingLeft="@dimen/layout_padding"
+            android:layout_below="@id/info_text_to1"
+            android:layout_toRightOf="@id/bus1"
+            android:layout_toEndOf="@id/bus1"
+            />
+
+        <TextView
+            android:id="@+id/label_departuretime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/importantText"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="@string/label_tripsactivity_fromtime"
+            android:paddingTop="@dimen/small_padding"
+            android:paddingLeft="@dimen/layout_padding"
+            android:layout_below="@id/label_origin"
+            />
+
+        <TextView
+            android:id="@+id/label_arrivaltime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/importantText"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="@string/label_tripsactivity_totime"
+            android:paddingTop="@dimen/small_padding"
+            android:paddingLeft="@dimen/layout_padding"
+            android:layout_below="@id/label_destination"
+            android:layout_toRightOf="@id/bus1"
+            android:layout_toEndOf="@id/bus1"
+            />
+
+        <!--clock icon-->
+        <ImageView
+            android:id="@+id/icon_clock"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:cropToPadding="false"
+            android:src="@drawable/ic_access_alarms_red_24dp"
+            android:visibility="invisible"
+            android:contentDescription="@string/label_tripsactivity_clockcontentdescription"
+            android:padding="@dimen/small_padding"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@id/bus1"
+            />
+
+        <!--text: countdown info-->
+        <TextView
+            android:id="@+id/label_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="@string/label_tripsactivity_day"
+            android:textColor="@color/black"
+            android:padding="@dimen/small_padding"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@id/icon_clock"
+            />
+
+        <TextView
+            android:id="@+id/label_countdown"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/header_textlarge"
+            android:text="@string/non_available"
+            android:textColor="@color/black"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@id/label_date"/>
+
+        <!--tripDetails icon-->
+        <ImageButton
+            android:id="@+id/button1"
+            android:layout_width="@dimen/button_sizelarge"
+            android:layout_height="@dimen/button_sizelarge"
+            android:background="?attr/colorPrimary"
+            android:src="@drawable/ic_arrow_forward_white_24dp"
+            android:contentDescription="@string/label_tripsactivity_buttoncontentdescription"
+            android:onClick="viewTripDetails"
+            android:layout_alignBottom="@+id/label_countdown"
+            android:layout_alignRight="@+id/cancel1"
+            android:layout_alignEnd="@+id/cancel1" />
+
+    </RelativeLayout>
+
+</android.support.v7.widget.CardView>
