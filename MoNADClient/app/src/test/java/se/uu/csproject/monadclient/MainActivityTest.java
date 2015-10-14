@@ -1,7 +1,5 @@
 package se.uu.csproject.monadclient;
 
-import android.app.Activity;
-
 //import se.uu.csproject.BuildConfig;
 
 import org.junit.Test;
@@ -10,7 +8,7 @@ import org.robolectric.Robolectric;
 import org.robolectric.RobolectricGradleTestRunner;
 import org.robolectric.annotation.Config;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.*;
 
 @RunWith(RobolectricGradleTestRunner.class)
 @Config(constants = BuildConfig.class)
@@ -18,6 +16,6 @@ public class MainActivityTest {
 
   @Test
   public void testSomething() throws Exception {
-    assertFalse(false);
+    assertThat("test".isEqualTo("test");
   }
 }
