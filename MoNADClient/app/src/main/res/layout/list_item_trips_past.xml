@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/card_view3"
+    android:layout_gravity="center"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    card_view:cardCornerRadius="@dimen/cardview_default_radius"
+    android:layout_marginTop="@dimen/medium_padding"
+    card_view:cardBackgroundColor="?attr/colorAccent">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/medium_padding">
+
+        <!--bus icon-->
+        <ImageView
+            android:id="@+id/bus3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:cropToPadding="false"
+            android:src="@drawable/ic_directions_bus_white_24dp"
+            android:layout_centerInParent="true"
+            android:contentDescription="@string/label_tripsactivity_buscontentdescription"
+            />
+
+        <!--text: from to-->
+        <TextView
+            android:id="@+id/info_tripsactivity_from3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/label_tripsactivity_from"
+            android:textSize="@dimen/small_text"
+            />
+
+        <TextView
+            android:id="@+id/info_tripsactivity_to3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/label_tripsactivity_to"
+            android:textSize="@dimen/small_text"
+            android:layout_toEndOf="@id/bus3"
+            android:layout_toRightOf="@id/bus3"
+            />
+
+        <TextView
+            android:id="@+id/info_origin3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/importantText"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text="@string/label_tripsactivity_fromorigin"
+            android:paddingTop="@dimen/small_padding"
+            android:paddingLeft="@dimen/layout_padding"
+            android:layout_below="@id/info_tripsactivity_from3"
+            />
+
+        <TextView
+            android:id="@+id/info_destination3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/importantText"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text="@string/label_tripsactivity_todestination"
+            android:paddingTop="@dimen/small_padding"
+            android:paddingLeft="@dimen/layout_padding"
+            android:layout_below="@id/info_tripsactivity_to3"
+            android:layout_toRightOf="@id/bus3"
+            android:layout_toEndOf="@id/bus3"
+            />
+
+        <TextView
+            android:id="@+id/info_origin_time3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/importantText"
+            android:text="@string/label_tripsactivity_fromtime"
+            android:paddingTop="@dimen/small_padding"
+            android:paddingLeft="@dimen/layout_padding"
+            android:layout_below="@id/info_origin3"
+            />
+
+        <TextView
+            android:id="@+id/info_destination_time3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/importantText"
+            android:text="@string/label_tripsactivity_totime"
+            android:paddingTop="@dimen/small_padding"
+            android:paddingLeft="@dimen/layout_padding"
+            android:layout_below="@id/info_destination3"
+            android:layout_toRightOf="@id/bus3"
+            android:layout_toEndOf="@id/bus3"
+            />
+
+        <TextView
+            android:id="@+id/info_date3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/small_text"
+            android:layout_gravity="end"
+            android:text="@string/label_tripsactivity_date"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            />
+
+        <!--ratings-->
+
+        <RatingBar android:progressDrawable="@drawable/ratingbar_gold"
+            android:id="@+id/ratingBar1"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/ratingbar_height"
+            android:isIndicator="false"
+            android:layout_alignRight="@id/info_date3"
+            android:layout_alignBottom="@id/info_destination_time3"
+            android:numStars="5"
+            android:rating="4"
+            />
+
+    </RelativeLayout>
+
+</android.support.v7.widget.CardView>
