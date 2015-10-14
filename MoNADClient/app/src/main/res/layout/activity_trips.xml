@@ -307,7 +307,7 @@
                 <RatingBar android:progressDrawable="@drawable/ratingbar_gold"
                     android:id="@+id/ratingBar1"
                     android:layout_width="wrap_content"
-                    android:layout_height="@dimen/activity_tripcancel_ratingbarheight"
+                    android:layout_height="@dimen/ratingbar_height"
                     android:isIndicator="false"
                     android:layout_alignRight="@id/info_date3"
                     android:layout_alignBottom="@id/info_destination_time3"
@@ -399,7 +399,7 @@
                     style="@style/importantText"
                     android:text="@string/label_tripsactivity_fromtime"
                     android:paddingTop="@dimen/small_padding"
-                    android:paddingLeft="16dp"
+                    android:paddingLeft="@dimen/layout_padding"
                     android:layout_below="@id/info_origin4"
                     />
 
@@ -431,7 +431,7 @@
                 <RatingBar android:progressDrawable="@drawable/ratingbar_gold"
                     android:id="@+id/ratingBar2"
                     android:layout_width="wrap_content"
-                    android:layout_height="@dimen/activity_tripcancel_ratingbarheight"
+                    android:layout_height="@dimen/ratingbar_height"
                     android:isIndicator="false"
                     android:layout_alignRight="@id/info_date4"
                     android:layout_alignBottom="@id/info_destination_time4"

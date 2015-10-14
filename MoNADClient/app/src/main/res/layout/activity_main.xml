@@ -18,7 +18,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/linearlayout_main"
-            android:layout_marginTop="@dimen/activity_main_verticalmargin"
+            android:layout_marginTop="@dimen/layout_padding"
             android:gravity="center_horizontal"
             android:focusable="true">
 
@@ -30,7 +30,8 @@
                 android:textColor="@color/white"
                 android:hint="@string/label_main_searchtext"
                 android:textColorHint="@color/white"
-                android:textStyle="italic"/>
+                android:textStyle="italic"
+                android:padding="@dimen/medium_padding"/>
 
             <ImageButton
                 android:layout_width="wrap_content"
@@ -45,7 +46,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/activity_main_verticalmargintop"
+            android:layout_marginTop="@dimen/large_padding"
             android:text="@string/label_main_recommendations"
             android:textAllCaps="true"
             android:textStyle="bold"
@@ -55,9 +56,9 @@
 
         <View
             android:layout_width="match_parent"
-            android:layout_height="@dimen/activity_main_separatorheight"
+            android:layout_height="1dp"
             android:background="@color/primaryColor"
-            android:layout_marginBottom="@dimen/small_margin">
+            android:layout_marginBottom="@dimen/small_padding">
         </View>
 
         <ScrollView
@@ -72,7 +73,7 @@
 
                 <RelativeLayout
                     android:layout_width="wrap_content"
-                    android:layout_height="@dimen/activity_main_customheight"
+                    android:layout_height="@dimen/button_sizelarge"
                     android:background="@color/gray">
 
                     <TextView
@@ -82,9 +83,7 @@
                         android:text="@string/label_main_resulttime1"
                         android:gravity="center"
                         android:textStyle="bold"
-                        android:layout_marginTop="@dimen/activity_main_custommargintop"
-                        android:layout_marginLeft="@dimen/activity_main_smallleftstartmargin"
-                        android:layout_marginStart="@dimen/activity_main_smallleftstartmargin"/>
+                        android:padding="@dimen/small_padding"/>
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -93,9 +92,7 @@
                         android:text="@string/label_main_resultstop1"
                         android:layout_below="@+id/textview_main_resulttime1"
                         android:gravity="center"
-                        android:layout_marginTop="@dimen/activity_main_custommargintop"
-                        android:layout_marginLeft="@dimen/activity_main_smallleftstartmargin"
-                        android:layout_marginStart="@dimen/activity_main_smallleftstartmargin"/>
+                        android:padding="@dimen/small_padding"/>
 
                     <ImageView
                         android:layout_width="wrap_content"
@@ -104,9 +101,7 @@
                         android:background="@color/primaryColor"
                         android:layout_toRightOf="@+id/textview_main_resulttime1"
                         android:layout_toEndOf="@+id/textview_main_resulttime1"
-                        android:layout_marginTop="@dimen/activity_main_custommargintop"
-                        android:layout_marginLeft="@dimen/activity_main_mediumleftstartmargin"
-                        android:layout_marginStart="@dimen/activity_main_mediumleftstartmargin"
+                        android:layout_margin="@dimen/small_padding"
                         android:contentDescription="@string/label_main_imagedescription"/>
 
                     <ImageButton
@@ -117,8 +112,7 @@
                         android:background="@color/primaryColor"
                         android:layout_alignParentRight="true"
                         android:layout_alignParentEnd="true"
-                        android:paddingRight="@dimen/activity_main_custompadding"
-                        android:paddingLeft="@dimen/activity_main_custompadding"
+                        android:padding="@dimen/layout_padding"
                         android:contentDescription="@string/label_main_imagebuttondescription"
                         android:onClick="openTripDetail"/>
 
@@ -126,9 +120,8 @@
 
                 <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/activity_main_customheight"
-                    android:layout_marginTop="@dimen/activity_main_smallmargintopbottom"
-                    android:layout_marginBottom="@dimen/activity_main_smallmargintopbottom"
+                    android:layout_height="@dimen/button_sizelarge"
+                    android:layout_marginTop="@dimen/small_padding"
                     android:background="@color/gray">
 
                     <TextView
@@ -138,9 +131,7 @@
                         android:text="@string/label_main_resulttime2"
                         android:gravity="center"
                         android:textStyle="bold"
-                        android:layout_marginTop="@dimen/activity_main_custommargintop"
-                        android:layout_marginLeft="@dimen/activity_main_smallleftstartmargin"
-                        android:layout_marginStart="@dimen/activity_main_smallleftstartmargin"/>
+                        android:padding="@dimen/small_padding"/>
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -149,9 +140,7 @@
                         android:text="@string/label_main_resultstop2"
                         android:gravity="center"
                         android:layout_below="@+id/textview_main_resulttime2"
-                        android:layout_marginTop="@dimen/activity_main_custommargintop"
-                        android:layout_marginLeft="@dimen/activity_main_smallleftstartmargin"
-                        android:layout_marginStart="@dimen/activity_main_smallleftstartmargin"/>
+                        android:padding="@dimen/small_padding"/>
 
                     <ImageButton
                         android:layout_width="wrap_content"
@@ -161,8 +150,7 @@
                         android:background="@color/primaryColor"
                         android:layout_alignParentRight="true"
                         android:layout_alignParentEnd="true"
-                        android:paddingRight="@dimen/activity_main_custompadding"
-                        android:paddingLeft="@dimen/activity_main_custompadding"
+                        android:padding="@dimen/layout_padding"
                         android:contentDescription="@string/label_main_imagebuttondescription"
                         android:onClick="openTripDetail"/>
 
@@ -170,7 +158,8 @@
 
                 <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/activity_main_customheight"
+                    android:layout_height="@dimen/button_sizelarge"
+                    android:layout_marginTop="@dimen/small_padding"
                     android:background="@color/gray">
 
                     <TextView
@@ -180,9 +169,7 @@
                         android:text="@string/label_main_resulttime3"
                         android:gravity="center"
                         android:textStyle="bold"
-                        android:layout_marginTop="@dimen/activity_main_custommargintop"
-                        android:layout_marginLeft="@dimen/activity_main_smallleftstartmargin"
-                        android:layout_marginStart="@dimen/activity_main_smallleftstartmargin"/>
+                        android:padding="@dimen/small_padding"/>
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -191,9 +178,7 @@
                         android:text="@string/label_main_resultstop3"
                         android:gravity="center"
                         android:layout_below="@+id/textview_main_resulttime3"
-                        android:layout_marginTop="@dimen/activity_main_custommargintop"
-                        android:layout_marginLeft="@dimen/activity_main_smallleftstartmargin"
-                        android:layout_marginStart="@dimen/activity_main_smallleftstartmargin"/>
+                        android:padding="@dimen/small_padding"/>
 
                     <ImageView
                         android:layout_width="wrap_content"
@@ -202,9 +187,7 @@
                         android:background="@color/primaryColor"
                         android:layout_toRightOf="@+id/textview_main_resulttime3"
                         android:layout_toEndOf="@+id/textview_main_resulttime3"
-                        android:layout_marginTop="@dimen/activity_main_custommargintop"
-                        android:layout_marginLeft="@dimen/activity_main_mediumleftstartmargin"
-                        android:layout_marginStart="@dimen/activity_main_mediumleftstartmargin"
+                        android:layout_margin="@dimen/small_padding"
                         android:contentDescription="@string/label_main_imagebuttondescription"/>
 
                     <ImageButton
@@ -215,8 +198,7 @@
                         android:background="@color/primaryColor"
                         android:layout_alignParentRight="true"
                         android:layout_alignParentEnd="true"
-                        android:paddingRight="@dimen/activity_main_custompadding"
-                        android:paddingLeft="@dimen/activity_main_custompadding"
+                        android:padding="@dimen/layout_padding"
                         android:contentDescription="@string/label_main_imagebuttondescription"
                         android:onClick="openTripDetail"/>
 
@@ -224,9 +206,8 @@
 
                 <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/activity_main_customheight"
-                    android:layout_marginTop="@dimen/activity_main_smallmargintopbottom"
-                    android:layout_marginBottom="@dimen/activity_main_smallmargintopbottom"
+                    android:layout_height="@dimen/button_sizelarge"
+                    android:layout_marginTop="@dimen/small_padding"
                     android:background="@color/gray">
 
                     <TextView
@@ -236,9 +217,7 @@
                         android:text="@string/label_main_resulttime4"
                         android:gravity="center"
                         android:textStyle="bold"
-                        android:layout_marginTop="@dimen/activity_main_custommargintop"
-                        android:layout_marginLeft="@dimen/activity_main_smallleftstartmargin"
-                        android:layout_marginStart="@dimen/activity_main_smallleftstartmargin"/>
+                        android:padding="@dimen/small_padding"/>
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -247,9 +226,7 @@
                         android:text="@string/label_main_resultstop4"
                         android:gravity="center"
                         android:layout_below="@+id/textview_main_resulttime4"
-                        android:layout_marginTop="@dimen/activity_main_custommargintop"
-                        android:layout_marginLeft="@dimen/activity_main_smallleftstartmargin"
-                        android:layout_marginStart="@dimen/activity_main_smallleftstartmargin"/>
+                        android:padding="@dimen/small_padding"/>
 
                     <ImageView
                         android:layout_width="wrap_content"
@@ -258,9 +235,7 @@
                         android:background="@color/primaryColor"
                         android:layout_toRightOf="@+id/textview_main_resulttime4"
                         android:layout_toEndOf="@+id/textview_main_resulttime4"
-                        android:layout_marginTop="@dimen/activity_main_custommargintop"
-                        android:layout_marginLeft="@dimen/activity_main_mediumleftstartmargin"
-                        android:layout_marginStart="@dimen/activity_main_mediumleftstartmargin"
+                        android:layout_margin="@dimen/small_padding"
                         android:contentDescription="@string/label_main_imagebuttondescription" />
 
                     <ImageButton
@@ -271,8 +246,7 @@
                         android:background="@color/primaryColor"
                         android:layout_alignParentRight="true"
                         android:layout_alignParentEnd="true"
-                        android:paddingRight="@dimen/activity_main_custompadding"
-                        android:paddingLeft="@dimen/activity_main_custompadding"
+                        android:padding="@dimen/layout_padding"
                         android:contentDescription="@string/label_main_imagebuttondescription"
                         android:onClick="openTripDetail"/>
 

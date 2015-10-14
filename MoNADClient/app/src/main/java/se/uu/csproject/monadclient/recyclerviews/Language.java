@@ -1,4 +1,4 @@
-package se.uu.csproject.monadclient.recyclerviewlanguage;
+package se.uu.csproject.monadclient.recyclerviews;
 
 public class Language{
     String name;

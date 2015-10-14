@@ -1,4 +1,4 @@
-package se.uu.csproject.monadclient.recyclerviewlanguage;
+package se.uu.csproject.monadclient.recyclerviews;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;

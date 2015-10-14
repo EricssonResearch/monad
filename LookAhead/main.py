@@ -12,7 +12,25 @@ under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
 CONDITIONS OF ANY KIND, either express or implied. See the License for the 
 specific language governing permissions and limitations under the License.
 """
+<<<<<<< HEAD
 from deap import base, creator, tools
+=======
+import struct
+import time
+import random
+from dbConnection import DB
+from deap import base
+from deap import creator
+from deap import tools
+from datetime import datetime, timedelta
+from itertools import repeat
+from collections import Sequence
+import mutation
+import toolBox
+from deap import base, creator, tools
+from itertools import repeat
+from collections import Sequence
+>>>>>>> 3ae1b4ab2635a1d5ebe0cb6a6f12e48b1f4cdfd8
 from dbConnection import DB
 from fitness import Fitness
 import mutation
@@ -22,6 +40,7 @@ BUSLINE = 2
 NUMTRIP = 5
 POPSIZE = 10
 
+<<<<<<< HEAD
 # Initialize the DB and Fitness classes
 db = DB()
 fitness = Fitness()
@@ -50,6 +69,28 @@ for ind, fit in zip(pop, fitnesses):
 print pop
 offspring = toolbox.select(pop, len(pop))
 offspring = list(map(toolbox.clone, offspring))
+=======
+MUTPB = 0.5
+# Initialize the look ahead class
+lookAhead = DB()
+fitness = Fitness()
+
+# Generate the population
+pop = toolBox.toolbox.population()
+# print pop
+# Evaluate the entire population
+fitnesses = list(map(toolBox.toolbox.evaluate, pop))
+for ind, fit in zip(pop, fitnesses):
+    ind.fitness.values = fit
+#print("  Evaluated %i individuals" % len(pop))
+
+print(len(pop))
+offspring = toolBox.toolbox.select(pop, len(pop))
+print(offspring)
+offspring = list(map(toolBox.toolbox.clone, offspring))
+print(offspring)
+'''
+>>>>>>> 3ae1b4ab2635a1d5ebe0cb6a6f12e48b1f4cdfd8
 
 '''
 # Testing mutation
@@ -59,7 +100,7 @@ for mutant in pop:
         del mutant.fitness.values
 '''
 invalids = [ind for ind in pop if not ind.fitness.valid]
-fitnesses = toolbox.map(toolbox.evaluate, invalids)
+fitnesses = toolBox.toolbox.map(toolBox.toolbox.evaluate, invalids)
 for ind, fit in zip(invalids, fitnesses):
     ind.fitness.values = fit
 
