@@ -14,9 +14,13 @@ specific language governing permissions and limitations under the License.
 """
 from dbConnection import DB
 from fitness import Fitness
-from deap import base, creator, tools
+import mutation
+from deap import base
+from deap import creator
+from deap import tools
 
 # Constant
+BUS_LINE = 2
 INDIVIDUAL_SIZE = 24
 POPULATION_SIZE = 100
 
@@ -24,10 +28,10 @@ POPULATION_SIZE = 100
 databaseClass = DB()
 fitnessClass = Fitness()
 
-# Creating a minimizing fitness class to minimize a single objective that 
+# Creating a minimizing fitness class to minimize a single objective that
 # inherits from the base class "Fitness".
 creator.create("FitnessMin", base.Fitness, weights=(-1.0,))
-# Creating an individual class that inherits a list property and has a fitness 
+# Creating an individual class that inherits a list property and has a fitness
 # attribute of type FitnessMin
 creator.create("Individual", list, fitness=creator.FitnessMin)
 
@@ -35,7 +39,7 @@ creator.create("Individual", list, fitness=creator.FitnessMin)
 toolbox = base.Toolbox()
 
 # Register the operations to be used in the toolbox
-toolbox.register("attribute", databaseClass.generateTripTimeTable, 2)
+toolbox.register("attribute", databaseClass.generateTripTimeTable, BUS_LINE)
 toolbox.register("individual", tools.initRepeat, creator.Individual,
                  toolbox.attribute, INDIVIDUAL_SIZE)
 toolbox.register("population", tools.initRepeat, list, toolbox.individual,
@@ -43,3 +47,4 @@ toolbox.register("population", tools.initRepeat, list, toolbox.individual,
 toolbox.register("evaluate", fitnessClass.evalIndividual)
 toolbox.register("mate", tools.cxOnePoint)
 toolbox.register("select", tools.selTournament, tournsize=3)
+toolbox.register("mutate", mutation.mutUniformTime)

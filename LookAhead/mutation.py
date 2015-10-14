@@ -5,6 +5,8 @@ import time
 from itertools import repeat
 from collections import Sequence
 
+formatString = '%H:%M'
+
 
 def strTimeProp(start, end, format, prop):
     """Get a time at a proportion of a range of two formatted times.
@@ -24,7 +26,7 @@ def strTimeProp(start, end, format, prop):
 
 
 def randomDate(start, end, prop):
-    return strTimeProp(start, end, '%H:%M:%S', prop)
+    return strTimeProp(start, end, formatString, prop)
 
 def mutUniformTime(individual):
     """Mutate an individual by replacing attributes, with probability *indpb*,
@@ -42,9 +44,9 @@ def mutUniformTime(individual):
     """
     size = len(individual)
     mutLocation = random.randint(0, len(individual)-1)
-    #print "Location indices ", mutLocation
-    print "Before mutation"
-    print individual[mutLocation]
+    # print "Location indices ", mutLocation
+    # print "Before mutation"
+    # print individual[mutLocation]
 
 
     '''
@@ -59,17 +61,17 @@ def mutUniformTime(individual):
     '''
 
     # Repairing the mutant
-    timeDiff = datetime.strptime(randomDate("00:00:00", "23:59:00", random.random()),'%H:%M:%S')
+    timeDiff = datetime.strptime(randomDate("00:00", "23:59", random.random()),formatString)
 
-    individual[mutLocation][2] = timeDiff.time().strftime('%H:%M:%S')
+    individual[mutLocation][2] = timeDiff.time().strftime(formatString)
     
     # Update the gene's bus stops after mutation, assumes time between 2 bus stops is 120 seconds
     # TODO: use variable time from database
     for trip in range(3, len(individual[mutLocation])):
-        individual[mutLocation][trip] = (timeDiff + timedelta(0, 120*(trip-2))).time().strftime('%H:%M:%S')
+        individual[mutLocation][trip] = (timeDiff + timedelta(0, 120*(trip-2))).time().strftime(formatString)
 
-    print "After mutation"
-    print individual[mutLocation]
+    # print "After mutation"
+    # print individual[mutLocation]
 
     '''
     for i, xl, xu in zip(range(size), low, up):
