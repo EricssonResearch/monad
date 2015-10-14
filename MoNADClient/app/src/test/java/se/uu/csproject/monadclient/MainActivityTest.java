@@ -1,5 +1,7 @@
 package se.uu.csproject.monadclient;
 
+import se.uu.csproject.monadclient.BuildConfig;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.Robolectric;
@@ -9,7 +11,7 @@ import org.robolectric.annotation.Config;
 import static org.assertj.core.api.Assertions.*;
 
 @RunWith(RobolectricGradleTestRunner.class)
-@Config(constants = MainActivityTest.BuildConfig.class)
+@Config(constants = BuildConfig.class)
 public class MainActivityTest {
 
   @Test
