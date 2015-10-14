@@ -18,72 +18,10 @@
     <dimen name="button_sizelarge">48dp</dimen>
     <dimen name="icon_small">24dp</dimen>
     <dimen name="icon_medium">32dp</dimen>
-
-
-    <dimen name="activity_tripcancel_ratingbarheight">16dp</dimen>
-
-
-
-    <!-- activity profile /yonatan -->
-    <dimen name="activity_profile_customlinearheight">50dp</dimen>
-    <dimen name="activity_profile_smallmargintop">2dp</dimen>
-    <dimen name="activity_profile_smallmarginbottom">2dp</dimen>
-    <dimen name="activity_profile_textsize">16sp</dimen>
-    <dimen name="activity_profile_marginleftstart">16dp</dimen>
-    <dimen name="activity_profile_separatorwidth">1dp</dimen>
-
-    <!-- Popup Edit Profile  /yonatan -->
-    <dimen name="popup_editprofile_customheight">230dp</dimen>
-    <dimen name="popup_editprofile_customlinearheight">110dp</dimen>
-    <dimen name="popup_editprofile_textsize">16sp</dimen>
-    <dimen name="popup_editprofile_marginstart">12dp</dimen>
-    <dimen name="popup_editprofile_smallmarginstartleft">8dp</dimen>
-    <dimen name="popup_editprofile_marginleft">12dp</dimen>
-    <dimen name="popup_editprofile_mediummarginstart">30dp</dimen>
-    <dimen name="popup_editprofile_margintop">12dp</dimen>
-
-    <!-- activity about us /yonatan -->
-    <dimen name="activity_aboutus_margintop">8dp</dimen>
-    <dimen name="activity_aboutus_leftrightmargin">5dp</dimen>
-    <dimen name="activity_aboutus_mediumleftrightmargin">8dp</dimen>
-    <dimen name="activity_aboutus_separatorheight">1dp</dimen>
-    <dimen name="activity_aboutus_smallmargintop">2dp</dimen>
-    <dimen name="activity_aboutus_cornerradiuscard">4dp</dimen>
-    <dimen name="activity_aboutus_padding">2dp</dimen>
-    <dimen name="activity_aboutus_paddingRight">100dp</dimen>
-    <dimen name="activity_aboutus_largepaddingRight">200dp</dimen>
-
-    <!-- activity main /yonatan -->
-    <dimen name="activity_main_separatorheight">1dp</dimen>
-    <dimen name="activity_main_verticalmargintop">30dp</dimen>
-    <dimen name="activity_main_custommargintop">5dp</dimen>
-    <dimen name="activity_main_custompadding">20dp</dimen>
-    <dimen name="activity_main_smallmargintopbottom">2dp</dimen>
-    <dimen name="activity_main_smallleftstartmargin">5dp</dimen>
-    <dimen name="activity_main_verticalmargin">16dp</dimen>
-    <dimen name="activity_main_mediumleftstartmargin">8dp</dimen>
-    <dimen name="activity_main_imagebuttoncustomwidth">60dp</dimen>
-    <dimen name="activity_main_customheight">50dp</dimen>
-
-    <!-- activity search /yonatan -->
-    <dimen name="activity_search_custompadding">25dp</dimen>
-    <dimen name="activity_search_imagebuttoncustomwidth">60dp</dimen>
-    <dimen name="activity_search_separatorheight">1dp</dimen>
-    <dimen name="activity_search_custommargintop">5dp</dimen>
-    <dimen name="activity_search_smallmargintopbottom">2dp</dimen>
-    <dimen name="activity_search_mediummargintop">5dp</dimen>
-    <dimen name="activity_search_smallrightendmargin">5dp</dimen>
-    <dimen name="activity_search_smallleftstartmargin">5dp</dimen>
-    <dimen name="activity_search_mediumleftstartmargin">8dp</dimen>
-    <dimen name="activity_search_customheight">50dp</dimen>
-    <dimen name="activity_search_hinttextsize">24sp</dimen>
-    <dimen name="main_layout_search">48dp</dimen>
-    <dimen name="layout_smallmargintop">2dp</dimen>
-    <dimen name="layout_mediummargintop">5dp</dimen>
-    <dimen name="layout_smallleftstartmargin">5dp</dimen>
-    <dimen name="layout_mediumleftstartmargin">8dp</dimen>
-    <dimen name="layout_customheight">50dp</dimen>
-
-    <!--Activity- Trips /yonatan-->
-    <dimen name="activity_trips_separatorheight">1dp</dimen>
+    <dimen name="ratingbar_height">16dp</dimen>
+    <dimen name="big_padding">24dp</dimen>
+    <dimen name="large_padding">32dp</dimen>
+    <dimen name="large_block">100dp</dimen>
+    <dimen name="popup_size">120dp</dimen>
+    <dimen name="popup_layoutsize">350dp</dimen>
 </resources>

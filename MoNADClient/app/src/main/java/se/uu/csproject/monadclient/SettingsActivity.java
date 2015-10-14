@@ -23,9 +23,9 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
-import se.uu.csproject.monadclient.recyclerviewlanguage.LanguageRecyclerViewAdapter;
+import se.uu.csproject.monadclient.recyclerviews.LanguageRecyclerViewAdapter;
 import se.uu.csproject.monadclient.tabs.SlidingTabLayout;
-import se.uu.csproject.monadclient.recyclerviewlanguage.Language;
+import se.uu.csproject.monadclient.recyclerviews.Language;
 
 public class SettingsActivity extends AppCompatActivity {
 
