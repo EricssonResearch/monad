@@ -1,4 +1,7 @@
-package se.uu.csproject.monadclient;
+// Waiting for robolectric to add support for API 23
+
+
+/*package se.uu.csproject.monadclient;
 
 import se.uu.csproject.monadclient.BuildConfig;
 
@@ -18,4 +21,4 @@ public class MainActivityTest {
   public void testSomething() throws Exception {
     //assertThat("test").isEqualTo("test");
   }
-}
+}*/
