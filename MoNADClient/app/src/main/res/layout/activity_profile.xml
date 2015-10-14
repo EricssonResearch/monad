@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:paddingTop="@dimen/activity_vertical_margin"
+        android:paddingTop="@dimen/layout_padding"
         android:layout_below="@id/actionToolBar">
 
         <TextView
@@ -27,15 +27,12 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:padding="@dimen/medium_padding">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/activity_profile_customlinearheight"
-                android:layout_marginTop="@dimen/activity_profile_smallmargintop"
-                android:layout_marginBottom="@dimen/activity_profile_smallmarginbottom"
-                android:paddingLeft="@dimen/popup_editprofile_smallmarginstartleft"
-                android:paddingStart="@dimen/popup_editprofile_smallmarginstartleft"
+                android:layout_height="@dimen/button_sizelarge"
                 android:background="@color/gray"
                 android:layout_gravity="center_vertical">
 
@@ -46,7 +43,8 @@
                     android:id="@+id/textView_profile_username"
                     android:textColor="@color/black"
                     android:layout_gravity="center"
-                    android:layout_weight="2" />
+                    android:layout_weight="2"
+                    android:padding="@dimen/medium_padding"/>
 
                 <TextView
                     android:layout_width="0dp"
@@ -55,17 +53,17 @@
                     android:text="@string/label_profile_user"
                     android:id="@+id/textView_profile_user"
                     android:textColor="@color/black"
-                    android:textSize="@dimen/activity_profile_textsize"
+                    android:textSize="@dimen/medium_text"
                     android:layout_gravity="center"/>
 
                 <View
-                    android:layout_width="@dimen/activity_profile_separatorwidth"
+                    android:layout_width="1dp"
                     android:layout_height="wrap_content"
                     android:background="@color/white">
                 </View>
 
                 <ImageButton
-                    android:layout_width="50dp"
+                    android:layout_width="@dimen/button_sizelarge"
                     android:layout_height="match_parent"
                     android:src="@drawable/ic_edit_white_24dp"
                     android:id="@+id/imagebutton_profile_editusername"
@@ -86,22 +84,20 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/activity_profile_customlinearheight"
-                android:layout_marginTop="@dimen/activity_profile_smallmargintop"
-                android:layout_marginBottom="@dimen/activity_profile_smallmarginbottom"
-                android:paddingLeft="@dimen/popup_editprofile_smallmarginstartleft"
-                android:paddingStart="@dimen/popup_editprofile_smallmarginstartleft"
+                android:layout_height="@dimen/button_sizelarge"
                 android:background="@color/gray"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:layout_marginTop="@dimen/small_padding">
 
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:id="@+id/textView_profile_phoneno"
-                    android:text="Phone:"
+                    android:text="@string/label_profile_phoneno"
                     android:textColor="@color/black"
                     android:layout_gravity="center"
-                    android:layout_weight="2" />
+                    android:layout_weight="2"
+                    android:padding="@dimen/medium_padding"/>
 
                 <TextView
                     android:layout_width="0dp"
@@ -110,18 +106,17 @@
                     android:id="@+id/textView_profile_phone"
                     android:text="@string/label_profile_phone"
                     android:textColor="@color/black"
-                    android:textSize="@dimen/activity_profile_textsize"
+                    android:textSize="@dimen/medium_text"
                     android:layout_gravity="center"/>
                 <View
-                    android:layout_width="@dimen/activity_profile_separatorwidth"
+                    android:layout_width="1dp"
                     android:layout_height="wrap_content"
                     android:background="@color/white">
                 </View>
 
                 <ImageButton
-                    android:layout_width="50dp"
+                    android:layout_width="@dimen/button_sizelarge"
                     android:layout_height="match_parent"
-
                     android:src="@drawable/ic_edit_white_24dp"
                     android:id="@+id/imagebutton_profile_editphoneno"
                     android:background="@color/primaryColor"
@@ -132,13 +127,10 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/activity_profile_customlinearheight"
-                android:layout_marginTop="@dimen/activity_profile_smallmargintop"
-                android:layout_marginBottom="@dimen/activity_profile_smallmarginbottom"
-                android:paddingLeft="@dimen/popup_editprofile_smallmarginstartleft"
-                android:paddingStart="@dimen/popup_editprofile_smallmarginstartleft"
+                android:layout_height="@dimen/button_sizelarge"
                 android:background="@color/gray"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:layout_marginTop="@dimen/small_padding">
 
                 <TextView
                     android:layout_width="0dp"
@@ -147,7 +139,8 @@
                     android:id="@+id/textView_profile_emailaddress"
                     android:textColor="@color/black"
                     android:layout_gravity="center"
-                    android:layout_weight="2" />
+                    android:layout_weight="2"
+                    android:padding="@dimen/medium_padding"/>
 
                 <TextView
                     android:layout_width="0dp"
@@ -156,17 +149,17 @@
                     android:id="@+id/textView_profile_email"
                     android:text="@string/label_profile_email"
                     android:textColor="@color/black"
-                    android:textSize="@dimen/activity_profile_textsize"
+                    android:textSize="@dimen/medium_text"
                     android:layout_gravity="center"/>
 
                 <View
-                    android:layout_width="@dimen/activity_profile_separatorwidth"
+                    android:layout_width="1dp"
                     android:layout_height="wrap_content"
                     android:background="@color/white">
                 </View>
 
                 <ImageButton
-                    android:layout_width="50dp"
+                    android:layout_width="@dimen/button_sizelarge"
                     android:layout_height="match_parent"
                     android:id="@+id/imagebutton_profile_editemail"
                     android:src="@drawable/ic_edit_white_24dp"
