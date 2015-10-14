@@ -15,7 +15,9 @@ specific language governing permissions and limitations under the License.
 from dbConnection import DB
 from fitness import Fitness
 import mutation
-from deap import base, creator, tools
+from deap import base
+from deap import creator
+from deap import tools
 
 # Constant
 BUS_LINE = 2

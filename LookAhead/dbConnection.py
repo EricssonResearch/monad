@@ -140,6 +140,10 @@ class DB():
         return random.randrange(DB.minutesHour)
 
     def mergeRandomTime(self, hour, minute):
+        if len(str(hour)) == 1:
+            hour = "0" + str(hour)
+        if len(str(minute)) == 1:
+            minute = "0" + str(minute)
         return str(hour) + DB.timeSeparator + str(minute)
 
     def generateMinute(self, time):
