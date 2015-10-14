@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+apply plugin: 'org.robolectric' // Enables Robolectric support
 
 android {
     compileSdkVersion 23
@@ -18,6 +19,34 @@ android {
         }
     }
     
+    productFlavors {
+        unitTest // Creates a new scope which wraps only unit tests
+    }
+    
+    sourceSets {
+        unitTest {
+            java {
+                srcDir 'src/test/java' // New scope includes our unit test folder
+            }
+        }
+    }
+    
+    // Prevent conflicts between Robolectric's dependencies
+    packagingOptions {
+        exclude 'META-INF/DEPENDENCIES.txt'
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/NOTICE.txt'
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/DEPENDENCIES'
+        exclude 'META-INF/notice.txt'
+        exclude 'META-INF/license.txt'
+        exclude 'META-INF/dependencies.txt'
+        exclude 'META-INF/LGPL2.1'
+        exclude 'LICENSE.txt'
+        exclude 'LICENSE'
+    }
+    
     lintOptions {
       abortOnError false
   	}
@@ -31,4 +60,65 @@ dependencies {
     compile 'com.android.support:recyclerview-v7:23.0.+'
     compile 'com.google.android.gms:play-services-identity:+'
     compile 'com.google.android.gms:play-services-plus:+'
+    
+    // Espresso
+    androidTestCompile 'com.android.support.test.espresso:espresso-core:2.0'
+    androidTestCompile 'com.android.support.test:testing-support-lib:0.1'
+
+    // Unit testing dependencies
+    unitTestCompile('junit:junit:4.12') { // Prevent duplication conflicts
+        exclude module: 'hamcrest-core'
+        exclude module: 'hamcrest-library'
+        exclude module: 'hamcrest-integration'
+    }
+    unitTestCompile 'org.hamcrest:hamcrest-core:1.1'
+    unitTestCompile 'org.hamcrest:hamcrest-library:1.1'
+    unitTestCompile 'org.hamcrest:hamcrest-integration:1.1'
+    
+    unitTestCompile('org.robolectric:robolectric:2.4') {
+        exclude module: 'classworlds'
+        exclude module: 'commons-logging'
+        exclude module: 'httpclient'
+        exclude module: 'maven-artifact'
+        exclude module: 'maven-artifact-manager'
+        exclude module: 'maven-error-diagnostics'
+        exclude module: 'maven-model'
+        exclude module: 'maven-project'
+        exclude module: 'maven-settings'
+        exclude module: 'plexus-container-default'
+        exclude module: 'plexus-interpolation'
+        exclude module: 'plexus-utils'
+        exclude module: 'wagon-file'
+        exclude module: 'wagon-http-lightweight'
+        exclude module: 'wagon-provider-api'
+    }
 }
+
+// Robolectric config
+robolectric {
+    // Configure includes / excludes
+    include '**/*Test.class'
+    exclude '**/espresso/**/*.class'
+
+    // Configure max heap size of the test JVM
+    maxHeapSize = '2048m'
+
+    // Configure the test JVM arguments - Does not apply to Java 8
+    jvmArgs '-XX:MaxPermSize=512m', '-XX:-UseSplitVerifier'
+
+    // Specify max number of processes (default is 1)
+    maxParallelForks = 4
+
+    // Specify max number of test classes to execute in a test process
+    // before restarting the process (default is unlimited)
+    forkEvery = 150
+
+    // configure whether failing tests should fail the build
+    ignoreFailures false
+
+    // use afterTest to listen to the test execution results
+    afterTest { descriptor, result ->
+        println "Executing test for ${descriptor.name} with result: ${result.resultType}"
+    }
+}
+//end Robolectric config
