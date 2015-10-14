@@ -1,0 +1,9 @@
+%% -*- erlang -*-
+{application, authentication,
+ [{description, "authentication"},
+  {vsn, "0.1"},
+  {modules, []},
+  {registered, []},
+  {mod, {'authentication_app', []}},
+  {env, []},
+  {applications, [kernel, stdlib, crypto]}]}.

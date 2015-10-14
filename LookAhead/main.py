@@ -19,48 +19,80 @@ import toolBox
 import random
 # Variables
 MUTPB = 0.5
+NGEN = 5
+CXPB = 0.5
+
+# Generate the population
+pop = toolBox.toolbox.population()
 
 
 def main():
-    # Generate the population
-    pop = toolBox.toolbox.population()
     # Evaluate the entire population
     fitnesses = list(map(toolBox.toolbox.evaluate, pop))
     for ind, fit in zip(pop, fitnesses):
         ind.fitness.values = fit
 
-    # Cloning the population to select them based on their fitness
-    offspring = toolBox.toolbox.select(pop, len(pop))
-    offspring = list(map(toolBox.toolbox.clone, offspring))
+    # Iterate trough a number of generations
+    for g in range(NGEN):
+        print("-- Generation %i --" % g)
+        # Select individuals based on their fitness
+        offspring = toolBox.toolbox.select(pop, len(pop))
+        # Cloning those individuals into a new population
+        offspring = list(map(toolBox.toolbox.clone, offspring))
 
-    # Calling the crossover function
-    crossover(offspring)
+        # Calling the crossover function
+        crossover(offspring)
+        mutation(offspring)
 
+        invalidfitness(offspring)
 
-    '''
-    invalids = [ind for ind in pop if not ind.fitness.valid]
-    fitnesses = toolBox.toolbox.map(toolBox.toolbox.evaluate, invalids)
-    for ind, fit in zip(invalids, fitnesses):
-        ind.fitness.values = fit
-    '''
+    # The Best Individual found
+    best_ind = tools.selBest(pop, 1)[0]
+    print("Best individual is %s, %s" % (best_ind, best_ind.fitness.values))
 
 
 def crossover(offspring):
+
     # Apply Crossover
     for child1, child2 in zip(offspring[::2], offspring[1::2]):
-        print "Child 1"
-        print len(child1)
-        print "Child 2"
-        print len(child2)
-        print(toolBox.toolbox.mate(child1, child2))
+        if random.random() < CXPB:
+            toolBox.toolbox.mate(child1, child2)
+            del child1.fitness.values
+            del child2.fitness.values
 
 
 def mutation(offspring):
-     # Testing mutation
-     for mutant in offspring:
-        if random.random() < MUTPB:
-            toolBox.toolbox.mutate(mutant)
-            del mutant.fitness.values
+    # Testing mutation
+    for mutant in offspring:
+         if random.random() < MUTPB:
+             toolBox.toolbox.mutate(mutant)
+             del mutant.fitness.values
+
+
+def invalidfitness(offspring):
+    # Evaluate the individuals with an invalid fitness
+    invalid_ind = [ind for ind in offspring if not ind.fitness.valid]
+    fitnesses = map(toolBox.toolbox.evaluate, invalid_ind)
+    for ind, fit in zip(invalid_ind, fitnesses):
+        ind.fitness.values = fit
+
+    print("  Evaluated %i individuals" % len(invalid_ind))
+
+    # The population is entirely replaced by the offspring
+    pop[:] = offspring
+
+    # Gather all the fitnesses in one list and print the stats
+    fits = [ind.fitness.values[0] for ind in pop]
+
+    length = len(pop)
+    mean = sum(fits) / length
+    sum2 = sum(x*x for x in fits)
+    std = abs(sum2 / length - mean**2)**0.5
+
+    print("  Min %s" % min(fits))
+    print("  Max %s" % max(fits))
+    print("  Avg %s" % mean)
+    print("  Std %s" % std)
 
 
 
