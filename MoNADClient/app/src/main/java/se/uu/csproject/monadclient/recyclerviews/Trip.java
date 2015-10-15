@@ -4,6 +4,8 @@ package se.uu.csproject.monadclient.recyclerviews;
  * The focus is on the assigned route rather than the request itself
  * Therefore, the class attributes are not comprehensive
  */
+
+//TODO: change times and positions data types
 public class Trip {
     int requestID;
     String username;
@@ -27,7 +29,19 @@ public class Trip {
     }
 
     // returns time in Milliseconds
+    //TODO: return the difference between variable "startTime" and the current timestamp
     public long getTimeToDeparture(){
         return 15000;
+    }
+
+    //determines if the trip has occurred yet, helps assign the right UI to the trip
+    //TODO: compare startTime with currentTime
+    public boolean isCurrent(){
+        if(this.requestID > 2) {
+            return false;
+        }
+        else {
+            return true;
+        }
     }
 }
