@@ -19,6 +19,7 @@
     <string name="title_activity_forgot_password_popup">Enter Your Email</string>
     <string name="title_activity_route_confirm_popup">Confirm?</string>
     <string name="title_activity_trip_cancel_popup">Cancel?</string>
+    <string name="title_activity_google_log_in">Google log in</string>
 
     <!--Toolbar/Actionbar menu items-->
     <string name="action_search">Search</string>

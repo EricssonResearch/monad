@@ -333,13 +333,14 @@
                 <Button
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/button_search_searchbtn"
+                    android:id="@+id/button_search_search"
                     android:text="@string/label_search_buttonsearch"
                     android:textColor="@color/white"
                     android:background="@color/primaryColor"
                     android:layout_gravity="bottom"
                     android:layout_marginTop="@dimen/small_padding"
                     android:layout_alignParentBottom="true"
+                    android:onClick="sendTravelRequest"
                     />
 
             </RelativeLayout>

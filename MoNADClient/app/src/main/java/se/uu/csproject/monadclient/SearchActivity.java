@@ -12,6 +12,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.RadioButton;
@@ -38,6 +39,7 @@ public class SearchActivity extends AppCompatActivity {
     private ImageButton detailButton1;
     private ImageButton detailButton2;
     private ImageButton detailButton3;
+    private Button searchButton;
     //private DatePicker datePicker;
 
     @Override
@@ -68,6 +70,8 @@ public class SearchActivity extends AppCompatActivity {
         detailButton1 = (ImageButton) findViewById(R.id.imagebutton_search_detail1);
         detailButton2 = (ImageButton) findViewById(R.id.imagebutton_search_detail2);
         detailButton3 = (ImageButton) findViewById(R.id.imagebutton_search_detail3);
+
+        searchButton = (Button) findViewById(R.id.button_search_search);
 
 
         RadioGroupListenerTime listenerTime = new RadioGroupListenerTime();
@@ -179,5 +183,9 @@ public class SearchActivity extends AppCompatActivity {
 
     public void openTripDetail (View v) {
         startActivity(new Intent(this, RouteActivity.class));
+    }
+
+    public void sendTravelRequest (View v) {
+        new SendTravelRequest().execute();
     }
 }
