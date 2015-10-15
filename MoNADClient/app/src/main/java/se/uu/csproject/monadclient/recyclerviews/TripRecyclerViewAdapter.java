@@ -27,7 +27,7 @@ public class TripRecyclerViewAdapter extends RecyclerView.Adapter<TripRecyclerVi
         TextView arrivalTime;
         TextView countdownTime; //active trips only
         TextView date;
-       // RatingBar feedback; // past trips only
+        RatingBar feedback; // past trips only
         ImageView clockIcon;
 
 
@@ -39,8 +39,18 @@ public class TripRecyclerViewAdapter extends RecyclerView.Adapter<TripRecyclerVi
             arrivalTime = (TextView) itemView.findViewById(R.id.label_arrivaltime);
             countdownTime = (TextView) itemView.findViewById(R.id.label_countdown);
             date = (TextView) itemView.findViewById(R.id.label_date);
-            //feedback = (RatingBar) itemView.findViewById(R.id.label_origin);
+            feedback = (RatingBar) itemView.findViewById(R.id.ratingbar);
             clockIcon = (ImageView) itemView.findViewById(R.id.icon_clock);
+        }
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        if(trips.get(position).isCurrent()) {
+            return 1;
+        }
+        else {
+            return 0;
         }
     }
 
@@ -56,44 +66,57 @@ public class TripRecyclerViewAdapter extends RecyclerView.Adapter<TripRecyclerVi
     }
 
     @Override
-    public TripViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.list_item_trips_active, viewGroup, false);
-        TripViewHolder tripViewHolder = new TripViewHolder(view);
-        return tripViewHolder;
+    public TripViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
+        View view;
+        if(viewType == 1) {
+            view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.list_item_trips_active, viewGroup, false);
+        }
+        else {
+            view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.list_item_trips_past, viewGroup, false);
+        }
+        return new TripViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(final TripViewHolder tripViewHolder, int i) {
-        final long MILLISECONDS_TO_DEPARTURE = trips.get(i).getTimeToDeparture();
-        final int MILLISECONDS = 1000;
-
         tripViewHolder.origin.setText(trips.get(i).startPosition);
         tripViewHolder.destination.setText(trips.get(i).endPosition);
         tripViewHolder.departureTime.setText(trips.get(i).startTime);
         tripViewHolder.arrivalTime.setText(trips.get(i).endTime);
-        tripViewHolder.countdownTime.setText(formatCoundownText(MILLISECONDS_TO_DEPARTURE));
-        tripViewHolder.date.setText("TODAY");
 
-        CountDownTimer timer = new CountDownTimer(MILLISECONDS_TO_DEPARTURE, MILLISECONDS) {
-            @Override
-            public void onTick(long millisUntilFinished) {
-                tripViewHolder.countdownTime.setText(formatCoundownText(millisUntilFinished));
-                if(millisUntilFinished < 10000){
-                    tripViewHolder.countdownTime.setTextColor(Color.parseColor("#f44336"));
-                    tripViewHolder.date.setTextColor(Color.parseColor("#f44336"));
-                    tripViewHolder.clockIcon.setVisibility(View.VISIBLE);
+        if(trips.get(i).isCurrent()) {
+            final long MILLISECONDS_TO_DEPARTURE = trips.get(i).getTimeToDeparture();
+            final int MILLISECONDS = 1000;
+
+            tripViewHolder.countdownTime.setText(formatCoundownText(MILLISECONDS_TO_DEPARTURE));
+            // TODO: derive date from the attribute "startTime" in object Trip
+            tripViewHolder.date.setText("TODAY");
+
+            //TODO: change parseColor() calls into theme colors
+            CountDownTimer timer = new CountDownTimer(MILLISECONDS_TO_DEPARTURE, MILLISECONDS) {
+                @Override
+                public void onTick(long millisUntilFinished) {
+                    tripViewHolder.countdownTime.setText(formatCoundownText(millisUntilFinished));
+                    if (millisUntilFinished < 10000) {
+                        tripViewHolder.countdownTime.setTextColor(Color.parseColor("#f44336"));
+                        tripViewHolder.date.setTextColor(Color.parseColor("#f44336"));
+                        tripViewHolder.clockIcon.setVisibility(View.VISIBLE);
+                    }
                 }
-            }
 
-            @Override
-            public void onFinish() {
-                tripViewHolder.countdownTime.setText("Trip in Progress");
-                tripViewHolder.countdownTime.setTextColor(Color.parseColor("#2e7d32"));
-                tripViewHolder.date.setTextColor(Color.parseColor("#2e7d32"));
-                tripViewHolder.clockIcon.setVisibility(View.INVISIBLE);
-                //tripViewHolder.clockIcon.setColorFilter(Color.parseColor("#2e7d32"));
-            }
-        }.start();
+                @Override
+                public void onFinish() {
+                    tripViewHolder.countdownTime.setText("Trip in Progress");
+                    tripViewHolder.countdownTime.setTextColor(Color.parseColor("#2e7d32"));
+                    tripViewHolder.date.setTextColor(Color.parseColor("#2e7d32"));
+                    tripViewHolder.clockIcon.setVisibility(View.INVISIBLE);
+                    //tripViewHolder.clockIcon.setColorFilter(Color.parseColor("#2e7d32"));
+                }
+            }.start();
+        }
+        else {
+            tripViewHolder.feedback.setRating(trips.get(i).userFeedback);
+        }
     }
 
     @Override

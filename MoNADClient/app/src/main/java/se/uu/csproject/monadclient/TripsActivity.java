@@ -123,7 +123,7 @@ public class TripsActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    //TEMPORARY FUNCTION
+    //TEMPORARY FUNCTION TODO: Remove this function once the database connection is set
     private void generateTrips(List<Trip> trips){
         trips.add(new Trip(1,"za3tot","Polacksbacken","12:36","Flogsta", "12:51", 15, 2));
         trips.add(new Trip(2,"za3tot","Polacksbacken","20:36","Flogsta", "20:51", 15, 4));

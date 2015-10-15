@@ -2,11 +2,12 @@
 <android.support.v7.widget.CardView
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/card_view1"
+    android:id="@+id/card_view"
     android:layout_gravity="center"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    card_view:cardCornerRadius="@dimen/cardview_default_radius">
+    card_view:cardCornerRadius="@dimen/cardview_default_radius"
+    android:layout_marginBottom="@dimen/medium_padding">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -16,7 +17,7 @@
 
         <!--cancel icon -->
         <ImageButton
-            android:id="@+id/cancel1"
+            android:id="@+id/cancel"
             android:layout_width="@dimen/cancel_size"
             android:layout_height="@dimen/cancel_size"
             android:background="?android:selectableItemBackground"
@@ -29,7 +30,7 @@
 
         <!--text: to from -->
         <TextView
-            android:id="@+id/info_text_from1"
+            android:id="@+id/info_text_from"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/label_tripsactivity_from"
@@ -45,13 +46,13 @@
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:paddingTop="@dimen/small_padding"
             android:paddingLeft="@dimen/layout_padding"
-            android:layout_below="@id/info_text_from1"
+            android:layout_below="@id/info_text_from"
             />
 
 
         <!--bus icon-->
         <ImageView
-            android:id="@+id/bus1"
+            android:id="@+id/bus"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:cropToPadding="false"
@@ -63,13 +64,13 @@
             />
 
         <TextView
-            android:id="@+id/info_text_to1"
+            android:id="@+id/info_text_to"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/label_tripsactivity_to"
             android:textSize="@dimen/small_text"
-            android:layout_toEndOf="@id/bus1"
-            android:layout_toRightOf="@id/bus1"
+            android:layout_toEndOf="@id/bus"
+            android:layout_toRightOf="@id/bus"
             />
 
         <TextView
@@ -81,9 +82,9 @@
             android:text="@string/label_tripsactivity_todestination"
             android:paddingTop="@dimen/small_padding"
             android:paddingLeft="@dimen/layout_padding"
-            android:layout_below="@id/info_text_to1"
-            android:layout_toRightOf="@id/bus1"
-            android:layout_toEndOf="@id/bus1"
+            android:layout_below="@id/info_text_to"
+            android:layout_toRightOf="@id/bus"
+            android:layout_toEndOf="@id/bus"
             />
 
         <TextView
@@ -108,8 +109,8 @@
             android:paddingTop="@dimen/small_padding"
             android:paddingLeft="@dimen/layout_padding"
             android:layout_below="@id/label_destination"
-            android:layout_toRightOf="@id/bus1"
-            android:layout_toEndOf="@id/bus1"
+            android:layout_toRightOf="@id/bus"
+            android:layout_toEndOf="@id/bus"
             />
 
         <!--clock icon-->
@@ -123,7 +124,7 @@
             android:contentDescription="@string/label_tripsactivity_clockcontentdescription"
             android:padding="@dimen/small_padding"
             android:layout_centerHorizontal="true"
-            android:layout_below="@id/bus1"
+            android:layout_below="@id/bus"
             />
 
         <!--text: countdown info-->
@@ -151,7 +152,7 @@
 
         <!--tripDetails icon-->
         <ImageButton
-            android:id="@+id/button1"
+            android:id="@+id/button"
             android:layout_width="@dimen/button_sizelarge"
             android:layout_height="@dimen/button_sizelarge"
             android:background="?attr/colorPrimary"
@@ -159,8 +160,8 @@
             android:contentDescription="@string/label_tripsactivity_buttoncontentdescription"
             android:onClick="viewTripDetails"
             android:layout_alignBottom="@+id/label_countdown"
-            android:layout_alignRight="@+id/cancel1"
-            android:layout_alignEnd="@+id/cancel1" />
+            android:layout_alignRight="@+id/cancel"
+            android:layout_alignEnd="@+id/cancel" />
 
     </RelativeLayout>
 
