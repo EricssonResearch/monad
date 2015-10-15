@@ -235,6 +235,8 @@
     <string name="label_login_googlelogin">Log In with Google</string>
     <string name="img_description">Icon Missing</string>
     <string name="non_available">n/a</string>
+    <string name="label_searchresult_timeinfo">n/a - n/a (n/a min)</string>
+    <string name="label_searchresult_routeinfo">n/a to n/a</string>
 
 
     <!-- UNPROCESSED -->

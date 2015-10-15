@@ -46,7 +46,7 @@
             />
 
         <TextView
-            android:id="@+id/info_origin3"
+            android:id="@+id/label_origin"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             style="@style/importantText"
@@ -58,7 +58,7 @@
             />
 
         <TextView
-            android:id="@+id/info_destination3"
+            android:id="@+id/label_destination"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             style="@style/importantText"
@@ -72,31 +72,31 @@
             />
 
         <TextView
-            android:id="@+id/info_origin_time3"
+            android:id="@+id/label_departuretime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             style="@style/importantText"
             android:text="@string/label_tripsactivity_fromtime"
             android:paddingTop="@dimen/small_padding"
             android:paddingLeft="@dimen/layout_padding"
-            android:layout_below="@id/info_origin3"
+            android:layout_below="@id/label_origin"
             />
 
         <TextView
-            android:id="@+id/info_destination_time3"
+            android:id="@+id/label_arrivaltime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             style="@style/importantText"
             android:text="@string/label_tripsactivity_totime"
             android:paddingTop="@dimen/small_padding"
             android:paddingLeft="@dimen/layout_padding"
-            android:layout_below="@id/info_destination3"
+            android:layout_below="@id/label_destination"
             android:layout_toRightOf="@id/bus3"
             android:layout_toEndOf="@id/bus3"
             />
 
         <TextView
-            android:id="@+id/info_date3"
+            android:id="@+id/label_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="@dimen/small_text"
@@ -109,12 +109,12 @@
         <!--ratings-->
 
         <RatingBar android:progressDrawable="@drawable/ratingbar_gold"
-            android:id="@+id/ratingBar1"
+            android:id="@+id/ratingbar"
             android:layout_width="wrap_content"
             android:layout_height="@dimen/ratingbar_height"
             android:isIndicator="false"
-            android:layout_alignRight="@id/info_date3"
-            android:layout_alignBottom="@id/info_destination_time3"
+            android:layout_alignRight="@id/label_date"
+            android:layout_alignBottom="@id/label_arrivaltime"
             android:numStars="5"
             android:rating="4"
             />

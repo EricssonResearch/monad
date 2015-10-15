@@ -178,175 +178,35 @@
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="@color/primaryColor"
-            android:layout_marginBottom="@dimen/small_padding">
+            android:layout_marginBottom="@dimen/small_padding"
+            >
         </View>
 
         <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:fillViewport="true">
+            android:layout_height="0dp"
+            android:fillViewport="true"
+            android:layout_weight="1">
 
-            <RelativeLayout
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recycler_view_search"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical"
-                >
+                android:layout_height="wrap_content"
+                />
 
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/button_sizelarge"
-                    android:background="@color/gray"
-                    android:id="@+id/result1">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/textview_search_resulttime1"
-                        android:text="@string/label_search_resulttime1"
-                        android:gravity="center"
-                        android:textStyle="bold"
-                        android:padding="@dimen/small_padding"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/textview_search_resultstop1"
-                        android:text="@string/label_search_resultstop1"
-                        android:gravity="center"
-                        android:layout_below="@+id/textview_search_resulttime1"
-                        android:padding="@dimen/small_padding"/>
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/ic_directions_run_black_18dp"
-                        android:background="@color/primaryColor"
-                        android:layout_toRightOf="@+id/textview_search_resulttime1"
-                        android:layout_toEndOf="@+id/textview_search_resulttime1"
-                        android:layout_margin="@dimen/small_padding"
-                        android:contentDescription="@string/label_search_imagedescription"/>
-
-                    <ImageButton
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/imagebutton_search_detail1"
-                        android:src="@drawable/ic_arrow_forward_white_24dp"
-                        android:background="@color/primaryColor"
-                        android:layout_alignParentRight="true"
-                        android:layout_alignParentEnd="true"
-                        android:padding="@dimen/layout_padding"
-                        android:contentDescription="@string/label_search_imagebuttondescription"
-                        android:onClick="openTripDetail"/>
-
-                </RelativeLayout>
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/button_sizelarge"
-                    android:layout_marginTop="@dimen/small_padding"
-                    android:background="@color/gray"
-                    android:id="@+id/result2"
-                    android:layout_below="@id/result1">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/textview_search_resulttime2"
-                        android:text="@string/label_search_resulttime2"
-                        android:gravity="center"
-                        android:textStyle="bold"
-                        android:padding="@dimen/small_padding"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/textview_search_resultstop2"
-                        android:text="@string/label_search_resultstop2"
-                        android:gravity="center"
-                        android:layout_below="@+id/textview_search_resulttime2"
-                        android:padding="@dimen/small_padding"/>
-
-                    <ImageButton
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:id="@+id/imagebutton_search_detail2"
-                        android:src="@drawable/ic_arrow_forward_white_24dp"
-                        android:background="@color/primaryColor"
-                        android:layout_alignParentRight="true"
-                        android:layout_alignParentEnd="true"
-                        android:padding="@dimen/layout_padding"
-                        android:contentDescription="@string/label_search_imagebuttondescription"
-                        android:onClick="openTripDetail"/>
-
-                </RelativeLayout>
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/button_sizelarge"
-                    android:layout_marginTop="@dimen/small_padding"
-                    android:background="@color/gray"
-                    android:id="@+id/result3"
-                    android:layout_below="@id/result2">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/textview_search_resulttime3"
-                        android:text="@string/label_search_resulttime3"
-                        android:gravity="center"
-                        android:textStyle="bold"
-                        android:padding="@dimen/small_padding"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/textview_search_resultstop3"
-                        android:text="@string/label_search_resultstop3"
-                        android:gravity="center"
-                        android:layout_below="@+id/textview_search_resulttime3"
-                        android:padding="@dimen/small_padding"/>
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/ic_directions_bus_black_18dp"
-                        android:layout_toRightOf="@+id/textview_search_resulttime3"
-                        android:layout_toEndOf="@+id/textview_search_resulttime3"
-                        android:layout_margin="@dimen/small_padding"
-                        android:contentDescription="@string/label_search_imagedescription"
-                        android:background="@color/primaryColor"/>
-
-                    <ImageButton
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:id="@+id/imagebutton_search_detail3"
-                        android:src="@drawable/ic_arrow_forward_white_24dp"
-                        android:background="@color/primaryColor"
-                        android:layout_alignParentRight="true"
-                        android:layout_alignParentEnd="true"
-                        android:padding="@dimen/layout_padding"
-                        android:contentDescription="@string/label_search_imagebuttondescription"
-                        android:onClick="openTripDetail"/>
-
-                </RelativeLayout>
-
-                <Button
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/button_search_search"
-                    android:text="@string/label_search_buttonsearch"
-                    android:textColor="@color/white"
-                    android:background="@color/primaryColor"
-                    android:layout_gravity="bottom"
-                    android:layout_marginTop="@dimen/small_padding"
-                    android:layout_alignParentBottom="true"
-                    android:onClick="sendTravelRequest"
-                    />
-
-            </RelativeLayout>
 
         </ScrollView>
-
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/button_search_search"
+            android:text="@string/label_search_buttonsearch"
+            android:textColor="@color/white"
+            android:background="@color/primaryColor"
+            android:layout_gravity="bottom"
+            android:layout_marginTop="@dimen/small_padding"
+            android:onClick="sendTravelRequest"
+            />
     </LinearLayout>
 
 </RelativeLayout>
