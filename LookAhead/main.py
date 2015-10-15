@@ -18,7 +18,7 @@ import toolBox
 import random
 # Variables
 MUTPB = 0.5
-NGEN = 2
+NGEN = 1
 CXPB = 0.5
 
 # Generate the population
@@ -91,8 +91,8 @@ def invalidfitness(offspring):
 
 def generateTimeTable(individual):
     databaseClass = DB()
-    databaseClass.generateTripTimeTable(individual)
-
+    timetable  = databaseClass.generateTripTimeTable(individual)
+    databaseClass.insertTimeTable(timetable)
 
 
 if __name__ == '__main__':

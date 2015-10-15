@@ -16,6 +16,8 @@ See the License for the specific language governing permissions and limitations 
 import random
 import string
 import collections
+import json
+import datetime
 from pymongo import MongoClient
 from bson.objectid import ObjectId
 
@@ -167,18 +169,20 @@ class DB():
         timeTable = []
         for i in range(len(timetable)):
             busStop = self.getRouteStop(timetable[i][0])
-            numberStop = len(busStop)
+            numberStop = len(busStop)-1
             # print numberStop
             minuteSeed = self.generateMinute(timetable[i][2])
             tripTimeTable = []
+            tripTimeTable.append([busStop[0][0],self.generateTime(minuteSeed)])
             for j in range(numberStop):
                 minuteSeed = minuteSeed + busStop[j][1]
                 if minuteSeed > DB.minutesDay:
                     minuteSeed = minuteSeed - DB.minutesDay
-                tripTimeTable.append(self.generateTime(minuteSeed))
+                tripTimeTable.append([busStop[j+1][0],self.generateTime(minuteSeed)])
             timeTable.append([timetable[i][0], timetable[i][1], list(self.flatten(tripTimeTable))])
         print timeTable
-        
+        return timeTable
+
     def generateTripTimeTable2(self, line):
         tripTimeTable = []
         seed = self.mergeRandomTime(self.getRandomHour(),self.getRandomMinute())
@@ -199,10 +203,30 @@ class DB():
             timeTable.append(self.generateTripTimeTable(line))
         return timeTable
 
-    def flatten(self, l):
-        for el in l:
+    # Dont forget to credit this function on Stack Overflow
+    # http://stackoverflow.com/questions/14820273/confused-by-chain-enumeration
+    def flatten(self, element):
+        for el in element:
             if isinstance(el, collections.Iterable) and not isinstance(el, basestring):
                 for sub in self.flatten(el):
                     yield sub
             else:
                 yield el
+
+    # Time Table
+    def insertTimeTable(self, document):
+        timeTable = []
+        # route5 = {"line": 5, "durationTime":39, routeStop2}
+        # {"line": document[i][0], "date": str(now.strftime("%Y-%m-%d")), "timetable": }
+        now = datetime.datetime.now()
+        for i in range(len(document)):
+            j = 0
+            trip = []
+            # print document[i][2]
+            for j in range(len(document[i][2])/2):
+                ind = j * 2
+                trip.append({"BusStop": document[i][2][ind],"DptTime": document[i][2][ind+1]})
+                # print trip
+            timeTable.append({"capacity": document[i][1],"trip": trip})
+        # print timeTable
+        self.db.timeTable.insert_one({"line": document[0][0], "date": str(now.strftime("%Y-%m-%d")), "timetable": timeTable})
