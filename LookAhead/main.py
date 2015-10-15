@@ -12,18 +12,21 @@ under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
 CONDITIONS OF ANY KIND, either express or implied. See the License for the 
 specific language governing permissions and limitations under the License.
 """
+import random
+
 from deap import tools
+
 from dbConnection import DB
 import toolBox
-import random
+
 # Variables
 MUTPB = 0.5
-NGEN = 2
 CXPB = 0.5
+NGEN = 2
+POPULATION_SIZE = 100
 
 # Generate the population
-pop = toolBox.toolbox.population()
-
+pop = toolBox.toolbox.population(n=POPULATION_SIZE)
 
 def main():
     # Evaluate the entire population
