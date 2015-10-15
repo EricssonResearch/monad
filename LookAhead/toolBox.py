@@ -12,16 +12,15 @@ under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
 CONDITIONS OF ANY KIND, either express or implied. See the License for the 
 specific language governing permissions and limitations under the License.
 """
+from deap import base, creator, tools
+
 from dbConnection import DB
 from fitness import Fitness
 import mutation
-from deap import base
-from deap import creator
-from deap import tools
 
 # Constant
 BUS_LINE = 2
-INDIVIDUAL_SIZE = 24
+INDIVIDUAL_SIZE = 90
 POPULATION_SIZE = 100
 
 # Initialize the classes
@@ -42,8 +41,7 @@ toolbox = base.Toolbox()
 toolbox.register("attribute", databaseClass.generateStartingTripTime)
 toolbox.register("individual", tools.initRepeat, creator.Individual,
                  toolbox.attribute, INDIVIDUAL_SIZE)
-toolbox.register("population", tools.initRepeat, list, toolbox.individual,
-                 POPULATION_SIZE)
+toolbox.register("population", tools.initRepeat, list, toolbox.individual)
 toolbox.register("evaluate", fitnessClass.evalIndividual)
 toolbox.register("mate", tools.cxOnePoint)
 toolbox.register("select", tools.selTournament, tournsize=3)

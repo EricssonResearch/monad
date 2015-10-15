@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -12,21 +14,22 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
-/**
- * Created by caichao on 28/09/15.
- */
+import java.util.ArrayList;
+import java.util.List;
+
+import se.uu.csproject.monadclient.recyclerviews.SearchRecyclerViewAdapter;
+import se.uu.csproject.monadclient.recyclerviews.Trip;
+
 public class SearchActivity extends AppCompatActivity {
-    private Toolbar toolbar;
     private TextView textViewTripTimeDate;
     private TextView textViewTripTimeHour;
-    private TextView textViewTripTimePriority;
-    private TextView textViewTripDistancePriority;
     private RadioButton arrivalTimeRadioButton;
     private RadioButton depatureTimeRadioButton;
     private RadioButton tripTimeButton;
@@ -35,16 +38,14 @@ public class SearchActivity extends AppCompatActivity {
     private RadioGroup priorityRadioGroup;
     private EditText positionEditText;
     private EditText destinationEditText;
-    private ImageButton detailButton1;
-    private ImageButton detailButton2;
-    private ImageButton detailButton3;
+    private Button searchButton;
     //private DatePicker datePicker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
-        toolbar = (Toolbar) findViewById(R.id.actionToolBar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.actionToolBar);
         setSupportActionBar(toolbar);
 
         getSupportActionBar().setHomeButtonEnabled(true);
@@ -54,8 +55,6 @@ public class SearchActivity extends AppCompatActivity {
         depatureTimeRadioButton = (RadioButton) findViewById(R.id.radiobutton_search_departuretime);
         textViewTripTimeDate = (TextView) findViewById(R.id.textview_search_tripdatetime);
         textViewTripTimeHour = (TextView) findViewById(R.id.textview_search_triptimehour);
-        textViewTripDistancePriority = (TextView) findViewById(R.id.textview_search_resulttime1);
-        textViewTripTimePriority = (TextView) findViewById(R.id.textview_search_resultstop1);
 
         tripTimeRadioGroup = (RadioGroup) findViewById(R.id.radiogroup_search_triptime);
         priorityRadioGroup = (RadioGroup) findViewById(R.id.radiogroup_search_priority);
@@ -65,10 +64,7 @@ public class SearchActivity extends AppCompatActivity {
         destinationEditText = (EditText) findViewById(R.id.edittext_search_destination);
         //datePicker = (DatePicker) findViewById(R.id.date_picker);
 
-        detailButton1 = (ImageButton) findViewById(R.id.imagebutton_search_detail1);
-        detailButton2 = (ImageButton) findViewById(R.id.imagebutton_search_detail2);
-        detailButton3 = (ImageButton) findViewById(R.id.imagebutton_search_detail3);
-
+        searchButton = (Button) findViewById(R.id.button_search_search);
 
         RadioGroupListenerTime listenerTime = new RadioGroupListenerTime();
         tripTimeRadioGroup.setOnCheckedChangeListener(listenerTime);
@@ -79,9 +75,17 @@ public class SearchActivity extends AppCompatActivity {
         tripTimeRadioGroup.check(depatureTimeRadioButton.getId());
         priorityRadioGroup.check(tripTimeButton.getId());
 
+        List<Trip> searchResults = new ArrayList<>();
+        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler_view_search);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getApplicationContext());
+        recyclerView.setLayoutManager(linearLayoutManager);
+        generateSearchResults(searchResults);
+        SearchRecyclerViewAdapter adapter = new SearchRecyclerViewAdapter(searchResults);
+        recyclerView.setAdapter(adapter);
+
+
         // Hide the keyboard when launch this activity
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-
     }
 
     // When the user touch somewhere else than focusable object, hide keyboard
@@ -95,16 +99,14 @@ public class SearchActivity extends AppCompatActivity {
 
     // Change the info if the priority button pressed dummy!
     class RadioGroupListenerPriority implements RadioGroup.OnCheckedChangeListener{
-
+        //TODO: handle search results based on priority
         @Override
         public void onCheckedChanged(RadioGroup group, int checkedId) {
             if (checkedId == tripDistanceButton.getId()){
-                textViewTripDistancePriority.setText("18:30 - 19:00 (30min)");
-                textViewTripTimePriority.setText("Uppsala Centrastation to Flogstavägen");
+
             }
             if (checkedId == tripTimeButton.getId()){
-                textViewTripDistancePriority.setText("09:20 - 10:10 (50min)");
-                textViewTripTimePriority.setText("Gottsunda to Övre Slottsgatan");
+
 
             }
         }
@@ -179,5 +181,17 @@ public class SearchActivity extends AppCompatActivity {
 
     public void openTripDetail (View v) {
         startActivity(new Intent(this, RouteActivity.class));
+    }
+
+    public void sendTravelRequest (View v) {
+        new SendTravelRequest().execute();
+    }
+
+    //TEMPORARY FUNCTION TODO: Remove this function once the database connection is set
+    private void generateSearchResults(List<Trip> trips){
+        trips.add(new Trip(1, "Polacksbacken","12:36","Flogsta", "12:51", 15, 2));
+        trips.add(new Trip(2, "Polacksbacken","20:36","Flogsta", "20:51", 15, 4));
+        trips.add(new Trip(3, "Gamla Uppsala","19:17","Övre Slottsgatan", "19:35", 18, 3));
+        trips.add(new Trip(4, "Polacksbacken", "12:36", "Flogsta", "12:51", 15, 0));
     }
 }
