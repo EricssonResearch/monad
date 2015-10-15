@@ -9,7 +9,7 @@
     <dimen name="small_margin">2dp</dimen>
 
     <!--GENERAL DIMENSIONS MALIN ADDITIONS 10.13-->
-    <dimen name="small_padding">3dp</dimen>
+    <dimen name="small_padding">2dp</dimen>
     <dimen name="medium_padding">8dp</dimen>
     <dimen name="small_text">12sp</dimen>
     <dimen name="medium_text">16sp</dimen>

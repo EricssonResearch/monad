@@ -5,12 +5,20 @@ import android.content.Intent;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import se.uu.csproject.monadclient.recyclerviews.SearchRecyclerViewAdapter;
+import se.uu.csproject.monadclient.recyclerviews.Trip;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -25,6 +33,14 @@ public class MainActivity extends AppCompatActivity {
 
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        List<Trip> searchResults = new ArrayList<>();
+        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler_view_main);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getApplicationContext());
+        recyclerView.setLayoutManager(linearLayoutManager);
+        generateSearchResults(searchResults);
+        SearchRecyclerViewAdapter adapter = new SearchRecyclerViewAdapter(searchResults);
+        recyclerView.setAdapter(adapter);
     }
 
     public void openMainSearch (View view) {
@@ -95,4 +111,11 @@ public class MainActivity extends AppCompatActivity {
         startActivity(new Intent(this, RouteActivity.class));
     }
 
+    //TEMPORARY FUNCTION TODO: Remove this function once the database connection is set
+    private void generateSearchResults(List<Trip> trips){
+        trips.add(new Trip(1, "Polacksbacken","12:36","Flogsta", "12:51", 15, 2));
+        trips.add(new Trip(2, "Polacksbacken","20:36","Flogsta", "20:51", 15, 4));
+        trips.add(new Trip(3, "Gamla Uppsala","19:17","Övre Slottsgatan", "19:35", 18, 3));
+        trips.add(new Trip(4, "Polacksbacken", "12:36", "Flogsta", "12:51", 15, 0));
+    }
 }

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="@dimen/button_sizelarge"
+    android:background="@color/gray"
+    android:layout_marginBottom="@dimen/small_padding"
+    >
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/label_timeinfo"
+        android:text="@string/label_searchresult_timeinfo"
+        android:gravity="center"
+        android:textStyle="bold"
+        android:padding="@dimen/small_padding"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/label_routeinfo"
+        android:text="@string/label_searchresult_routeinfo"
+        android:layout_below="@+id/label_timeinfo"
+        android:gravity="center"
+        android:padding="@dimen/small_padding"/>
+
+    <ImageView
+        android:id="@+id/icon_hurry"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_directions_run_black_18dp"
+        android:background="@color/primaryColor"
+        android:layout_toRightOf="@+id/label_timeinfo"
+        android:layout_toEndOf="@+id/label_timeinfo"
+        android:layout_margin="@dimen/small_padding"
+        android:contentDescription="@string/label_main_imagedescription"
+        android:visibility="invisible"
+        />
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:id="@+id/imagebutton_main_resultbtn1"
+        android:src="@drawable/ic_arrow_forward_white_24dp"
+        android:background="@color/primaryColor"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:padding="@dimen/layout_padding"
+        android:contentDescription="@string/label_main_imagebuttondescription"
+        android:onClick="openTripDetail"/>
+
+</RelativeLayout>
