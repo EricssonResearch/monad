@@ -1,9 +1,6 @@
 #!/bin/bash
 
-
-echo $PATH
-
-cd $WORKSPACE
+cd /var/lib/jenkins/jobs/"ProjectCS 2015 Development"/workspace
 
 python -m compileall *.py
 python -m compileall */*.py
