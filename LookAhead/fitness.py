@@ -13,6 +13,7 @@ Unless required by applicable law or agreed to in writing, software distributed 
 See the License for the specific language governing permissions and limitations under the License.
 
 """
+import unittest
 from datetime import datetime, timedelta
 
 
@@ -77,3 +78,5 @@ class Fitness():
             # print diffMinutes
             minDiff = timedelta.max  # Reset minDiff for the next request time
         return diffMinutes,
+
+
