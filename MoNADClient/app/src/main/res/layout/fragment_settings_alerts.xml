@@ -1,17 +1,110 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="@dimen/layout_padding">
+    android:orientation="vertical"
+    tools:context="se.uu.csproject.monadclient.SettingsActivity">
 
 
-</LinearLayout-->
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/primaryColor">
+        <TextView
+            android:text="@string/label_fragmentsettingsalert_title"
+            style="?android:attr/listSeparatorTextViewStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/big_padding"
+            android:id="@+id/textview_fragmentsettingsalert_title" />
+    </RelativeLayout>
 
-<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:orientation="vertical"
+            android:background="@color/gray"
+            android:padding="@dimen/big_padding">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <TextView
+                    android:id="@+id/textview_fragmentsettingsalert_recommendations"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/label_fragmentsettingsalert_recommendation"
+                    android:textSize="@dimen/medium_text"
+                    android:padding="@dimen/medium_padding"
+                    android:textColor="@color/black"/>
+
+                <Switch
+                    android:id="@+id/switch_fragmentsettingsalert_recommendations"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/medium_padding"
+                    android:checked="false"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <TextView
+                    android:id="@+id/textview_fragmentsettingsalert_alerts"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="@string/label_fragmentsettingsalert_alert"
+                    android:textSize="@dimen/medium_text"
+                    android:padding="@dimen/medium_padding"
+                    android:textColor="@color/black" />
+
+                <Switch
+                    android:id="@+id/switch_fragmentsettingsalert_alerts"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="true"
+                    android:padding="@dimen/medium_padding"/>
+            </LinearLayout>
+
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/primaryColorDark">
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="@string/label_fragmentsettingsalert_buttoncancel"
+                android:layout_weight="1"
+                android:textColor="@color/black"
+                android:id="@+id/button_fragmentsettingsalert_cancel"
+                android:onClick="alertCancel"/>
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="@string/label_fragmentsettingsalert_buttonok"
+                android:textColor="@color/black"
+                android:id="@+id/button_fragmentsettingsalert_ok"
+                android:onClick="alertOk"/>
+
+        </LinearLayout>
+
+
+</LinearLayout>
+
+<!--<TextView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:text="ALERTS FRAGMENT"
     android:gravity="center"
     android:id="@+id/alerttxt"
-    />
+    />-->
+
+

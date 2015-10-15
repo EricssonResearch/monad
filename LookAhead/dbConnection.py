@@ -20,6 +20,7 @@ import json
 import datetime
 from pymongo import MongoClient
 from bson.objectid import ObjectId
+from operator import itemgetter
 
 
 class DB():
@@ -180,8 +181,7 @@ class DB():
                     minuteSeed = minuteSeed - DB.minutesDay
                 tripTimeTable.append([busStop[j+1][0],self.generateTime(minuteSeed)])
             timeTable.append([timetable[i][0], timetable[i][1], list(self.flatten(tripTimeTable))])
-        print timeTable
-        return timeTable
+        return sorted(timeTable, key = itemgetter(2))
 
     def generateTripTimeTable2(self, line):
         tripTimeTable = []

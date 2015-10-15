@@ -13,12 +13,14 @@ Unless required by applicable law or agreed to in writing, software distributed 
 See the License for the specific language governing permissions and limitations under the License.
 
 """
+import unittest
 from datetime import datetime, timedelta
 
 
 class Fitness():
 
-    # Main variables
+    # Main [class] variables
+    diffMinutes = 0
     formatString = '%H:%M'
     secondMinute = 60.0
     avgBusRequestTime = [
@@ -57,7 +59,7 @@ class Fitness():
         # The least and most possible time timedelta values
         # timeDelta = timeDiff(individual[0][2], individual[0][2])
         minDiff = timedelta.max
-        diffMinutes = 0
+        #diffMinutes = 0
         for reqTime in Fitness.avgBusRequestTime:
             for i in range(len(individual)):
                 timeTableDiff = self.timeDiff(individual[i][2], reqTime)
@@ -73,7 +75,9 @@ class Fitness():
             print "Individual gene"
             print individual[index]
             '''
-            diffMinutes += minDiff.total_seconds() / Fitness.secondMinute
+            self.diffMinutes += minDiff.total_seconds() / Fitness.secondMinute
             # print diffMinutes
             minDiff = timedelta.max  # Reset minDiff for the next request time
-        return diffMinutes,
+        return self.diffMinutes,
+
+
