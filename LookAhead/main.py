@@ -12,87 +12,103 @@ under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
 CONDITIONS OF ANY KIND, either express or implied. See the License for the 
 specific language governing permissions and limitations under the License.
 """
-from deap import tools
+import random
+
+from deap import tools, algorithms
+import numpy
+
 from dbConnection import DB
 import toolBox
-import random
+
 # Variables
 MUTPB = 0.5
-NGEN = 2
 CXPB = 0.5
-
-# Generate the population
-pop = toolBox.toolbox.population()
+NGEN = 2
+POPULATION_SIZE = 100
 
 
 def main():
-    # Evaluate the entire population
-    fitnesses = list(map(toolBox.toolbox.evaluate, pop))
-    for ind, fit in zip(pop, fitnesses):
-        ind.fitness.values = fit
+    # Generate the population
+    pop = toolBox.toolbox.population(n=POPULATION_SIZE)
 
-    # Iterate trough a number of generations
-    for g in range(NGEN):
-        print("-- Generation %i --" % g)
-        # Select individuals based on their fitness
-        offspring = toolBox.toolbox.select(pop, len(pop))
-        # Cloning those individuals into a new population
-        offspring = list(map(toolBox.toolbox.clone, offspring))
+    hof = tools.HallOfFame(1)
+    
+    stats = tools.Statistics(lambda ind: ind.fitness.values)
+    stats.register("avg", numpy.mean)
+    stats.register("std", numpy.std)
+    stats.register("min", numpy.min)
+    stats.register("max", numpy.max)
 
-        # Calling the crossover function
-        crossover(offspring)
-        mutation(offspring)
+    pop, log = algorithms.eaSimple(pop, toolBox.toolbox, cxpb=CXPB, 
+                                   mutpb=MUTPB, ngen=40, stats=stats,
+                                   halloffame=hof, verbose=True)
 
-        invalidfitness(offspring)
+    ## Evaluate the entire population
+    #fitnesses = list(map(toolBox.toolbox.evaluate, pop))
+    #for ind, fit in zip(pop, fitnesses):
+    #    ind.fitness.values = fit
 
-    # The Best Individual found
+    ## Iterate trough a number of generations
+    #for g in range(NGEN):
+    #    print("-- Generation %i --" % g)
+    #    # Select individuals based on their fitness
+    #    offspring = toolBox.toolbox.select(pop, len(pop))
+    #    # Cloning those individuals into a new population
+    #    offspring = list(map(toolBox.toolbox.clone, offspring))
+
+    #    # Calling the crossover function
+    #    crossover(offspring)
+    #    mutation(offspring)
+
+    #    invalidfitness(offspring)
+
+    ## The Best Individual found
     best_ind = tools.selBest(pop, 1)[0]
     print("Best individual is %s, %s" % (best_ind, best_ind.fitness.values))
     generateTimeTable(best_ind)
 
 
-def crossover(offspring):
-    # Apply Crossover
-    for child1, child2 in zip(offspring[::2], offspring[1::2]):
-        if random.random() < CXPB:
-            toolBox.toolbox.mate(child1, child2)
-            del child1.fitness.values
-            del child2.fitness.values
-
-
-def mutation(offspring):
-    # Testing mutation
-    for mutant in offspring:
-         if random.random() < MUTPB:
-             toolBox.toolbox.mutate(mutant)
-             del mutant.fitness.values
-
-
-def invalidfitness(offspring):
-    # Evaluate the individuals with an invalid fitness
-    invalid_ind = [ind for ind in offspring if not ind.fitness.valid]
-    fitnesses = map(toolBox.toolbox.evaluate, invalid_ind)
-    for ind, fit in zip(invalid_ind, fitnesses):
-        ind.fitness.values = fit
-    print("  Evaluated %i individuals" % len(invalid_ind))
-    # The population is entirely replaced by the offspring
-    pop[:] = offspring
-    # Gather all the fitnesses in one list and print the stats
-    fits = [ind.fitness.values[0] for ind in pop]
-    length = len(pop)
-    mean = sum(fits) / length
-    sum2 = sum(x*x for x in fits)
-    std = abs(sum2 / length - mean**2)**0.5
-    print("  Min %s" % min(fits))
-    print("  Max %s" % max(fits))
-    print("  Avg %s" % mean)
-    print("  Std %s" % std)
+#def crossover(offspring):
+#    # Apply Crossover
+#    for child1, child2 in zip(offspring[::2], offspring[1::2]):
+#        if random.random() < CXPB:
+#            toolBox.toolbox.mate(child1, child2)
+#            del child1.fitness.values
+#            del child2.fitness.values
+#
+#
+#def mutation(offspring):
+#    # Testing mutation
+#    for mutant in offspring:
+#         if random.random() < MUTPB:
+#             toolBox.toolbox.mutate(mutant)
+#             del mutant.fitness.values
+#
+#
+#def invalidfitness(offspring):
+#    # Evaluate the individuals with an invalid fitness
+#    invalid_ind = [ind for ind in offspring if not ind.fitness.valid]
+#    fitnesses = map(toolBox.toolbox.evaluate, invalid_ind)
+#    for ind, fit in zip(invalid_ind, fitnesses):
+#        ind.fitness.values = fit
+#    print("  Evaluated %i individuals" % len(invalid_ind))
+#    # The population is entirely replaced by the offspring
+#    pop[:] = offspring
+#    # Gather all the fitnesses in one list and print the stats
+#    fits = [ind.fitness.values[0] for ind in pop]
+#    length = len(pop)
+#    mean = sum(fits) / length
+#    sum2 = sum(x*x for x in fits)
+#    std = abs(sum2 / length - mean**2)**0.5
+#    print("  Min %s" % min(fits))
+#    print("  Max %s" % max(fits))
+#    print("  Avg %s" % mean)
+#    print("  Std %s" % std)
 
 
 def generateTimeTable(individual):
     databaseClass = DB()
     databaseClass.generateTripTimeTable(individual)
-
 
 
 if __name__ == '__main__':
