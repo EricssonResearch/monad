@@ -73,19 +73,20 @@ def getTimeTable():
     dataFile = open("timetableResult.txt", "w")
     # find (where , select clause)
 
-    cursor = databaseClass.db.timeTable.find({"_id": ObjectId("561f95befa1f42165d9a3b4c")},
-                                             {"BusLine": 1, "WayPoints.BusStop": 1,
-                                              "WayPoints.DptTime": 1})
+    cursor = databaseClass.db.timeTable.find({"_id": ObjectId("561fc48baa47f81faa244d6e")},
+                                             {"line": 1, "timetable": 1
+                                              })
 
     for document in cursor:
-        dataFile.write(str(document))
+
         dataFile.write(str("This Is The TimeTable for Bus Line " +
-                           str(document["BusLine"])+'\n'+'\n'))
+                           str(document["line"])+'\n'+'\n'))
 
-        for i in range(len(document["WayPoints"])):
+        for i in range(len(document["timetable"])):
+            dataFile.write("\n")
+            for j in range(len(document["timetable"][i]["trip"])):
+                dataFile.write(str(document["timetable"][i]["trip"][j]["DptTime"]) + " " +document["timetable"][i]["trip"][j]["BusStop"].encode('utf-8').strip()+"\n")
 
-            dataFile.write(str(document["WayPoints"][i]["DptTime"]) + "   " +
-                           document["WayPoints"][i]["BusStop"].encode('utf-8').strip()+'\n')
 
 
     dataFile.close()
