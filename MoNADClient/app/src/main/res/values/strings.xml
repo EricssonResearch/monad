@@ -19,6 +19,7 @@
     <string name="title_activity_forgot_password_popup">Enter Your Email</string>
     <string name="title_activity_route_confirm_popup">Confirm?</string>
     <string name="title_activity_trip_cancel_popup">Cancel?</string>
+    <string name="title_activity_google_log_in">Google log in</string>
 
     <!--Toolbar/Actionbar menu items-->
     <string name="action_search">Search</string>
@@ -157,6 +158,21 @@
     </string-array>
     <string name="label_settings_selectlanguage">Please select your language</string>
 
+    <!--Settings - Alert setting /yonatan -->
+    <string name="label_fragmentsettingsalert_recommendation">Recommendation</string>
+    <string name="label_fragmentsettingsalert_alert">Alerts</string>
+    <string name="label_fragmentsettingsalert_buttoncancel">Cancel</string>
+    <string name="label_fragmentsettingsalert_buttonok">OK</string>
+    <string name="label_fragmentsettingsalert_title">Notifications</string>
+
+    <!-- Settings - Theme setting /yonatan -->
+    <string name="label_fragmentsettingstheme_title">Themes</string>
+    <string name="label_fragmentsettingstheme_light">Light</string>
+    <string name="label_fragmentsettingstheme_dark">Dark</string>
+    <string name="label_fragmentsettingstheme_default">Default</string>
+    <string name="label_fragmentsettingstheme_buttoncancel">Cancel</string>
+    <string name="label_fragmentsettingstheme_ok">Apply</string>
+
     <!--Activity - Trips-->
     <string name="label_trips_current">Active Trips</string>
     <string name="label_trips_expired">Past Trips</string>
@@ -234,7 +250,8 @@
     <string name="label_login_googlelogin">Log In with Google</string>
     <string name="img_description">Icon Missing</string>
     <string name="non_available">n/a</string>
-
+    <string name="label_searchresult_timeinfo">n/a - n/a (n/a min)</string>
+    <string name="label_searchresult_routeinfo">n/a to n/a</string>
 
     <!-- UNPROCESSED -->
 

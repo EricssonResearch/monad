@@ -19,6 +19,8 @@ import numpy
 
 from dbConnection import DB
 import toolBox
+from fitness import Fitness
+from datetime import datetime, timedelta
 
 # Variables
 MUTPB = 0.5
@@ -28,6 +30,7 @@ POPULATION_SIZE = 100
 
 
 def main():
+
     # Generate the population
     pop = toolBox.toolbox.population(n=POPULATION_SIZE)
 
@@ -40,7 +43,7 @@ def main():
     stats.register("max", numpy.max)
 
     pop, log = algorithms.eaSimple(pop, toolBox.toolbox, cxpb=CXPB, 
-                                   mutpb=MUTPB, ngen=40, stats=stats,
+                                   mutpb=MUTPB, ngen=2, stats=stats,
                                    halloffame=hof, verbose=True)
 
     ## Evaluate the entire population
@@ -109,6 +112,7 @@ def main():
 def generateTimeTable(individual):
     databaseClass = DB()
     databaseClass.generateTripTimeTable(individual)
+    
 
 
 if __name__ == '__main__':
