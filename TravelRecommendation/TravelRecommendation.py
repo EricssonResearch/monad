@@ -50,7 +50,7 @@ def toCoordinates(secs):
 def timeNormalizer(value):
     new_value = float((float(value) - MIN_COORDINATE) /
                       (MAX_COORDINATE - MIN_COORDINATE))
-    return new_value
+    return new_value /2
 
 def latNormalizer(value):
     new_value = float((float(value) - MIN_LATITUDE) /
@@ -185,8 +185,8 @@ for sug in finalRecommendation:
 
 # Keeping only the ids and remove duplicates
 recommendations = map(lambda x: x[0], recommendations)
-recommendations = set(recommendations)
-recommendations = list(recommendations)
+#recommendations = set(recommendations)
+#recommendations = list(recommendations)
 
 # Prints the recommendations
 # TODO Change that to return the final recommendations instead of just printing
