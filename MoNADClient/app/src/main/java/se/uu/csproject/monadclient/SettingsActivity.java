@@ -18,6 +18,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -144,6 +148,12 @@ public class SettingsActivity extends AppCompatActivity {
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
             View layout;
+            final Switch switchrecommendation;
+            final Switch switchalert;
+            final RadioGroup radiogroup_themes;
+            final RadioButton radiobutton_defaulttheme;
+            final RadioButton radiobutton_lighttheme;
+            final RadioButton radiobutton_darktheme;
 
             if(page == 1){
                 layout = inflater.inflate(R.layout.fragment_settings_language,container,false);
@@ -157,16 +167,63 @@ public class SettingsActivity extends AppCompatActivity {
             }
             else if(page == 2){
                 layout = inflater.inflate(R.layout.fragment_settings_alerts,container,false);
-                TextView textView = (TextView) layout.findViewById(R.id.alerttxt);
+                //TextView textView = (TextView) layout.findViewById(R.id.alerttxt);
+
+                // switch button for alerts and recommendations
+                switchrecommendation = (Switch)layout.findViewById(R.id.switch_fragmentsettingsalert_recommendations);
+                switchalert = (Switch)layout.findViewById(R.id.switch_fragmentsettingsalert_alerts);
+                switchrecommendation.setChecked(true);
+                switchalert.setChecked(false);
+
+                switchrecommendation.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                    @Override
+                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+                        if(switchrecommendation.isChecked()){
+                            //do something
+                            switchrecommendation.setChecked(false);
+                        }
+                    }
+                });
+
+                switchalert.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                    @Override
+                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+                        if(switchalert.isChecked()){
+                            //do something
+                            switchalert.setChecked(true);
+                        }
+                    }
+                });
             }
             else if(page == 3){
                 layout = inflater.inflate(R.layout.fragment_settings_theme,container,false);
-                TextView textView = (TextView) layout.findViewById(R.id.themetxt);
+                //TextView textView = (TextView) layout.findViewById(R.id.themetxt);
+
+                //different themes
+                //radiogroup_themes  = (RadioGroup)layout.findViewById(R.id.radiogroup_fragmentsettingstheme_theme);
+                radiobutton_defaulttheme = (RadioButton)layout.findViewById(R.id.radiobutton_fragmentsettingstheme_default);
+                radiobutton_lighttheme = (RadioButton)layout.findViewById(R.id.radiobutton_fragmentsettingstheme_light);
+                radiobutton_darktheme = (RadioButton)layout.findViewById(R.id.radiobutton_fragmentsettingstheme_dark);
+
+                if(radiobutton_lighttheme.isChecked()){
+                    //change the theme to light
+                }
+
+                if(radiobutton_defaulttheme.isChecked()){
+                    //change the theme to light
+
+                }
+
+                if(radiobutton_darktheme.isChecked()){
+                    //change the theme to dark
+                }
             }
             else{
                 layout = inflater.inflate(R.layout.fragment_settings_theme,container,false);
-                TextView textView = (TextView) layout.findViewById(R.id.themetxt);
-                textView.setText("DEFAULT FRAGMENT FROM THEME");
+                //TextView textView = (TextView) layout.findViewById(R.id.themetxt);
+                //textView.setText("DEFAULT FRAGMENT FROM THEME");
             }
             return layout;
         }
@@ -180,8 +237,6 @@ public class SettingsActivity extends AppCompatActivity {
             languages.add(new Language("Suomi", "fi", R.drawable.lang_fi));
         }
     }
-
-
 
 }
 
