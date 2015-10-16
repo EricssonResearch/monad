@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="primaryColor">#303f9f</color>
+    <color name="primaryColorDark">#1a237e</color>
+    <color name="accentColor">#e0e0e0</color>
+    <color name="warnColor">#9fa8da</color>
+    <color name="notificationsColor">#e8eaf6</color>
+    <color name="busColor">#c5cae9</color>
+    <color name="boardingPassengersColor">#388e3c</color>
+    <color name="leavingPassengersColor">#d50000</color>
+</resources>

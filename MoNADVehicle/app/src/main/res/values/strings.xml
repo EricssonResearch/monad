@@ -1,0 +1,29 @@
+<resources>
+    <string name="app_name">MoNAD</string>
+    <string name="title_activity_login">MoNAD - The Driver\'s Best Friend</string>
+    <string name="title_activity_main">MainActivity</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="label_emergency">S.O.S</string>
+
+    <!--Login Activity-->
+    <string name="label_login_login">Log In</string>
+    <string name="label_login_driverid">Driver ID</string>
+    <string name="label_login_password">Password</string>
+    <string name="label_login_busnumber">Bus Number</string>
+
+    <!--Map Activity-->
+    <string name="label_main_nextdestination">Kungsgatan 15</string>
+    <string name="label_main_boardingpassengers">Boarding</string>
+    <string name="label_main_leavingpassengers">Leaving</string>
+    <string name="label_main_boardingnumber">88</string>
+    <string name="label_main_leavingnumber">88</string>
+    <string name="label_main_distance">Distance</string>
+    <string name="label_main_distance_value">200 m</string>
+    <string name="label_main_arrivaltime">Arrival Time</string>
+    <string name="label_main_arrivaltime_duration">(2 min)</string>
+    <string name="label_main_arrivaltime_value">18:02</string>
+
+    <string name="action_settings">Settings</string>
+
+</resources>
