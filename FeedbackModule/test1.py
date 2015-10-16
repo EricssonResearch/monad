@@ -16,7 +16,7 @@ db = client.monad
 coll = db.feedback
 
 checker = False
-    print "Enter a number between 0 to 5 as your feedback: ",
+print "Enter a number between 0 to 5 as your feedback: ",
 
 
 number = raw_input()
