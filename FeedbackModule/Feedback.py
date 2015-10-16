@@ -96,7 +96,7 @@ if checker:
     print " Now send feedback request!"
 
 #later on the checker should be false after storing data in DB
-   checker = False
+  checker = False
 
 
 
