@@ -38,9 +38,9 @@ elif star == 5:
 print "Enter the SuggestionID: ",
 
 
-suggNo= raw_input()
-        newsuggest = {"SuggestionID": suggNo}
-        newfeedback = {"feedback": translate}
+suggNo = raw_input()
+newsuggest = {"SuggestionID": suggNo}
+newfeedback = {"feedback": translate}
 
 
 def storData():
@@ -52,7 +52,6 @@ def storData():
         checker = True
         #Checking for Pending Request
         if checker:
-                
                 #Ask for feedback (call function from Notification Module)
                 scurrent = strftime("%Y.%m.%d %H:%M:%S", gmtime())
                 currentTime = datetime.strptime(scurrent,"%Y.%m.%d %H:%M:%S")
@@ -79,7 +78,7 @@ def storData():
 #retrieve data from database
 #cursor = coll.find({"feedback":"Bad"})
 #for document in cursor:
- #print (document)
+#print (document)
 
 
 client.close()
