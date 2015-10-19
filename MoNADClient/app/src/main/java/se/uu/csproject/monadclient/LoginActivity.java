@@ -59,7 +59,7 @@ public class LoginActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), response,
                             Toast.LENGTH_LONG).show();
                     // If the reponse starts with the specific word, it means the users loged in successfully
-                    if (response.startsWith("Welcome back")) {
+                    if (response.startsWith("Success (1)")) {
                         LoginActivity.this.startActivity(new Intent(LoginActivity.this, MainActivity.class));
                     }
                 } catch (InterruptedException e) {

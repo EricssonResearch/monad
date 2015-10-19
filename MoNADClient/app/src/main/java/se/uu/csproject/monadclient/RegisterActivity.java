@@ -56,7 +56,7 @@ public class RegisterActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), response,
                             Toast.LENGTH_LONG).show();
                     // If the user successfully registered, the app will jump to search activity.
-                    if (response.startsWith("Welcome ")) {
+                    if (response.startsWith("Success (1)")) {
                         RegisterActivity.this.startActivity(new Intent(RegisterActivity.this, SearchActivity.class));
                     }
                 } catch (InterruptedException e) {
