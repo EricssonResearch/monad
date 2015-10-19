@@ -159,8 +159,8 @@
     <string name="label_settings_selectlanguage">Please select your language</string>
 
     <!--Settings - Alert setting /yonatan -->
-    <string name="label_fragmentsettingsalert_recommendation">Recommendation</string>
-    <string name="label_fragmentsettingsalert_alert">Alerts</string>
+    <string name="label_fragmentsettingsalert_recommendation">Recommendations</string>
+    <string name="label_fragmentsettingsalert_alert">Reminders about trips</string>
     <string name="label_fragmentsettingsalert_buttoncancel">Cancel</string>
     <string name="label_fragmentsettingsalert_buttonok">OK</string>
     <string name="label_fragmentsettingsalert_title">Notifications</string>
@@ -252,6 +252,7 @@
     <string name="non_available">n/a</string>
     <string name="label_searchresult_timeinfo">n/a - n/a (n/a min)</string>
     <string name="label_searchresult_routeinfo">n/a to n/a</string>
+    <string name="label_fragmentsettingsalert_recommendationsswitch">ON</string>
 
     <!-- UNPROCESSED -->
 

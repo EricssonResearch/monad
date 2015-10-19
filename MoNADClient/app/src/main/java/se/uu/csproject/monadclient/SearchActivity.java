@@ -119,11 +119,11 @@ public class SearchActivity extends AppCompatActivity {
         public void onCheckedChanged(RadioGroup group, int checkedId) {
             if (checkedId == arrivalTimeRadioButton.getId()){
                 textViewTripTimeDate.setText("Thu, Nov, 9");
-                textViewTripTimeHour.setText("21:20, AM");
+                textViewTripTimeHour.setText("21:20 AM");
             }
             if (checkedId == depatureTimeRadioButton.getId()){
                 textViewTripTimeDate.setText("Fri, Oct, 2");
-                textViewTripTimeHour.setText("11:45, AM");
+                textViewTripTimeHour.setText("11:45 AM");
             }
         }
     }
@@ -191,7 +191,7 @@ public class SearchActivity extends AppCompatActivity {
     private void generateSearchResults(List<Trip> trips){
         trips.add(new Trip(1, "Polacksbacken","12:36","Flogsta", "12:51", 15, 2));
         trips.add(new Trip(2, "Polacksbacken","20:36","Flogsta", "20:51", 15, 4));
-        trips.add(new Trip(3, "Gamla Uppsala","19:17","Övre Slottsgatan", "19:35", 18, 3));
+        trips.add(new Trip(3, "Polacksbacken","19:17","Ekeby", "19:35", 18, 3));
         trips.add(new Trip(4, "Polacksbacken", "12:36", "Flogsta", "12:51", 15, 0));
     }
 }
