@@ -1,5 +1,9 @@
 package se.uu.csproject.monadclient;
 
+import android.app.DatePickerDialog;
+import android.app.Dialog;
+import android.app.DialogFragment;
+import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,6 +12,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.format.DateFormat;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -15,21 +20,28 @@ import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.TimePicker;
+import android.widget.Toast;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import se.uu.csproject.monadclient.recyclerviews.SearchRecyclerViewAdapter;
 import se.uu.csproject.monadclient.recyclerviews.Trip;
 
 public class SearchActivity extends AppCompatActivity {
-    private TextView textViewTripTimeDate;
-    private TextView textViewTripTimeHour;
+    private TextView textViewTripDate;
+    DialogFragment dateFragment;
+    private TextView textViewTripTime;
+    DialogFragment timeFragment;
     private RadioButton arrivalTimeRadioButton;
     private RadioButton depatureTimeRadioButton;
     private RadioButton tripTimeButton;
@@ -39,6 +51,8 @@ public class SearchActivity extends AppCompatActivity {
     private EditText positionEditText;
     private EditText destinationEditText;
     private Button searchButton;
+    public Calendar calendar;
+    static final int DIALOG_ID = 0;
     //private DatePicker datePicker;
 
     @Override
@@ -53,8 +67,16 @@ public class SearchActivity extends AppCompatActivity {
 
         arrivalTimeRadioButton = (RadioButton) findViewById(R.id.radiobutton_search_arrivaltime);
         depatureTimeRadioButton = (RadioButton) findViewById(R.id.radiobutton_search_departuretime);
-        textViewTripTimeDate = (TextView) findViewById(R.id.textview_search_tripdatetime);
-        textViewTripTimeHour = (TextView) findViewById(R.id.textview_search_triptimehour);
+        textViewTripDate = (TextView) findViewById(R.id.textview_search_tripdate);
+        textViewTripTime= (TextView) findViewById(R.id.textview_search_triptime);
+        calendar = Calendar.getInstance();
+
+        textViewTripDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showDatePickerDialog(v);
+            }
+        });
 
         tripTimeRadioGroup = (RadioGroup) findViewById(R.id.radiogroup_search_triptime);
         priorityRadioGroup = (RadioGroup) findViewById(R.id.radiogroup_search_priority);
@@ -62,7 +84,6 @@ public class SearchActivity extends AppCompatActivity {
         tripTimeButton = (RadioButton) findViewById(R.id.radiobutton_search_prioritytripdistance);
         positionEditText = (EditText) findViewById(R.id.edittext_search_position);
         destinationEditText = (EditText) findViewById(R.id.edittext_search_destination);
-        //datePicker = (DatePicker) findViewById(R.id.date_picker);
 
         searchButton = (Button) findViewById(R.id.button_search_search);
 
@@ -87,6 +108,70 @@ public class SearchActivity extends AppCompatActivity {
         // Hide the keyboard when launch this activity
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
     }
+
+    public void showDatePickerDialog(View v) {
+        dateFragment = new DatePickerFragment();
+        dateFragment.show(getFragmentManager(), "datePicker");
+
+    }
+
+    /*public void showTimePickerDialog(View v) {
+        timeFragment = new TimePickerFragment();
+        timeFragment.show(getFragmentManager(), "timePicker");
+    }*/
+
+    public void updateDate() {
+        final String DATE_FORMAT = "EEE dd MMM.";
+        SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT);
+        String selectedDate = dateFormat.format(calendar.getTime());
+        textViewTripDate.setText(selectedDate);
+    }
+
+    public void updateTime() {
+        final String TIME_FORMAT = "HH:mm";
+        SimpleDateFormat timeFormat = new SimpleDateFormat(TIME_FORMAT);
+        String selectedTime = timeFormat.format(calendar.getTime());
+        textViewTripDate.setText(selectedTime);
+    }
+
+    public class DatePickerFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener {
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            final Calendar c = Calendar.getInstance();
+            int year = c.get(Calendar.YEAR);
+            int month = c.get(Calendar.MONTH);
+            int day = c.get(Calendar.DAY_OF_MONTH);
+            return new DatePickerDialog(getActivity(), this, year, month, day);
+        }
+
+        public void onDateSet(DatePicker view, int year, int month, int day) {
+            calendar.set(Calendar.YEAR, year);
+            calendar.set(Calendar.MONTH, month);
+            calendar.set(Calendar.DAY_OF_MONTH, day);
+            updateDate();
+        }
+    }
+
+    /*public class TimePickerFragment extends DialogFragment implements TimePickerDialog.OnTimeSetListener {
+
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            // Use the current time as the default values for the picker
+            final Calendar c = Calendar.getInstance();
+            int hour = c.get(Calendar.HOUR_OF_DAY);
+            int minute = c.get(Calendar.MINUTE);
+
+            // Create a new instance of TimePickerDialog and return it
+            return new TimePickerDialog(getActivity(), this, hour, minute,
+                    DateFormat.is24HourFormat(getActivity()));
+        }
+
+        public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+            calendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
+            calendar.set(Calendar.MINUTE, minute);
+            updateTime();
+        }
+    }*/
 
     // When the user touch somewhere else than focusable object, hide keyboard
     @Override
@@ -118,12 +203,10 @@ public class SearchActivity extends AppCompatActivity {
         @Override
         public void onCheckedChanged(RadioGroup group, int checkedId) {
             if (checkedId == arrivalTimeRadioButton.getId()){
-                textViewTripTimeDate.setText("Thu, Nov, 9");
-                textViewTripTimeHour.setText("21:20 AM");
+
             }
             if (checkedId == depatureTimeRadioButton.getId()){
-                textViewTripTimeDate.setText("Fri, Oct, 2");
-                textViewTripTimeHour.setText("11:45 AM");
+
             }
         }
     }
