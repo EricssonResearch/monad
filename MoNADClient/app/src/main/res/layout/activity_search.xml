@@ -115,22 +115,27 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:id="@+id/textview_search_tripdatetime"
-                android:text="@string/label_search_triptimedate"
+                android:id="@+id/textview_search_tripdate"
+                android:text="@string/non_available"
                 android:padding="@dimen/medium_padding"
                 style="@style/Widget.AppCompat.EditText"
                 android:textColor="@color/black"
-                android:gravity="center_horizontal"/>
+                android:gravity="center_horizontal"
+                android:clickable="true"
+                />
 
-            <EditText
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:id="@+id/textview_search_triptimehour"
-                android:text="@string/label_search_triptimehour"
+                android:id="@+id/textview_search_triptime"
+                android:text="@string/non_available"
+                android:padding="@dimen/medium_padding"
+                style="@style/Widget.AppCompat.EditText"
                 android:textColor="@color/black"
                 android:gravity="center_horizontal"
-                android:padding="@dimen/medium_padding"/>
+                android:clickable="true"
+                />
 
         </LinearLayout>
 
