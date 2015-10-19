@@ -15,14 +15,16 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.common.SignInButton;
+
+import java.util.concurrent.ExecutionException;
 
 public class LoginActivity extends AppCompatActivity {
 
     private EditText usernameField;
     private EditText passwordField;
-    private TextView wrongCredentials;
     private SignInButton googleLogInButton;
 
     @Override
@@ -36,7 +38,6 @@ public class LoginActivity extends AppCompatActivity {
         usernameField = (EditText) findViewById(R.id.field_username);
         passwordField = (EditText) findViewById(R.id.field_password);
         Button logInButton = (Button) findViewById(R.id.button_login);
-        wrongCredentials = (TextView) findViewById(R.id.wrong_credentials);
         TextView forgotPasswordTextView = (TextView) findViewById(R.id.forgotpassword_text_view);
         TextView registerTextView = (TextView) findViewById(R.id.textview_register);
         googleLogInButton = (SignInButton) findViewById(R.id.google_login_button);
@@ -51,12 +52,20 @@ public class LoginActivity extends AppCompatActivity {
         logInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(usernameField.getText().toString().equals("monad")
-                        && passwordField.getText().toString().equals("monad")){
-                    LoginActivity.this.startActivity(new Intent(LoginActivity.this, MainActivity.class));
-                }
-                else{
-                    wrongCredentials.setVisibility(TextView.VISIBLE);
+                LogInTask task = new LogInTask();
+                try {
+                    // Get the username and password, send them with the request
+                    String response = task.execute(usernameField.getText().toString(), passwordField.getText().toString()).get();
+                    Toast.makeText(getApplicationContext(), response,
+                            Toast.LENGTH_LONG).show();
+                    // If the reponse starts with the specific word, it means the users loged in successfully
+                    if (response.startsWith("Welcome back")) {
+                        LoginActivity.this.startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                    }
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                } catch (ExecutionException e) {
+                    e.printStackTrace();
                 }
             }
         });

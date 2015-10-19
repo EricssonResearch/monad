@@ -1,5 +1,7 @@
 package se.uu.csproject.monadclient;
 
+import com.google.common.base.Charsets;
+
 import java.net.URL;
 import java.net.HttpURLConnection;
 import java.io.DataOutputStream;
@@ -13,8 +15,8 @@ import java.io.IOException;
  */
 
 public class ClientAuthentication {
-    private static final String AUTHENTICATION_HOST = "";
-    private static final String AUTHENTICATION_PORT = "";
+    private static final String AUTHENTICATION_HOST = "http://130.238.15.114:";
+    private static final String AUTHENTICATION_PORT = "9999";
     private static String[] profile = new String[9];
     /* 0: clientId */
     /* 1: username */
@@ -186,7 +188,7 @@ public class ClientAuthentication {
 
         try {
             url = new URL(request);
-            byte[] postData = urlParameters.getBytes(StandardCharsets.UTF_8);
+            byte[] postData = urlParameters.getBytes(Charsets.UTF_8);
             int postDataLength = postData.length;
 
             connection = (HttpURLConnection) url.openConnection();
@@ -225,11 +227,10 @@ public class ClientAuthentication {
         return response;
     }
 
-    public static void postSignUpRequest(String username, String password, String email, String phone) {
+    public static String postSignUpRequest(String username, String password, String email, String phone) {
         String request = AUTHENTICATION_HOST + AUTHENTICATION_PORT + "/client_sign_up";
         String urlParameters = "username=" + username + "&password=" + password
                              + "&email=" + email + "&phone=" + phone;
-
         /* Update profile: username, password, email, phone */
         setProfileBeforeSignUp(username, password, email, phone);
 
@@ -242,11 +243,12 @@ public class ClientAuthentication {
         // response = response.trim();
 
         /* Process Authentication Module's response */
-        processSignUpResponse(response);
+        return processSignUpResponse(response);
     }
 
-    public static void processSignUpResponse(String response) {
+    public static String processSignUpResponse(String response) {
         String responseMessage = "";
+        String result = "";
 
         /* Username already in use */
         if (response.startsWith("01")) {
@@ -265,15 +267,17 @@ public class ClientAuthentication {
         else if (response.startsWith("1|")) {
             /* Update profile: clientId */
             setProfileAfterSignUp(response.substring(2));
-            responseMessage = "Success (1) - User Id: " + getClientId();
+            responseMessage = "Welcome " + getUsername() + " !";
         }
         else {
-            System.out.println("ERROR - " + response);
+            result = "ERROR - " + response;
         }
-        System.out.println("Response: " + responseMessage);
+        result = responseMessage;
+
+        return result;
     }
 
-    public static void postSignInRequest(String username, String password) {
+    public static String postSignInRequest(String username, String password) {
         String request = AUTHENTICATION_HOST + AUTHENTICATION_PORT + "/client_sign_in";
         String urlParameters = "username=" + username + "&password=" + password;
 
@@ -289,12 +293,13 @@ public class ClientAuthentication {
         // response = response.trim();
 
         /* Process Authentication Module's response */
-        processSignInResponse(response);
+        return processSignInResponse(response);
     }
 
-    public static void processSignInResponse(String response) {
+    public static String processSignInResponse(String response) {
         String responseMessage = "";
         String[] responseData = new String[7];
+        String result = "";
         /* 0: id */
         /* 1: email */
         /* 2: phone */
@@ -329,23 +334,26 @@ public class ClientAuthentication {
             setProfileAfterSignIn(responseData[0], responseData[1], responseData[2], responseData[3],
                                   responseData[4], responseData[5], responseData[6]);
 
-            responseMessage = "Success (1) - " + response
-                    + "\nclientId: " + getClientId()
-                    + "\nemail: " + getEmail()
-                    + "\nphone: " + getPhone()
-                    + "\nlanguage: " + getLanguage()
-                    + "\nstoreLocation: " + getStoreLocation()
-                    + "\nnotificationsAlert: " + getNotificationsAlert()
-                    + "\nrecommendationsAlert: " + getRecommendationsAlert();
+//            responseMessage = "Success (1) - " + response
+//                    + "\nclientId: " + getClientId()
+//                    + "\nemail: " + getEmail()
+//                    + "\nphone: " + getPhone()
+//                    + "\nlanguage: " + getLanguage()
+//                    + "\nstoreLocation: " + getStoreLocation()
+//                    + "\nnotificationsAlert: " + getNotificationsAlert()
+//                    + "\nrecommendationsAlert: " + getRecommendationsAlert();
+
+            responseMessage = "Welcome back " + getUsername() + " !";
         }
         /* Wrong crendentials */
         else if (response.startsWith("0")) {
-            responseMessage = "Wrong Crendentials (0)";
+            responseMessage = "The password or username is not correct.";
         }
         /* ERROR case */
         else {
-            System.out.println("ERROR - " + response);
+            result = "ERROR - " + response;
         }
-        System.out.println("\nResponse: " + responseMessage);
+        result = responseMessage;
+        return result;
     }
 }

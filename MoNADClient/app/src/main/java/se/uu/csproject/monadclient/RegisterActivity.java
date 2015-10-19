@@ -12,6 +12,9 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
+
+import java.util.concurrent.ExecutionException;
 
 public class RegisterActivity extends AppCompatActivity {
 
@@ -41,9 +44,25 @@ public class RegisterActivity extends AppCompatActivity {
         registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(password.getText().length() > 6
-                        && password.getText().toString().equals(passwordVerify.getText().toString())){
-                    RegisterActivity.this.startActivity(new Intent(RegisterActivity.this, SearchActivity.class));
+                if(!password.getText().toString().equals(passwordVerify.getText().toString())){
+                    Toast.makeText(getApplicationContext(), "Password does not match!",
+                            Toast.LENGTH_LONG).show();
+                }
+                // initialize a new AsyncTask
+                SignUpTask task = new SignUpTask();
+                try {
+                    // Get the info of the user, send them with the request
+                    String response = task.execute(username.getText().toString(), password.getText().toString(), email.getText().toString(), phone.getText().toString()).get();
+                    Toast.makeText(getApplicationContext(), response,
+                            Toast.LENGTH_LONG).show();
+                    // If the user successfully registered, the app will jump to search activity.
+                    if (response.startsWith("Welcome ")) {
+                        RegisterActivity.this.startActivity(new Intent(RegisterActivity.this, SearchActivity.class));
+                    }
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                } catch (ExecutionException e) {
+                    e.printStackTrace();
                 }
             }
         });
