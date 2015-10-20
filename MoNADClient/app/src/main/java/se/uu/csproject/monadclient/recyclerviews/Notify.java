@@ -3,11 +3,11 @@ package se.uu.csproject.monadclient.recyclerviews;
 public class Notify{
     String name;
     String time;
-    int icon;
+    int iconId;
 
-    public  Notify(String name, String time, int icon) {
+    public  Notify(String name, String time, int iconId) {
         this.name = name;
         this.time = time;
-        this.icon = icon;
+        this.iconId = iconId;
     }
 }

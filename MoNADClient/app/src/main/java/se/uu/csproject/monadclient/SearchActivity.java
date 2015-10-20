@@ -68,13 +68,21 @@ public class SearchActivity extends AppCompatActivity {
         arrivalTimeRadioButton = (RadioButton) findViewById(R.id.radiobutton_search_arrivaltime);
         depatureTimeRadioButton = (RadioButton) findViewById(R.id.radiobutton_search_departuretime);
         textViewTripDate = (TextView) findViewById(R.id.textview_search_tripdate);
-        textViewTripTime= (TextView) findViewById(R.id.textview_search_triptime);
         calendar = Calendar.getInstance();
+        updateDate();
+        textViewTripTime= (TextView) findViewById(R.id.textview_search_triptime);
+        updateTime();
 
         textViewTripDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 showDatePickerDialog(v);
+            }
+        });
+        textViewTripTime.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showTimePickerDialog(v);
             }
         });
 
@@ -104,7 +112,6 @@ public class SearchActivity extends AppCompatActivity {
         SearchRecyclerViewAdapter adapter = new SearchRecyclerViewAdapter(searchResults);
         recyclerView.setAdapter(adapter);
 
-
         // Hide the keyboard when launch this activity
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
     }
@@ -115,10 +122,10 @@ public class SearchActivity extends AppCompatActivity {
 
     }
 
-    /*public void showTimePickerDialog(View v) {
+    public void showTimePickerDialog(View v) {
         timeFragment = new TimePickerFragment();
         timeFragment.show(getFragmentManager(), "timePicker");
-    }*/
+    }
 
     public void updateDate() {
         final String DATE_FORMAT = "EEE dd MMM.";
@@ -131,7 +138,7 @@ public class SearchActivity extends AppCompatActivity {
         final String TIME_FORMAT = "HH:mm";
         SimpleDateFormat timeFormat = new SimpleDateFormat(TIME_FORMAT);
         String selectedTime = timeFormat.format(calendar.getTime());
-        textViewTripDate.setText(selectedTime);
+        textViewTripTime.setText(selectedTime);
     }
 
     public class DatePickerFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener {
@@ -152,7 +159,7 @@ public class SearchActivity extends AppCompatActivity {
         }
     }
 
-    /*public class TimePickerFragment extends DialogFragment implements TimePickerDialog.OnTimeSetListener {
+    public class TimePickerFragment extends DialogFragment implements TimePickerDialog.OnTimeSetListener {
 
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -171,7 +178,7 @@ public class SearchActivity extends AppCompatActivity {
             calendar.set(Calendar.MINUTE, minute);
             updateTime();
         }
-    }*/
+    }
 
     // When the user touch somewhere else than focusable object, hide keyboard
     @Override
@@ -199,7 +206,7 @@ public class SearchActivity extends AppCompatActivity {
 
     // Change the info if the depature/arrival button pressed  dummy!
     class RadioGroupListenerTime implements RadioGroup.OnCheckedChangeListener{
-
+        //TODO; handle input time as departure or arrival based on user's choice
         @Override
         public void onCheckedChanged(RadioGroup group, int checkedId) {
             if (checkedId == arrivalTimeRadioButton.getId()){
