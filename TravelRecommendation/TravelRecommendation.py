@@ -6,24 +6,6 @@ from pyspark.mllib.clustering import KMeans, KMeansModel
 from numpy import array
 from math import sqrt
 
-# Initializing connection with MongoDB
-client = MongoClient()
-
-db = client.monad
-
-TravelRequest = db.TravelRequest
-TimeTable = db.TimeTable
-
-# Not needed if executed from pyspark. We need it only for ./bin/spark-submit
-sc = SparkContext()
-
-# TODO Specify the user we want to look for
-results = TravelRequest.find()
-
-users = []
-
-# Number of iterations to find the best k, minimum and maximum latitude,
-# longitude and radius and number of recommendations for each cluster
 NUM_OF_IT = 8
 MIN_LATITUDE = 59.78
 MAX_LATITUDE = 59.92
@@ -33,6 +15,40 @@ MIN_COORDINATE = -13750
 MAX_COORDINATE = 13750
 CIRCLE_CONVERTER = math.pi / 43200
 NUMBER_OF_RECOMMENDATIONS = 1
+users = []
+routes = []
+recommendations = []
+finalRecommendation = []
+selected_centroids = []
+routesDistances = []
+client = None
+db = None
+
+def dataBaseConnection():
+    # TODO Connect MongoDB with Spark, so we can directly distribute the data
+    # we retrieved from Mongo in a RDD
+    client = MongoClient()
+    db = client.monad
+    TravelRequest = db.TravelRequest
+    TimeTable = db.TimeTable
+    return TravelRequest, TimeTable
+
+def populateFromDatabase(TravelRequest, TimeTable):
+    results = TravelRequest.find()
+    for res in results:
+        users.append((res['start_position_lat'], res['start_position_lon'],
+        res['end_position_lat'], res['end_position_lon'],
+        (res['start_time']).time(), (res['end_time']).time()))
+    route = TimeTable.find()
+    for res in route:
+        for i in range(len(res['Waypoints']) - 1):
+            for j in range(i+1,len(res['Waypoints'])):
+                routes.append([res['_id'], (res['Waypoints'][i]['latitude'],
+                res['Waypoints'][i]['longitude'],
+                res['Waypoints'][j]['latitude'],
+                res['Waypoints'][j]['longitude'],
+                res['Waypoints'][i]['DptTime'],
+                res['Waypoints'][j]['DptTime'])])
 
 # Converting time object to seconds
 def toSeconds(dt):
@@ -62,28 +78,6 @@ def lonNormalizer(value):
                       (MAX_LONGITUDE - MIN_LONGITUDE))
     return new_value
 
-# Creates a list with the data retrieved from MongoDB for the selected user
-for res in results:
-    users.append((res['start_position_lat'], res['start_position_lon'],
-    res['end_position_lat'], res['end_position_lon'],
-    (res['start_time']).time(), (res['end_time']).time()))
-
-# TODO Connect MongoDB with Spark, so we can directly distribute the data
-# we retrieved from Mongo in a RDD
-
-# Time data are first converted to seconds and then mapped as coordinates
-# of a circle
-myRdd = sc.parallelize(users).cache()
-myRdd = myRdd.map(lambda x: (x[0], x[1], x[2], x[3],
-                             toCoordinates(toSeconds(x[4])),
-                             toCoordinates(toSeconds(x[5]))))
-# Normalize all the values between 0 and 1
-myRdd = myRdd.map(lambda (x1, x2, x3, x4, (x5, x6), (x7, x8)):
-                         (latNormalizer(x1), lonNormalizer(x2),
-                          latNormalizer(x3), lonNormalizer(x4),
-                          timeNormalizer(x5), timeNormalizer(x6),
-                          timeNormalizer(x7), timeNormalizer(x8)))
-
 # Function that implements the kmeans algorithm to group users requests
 def kmeans(iterations):
     def error(point):
@@ -100,96 +94,65 @@ def optimalk():
     results = []
     for i in range(NUM_OF_IT):
         results.append(kmeans(i+1)[0])
-    print results
     optimal = []
     for i in range(NUM_OF_IT-1):
         optimal.append(results[i] - results[i+1])
-    print optimal
     optimal1 = []
     for i in range(NUM_OF_IT-2):
         optimal1.append(optimal[i] - optimal[i+1])
-    print optimal1
     return (optimal1.index(max(optimal1)) + 2)
-
-# Printing the clusters
-# TODO Maybe we need an RDD for that
-selected_centroids = kmeans(optimalk())[1].centers
-#print myRdd.collect
-#selected_centroids = kmeans(8)[1].centers
-
-for centroid in selected_centroids:
-    print centroid
-
-# TODO Retrieves the whole timetable as desired. However has to be done
-# directly from MongoDB
-route = TimeTable.find()
-
-routes = []
-
-# Creation of route tuples of type (ID,(start, end))
-for res in route:
-    #routes.append([res['_id'], (res['start_position_lat'],
-    #res['start_position_lon'],  res['end_position_lat'],
-    #res['end_position_lon'], res['StartTime'], res['EndTime'])])
-    for i in range(len(res['Waypoints']) - 1):
-        for j in range(i+1,len(res['Waypoints'])):
-            routes.append([res['_id'], (res['Waypoints'][i]['latitude'],
-            res['Waypoints'][i]['longitude'],
-            res['Waypoints'][j]['latitude'],
-            res['Waypoints'][j]['longitude'],
-            res['Waypoints'][i]['DptTime'],
-            res['Waypoints'][j]['DptTime'])])
-
-# Time data are first converted to seconds and then mapped as coordinates
-# of a circle
-myRoutes = sc.parallelize(routes).cache()
-myRoutes = myRoutes.map(lambda (y,x): (y, (x[0], x[1], x[2], x[3],
-                             toCoordinates(toSeconds(x[4])),
-                             toCoordinates(toSeconds(x[5])))))
-# Normalize all the values between 0 and 1
-myRoutes = myRoutes.map(lambda (y, (x1, x2, x3, x4, (x5, x6), (x7, x8))):
-                         (y, (latNormalizer(x1), lonNormalizer(x2),
-                              latNormalizer(x3), lonNormalizer(x4),
-                              timeNormalizer(x5),timeNormalizer(x6),
-                              timeNormalizer(x7),timeNormalizer(x8))))
 
 # The function that calculate the distance from the given tuple to all the
 # cluster centroids and returns the minimum disstance
 def calculateDistance(tup1):
     current_route = numpy.array(tup1)
-    print current_route
     distances = []
     for i in selected_centroids:
         centroid = numpy.array(i)
         distances.append(numpy.linalg.norm(current_route - centroid))
     return distances
 
-# Calculating all the distances and sorting the results by ascending value
-# therefore smallest distance comes first
-routesDistances = myRoutes.map(lambda x: (x[0], calculateDistance(x[1])))
+if __name__ == "__main__":
+    sc = SparkContext()
+    req, time_t = dataBaseConnection()
+    populateFromDatabase(req, time_t)
 
-finalRecommendation = []
-# Appends a specific number of recommendations for each cluster
-for i in range(len(selected_centroids)):
-    sortRoute = routesDistances.map(lambda (x, y): (x, y[i]))
-    sortRoute = sortRoute.map(lambda (x,y): (y,x)).sortByKey()
-    finalArray = sortRoute.map(lambda (x,y): (y,x))
-    finalRecommendation.append(finalArray.take(NUMBER_OF_RECOMMENDATIONS))
+    myRdd = sc.parallelize(users).cache()
+    myRoutes = sc.parallelize(routes).cache()
 
-recommendations = []
-# Transforms the list of lists format into a simple list with all the
-# recommendations
-for sug in finalRecommendation:
-    for i in range(len(sug)):
-        recommendations.append(sug[i])
+    myRdd = (myRdd.map(lambda x: (x[0], x[1], x[2], x[3],
+                                 toCoordinates(toSeconds(x[4])),
+                                 toCoordinates(toSeconds(x[5]))))
+                  .map(lambda (x1, x2, x3, x4, (x5, x6), (x7, x8)):
+                                (latNormalizer(x1), lonNormalizer(x2),
+                                 latNormalizer(x3), lonNormalizer(x4),
+                                 timeNormalizer(x5), timeNormalizer(x6),
+                                 timeNormalizer(x7), timeNormalizer(x8))))
 
-# Keeping only the ids and remove duplicates
-recommendations = map(lambda x: x[0], recommendations)
-#recommendations = set(recommendations)
-#recommendations = list(recommendations)
+    myRoutes = (myRoutes.map(lambda (y,x): (y, (x[0], x[1], x[2], x[3],
+                                 toCoordinates(toSeconds(x[4])),
+                                 toCoordinates(toSeconds(x[5])))))
+                       .map(lambda (y, (x1, x2, x3, x4, (x5, x6), (x7, x8))):
+                                 (y, (latNormalizer(x1), lonNormalizer(x2),
+                                 latNormalizer(x3), lonNormalizer(x4),
+                                 timeNormalizer(x5),timeNormalizer(x6),
+                                 timeNormalizer(x7),timeNormalizer(x8)))))
 
-# Prints the recommendations
-# TODO Change that to return the final recommendations instead of just printing
-for sug in recommendations:
-    print TimeTable.find_one({"_id": sug}, {"StartBusstop":1, "EndBusstop":1,
-                              "StartTime":1, "EndTime":1})
+    selected_centroids = kmeans(optimalk())[1].centers
+    routesDistances = myRoutes.map(lambda x: (x[0], calculateDistance(x[1])))
+
+    for i in range(len(selected_centroids)):
+        sortRoute = (routesDistances.map(lambda (x, y): (x, y[i]))
+                                    .map(lambda (x,y): (y,x)).sortByKey()
+                                    .map(lambda (x,y): (y,x)))
+        finalRecommendation.append(sortRoute.take(NUMBER_OF_RECOMMENDATIONS))
+
+    for sug in finalRecommendation:
+        for i in range(len(sug)):
+            recommendations.append(sug[i])
+
+    recommendations = list(set(map(lambda x: x[0], recommendations)))
+
+    for sug in recommendations:
+        print time_t.find_one({"_id": sug}, {"StartBusstop":1, "EndBusstop":2,
+                                  "StartTime":3, "EndTime":4})
