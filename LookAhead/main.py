@@ -111,8 +111,9 @@ def main():
 
 def generateTimeTable(individual):
     databaseClass = DB()
-    databaseClass.generateTripTimeTable(individual)
-    
+    timetable  = databaseClass.generateTripTimeTable(individual)
+    databaseClass.insertTimeTable(timetable)
+
 
 
 if __name__ == '__main__':
