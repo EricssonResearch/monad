@@ -31,6 +31,7 @@ public class LoginActivity extends AppCompatActivity {
         loginButton = (Button) findViewById(R.id.loginButton);
         //emergencyButton = (ToggleButton) findViewById(R.id.emergencyButton);
 
+        //// TODO: add login authentication for vehicle app, similar to that in client app
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

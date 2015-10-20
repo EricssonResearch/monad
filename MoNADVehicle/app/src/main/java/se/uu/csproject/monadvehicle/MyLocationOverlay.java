@@ -45,6 +45,7 @@ import android.util.Log;
  * Play Services. Also note that MyLocationOverlay needs to be added to a view before requesting location updates
  * (otherwise no DisplayModel is set).
  */
+//// TODO: the official mapsforge example recommends location services by Google Play Services instead of the current solution. Change the class according to the recommendation, or improve the current one.
 public class MyLocationOverlay extends Layer implements LocationListener {
 	private static final GraphicFactory GRAPHIC_FACTORY = AndroidGraphicFactory.INSTANCE;
 	private float minDistance = 0.0f;
@@ -133,7 +134,7 @@ public class MyLocationOverlay extends Layer implements LocationListener {
 			} catch (SecurityException e){
 				Log.e("Exception", e.getMessage());
 			}
-			// TODO trigger redraw?
+			// TODO trigger redraw? (a todo in original mapsforge example. map still works without trigger redraw. - low priority todo)
 		}
 	}
 
