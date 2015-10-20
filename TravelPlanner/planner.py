@@ -18,6 +18,10 @@ import datetime
 
 from pymongo import MongoClient
 
+NUM_OF_ROUTES_RETURNED = 5
+RT_ARRIVAL_TIME = 1
+RT_DEPARTURE_TIME = 2
+
 class Mode:
     tripTime = 1
     waitTime = 2
@@ -34,6 +38,7 @@ class TravelPlanner:
         self.fittingRoutes = []
         self.startingWaypoint = []
         self.endingWaypoint = []
+        self.routeList = []
         self.minTimeDiff = datetime.timedelta.max
         self.bestRouteStartTime = datetime.datetime(2015, 1, 1)
         self.bestTravelTime = datetime.timedelta.max
@@ -114,29 +119,65 @@ class TravelPlanner:
                         self.endingWaypoint.append(i)
                     break
 
+    def _isBetterRoute(self, i):
+        if (self.timeToArrival <= self.routeTuples[i][RT_ARRIVAL_TIME]):
+            if (self.dptTime < self.routeTuples[i][RT_DEPARTURE_TIME]):
+                if (self.routeMode == Mode.tripTime):
+                    return True
+            else:
+                if (self.routeMode == Mode.waitTime):
+                    return True
+        return False
+
     def _findBestRoute(self):
         self.bestRoute = self.fittingRoutes[0]
         self.counter = 0
+        self.routeTuples = []
         for route in self.fittingRoutes:
-            self.arrTime = route["Waypoints"][self.endingWaypoint[self.counter]]["DptTime"]
+            self.routeAdded = False
             self.dptTime = route["Waypoints"][self.startingWaypoint[self.counter]]["DptTime"]
+            self.arrTime = route["Waypoints"][self.endingWaypoint[self.counter]]["DptTime"]
             self.travelTime = self.arrTime - self.dptTime
-            self.timeToArrival = self.arrTime - self.startTime
 
-            if (self.timeToArrival <= self.minTimeDiff):
+            if (self.timeMode == Mode.startTime):
+                self.timeToArrival = self.arrTime - self.startTime
+                if (self.routeTuples == []):
+                    self.routeTuples.append((route, self.timeToArrival, self.dptTime))
+                    continue
+
+                #TODO can probably be summarised in one short function
                 if (self.routeMode == Mode.tripTime):
-                    if (self.dptTime > self.bestRouteStartTime):
-                        self.bestRoute = route
-                        self.minTimeDiff = self.timeToArrival
-                        self.bestRouteStartTime = self.dptTime
-                        self.bestTravelTime = self.travelTime
+                    for i in range(len(self.routeTuples)):
+                        if (self._isBetterRoute(i)):
+                            self.routeTuples.insert(i, (route, self.timeToArrival, self.dptTime))
+                            self.routeAdded = True
+                            break
+                        if (i > NUM_OF_ROUTES_RETURNED):
+                            break
+                    if (self.routeAdded == False):
+                        self.routeTuples.append((route, self.timeToArrival, self.dptTime))
+
                 elif (self.routeMode == Mode.waitTime):
-                    if (self.dptTime < self.bestRouteStartTime):
-                        self.bestRoute = route
-                        self.minTimeDiff = self.timeToArrival
-                        self.bestRouteStartTime = self.dptTime
-                        self.bestTravelTime = self.travelTime
+                    for i in range(len(self.routeTuples)):
+                        if (self._isBetterRoute(i)):
+                            self.routeTuples.insert(i, (route, self.timeToArrival, self.dptTime))
+                            self.routeAdded = True
+                            break
+                        if (i > NUM_OF_ROUTES_RETURNED):
+                            break
+                    if (self.routeAdded == False):
+                        self.routeTuples.append((route, self.timeToArrival, self.dptTime))
+
+
+            #TODO Implementation
+            elif (self.timeMode == Mode.arrivalTime):
+                self.arrivalBeforeSetTime = self.endTime - self.arrTime
+
+                pass
+
             self.counter = self.counter + 1
+        for (route, arrTime, dptTime) in self.routeTuples:
+            self.routeList.append(route)
 
 
     def getBestRoute(self, requestID, mode = Mode.tripTime):
@@ -149,9 +190,9 @@ class TravelPlanner:
 
         self._findBestRoute()
 
-        self._updateRequestDB()
-        self._updateTimeTableDB()
+#        self._updateRequestDB()
+#        self._updateTimeTableDB()
 
-        return [self.bestRoute]
+        return self.routeList[:NUM_OF_ROUTES_RETURNED]
 
 
