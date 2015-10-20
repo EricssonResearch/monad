@@ -119,7 +119,6 @@ public class SearchActivity extends AppCompatActivity {
     public void showDatePickerDialog(View v) {
         dateFragment = new DatePickerFragment();
         dateFragment.show(getFragmentManager(), "datePicker");
-
     }
 
     public void showTimePickerDialog(View v) {
@@ -274,6 +273,7 @@ public class SearchActivity extends AppCompatActivity {
     }
 
     public void sendTravelRequest (View v) {
+        //// TODO: retrieve various fields from the UI and send them to SendTravelRequest
         new SendTravelRequest().execute();
     }
 

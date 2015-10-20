@@ -147,6 +147,7 @@ public class SettingsActivity extends AppCompatActivity {
 
         //TODO 1: (high priority) reformat languages fragment into selectable cards
         //TODO 2: save settings changes in their respective fragments
+        //// TODO: update changes in the database
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
             View layout;

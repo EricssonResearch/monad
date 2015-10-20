@@ -11,6 +11,7 @@ import java.util.List;
 import se.uu.csproject.monadclient.recyclerviews.NotificationRecyclerViewAdapter;
 import se.uu.csproject.monadclient.recyclerviews.Notify;
 
+//// TODO: receive data from notification module (maybe not in this activity - TBD), display them in notification bar as well as in the recyclerview
 public class NotificationsActivity extends AppCompatActivity {
 
     public List<Notify> notifications;

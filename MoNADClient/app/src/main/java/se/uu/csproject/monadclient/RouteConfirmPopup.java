@@ -25,6 +25,7 @@ public class RouteConfirmPopup extends AppCompatActivity {
         ImageButton cancel = (ImageButton)findViewById(R.id.cancelbutton);
         cancel.setOnClickListener(new View.OnClickListener() {
             public void onClick(View vw) {
+                //// TODO: maybe return to the previous activity instead of start a new one 
                 startActivity(new Intent(RouteConfirmPopup.this, RouteActivity.class));
             }
         });
