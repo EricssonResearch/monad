@@ -43,6 +43,7 @@ public class TripCancelPopup extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+    //TODO: remove trip from user's schedule if the confirm button is clicked
     public void dropTrip(View view) {
         startActivity(new Intent(this, MainActivity.class));
     }

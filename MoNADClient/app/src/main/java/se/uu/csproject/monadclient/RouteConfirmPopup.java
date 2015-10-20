@@ -29,6 +29,7 @@ public class RouteConfirmPopup extends AppCompatActivity {
             }
         });
 
+        //TODO: store trip in user's schedule when button clicked
         Button button_confirm = (Button)findViewById(R.id.button_trip_confirm);
         button_confirm.setOnClickListener(new View.OnClickListener() {
             public void onClick(View vw) {

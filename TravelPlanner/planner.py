@@ -145,13 +145,13 @@ class TravelPlanner:
         self._findFittingRoutes()
         
         if (self.fittingRoutes == []):
-            return None
+            return []
 
         self._findBestRoute()
 
         self._updateRequestDB()
         self._updateTimeTableDB()
 
-        return self.bestRoute
+        return [self.bestRoute]
 
 
