@@ -5,7 +5,6 @@ import java.net.URL;
 import java.net.HttpURLConnection;
 import java.io.DataOutputStream;
 import java.io.BufferedReader;
-import java.nio.charset.StandardCharsets;
 import java.io.InputStreamReader;
 import java.io.IOException;
 
@@ -26,7 +25,7 @@ public abstract class Authentication {
 
         try {
             url = new URL(request);
-            byte[] postData = urlParameters.getBytes(StandardCharsets.UTF_8);
+            byte[] postData = urlParameters.getBytes(Charsets.UTF_8);
             int postDataLength = postData.length;
 
             connection = (HttpURLConnection) url.openConnection();
