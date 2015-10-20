@@ -67,7 +67,7 @@ public class ProfileActivity extends AppCompatActivity {
         }
 
         if (id == R.id.action_aboutus) {
-            //TODO: Create a toaster with text about the MoNAD project and team
+            //TODO (low priority): Create a toaster with text about the MoNAD project and team
             startActivity(new Intent(this, AboutUsActivity.class));
         }
 
@@ -78,6 +78,7 @@ public class ProfileActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    //// TODO huijie: update username in the database and show if update succeeds or not
     public void editProfileUser (View v) {
         Intent intent = new Intent(this, ProfileEditPopup.class);
         intent.putExtra("name", "username");
@@ -85,6 +86,7 @@ public class ProfileActivity extends AppCompatActivity {
         finish();
     }
 
+    //// TODO huijie: update phone in the database and show if update succeeds or not
     public void editProfilePhone(View v) {
         Intent intent = new Intent(this, ProfileEditPopup.class);
         intent.putExtra("name","phone");
@@ -92,6 +94,7 @@ public class ProfileActivity extends AppCompatActivity {
         finish();
     }
 
+    //// TODO huijie: update email in the database and show if update succeeds or not
     public void editProfileEmail(View v) {
         Intent intent = new Intent(this, ProfileEditPopup.class);
         intent.putExtra("name","email");

@@ -6,10 +6,16 @@
         <item name="android:colorPrimary">@color/primaryColor</item>
         <item name="android:colorPrimaryDark">@color/primaryColorDark</item>
         <item name="android:colorAccent">@color/accentColor</item>
+        <item name="android:datePickerDialogTheme">@style/DateTimePickerDialogTheme</item>
+        <item name="android:timePickerDialogTheme">@style/DateTimePickerDialogTheme</item>
     </style>
 
     <style name="TabColor" parent="Widget.Design.TabLayout">
         <item name="android:background">?attr/colorPrimary</item>
     </style>
 
+    <style name="MyDatePickerDialogTheme" parent="Theme.AppCompat.Dialog">
+        <!--item name="android:datePickerStyle">@style/MyDatePickerStyle</item-->
+        <item name="android:colorAccent">?android:attr/colorPrimary</item>
+    </style>
 </resources>
