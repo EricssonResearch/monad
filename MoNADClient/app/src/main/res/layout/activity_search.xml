@@ -45,7 +45,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="0"
                 android:background="@color/primaryColor"
-                android:contentDescription="@string/label_search_imagedescription"
+                android:contentDescription="@string/img_description"
                 android:src="@drawable/ic_location_on_white_48dp"/>
 
         </LinearLayout>
@@ -78,7 +78,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="0"
                 android:background="@color/primaryColor"
-                android:contentDescription="@string/label_search_imagedescription"
+                android:contentDescription="@string/img_description"
                 android:src="@drawable/ic_location_on_white_48dp"/>
 
         </LinearLayout>

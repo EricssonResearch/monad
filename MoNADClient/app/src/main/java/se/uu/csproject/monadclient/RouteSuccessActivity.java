@@ -22,6 +22,7 @@ public class RouteSuccessActivity extends AppCompatActivity {
 
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        //TODO: copy the countdown code from TripRecyclerView to make the countdown active
     }
 
     @Override

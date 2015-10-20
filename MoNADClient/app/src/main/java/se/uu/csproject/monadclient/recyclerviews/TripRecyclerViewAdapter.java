@@ -89,7 +89,7 @@ public class TripRecyclerViewAdapter extends RecyclerView.Adapter<TripRecyclerVi
             final int MILLISECONDS = 1000;
 
             tripViewHolder.countdownTime.setText(formatCoundownText(MILLISECONDS_TO_DEPARTURE));
-            // TODO: derive date from the attribute "startTime" in object Trip
+            // TODO: derive date from the attribute "startTime" in object Trip, format: "EEE dd MMM."
             tripViewHolder.date.setText("TODAY");
 
             //TODO: change parseColor() calls into theme colors
