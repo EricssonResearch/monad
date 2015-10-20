@@ -13,7 +13,7 @@ public class RouteActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //// TODO: dynamically set the content view as the trip details (map probably not shown -TBD)
+        //// TODO Ilyass: dynamically set the content view as the trip details (map probably not shown -TBD)
         setContentView(R.layout.activity_route);
         Toolbar toolbar = (Toolbar)findViewById(R.id.actionToolBar);
         setSupportActionBar(toolbar);

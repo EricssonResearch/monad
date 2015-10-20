@@ -24,7 +24,7 @@ public class TripsActivity extends AppCompatActivity {
     Toolbar toolbar;
     ImageButton button;
 
-    //TODO: (high priority) Make specific trips selectable
+    //TODO Ilyass: (high priority) Make specific trips selectable
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -92,7 +92,7 @@ public class TripsActivity extends AppCompatActivity {
         }
 
         if (id == R.id.action_aboutus) {
-            //TODO: Create a toaster with text about the MoNAD project and team
+            //TODO (low priority): Create a toaster with text about the MoNAD project and team
             startActivity(new Intent(this, AboutUsActivity.class));
         }
 

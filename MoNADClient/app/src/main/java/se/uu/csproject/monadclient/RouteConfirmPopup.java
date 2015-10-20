@@ -25,12 +25,12 @@ public class RouteConfirmPopup extends AppCompatActivity {
         ImageButton cancel = (ImageButton)findViewById(R.id.cancelbutton);
         cancel.setOnClickListener(new View.OnClickListener() {
             public void onClick(View vw) {
-                //// TODO: maybe return to the previous activity instead of start a new one 
+                //// TODO Ilyass: maybe return to the previous activity instead of start a new one
                 startActivity(new Intent(RouteConfirmPopup.this, RouteActivity.class));
             }
         });
 
-        //TODO: store trip in user's schedule when button clicked
+        //TODO Stavros: store trip in user's schedule when button clicked
         Button button_confirm = (Button)findViewById(R.id.button_trip_confirm);
         button_confirm.setOnClickListener(new View.OnClickListener() {
             public void onClick(View vw) {

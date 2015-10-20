@@ -43,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
     }
 
+    //TODO Stavros: call the search function using SendTravelRequest (same for SearchActivity)
     public void openMainSearch (View view) {
         Intent myIntent = new Intent(MainActivity.this, SearchActivity.class);
         MainActivity.this.startActivity(myIntent);
@@ -95,7 +96,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         if (id == R.id.action_aboutus) {
-            //TODO: Create a toaster with text about the MoNAD project and team
+            //TODO (low priority): Create a toaster with text about the MoNAD project and team
             startActivity(new Intent(this, AboutUsActivity.class));
         }
 

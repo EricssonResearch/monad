@@ -190,7 +190,7 @@ public class SearchActivity extends AppCompatActivity {
 
     // Change the info if the priority button pressed dummy!
     class RadioGroupListenerPriority implements RadioGroup.OnCheckedChangeListener{
-        //TODO: handle search results based on priority
+        //TODO Stavros: handle search results based on priority
         @Override
         public void onCheckedChanged(RadioGroup group, int checkedId) {
             if (checkedId == tripDistanceButton.getId()){
@@ -205,7 +205,7 @@ public class SearchActivity extends AppCompatActivity {
 
     // Change the info if the depature/arrival button pressed  dummy!
     class RadioGroupListenerTime implements RadioGroup.OnCheckedChangeListener{
-        //TODO; handle input time as departure or arrival based on user's choice
+        //TODO Stavros: handle input time as departure or arrival based on user's choice
         @Override
         public void onCheckedChanged(RadioGroup group, int checkedId) {
             if (checkedId == arrivalTimeRadioButton.getId()){
@@ -257,7 +257,7 @@ public class SearchActivity extends AppCompatActivity {
         }
 
         if (id == R.id.action_aboutus) {
-            //TODO: Create a toaster with text about the MoNAD project and team
+            //TODO (low priority): Create a toaster with text about the MoNAD project and team
             startActivity(new Intent(this, AboutUsActivity.class));
         }
 
@@ -273,7 +273,7 @@ public class SearchActivity extends AppCompatActivity {
     }
 
     public void sendTravelRequest (View v) {
-        //// TODO: retrieve various fields from the UI and send them to SendTravelRequest
+        //// TODO Stavros: retrieve various fields from the UI and send them to SendTravelRequest
         new SendTravelRequest().execute();
     }
 

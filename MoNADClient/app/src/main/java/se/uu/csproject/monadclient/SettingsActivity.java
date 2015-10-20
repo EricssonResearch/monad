@@ -145,8 +145,8 @@ public class SettingsActivity extends AppCompatActivity {
             page = getArguments().getInt(TAB_POSITION);
         }
 
-        //TODO 1: (high priority) reformat languages fragment into selectable cards
-        //TODO 2: save settings changes in their respective fragments
+        //TODO 1 Ilyass: (high priority) reformat languages fragment into selectable cards
+        //TODO 2 Ilyass: save settings changes in their respective fragments
         //// TODO: update changes in the database
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
