@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="se.uu.csproject.monadclient.ConfirmCodePopup"
     android:layout_width="match_parent"
-    android:layout_height="240dp"
+    android:layout_height="180dp"
     android:layout_centerInParent="true"
     android:layout_centerVertical="true"
     android:layout_alignParentLeft="true"
@@ -19,16 +19,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/label_confirmcode_codesent"
-        android:layout_marginBottom="@dimen/small_margin"
-        />
-    <TextView
-        android:id="@+id/label_entercode"
-        style="@style/Base.TextAppearance.AppCompat.Widget.ActionBar.Subtitle"
-        android:textColor="@color/white"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/label_codesent"
-        android:text="@string/label_confirmcode_entercode"
         android:layout_marginBottom="@dimen/activity_vertical_margin"
         />
 
@@ -37,7 +27,7 @@
         style="@style/Base.TextAppearance.AppCompat.Widget.ActionBar.Subtitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/label_entercode"
+        android:layout_below="@+id/label_codesent"
         android:text="@string/label_confirmcode_code"
         />
     <EditText

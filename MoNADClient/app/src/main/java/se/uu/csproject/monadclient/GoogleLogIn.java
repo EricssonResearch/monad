@@ -108,6 +108,7 @@ public class GoogleLogIn extends Activity implements
 
         Toast.makeText(getApplicationContext(), "Sign In Successfully",
                 Toast.LENGTH_LONG).show();
+        //// TODO Huijie: register the user with gmail and possibly other available information when he/she first login with the google account
         setContentView(R.layout.activity_main);
     }
 

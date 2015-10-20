@@ -30,7 +30,7 @@ class DB():
     database = "monad"
     timeSeparator = ":"
     minutesDay = 1440
-    hoursDay = 23
+    hoursDay = 24
     minutesHour = 60
 
     # Constructor
@@ -65,6 +65,16 @@ class DB():
     def getTravelRequest(self, object, column):
         req = self.db.TravelRequest.find({"_id": ObjectId(object)})
         return self.retrieveData(req, column)
+
+    # These function will be called for every gene in order to get the difference
+    def getTravelRequestBetween(self, start, end):
+        req = self.db.TravelRequest.find({ "StartTime": {"$gte": start, "$lt": end}})
+        return req
+
+    # These function will be called for every gene in order to get the difference
+    # def getTravelRequestBetween(self, start, end):
+    #    for doc in self.db.TravelRequest.find({'time': {'$gte': start, '$lt': end}}):
+    #        print doc
 
     # Routes
     def populateRoute(self, route):

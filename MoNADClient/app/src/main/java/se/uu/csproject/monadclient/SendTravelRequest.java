@@ -116,7 +116,7 @@ public class SendTravelRequest extends AsyncTask<String, Void, String> {
     protected void onPostExecute(String s) {
         super.onPostExecute(s);
 
-        //TODO: set the scrollview with the response
+        //TODO Stavros: set the scrollview with the response
     }
 }
 
