@@ -74,6 +74,7 @@ public class MainActivity extends Activity {
         myLocationOverlay = new MyLocationOverlay(this, this.mapView.getModel().mapViewPosition, bitmap);
         myLocationOverlay.setSnapToLocationEnabled(false);
 
+        //// TODO: find better solution for locationManager to track bus location. If the following is a good practice, find the best combination of parameters
         // since API 23, runtime check of permission is required
         try {
             //locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, (LocationListener) myLocationOverlay);
@@ -100,6 +101,7 @@ public class MainActivity extends Activity {
         // instantiating the polyline object
         Polyline polyline = new Polyline(paint, AndroidGraphicFactory.INSTANCE);
 
+        //// TODO: receive route from server and draw it. The following route is just for demo.
         // the route from polacksbacken to flogsta
         // to draw the route, all the turning points along the route must be specified,
         // mapsforge does not have the functionality to draw the route between two points with auto detection of turning points
