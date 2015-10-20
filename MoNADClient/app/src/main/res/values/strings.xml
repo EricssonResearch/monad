@@ -185,7 +185,7 @@
 
     <!--Popup - Confirmation Code -->
     <string name="label_confirmcode_codesent">Confirmation code sent!</string>
-    <string name="label_confirmcode_entercode">Please enter the code to reset your password</string>
+    <string name="label_confirmcode_entercode">Please enter your code</string>
     <string name="label_confirmcode_code">Confirmation code</string>
     <string name="label_confirmcode_codehint" translatable="false">000000</string>
     <string name="label_confirmcode_submit">Submit</string>
