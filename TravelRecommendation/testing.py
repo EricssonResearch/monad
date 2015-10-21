@@ -78,5 +78,12 @@ class TestStringMethods(unittest.TestCase):
         2.2360679774997898])
         print "\nTest 8 - OK ... Calculating distance"
 
+    def test9_removeDuplicates(self):
+        a = [(1,2), (1,3), (1,4), (2,3)]
+        b = [(1,2), (2,2), (3,2)]
+        self.assertEqual(tr.removeDuplicates(a), [1,2])
+        self.assertEqual(tr.removeDuplicates(b), [1,2,3])
+        print "\nTest 9 - OK ... Removing duplicates"
+
 if __name__ == "__main__":
     unittest.main()

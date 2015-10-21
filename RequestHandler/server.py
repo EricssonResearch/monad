@@ -19,7 +19,7 @@ escape_table = {
 	"{": "",
 	"}": "",
 	"\\": "",
-	",": ""
+	",": ""	
 }
 
 
@@ -40,8 +40,8 @@ def application(env, start_response):
 	data_env["QUERY_STRING"] = ""
 	data = cgi.FieldStorage(fp = env["wsgi.input"], environ = data_env)		
 	
-	if "username" and "startTime" and "endTime" and "requestTime" and "stPosition" and "edPosition" in data:
-		username = escape(data.getvalue("username"))
+	if "userId" and "startTime" and "endTime" and "requestTime" and "stPosition" and "edPosition" in data:
+		userId = int(escape(data.getvalue("userId")))
 		startTime = escape(data.getvalue("startTime"))
 		endTime = escape(data.getvalue("endTime"))
 		requestTime = escape(data.getvalue("requestTime"))
@@ -53,8 +53,8 @@ def application(env, start_response):
 									serverSelectionTimeoutMS = 5000)		
 			database = connection.monad
 			collection = database.TravelRequest		
-			document = {"Username": username, "StartTime": startTime, "EndTime": endTime,
-						"RequestTime": requestTime, "StPosition": stPosition, "EdPosition": edPosition}			
+			document = {"userId": userId, "startTime": startTime, "endTime": endTime,
+						"requestTime": requestTime, "stPosition": stPosition, "edPosition": edPosition}			
 			insert_one_document(collection, document)
 		except pymongo.errors.PyMongoError as e:
 			start_response("500 INTERNAL ERROR", [("Content-Type", "text/plain")])	

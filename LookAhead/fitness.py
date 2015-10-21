@@ -19,7 +19,6 @@ from operator import itemgetter
 from datetime import datetime
 from datetime import timedelta
 
-
 class Fitness():
 
     # Main [class] variables
@@ -53,6 +52,10 @@ class Fitness():
         return (td.seconds//Fitness.secondMinute) % Fitness.secondMinute
 
     def evalIndividual(self, individual):
+        print(sorted(individual, key = itemgetter(2)))
+
+
+
         ''' Evaluate an individual in the population. Based on how close the
         average bus request time is to the actual bus trip time.
 
@@ -117,5 +120,7 @@ class Fitness():
             # print diffMinutes
             minDiff = timedelta.max  # Reset minDiff for the next request time
         return self.diffMinutes,
+
+
 
 

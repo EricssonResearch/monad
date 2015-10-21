@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -145,7 +146,6 @@ public class SettingsActivity extends AppCompatActivity {
             page = getArguments().getInt(TAB_POSITION);
         }
 
-        //TODO 1 Ilyass: (high priority) reformat languages fragment into selectable cards
         //TODO 2 Ilyass: save settings changes in their respective fragments
         //// TODO: update changes in the database
         @Override
@@ -161,6 +161,7 @@ public class SettingsActivity extends AppCompatActivity {
                 initializeLanguages(languages);
                 LanguageRecyclerViewAdapter adapter = new LanguageRecyclerViewAdapter(languages);
                 recyclerView.setAdapter(adapter);
+                recyclerView.setItemAnimator(new DefaultItemAnimator());
             }
             else if(page == 2){
                 layout = inflater.inflate(R.layout.fragment_settings_alerts,container,false);
@@ -179,7 +180,8 @@ public class SettingsActivity extends AppCompatActivity {
                     @Override
                     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                         if(switchrecommendation.isChecked()) {
-                            recommendationsSwitch.setText("ON");
+                            // The space after ON should be kept for UI formatting purposes
+                            recommendationsSwitch.setText("ON ");
                         }
                         else {
                             recommendationsSwitch.setText("OFF");
@@ -191,7 +193,8 @@ public class SettingsActivity extends AppCompatActivity {
                     @Override
                     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                         if(switchalert.isChecked()){
-                            remindersSwitch.setText("ON");
+                            // The space after ON should be kept for UI formatting purposes
+                            remindersSwitch.setText("ON ");
                         }
                         else {
                             remindersSwitch.setText("OFF");

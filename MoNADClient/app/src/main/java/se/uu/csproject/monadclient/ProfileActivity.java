@@ -8,6 +8,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 
 
 public class ProfileActivity extends AppCompatActivity {
@@ -25,6 +26,15 @@ public class ProfileActivity extends AppCompatActivity {
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        //set the profile fields from the profile stored in ClientAuthentication
+        TextView usernameField = (TextView)findViewById(R.id.textView_profile_user);
+        usernameField.setText(ClientAuthentication.getUsername());
+
+        TextView phoneField = (TextView)findViewById(R.id.textView_profile_phone);
+        phoneField.setText(ClientAuthentication.getPhone());
+
+        TextView emailField = (TextView)findViewById(R.id.textView_profile_email);
+        emailField.setText(ClientAuthentication.getEmail());
     }
 
     @Override
@@ -78,28 +88,28 @@ public class ProfileActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    //// TODO huijie: update username in the database and show if update succeeds or not
     public void editProfileUser (View v) {
         Intent intent = new Intent(this, ProfileEditPopup.class);
         intent.putExtra("name", "username");
         startActivityForResult(intent, 1);
-        finish();
+        //should not finish here, the user may want to continue editting other fields
+        //finish();
     }
 
-    //// TODO huijie: update phone in the database and show if update succeeds or not
     public void editProfilePhone(View v) {
         Intent intent = new Intent(this, ProfileEditPopup.class);
         intent.putExtra("name","phone");
         startActivityForResult(intent, 1);
-        finish();
+        //should not finish here, the user may want to continue editting other fields
+        //finish();
     }
 
-    //// TODO huijie: update email in the database and show if update succeeds or not
     public void editProfileEmail(View v) {
         Intent intent = new Intent(this, ProfileEditPopup.class);
         intent.putExtra("name","email");
         startActivityForResult(intent, 1);
-        finish();
+        //should not finish here, the user may want to continue editting other fields
+        //finish();
     }
 
 }
