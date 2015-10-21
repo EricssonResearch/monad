@@ -19,7 +19,7 @@ escape_table = {
 	"{": "",
 	"}": "",
 	"\\": "",
-	",": ""
+	",": ""	
 }
 
 
@@ -40,7 +40,7 @@ def application(env, start_response):
 	data_env["QUERY_STRING"] = ""
 	data = cgi.FieldStorage(fp = env["wsgi.input"], environ = data_env)		
 	
-	if "username" and "startTime" and "endTime" and "requestTime" and "stPosition" and "edPosition" in data:
+	if "userId" and "startTime" and "endTime" and "requestTime" and "stPosition" and "edPosition" in data:
 		username = escape(data.getvalue("username"))
 		startTime = escape(data.getvalue("startTime"))
 		endTime = escape(data.getvalue("endTime"))

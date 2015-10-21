@@ -242,7 +242,7 @@ public class SearchActivity extends AppCompatActivity {
     public void sendTravelRequest (View v) {
         //// TODO Stavros: retrieve various fields from the UI and send them to SendTravelRequest
 
-        String stPosition, edPosition, username, startTime, endTime, requestTime;
+        String stPosition, edPosition, userId, startTime, endTime, requestTime;
         int selectedId;
         Date now = new Date();
         SimpleDateFormat df = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
@@ -250,7 +250,7 @@ public class SearchActivity extends AppCompatActivity {
         startTime = "";
         endTime = "";
         requestTime = df.format(now);
-        username = ClientAuthentication.getUsername();
+        userId = ClientAuthentication.getClientId();
         stPosition = positionEditText.getText().toString();
         edPosition = destinationEditText.getText().toString();
         selectedId = tripTimeRadioGroup.getCheckedRadioButtonId();
@@ -266,7 +266,7 @@ public class SearchActivity extends AppCompatActivity {
         }
 
         //TODO: send the correct starting and ending times
-        new SendTravelRequest().execute(username, startTime, endTime, requestTime, stPosition, edPosition);
+        new SendTravelRequest().execute(userId, startTime, endTime, requestTime, stPosition, edPosition);
     }
 
     //TEMPORARY FUNCTION TODO: Remove this function once the database connection is set
