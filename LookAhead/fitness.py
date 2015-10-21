@@ -16,14 +16,15 @@ See the License for the specific language governing permissions and limitations 
 import unittest
 from dbConnection import DB
 from operator import itemgetter
-from datetime import datetime, timedelta
+from datetime import datetime
+from datetime import timedelta
 
 
 class Fitness():
 
     # Main [class] variables
     diffMinutes = 0
-    formatString = '%H:%M'
+    formatString = '%d-%m-%Y %H:%M'
     secondMinute = 60.0
     avgBusRequestTime = [
             '03:52', '04:22', '04:52', '05:07', '05:22', '05:37', '05:52',
@@ -48,6 +49,9 @@ class Fitness():
         '''
         return datetime.strptime(time1, Fitness.formatString) - datetime.strptime(time2, Fitness.formatString)
 
+    def getMinutes(self, td):
+        return (td.seconds//Fitness.secondMinute) % Fitness.secondMinute
+
     def evalIndividual(self, individual):
         ''' Evaluate an individual in the population. Based on how close the
         average bus request time is to the actual bus trip time.
@@ -58,19 +62,34 @@ class Fitness():
         according to the evolving timetable.
         Lower values are better.
         '''
+        # Store the date on mongo as datetime 
+        # Store the requests of the previous day into a JSON file order them by date
+        # Group by request query from the file to reduce the number of elements being processed
+        # Use map function instead of LOOP
+        # Multi thread the MAP functions
+
         # First, the randomly-generated starting times are sorted in order to check sequentially the number of requests for that particular trip
-        # individual = sorted(individual, key=itemgetter(2))
+        individual = sorted(individual, key=itemgetter(2))
         # Second, we loop trough the number of genes in order to retrieve the number of requests for that particular trip
         # DB calls can ve avoided by querying the whole Request Collection for a particular day
         # For the 1st trip, the starting time has to be selected
-        # db = DB()
-        # for i in range(len(individual)-1):
-        #     request = db.getTravelRequestBetween("20-10-2015 "+individual[i][2] ,"20-10-2015 "+individual[i+1][2])
-        #     tripTime = individual[i+1][2]
-        #     req.append(request.count)
-        #     for j in range(request.count):
-        #         diff.append(tripTime - request[j][2])
+        db = DB()
+        # Replace the dates here from yesterday's date
+        request = []
+        # The result here should be added into a file: the order is by hour, minute and initialBusStop
+        request = db.getTravelRequestSummary(datetime.datetime(2015, 10, 23, 0, 0, 0),datetime.datetime(2015, 10, 23, 23, 59, 59))
 
+        # for i in range(len(individual)-1):
+        #     request = []
+        #     request = db.getTravelRequestBetween("20-10-2015 "+individual[i][2] ,"20-10-2015 "+individual[i+1][2])
+        #     req.append(request.count())
+        #     diff = []
+        #     for j in range(request.count()):
+        #         diff.append(self.getMinutes(self.timeDiff(tripTime,request[j]["StartTime"])))
+        #         tripTime = "20-10-2015 "+individual[i+1][2]
+        #     dif.append([diff])
+        # print req
+        # print dif
         # Apply a map function to sum all elements of req and diff
         # Then, perform diff / req
         # The result is the value of the fitness function in waiting minutes

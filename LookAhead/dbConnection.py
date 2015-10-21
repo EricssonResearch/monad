@@ -71,6 +71,15 @@ class DB():
         req = self.db.TravelRequest.find({ "StartTime": {"$gte": start, "$lt": end}})
         return req
 
+    def getTravelRequestSummary(self, start, end):
+        keyf = "function(doc) { return { startBusStop: doc.StartBusStop, hour: doc.StartTime.getHours(), minute: doc.StartTime.getMinutes() }; }"
+        condition = {"StartTime": {"$gte": start, "$lt": end}}
+        initial = {"count": 0}
+        reduce = "function(curr, result) { result.count++; }"
+        req = self.db.TravelRequest.group(keyf, condition, initial, reduce)
+        req = sorted(req, key=itemgetter("hour","minute","startBusStop"))
+        return req
+
     # These function will be called for every gene in order to get the difference
     # def getTravelRequestBetween(self, start, end):
     #    for doc in self.db.TravelRequest.find({'time': {'$gte': start, '$lt': end}}):
