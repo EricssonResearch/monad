@@ -338,7 +338,7 @@ public class ClientAuthentication extends Authentication {
         processProfileUpdateResponse(username, password, email, phone, response);
     }
 
-    //// TODO: implement processProfileUpdateResponse and return meaningful response message as string
+    //// TODO Lefteris: implement processProfileUpdateResponse and return meaningful response message as string
     public static void processProfileUpdateResponse(String username, String password, String email,
                                                     String phone, String response) {
 

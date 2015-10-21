@@ -5,7 +5,7 @@ package se.uu.csproject.monadclient.recyclerviews;
  * Therefore, the class attributes are not comprehensive
  */
 
-//TODO: change times and positions data types
+//TODO: change times data types
 public class Trip {
     int tripId;
     String startPosition; // this is the bus stop coordinate

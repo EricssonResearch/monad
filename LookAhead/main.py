@@ -12,15 +12,10 @@ under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
 CONDITIONS OF ANY KIND, either express or implied. See the License for the 
 specific language governing permissions and limitations under the License.
 """
-import random
-
 from deap import tools, algorithms
 import numpy
-
 from dbConnection import DB
 import toolBox
-from fitness import Fitness
-from datetime import datetime, timedelta
 
 # Variables
 MUTATION_PROB = 0.5
@@ -51,10 +46,11 @@ def main():
     ## Evaluate the entire population
     #fitnesses = list(map(toolBox.toolbox.evaluate, pop))
     #for ind, fit in zip(pop, fitnesses):
+
     #    ind.fitness.values = fit
 
-    ## Iterate trough a number of generations
-    #for g in range(NGEN):
+    # Iterate trough a number of generations
+    # for g in range(NGEN):
     #    print("-- Generation %i --" % g)
     #    # Select individuals based on their fitness
     #    offspring = toolBox.toolbox.select(pop, len(pop))
@@ -67,13 +63,13 @@ def main():
 
     #    invalidfitness(offspring)
 
-    ## The Best Individual found
+    # The Best Individual found
     best_ind = tools.selBest(pop, 1)[0]
     print("Best individual is %s, %s" % (best_ind, best_ind.fitness.values))
     generateTimeTable(best_ind)
 
 
-#def crossover(offspring):
+# def crossover(offspring):
 #    # Apply Crossover
 #    for child1, child2 in zip(offspring[::2], offspring[1::2]):
 #        if random.random() < CXPB:
@@ -82,7 +78,7 @@ def main():
 #            del child2.fitness.values
 #
 #
-#def mutation(offspring):
+# def mutation(offspring):
 #    # Testing mutation
 #    for mutant in offspring:
 #         if random.random() < MUTPB:
@@ -90,7 +86,7 @@ def main():
 #             del mutant.fitness.values
 #
 #
-#def invalidfitness(offspring):
+# def invalidfitness(offspring):
 #    # Evaluate the individuals with an invalid fitness
 #    invalid_ind = [ind for ind in offspring if not ind.fitness.valid]
 #    fitnesses = map(toolBox.toolbox.evaluate, invalid_ind)
@@ -113,9 +109,8 @@ def main():
 
 def generateTimeTable(individual):
     databaseClass = DB()
-    timetable  = databaseClass.generateTripTimeTable(individual)
+    timetable = databaseClass.generateTripTimeTable(individual)
     databaseClass.insertTimeTable(timetable)
-
 
 
 if __name__ == '__main__':

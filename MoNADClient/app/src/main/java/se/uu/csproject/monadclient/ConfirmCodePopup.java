@@ -29,7 +29,7 @@ public class ConfirmCodePopup extends AppCompatActivity {
         confirmationCode = (EditText) findViewById(R.id.field_code);
         submitButton = (Button) findViewById(R.id.button_submit);
 
-        //TODO: implement a way to verify the code sent to the user
+        //TODO huijie: implement a way to verify the code sent to the user
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
