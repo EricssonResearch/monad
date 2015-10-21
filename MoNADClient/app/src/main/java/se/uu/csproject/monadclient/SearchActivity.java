@@ -28,11 +28,14 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
+import android.widget.RadioGroup.OnCheckedChangeListener;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import se.uu.csproject.monadclient.recyclerviews.SearchRecyclerViewAdapter;
 import se.uu.csproject.monadclient.recyclerviews.Trip;
@@ -94,12 +97,6 @@ public class SearchActivity extends AppCompatActivity {
         destinationEditText = (EditText) findViewById(R.id.edittext_search_destination);
 
         searchButton = (Button) findViewById(R.id.button_search_search);
-
-        RadioGroupListenerTime listenerTime = new RadioGroupListenerTime();
-        tripTimeRadioGroup.setOnCheckedChangeListener(listenerTime);
-
-        RadioGroupListenerPriority listenerPriority = new RadioGroupListenerPriority();
-        priorityRadioGroup.setOnCheckedChangeListener(listenerPriority);
 
         tripTimeRadioGroup.check(depatureTimeRadioButton.getId());
         priorityRadioGroup.check(tripTimeButton.getId());
@@ -188,35 +185,6 @@ public class SearchActivity extends AppCompatActivity {
         return true;
     }
 
-    // Change the info if the priority button pressed dummy!
-    class RadioGroupListenerPriority implements RadioGroup.OnCheckedChangeListener{
-        //TODO Stavros: handle search results based on priority
-        @Override
-        public void onCheckedChanged(RadioGroup group, int checkedId) {
-            if (checkedId == tripDistanceButton.getId()){
-
-            }
-            if (checkedId == tripTimeButton.getId()){
-
-
-            }
-        }
-    }
-
-    // Change the info if the depature/arrival button pressed  dummy!
-    class RadioGroupListenerTime implements RadioGroup.OnCheckedChangeListener{
-        //TODO Stavros: handle input time as departure or arrival based on user's choice
-        @Override
-        public void onCheckedChanged(RadioGroup group, int checkedId) {
-            if (checkedId == arrivalTimeRadioButton.getId()){
-
-            }
-            if (checkedId == depatureTimeRadioButton.getId()){
-
-            }
-        }
-    }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -268,13 +236,38 @@ public class SearchActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void openTripDetail (View v) {
+    public void openTripDetail(View v) {
         startActivity(new Intent(this, RouteActivity.class));
     }
 
     public void sendTravelRequest (View v) {
         //// TODO Stavros: retrieve various fields from the UI and send them to SendTravelRequest
-        new SendTravelRequest().execute();
+
+        String stPosition, edPosition, username, startTime, endTime, requestTime;
+        int selectedId;
+        Date now = new Date();
+        SimpleDateFormat df = new SimpleDateFormat("yyyy, MM, dd, HH, mm, ss");
+
+        startTime = "";
+        endTime = "";
+        requestTime = df.format(now);
+        username = ClientAuthentication.getUsername();
+        stPosition = positionEditText.getText().toString();
+        edPosition = destinationEditText.getText().toString();
+        selectedId = tripTimeRadioGroup.getCheckedRadioButtonId();
+
+        switch(selectedId){
+            case R.id.radiobutton_search_departuretime:
+                startTime = textViewTripDate.getText().toString();
+                break;
+
+            case R.id.radiobutton_search_arrivaltime:
+                endTime = textViewTripTime.getText().toString();
+                break;
+        }
+
+        //TODO: send the correct starting and ending times
+        new SendTravelRequest().execute(username, requestTime, requestTime, requestTime, stPosition, edPosition);
     }
 
     //TEMPORARY FUNCTION TODO: Remove this function once the database connection is set

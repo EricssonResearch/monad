@@ -20,8 +20,9 @@ import mutation
 
 # Constant
 BUS_LINE = 2
+# The individual size corresponds to the number of trips
 INDIVIDUAL_SIZE = 90
-POPULATION_SIZE = 100
+
 
 # Initialize the classes
 databaseClass = DB()

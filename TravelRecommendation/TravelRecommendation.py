@@ -21,14 +21,13 @@ recommendations = []
 finalRecommendation = []
 selected_centroids = []
 routesDistances = []
-client = None
-db = None
+client = MongoClient()
+db = client.monad
 
 def dataBaseConnection():
     # TODO Connect MongoDB with Spark, so we can directly distribute the data
     # we retrieved from Mongo in a RDD
-    client = MongoClient()
-    db = client.monad
+    #client = MongoClient("130.238.15.114",27017)
     TravelRequest = db.TravelRequest
     TimeTable = db.TimeTable
     return TravelRequest, TimeTable
@@ -151,8 +150,27 @@ if __name__ == "__main__":
         for i in range(len(sug)):
             recommendations.append(sug[i])
 
+    # TODO Do this in functions
     recommendations = list(set(map(lambda x: x[0], recommendations)))
 
+    toReturn = []
     for sug in recommendations:
-        print time_t.find_one({"_id": sug}, {"StartBusstop":1, "EndBusstop":2,
-                                  "StartTime":3, "EndTime":4})
+        toReturn.append( time_t.find_one({"_id": sug}, {"StartBusstop":1, "EndBusstop":1,
+                                  "StartTime":1, "EndTime":1, "VehicleID":1}))
+    for item in toReturn:
+        print item, "\n"
+        route_id = item['_id']
+        start_place = item['StartBusstop']
+        end_place = item['EndBusstop']
+        start_time = item['StartTime']
+        end_time = item['EndTime']
+        vehicle_no = item['VehicleID']
+        new_record = {
+            "route_id" : route_id,
+            "start_place" : start_place,
+            "end_place" : end_place,
+            "start_time" : start_time,
+            "end_time" : end_time,
+            "vehicle_no" : vehicle_no
+        }
+        db.TravelRecommendation.insert(new_record)
