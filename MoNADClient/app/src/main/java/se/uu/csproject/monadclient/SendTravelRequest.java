@@ -72,12 +72,11 @@ public class SendTravelRequest extends AsyncTask<String, Void, String> {
     }
 
     /* Get the data from the interface and wrap them in a request */
-    public static String wrapRequest(String userIdString, String startTimeString, String endTimeString,
+    public static String wrapRequest(String userId, String startTimeString, String endTimeString,
                                    String requestTimeString, String stPosition, String edPosition) {
         String request = SERVER + "/request";
         SimpleDateFormat df = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
         SimpleDateFormat dfUserInput = new SimpleDateFormat("EEE dd MMM HH:mm");
-        int userId = Integer.parseInt(userIdString);
 
         Date startTime = null;
         Date endTime = null;
