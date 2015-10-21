@@ -30,7 +30,7 @@ class DB():
     database = "monad"
     timeSeparator = ":"
     minutesDay = 1440
-    hoursDay = 23
+    hoursDay = 24
     minutesHour = 60
 
     # Constructor
