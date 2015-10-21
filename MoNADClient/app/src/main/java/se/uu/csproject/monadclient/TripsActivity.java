@@ -48,9 +48,9 @@ public class TripsActivity extends AppCompatActivity {
         startActivity(new Intent(this, TripCancelPopup.class));
     }
 
-    public void viewTripDetails(View view) {
+    /*public void viewTripDetails(View view) {
         startActivity(new Intent(this, RouteActivity.class));
-    }
+    }*/
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
