@@ -17,6 +17,8 @@ import unittest
 from dbConnection import DB
 from operator import itemgetter
 from datetime import datetime, timedelta
+from operator import itemgetter
+
 
 
 class Fitness():
@@ -49,6 +51,10 @@ class Fitness():
         return datetime.strptime(time1, Fitness.formatString) - datetime.strptime(time2, Fitness.formatString)
 
     def evalIndividual(self, individual):
+        print(sorted(individual, key = itemgetter(2)))
+
+
+
         ''' Evaluate an individual in the population. Based on how close the
         average bus request time is to the actual bus trip time.
 
@@ -98,5 +104,7 @@ class Fitness():
             # print diffMinutes
             minDiff = timedelta.max  # Reset minDiff for the next request time
         return self.diffMinutes,
+
+
 
 
