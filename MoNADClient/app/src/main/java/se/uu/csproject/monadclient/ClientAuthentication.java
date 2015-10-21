@@ -316,7 +316,7 @@ public class ClientAuthentication extends Authentication {
         return responseMessage;
     }
 
-    public static void postProfileUpdateRequest(String clientId, String username, String password,
+    public static String postProfileUpdateRequest(String clientId, String username, String password,
                                                 String email, String phone) {
 
         String request = AUTHENTICATION_HOST + AUTHENTICATION_PORT + "/client_profile_update";
@@ -335,13 +335,13 @@ public class ClientAuthentication extends Authentication {
         // response = response.trim();
 
         /* Process Authentication Module's response */
-        processProfileUpdateResponse(username, password, email, phone, response);
+        return processProfileUpdateResponse(username, password, email, phone, response);
     }
 
-    //// TODO Lefteris: implement processProfileUpdateResponse and return meaningful response message as string
-    public static void processProfileUpdateResponse(String username, String password, String email,
+    //// TODO Lefteris: implement processProfileUpdateResponse and return meaningful response message as string; also, if update succeeds, update the user profile here
+    public static String processProfileUpdateResponse(String username, String password, String email,
                                                     String phone, String response) {
-
+        return "";
     }
 }
 
