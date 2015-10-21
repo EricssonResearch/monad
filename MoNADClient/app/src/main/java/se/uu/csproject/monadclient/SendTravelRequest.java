@@ -75,15 +75,19 @@ public class SendTravelRequest extends AsyncTask<String, Void, String> {
     public static String wrapRequest(String username, String startTimeString, String endTimeString,
                                    String requestTimeString, String stPosition, String edPosition) {
         String request = SERVER + "/request";
-        SimpleDateFormat df = new SimpleDateFormat("yyyy, MM, dd, HH, mm, ss");
+        SimpleDateFormat df = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+        SimpleDateFormat dfUserInput = new SimpleDateFormat("EEE dd MMM HH:mm");
 
         Date startTime = null;
         Date endTime = null;
-        Date requestTime = null;
+        Date requestTime;
 
         try {
-            startTime = df.parse(startTimeString);
-            endTime = df.parse(endTimeString);
+            if (startTimeString == ""){
+                endTime = dfUserInput.parse(endTimeString);
+            }else{
+                startTime = dfUserInput.parse(startTimeString);
+            }
             requestTime = df.parse(requestTimeString);
         } catch (ParseException e) {
             Log.d("oops", e.toString());
@@ -111,7 +115,7 @@ public class SendTravelRequest extends AsyncTask<String, Void, String> {
     /* Deal with the response returned by the server */
     @Override
     protected void onPostExecute(String response) {
-        Log.d("RESULT", response);
+        Log.d("goodJob", response);
 
         //TODO Stavros: set the scrollview with the response
     }
