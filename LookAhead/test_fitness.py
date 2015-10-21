@@ -14,7 +14,7 @@ specific language governing permissions and limitations under the License.
 import unittest
 
 import toolBox
-from fitness import Fitness
+from fitness import Fitness, evalIndividualCapacity
 from datetime import datetime, timedelta
 
 # Variables
@@ -91,10 +91,11 @@ class FitnessTests(unittest.TestCase):
         # On average, no passengers has to wait > 30 minutes at any of the bus stops
         self.assertLess(fit.evalIndividual(ind1), (162000.0,))
 
-    def testGenerateTimetable(self):
+    def testEvalIndividualCapacity(self):
         # TODO
+        pop = toolBox.toolbox.population(n=2)
 
-        self.assertTrue(True)
+        self.assertFalse(evalIndividualCapacity(pop[0] < 0))
 
 
 if __name__ == '__main__':

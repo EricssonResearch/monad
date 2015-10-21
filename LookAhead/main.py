@@ -17,6 +17,8 @@ import numpy
 from dbConnection import DB
 import toolBox
 
+from fitness import evalIndividualCapacity
+
 # Variables
 MUTATION_PROB = 0.5
 CROSS_OVER_PROB = 0.5
@@ -37,6 +39,7 @@ def main():
     stats.register("min", numpy.min)
     stats.register("max", numpy.max)
 
+    evalIndividualCapacity(pop[0])
     pop, log = algorithms.eaSimple(pop, toolBox.toolbox, cxpb=CROSS_OVER_PROB,
                                    mutpb=MUTATION_PROB, ngen=NO_OF_GENERATION, stats=stats,
                                    halloffame=hof, verbose=True)
