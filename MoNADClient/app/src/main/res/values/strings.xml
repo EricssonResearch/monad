@@ -1,7 +1,6 @@
 <resources>
     <string name="app_name">MoNAD - Ready Set GO!</string>
 
-    <string name="hello_world">Hello world!</string>
     <!--Activity titles (label displayed on the Toolbar)-->
     <string name="title_activity_about_us">About Us</string>
     <string name="title_activity_login" translatable="false">MoNAD</string>
@@ -20,6 +19,7 @@
     <string name="title_activity_route_confirm_popup">Confirm?</string>
     <string name="title_activity_trip_cancel_popup">Cancel?</string>
     <string name="title_activity_google_log_in">Google log in</string>
+    <string name="title_activity_profile_edit_popup" translatable="false">ProfileEditPopup</string>
 
     <!--Toolbar/Actionbar menu items-->
     <string name="action_search">Search</string>
@@ -43,6 +43,7 @@
 
     <!--Activity - Login-->
     <string name="label_login_login">Log In</string>
+    <string name="label_login_googlelogin">Log In with Google</string>
     <string name="label_login_username">Username</string>
     <string name="label_login_password">Password</string>
     <string name="label_login_anonymous">Stay anonymous</string>
@@ -137,18 +138,8 @@
     <string name="label_search_shortesttripdistance">Shortest trip distance</string>
     <string name="label_search_results">Results</string>
     <string name="label_search_buttonsearch">Search</string>
-    <!--Activity - Search /yonatan-->
-    <string name="label_search_imagebuttondescription">image button decsription</string>
-    <string name="label_search_imagedescription">image view description</string>
-    <string name="label_search_resulttime1">18:30 - 19:00 (30min)</string>
-    <string name="label_search_resultstop1">Uppsala Centrastation to Flogstavägen</string>
-    <string name="label_search_resulttime2">13:10 - 13:55 (45min)</string>
-    <string name="label_search_resultstop2">Polacksbacken to Ultuna</string>
-    <string name="label_search_resulttime3">09:20 - 10:10 (50min)</string>
-    <string name="label_search_resultstop3">Gottsunda to Övre Slottsgatan</string>
-
-    <string name="label_search_imgbuttondescription">image button decsription</string>
-    <string name="label_search_imgdescription">image view description</string>
+    <string name="label_searchresult_timeinfo">n/a - n/a (n/a min)</string>
+    <string name="label_searchresult_routeinfo">n/a to n/a</string>
 
     <!--Activity - Settings-->
     <string-array name="settings_tab_titles">
@@ -159,11 +150,12 @@
     <string name="label_settings_selectlanguage">Please select your language</string>
 
     <!--Settings - Alert setting /yonatan -->
-    <string name="label_fragmentsettingsalert_recommendation">Recommendation</string>
-    <string name="label_fragmentsettingsalert_alert">Alerts</string>
+    <string name="label_fragmentsettingsalert_recommendation">Recommendations</string>
+    <string name="label_fragmentsettingsalert_alert">Reminders about trips</string>
     <string name="label_fragmentsettingsalert_buttoncancel">Cancel</string>
     <string name="label_fragmentsettingsalert_buttonok">OK</string>
     <string name="label_fragmentsettingsalert_title">Notifications</string>
+    <string name="label_fragmentsettingsalert_recommendationsswitch">ON </string>
 
     <!-- Settings - Theme setting /yonatan -->
     <string name="label_fragmentsettingstheme_title">Themes</string>
@@ -193,7 +185,7 @@
 
     <!--Popup - Confirmation Code -->
     <string name="label_confirmcode_codesent">Confirmation code sent!</string>
-    <string name="label_confirmcode_entercode">Please enter the code to reset your password</string>
+    <string name="label_confirmcode_entercode">Please enter your code</string>
     <string name="label_confirmcode_code">Confirmation code</string>
     <string name="label_confirmcode_codehint" translatable="false">000000</string>
     <string name="label_confirmcode_submit">Submit</string>
@@ -246,13 +238,9 @@
     <string name="label_tripcancel_clockcontentdescription">Clock</string>
     <string name="label_tripcancel_cancelcontentdescription">Cancel</string>
     <string name="label_tripcancel_buttoncontentdescription">Button</string>
-    <string name="title_activity_profile_edit_popup" translatable="false">ProfileEditPopup</string>
-    <string name="label_login_googlelogin">Log In with Google</string>
+
+    <!--MISCELLANEOUS-->
     <string name="img_description">Icon Missing</string>
     <string name="non_available">n/a</string>
-    <string name="label_searchresult_timeinfo">n/a - n/a (n/a min)</string>
-    <string name="label_searchresult_routeinfo">n/a to n/a</string>
-
-    <!-- UNPROCESSED -->
-
+    <string name="hello_world">Hello world!</string>
 </resources>

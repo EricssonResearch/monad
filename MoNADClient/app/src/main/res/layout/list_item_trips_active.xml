@@ -152,13 +152,12 @@
 
         <!--tripDetails icon-->
         <ImageButton
-            android:id="@+id/button"
+            android:id="@+id/button_routeinfo"
             android:layout_width="@dimen/button_sizelarge"
             android:layout_height="@dimen/button_sizelarge"
             android:background="?attr/colorPrimary"
             android:src="@drawable/ic_arrow_forward_white_24dp"
             android:contentDescription="@string/label_tripsactivity_buttoncontentdescription"
-            android:onClick="viewTripDetails"
             android:layout_alignBottom="@+id/label_countdown"
             android:layout_alignRight="@+id/cancel"
             android:layout_alignEnd="@+id/cancel" />

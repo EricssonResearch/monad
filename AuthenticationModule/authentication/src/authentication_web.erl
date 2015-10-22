@@ -20,10 +20,11 @@ start(Options) ->
     application:start(emysql),
     emysql:add_pool(pool_one, [
         {size, 1},
-        {user, "root"},
-        {password, "passrootword"},
-        {host, "localhost"},
-        {port, 3306}, {database, "users"},
+        {user, ""},
+        {password, ""},
+        {host, ""},
+        {port, 3306},
+        {database, ""},
         {encoding, utf8}]),
 
     mochiweb_http:start([{name, ?MODULE}, {loop, Loop} | Options1]).
@@ -48,6 +49,8 @@ loop(Req, DocRoot) ->
                         client_sign_up(Req);
                     "client_sign_in" ->
                         client_sign_in(Req);
+                    "google_sign_in" ->
+                        google_sign_in(Req);
                     _ ->
                         Req:not_found()
                 end;
@@ -126,6 +129,72 @@ client_sign_in(Req) ->
     catch
         Type:What ->
             Report = ["Failed Request: client_sign_in",
+                      {type, Type}, {what, What},
+                      {trace, erlang:get_stacktrace()}],
+            handle_error(Report, Req)
+    end.
+
+google_sign_in(Req) ->
+    % Parse email
+    PostData = Req:parse_post(),
+    Email = proplists:get_value("email", PostData, "Anonymous"),
+    try
+        % Prepare and execute google_sign_in statement
+        emysql:prepare(client_sign_up_statement, <<"SELECT google_sign_in(?)">>),
+        Result = emysql:execute(pool_one, client_sign_up_statement, [Email]),
+        case Result of
+            {_, _, _, [[Response]], _} ->
+                Msg = [{type, google_sign_in},
+                       {email, Email},
+                       {response, Response},
+                       {process, self()}],
+                io:format("~n~p~n", [Msg]),
+                Req:respond({200, [{"Content-Type", "text/plain"}], Response});
+            _ ->
+                Msg = ["Unexpected Database Response",
+                       {result, Result},
+                       {trace, erlang:get_stacktrace()}],
+                handle_error(Msg, Req)
+        end
+    catch
+        Type:What ->
+            Report = ["Failed Request: google_sign_in",
+                      {type, Type}, {what, What},
+                      {trace, erlang:get_stacktrace()}],
+            handle_error(Report, Req)
+    end.
+
+client_profile_update(Req) ->
+    % Parse username, password, email, phone
+    PostData = Req:parse_post(),
+    ClientId = proplists:get_value("client_id", PostData, "Anonymous"),
+    Username = proplists:get_value("username", PostData, "Anonymous"),
+    Email = proplists:get_value("email", PostData, "Anonymous"),
+    Phone = proplists:get_value("phone", PostData, "Anonymous"),
+    try
+        % Prepare and execute client_sign_up statement
+        emysql:prepare(client_profile_update_statement, <<"SELECT client_profile_update(?, ?, ?, ?)">>),
+        Result = emysql:execute(pool_one, client_profile_update_statement,
+                                [ClientId, Username, Email, Phone]),
+        case Result of
+            {_, _, _, [[Response]], _} ->
+                Msg = [{type, client_profile_update},
+                       {username, Username},
+                       {email, Email},
+                       {phone, Phone},
+                       {response, Response},
+                       {process, self()}],
+                io:format("~n~p~n", [Msg]),
+                Req:respond({200, [{"Content-Type", "text/plain"}], Response});
+            _ ->
+                Msg = ["Unexpected Database Response",
+                       {result, Result},
+                       {trace, erlang:get_stacktrace()}],
+                handle_error(Msg, Req)
+        end
+    catch
+        Type:What ->
+            Report = ["Failed Request: client_profile_update",
                       {type, Type}, {what, What},
                       {trace, erlang:get_stacktrace()}],
             handle_error(Report, Req)

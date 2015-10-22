@@ -22,6 +22,7 @@ public class RouteSuccessActivity extends AppCompatActivity {
 
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        //TODO: copy the countdown code from TripRecyclerView to make the countdown active
     }
 
     @Override
@@ -64,7 +65,7 @@ public class RouteSuccessActivity extends AppCompatActivity {
         }
 
         if (id == R.id.action_aboutus) {
-            //TODO: Create a toaster with text about the MoNAD project and team
+            //TODO (low priority): Create a toaster with text about the MoNAD project and team
         }
 
         if (id == R.id.action_signout) {

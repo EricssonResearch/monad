@@ -33,6 +33,7 @@ public class ResetPasswordActivity extends AppCompatActivity {
         confirmPasswordField= (EditText) findViewById(R.id.field_verify_password);
         resetButton = (Button) findViewById(R.id.button_reset);
 
+        //TODO: update the password in the database
         resetButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

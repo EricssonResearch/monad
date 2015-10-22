@@ -24,11 +24,12 @@ public class ConfirmCodePopup extends AppCompatActivity {
         getWindowManager().getDefaultDisplay().getMetrics(dm);
         int width = dm.widthPixels;
         int height = dm.heightPixels;
-        getWindow().setLayout((int) (width*.94),(int) (height*.25));
+        getWindow().setLayout((int) (width*.94),(int) (height*.30));
 
         confirmationCode = (EditText) findViewById(R.id.field_code);
         submitButton = (Button) findViewById(R.id.button_submit);
 
+        //TODO huijie: implement a way to verify the code sent to the user
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

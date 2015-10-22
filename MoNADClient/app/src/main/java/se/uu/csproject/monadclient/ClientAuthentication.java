@@ -1,21 +1,12 @@
 package se.uu.csproject.monadclient;
 
-import java.net.URL;
-import java.net.HttpURLConnection;
-import java.io.DataOutputStream;
-import java.io.BufferedReader;
-import java.nio.charset.StandardCharsets;
-import java.io.InputStreamReader;
-import java.io.IOException;
+//import com.google.common.base.Charsets;
 
 /**
  *
  */
-
-public class ClientAuthentication {
-    private static final String AUTHENTICATION_HOST = "";
-    private static final String AUTHENTICATION_PORT = "";
-    private static String[] profile = new String[9];
+public class ClientAuthentication extends Authentication {
+    private static String[] profile = new String[10];
     /* 0: clientId */
     /* 1: username */
     /* 2: password */
@@ -25,6 +16,7 @@ public class ClientAuthentication {
     /* 6: storeLocation */
     /* 7: notificationsAlert */
     /* 8 recommendationsAlert */
+    /* 9: theme */
 
     public static void setClientId(String clientId) {
         profile[0] = clientId;
@@ -116,11 +108,25 @@ public class ClientAuthentication {
         }
     }
 
-    public static void defaultSettings() {
-        setLanguage("en");
-        setStoreLocation("1");
-        setNotificationsAlert("1");
-        setRecommendationsAlert("1");
+    public static void setTheme(String theme) {
+        profile[9] = theme;
+    }
+    public static String getTheme() {
+        return profile[9];
+    }
+
+    public static String profileToString() {
+        String strProfile = "\nclientId: " + getClientId()
+                + "\nusername: " + getUsername()
+                + "\npassword: " + getPassword()
+                + "\nemail: " + getEmail()
+                + "\nphone: " + getPhone()
+                + "\nlanguage: " + getLanguage()
+                + "\nstoreLocation: " + getStoreLocation()
+                + "\nnotificationsAlert: " + getNotificationsAlert()
+                + "\nrecommendationsAlert: " + getRecommendationsAlert()
+                + "\ntheme: " + getTheme();
+        return strProfile;
     }
 
     public static void initProfile() {
@@ -132,106 +138,65 @@ public class ClientAuthentication {
         defaultSettings();
     }
 
-    public static void updateProfile(String username, String password, String email, String phone) {
+    public static void defaultSettings() {
+        setLanguage("en");
+        setStoreLocation("1");
+        setNotificationsAlert("1");
+        setRecommendationsAlert("1");
+        setTheme("1");
+    }
+
+    public static void updateProfile(String clientId, String username, String password, String email, String phone,
+                                     String language, String storeLocation, String notificationsAlert,
+                                     String recommendationsAlert, String theme) {
+        setClientId(clientId);
+        updateProfileData(username, password, email, phone);
+        updateSettings(language, storeLocation, notificationsAlert, recommendationsAlert, theme);
+    }
+
+    public static void updateProfileData(String username, String password, String email, String phone) {
         setUsername(username);
         setPassword(password);
         setEmail(email);
         setPhone(phone);
     }
 
-    public static void setProfileBeforeSignUp(String username, String password, String email, String phone) {
-        setUsername(username);
-        setPassword(password);
-        setEmail(email);
-        setPhone(phone);
-        // defaultSettings();
-    }
-
-    public static void setProfileAfterSignUp(String clientId) {
-        setClientId(clientId);
-    }
-
-    public static void setProfileBeforeGoogleSignUp(String email) {
-        setEmail(email);
-        // defaultSettings();
-    }
-
-    public static void setProfileAfterGoogleSignUp(String clientId) {
-        setClientId(clientId);
-    }
-
-    public static void setProfileBeforeSignIn(String username, String password) {
-        setUsername(username);
-        setPassword(password);
-    }
-
-    public static void setProfileAfterSignIn(String clientId, String email, String phone,
-                                             String language, String storeLocation,
-                                             String notificationsAlert, String recommendationsAlert) {
-        setClientId(clientId);
-        setEmail(email);
-        setPhone(phone);
+    public static void updateSettings(String language, String storeLocation, String notificationsAlert,
+                                      String recommendationsAlert, String theme) {
         setLanguage(language);
         setStoreLocation(storeLocation);
         setNotificationsAlert(notificationsAlert);
         setRecommendationsAlert(recommendationsAlert);
+        setTheme(theme);
     }
 
-    public static String postRequest(String request, String urlParameters) {
-        String response = "";
-        URL url = null;
-        HttpURLConnection connection = null;
-        DataOutputStream dos = null;
-        BufferedReader br = null;
-
-        try {
-            url = new URL(request);
-            byte[] postData = urlParameters.getBytes(StandardCharsets.UTF_8);
-            int postDataLength = postData.length;
-
-            connection = (HttpURLConnection) url.openConnection();
-            connection.setDoOutput(true);
-            connection.setInstanceFollowRedirects(false);
-            connection.setRequestMethod("POST");
-            connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
-            connection.setRequestProperty("charset", "utf-8");
-            connection.setRequestProperty("Content-Length", Integer.toString(postDataLength));
-            connection.setUseCaches(false);
-
-            dos = new DataOutputStream(connection.getOutputStream());
-            dos.write(postData);
-
-            if (connection.getResponseCode() != 200) {
-                throw new RuntimeException("Failed : HTTP error code : " + connection.getResponseCode());
-            }
-            br = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-            String line = "";
-
-            while ((line = br.readLine()) != null) {
-                response = response + "\n" + line;
-            }
-            br.close();
-            dos.close();
-            connection.disconnect();
-        }
-        catch (IOException e) {
-            e.printStackTrace();
-        }
-        finally {
-            if (connection != null) {
-                connection.disconnect();
-            }
-        }
-        return response;
+    public static void updateProfileAfterSignUp(String clientId, String username, String password,
+                                                String email, String phone) {
+        setClientId(clientId);
+        setUsername(username);
+        setPassword(password);
+        setEmail(email);
+        setPhone(phone);
+        defaultSettings();
     }
 
-    public static void postSignUpRequest(String username, String password, String email, String phone) {
+    // public static void setProfileBeforeGoogleSignUp(String email) {
+    //     setEmail(email);
+    //     // defaultSettings();
+    // }
+    //
+    // public static void setProfileAfterGoogleSignUp(String clientId) {
+    //     setClientId(clientId);
+    // }
+    //
+
+    public static String postSignUpRequest(String username, String password, String email, String phone) {
         String request = AUTHENTICATION_HOST + AUTHENTICATION_PORT + "/client_sign_up";
         String urlParameters = "username=" + username + "&password=" + password
                              + "&email=" + email + "&phone=" + phone;
 
         /* Update profile: username, password, email, phone */
-        setProfileBeforeSignUp(username, password, email, phone);
+        // setProfileBeforeSignUp(username, password, email, phone);
 
         /* Send the request to the Authentication Module */
         String response = postRequest(request, urlParameters);
@@ -242,10 +207,11 @@ public class ClientAuthentication {
         // response = response.trim();
 
         /* Process Authentication Module's response */
-        processSignUpResponse(response);
+        return processSignUpResponse(username, password, email, phone, response);
     }
 
-    public static void processSignUpResponse(String response) {
+    public static String processSignUpResponse(String username, String password, String email,
+                                             String phone, String response) {
         String responseMessage = "";
 
         /* Username already in use */
@@ -263,22 +229,25 @@ public class ClientAuthentication {
         /* Successful signUp request */
         /* Response: "1|clientId" */
         else if (response.startsWith("1|")) {
-            /* Update profile: clientId */
-            setProfileAfterSignUp(response.substring(2));
+            /* Update profile: clientId, username, password, email, phone */
+            String clientId = response.substring(2);
+            updateProfileAfterSignUp(clientId, username, password, email, phone);
             responseMessage = "Success (1) - User Id: " + getClientId();
         }
         else {
-            System.out.println("ERROR - " + response);
+            responseMessage = "ERROR - " + response;
+//            System.out.println("ERROR - " + response);
         }
-        System.out.println("Response: " + responseMessage);
+//        System.out.println("Response: " + responseMessage);
+        return responseMessage;
     }
 
-    public static void postSignInRequest(String username, String password) {
+    public static String postSignInRequest(String username, String password) {
         String request = AUTHENTICATION_HOST + AUTHENTICATION_PORT + "/client_sign_in";
         String urlParameters = "username=" + username + "&password=" + password;
 
         /* Update profile: username, password */
-        setProfileBeforeSignIn(username, password);
+        // setProfileBeforeSignIn(username, password);
 
         /* Send the request to the Authentication Module */
         String response = postRequest(request, urlParameters);
@@ -289,12 +258,12 @@ public class ClientAuthentication {
         // response = response.trim();
 
         /* Process Authentication Module's response */
-        processSignInResponse(response);
+        return processSignInResponse(username, password, response);
     }
 
-    public static void processSignInResponse(String response) {
+    public static String processSignInResponse(String username, String password, String response) {
         String responseMessage = "";
-        String[] responseData = new String[7];
+        String[] responseData = new String[8];
         /* 0: id */
         /* 1: email */
         /* 2: phone */
@@ -302,11 +271,12 @@ public class ClientAuthentication {
         /* 4: storeLocation */
         /* 5: notificationsAlert */
         /* 6 recommendationsAlert */
+        /* 7: theme */
         String temp = "";
         int index = 0;
 
         /* Successful signIn request */
-        /* Response: "1|clientId|email|phone|language|storeLocation|notificationsAlert|recommendationsAlert" */
+        /* Response: "1|clientId|email|phone|language|storeLocation|notificationsAlert|recommendationsAlert|theme" */
         if (response.startsWith("1|")) {
 
             /* Process response and parse profile data */
@@ -324,28 +294,136 @@ public class ClientAuthentication {
             }
             responseData[index] = temp;
 
-            /* Update profile: clientId, email, phone, language,
-                               storeLocation, notificationsAlert, recommendationsAlert */
-            setProfileAfterSignIn(responseData[0], responseData[1], responseData[2], responseData[3],
-                                  responseData[4], responseData[5], responseData[6]);
+            /* Update profile: clientId, username, password, email, phone,
+                               language, storeLocation, notificationsAlert,
+                               recommendationsAlert, theme */
+            updateProfile(responseData[0], username, password, responseData[1], responseData[2],
+                    responseData[3], responseData[4], responseData[5],
+                    responseData[6], responseData[7]);
 
-            responseMessage = "Success (1) - " + response
-                    + "\nclientId: " + getClientId()
-                    + "\nemail: " + getEmail()
-                    + "\nphone: " + getPhone()
-                    + "\nlanguage: " + getLanguage()
-                    + "\nstoreLocation: " + getStoreLocation()
-                    + "\nnotificationsAlert: " + getNotificationsAlert()
-                    + "\nrecommendationsAlert: " + getRecommendationsAlert();
+            responseMessage = "Success (1) - " + response + profileToString();
         }
-        /* Wrong crendentials */
+        /* Wrong credentials */
         else if (response.startsWith("0")) {
-            responseMessage = "Wrong Crendentials (0)";
+            responseMessage = "Wrong Credentials (0)";
         }
         /* ERROR case */
         else {
-            System.out.println("ERROR - " + response);
+            responseMessage = "ERROR - " + response;
+//            System.out.println("ERROR - " + response);
         }
-        System.out.println("\nResponse: " + responseMessage);
+//        System.out.println("\nResponse: " + responseMessage);
+        return responseMessage;
+    }
+
+    public static String postGoogleSignInRequest(String email) {
+        String request = AUTHENTICATION_HOST + AUTHENTICATION_PORT + "/google_sign_in";
+        String urlParameters = "email=" + email;
+
+        /* Update profile: username, password, email, phone */
+        // setProfileBeforeSignUp(username, password, email, phone);
+
+        /* Send the request to the Authentication Module */
+        String response = postRequest(request, urlParameters);
+
+        /* By default, Erlang adds the newline '\n' character at the beginning of response */
+        /* For this reason substring() function is used */
+        response = response.substring(1);
+        // response = response.trim();
+
+        /* Process Authentication Module's response */
+        return processGoogleSignInResponse(email, response);
+    }
+
+    public static String processGoogleSignInResponse(String email, String response) {
+        String responseMessage = "";
+        String[] responseData = new String[8];
+        /* 0: id */
+        /* 1: username */
+        /* 2: phone */
+        /* 3: language */
+        /* 4: storeLocation */
+        /* 5: notificationsAlert */
+        /* 6 recommendationsAlert */
+        /* 7: theme */
+        String temp = "";
+        int index = 0;
+
+        /* Successful signIn request */
+        /* Response: "1|clientId|username|phone|language|storeLocation|notificationsAlert|recommendationsAlert|theme" */
+        if (response.startsWith("1|")) {
+
+            /* Process response and parse profile data */
+            for (int i = 2; i < response.length(); i++) {
+                char c = response.charAt(i);
+
+                if (c != '|') {
+                    temp = temp + c;
+                }
+                else {
+                    responseData[index] = temp;
+                    index++;
+                    temp = "";
+                }
+            }
+            responseData[index] = temp;
+
+            /* Update profile: clientId, username, password, email, phone,
+                               language, storeLocation, notificationsAlert,
+                               recommendationsAlert, theme */
+            updateProfile(responseData[0], responseData[1], "", email, responseData[2],
+                    responseData[3], responseData[4], responseData[5],
+                    responseData[6], responseData[7]);
+
+            responseMessage = "Success (1) - " + response + profileToString();
+        }
+
+        /*  */
+        /* Response: "2|clientId" */
+        else if (response.startsWith("2|")) {
+            /* Update profile: clientId, username, password, email, phone */
+            String clientId = response.substring(2);
+            updateProfileAfterSignUp(clientId, "", "", email, "");
+            responseMessage = "Success (1) - User Id: " + getClientId();
+        }
+        else {
+            responseMessage = "ERROR - " + response;
+//            System.out.println("ERROR - " + response);
+        }
+//        System.out.println("Response: " + responseMessage);
+        return responseMessage;
+    }
+
+
+    public static String postProfileUpdateRequest(String clientId, String username, String password,
+                                                String email, String phone) {
+
+        String request = AUTHENTICATION_HOST + AUTHENTICATION_PORT + "/client_profile_update";
+        String urlParameters = "client_id=" + clientId + "&username=" + username
+                + "&password=" + password + "&email=" + email + "&phone=" + phone;
+
+        /* Update profile: username, password, email, phone */
+        // setProfileBeforeSignUp(username, password, email, phone);
+
+        /* Send the request to the Authentication Module */
+        String response = postRequest(request, urlParameters);
+
+        /* By default, Erlang adds the newline '\n' character at the beginning of response */
+        /* For this reason substring() function is used */
+        response = response.substring(1);
+        // response = response.trim();
+
+        /* Process Authentication Module's response */
+        return processProfileUpdateResponse(username, password, email, phone, response);
+    }
+
+    //// TODO Lefteris: implement processProfileUpdateResponse and return meaningful response message as string; also, if update succeeds, update the user profile here
+    public static String processProfileUpdateResponse(String username, String password, String email,
+                                                    String phone, String response) {
+        return "";
     }
 }
+
+//responseMessage = "Welcome " + getUsername() + " !";
+//responseMessage = "Welcome back " + getUsername() + " !";
+//responseMessage = "The password or username is not correct.";

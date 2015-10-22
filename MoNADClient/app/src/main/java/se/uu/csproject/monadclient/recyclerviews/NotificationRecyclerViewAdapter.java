@@ -52,7 +52,7 @@ public class NotificationRecyclerViewAdapter extends RecyclerView.Adapter<Notifi
     public void onBindViewHolder(NotificationViewHolder notificationViewHolder, int i) {
         notificationViewHolder.notificationName.setText(notify.get(i).name);
         notificationViewHolder.notificationTime.setText(notify.get(i).time);
-        notificationViewHolder.notificationPhoto.setImageResource(notify.get(i).icon);
+        notificationViewHolder.notificationPhoto.setImageResource(notify.get(i).iconId);
     }
 
     @Override

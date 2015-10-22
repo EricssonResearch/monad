@@ -5,7 +5,7 @@ package se.uu.csproject.monadclient.recyclerviews;
  * Therefore, the class attributes are not comprehensive
  */
 
-//TODO: change times and positions data types
+//TODO: change times data types
 public class Trip {
     int tripId;
     String startPosition; // this is the bus stop coordinate
@@ -27,13 +27,13 @@ public class Trip {
     }
 
     // returns time in Milliseconds
-    //TODO: return the difference between variable "startTime" and the current timestamp
+    //TODO: return the difference between variable "startTime" and the current timestamp im milliseconds)
     public long getTimeToDeparture(){
         return 15000;
     }
 
     //determines if the trip has occurred yet, helps assign the right UI to the trip
-    //TODO: compare startTime with currentTime
+    //TODO: replace function with the commented one once the data types are changed
     public boolean isCurrent(){
         if(this.tripId > 2) {
             return false;
@@ -41,5 +41,12 @@ public class Trip {
         else {
             return true;
         }
+
+        /*if(getTimeToDeparture() >= 0) {
+            return true;
+        }
+        else {
+            return false;
+        }*/
     }
 }

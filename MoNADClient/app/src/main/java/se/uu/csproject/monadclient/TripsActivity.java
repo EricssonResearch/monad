@@ -21,12 +21,10 @@ import se.uu.csproject.monadclient.recyclerviews.TripRecyclerViewAdapter;
 
 
 public class TripsActivity extends AppCompatActivity {
-    //ImageButton detailsButton1;
-    //ImageButton cancelButton1;
-    //ImageButton imgButton;
     Toolbar toolbar;
     ImageButton button;
 
+    //TODO Ilyass: (high priority) Make specific trips selectable
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,26 +48,8 @@ public class TripsActivity extends AppCompatActivity {
         startActivity(new Intent(this, TripCancelPopup.class));
     }
 
-    public void viewTripDetails(View view) {
+    /*public void viewTripDetails(View view) {
         startActivity(new Intent(this, RouteActivity.class));
-    }
-
-    /*public void cancelTrip2(View view) {
-        Intent intent = new Intent(this, TripCancelPopup.class);
-        cancelButton1 = (ImageButton) findViewById(R.id.cancel2);
-        startActivity(intent);
-    }*/
-
-    /*public void viewTripDetails1(View view) {
-        Intent intent = new Intent(this, RouteActivity.class);
-        detailsButton1 = (ImageButton) findViewById(R.id.button1);
-        startActivity(intent);
-    }*/
-
-   /* public void viewTripDetails2(View view) {
-        Intent intent = new Intent(this, RouteActivity.class);
-        detailsButton1 = (ImageButton) findViewById(R.id.button2);
-        startActivity(intent);
     }*/
 
     @Override
@@ -112,7 +92,7 @@ public class TripsActivity extends AppCompatActivity {
         }
 
         if (id == R.id.action_aboutus) {
-            //TODO: Create a toaster with text about the MoNAD project and team
+            //TODO (low priority): Create a toaster with text about the MoNAD project and team
             startActivity(new Intent(this, AboutUsActivity.class));
         }
 

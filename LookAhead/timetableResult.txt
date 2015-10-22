@@ -1,0 +1,2702 @@
+This Is The TimeTable for Bus Line 2
+
+
+00:06 Kungshögarna
+00:08 Regins väg
+00:10 Valhalls väg
+00:11 Huges väg
+00:12 Topeliusgatan
+00:14 Värnlundsgatan
+00:15 Ferlinsgatan
+00:16 Heidenstamstorg
+00:18 Kantorsgatan
+00:19 Djäknegatan
+00:20 Portalgatan
+00:21 Höganäsgatan
+00:22 Väderkvarnsgatan
+00:23 Vaksala torg
+00:23 Stadshuset
+00:27 Skolgatan
+00:29 Götgatan
+00:31 Ekonomikum
+00:32 Studentstaden
+00:34 Rickomberga
+00:35 Oslogatan
+00:37 Reykjaviksgatan
+00:37 Ekebyhus
+00:38 Sernanders väg
+00:39 Flogsta centrum
+00:40 Flogsta vårdcentral
+00:42 Ihres väg
+00:43 Noreens väg
+00:44 Säves väg
+
+00:15 Kungshögarna
+00:17 Regins väg
+00:19 Valhalls väg
+00:20 Huges väg
+00:21 Topeliusgatan
+00:23 Värnlundsgatan
+00:24 Ferlinsgatan
+00:25 Heidenstamstorg
+00:27 Kantorsgatan
+00:28 Djäknegatan
+00:29 Portalgatan
+00:30 Höganäsgatan
+00:31 Väderkvarnsgatan
+00:32 Vaksala torg
+00:32 Stadshuset
+00:36 Skolgatan
+00:38 Götgatan
+00:40 Ekonomikum
+00:41 Studentstaden
+00:43 Rickomberga
+00:44 Oslogatan
+00:46 Reykjaviksgatan
+00:46 Ekebyhus
+00:47 Sernanders väg
+00:48 Flogsta centrum
+00:49 Flogsta vårdcentral
+00:51 Ihres väg
+00:52 Noreens väg
+00:53 Säves väg
+
+00:17 Kungshögarna
+00:19 Regins väg
+00:21 Valhalls väg
+00:22 Huges väg
+00:23 Topeliusgatan
+00:25 Värnlundsgatan
+00:26 Ferlinsgatan
+00:27 Heidenstamstorg
+00:29 Kantorsgatan
+00:30 Djäknegatan
+00:31 Portalgatan
+00:32 Höganäsgatan
+00:33 Väderkvarnsgatan
+00:34 Vaksala torg
+00:34 Stadshuset
+00:38 Skolgatan
+00:40 Götgatan
+00:42 Ekonomikum
+00:43 Studentstaden
+00:45 Rickomberga
+00:46 Oslogatan
+00:48 Reykjaviksgatan
+00:48 Ekebyhus
+00:49 Sernanders väg
+00:50 Flogsta centrum
+00:51 Flogsta vårdcentral
+00:53 Ihres väg
+00:54 Noreens väg
+00:55 Säves väg
+
+00:20 Kungshögarna
+00:22 Regins väg
+00:24 Valhalls väg
+00:25 Huges väg
+00:26 Topeliusgatan
+00:28 Värnlundsgatan
+00:29 Ferlinsgatan
+00:30 Heidenstamstorg
+00:32 Kantorsgatan
+00:33 Djäknegatan
+00:34 Portalgatan
+00:35 Höganäsgatan
+00:36 Väderkvarnsgatan
+00:37 Vaksala torg
+00:37 Stadshuset
+00:41 Skolgatan
+00:43 Götgatan
+00:45 Ekonomikum
+00:46 Studentstaden
+00:48 Rickomberga
+00:49 Oslogatan
+00:51 Reykjaviksgatan
+00:51 Ekebyhus
+00:52 Sernanders väg
+00:53 Flogsta centrum
+00:54 Flogsta vårdcentral
+00:56 Ihres väg
+00:57 Noreens väg
+00:58 Säves väg
+
+00:22 Kungshögarna
+00:24 Regins väg
+00:26 Valhalls väg
+00:27 Huges väg
+00:28 Topeliusgatan
+00:30 Värnlundsgatan
+00:31 Ferlinsgatan
+00:32 Heidenstamstorg
+00:34 Kantorsgatan
+00:35 Djäknegatan
+00:36 Portalgatan
+00:37 Höganäsgatan
+00:38 Väderkvarnsgatan
+00:39 Vaksala torg
+00:39 Stadshuset
+00:43 Skolgatan
+00:45 Götgatan
+00:47 Ekonomikum
+00:48 Studentstaden
+00:50 Rickomberga
+00:51 Oslogatan
+00:53 Reykjaviksgatan
+00:53 Ekebyhus
+00:54 Sernanders väg
+00:55 Flogsta centrum
+00:56 Flogsta vårdcentral
+00:58 Ihres väg
+00:59 Noreens väg
+01:00 Säves väg
+
+00:24 Kungshögarna
+00:26 Regins väg
+00:28 Valhalls väg
+00:29 Huges väg
+00:30 Topeliusgatan
+00:32 Värnlundsgatan
+00:33 Ferlinsgatan
+00:34 Heidenstamstorg
+00:36 Kantorsgatan
+00:37 Djäknegatan
+00:38 Portalgatan
+00:39 Höganäsgatan
+00:40 Väderkvarnsgatan
+00:41 Vaksala torg
+00:41 Stadshuset
+00:45 Skolgatan
+00:47 Götgatan
+00:49 Ekonomikum
+00:50 Studentstaden
+00:52 Rickomberga
+00:53 Oslogatan
+00:55 Reykjaviksgatan
+00:55 Ekebyhus
+00:56 Sernanders väg
+00:57 Flogsta centrum
+00:58 Flogsta vårdcentral
+01:00 Ihres väg
+01:01 Noreens väg
+01:02 Säves väg
+
+00:26 Kungshögarna
+00:28 Regins väg
+00:30 Valhalls väg
+00:31 Huges väg
+00:32 Topeliusgatan
+00:34 Värnlundsgatan
+00:35 Ferlinsgatan
+00:36 Heidenstamstorg
+00:38 Kantorsgatan
+00:39 Djäknegatan
+00:40 Portalgatan
+00:41 Höganäsgatan
+00:42 Väderkvarnsgatan
+00:43 Vaksala torg
+00:43 Stadshuset
+00:47 Skolgatan
+00:49 Götgatan
+00:51 Ekonomikum
+00:52 Studentstaden
+00:54 Rickomberga
+00:55 Oslogatan
+00:57 Reykjaviksgatan
+00:57 Ekebyhus
+00:58 Sernanders väg
+00:59 Flogsta centrum
+01:00 Flogsta vårdcentral
+01:02 Ihres väg
+01:03 Noreens väg
+01:04 Säves väg
+
+00:32 Kungshögarna
+00:34 Regins väg
+00:36 Valhalls väg
+00:37 Huges väg
+00:38 Topeliusgatan
+00:40 Värnlundsgatan
+00:41 Ferlinsgatan
+00:42 Heidenstamstorg
+00:44 Kantorsgatan
+00:45 Djäknegatan
+00:46 Portalgatan
+00:47 Höganäsgatan
+00:48 Väderkvarnsgatan
+00:49 Vaksala torg
+00:49 Stadshuset
+00:53 Skolgatan
+00:55 Götgatan
+00:57 Ekonomikum
+00:58 Studentstaden
+01:00 Rickomberga
+01:01 Oslogatan
+01:03 Reykjaviksgatan
+01:03 Ekebyhus
+01:04 Sernanders väg
+01:05 Flogsta centrum
+01:06 Flogsta vårdcentral
+01:08 Ihres väg
+01:09 Noreens väg
+01:10 Säves väg
+
+00:38 Kungshögarna
+00:40 Regins väg
+00:42 Valhalls väg
+00:43 Huges väg
+00:44 Topeliusgatan
+00:46 Värnlundsgatan
+00:47 Ferlinsgatan
+00:48 Heidenstamstorg
+00:50 Kantorsgatan
+00:51 Djäknegatan
+00:52 Portalgatan
+00:53 Höganäsgatan
+00:54 Väderkvarnsgatan
+00:55 Vaksala torg
+00:55 Stadshuset
+00:59 Skolgatan
+01:01 Götgatan
+01:03 Ekonomikum
+01:04 Studentstaden
+01:06 Rickomberga
+01:07 Oslogatan
+01:09 Reykjaviksgatan
+01:09 Ekebyhus
+01:10 Sernanders väg
+01:11 Flogsta centrum
+01:12 Flogsta vårdcentral
+01:14 Ihres väg
+01:15 Noreens väg
+01:16 Säves väg
+
+00:58 Kungshögarna
+01:00 Regins väg
+01:02 Valhalls väg
+01:03 Huges väg
+01:04 Topeliusgatan
+01:06 Värnlundsgatan
+01:07 Ferlinsgatan
+01:08 Heidenstamstorg
+01:10 Kantorsgatan
+01:11 Djäknegatan
+01:12 Portalgatan
+01:13 Höganäsgatan
+01:14 Väderkvarnsgatan
+01:15 Vaksala torg
+01:15 Stadshuset
+01:19 Skolgatan
+01:21 Götgatan
+01:23 Ekonomikum
+01:24 Studentstaden
+01:26 Rickomberga
+01:27 Oslogatan
+01:29 Reykjaviksgatan
+01:29 Ekebyhus
+01:30 Sernanders väg
+01:31 Flogsta centrum
+01:32 Flogsta vårdcentral
+01:34 Ihres väg
+01:35 Noreens väg
+01:36 Säves väg
+
+01:08 Kungshögarna
+01:10 Regins väg
+01:12 Valhalls väg
+01:13 Huges väg
+01:14 Topeliusgatan
+01:16 Värnlundsgatan
+01:17 Ferlinsgatan
+01:18 Heidenstamstorg
+01:20 Kantorsgatan
+01:21 Djäknegatan
+01:22 Portalgatan
+01:23 Höganäsgatan
+01:24 Väderkvarnsgatan
+01:25 Vaksala torg
+01:25 Stadshuset
+01:29 Skolgatan
+01:31 Götgatan
+01:33 Ekonomikum
+01:34 Studentstaden
+01:36 Rickomberga
+01:37 Oslogatan
+01:39 Reykjaviksgatan
+01:39 Ekebyhus
+01:40 Sernanders väg
+01:41 Flogsta centrum
+01:42 Flogsta vårdcentral
+01:44 Ihres väg
+01:45 Noreens väg
+01:46 Säves väg
+
+01:52 Kungshögarna
+01:54 Regins väg
+01:56 Valhalls väg
+01:57 Huges väg
+01:58 Topeliusgatan
+02:00 Värnlundsgatan
+02:01 Ferlinsgatan
+02:02 Heidenstamstorg
+02:04 Kantorsgatan
+02:05 Djäknegatan
+02:06 Portalgatan
+02:07 Höganäsgatan
+02:08 Väderkvarnsgatan
+02:09 Vaksala torg
+02:09 Stadshuset
+02:13 Skolgatan
+02:15 Götgatan
+02:17 Ekonomikum
+02:18 Studentstaden
+02:20 Rickomberga
+02:21 Oslogatan
+02:23 Reykjaviksgatan
+02:23 Ekebyhus
+02:24 Sernanders väg
+02:25 Flogsta centrum
+02:26 Flogsta vårdcentral
+02:28 Ihres väg
+02:29 Noreens väg
+02:30 Säves väg
+
+01:57 Kungshögarna
+01:59 Regins väg
+02:01 Valhalls väg
+02:02 Huges väg
+02:03 Topeliusgatan
+02:05 Värnlundsgatan
+02:06 Ferlinsgatan
+02:07 Heidenstamstorg
+02:09 Kantorsgatan
+02:10 Djäknegatan
+02:11 Portalgatan
+02:12 Höganäsgatan
+02:13 Väderkvarnsgatan
+02:14 Vaksala torg
+02:14 Stadshuset
+02:18 Skolgatan
+02:20 Götgatan
+02:22 Ekonomikum
+02:23 Studentstaden
+02:25 Rickomberga
+02:26 Oslogatan
+02:28 Reykjaviksgatan
+02:28 Ekebyhus
+02:29 Sernanders väg
+02:30 Flogsta centrum
+02:31 Flogsta vårdcentral
+02:33 Ihres väg
+02:34 Noreens väg
+02:35 Säves väg
+
+02:24 Kungshögarna
+02:26 Regins väg
+02:28 Valhalls väg
+02:29 Huges väg
+02:30 Topeliusgatan
+02:32 Värnlundsgatan
+02:33 Ferlinsgatan
+02:34 Heidenstamstorg
+02:36 Kantorsgatan
+02:37 Djäknegatan
+02:38 Portalgatan
+02:39 Höganäsgatan
+02:40 Väderkvarnsgatan
+02:41 Vaksala torg
+02:41 Stadshuset
+02:45 Skolgatan
+02:47 Götgatan
+02:49 Ekonomikum
+02:50 Studentstaden
+02:52 Rickomberga
+02:53 Oslogatan
+02:55 Reykjaviksgatan
+02:55 Ekebyhus
+02:56 Sernanders väg
+02:57 Flogsta centrum
+02:58 Flogsta vårdcentral
+03:00 Ihres väg
+03:01 Noreens väg
+03:02 Säves väg
+
+02:24 Kungshögarna
+02:26 Regins väg
+02:28 Valhalls väg
+02:29 Huges väg
+02:30 Topeliusgatan
+02:32 Värnlundsgatan
+02:33 Ferlinsgatan
+02:34 Heidenstamstorg
+02:36 Kantorsgatan
+02:37 Djäknegatan
+02:38 Portalgatan
+02:39 Höganäsgatan
+02:40 Väderkvarnsgatan
+02:41 Vaksala torg
+02:41 Stadshuset
+02:45 Skolgatan
+02:47 Götgatan
+02:49 Ekonomikum
+02:50 Studentstaden
+02:52 Rickomberga
+02:53 Oslogatan
+02:55 Reykjaviksgatan
+02:55 Ekebyhus
+02:56 Sernanders väg
+02:57 Flogsta centrum
+02:58 Flogsta vårdcentral
+03:00 Ihres väg
+03:01 Noreens väg
+03:02 Säves väg
+
+02:25 Kungshögarna
+02:27 Regins väg
+02:29 Valhalls väg
+02:30 Huges väg
+02:31 Topeliusgatan
+02:33 Värnlundsgatan
+02:34 Ferlinsgatan
+02:35 Heidenstamstorg
+02:37 Kantorsgatan
+02:38 Djäknegatan
+02:39 Portalgatan
+02:40 Höganäsgatan
+02:41 Väderkvarnsgatan
+02:42 Vaksala torg
+02:42 Stadshuset
+02:46 Skolgatan
+02:48 Götgatan
+02:50 Ekonomikum
+02:51 Studentstaden
+02:53 Rickomberga
+02:54 Oslogatan
+02:56 Reykjaviksgatan
+02:56 Ekebyhus
+02:57 Sernanders väg
+02:58 Flogsta centrum
+02:59 Flogsta vårdcentral
+03:01 Ihres väg
+03:02 Noreens väg
+03:03 Säves väg
+
+02:25 Kungshögarna
+02:27 Regins väg
+02:29 Valhalls väg
+02:30 Huges väg
+02:31 Topeliusgatan
+02:33 Värnlundsgatan
+02:34 Ferlinsgatan
+02:35 Heidenstamstorg
+02:37 Kantorsgatan
+02:38 Djäknegatan
+02:39 Portalgatan
+02:40 Höganäsgatan
+02:41 Väderkvarnsgatan
+02:42 Vaksala torg
+02:42 Stadshuset
+02:46 Skolgatan
+02:48 Götgatan
+02:50 Ekonomikum
+02:51 Studentstaden
+02:53 Rickomberga
+02:54 Oslogatan
+02:56 Reykjaviksgatan
+02:56 Ekebyhus
+02:57 Sernanders väg
+02:58 Flogsta centrum
+02:59 Flogsta vårdcentral
+03:01 Ihres väg
+03:02 Noreens väg
+03:03 Säves väg
+
+02:42 Kungshögarna
+02:44 Regins väg
+02:46 Valhalls väg
+02:47 Huges väg
+02:48 Topeliusgatan
+02:50 Värnlundsgatan
+02:51 Ferlinsgatan
+02:52 Heidenstamstorg
+02:54 Kantorsgatan
+02:55 Djäknegatan
+02:56 Portalgatan
+02:57 Höganäsgatan
+02:58 Väderkvarnsgatan
+02:59 Vaksala torg
+02:59 Stadshuset
+03:03 Skolgatan
+03:05 Götgatan
+03:07 Ekonomikum
+03:08 Studentstaden
+03:10 Rickomberga
+03:11 Oslogatan
+03:13 Reykjaviksgatan
+03:13 Ekebyhus
+03:14 Sernanders väg
+03:15 Flogsta centrum
+03:16 Flogsta vårdcentral
+03:18 Ihres väg
+03:19 Noreens väg
+03:20 Säves väg
+
+02:47 Kungshögarna
+02:49 Regins väg
+02:51 Valhalls väg
+02:52 Huges väg
+02:53 Topeliusgatan
+02:55 Värnlundsgatan
+02:56 Ferlinsgatan
+02:57 Heidenstamstorg
+02:59 Kantorsgatan
+03:00 Djäknegatan
+03:01 Portalgatan
+03:02 Höganäsgatan
+03:03 Väderkvarnsgatan
+03:04 Vaksala torg
+03:04 Stadshuset
+03:08 Skolgatan
+03:10 Götgatan
+03:12 Ekonomikum
+03:13 Studentstaden
+03:15 Rickomberga
+03:16 Oslogatan
+03:18 Reykjaviksgatan
+03:18 Ekebyhus
+03:19 Sernanders väg
+03:20 Flogsta centrum
+03:21 Flogsta vårdcentral
+03:23 Ihres väg
+03:24 Noreens väg
+03:25 Säves väg
+
+03:25 Kungshögarna
+03:27 Regins väg
+03:29 Valhalls väg
+03:30 Huges väg
+03:31 Topeliusgatan
+03:33 Värnlundsgatan
+03:34 Ferlinsgatan
+03:35 Heidenstamstorg
+03:37 Kantorsgatan
+03:38 Djäknegatan
+03:39 Portalgatan
+03:40 Höganäsgatan
+03:41 Väderkvarnsgatan
+03:42 Vaksala torg
+03:42 Stadshuset
+03:46 Skolgatan
+03:48 Götgatan
+03:50 Ekonomikum
+03:51 Studentstaden
+03:53 Rickomberga
+03:54 Oslogatan
+03:56 Reykjaviksgatan
+03:56 Ekebyhus
+03:57 Sernanders väg
+03:58 Flogsta centrum
+03:59 Flogsta vårdcentral
+04:01 Ihres väg
+04:02 Noreens väg
+04:03 Säves väg
+
+03:45 Kungshögarna
+03:47 Regins väg
+03:49 Valhalls väg
+03:50 Huges väg
+03:51 Topeliusgatan
+03:53 Värnlundsgatan
+03:54 Ferlinsgatan
+03:55 Heidenstamstorg
+03:57 Kantorsgatan
+03:58 Djäknegatan
+03:59 Portalgatan
+04:00 Höganäsgatan
+04:01 Väderkvarnsgatan
+04:02 Vaksala torg
+04:02 Stadshuset
+04:06 Skolgatan
+04:08 Götgatan
+04:10 Ekonomikum
+04:11 Studentstaden
+04:13 Rickomberga
+04:14 Oslogatan
+04:16 Reykjaviksgatan
+04:16 Ekebyhus
+04:17 Sernanders väg
+04:18 Flogsta centrum
+04:19 Flogsta vårdcentral
+04:21 Ihres väg
+04:22 Noreens väg
+04:23 Säves väg
+
+03:48 Kungshögarna
+03:50 Regins väg
+03:52 Valhalls väg
+03:53 Huges väg
+03:54 Topeliusgatan
+03:56 Värnlundsgatan
+03:57 Ferlinsgatan
+03:58 Heidenstamstorg
+04:00 Kantorsgatan
+04:01 Djäknegatan
+04:02 Portalgatan
+04:03 Höganäsgatan
+04:04 Väderkvarnsgatan
+04:05 Vaksala torg
+04:05 Stadshuset
+04:09 Skolgatan
+04:11 Götgatan
+04:13 Ekonomikum
+04:14 Studentstaden
+04:16 Rickomberga
+04:17 Oslogatan
+04:19 Reykjaviksgatan
+04:19 Ekebyhus
+04:20 Sernanders väg
+04:21 Flogsta centrum
+04:22 Flogsta vårdcentral
+04:24 Ihres väg
+04:25 Noreens väg
+04:26 Säves väg
+
+03:56 Kungshögarna
+03:58 Regins väg
+04:00 Valhalls väg
+04:01 Huges väg
+04:02 Topeliusgatan
+04:04 Värnlundsgatan
+04:05 Ferlinsgatan
+04:06 Heidenstamstorg
+04:08 Kantorsgatan
+04:09 Djäknegatan
+04:10 Portalgatan
+04:11 Höganäsgatan
+04:12 Väderkvarnsgatan
+04:13 Vaksala torg
+04:13 Stadshuset
+04:17 Skolgatan
+04:19 Götgatan
+04:21 Ekonomikum
+04:22 Studentstaden
+04:24 Rickomberga
+04:25 Oslogatan
+04:27 Reykjaviksgatan
+04:27 Ekebyhus
+04:28 Sernanders väg
+04:29 Flogsta centrum
+04:30 Flogsta vårdcentral
+04:32 Ihres väg
+04:33 Noreens väg
+04:34 Säves väg
+
+04:34 Kungshögarna
+04:36 Regins väg
+04:38 Valhalls väg
+04:39 Huges väg
+04:40 Topeliusgatan
+04:42 Värnlundsgatan
+04:43 Ferlinsgatan
+04:44 Heidenstamstorg
+04:46 Kantorsgatan
+04:47 Djäknegatan
+04:48 Portalgatan
+04:49 Höganäsgatan
+04:50 Väderkvarnsgatan
+04:51 Vaksala torg
+04:51 Stadshuset
+04:55 Skolgatan
+04:57 Götgatan
+04:59 Ekonomikum
+05:00 Studentstaden
+05:02 Rickomberga
+05:03 Oslogatan
+05:05 Reykjaviksgatan
+05:05 Ekebyhus
+05:06 Sernanders väg
+05:07 Flogsta centrum
+05:08 Flogsta vårdcentral
+05:10 Ihres väg
+05:11 Noreens väg
+05:12 Säves väg
+
+04:51 Kungshögarna
+04:53 Regins väg
+04:55 Valhalls väg
+04:56 Huges väg
+04:57 Topeliusgatan
+04:59 Värnlundsgatan
+05:00 Ferlinsgatan
+05:01 Heidenstamstorg
+05:03 Kantorsgatan
+05:04 Djäknegatan
+05:05 Portalgatan
+05:06 Höganäsgatan
+05:07 Väderkvarnsgatan
+05:08 Vaksala torg
+05:08 Stadshuset
+05:12 Skolgatan
+05:14 Götgatan
+05:16 Ekonomikum
+05:17 Studentstaden
+05:19 Rickomberga
+05:20 Oslogatan
+05:22 Reykjaviksgatan
+05:22 Ekebyhus
+05:23 Sernanders väg
+05:24 Flogsta centrum
+05:25 Flogsta vårdcentral
+05:27 Ihres väg
+05:28 Noreens väg
+05:29 Säves väg
+
+05:11 Kungshögarna
+05:13 Regins väg
+05:15 Valhalls väg
+05:16 Huges väg
+05:17 Topeliusgatan
+05:19 Värnlundsgatan
+05:20 Ferlinsgatan
+05:21 Heidenstamstorg
+05:23 Kantorsgatan
+05:24 Djäknegatan
+05:25 Portalgatan
+05:26 Höganäsgatan
+05:27 Väderkvarnsgatan
+05:28 Vaksala torg
+05:28 Stadshuset
+05:32 Skolgatan
+05:34 Götgatan
+05:36 Ekonomikum
+05:37 Studentstaden
+05:39 Rickomberga
+05:40 Oslogatan
+05:42 Reykjaviksgatan
+05:42 Ekebyhus
+05:43 Sernanders väg
+05:44 Flogsta centrum
+05:45 Flogsta vårdcentral
+05:47 Ihres väg
+05:48 Noreens väg
+05:49 Säves väg
+
+05:15 Kungshögarna
+05:17 Regins väg
+05:19 Valhalls väg
+05:20 Huges väg
+05:21 Topeliusgatan
+05:23 Värnlundsgatan
+05:24 Ferlinsgatan
+05:25 Heidenstamstorg
+05:27 Kantorsgatan
+05:28 Djäknegatan
+05:29 Portalgatan
+05:30 Höganäsgatan
+05:31 Väderkvarnsgatan
+05:32 Vaksala torg
+05:32 Stadshuset
+05:36 Skolgatan
+05:38 Götgatan
+05:40 Ekonomikum
+05:41 Studentstaden
+05:43 Rickomberga
+05:44 Oslogatan
+05:46 Reykjaviksgatan
+05:46 Ekebyhus
+05:47 Sernanders väg
+05:48 Flogsta centrum
+05:49 Flogsta vårdcentral
+05:51 Ihres väg
+05:52 Noreens väg
+05:53 Säves väg
+
+06:04 Kungshögarna
+06:06 Regins väg
+06:08 Valhalls väg
+06:09 Huges väg
+06:10 Topeliusgatan
+06:12 Värnlundsgatan
+06:13 Ferlinsgatan
+06:14 Heidenstamstorg
+06:16 Kantorsgatan
+06:17 Djäknegatan
+06:18 Portalgatan
+06:19 Höganäsgatan
+06:20 Väderkvarnsgatan
+06:21 Vaksala torg
+06:21 Stadshuset
+06:25 Skolgatan
+06:27 Götgatan
+06:29 Ekonomikum
+06:30 Studentstaden
+06:32 Rickomberga
+06:33 Oslogatan
+06:35 Reykjaviksgatan
+06:35 Ekebyhus
+06:36 Sernanders väg
+06:37 Flogsta centrum
+06:38 Flogsta vårdcentral
+06:40 Ihres väg
+06:41 Noreens väg
+06:42 Säves väg
+
+06:25 Kungshögarna
+06:27 Regins väg
+06:29 Valhalls väg
+06:30 Huges väg
+06:31 Topeliusgatan
+06:33 Värnlundsgatan
+06:34 Ferlinsgatan
+06:35 Heidenstamstorg
+06:37 Kantorsgatan
+06:38 Djäknegatan
+06:39 Portalgatan
+06:40 Höganäsgatan
+06:41 Väderkvarnsgatan
+06:42 Vaksala torg
+06:42 Stadshuset
+06:46 Skolgatan
+06:48 Götgatan
+06:50 Ekonomikum
+06:51 Studentstaden
+06:53 Rickomberga
+06:54 Oslogatan
+06:56 Reykjaviksgatan
+06:56 Ekebyhus
+06:57 Sernanders väg
+06:58 Flogsta centrum
+06:59 Flogsta vårdcentral
+07:01 Ihres väg
+07:02 Noreens väg
+07:03 Säves väg
+
+06:30 Kungshögarna
+06:32 Regins väg
+06:34 Valhalls väg
+06:35 Huges väg
+06:36 Topeliusgatan
+06:38 Värnlundsgatan
+06:39 Ferlinsgatan
+06:40 Heidenstamstorg
+06:42 Kantorsgatan
+06:43 Djäknegatan
+06:44 Portalgatan
+06:45 Höganäsgatan
+06:46 Väderkvarnsgatan
+06:47 Vaksala torg
+06:47 Stadshuset
+06:51 Skolgatan
+06:53 Götgatan
+06:55 Ekonomikum
+06:56 Studentstaden
+06:58 Rickomberga
+06:59 Oslogatan
+07:01 Reykjaviksgatan
+07:01 Ekebyhus
+07:02 Sernanders väg
+07:03 Flogsta centrum
+07:04 Flogsta vårdcentral
+07:06 Ihres väg
+07:07 Noreens väg
+07:08 Säves väg
+
+06:46 Kungshögarna
+06:48 Regins väg
+06:50 Valhalls väg
+06:51 Huges väg
+06:52 Topeliusgatan
+06:54 Värnlundsgatan
+06:55 Ferlinsgatan
+06:56 Heidenstamstorg
+06:58 Kantorsgatan
+06:59 Djäknegatan
+07:00 Portalgatan
+07:01 Höganäsgatan
+07:02 Väderkvarnsgatan
+07:03 Vaksala torg
+07:03 Stadshuset
+07:07 Skolgatan
+07:09 Götgatan
+07:11 Ekonomikum
+07:12 Studentstaden
+07:14 Rickomberga
+07:15 Oslogatan
+07:17 Reykjaviksgatan
+07:17 Ekebyhus
+07:18 Sernanders väg
+07:19 Flogsta centrum
+07:20 Flogsta vårdcentral
+07:22 Ihres väg
+07:23 Noreens väg
+07:24 Säves väg
+
+06:53 Kungshögarna
+06:55 Regins väg
+06:57 Valhalls väg
+06:58 Huges väg
+06:59 Topeliusgatan
+07:01 Värnlundsgatan
+07:02 Ferlinsgatan
+07:03 Heidenstamstorg
+07:05 Kantorsgatan
+07:06 Djäknegatan
+07:07 Portalgatan
+07:08 Höganäsgatan
+07:09 Väderkvarnsgatan
+07:10 Vaksala torg
+07:10 Stadshuset
+07:14 Skolgatan
+07:16 Götgatan
+07:18 Ekonomikum
+07:19 Studentstaden
+07:21 Rickomberga
+07:22 Oslogatan
+07:24 Reykjaviksgatan
+07:24 Ekebyhus
+07:25 Sernanders väg
+07:26 Flogsta centrum
+07:27 Flogsta vårdcentral
+07:29 Ihres väg
+07:30 Noreens väg
+07:31 Säves väg
+
+07:32 Kungshögarna
+07:34 Regins väg
+07:36 Valhalls väg
+07:37 Huges väg
+07:38 Topeliusgatan
+07:40 Värnlundsgatan
+07:41 Ferlinsgatan
+07:42 Heidenstamstorg
+07:44 Kantorsgatan
+07:45 Djäknegatan
+07:46 Portalgatan
+07:47 Höganäsgatan
+07:48 Väderkvarnsgatan
+07:49 Vaksala torg
+07:49 Stadshuset
+07:53 Skolgatan
+07:55 Götgatan
+07:57 Ekonomikum
+07:58 Studentstaden
+08:00 Rickomberga
+08:01 Oslogatan
+08:03 Reykjaviksgatan
+08:03 Ekebyhus
+08:04 Sernanders väg
+08:05 Flogsta centrum
+08:06 Flogsta vårdcentral
+08:08 Ihres väg
+08:09 Noreens väg
+08:10 Säves väg
+
+07:49 Kungshögarna
+07:51 Regins väg
+07:53 Valhalls väg
+07:54 Huges väg
+07:55 Topeliusgatan
+07:57 Värnlundsgatan
+07:58 Ferlinsgatan
+07:59 Heidenstamstorg
+08:01 Kantorsgatan
+08:02 Djäknegatan
+08:03 Portalgatan
+08:04 Höganäsgatan
+08:05 Väderkvarnsgatan
+08:06 Vaksala torg
+08:06 Stadshuset
+08:10 Skolgatan
+08:12 Götgatan
+08:14 Ekonomikum
+08:15 Studentstaden
+08:17 Rickomberga
+08:18 Oslogatan
+08:20 Reykjaviksgatan
+08:20 Ekebyhus
+08:21 Sernanders väg
+08:22 Flogsta centrum
+08:23 Flogsta vårdcentral
+08:25 Ihres väg
+08:26 Noreens väg
+08:27 Säves väg
+
+07:51 Kungshögarna
+07:53 Regins väg
+07:55 Valhalls väg
+07:56 Huges väg
+07:57 Topeliusgatan
+07:59 Värnlundsgatan
+08:00 Ferlinsgatan
+08:01 Heidenstamstorg
+08:03 Kantorsgatan
+08:04 Djäknegatan
+08:05 Portalgatan
+08:06 Höganäsgatan
+08:07 Väderkvarnsgatan
+08:08 Vaksala torg
+08:08 Stadshuset
+08:12 Skolgatan
+08:14 Götgatan
+08:16 Ekonomikum
+08:17 Studentstaden
+08:19 Rickomberga
+08:20 Oslogatan
+08:22 Reykjaviksgatan
+08:22 Ekebyhus
+08:23 Sernanders väg
+08:24 Flogsta centrum
+08:25 Flogsta vårdcentral
+08:27 Ihres väg
+08:28 Noreens väg
+08:29 Säves väg
+
+08:28 Kungshögarna
+08:30 Regins väg
+08:32 Valhalls väg
+08:33 Huges väg
+08:34 Topeliusgatan
+08:36 Värnlundsgatan
+08:37 Ferlinsgatan
+08:38 Heidenstamstorg
+08:40 Kantorsgatan
+08:41 Djäknegatan
+08:42 Portalgatan
+08:43 Höganäsgatan
+08:44 Väderkvarnsgatan
+08:45 Vaksala torg
+08:45 Stadshuset
+08:49 Skolgatan
+08:51 Götgatan
+08:53 Ekonomikum
+08:54 Studentstaden
+08:56 Rickomberga
+08:57 Oslogatan
+08:59 Reykjaviksgatan
+08:59 Ekebyhus
+09:00 Sernanders väg
+09:01 Flogsta centrum
+09:02 Flogsta vårdcentral
+09:04 Ihres väg
+09:05 Noreens väg
+09:06 Säves väg
+
+08:38 Kungshögarna
+08:40 Regins väg
+08:42 Valhalls väg
+08:43 Huges väg
+08:44 Topeliusgatan
+08:46 Värnlundsgatan
+08:47 Ferlinsgatan
+08:48 Heidenstamstorg
+08:50 Kantorsgatan
+08:51 Djäknegatan
+08:52 Portalgatan
+08:53 Höganäsgatan
+08:54 Väderkvarnsgatan
+08:55 Vaksala torg
+08:55 Stadshuset
+08:59 Skolgatan
+09:01 Götgatan
+09:03 Ekonomikum
+09:04 Studentstaden
+09:06 Rickomberga
+09:07 Oslogatan
+09:09 Reykjaviksgatan
+09:09 Ekebyhus
+09:10 Sernanders väg
+09:11 Flogsta centrum
+09:12 Flogsta vårdcentral
+09:14 Ihres väg
+09:15 Noreens väg
+09:16 Säves väg
+
+08:52 Kungshögarna
+08:54 Regins väg
+08:56 Valhalls väg
+08:57 Huges väg
+08:58 Topeliusgatan
+09:00 Värnlundsgatan
+09:01 Ferlinsgatan
+09:02 Heidenstamstorg
+09:04 Kantorsgatan
+09:05 Djäknegatan
+09:06 Portalgatan
+09:07 Höganäsgatan
+09:08 Väderkvarnsgatan
+09:09 Vaksala torg
+09:09 Stadshuset
+09:13 Skolgatan
+09:15 Götgatan
+09:17 Ekonomikum
+09:18 Studentstaden
+09:20 Rickomberga
+09:21 Oslogatan
+09:23 Reykjaviksgatan
+09:23 Ekebyhus
+09:24 Sernanders väg
+09:25 Flogsta centrum
+09:26 Flogsta vårdcentral
+09:28 Ihres väg
+09:29 Noreens väg
+09:30 Säves väg
+
+08:57 Kungshögarna
+08:59 Regins väg
+09:01 Valhalls väg
+09:02 Huges väg
+09:03 Topeliusgatan
+09:05 Värnlundsgatan
+09:06 Ferlinsgatan
+09:07 Heidenstamstorg
+09:09 Kantorsgatan
+09:10 Djäknegatan
+09:11 Portalgatan
+09:12 Höganäsgatan
+09:13 Väderkvarnsgatan
+09:14 Vaksala torg
+09:14 Stadshuset
+09:18 Skolgatan
+09:20 Götgatan
+09:22 Ekonomikum
+09:23 Studentstaden
+09:25 Rickomberga
+09:26 Oslogatan
+09:28 Reykjaviksgatan
+09:28 Ekebyhus
+09:29 Sernanders väg
+09:30 Flogsta centrum
+09:31 Flogsta vårdcentral
+09:33 Ihres väg
+09:34 Noreens väg
+09:35 Säves väg
+
+09:01 Kungshögarna
+09:03 Regins väg
+09:05 Valhalls väg
+09:06 Huges väg
+09:07 Topeliusgatan
+09:09 Värnlundsgatan
+09:10 Ferlinsgatan
+09:11 Heidenstamstorg
+09:13 Kantorsgatan
+09:14 Djäknegatan
+09:15 Portalgatan
+09:16 Höganäsgatan
+09:17 Väderkvarnsgatan
+09:18 Vaksala torg
+09:18 Stadshuset
+09:22 Skolgatan
+09:24 Götgatan
+09:26 Ekonomikum
+09:27 Studentstaden
+09:29 Rickomberga
+09:30 Oslogatan
+09:32 Reykjaviksgatan
+09:32 Ekebyhus
+09:33 Sernanders väg
+09:34 Flogsta centrum
+09:35 Flogsta vårdcentral
+09:37 Ihres väg
+09:38 Noreens väg
+09:39 Säves väg
+
+09:10 Kungshögarna
+09:12 Regins väg
+09:14 Valhalls väg
+09:15 Huges väg
+09:16 Topeliusgatan
+09:18 Värnlundsgatan
+09:19 Ferlinsgatan
+09:20 Heidenstamstorg
+09:22 Kantorsgatan
+09:23 Djäknegatan
+09:24 Portalgatan
+09:25 Höganäsgatan
+09:26 Väderkvarnsgatan
+09:27 Vaksala torg
+09:27 Stadshuset
+09:31 Skolgatan
+09:33 Götgatan
+09:35 Ekonomikum
+09:36 Studentstaden
+09:38 Rickomberga
+09:39 Oslogatan
+09:41 Reykjaviksgatan
+09:41 Ekebyhus
+09:42 Sernanders väg
+09:43 Flogsta centrum
+09:44 Flogsta vårdcentral
+09:46 Ihres väg
+09:47 Noreens väg
+09:48 Säves väg
+
+09:47 Kungshögarna
+09:49 Regins väg
+09:51 Valhalls väg
+09:52 Huges väg
+09:53 Topeliusgatan
+09:55 Värnlundsgatan
+09:56 Ferlinsgatan
+09:57 Heidenstamstorg
+09:59 Kantorsgatan
+10:00 Djäknegatan
+10:01 Portalgatan
+10:02 Höganäsgatan
+10:03 Väderkvarnsgatan
+10:04 Vaksala torg
+10:04 Stadshuset
+10:08 Skolgatan
+10:10 Götgatan
+10:12 Ekonomikum
+10:13 Studentstaden
+10:15 Rickomberga
+10:16 Oslogatan
+10:18 Reykjaviksgatan
+10:18 Ekebyhus
+10:19 Sernanders väg
+10:20 Flogsta centrum
+10:21 Flogsta vårdcentral
+10:23 Ihres väg
+10:24 Noreens väg
+10:25 Säves väg
+
+09:49 Kungshögarna
+09:51 Regins väg
+09:53 Valhalls väg
+09:54 Huges väg
+09:55 Topeliusgatan
+09:57 Värnlundsgatan
+09:58 Ferlinsgatan
+09:59 Heidenstamstorg
+10:01 Kantorsgatan
+10:02 Djäknegatan
+10:03 Portalgatan
+10:04 Höganäsgatan
+10:05 Väderkvarnsgatan
+10:06 Vaksala torg
+10:06 Stadshuset
+10:10 Skolgatan
+10:12 Götgatan
+10:14 Ekonomikum
+10:15 Studentstaden
+10:17 Rickomberga
+10:18 Oslogatan
+10:20 Reykjaviksgatan
+10:20 Ekebyhus
+10:21 Sernanders väg
+10:22 Flogsta centrum
+10:23 Flogsta vårdcentral
+10:25 Ihres väg
+10:26 Noreens väg
+10:27 Säves väg
+
+09:50 Kungshögarna
+09:52 Regins väg
+09:54 Valhalls väg
+09:55 Huges väg
+09:56 Topeliusgatan
+09:58 Värnlundsgatan
+09:59 Ferlinsgatan
+10:00 Heidenstamstorg
+10:02 Kantorsgatan
+10:03 Djäknegatan
+10:04 Portalgatan
+10:05 Höganäsgatan
+10:06 Väderkvarnsgatan
+10:07 Vaksala torg
+10:07 Stadshuset
+10:11 Skolgatan
+10:13 Götgatan
+10:15 Ekonomikum
+10:16 Studentstaden
+10:18 Rickomberga
+10:19 Oslogatan
+10:21 Reykjaviksgatan
+10:21 Ekebyhus
+10:22 Sernanders väg
+10:23 Flogsta centrum
+10:24 Flogsta vårdcentral
+10:26 Ihres väg
+10:27 Noreens väg
+10:28 Säves väg
+
+09:51 Kungshögarna
+09:53 Regins väg
+09:55 Valhalls väg
+09:56 Huges väg
+09:57 Topeliusgatan
+09:59 Värnlundsgatan
+10:00 Ferlinsgatan
+10:01 Heidenstamstorg
+10:03 Kantorsgatan
+10:04 Djäknegatan
+10:05 Portalgatan
+10:06 Höganäsgatan
+10:07 Väderkvarnsgatan
+10:08 Vaksala torg
+10:08 Stadshuset
+10:12 Skolgatan
+10:14 Götgatan
+10:16 Ekonomikum
+10:17 Studentstaden
+10:19 Rickomberga
+10:20 Oslogatan
+10:22 Reykjaviksgatan
+10:22 Ekebyhus
+10:23 Sernanders väg
+10:24 Flogsta centrum
+10:25 Flogsta vårdcentral
+10:27 Ihres väg
+10:28 Noreens väg
+10:29 Säves väg
+
+10:12 Kungshögarna
+10:14 Regins väg
+10:16 Valhalls väg
+10:17 Huges väg
+10:18 Topeliusgatan
+10:20 Värnlundsgatan
+10:21 Ferlinsgatan
+10:22 Heidenstamstorg
+10:24 Kantorsgatan
+10:25 Djäknegatan
+10:26 Portalgatan
+10:27 Höganäsgatan
+10:28 Väderkvarnsgatan
+10:29 Vaksala torg
+10:29 Stadshuset
+10:33 Skolgatan
+10:35 Götgatan
+10:37 Ekonomikum
+10:38 Studentstaden
+10:40 Rickomberga
+10:41 Oslogatan
+10:43 Reykjaviksgatan
+10:43 Ekebyhus
+10:44 Sernanders väg
+10:45 Flogsta centrum
+10:46 Flogsta vårdcentral
+10:48 Ihres väg
+10:49 Noreens väg
+10:50 Säves väg
+
+10:16 Kungshögarna
+10:18 Regins väg
+10:20 Valhalls väg
+10:21 Huges väg
+10:22 Topeliusgatan
+10:24 Värnlundsgatan
+10:25 Ferlinsgatan
+10:26 Heidenstamstorg
+10:28 Kantorsgatan
+10:29 Djäknegatan
+10:30 Portalgatan
+10:31 Höganäsgatan
+10:32 Väderkvarnsgatan
+10:33 Vaksala torg
+10:33 Stadshuset
+10:37 Skolgatan
+10:39 Götgatan
+10:41 Ekonomikum
+10:42 Studentstaden
+10:44 Rickomberga
+10:45 Oslogatan
+10:47 Reykjaviksgatan
+10:47 Ekebyhus
+10:48 Sernanders väg
+10:49 Flogsta centrum
+10:50 Flogsta vårdcentral
+10:52 Ihres väg
+10:53 Noreens väg
+10:54 Säves väg
+
+10:19 Kungshögarna
+10:21 Regins väg
+10:23 Valhalls väg
+10:24 Huges väg
+10:25 Topeliusgatan
+10:27 Värnlundsgatan
+10:28 Ferlinsgatan
+10:29 Heidenstamstorg
+10:31 Kantorsgatan
+10:32 Djäknegatan
+10:33 Portalgatan
+10:34 Höganäsgatan
+10:35 Väderkvarnsgatan
+10:36 Vaksala torg
+10:36 Stadshuset
+10:40 Skolgatan
+10:42 Götgatan
+10:44 Ekonomikum
+10:45 Studentstaden
+10:47 Rickomberga
+10:48 Oslogatan
+10:50 Reykjaviksgatan
+10:50 Ekebyhus
+10:51 Sernanders väg
+10:52 Flogsta centrum
+10:53 Flogsta vårdcentral
+10:55 Ihres väg
+10:56 Noreens väg
+10:57 Säves väg
+
+10:20 Kungshögarna
+10:22 Regins väg
+10:24 Valhalls väg
+10:25 Huges väg
+10:26 Topeliusgatan
+10:28 Värnlundsgatan
+10:29 Ferlinsgatan
+10:30 Heidenstamstorg
+10:32 Kantorsgatan
+10:33 Djäknegatan
+10:34 Portalgatan
+10:35 Höganäsgatan
+10:36 Väderkvarnsgatan
+10:37 Vaksala torg
+10:37 Stadshuset
+10:41 Skolgatan
+10:43 Götgatan
+10:45 Ekonomikum
+10:46 Studentstaden
+10:48 Rickomberga
+10:49 Oslogatan
+10:51 Reykjaviksgatan
+10:51 Ekebyhus
+10:52 Sernanders väg
+10:53 Flogsta centrum
+10:54 Flogsta vårdcentral
+10:56 Ihres väg
+10:57 Noreens väg
+10:58 Säves väg
+
+11:29 Kungshögarna
+11:31 Regins väg
+11:33 Valhalls väg
+11:34 Huges väg
+11:35 Topeliusgatan
+11:37 Värnlundsgatan
+11:38 Ferlinsgatan
+11:39 Heidenstamstorg
+11:41 Kantorsgatan
+11:42 Djäknegatan
+11:43 Portalgatan
+11:44 Höganäsgatan
+11:45 Väderkvarnsgatan
+11:46 Vaksala torg
+11:46 Stadshuset
+11:50 Skolgatan
+11:52 Götgatan
+11:54 Ekonomikum
+11:55 Studentstaden
+11:57 Rickomberga
+11:58 Oslogatan
+12:00 Reykjaviksgatan
+12:00 Ekebyhus
+12:01 Sernanders väg
+12:02 Flogsta centrum
+12:03 Flogsta vårdcentral
+12:05 Ihres väg
+12:06 Noreens väg
+12:07 Säves väg
+
+11:30 Kungshögarna
+11:32 Regins väg
+11:34 Valhalls väg
+11:35 Huges väg
+11:36 Topeliusgatan
+11:38 Värnlundsgatan
+11:39 Ferlinsgatan
+11:40 Heidenstamstorg
+11:42 Kantorsgatan
+11:43 Djäknegatan
+11:44 Portalgatan
+11:45 Höganäsgatan
+11:46 Väderkvarnsgatan
+11:47 Vaksala torg
+11:47 Stadshuset
+11:51 Skolgatan
+11:53 Götgatan
+11:55 Ekonomikum
+11:56 Studentstaden
+11:58 Rickomberga
+11:59 Oslogatan
+12:01 Reykjaviksgatan
+12:01 Ekebyhus
+12:02 Sernanders väg
+12:03 Flogsta centrum
+12:04 Flogsta vårdcentral
+12:06 Ihres väg
+12:07 Noreens väg
+12:08 Säves väg
+
+12:20 Kungshögarna
+12:22 Regins väg
+12:24 Valhalls väg
+12:25 Huges väg
+12:26 Topeliusgatan
+12:28 Värnlundsgatan
+12:29 Ferlinsgatan
+12:30 Heidenstamstorg
+12:32 Kantorsgatan
+12:33 Djäknegatan
+12:34 Portalgatan
+12:35 Höganäsgatan
+12:36 Väderkvarnsgatan
+12:37 Vaksala torg
+12:37 Stadshuset
+12:41 Skolgatan
+12:43 Götgatan
+12:45 Ekonomikum
+12:46 Studentstaden
+12:48 Rickomberga
+12:49 Oslogatan
+12:51 Reykjaviksgatan
+12:51 Ekebyhus
+12:52 Sernanders väg
+12:53 Flogsta centrum
+12:54 Flogsta vårdcentral
+12:56 Ihres väg
+12:57 Noreens väg
+12:58 Säves väg
+
+12:34 Kungshögarna
+12:36 Regins väg
+12:38 Valhalls väg
+12:39 Huges väg
+12:40 Topeliusgatan
+12:42 Värnlundsgatan
+12:43 Ferlinsgatan
+12:44 Heidenstamstorg
+12:46 Kantorsgatan
+12:47 Djäknegatan
+12:48 Portalgatan
+12:49 Höganäsgatan
+12:50 Väderkvarnsgatan
+12:51 Vaksala torg
+12:51 Stadshuset
+12:55 Skolgatan
+12:57 Götgatan
+12:59 Ekonomikum
+13:00 Studentstaden
+13:02 Rickomberga
+13:03 Oslogatan
+13:05 Reykjaviksgatan
+13:05 Ekebyhus
+13:06 Sernanders väg
+13:07 Flogsta centrum
+13:08 Flogsta vårdcentral
+13:10 Ihres väg
+13:11 Noreens väg
+13:12 Säves väg
+
+12:34 Kungshögarna
+12:36 Regins väg
+12:38 Valhalls väg
+12:39 Huges väg
+12:40 Topeliusgatan
+12:42 Värnlundsgatan
+12:43 Ferlinsgatan
+12:44 Heidenstamstorg
+12:46 Kantorsgatan
+12:47 Djäknegatan
+12:48 Portalgatan
+12:49 Höganäsgatan
+12:50 Väderkvarnsgatan
+12:51 Vaksala torg
+12:51 Stadshuset
+12:55 Skolgatan
+12:57 Götgatan
+12:59 Ekonomikum
+13:00 Studentstaden
+13:02 Rickomberga
+13:03 Oslogatan
+13:05 Reykjaviksgatan
+13:05 Ekebyhus
+13:06 Sernanders väg
+13:07 Flogsta centrum
+13:08 Flogsta vårdcentral
+13:10 Ihres väg
+13:11 Noreens väg
+13:12 Säves väg
+
+12:39 Kungshögarna
+12:41 Regins väg
+12:43 Valhalls väg
+12:44 Huges väg
+12:45 Topeliusgatan
+12:47 Värnlundsgatan
+12:48 Ferlinsgatan
+12:49 Heidenstamstorg
+12:51 Kantorsgatan
+12:52 Djäknegatan
+12:53 Portalgatan
+12:54 Höganäsgatan
+12:55 Väderkvarnsgatan
+12:56 Vaksala torg
+12:56 Stadshuset
+13:00 Skolgatan
+13:02 Götgatan
+13:04 Ekonomikum
+13:05 Studentstaden
+13:07 Rickomberga
+13:08 Oslogatan
+13:10 Reykjaviksgatan
+13:10 Ekebyhus
+13:11 Sernanders väg
+13:12 Flogsta centrum
+13:13 Flogsta vårdcentral
+13:15 Ihres väg
+13:16 Noreens väg
+13:17 Säves väg
+
+13:07 Kungshögarna
+13:09 Regins väg
+13:11 Valhalls väg
+13:12 Huges väg
+13:13 Topeliusgatan
+13:15 Värnlundsgatan
+13:16 Ferlinsgatan
+13:17 Heidenstamstorg
+13:19 Kantorsgatan
+13:20 Djäknegatan
+13:21 Portalgatan
+13:22 Höganäsgatan
+13:23 Väderkvarnsgatan
+13:24 Vaksala torg
+13:24 Stadshuset
+13:28 Skolgatan
+13:30 Götgatan
+13:32 Ekonomikum
+13:33 Studentstaden
+13:35 Rickomberga
+13:36 Oslogatan
+13:38 Reykjaviksgatan
+13:38 Ekebyhus
+13:39 Sernanders väg
+13:40 Flogsta centrum
+13:41 Flogsta vårdcentral
+13:43 Ihres väg
+13:44 Noreens väg
+13:45 Säves väg
+
+13:19 Kungshögarna
+13:21 Regins väg
+13:23 Valhalls väg
+13:24 Huges väg
+13:25 Topeliusgatan
+13:27 Värnlundsgatan
+13:28 Ferlinsgatan
+13:29 Heidenstamstorg
+13:31 Kantorsgatan
+13:32 Djäknegatan
+13:33 Portalgatan
+13:34 Höganäsgatan
+13:35 Väderkvarnsgatan
+13:36 Vaksala torg
+13:36 Stadshuset
+13:40 Skolgatan
+13:42 Götgatan
+13:44 Ekonomikum
+13:45 Studentstaden
+13:47 Rickomberga
+13:48 Oslogatan
+13:50 Reykjaviksgatan
+13:50 Ekebyhus
+13:51 Sernanders väg
+13:52 Flogsta centrum
+13:53 Flogsta vårdcentral
+13:55 Ihres väg
+13:56 Noreens väg
+13:57 Säves väg
+
+14:30 Kungshögarna
+14:32 Regins väg
+14:34 Valhalls väg
+14:35 Huges väg
+14:36 Topeliusgatan
+14:38 Värnlundsgatan
+14:39 Ferlinsgatan
+14:40 Heidenstamstorg
+14:42 Kantorsgatan
+14:43 Djäknegatan
+14:44 Portalgatan
+14:45 Höganäsgatan
+14:46 Väderkvarnsgatan
+14:47 Vaksala torg
+14:47 Stadshuset
+14:51 Skolgatan
+14:53 Götgatan
+14:55 Ekonomikum
+14:56 Studentstaden
+14:58 Rickomberga
+14:59 Oslogatan
+15:01 Reykjaviksgatan
+15:01 Ekebyhus
+15:02 Sernanders väg
+15:03 Flogsta centrum
+15:04 Flogsta vårdcentral
+15:06 Ihres väg
+15:07 Noreens väg
+15:08 Säves väg
+
+14:32 Kungshögarna
+14:34 Regins väg
+14:36 Valhalls väg
+14:37 Huges väg
+14:38 Topeliusgatan
+14:40 Värnlundsgatan
+14:41 Ferlinsgatan
+14:42 Heidenstamstorg
+14:44 Kantorsgatan
+14:45 Djäknegatan
+14:46 Portalgatan
+14:47 Höganäsgatan
+14:48 Väderkvarnsgatan
+14:49 Vaksala torg
+14:49 Stadshuset
+14:53 Skolgatan
+14:55 Götgatan
+14:57 Ekonomikum
+14:58 Studentstaden
+15:00 Rickomberga
+15:01 Oslogatan
+15:03 Reykjaviksgatan
+15:03 Ekebyhus
+15:04 Sernanders väg
+15:05 Flogsta centrum
+15:06 Flogsta vårdcentral
+15:08 Ihres väg
+15:09 Noreens väg
+15:10 Säves väg
+
+14:41 Kungshögarna
+14:43 Regins väg
+14:45 Valhalls väg
+14:46 Huges väg
+14:47 Topeliusgatan
+14:49 Värnlundsgatan
+14:50 Ferlinsgatan
+14:51 Heidenstamstorg
+14:53 Kantorsgatan
+14:54 Djäknegatan
+14:55 Portalgatan
+14:56 Höganäsgatan
+14:57 Väderkvarnsgatan
+14:58 Vaksala torg
+14:58 Stadshuset
+15:02 Skolgatan
+15:04 Götgatan
+15:06 Ekonomikum
+15:07 Studentstaden
+15:09 Rickomberga
+15:10 Oslogatan
+15:12 Reykjaviksgatan
+15:12 Ekebyhus
+15:13 Sernanders väg
+15:14 Flogsta centrum
+15:15 Flogsta vårdcentral
+15:17 Ihres väg
+15:18 Noreens väg
+15:19 Säves väg
+
+14:48 Kungshögarna
+14:50 Regins väg
+14:52 Valhalls väg
+14:53 Huges väg
+14:54 Topeliusgatan
+14:56 Värnlundsgatan
+14:57 Ferlinsgatan
+14:58 Heidenstamstorg
+15:00 Kantorsgatan
+15:01 Djäknegatan
+15:02 Portalgatan
+15:03 Höganäsgatan
+15:04 Väderkvarnsgatan
+15:05 Vaksala torg
+15:05 Stadshuset
+15:09 Skolgatan
+15:11 Götgatan
+15:13 Ekonomikum
+15:14 Studentstaden
+15:16 Rickomberga
+15:17 Oslogatan
+15:19 Reykjaviksgatan
+15:19 Ekebyhus
+15:20 Sernanders väg
+15:21 Flogsta centrum
+15:22 Flogsta vårdcentral
+15:24 Ihres väg
+15:25 Noreens väg
+15:26 Säves väg
+
+15:13 Kungshögarna
+15:15 Regins väg
+15:17 Valhalls väg
+15:18 Huges väg
+15:19 Topeliusgatan
+15:21 Värnlundsgatan
+15:22 Ferlinsgatan
+15:23 Heidenstamstorg
+15:25 Kantorsgatan
+15:26 Djäknegatan
+15:27 Portalgatan
+15:28 Höganäsgatan
+15:29 Väderkvarnsgatan
+15:30 Vaksala torg
+15:30 Stadshuset
+15:34 Skolgatan
+15:36 Götgatan
+15:38 Ekonomikum
+15:39 Studentstaden
+15:41 Rickomberga
+15:42 Oslogatan
+15:44 Reykjaviksgatan
+15:44 Ekebyhus
+15:45 Sernanders väg
+15:46 Flogsta centrum
+15:47 Flogsta vårdcentral
+15:49 Ihres väg
+15:50 Noreens väg
+15:51 Säves väg
+
+15:13 Kungshögarna
+15:15 Regins väg
+15:17 Valhalls väg
+15:18 Huges väg
+15:19 Topeliusgatan
+15:21 Värnlundsgatan
+15:22 Ferlinsgatan
+15:23 Heidenstamstorg
+15:25 Kantorsgatan
+15:26 Djäknegatan
+15:27 Portalgatan
+15:28 Höganäsgatan
+15:29 Väderkvarnsgatan
+15:30 Vaksala torg
+15:30 Stadshuset
+15:34 Skolgatan
+15:36 Götgatan
+15:38 Ekonomikum
+15:39 Studentstaden
+15:41 Rickomberga
+15:42 Oslogatan
+15:44 Reykjaviksgatan
+15:44 Ekebyhus
+15:45 Sernanders väg
+15:46 Flogsta centrum
+15:47 Flogsta vårdcentral
+15:49 Ihres väg
+15:50 Noreens väg
+15:51 Säves väg
+
+15:16 Kungshögarna
+15:18 Regins väg
+15:20 Valhalls väg
+15:21 Huges väg
+15:22 Topeliusgatan
+15:24 Värnlundsgatan
+15:25 Ferlinsgatan
+15:26 Heidenstamstorg
+15:28 Kantorsgatan
+15:29 Djäknegatan
+15:30 Portalgatan
+15:31 Höganäsgatan
+15:32 Väderkvarnsgatan
+15:33 Vaksala torg
+15:33 Stadshuset
+15:37 Skolgatan
+15:39 Götgatan
+15:41 Ekonomikum
+15:42 Studentstaden
+15:44 Rickomberga
+15:45 Oslogatan
+15:47 Reykjaviksgatan
+15:47 Ekebyhus
+15:48 Sernanders väg
+15:49 Flogsta centrum
+15:50 Flogsta vårdcentral
+15:52 Ihres väg
+15:53 Noreens väg
+15:54 Säves väg
+
+15:26 Kungshögarna
+15:28 Regins väg
+15:30 Valhalls väg
+15:31 Huges väg
+15:32 Topeliusgatan
+15:34 Värnlundsgatan
+15:35 Ferlinsgatan
+15:36 Heidenstamstorg
+15:38 Kantorsgatan
+15:39 Djäknegatan
+15:40 Portalgatan
+15:41 Höganäsgatan
+15:42 Väderkvarnsgatan
+15:43 Vaksala torg
+15:43 Stadshuset
+15:47 Skolgatan
+15:49 Götgatan
+15:51 Ekonomikum
+15:52 Studentstaden
+15:54 Rickomberga
+15:55 Oslogatan
+15:57 Reykjaviksgatan
+15:57 Ekebyhus
+15:58 Sernanders väg
+15:59 Flogsta centrum
+16:00 Flogsta vårdcentral
+16:02 Ihres väg
+16:03 Noreens väg
+16:04 Säves väg
+
+15:41 Kungshögarna
+15:43 Regins väg
+15:45 Valhalls väg
+15:46 Huges väg
+15:47 Topeliusgatan
+15:49 Värnlundsgatan
+15:50 Ferlinsgatan
+15:51 Heidenstamstorg
+15:53 Kantorsgatan
+15:54 Djäknegatan
+15:55 Portalgatan
+15:56 Höganäsgatan
+15:57 Väderkvarnsgatan
+15:58 Vaksala torg
+15:58 Stadshuset
+16:02 Skolgatan
+16:04 Götgatan
+16:06 Ekonomikum
+16:07 Studentstaden
+16:09 Rickomberga
+16:10 Oslogatan
+16:12 Reykjaviksgatan
+16:12 Ekebyhus
+16:13 Sernanders väg
+16:14 Flogsta centrum
+16:15 Flogsta vårdcentral
+16:17 Ihres väg
+16:18 Noreens väg
+16:19 Säves väg
+
+15:46 Kungshögarna
+15:48 Regins väg
+15:50 Valhalls väg
+15:51 Huges väg
+15:52 Topeliusgatan
+15:54 Värnlundsgatan
+15:55 Ferlinsgatan
+15:56 Heidenstamstorg
+15:58 Kantorsgatan
+15:59 Djäknegatan
+16:00 Portalgatan
+16:01 Höganäsgatan
+16:02 Väderkvarnsgatan
+16:03 Vaksala torg
+16:03 Stadshuset
+16:07 Skolgatan
+16:09 Götgatan
+16:11 Ekonomikum
+16:12 Studentstaden
+16:14 Rickomberga
+16:15 Oslogatan
+16:17 Reykjaviksgatan
+16:17 Ekebyhus
+16:18 Sernanders väg
+16:19 Flogsta centrum
+16:20 Flogsta vårdcentral
+16:22 Ihres väg
+16:23 Noreens väg
+16:24 Säves väg
+
+16:06 Kungshögarna
+16:08 Regins väg
+16:10 Valhalls väg
+16:11 Huges väg
+16:12 Topeliusgatan
+16:14 Värnlundsgatan
+16:15 Ferlinsgatan
+16:16 Heidenstamstorg
+16:18 Kantorsgatan
+16:19 Djäknegatan
+16:20 Portalgatan
+16:21 Höganäsgatan
+16:22 Väderkvarnsgatan
+16:23 Vaksala torg
+16:23 Stadshuset
+16:27 Skolgatan
+16:29 Götgatan
+16:31 Ekonomikum
+16:32 Studentstaden
+16:34 Rickomberga
+16:35 Oslogatan
+16:37 Reykjaviksgatan
+16:37 Ekebyhus
+16:38 Sernanders väg
+16:39 Flogsta centrum
+16:40 Flogsta vårdcentral
+16:42 Ihres väg
+16:43 Noreens väg
+16:44 Säves väg
+
+16:17 Kungshögarna
+16:19 Regins väg
+16:21 Valhalls väg
+16:22 Huges väg
+16:23 Topeliusgatan
+16:25 Värnlundsgatan
+16:26 Ferlinsgatan
+16:27 Heidenstamstorg
+16:29 Kantorsgatan
+16:30 Djäknegatan
+16:31 Portalgatan
+16:32 Höganäsgatan
+16:33 Väderkvarnsgatan
+16:34 Vaksala torg
+16:34 Stadshuset
+16:38 Skolgatan
+16:40 Götgatan
+16:42 Ekonomikum
+16:43 Studentstaden
+16:45 Rickomberga
+16:46 Oslogatan
+16:48 Reykjaviksgatan
+16:48 Ekebyhus
+16:49 Sernanders väg
+16:50 Flogsta centrum
+16:51 Flogsta vårdcentral
+16:53 Ihres väg
+16:54 Noreens väg
+16:55 Säves väg
+
+16:32 Kungshögarna
+16:34 Regins väg
+16:36 Valhalls väg
+16:37 Huges väg
+16:38 Topeliusgatan
+16:40 Värnlundsgatan
+16:41 Ferlinsgatan
+16:42 Heidenstamstorg
+16:44 Kantorsgatan
+16:45 Djäknegatan
+16:46 Portalgatan
+16:47 Höganäsgatan
+16:48 Väderkvarnsgatan
+16:49 Vaksala torg
+16:49 Stadshuset
+16:53 Skolgatan
+16:55 Götgatan
+16:57 Ekonomikum
+16:58 Studentstaden
+17:00 Rickomberga
+17:01 Oslogatan
+17:03 Reykjaviksgatan
+17:03 Ekebyhus
+17:04 Sernanders väg
+17:05 Flogsta centrum
+17:06 Flogsta vårdcentral
+17:08 Ihres väg
+17:09 Noreens väg
+17:10 Säves väg
+
+17:01 Kungshögarna
+17:03 Regins väg
+17:05 Valhalls väg
+17:06 Huges väg
+17:07 Topeliusgatan
+17:09 Värnlundsgatan
+17:10 Ferlinsgatan
+17:11 Heidenstamstorg
+17:13 Kantorsgatan
+17:14 Djäknegatan
+17:15 Portalgatan
+17:16 Höganäsgatan
+17:17 Väderkvarnsgatan
+17:18 Vaksala torg
+17:18 Stadshuset
+17:22 Skolgatan
+17:24 Götgatan
+17:26 Ekonomikum
+17:27 Studentstaden
+17:29 Rickomberga
+17:30 Oslogatan
+17:32 Reykjaviksgatan
+17:32 Ekebyhus
+17:33 Sernanders väg
+17:34 Flogsta centrum
+17:35 Flogsta vårdcentral
+17:37 Ihres väg
+17:38 Noreens väg
+17:39 Säves väg
+
+17:15 Kungshögarna
+17:17 Regins väg
+17:19 Valhalls väg
+17:20 Huges väg
+17:21 Topeliusgatan
+17:23 Värnlundsgatan
+17:24 Ferlinsgatan
+17:25 Heidenstamstorg
+17:27 Kantorsgatan
+17:28 Djäknegatan
+17:29 Portalgatan
+17:30 Höganäsgatan
+17:31 Väderkvarnsgatan
+17:32 Vaksala torg
+17:32 Stadshuset
+17:36 Skolgatan
+17:38 Götgatan
+17:40 Ekonomikum
+17:41 Studentstaden
+17:43 Rickomberga
+17:44 Oslogatan
+17:46 Reykjaviksgatan
+17:46 Ekebyhus
+17:47 Sernanders väg
+17:48 Flogsta centrum
+17:49 Flogsta vårdcentral
+17:51 Ihres väg
+17:52 Noreens väg
+17:53 Säves väg
+
+17:16 Kungshögarna
+17:18 Regins väg
+17:20 Valhalls väg
+17:21 Huges väg
+17:22 Topeliusgatan
+17:24 Värnlundsgatan
+17:25 Ferlinsgatan
+17:26 Heidenstamstorg
+17:28 Kantorsgatan
+17:29 Djäknegatan
+17:30 Portalgatan
+17:31 Höganäsgatan
+17:32 Väderkvarnsgatan
+17:33 Vaksala torg
+17:33 Stadshuset
+17:37 Skolgatan
+17:39 Götgatan
+17:41 Ekonomikum
+17:42 Studentstaden
+17:44 Rickomberga
+17:45 Oslogatan
+17:47 Reykjaviksgatan
+17:47 Ekebyhus
+17:48 Sernanders väg
+17:49 Flogsta centrum
+17:50 Flogsta vårdcentral
+17:52 Ihres väg
+17:53 Noreens väg
+17:54 Säves väg
+
+17:36 Kungshögarna
+17:38 Regins väg
+17:40 Valhalls väg
+17:41 Huges väg
+17:42 Topeliusgatan
+17:44 Värnlundsgatan
+17:45 Ferlinsgatan
+17:46 Heidenstamstorg
+17:48 Kantorsgatan
+17:49 Djäknegatan
+17:50 Portalgatan
+17:51 Höganäsgatan
+17:52 Väderkvarnsgatan
+17:53 Vaksala torg
+17:53 Stadshuset
+17:57 Skolgatan
+17:59 Götgatan
+18:01 Ekonomikum
+18:02 Studentstaden
+18:04 Rickomberga
+18:05 Oslogatan
+18:07 Reykjaviksgatan
+18:07 Ekebyhus
+18:08 Sernanders väg
+18:09 Flogsta centrum
+18:10 Flogsta vårdcentral
+18:12 Ihres väg
+18:13 Noreens väg
+18:14 Säves väg
+
+17:40 Kungshögarna
+17:42 Regins väg
+17:44 Valhalls väg
+17:45 Huges väg
+17:46 Topeliusgatan
+17:48 Värnlundsgatan
+17:49 Ferlinsgatan
+17:50 Heidenstamstorg
+17:52 Kantorsgatan
+17:53 Djäknegatan
+17:54 Portalgatan
+17:55 Höganäsgatan
+17:56 Väderkvarnsgatan
+17:57 Vaksala torg
+17:57 Stadshuset
+18:01 Skolgatan
+18:03 Götgatan
+18:05 Ekonomikum
+18:06 Studentstaden
+18:08 Rickomberga
+18:09 Oslogatan
+18:11 Reykjaviksgatan
+18:11 Ekebyhus
+18:12 Sernanders väg
+18:13 Flogsta centrum
+18:14 Flogsta vårdcentral
+18:16 Ihres väg
+18:17 Noreens väg
+18:18 Säves väg
+
+17:45 Kungshögarna
+17:47 Regins väg
+17:49 Valhalls väg
+17:50 Huges väg
+17:51 Topeliusgatan
+17:53 Värnlundsgatan
+17:54 Ferlinsgatan
+17:55 Heidenstamstorg
+17:57 Kantorsgatan
+17:58 Djäknegatan
+17:59 Portalgatan
+18:00 Höganäsgatan
+18:01 Väderkvarnsgatan
+18:02 Vaksala torg
+18:02 Stadshuset
+18:06 Skolgatan
+18:08 Götgatan
+18:10 Ekonomikum
+18:11 Studentstaden
+18:13 Rickomberga
+18:14 Oslogatan
+18:16 Reykjaviksgatan
+18:16 Ekebyhus
+18:17 Sernanders väg
+18:18 Flogsta centrum
+18:19 Flogsta vårdcentral
+18:21 Ihres väg
+18:22 Noreens väg
+18:23 Säves väg
+
+18:47 Kungshögarna
+18:49 Regins väg
+18:51 Valhalls väg
+18:52 Huges väg
+18:53 Topeliusgatan
+18:55 Värnlundsgatan
+18:56 Ferlinsgatan
+18:57 Heidenstamstorg
+18:59 Kantorsgatan
+19:00 Djäknegatan
+19:01 Portalgatan
+19:02 Höganäsgatan
+19:03 Väderkvarnsgatan
+19:04 Vaksala torg
+19:04 Stadshuset
+19:08 Skolgatan
+19:10 Götgatan
+19:12 Ekonomikum
+19:13 Studentstaden
+19:15 Rickomberga
+19:16 Oslogatan
+19:18 Reykjaviksgatan
+19:18 Ekebyhus
+19:19 Sernanders väg
+19:20 Flogsta centrum
+19:21 Flogsta vårdcentral
+19:23 Ihres väg
+19:24 Noreens väg
+19:25 Säves väg
+
+19:14 Kungshögarna
+19:16 Regins väg
+19:18 Valhalls väg
+19:19 Huges väg
+19:20 Topeliusgatan
+19:22 Värnlundsgatan
+19:23 Ferlinsgatan
+19:24 Heidenstamstorg
+19:26 Kantorsgatan
+19:27 Djäknegatan
+19:28 Portalgatan
+19:29 Höganäsgatan
+19:30 Väderkvarnsgatan
+19:31 Vaksala torg
+19:31 Stadshuset
+19:35 Skolgatan
+19:37 Götgatan
+19:39 Ekonomikum
+19:40 Studentstaden
+19:42 Rickomberga
+19:43 Oslogatan
+19:45 Reykjaviksgatan
+19:45 Ekebyhus
+19:46 Sernanders väg
+19:47 Flogsta centrum
+19:48 Flogsta vårdcentral
+19:50 Ihres väg
+19:51 Noreens väg
+19:52 Säves väg
+
+19:43 Kungshögarna
+19:45 Regins väg
+19:47 Valhalls väg
+19:48 Huges väg
+19:49 Topeliusgatan
+19:51 Värnlundsgatan
+19:52 Ferlinsgatan
+19:53 Heidenstamstorg
+19:55 Kantorsgatan
+19:56 Djäknegatan
+19:57 Portalgatan
+19:58 Höganäsgatan
+19:59 Väderkvarnsgatan
+20:00 Vaksala torg
+20:00 Stadshuset
+20:04 Skolgatan
+20:06 Götgatan
+20:08 Ekonomikum
+20:09 Studentstaden
+20:11 Rickomberga
+20:12 Oslogatan
+20:14 Reykjaviksgatan
+20:14 Ekebyhus
+20:15 Sernanders väg
+20:16 Flogsta centrum
+20:17 Flogsta vårdcentral
+20:19 Ihres väg
+20:20 Noreens väg
+20:21 Säves väg
+
+19:53 Kungshögarna
+19:55 Regins väg
+19:57 Valhalls väg
+19:58 Huges väg
+19:59 Topeliusgatan
+20:01 Värnlundsgatan
+20:02 Ferlinsgatan
+20:03 Heidenstamstorg
+20:05 Kantorsgatan
+20:06 Djäknegatan
+20:07 Portalgatan
+20:08 Höganäsgatan
+20:09 Väderkvarnsgatan
+20:10 Vaksala torg
+20:10 Stadshuset
+20:14 Skolgatan
+20:16 Götgatan
+20:18 Ekonomikum
+20:19 Studentstaden
+20:21 Rickomberga
+20:22 Oslogatan
+20:24 Reykjaviksgatan
+20:24 Ekebyhus
+20:25 Sernanders väg
+20:26 Flogsta centrum
+20:27 Flogsta vårdcentral
+20:29 Ihres väg
+20:30 Noreens väg
+20:31 Säves väg
+
+20:17 Kungshögarna
+20:19 Regins väg
+20:21 Valhalls väg
+20:22 Huges väg
+20:23 Topeliusgatan
+20:25 Värnlundsgatan
+20:26 Ferlinsgatan
+20:27 Heidenstamstorg
+20:29 Kantorsgatan
+20:30 Djäknegatan
+20:31 Portalgatan
+20:32 Höganäsgatan
+20:33 Väderkvarnsgatan
+20:34 Vaksala torg
+20:34 Stadshuset
+20:38 Skolgatan
+20:40 Götgatan
+20:42 Ekonomikum
+20:43 Studentstaden
+20:45 Rickomberga
+20:46 Oslogatan
+20:48 Reykjaviksgatan
+20:48 Ekebyhus
+20:49 Sernanders väg
+20:50 Flogsta centrum
+20:51 Flogsta vårdcentral
+20:53 Ihres väg
+20:54 Noreens väg
+20:55 Säves väg
+
+20:46 Kungshögarna
+20:48 Regins väg
+20:50 Valhalls väg
+20:51 Huges väg
+20:52 Topeliusgatan
+20:54 Värnlundsgatan
+20:55 Ferlinsgatan
+20:56 Heidenstamstorg
+20:58 Kantorsgatan
+20:59 Djäknegatan
+21:00 Portalgatan
+21:01 Höganäsgatan
+21:02 Väderkvarnsgatan
+21:03 Vaksala torg
+21:03 Stadshuset
+21:07 Skolgatan
+21:09 Götgatan
+21:11 Ekonomikum
+21:12 Studentstaden
+21:14 Rickomberga
+21:15 Oslogatan
+21:17 Reykjaviksgatan
+21:17 Ekebyhus
+21:18 Sernanders väg
+21:19 Flogsta centrum
+21:20 Flogsta vårdcentral
+21:22 Ihres väg
+21:23 Noreens väg
+21:24 Säves väg
+
+20:51 Kungshögarna
+20:53 Regins väg
+20:55 Valhalls väg
+20:56 Huges väg
+20:57 Topeliusgatan
+20:59 Värnlundsgatan
+21:00 Ferlinsgatan
+21:01 Heidenstamstorg
+21:03 Kantorsgatan
+21:04 Djäknegatan
+21:05 Portalgatan
+21:06 Höganäsgatan
+21:07 Väderkvarnsgatan
+21:08 Vaksala torg
+21:08 Stadshuset
+21:12 Skolgatan
+21:14 Götgatan
+21:16 Ekonomikum
+21:17 Studentstaden
+21:19 Rickomberga
+21:20 Oslogatan
+21:22 Reykjaviksgatan
+21:22 Ekebyhus
+21:23 Sernanders väg
+21:24 Flogsta centrum
+21:25 Flogsta vårdcentral
+21:27 Ihres väg
+21:28 Noreens väg
+21:29 Säves väg
+
+21:05 Kungshögarna
+21:07 Regins väg
+21:09 Valhalls väg
+21:10 Huges väg
+21:11 Topeliusgatan
+21:13 Värnlundsgatan
+21:14 Ferlinsgatan
+21:15 Heidenstamstorg
+21:17 Kantorsgatan
+21:18 Djäknegatan
+21:19 Portalgatan
+21:20 Höganäsgatan
+21:21 Väderkvarnsgatan
+21:22 Vaksala torg
+21:22 Stadshuset
+21:26 Skolgatan
+21:28 Götgatan
+21:30 Ekonomikum
+21:31 Studentstaden
+21:33 Rickomberga
+21:34 Oslogatan
+21:36 Reykjaviksgatan
+21:36 Ekebyhus
+21:37 Sernanders väg
+21:38 Flogsta centrum
+21:39 Flogsta vårdcentral
+21:41 Ihres väg
+21:42 Noreens väg
+21:43 Säves väg
+
+21:34 Kungshögarna
+21:36 Regins väg
+21:38 Valhalls väg
+21:39 Huges väg
+21:40 Topeliusgatan
+21:42 Värnlundsgatan
+21:43 Ferlinsgatan
+21:44 Heidenstamstorg
+21:46 Kantorsgatan
+21:47 Djäknegatan
+21:48 Portalgatan
+21:49 Höganäsgatan
+21:50 Väderkvarnsgatan
+21:51 Vaksala torg
+21:51 Stadshuset
+21:55 Skolgatan
+21:57 Götgatan
+21:59 Ekonomikum
+22:00 Studentstaden
+22:02 Rickomberga
+22:03 Oslogatan
+22:05 Reykjaviksgatan
+22:05 Ekebyhus
+22:06 Sernanders väg
+22:07 Flogsta centrum
+22:08 Flogsta vårdcentral
+22:10 Ihres väg
+22:11 Noreens väg
+22:12 Säves väg
+
+21:40 Kungshögarna
+21:42 Regins väg
+21:44 Valhalls väg
+21:45 Huges väg
+21:46 Topeliusgatan
+21:48 Värnlundsgatan
+21:49 Ferlinsgatan
+21:50 Heidenstamstorg
+21:52 Kantorsgatan
+21:53 Djäknegatan
+21:54 Portalgatan
+21:55 Höganäsgatan
+21:56 Väderkvarnsgatan
+21:57 Vaksala torg
+21:57 Stadshuset
+22:01 Skolgatan
+22:03 Götgatan
+22:05 Ekonomikum
+22:06 Studentstaden
+22:08 Rickomberga
+22:09 Oslogatan
+22:11 Reykjaviksgatan
+22:11 Ekebyhus
+22:12 Sernanders väg
+22:13 Flogsta centrum
+22:14 Flogsta vårdcentral
+22:16 Ihres väg
+22:17 Noreens väg
+22:18 Säves väg
+
+22:05 Kungshögarna
+22:07 Regins väg
+22:09 Valhalls väg
+22:10 Huges väg
+22:11 Topeliusgatan
+22:13 Värnlundsgatan
+22:14 Ferlinsgatan
+22:15 Heidenstamstorg
+22:17 Kantorsgatan
+22:18 Djäknegatan
+22:19 Portalgatan
+22:20 Höganäsgatan
+22:21 Väderkvarnsgatan
+22:22 Vaksala torg
+22:22 Stadshuset
+22:26 Skolgatan
+22:28 Götgatan
+22:30 Ekonomikum
+22:31 Studentstaden
+22:33 Rickomberga
+22:34 Oslogatan
+22:36 Reykjaviksgatan
+22:36 Ekebyhus
+22:37 Sernanders väg
+22:38 Flogsta centrum
+22:39 Flogsta vårdcentral
+22:41 Ihres väg
+22:42 Noreens väg
+22:43 Säves väg
+
+22:12 Kungshögarna
+22:14 Regins väg
+22:16 Valhalls väg
+22:17 Huges väg
+22:18 Topeliusgatan
+22:20 Värnlundsgatan
+22:21 Ferlinsgatan
+22:22 Heidenstamstorg
+22:24 Kantorsgatan
+22:25 Djäknegatan
+22:26 Portalgatan
+22:27 Höganäsgatan
+22:28 Väderkvarnsgatan
+22:29 Vaksala torg
+22:29 Stadshuset
+22:33 Skolgatan
+22:35 Götgatan
+22:37 Ekonomikum
+22:38 Studentstaden
+22:40 Rickomberga
+22:41 Oslogatan
+22:43 Reykjaviksgatan
+22:43 Ekebyhus
+22:44 Sernanders väg
+22:45 Flogsta centrum
+22:46 Flogsta vårdcentral
+22:48 Ihres väg
+22:49 Noreens väg
+22:50 Säves väg
+
+22:18 Kungshögarna
+22:20 Regins väg
+22:22 Valhalls väg
+22:23 Huges väg
+22:24 Topeliusgatan
+22:26 Värnlundsgatan
+22:27 Ferlinsgatan
+22:28 Heidenstamstorg
+22:30 Kantorsgatan
+22:31 Djäknegatan
+22:32 Portalgatan
+22:33 Höganäsgatan
+22:34 Väderkvarnsgatan
+22:35 Vaksala torg
+22:35 Stadshuset
+22:39 Skolgatan
+22:41 Götgatan
+22:43 Ekonomikum
+22:44 Studentstaden
+22:46 Rickomberga
+22:47 Oslogatan
+22:49 Reykjaviksgatan
+22:49 Ekebyhus
+22:50 Sernanders väg
+22:51 Flogsta centrum
+22:52 Flogsta vårdcentral
+22:54 Ihres väg
+22:55 Noreens väg
+22:56 Säves väg
+
+22:44 Kungshögarna
+22:46 Regins väg
+22:48 Valhalls väg
+22:49 Huges väg
+22:50 Topeliusgatan
+22:52 Värnlundsgatan
+22:53 Ferlinsgatan
+22:54 Heidenstamstorg
+22:56 Kantorsgatan
+22:57 Djäknegatan
+22:58 Portalgatan
+22:59 Höganäsgatan
+23:00 Väderkvarnsgatan
+23:01 Vaksala torg
+23:01 Stadshuset
+23:05 Skolgatan
+23:07 Götgatan
+23:09 Ekonomikum
+23:10 Studentstaden
+23:12 Rickomberga
+23:13 Oslogatan
+23:15 Reykjaviksgatan
+23:15 Ekebyhus
+23:16 Sernanders väg
+23:17 Flogsta centrum
+23:18 Flogsta vårdcentral
+23:20 Ihres väg
+23:21 Noreens väg
+23:22 Säves väg

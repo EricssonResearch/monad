@@ -31,8 +31,9 @@ public class ForgotPasswordPopup extends AppCompatActivity {
         getWindowManager().getDefaultDisplay().getMetrics(dm);
         int width = dm.widthPixels;
         int height = dm.heightPixels;
-        getWindow().setLayout((int) (width*.94),(int) (height*.25));
+        getWindow().setLayout((int) (width*.94),(int) (height*.30));
 
+        //// TODO Huijie: send code to the user's email
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

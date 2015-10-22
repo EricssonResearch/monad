@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="se.uu.csproject.monadclient.LoginActivity">
+    tools:context="se.uu.csproject.monadclient.SearchActivity">
 
     <include
         android:id="@+id/actionToolBar"
@@ -45,7 +45,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="0"
                 android:background="@color/primaryColor"
-                android:contentDescription="@string/label_search_imagedescription"
+                android:contentDescription="@string/img_description"
                 android:src="@drawable/ic_location_on_white_48dp"/>
 
         </LinearLayout>
@@ -78,7 +78,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="0"
                 android:background="@color/primaryColor"
-                android:contentDescription="@string/label_search_imagedescription"
+                android:contentDescription="@string/img_description"
                 android:src="@drawable/ic_location_on_white_48dp"/>
 
         </LinearLayout>
@@ -115,22 +115,27 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:id="@+id/textview_search_tripdatetime"
-                android:text="@string/label_search_triptimedate"
+                android:id="@+id/textview_search_tripdate"
+                android:text="@string/non_available"
                 android:padding="@dimen/medium_padding"
                 style="@style/Widget.AppCompat.EditText"
                 android:textColor="@color/black"
-                android:gravity="center_horizontal"/>
+                android:gravity="center_horizontal"
+                android:clickable="true"
+                />
 
-            <EditText
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:id="@+id/textview_search_triptimehour"
-                android:text="@string/label_search_triptimehour"
+                android:id="@+id/textview_search_triptime"
+                android:text="@string/non_available"
+                android:padding="@dimen/medium_padding"
+                style="@style/Widget.AppCompat.EditText"
                 android:textColor="@color/black"
                 android:gravity="center_horizontal"
-                android:padding="@dimen/medium_padding"/>
+                android:clickable="true"
+                />
 
         </LinearLayout>
 

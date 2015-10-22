@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -145,15 +146,11 @@ public class SettingsActivity extends AppCompatActivity {
             page = getArguments().getInt(TAB_POSITION);
         }
 
+        //TODO 2 Ilyass: save settings changes in their respective fragments
+        //// TODO: update changes in the database
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
             View layout;
-            final Switch switchrecommendation;
-            final Switch switchalert;
-            final RadioGroup radiogroup_themes;
-            final RadioButton radiobutton_defaulttheme;
-            final RadioButton radiobutton_lighttheme;
-            final RadioButton radiobutton_darktheme;
 
             if(page == 1){
                 layout = inflater.inflate(R.layout.fragment_settings_language,container,false);
@@ -164,24 +161,30 @@ public class SettingsActivity extends AppCompatActivity {
                 initializeLanguages(languages);
                 LanguageRecyclerViewAdapter adapter = new LanguageRecyclerViewAdapter(languages);
                 recyclerView.setAdapter(adapter);
+                recyclerView.setItemAnimator(new DefaultItemAnimator());
             }
             else if(page == 2){
                 layout = inflater.inflate(R.layout.fragment_settings_alerts,container,false);
-                //TextView textView = (TextView) layout.findViewById(R.id.alerttxt);
+                final Switch switchrecommendation;
+                final Switch switchalert;
+                final TextView recommendationsSwitch = (TextView) layout.findViewById(R.id.label_recommendationsswitch);
+                final TextView remindersSwitch= (TextView) layout.findViewById(R.id.label_remindersswitch);
 
                 // switch button for alerts and recommendations
                 switchrecommendation = (Switch)layout.findViewById(R.id.switch_fragmentsettingsalert_recommendations);
                 switchalert = (Switch)layout.findViewById(R.id.switch_fragmentsettingsalert_alerts);
                 switchrecommendation.setChecked(true);
-                switchalert.setChecked(false);
+                switchalert.setChecked(true);
 
                 switchrecommendation.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                     @Override
                     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-
-                        if(switchrecommendation.isChecked()){
-                            //do something
-                            switchrecommendation.setChecked(false);
+                        if(switchrecommendation.isChecked()) {
+                            // The space after ON should be kept for UI formatting purposes
+                            recommendationsSwitch.setText("ON ");
+                        }
+                        else {
+                            recommendationsSwitch.setText("OFF");
                         }
                     }
                 });
@@ -189,17 +192,22 @@ public class SettingsActivity extends AppCompatActivity {
                 switchalert.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                     @Override
                     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-
                         if(switchalert.isChecked()){
-                            //do something
-                            switchalert.setChecked(true);
+                            // The space after ON should be kept for UI formatting purposes
+                            remindersSwitch.setText("ON ");
+                        }
+                        else {
+                            remindersSwitch.setText("OFF");
                         }
                     }
                 });
             }
             else if(page == 3){
                 layout = inflater.inflate(R.layout.fragment_settings_theme,container,false);
-                //TextView textView = (TextView) layout.findViewById(R.id.themetxt);
+                final RadioGroup radiogroup_themes;
+                final RadioButton radiobutton_defaulttheme;
+                final RadioButton radiobutton_lighttheme;
+                final RadioButton radiobutton_darktheme;
 
                 //different themes
                 //radiogroup_themes  = (RadioGroup)layout.findViewById(R.id.radiogroup_fragmentsettingstheme_theme);

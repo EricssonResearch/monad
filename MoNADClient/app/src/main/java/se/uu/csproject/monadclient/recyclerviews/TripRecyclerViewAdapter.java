@@ -1,11 +1,13 @@
 package se.uu.csproject.monadclient.recyclerviews;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.CountDownTimer;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
@@ -14,12 +16,18 @@ import java.text.DecimalFormat;
 import java.util.List;
 
 import se.uu.csproject.monadclient.R;
+import se.uu.csproject.monadclient.RouteActivity;
 
 import static java.lang.Math.floor;
 
-public class TripRecyclerViewAdapter extends RecyclerView.Adapter<TripRecyclerViewAdapter.TripViewHolder>{
+public class TripRecyclerViewAdapter
+        extends RecyclerView.Adapter<TripRecyclerViewAdapter.TripViewHolder>{
 
-    public static class TripViewHolder extends RecyclerView.ViewHolder {
+    List<Trip> trips;
+    int selectedTripPosition;
+
+    public class TripViewHolder extends RecyclerView.ViewHolder
+        implements View.OnClickListener{
 
         TextView origin;
         TextView destination;
@@ -29,7 +37,7 @@ public class TripRecyclerViewAdapter extends RecyclerView.Adapter<TripRecyclerVi
         TextView date;
         RatingBar feedback; // past trips only
         ImageView clockIcon;
-
+        ImageButton routeInfoButton;
 
         TripViewHolder(View itemView) {
             super(itemView);
@@ -41,6 +49,12 @@ public class TripRecyclerViewAdapter extends RecyclerView.Adapter<TripRecyclerVi
             date = (TextView) itemView.findViewById(R.id.label_date);
             feedback = (RatingBar) itemView.findViewById(R.id.ratingbar);
             clockIcon = (ImageView) itemView.findViewById(R.id.icon_clock);
+            routeInfoButton = (ImageButton) itemView.findViewById(R.id.button_routeinfo);
+        }
+
+        @Override
+        public void onClick(View v) {
+            selectedTripPosition = getAdapterPosition();
         }
     }
 
@@ -53,8 +67,6 @@ public class TripRecyclerViewAdapter extends RecyclerView.Adapter<TripRecyclerVi
             return 0;
         }
     }
-
-    List<Trip> trips;
 
     public TripRecyclerViewAdapter(List<Trip> trips){
         this.trips = trips;
@@ -89,10 +101,10 @@ public class TripRecyclerViewAdapter extends RecyclerView.Adapter<TripRecyclerVi
             final int MILLISECONDS = 1000;
 
             tripViewHolder.countdownTime.setText(formatCoundownText(MILLISECONDS_TO_DEPARTURE));
-            // TODO: derive date from the attribute "startTime" in object Trip
+            // TODO: derive date from the attribute "startTime" in object Trip, format: "EEE dd MMM."
             tripViewHolder.date.setText("TODAY");
 
-            //TODO: change parseColor() calls into theme colors
+            //TODO (low priority): change parseColor() calls into theme colors
             CountDownTimer timer = new CountDownTimer(MILLISECONDS_TO_DEPARTURE, MILLISECONDS) {
                 @Override
                 public void onTick(long millisUntilFinished) {
