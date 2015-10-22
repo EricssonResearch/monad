@@ -18,6 +18,11 @@ from dbConnection import DB
 from operator import itemgetter
 from datetime import datetime, timedelta
 from operator import itemgetter
+import bson
+from bson import loads
+
+from bson import json_util
+import json
 
 
 
@@ -51,7 +56,34 @@ class Fitness():
         return datetime.strptime(time1, Fitness.formatString) - datetime.strptime(time2, Fitness.formatString)
 
     def evalIndividual(self, individual):
-        print(sorted(individual, key = itemgetter(2)))
+        #print(sorted(individual, key = itemgetter(2)))
+
+        dataFile = open("data.bson", "w")
+
+        databaseClass = DB()
+        cursor = databaseClass.db.TravelRequest.find({}, {'_id': False})
+
+        for document in cursor:
+
+            json.dump(document, dataFile, default=json_util.default)
+
+            dataFile.write(",\n")
+
+        dataFile.close()
+
+
+        with open('data.json') as x:
+            b = bson.loads(x.read())
+
+
+        print(b)
+
+
+
+
+
+
+
 
 
 
