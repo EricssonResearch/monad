@@ -1,15 +1,20 @@
 package se.uu.csproject.monadclient.recyclerviews;
 
+import android.content.Intent;
+import android.media.Image;
+import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.List;
 
 import se.uu.csproject.monadclient.R;
+import se.uu.csproject.monadclient.RouteActivity;
 
 public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<SearchRecyclerViewAdapter.SearchViewHolder>{
 
@@ -18,12 +23,14 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<SearchRecycl
         TextView timeInfo;
         TextView routeInfo;
         ImageView hurryAlertIcon;
+        ImageButton tripInfoButton;
 
         SearchViewHolder(View itemView) {
             super(itemView);
             timeInfo = (TextView) itemView.findViewById(R.id.label_timeinfo);
             routeInfo = (TextView) itemView.findViewById(R.id.label_routeinfo);
             hurryAlertIcon = (ImageView) itemView.findViewById(R.id.icon_hurry);
+            tripInfoButton = (ImageButton) itemView.findViewById(R.id.button_tripdetails);
         }
     }
 
@@ -46,7 +53,7 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<SearchRecycl
     }
 
     @Override
-    public void onBindViewHolder(SearchViewHolder searchViewHolder, int i) {
+    public void onBindViewHolder(final SearchViewHolder searchViewHolder, final int i) {
         String timeInfo = searchResults.get(i).startTime + " - " + searchResults.get(i).endTime
                 + " (" + searchResults.get(i).durationMinutes + "min)";
         String routeInfo = searchResults.get(i).startPosition + " to " + searchResults.get(i).endPosition;
@@ -56,6 +63,18 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<SearchRecycl
         if(searchResults.get(i).isCurrent()){
             searchViewHolder.hurryAlertIcon.setVisibility(View.VISIBLE);
         }
+
+        searchViewHolder.tripInfoButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(searchViewHolder.itemView.getContext(), RouteActivity.class);
+                Bundle bundle = new Bundle();
+                //TODO: replace bundle content with departure/ arrival names/times etc
+                bundle.putInt("element", i);
+                intent.putExtras(bundle);
+                searchViewHolder.itemView.getContext().startActivity(intent);
+            }
+        });
     }
 
     @Override
