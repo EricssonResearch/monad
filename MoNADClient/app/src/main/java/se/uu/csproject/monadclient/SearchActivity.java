@@ -240,8 +240,6 @@ public class SearchActivity extends AppCompatActivity {
     }
 
     public void sendTravelRequest (View v) {
-        //// TODO Stavros: retrieve various fields from the UI and send them to SendTravelRequest
-
         String stPosition, edPosition, userId, startTime, endTime, requestTime, priority;
         int selectedId, currentYear;
 
