@@ -15,6 +15,7 @@
 
 import pymongo
 import datetime
+import random
 
 from pymongo import MongoClient
 
@@ -24,6 +25,16 @@ RT_ARRIVAL_TIME = 1
 RT_DEPARTURE_TIME = 2
 RT_TIME_DIFFERENCE = 1
 RT_ARRIVAL_TIME = 3
+
+class RouteAdministrator:
+
+    def __init__(self):
+        pass
+
+    def getBusStop(self, Latitude, Longitude):
+        availableStops = ["Flogsta Centrum", "Sernanders vag", "Ekeby hus", "Oslogatan", 
+                          "Studentstaden", "Ekonomikum", "Gotgatan", "Skolgatan"]
+        return random.choice(availableStops)
 
 class Mode:
     tripTime = 1
@@ -36,18 +47,11 @@ class TravelPlanner:
     def __init__(self):
         self.client = MongoClient()
         self.db = self.client.monad
-        self.busStops = []
-        self.busStopIDs = []
         self.fittingRoutes = []
         self.startingWaypoint = []
         self.endingWaypoint = []
         self.routeList = []
         self.counter = 0
-
-        cursor = self.db.BusStopLocation.find({"Available": 1})
-        for stop in cursor:
-            self.busStops.append([stop["Longitude"], stop["Latitude"]])
-            self.busStopIDs.append(stop["_id"])
 
 
     def _startpointFits(self, dptTime):
@@ -68,31 +72,37 @@ class TravelPlanner:
 
     def _findFittingRoutes(self):
         request = self.db.TravelRequest.find_one({"_id": self.requestID})
-        self.startPosition = request["StartPosition"]
-        self.endPosition   = request["EndPosition"]
-        self.startID = self.busStopIDs[self.busStops.index(self.startPosition)]
-        self.endID   = self.busStopIDs[self.busStops.index(self.endPosition)]
-        if (request["StartTime"] == ""):
+        self.startPositionLat = request["startPositionLatitude"]
+        self.startPositionLon = request["startPositionLongitude"]
+        self.endPositionLat   = request["endPositionLatitude"]
+        self.endPositionLon   = request["endPositionLongitude"]
+
+        #TODO: Use real RouteAdministrator
+        ra = RouteAdministrator()
+        self.startBusStop = ra.getBusStop(self.startPositionLat, startPositionLon)
+        self.endBusStop   = ra.getBusStop(self.endPositionLat, endPositionLon)
+
+        if (request["startTime"] == "null"):
             self.startTime = 0
             self.endTime   = request["EndTime"]
             self.timeMode  = Mode.arrivalTime
-        else:
+        elif (request["endTime"] == "null"):
             self.startTime = request["StartTime"]
             self.endTime   = 0
             self.timeMode  = Mode.startTime
+        else:
+            return
 
-        cursor = self.db.TimeTable.find({"Waypoints.BusStopID": self.endID, 
-                "StartBusstop": {"$ne": self.endPosition}})
+        cursor = self.db.Route.find({"stop.name": self.startBusStop, "stop.name": self.endBusStop})
         for route in cursor:
             self.fits = False
-            for i in range(len(route["Waypoints"])):
-                if (route["Waypoints"][i]["BusStopID"] == self.startID):
-                    if (self._startpointFits(route["Waypoints"][i]["DptTime"])):
-                        self.startingWaypoint.append(i)
-                        self.fittingRoutes.append(route)
-                        self.fits = True
-                elif (route["Waypoints"][i]["BusStopID"] == self.endID):
-                    if (self._endpointFits(route["Waypoints"][i]["DptTime"])):
+            for i in range(len(route["stop"])):
+                if (route["stop"][i]["name"] == self.startBusStop):
+                    self.startingWaypoint.append(i)
+                    self.fittingRoutes.append(route)
+                    self.fits = True
+                elif (route["stop"][i]["name"] == self.endBusStop):
+                    if (self.fits):
                         self.endingWaypoint.append(i)
                     break
 
