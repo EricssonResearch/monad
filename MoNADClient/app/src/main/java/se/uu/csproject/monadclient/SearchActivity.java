@@ -242,19 +242,21 @@ public class SearchActivity extends AppCompatActivity {
     public void sendTravelRequest (View v) {
         //// TODO Stavros: retrieve various fields from the UI and send them to SendTravelRequest
 
-        String stPosition, edPosition, userId, startTime, endTime, requestTime;
+        String stPosition, edPosition, userId, startTime, endTime, requestTime, priority;
         int selectedId, currentYear;
 
         Date now = new Date();
         Calendar rightNow = Calendar.getInstance();
         currentYear = rightNow.get(Calendar.YEAR);
-        SimpleDateFormat df = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+        SimpleDateFormat df = new SimpleDateFormat("yyyy EEE dd MMM HH:mm");
         startTime = "null";
         endTime = "null";
+        priority = "";
         requestTime = df.format(now);
         userId = ClientAuthentication.getClientId();
         stPosition = positionEditText.getText().toString();
         edPosition = destinationEditText.getText().toString();
+
         selectedId = tripTimeRadioGroup.getCheckedRadioButtonId();
 
         switch(selectedId){
@@ -269,7 +271,19 @@ public class SearchActivity extends AppCompatActivity {
                 break;
         }
 
-        new SendTravelRequest().execute(userId, startTime, endTime, requestTime, stPosition, edPosition);
+        selectedId = priorityRadioGroup.getCheckedRadioButtonId();
+
+        switch(selectedId){
+            case R.id.radiobutton_search_prioritytripdistance:
+                priority = "distance";
+                break;
+
+            case R.id.radiobutton_search_prioritytriptime:
+                priority = "time";
+                break;
+        }
+
+        new SendTravelRequest().execute(userId, startTime, endTime, requestTime, stPosition, edPosition, priority);
     }
 
     //TEMPORARY FUNCTION TODO: Remove this function once the database connection is set

@@ -73,12 +73,13 @@ class DB():
         return req
 
     def getTravelRequestSummary(self, start, end):
-        keyf = "function(doc) { return { startBusStop: doc.StartBusStop, hour: doc.StartTime.getHours(), minute: doc.StartTime.getMinutes() }; }"
-        condition = {"StartTime": {"$gte": start, "$lt": end}}
+        keyf = "function(doc) { return { startBusStop: doc.startBusStop, hour: doc.startTime.getHours(), minute: doc.startTime.getMinutes()};}"
+        condition = {"startTime": {"$gte": start, "$lt": end}}
         initial = {"count": 0}
         reduce = "function(curr, result) { result.count++; }"
-        req = self.db.TravelRequest.group(keyf, condition, initial, reduce)
-        req = sorted(req, key=itemgetter("hour","minute","startBusStop"))
+        # req = self.db.TravelRequest.group(keyf, condition, initial, reduce)
+        req = self.db.TravelRequestLookAhead.group(keyf, condition, initial, reduce)
+        req = sorted(req, key=itemgetter("hour","minute"))
         return req
 
     # These function will be called for every gene in order to get the difference
