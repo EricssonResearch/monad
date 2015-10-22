@@ -31,6 +31,7 @@ def main():
     # Generate the population
     pop = toolBox.toolbox.population(n=POPULATION_SIZE)
 
+    evalIndividualCapacity(pop[0])
     hof = tools.HallOfFame(1)
 
     stats = tools.Statistics(lambda ind: ind.fitness.values)

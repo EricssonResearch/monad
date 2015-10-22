@@ -261,7 +261,7 @@ class DB():
         @return: total number of requests.
         '''
         reqs = []
-        requests = self.db.TravelRequest.find()
+        requests = self.db.TravelRequestLookAhead.find()  # New collection for LookAhead
         for req in requests:
-            reqs.append(req)
+            reqs.append(req.get('startTime', None))
         return reqs
