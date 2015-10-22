@@ -1,3 +1,16 @@
+#!/usr/bin/python
+"""
+Copyright 2015 Ericsson AB
+Licensed under the Apache License, Version 2.0 (the "License"); you may not use
+this file except in compliance with the License. You may obtain a copy of the
+License at
+    http://www.apache.org/licenses/LICENSE-2.0
+Unless required by applicable law or agreed to in writing, software distributed
+under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
+CONDITIONS OF ANY KIND, either express or implied. See the License for the
+specific language governing permissions and limitations under the License.
+"""
+
 import numpy
 import math
 import datetime
@@ -6,6 +19,7 @@ from pymongo import MongoClient
 from pyspark.mllib.clustering import KMeans, KMeansModel
 from numpy import array
 from math import sqrt
+from geopy.distance import vincenty
 
 NUM_OF_IT = 8
 MIN_LATITUDE = 59.78
@@ -27,6 +41,12 @@ userId = 123
 client = MongoClient()
 db = client.monad
 
+def timeApproximation(lat1, lon1, lat2, lon2):
+    point1 = (lat1, lon1)
+    point2 = (lat2, lon2)
+    distance = vincenty(point1, point2).kilometers
+    return int(round(distance / 10 * 60))
+
 def dataBaseConnection():
     # TODO Connect MongoDB with Spark, so we can directly distribute the data
     # we retrieved from Mongo in a RDD
@@ -38,12 +58,25 @@ def dataBaseConnection():
 def populateFromDatabase(TravelRequest, TimeTable):
     results = TravelRequest.find()
     for res in results:
-        #if res['start_time'] == "":
-            #res['start_time'] = datetime.datetime.utcnow()
-            #st_weight = 0
-        users.append((res['start_position_lat'], res['start_position_lon'],
-        res['end_position_lat'], res['end_position_lon'],
-        (res['start_time']).time(), (res['end_time']).time()))
+        dist = timeApproximation(res['start_position_lat'],
+                                 res['start_position_lon'],
+                                 res['end_position_lat'],
+                                 res['end_position_lon'])
+        if res['start_time'] == "":
+            users.append((res['start_position_lat'], res['start_position_lon'],
+            res['end_position_lat'], res['end_position_lon'],
+            (res['end_time'] - datetime.timedelta(minutes = dist)).time(),
+            (res['end_time']).time()))
+        elif res['end_time' ] == "":
+            users.append((res['start_position_lat'], res['start_position_lon'],
+            res['end_position_lat'], res['end_position_lon'],
+            (res['start_time']).time(),
+            (res['start_time'] + datetime.timedelta(minutes = dist)).time()))
+        else:
+            users.append((res['start_position_lat'], res['start_position_lon'],
+            res['end_position_lat'], res['end_position_lon'],
+            (res['start_time']).time(),
+            (res['end_time']).time()))
     route = TimeTable.find()
     for res in route:
         for i in range(len(res['Waypoints']) - 1):
@@ -147,6 +180,7 @@ def recommendationsToDB(alist):
     return rec_list
 
 def insertToDB(user, recs):
+    db.TravelRecommendation.delete_many({"userId": user})
     new_record = {
         "userId" : user,
         "recommendations": recs

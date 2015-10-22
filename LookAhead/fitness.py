@@ -158,50 +158,47 @@ class Fitness():
         # return 1, #TODO
 
 
-
 # incorporating capacity/no of requests into the fitness function
-
 def evalIndividualCapacity(individual):
-    # TODO: pass individual to be evaluated as a paramete
     ''' Evaluates an individual based on the capacity/bus type chosen for each trip.
 
     @param: individual - a possible timetable for a bus line, covering the whole day.
     @return: a fitness score assigned in accordance with how close the requested
     capacity is to the availed capacity on the individual
     '''
+    individual.sort(key = itemgetter(2))
+
     db = DB()
-    requests = sorted(db.getRequestsFromDB())
-    print (requests[0])
-    #requests = ['10:28', '10:35', '10:45', '10:51', '10:55', '11:05']
+    requests = db.getRequestsFromDB()
+    requests[:] = [request.time() for request in requests if request is not None]
     fitnessVal = 0 # assumed initial fitness value TODO: put as class variable
-    for trip in range(len(individual)):
+
+    for trip, item in enumerate(individual):
         nrReqs = []
         if trip == 0:
-            start = datetime.strptime('00:00', '%H:%M')
-            end   = datetime.strptime(individual[0][2], '%H:%M')
-            nrReqs = [i for i in requests if (datetime.strptime(i, '%H:%M')) >= start and
-                    datetime.strptime(i, '%H:%M') < end]
+            start = datetime.strptime('00:00', '%H:%M').time()
+            end   = datetime.strptime(individual[0][2], '%H:%M').time()
+            nrReqs = [i for i in requests if i > start and i <= end]
 
-            # Assign fitness value
-            if len(nrReqs) == individual[0][1]:
+            # Assign fitness values
+            if len(nrReqs) == individual[trip][1]:
                 fitnessVal += 0
-            elif len(nrReqs) < individual[0][1]:
+            elif len(nrReqs) < individual[trip][1]:
                 fitnessVal += 1
             else:
-                fitnessVal += 1000
+                fitnessVal += 1000000
         else:
-            start = datetime.strptime(individual[trip-1][2], '%H:%M')
-            end   = datetime.strptime(individual[trip][2], '%H:%M')
-            nrReqs = [i for i in requests if (datetime.strptime(i, '%H:%M')) >= start and
-                    datetime.strptime(i, '%H:%M') < end]
+            start = datetime.strptime(individual[trip-1][2], '%H:%M').time()
+            end   = datetime.strptime(individual[trip][2], '%H:%M').time()
+            nrReqs = [i for i in requests if i > start and i <= end]
 
-            # Assign fitness value
-            if len(nrReqs) == individual[0][1]:
+            # Assign fitness values
+            if len(nrReqs) == individual[trip][1]:
                 fitnessVal += 0
-            elif len(nrReqs) < individual[0][1]:
+            elif len(nrReqs) < individual[trip][1]:
                 fitnessVal += 1
             else:
-                fitnessVal += 1000
+                fitnessVal += 1000000
 
     return fitnessVal
 

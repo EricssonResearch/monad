@@ -32,6 +32,7 @@ class FitnessTests(unittest.TestCase):
     ''' Class for testing the fitness class using unittest.
 
     '''
+
     # Tests for timeDiff function
     def testTimeDiffPos(self):
         fit = Fitness()
@@ -101,11 +102,42 @@ class FitnessTests(unittest.TestCase):
         self.assertLess(1, 2)
 
     def testEvalIndividualCapacity(self):
-        # TODO
+        ''' test to check that no individual is assigned a fitness value less than 0
+        '''
         pop = toolBox.toolbox.population(n=2)
 
-        #self.assertFalse(evalIndividualCapacity(pop[0] < 0))
-        self.assertFalse(False)
+        self.assertFalse(evalIndividualCapacity(pop[0]) < 0)
+
+    def testEvalIndividualCapacityNotZero(self):
+        ''' test that no one's perfect
+        '''
+        pop = toolBox.toolbox.population(n=2)
+
+        self.assertGreater(evalIndividualCapacity(pop[0]), 0)
+
+    def testEvalIndividualCapacityZeroCapacity(self):
+        ''' test worst case scenario - individual with zero capacity has the worst fitness
+        '''
+        pop = toolBox.toolbox.population(n=2)
+        ind1 = pop[0]
+        ind2 = pop[1]
+        
+        for i, item in enumerate(ind1):
+            ind1[i][1] = 0
+
+        self.assertGreater(evalIndividualCapacity(ind1), evalIndividualCapacity(ind2))
+
+    def testEvalIndividualCapacitySufficient(self):
+        ''' test on individual that offers more than enough capacity to handle all requests
+        '''
+        pop = toolBox.toolbox.population(n=2)
+        ind1 = pop[0]
+        ind2 = pop[1]
+        
+        for i, item in enumerate(ind1):
+            ind1[i][1] = 120
+
+        self.assertGreater(evalIndividualCapacity(ind2), evalIndividualCapacity(ind1))
 
 
 if __name__ == '__main__':
