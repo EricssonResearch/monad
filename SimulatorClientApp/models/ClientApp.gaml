@@ -46,18 +46,29 @@ species client skills: [SQLSKILL] {
 	int edposition_rnd <- rnd(street_amount) update: rnd(street_amount);
 	string start_position <- string(position_mx [1, stposition_rnd]) update: string(position_mx [1, stposition_rnd]);
 	string end_position <- string(position_mx [1, edposition_rnd]) update: string(position_mx [1, edposition_rnd]);
-	string user_feedback;
 	
 	int user_name <- rnd(500000) update: rnd(500000);
 	float current_time <- machine_time update: machine_time;
 	string cur_time_str <- (current_time/1000) as_date "%Y y %M m %D d %h h %m m %s seconds" update: (current_time/1000) as_date "%Y y %M m %D d %h h %m m %s seconds"; 
-	int cts_length <- length(cur_time_str) update: length(cur_time_str);
 
-	int time_interval <- rnd(10800000) update: rnd(10800000);
-	float st_time <- machine_time + time_interval update: machine_time + time_interval;
-	string start_time_str <- (st_time/1000) as_date "%Y y %M m %D d %h h %m m %s seconds" update: (st_time/1000) as_date "%Y y %M m %D d %h h %m m %s seconds"; 
-	int sts_length <- length(start_time_str) update: length(start_time_str);
+	/*
+	Define variables for caculating rush time.
+	Assume client alwasy send request for tomorrow's travel.
+	We follow UL's rush hour, it's 6-9 in morning(peak at 7:30) and 3-6 in afternoon(peak at 16:30)
+	Using Gauss distribution to simulate rush time.
+	We random pick one from morning and afternoon
+	*/	
+	float tom_start_time;
+	float today_cur_sec;
+	float rush_time;
+	int mor_aft_rnd <- rnd(1) update: rnd(1);
+	float a_day_in_ms <- (24.0 * 60 * 60 * 1000);
+	float mor_rush <- (7.5 * 60 * 60 * 1000);
+	float aft_rush <- (16.5 * 60 * 60 * 1000);
 	
+	//Define variable to form request time and start time
+	float st_time;
+	string start_time_str; 			
 	string year;
 	string month;
 	string day;
@@ -127,6 +138,20 @@ species client skills: [SQLSKILL] {
 			second <- '0' + string(int(second));
 		}	
 				
+		//Using Gauss distribution to simulate rush time for start time , either in moring or in afternoon
+		//Calculate Tomorrow's start time 00:00
+		today_cur_sec <- float(hour) * 60 * 60 + float(minute) * 60 + float(second);
+		tom_start_time <- current_time - today_cur_sec * 1000 + a_day_in_ms;
+		
+		if mor_aft_rnd = 0 {
+			rush_time <- tom_start_time + mor_rush;
+		} else if mor_aft_rnd = 1{
+			rush_time <- tom_start_time + aft_rush;
+		}
+			
+		st_time <- gauss (rush_time, 5000000);
+		start_time_str <- (st_time/1000) as_date "%Y y %M m %D d %h h %m m %s seconds";
+						
 		//Form start time
 		st_y_index <- start_time_str index_of "y";
 		st_year <- start_time_str at (st_y_index-3) + start_time_str at (st_y_index-2); 
@@ -164,6 +189,7 @@ species client skills: [SQLSKILL] {
 
 		request_time <- string(1970 + int(year) - 1)  + "-" + month + "-" + day + "," + hour + ":" + minute + ":" + second;
 		start_time <- string(1970 + int(st_year) - 1)  + "-" + st_month + "-" + st_day + "," + st_hour + ":" + st_minute + ":" + st_second;
+		write start_time;
 		save ["username = " + user_name + "; RequestTime = " + request_time + "; StartTime = " + start_time + "; StartPosition = " + start_position + "; EndPosition = " + end_position] 
 		     to: "ClientRequest" type:text;
 

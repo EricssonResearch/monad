@@ -72,6 +72,15 @@ class DB():
         req = self.db.TravelRequest.find({ "StartTime": {"$gte": start, "$lt": end}})
         return req
 
+    def getTravelRequestSummary(self, start, end):
+        keyf = "function(doc) { return { startBusStop: doc.StartBusStop, hour: doc.StartTime.getHours(), minute: doc.StartTime.getMinutes() }; }"
+        condition = {"StartTime": {"$gte": start, "$lt": end}}
+        initial = {"count": 0}
+        reduce = "function(curr, result) { result.count++; }"
+        req = self.db.TravelRequest.group(keyf, condition, initial, reduce)
+        req = sorted(req, key=itemgetter("hour","minute","startBusStop"))
+        return req
+
     # These function will be called for every gene in order to get the difference
     # def getTravelRequestBetween(self, start, end):
     #    for doc in self.db.TravelRequest.find({'time': {'$gte': start, '$lt': end}}):
@@ -241,3 +250,18 @@ class DB():
             timeTable.append({"capacity": document[i][1],"trip": trip})
         # print timeTable
         self.db.timeTable.insert_one({"line": document[0][0], "date": str(now.strftime("%Y-%m-%d")), "timetable": timeTable})
+
+
+    def getRequestsFromDB(self):
+        ''' Gets travel requests from the database. Attempts to cluster the requests based on time 
+        and calculates a count of the total requests between a time window.
+
+        @param: start - lower time bound
+        @param: end - upper time bound
+        @return: total number of requests.
+        '''
+        reqs = []
+        requests = self.db.TravelRequest.find()
+        for req in requests:
+            reqs.append(req)
+        return reqs

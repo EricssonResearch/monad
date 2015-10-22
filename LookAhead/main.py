@@ -17,6 +17,8 @@ import numpy
 from dbConnection import DB
 import toolBox
 
+from fitness import evalIndividualCapacity
+
 # Variables
 MUTATION_PROB = 0.5
 CROSS_OVER_PROB = 0.5

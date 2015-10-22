@@ -2,7 +2,6 @@ package se.uu.csproject.monadclient;
 
 
 import android.os.AsyncTask;
-
 import android.util.Log;
 
 import com.google.common.base.Charsets;
@@ -13,17 +12,16 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.io.DataOutputStream;
 
 
-
 public class SendTravelRequest extends AsyncTask<String, Void, String> {
-    private static String SERVER;
-    private static boolean sendOutSuccessful =false;
+    private static String SERVER = "http://130.238.15.114";
 
-    /* Post the request and get the response from the server */
+    /* Send the data to the server via POST and receive the response */
     public static String postRequest(String request, String urlParameters) {
         String response = "";
 
@@ -32,8 +30,8 @@ public class SendTravelRequest extends AsyncTask<String, Void, String> {
             byte[] postData = urlParameters.getBytes(Charsets.UTF_8);
             int postDataLength = postData.length;
 
-            // Setup connection
-            HttpURLConnection conn= (HttpURLConnection) url.openConnection();
+            // Setup connection to the server
+            HttpURLConnection conn = (HttpURLConnection)url.openConnection();
             conn.setDoOutput(true);
             conn.setInstanceFollowRedirects(false);
             conn.setRequestMethod("POST");
@@ -42,79 +40,64 @@ public class SendTravelRequest extends AsyncTask<String, Void, String> {
             conn.setRequestProperty("Content-Length", Integer.toString(postDataLength));
             conn.setUseCaches(false);
 
-
-            // Post request data
+            // Send the data
             DataOutputStream outputStream = new DataOutputStream(conn.getOutputStream());
             outputStream.write(postData);
 
-            // Show response from the server
-            if (conn.getResponseCode() != 200) {
-                throw new RuntimeException("Failed : HTTP error code : "
-                        + conn.getResponseCode());
+            // Get the response from the server
+            int responseCode = conn.getResponseCode();
+            if (responseCode != 200 && responseCode != 500 && responseCode != 403) {
+                throw new RuntimeException("Something went wrong - HTTP error code: " + responseCode);
             }
-            BufferedReader br = new BufferedReader(new InputStreamReader(
-                    (conn.getInputStream())));
-
+            BufferedReader br = new BufferedReader(new InputStreamReader((conn.getInputStream())));
             String line;
-
             while ((line = br.readLine()) != null) {
                 response = response + "\n" + line;
             }
 
-            sendOutSuccessful = true;
+            // Close the connection
             conn.disconnect();
 
         } catch (MalformedURLException e) {
-            e.printStackTrace();
+            return ("MalformedURLException: " + e.toString());
 
         } catch (IOException e) {
-            e.printStackTrace();
+            return ("IOException: " + e.toString());
 
         } catch (RuntimeException e) {
-            e.printStackTrace();
+            return (e.toString());
         }
+
         return response;
     }
 
     /* Get the data from the interface and wrap them in a request */
-    public static String wrapRequest(String username, Date startTime, Date endTime,
-                                   Date requestTime, String stPosition, String edPosition) {
-        SERVER = "http://130.238.15.114";
+    public static String wrapRequest(String userId, String startTime, String endTime,
+                                   String requestTime, String stPosition, String edPosition) {
         String request = SERVER + "/request";
-        SimpleDateFormat dateFormatter = new SimpleDateFormat("E yyyy.MM.dd 'at' hh:mm:ss");
-        String urlParameters = "username=" + username + "&startTime=" + dateFormatter.format(startTime)
-                + "&endTime=" + dateFormatter.format(endTime) + "&requestTime=" + dateFormatter.format(requestTime)
+
+        String urlParameters = "userId=" + userId + "&startTime=" + startTime
+                + "&endTime=" + endTime + "&requestTime=" + requestTime
                 + "&stPosition=" + stPosition + "&edPosition=" + edPosition;
         String response = postRequest(request, urlParameters);
 
-        // record the response from the server
-        Log.i("successful :", "\nOutput from Server .... \n" + response + "\n");
         return response;
     }
 
-    /* Put the request in background and send it out */
+    /* This is the function that is called by the button listener */
     @Override
     protected String doInBackground(String... params) {
-        String response=null;
-        int tryTimes = 0;
+        String response;
 
-        // The request will be sent again for 5 times if it failed.
-        while(tryTimes < 5) {
-            Date now = new Date();
-            response = wrapRequest("Emma", now, now, now, "Polacksbacken", "centrastation202");
-            if(sendOutSuccessful) {
-                break;
-            }
-            tryTimes++;
-        }
-        sendOutSuccessful = false;
+        response = wrapRequest(params[0], params[1], params[2],params[3], params[4], params[5]);
+
         return response;
     }
 
-    /* Deal with the response returned by server */
+    /* Deal with the response returned by the server */
     @Override
-    protected void onPostExecute(String s) {
-        super.onPostExecute(s);
+    protected void onPostExecute(String response) {
+        Log.d("goodJob", response);
 
         //TODO Stavros: set the scrollview with the response
     }

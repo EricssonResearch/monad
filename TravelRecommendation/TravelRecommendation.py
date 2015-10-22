@@ -1,5 +1,6 @@
 import numpy
 import math
+import datetime
 from pyspark import SparkContext
 from pymongo import MongoClient
 from pyspark.mllib.clustering import KMeans, KMeansModel
@@ -21,6 +22,8 @@ recommendations = []
 finalRecommendation = []
 selected_centroids = []
 routesDistances = []
+to_return = []
+userId = 123
 client = MongoClient()
 db = client.monad
 
@@ -35,6 +38,9 @@ def dataBaseConnection():
 def populateFromDatabase(TravelRequest, TimeTable):
     results = TravelRequest.find()
     for res in results:
+        #if res['start_time'] == "":
+            #res['start_time'] = datetime.datetime.utcnow()
+            #st_weight = 0
         users.append((res['start_position_lat'], res['start_position_lon'],
         res['end_position_lat'], res['end_position_lon'],
         (res['start_time']).time(), (res['end_time']).time()))
@@ -111,6 +117,42 @@ def calculateDistance(tup1):
         distances.append(numpy.linalg.norm(current_route - centroid))
     return distances
 
+def removeDuplicates(alist):
+    return list(set(map(lambda x: x[0], alist)))
+
+def recommendationsToReturn(alist):
+    for sug in alist:
+        to_return.append( time_t.find_one({"_id": sug},
+                                 {"StartBusstop":1, "EndBusstop":1,
+                                  "StartTime":1, "EndTime":1, "VehicleID":1}))
+
+def recommendationsToDB(alist):
+    rec_list = []
+    for item in alist:
+        route_id = item['_id']
+        start_place = item['StartBusstop']
+        end_place = item['EndBusstop']
+        start_time = item['StartTime']
+        end_time = item['EndTime']
+        vehicle_no = item['VehicleID']
+        new_record = {
+            "routeId" : route_id,
+            "startPlace" : start_place,
+            "endPlace" : end_place,
+            "startTime" : start_time,
+            "endTime" : end_time,
+            "vehicleNo" : vehicle_no
+        }
+        rec_list.append(new_record)
+    return rec_list
+
+def insertToDB(user, recs):
+    new_record = {
+        "userId" : user,
+        "recommendations": recs
+    }
+    db.TravelRecommendation.insert(new_record)
+
 if __name__ == "__main__":
     sc = SparkContext()
     req, time_t = dataBaseConnection()
@@ -150,27 +192,8 @@ if __name__ == "__main__":
         for i in range(len(sug)):
             recommendations.append(sug[i])
 
-    # TODO Do this in functions
-    recommendations = list(set(map(lambda x: x[0], recommendations)))
+    recommendations = removeDuplicates(recommendations)
+    recommendationsToReturn(recommendations)
 
-    toReturn = []
-    for sug in recommendations:
-        toReturn.append( time_t.find_one({"_id": sug}, {"StartBusstop":1, "EndBusstop":1,
-                                  "StartTime":1, "EndTime":1, "VehicleID":1}))
-    for item in toReturn:
-        print item, "\n"
-        route_id = item['_id']
-        start_place = item['StartBusstop']
-        end_place = item['EndBusstop']
-        start_time = item['StartTime']
-        end_time = item['EndTime']
-        vehicle_no = item['VehicleID']
-        new_record = {
-            "route_id" : route_id,
-            "start_place" : start_place,
-            "end_place" : end_place,
-            "start_time" : start_time,
-            "end_time" : end_time,
-            "vehicle_no" : vehicle_no
-        }
-        db.TravelRecommendation.insert(new_record)
+    recs = recommendationsToDB(to_return)
+    insertToDB(userId, recs)

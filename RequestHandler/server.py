@@ -4,6 +4,7 @@ import pymongo
 
 from pymongo import MongoClient
 from pymongo import errors
+from datetime import datetime
 
 IP_ADDRESS_OF_MONGODB = "localhost"
 PORT_OF_MONGODB = 27017
@@ -19,7 +20,7 @@ escape_table = {
 	"{": "",
 	"}": "",
 	"\\": "",
-	",": ""
+	",": ""	
 }
 
 
@@ -40,21 +41,32 @@ def application(env, start_response):
 	data_env["QUERY_STRING"] = ""
 	data = cgi.FieldStorage(fp = env["wsgi.input"], environ = data_env)		
 	
-	if "username" and "startTime" and "endTime" and "requestTime" and "stPosition" and "edPosition" in data:
-		username = escape(data.getvalue("username"))
+	if "userId" and "startTime" and "endTime" and "requestTime" and "stPosition" and "edPosition" in data:
+		userId = int(escape(data.getvalue("userId")))
 		startTime = escape(data.getvalue("startTime"))
 		endTime = escape(data.getvalue("endTime"))
 		requestTime = escape(data.getvalue("requestTime"))
 		stPosition = escape(data.getvalue("stPosition"))
 		edPosition = escape(data.getvalue("edPosition"))		
+		
+		try:
+			requestTime = datetime.strptime(requestTime, "%Y/%m/%d %H:%M:%S")
+			if startTime == "null":
+				endTime = datetime.strptime(endTime, "%Y %a %d %b %H:%M")
+			else:
+				startTime = datetime.strptime(startTime, "%Y %a %d %b %H:%M")
+		except ValueError as e:
+			start_response("500 INTERNAL ERROR", [("Content-Type", "text/plain")])
+			logging.error("Something went wrong with the date format: {0}".format(e))
+			return ["Something went wrong, please try again. We are sorry for the inconvenience."]			
 			
 		try:
 			connection = MongoClient(IP_ADDRESS_OF_MONGODB, PORT_OF_MONGODB, connectTimeoutMS = 5000, 
 									serverSelectionTimeoutMS = 5000)		
 			database = connection.monad
 			collection = database.TravelRequest		
-			document = {"Username": username, "StartTime": startTime, "EndTime": endTime,
-						"RequestTime": requestTime, "StPosition": stPosition, "EdPosition": edPosition}			
+			document = {"userId": userId, "startTime": startTime, "endTime": endTime,
+						"requestTime": requestTime, "stPosition": stPosition, "edPosition": edPosition}			
 			insert_one_document(collection, document)
 		except pymongo.errors.PyMongoError as e:
 			start_response("500 INTERNAL ERROR", [("Content-Type", "text/plain")])	

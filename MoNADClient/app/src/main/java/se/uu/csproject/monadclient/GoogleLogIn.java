@@ -106,9 +106,11 @@ public class GoogleLogIn extends Activity implements
         // account has granted any requested permissions to our app and that we were able to
         // establish a service connection to Google Play services.
 
-        Toast.makeText(getApplicationContext(), "Sign In Successfully",
-                Toast.LENGTH_LONG).show();
+        String email = Plus.AccountApi.getAccountName(mGoogleApiClient);
+
+        Toast.makeText(getApplicationContext(), "Sign In Successfully, email: " + email, Toast.LENGTH_LONG).show();
         //// TODO Huijie: register the user with gmail and possibly other available information when he/she first login with the google account
+
         setContentView(R.layout.activity_main);
     }
 
