@@ -56,7 +56,7 @@
             android:src="@drawable/ic_clear_black_24dp"
             android:layout_gravity="center_vertical"
             android:contentDescription="@string/label_notification_cancelcontentdescription"
-            android:onClick="removeNotification"
+            android:id="@+id/button_hidenotification"
             />
 
     </LinearLayout>

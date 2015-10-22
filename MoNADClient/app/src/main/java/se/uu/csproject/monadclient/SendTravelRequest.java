@@ -12,9 +12,6 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.io.DataOutputStream;
 
 
@@ -73,12 +70,13 @@ public class SendTravelRequest extends AsyncTask<String, Void, String> {
 
     /* Get the data from the interface and wrap them in a request */
     public static String wrapRequest(String userId, String startTime, String endTime,
-                                   String requestTime, String stPosition, String edPosition) {
+                                   String requestTime, String stPosition, String edPosition, String priority) {
         String request = SERVER + "/request";
 
         String urlParameters = "userId=" + userId + "&startTime=" + startTime
                 + "&endTime=" + endTime + "&requestTime=" + requestTime
-                + "&stPosition=" + stPosition + "&edPosition=" + edPosition;
+                + "&stPosition=" + stPosition + "&edPosition=" + edPosition
+                + "&priority=" + priority;
         String response = postRequest(request, urlParameters);
 
         return response;
@@ -89,7 +87,7 @@ public class SendTravelRequest extends AsyncTask<String, Void, String> {
     protected String doInBackground(String... params) {
         String response;
 
-        response = wrapRequest(params[0], params[1], params[2],params[3], params[4], params[5]);
+        response = wrapRequest(params[0], params[1], params[2],params[3], params[4], params[5], params[6]);
 
         return response;
     }

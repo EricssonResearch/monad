@@ -13,8 +13,11 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import se.uu.csproject.monadclient.recyclerviews.SearchRecyclerViewAdapter;
@@ -23,12 +26,14 @@ import se.uu.csproject.monadclient.recyclerviews.Trip;
 public class MainActivity extends AppCompatActivity {
 
     private Toolbar toolbar;
+    private EditText destination;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         toolbar = (Toolbar) findViewById(R.id.actionToolBar);
+        destination = (EditText) findViewById(R.id.main_search_destination);
         setSupportActionBar(toolbar);
 
         getSupportActionBar().setHomeButtonEnabled(true);
@@ -43,8 +48,24 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
     }
 
-    //TODO Stavros: call the search function using SendTravelRequest (same for SearchActivity)
     public void openMainSearch (View view) {
+        // Make a quick search based on the current time and the user's current location
+        String stPosition, edPosition, userId, startTime, endTime, requestTime, priority;
+        Date now = new Date();
+        SimpleDateFormat df = new SimpleDateFormat("yyyy EEE dd MMM HH:mm");
+
+        // Provide some default values since this is a quick search
+        // TODO: Get the actual current position of the user
+        stPosition = "Polacksbacken";
+        edPosition = destination.getText().toString();
+        userId = ClientAuthentication.getClientId();
+        startTime = df.format(now);
+        endTime = "null";
+        requestTime = df.format(now);
+        priority = "distance";
+
+        new SendTravelRequest().execute(userId, startTime, endTime, requestTime, stPosition, edPosition, priority);
+
         Intent myIntent = new Intent(MainActivity.this, SearchActivity.class);
         MainActivity.this.startActivity(myIntent);
     }

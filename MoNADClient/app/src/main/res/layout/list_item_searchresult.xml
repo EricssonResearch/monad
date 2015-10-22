@@ -41,7 +41,7 @@
     <ImageButton
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:id="@+id/imagebutton_main_resultbtn1"
+        android:id="@+id/button_tripdetails"
         android:src="@drawable/ic_arrow_forward_white_24dp"
         android:background="@color/primaryColor"
         android:layout_alignParentRight="true"

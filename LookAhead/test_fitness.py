@@ -14,7 +14,7 @@ specific language governing permissions and limitations under the License.
 import unittest
 
 import toolBox
-from fitness import Fitness, evalIndividualCapacity
+from fitness import Fitness
 from datetime import datetime, timedelta
 
 # Variables
@@ -32,18 +32,19 @@ class FitnessTests(unittest.TestCase):
     ''' Class for testing the fitness class using unittest.
 
     '''
+
     # Tests for timeDiff function
     def testTimeDiffPos(self):
         fit = Fitness()
-        self.assertEqual(fit.timeDiff('20-10-2015 23:59', '20-10-2015 00:00'), timedelta(hours=23, minutes=59))
+        self.assertEqual(fit.timeDiff('23:59', '00:00'), timedelta(hours=23, minutes=59))
 
     def testTimeDiffEq(self):
         fit = Fitness()
-        self.assertEqual(fit.timeDiff('20-10-2015 00:00', '20-10-2015 00:00'), timedelta(hours=0, minutes=0))
+        self.assertEqual(fit.timeDiff('00:00', '00:00'), timedelta(hours=0, minutes=0))
 
     def testTimeDiffNeg(self):
         fit = Fitness()
-        self.assertEqual(fit.timeDiff('20-10-2015 08:00', '20-10-2015 08:01'), timedelta(minutes=-1))
+        self.assertEqual(fit.timeDiff('08:00', '08:01'), timedelta(minutes=-1))
 
     # Tests for evaluating individuals
     def testEvalIndividualNoWait(self):
@@ -101,11 +102,46 @@ class FitnessTests(unittest.TestCase):
         self.assertLess(1, 2)
 
     def testEvalIndividualCapacity(self):
-        # TODO
+        ''' test to check that no individual is assigned a fitness value less than 0
+        '''
         pop = toolBox.toolbox.population(n=2)
+        fit = Fitness()
 
-        #self.assertFalse(evalIndividualCapacity(pop[0] < 0))
-        self.assertFalse(False)
+        self.assertFalse(fit.evalIndividualCapacity(pop[0]) < 0)
+
+    def testEvalIndividualCapacityNotZero(self):
+        ''' test that no one's perfect
+        '''
+        pop = toolBox.toolbox.population(n=2)
+        fit = Fitness()
+
+        self.assertGreater(fit.evalIndividualCapacity(pop[0]), 0)
+
+    def testEvalIndividualCapacityZeroCapacity(self):
+        ''' test worst case scenario - individual with zero capacity has the worst fitness
+        '''
+        pop = toolBox.toolbox.population(n=2)
+        fit = Fitness()
+        ind1 = pop[0]
+        ind2 = pop[1]
+        
+        for i, item in enumerate(ind1):
+            ind1[i][1] = 0
+
+        self.assertGreater(fit.evalIndividualCapacity(ind1), fit.evalIndividualCapacity(ind2))
+
+    def testEvalIndividualCapacitySufficient(self):
+        ''' test on individual that offers more than enough capacity to handle all requests
+        '''
+        pop = toolBox.toolbox.population(n=2)
+        fit = Fitness()
+        ind1 = pop[0]
+        ind2 = pop[1]
+        
+        for i, item in enumerate(ind1):
+            ind1[i][1] = 120
+
+        self.assertGreater(fit.evalIndividualCapacity(ind2), fit.evalIndividualCapacity(ind1))
 
 
 if __name__ == '__main__':

@@ -72,13 +72,24 @@ class DB():
         return req
 
     def getTravelRequestSummary(self, start, end):
-        keyf = "function(doc) { return { startBusStop: doc.StartBusStop, hour: doc.StartTime.getHours(), minute: doc.StartTime.getMinutes() }; }"
-        condition = {"StartTime": {"$gte": start, "$lt": end}}
+        keyf = "function(doc) { return { startBusStop: doc.startBusStop, hour: doc.startTime.getHours(), minute: doc.startTime.getMinutes()};}"
+        condition = {"startTime": {"$gte": start, "$lt": end}}
         initial = {"count": 0}
         reduce = "function(curr, result) { result.count++; }"
-        req = self.db.TravelRequest.group(keyf, condition, initial, reduce)
-        req = sorted(req, key=itemgetter("hour","minute","startBusStop"))
+        # req = self.db.TravelRequest.group(keyf, condition, initial, reduce)
+        req = self.db.TravelRequestLookAhead.group(keyf, condition, initial, reduce)
+        req = sorted(req, key=itemgetter("hour","minute"))
         return req
+
+    def getTravelRequestSummary2(self, start, end, busStop):
+        keyf = "function(doc) { return { startBusStop: doc.startBusStop, hour: doc.startTime.getHours(), minute: doc.startTime.getMinutes()};}"
+        condition = {"startTime": {"$gte": start, "$lt": end}, "startBusStop": {"$eq": busStop}}
+        initial = {"count": 0}
+        reduce = "function(curr, result) { result.count++; }"
+        # req = self.db.TravelRequest.group(keyf, condition, initial, reduce)
+        req = self.db.TravelRequestLookAhead.group(keyf, condition, initial, reduce)
+        req = sorted(req, key=itemgetter("hour","minute"))
+        return req        
 
     # These function will be called for every gene in order to get the difference
     # def getTravelRequestBetween(self, start, end):
@@ -185,6 +196,18 @@ class DB():
     def generateStartingTripTime(self):
         return list([self.getRoute("line"), self.generateRandomCapacity(), self.generateTime(self.generateMinute(self.mergeRandomTime(self.getRandomHour(),self.getRandomMinute())))])
 
+    def generateFitnessTripTimeTable(self, line, startingTime):
+        tripTimeTable = []
+        busStop = self.getRouteStop(line)
+        minuteSeed = self.generateMinute(startingTime)
+        tripTimeTable.append([busStop[0][0],self.generateTime(minuteSeed)])
+        for j in range(len(busStop)-1):
+            minuteSeed = minuteSeed + busStop[j][1]
+            if minuteSeed > DB.minutesDay:
+                minuteSeed = minuteSeed - DB.minutesDay
+            tripTimeTable.append([busStop[j+1][0],self.generateTime(minuteSeed)])
+        return tripTimeTable
+
     def generateTripTimeTable(self, timetable):
         timeTable = []
         for i in range(len(timetable)):
@@ -260,7 +283,7 @@ class DB():
         @return: total number of requests.
         '''
         reqs = []
-        requests = self.db.TravelRequest.find()
+        requests = self.db.TravelRequestLookAhead.find()  # New collection for LookAhead
         for req in requests:
-            reqs.append(req)
+            reqs.append(req.get('startTime', None))
         return reqs
