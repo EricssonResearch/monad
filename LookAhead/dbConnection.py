@@ -82,6 +82,16 @@ class DB():
         req = sorted(req, key=itemgetter("hour","minute"))
         return req
 
+    def getTravelRequestSummary2(self, start, end, busStop):
+        keyf = "function(doc) { return { startBusStop: doc.startBusStop, hour: doc.startTime.getHours(), minute: doc.startTime.getMinutes()};}"
+        condition = {"startTime": {"$gte": start, "$lt": end}, "startBusStop": {"$eq": busStop}}
+        initial = {"count": 0}
+        reduce = "function(curr, result) { result.count++; }"
+        # req = self.db.TravelRequest.group(keyf, condition, initial, reduce)
+        req = self.db.TravelRequestLookAhead.group(keyf, condition, initial, reduce)
+        req = sorted(req, key=itemgetter("hour","minute"))
+        return req        
+
     # These function will be called for every gene in order to get the difference
     # def getTravelRequestBetween(self, start, end):
     #    for doc in self.db.TravelRequest.find({'time': {'$gte': start, '$lt': end}}):
@@ -186,6 +196,18 @@ class DB():
     # Generate TT from seed random starting time
     def generateStartingTripTime(self):
         return list([self.getRoute("line"), self.generateRandomCapacity(), self.generateTime(self.generateMinute(self.mergeRandomTime(self.getRandomHour(),self.getRandomMinute())))])
+
+    def generateFitnessTripTimeTable(self, line, startingTime):
+        tripTimeTable = []
+        busStop = self.getRouteStop(line)
+        minuteSeed = self.generateMinute(startingTime)
+        tripTimeTable.append([busStop[0][0],self.generateTime(minuteSeed)])
+        for j in range(len(busStop)-1):
+            minuteSeed = minuteSeed + busStop[j][1]
+            if minuteSeed > DB.minutesDay:
+                minuteSeed = minuteSeed - DB.minutesDay
+            tripTimeTable.append([busStop[j+1][0],self.generateTime(minuteSeed)])
+        return tripTimeTable
 
     def generateTripTimeTable(self, timetable):
         timeTable = []

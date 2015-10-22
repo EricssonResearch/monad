@@ -38,7 +38,7 @@ class Fitness():
         Args: time1 and time2 in datetime format, time1 > time2
         Returns: the timedelta between time1 and time2.
         '''
-        return datetime.strptime(time1, Fitness.formatString) - datetime.strptime(time2, Fitness.formatString)
+        return datetime.strptime(time1, Fitness.formatTime) - datetime.strptime(time2, Fitness.formatTime)
 
     def getMinutes(self, td):
         return (td.seconds//Fitness.secondMinute) % Fitness.secondMinute
@@ -84,13 +84,40 @@ class Fitness():
         db = DB()
         # Replace the dates here from yesterday's date
         request = []
+        dif = []
+        cnt = []
+        intialTripTime = "00:00"
         # TODO: Change to timedelta(1)
         yesterday = date.today() - timedelta(2)
         # The result here should be added into a file: the order is by hour, minute and initialBusStop
-        request = db.getTravelRequestSummary(datetime.combine(yesterday, datetime.strptime(Fitness.firstMinute, Fitness.formatTime).time()),datetime.combine(yesterday, datetime.strptime(Fitness.lastMinute, Fitness.formatTime).time()))
-        print request
-        print individual
-        # for i in range(len(individual)-1):
+        # request = db.getTravelRequestSummary(datetime.combine(yesterday, datetime.strptime(Fitness.firstMinute, Fitness.formatTime).time()),datetime.combine(yesterday, datetime.strptime(Fitness.lastMinute, Fitness.formatTime).time()))
+        for i in range(len(individual)):
+            tripTimeTable = []
+            tripTimeTable = db.generateFitnessTripTimeTable(individual[i][0], individual[i][2])
+            # For each gene, the corresponding requests are returned
+            for j in range(len(tripTimeTable)):
+                request = []
+                if j==0:
+                    request = db.getTravelRequestSummary2(datetime.combine(yesterday, datetime.strptime(intialTripTime, Fitness.formatTime).time()),datetime.combine(yesterday, datetime.strptime(tripTimeTable[j][1], Fitness.formatTime).time()), tripTimeTable[j][0])
+                    intialTripTime = tripTimeTable[j][1]
+                else:
+                    request = db.getTravelRequestSummary2(datetime.combine(yesterday, datetime.strptime(tripTimeTable[j-1][1], Fitness.formatTime).time()),datetime.combine(yesterday, datetime.strptime(tripTimeTable[j][1], Fitness.formatTime).time()), tripTimeTable[j][0])
+                if len(request)>0: 
+                    diff = 0
+                    count = 0
+                    for k in range(len(request)):
+                        diff = diff + self.getMinutes(self.timeDiff(tripTimeTable[j][1],str(int(request[k]["hour"])) + ":" + str(int(request[k]["minute"]))))*int(request[k]["count"])
+                        count = count + int(request[k]["count"])
+                    dif.append(diff)
+                    cnt.append(count)
+        print sum(dif)/sum(cnt)
+        return sum(dif)/sum(cnt),
+        # print len(dif)
+        #print len(cnt)
+
+                # diff.append(self.getMinutes(self.timeDiff(tripTime,request[j]["StartTime"])))
+            
+            
         #     req.append(request.count())
         #     diff = []
         #     for j in range(request.count()):
@@ -128,7 +155,7 @@ class Fitness():
             minDiff = timedelta.max  # Reset minDiff for the next request time
         return self.diffMinutes,
         '''
-        return 1, #TODO
+        # return 1, #TODO
 
 
 
