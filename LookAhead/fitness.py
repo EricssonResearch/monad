@@ -70,28 +70,27 @@ class Fitness():
         according to the evolving timetable.
         Lower values are better.
         '''
-        # Store the date on mongo as datetime 
-        # Store the requests of the previous day into a JSON file order them by date
-        # Group by request query from the file to reduce the number of elements being processed
+        # DONE Store the date on mongo as datetime 
+        # Store the requests of the previous day into a JSON file order them by date and KEEP IT during the whole iteration on memory
+        # DONE Group by request query from the file to reduce the number of elements being processed
         # Use map function instead of LOOP
         # Multi thread the MAP functions
 
         # First, the randomly-generated starting times are sorted in order to check sequentially the number of requests for that particular trip
-       # individual = sorted(individual, key=itemgetter(2))
+        individual = sorted(individual, key=itemgetter(2))
         # Second, we loop trough the number of genes in order to retrieve the number of requests for that particular trip
         # DB calls can ve avoided by querying the whole Request Collection for a particular day
         # For the 1st trip, the starting time has to be selected
         db = DB()
         # Replace the dates here from yesterday's date
         request = []
-        yesterday = date.today() + timedelta(1)
+        # TODO: Change to timedelta(1)
+        yesterday = date.today() - timedelta(2)
         # The result here should be added into a file: the order is by hour, minute and initialBusStop
-
         request = db.getTravelRequestSummary(datetime.combine(yesterday, datetime.strptime(Fitness.firstMinute, Fitness.formatTime).time()),datetime.combine(yesterday, datetime.strptime(Fitness.lastMinute, Fitness.formatTime).time()))
-
+        print request
+        print individual
         # for i in range(len(individual)-1):
-        #     request = []
-        #     request = db.getTravelRequestBetween("20-10-2015 "+individual[i][2] ,"20-10-2015 "+individual[i+1][2])
         #     req.append(request.count())
         #     diff = []
         #     for j in range(request.count()):
