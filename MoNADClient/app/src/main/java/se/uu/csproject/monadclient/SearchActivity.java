@@ -243,12 +243,14 @@ public class SearchActivity extends AppCompatActivity {
         //// TODO Stavros: retrieve various fields from the UI and send them to SendTravelRequest
 
         String stPosition, edPosition, userId, startTime, endTime, requestTime;
-        int selectedId;
-        Date now = new Date();
-        SimpleDateFormat df = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+        int selectedId, currentYear;
 
-        startTime = "";
-        endTime = "";
+        Date now = new Date();
+        Calendar rightNow = Calendar.getInstance();
+        currentYear = rightNow.get(Calendar.YEAR);
+        SimpleDateFormat df = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+        startTime = "null";
+        endTime = "null";
         requestTime = df.format(now);
         userId = ClientAuthentication.getClientId();
         stPosition = positionEditText.getText().toString();
@@ -257,15 +259,16 @@ public class SearchActivity extends AppCompatActivity {
 
         switch(selectedId){
             case R.id.radiobutton_search_departuretime:
-                startTime = textViewTripDate.getText().toString() + " " + textViewTripTime.getText().toString();
+                startTime = Integer.toString(currentYear) + " " + textViewTripDate.getText().toString() + " "
+                        + textViewTripTime.getText().toString();
                 break;
 
             case R.id.radiobutton_search_arrivaltime:
-                endTime = textViewTripDate.getText().toString() + " " + textViewTripTime.getText().toString();
+                endTime = Integer.toString(currentYear) + " " + textViewTripDate.getText().toString() + " "
+                        + textViewTripTime.getText().toString();
                 break;
         }
 
-        //TODO: send the correct starting and ending times
         new SendTravelRequest().execute(userId, startTime, endTime, requestTime, stPosition, edPosition);
     }
 

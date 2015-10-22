@@ -72,27 +72,9 @@ public class SendTravelRequest extends AsyncTask<String, Void, String> {
     }
 
     /* Get the data from the interface and wrap them in a request */
-    public static String wrapRequest(String userId, String startTimeString, String endTimeString,
-                                   String requestTimeString, String stPosition, String edPosition) {
+    public static String wrapRequest(String userId, String startTime, String endTime,
+                                   String requestTime, String stPosition, String edPosition) {
         String request = SERVER + "/request";
-        SimpleDateFormat df = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-        SimpleDateFormat dfUserInput = new SimpleDateFormat("EEE dd MMM HH:mm");
-
-        Date startTime = null;
-        Date endTime = null;
-        Date requestTime;
-
-        try {
-            if (startTimeString == ""){
-                endTime = dfUserInput.parse(endTimeString);
-            }else{
-                startTime = dfUserInput.parse(startTimeString);
-            }
-            requestTime = df.parse(requestTimeString);
-        } catch (ParseException e) {
-            Log.d("oops", e.toString());
-            return("Something went wrong with the date formatting");
-        }
 
         String urlParameters = "userId=" + userId + "&startTime=" + startTime
                 + "&endTime=" + endTime + "&requestTime=" + requestTime
