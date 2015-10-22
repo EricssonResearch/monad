@@ -82,7 +82,7 @@ class TravelPlanner:
             self.timeMode  = Mode.startTime
 
         cursor = self.db.TimeTable.find({"Waypoints.BusStopID": self.endID, 
-            "StartBusstop": {"$ne": self.endPosition}})
+                "StartBusstop": {"$ne": self.endPosition}})
         for route in cursor:
             self.fits = False
             for i in range(len(route["Waypoints"])):
@@ -173,7 +173,7 @@ class TravelPlanner:
                     "_id": ObjectId(),
                     "travelRequest": self.requestID }
 
-    def getBestRoute(self, requestID, mode = Mode.tripTime):
+    def getBestRoutes(self, requestID, mode = Mode.tripTime):
         self.requestID = requestID
         self.routeMode = mode
         self._findFittingRoutes()
