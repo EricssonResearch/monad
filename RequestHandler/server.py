@@ -4,6 +4,7 @@ import pymongo
 
 from pymongo import MongoClient
 from pymongo import errors
+from datetime import datetime
 
 IP_ADDRESS_OF_MONGODB = "localhost"
 PORT_OF_MONGODB = 27017
@@ -47,6 +48,17 @@ def application(env, start_response):
 		requestTime = escape(data.getvalue("requestTime"))
 		stPosition = escape(data.getvalue("stPosition"))
 		edPosition = escape(data.getvalue("edPosition"))		
+		
+		try:
+			requestTime = datetime.strptime(requestTime, "%Y/%m/%d %H:%M:%S")
+			if startTime == "null":
+				endTime = datetime.strptime(endTime, "%Y %a %d %b %H:%M")
+			else:
+				startTime = datetime.strptime(startTime, "%Y %a %d %b %H:%M")
+		except ValueError as e:
+			start_response("500 INTERNAL ERROR", [("Content-Type", "text/plain")])
+			logging.error("Something went wrong with the date format: {0}".format(e))
+			return ["Something went wrong, please try again. We are sorry for the inconvenience."]			
 			
 		try:
 			connection = MongoClient(IP_ADDRESS_OF_MONGODB, PORT_OF_MONGODB, connectTimeoutMS = 5000, 
