@@ -16,12 +16,11 @@ See the License for the specific language governing permissions and limitations 
 import random
 import string
 import collections
-import json
 import datetime
 from pymongo import MongoClient
 from bson.objectid import ObjectId
 from operator import itemgetter
-import json
+
 
 
 class DB():
@@ -63,8 +62,8 @@ class DB():
             {"_id": ObjectId(self.getRandomTravelRequestId())})
         return req
 
-    def getTravelRequest(self, object, column):
-        req = self.db.TravelRequest.find({"_id": ObjectId(object)})
+    def getTravelRequest(self, column):
+        req = self.db.TravelRequestLookAhead.find({}, {"_id": False})
         return self.retrieveData(req, column)
 
     # These function will be called for every gene in order to get the difference

@@ -21,7 +21,6 @@ from datetime import timedelta
 from datetime import date
 
 
-
 class Fitness():
 
     # Main [class] variables
@@ -31,6 +30,39 @@ class Fitness():
     secondMinute = 60.0
     firstMinute = "00:00"
     lastMinute = "23:59"
+
+# A decorator is a function that can accept another function as
+# a parameter to be able to modify or extend it
+    def decorator(afunction):
+
+        # A wrapper function is used to wrap functionalites you want around the original function
+        def wrapper(*args):
+            # Checks whether or not the original function as been executed once
+            if not wrapper.has_run:
+                wrapper.has_run = True
+                return afunction(*args)
+
+        wrapper.has_run = False
+        return wrapper
+
+    @decorator
+    def runOnce(self):
+        db = DB()
+        request = []
+        # DB calls can ve avoided by querying the whole Request Collection for a particular day
+        getTravelRequests = db.getTravelRequest
+
+        # Replace the dates here from yesterday's date
+        yesterday = date.today() + timedelta(1)
+
+        # The result here should be added into a file: the order is by hour, minute and initialBusStop
+        request = db.getTravelRequestSummary(datetime.combine(yesterday,
+                                                              datetime.strptime(Fitness.firstMinute,
+                                                                                Fitness.formatTime).time()),
+                                             datetime.combine(yesterday, datetime.strptime(Fitness.lastMinute,
+                                                                                           Fitness.formatTime).time()))
+
+
 
     def timeDiff(self, time1, time2):
         ''' Evaluates the difference between two times.
@@ -44,23 +76,6 @@ class Fitness():
         return (td.seconds//Fitness.secondMinute) % Fitness.secondMinute
 
     def evalIndividual(self, individual):
-        #print(sorted(individual, key = itemgetter(2)))
-
-        """
-        dataFile = open("data.bson", "w")
-
-        databaseClass = DB()
-        cursor = databaseClass.db.TravelRequest.find({}, {'_id': False})
-
-        for document in cursor:
-
-            json.dump(document, dataFile, default=json_util.default)
-
-            dataFile.write(",\n")
-
-        dataFile.close()
-        """
-
         ''' Evaluate an individual in the population. Based on how close the
         average bus request time is to the actual bus trip time.
 
@@ -70,24 +85,21 @@ class Fitness():
         according to the evolving timetable.
         Lower values are better.
         '''
-        # Store the date on mongo as datetime 
+        self.runOnce()
+
+        # Store the date on mongo as datetime
         # Store the requests of the previous day into a JSON file order them by date
         # Group by request query from the file to reduce the number of elements being processed
         # Use map function instead of LOOP
         # Multi thread the MAP functions
 
         # First, the randomly-generated starting times are sorted in order to check sequentially the number of requests for that particular trip
-       # individual = sorted(individual, key=itemgetter(2))
-        # Second, we loop trough the number of genes in order to retrieve the number of requests for that particular trip
-        # DB calls can ve avoided by querying the whole Request Collection for a particular day
-        # For the 1st trip, the starting time has to be selected
-        db = DB()
-        # Replace the dates here from yesterday's date
-        request = []
-        yesterday = date.today() + timedelta(1)
-        # The result here should be added into a file: the order is by hour, minute and initialBusStop
+        # individual = sorted(individual, key=itemgetter(2))
 
-        request = db.getTravelRequestSummary(datetime.combine(yesterday, datetime.strptime(Fitness.firstMinute, Fitness.formatTime).time()),datetime.combine(yesterday, datetime.strptime(Fitness.lastMinute, Fitness.formatTime).time()))
+        # Second, we loop trough the number of genes in order to retrieve the number of requests for that particular trip
+
+
+        # For the 1st trip, the starting time has to be selected
 
         # for i in range(len(individual)-1):
         #     request = []
