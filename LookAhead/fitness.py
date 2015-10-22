@@ -18,13 +18,18 @@ from dbConnection import DB
 from operator import itemgetter
 from datetime import datetime
 from datetime import timedelta
+from datetime import date
+
 
 class Fitness():
 
     # Main [class] variables
     diffMinutes = 0
     formatString = '%d-%m-%Y %H:%M'
+    formatTime = '%H:%M'
     secondMinute = 60.0
+    firstMinute = "00:00"
+    lastMinute = "23:59"
 
     def timeDiff(self, time1, time2):
         ''' Evaluates the difference between two times.
@@ -65,9 +70,9 @@ class Fitness():
         db = DB()
         # Replace the dates here from yesterday's date
         request = []
+        yesterday = date.today() + timedelta(1)
         # The result here should be added into a file: the order is by hour, minute and initialBusStop
-        request = db.getTravelRequestSummary(datetime.datetime(2015, 10, 23, 0, 0, 0),datetime.datetime(2015, 10, 23, 23, 59, 59))
-
+        request = db.getTravelRequestSummary(datetime.combine(yesterday, datetime.strptime(Fitness.firstMinute, Fitness.formatTime).time()),datetime.combine(yesterday, datetime.strptime(Fitness.lastMinute, Fitness.formatTime).time()))
         # for i in range(len(individual)-1):
         #     request = []
         #     request = db.getTravelRequestBetween("20-10-2015 "+individual[i][2] ,"20-10-2015 "+individual[i+1][2])
@@ -108,7 +113,7 @@ class Fitness():
             minDiff = timedelta.max  # Reset minDiff for the next request time
         return self.diffMinutes,
         '''
-        return 1 #TODO
+        return 1, #TODO
 
 
 
