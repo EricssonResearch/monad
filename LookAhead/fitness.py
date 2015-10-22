@@ -43,6 +43,49 @@ class Fitness():
     def getMinutes(self, td):
         return (td.seconds//Fitness.secondMinute) % Fitness.secondMinute
 
+    def evalIndividualCapacity(self, individual):
+        ''' Evaluates an individual based on the capacity/bus type chosen for each trip.
+
+        @param: individual - a possible timetable for a bus line, covering the whole day.
+        @return: a fitness score assigned in accordance with how close the requested
+        capacity is to the availed capacity on the individual
+        '''
+        individual.sort(key = itemgetter(2))
+
+        db = DB()
+        requests = db.getRequestsFromDB()
+        requests[:] = [request.time() for request in requests if request is not None]
+        fitnessVal = 0 # assumed initial fitness value TODO: put as class variable
+
+        for trip, item in enumerate(individual):
+            nrReqs = []
+            if trip == 0:
+                start = datetime.strptime('00:00', '%H:%M').time()
+                end   = datetime.strptime(individual[0][2], '%H:%M').time()
+                nrReqs = [i for i in requests if i > start and i <= end]
+
+                # Assign fitness values
+                if len(nrReqs) == individual[trip][1]:
+                    fitnessVal += 0
+                elif len(nrReqs) < individual[trip][1]:
+                    fitnessVal += 1
+                else:
+                    fitnessVal += 1000000
+            else:
+                start = datetime.strptime(individual[trip-1][2], '%H:%M').time()
+                end   = datetime.strptime(individual[trip][2], '%H:%M').time()
+                nrReqs = [i for i in requests if i > start and i <= end]
+
+                # Assign fitness values
+                if len(nrReqs) == individual[trip][1]:
+                    fitnessVal += 0
+                elif len(nrReqs) < individual[trip][1]:
+                    fitnessVal += 1
+                else:
+                    fitnessVal += 1000000
+
+        return fitnessVal
+
     def evalIndividual(self, individual):
         #print(sorted(individual, key = itemgetter(2)))
 
@@ -131,49 +174,6 @@ class Fitness():
         return 1, #TODO
 
 
-# incorporating capacity/no of requests into the fitness function
-def evalIndividualCapacity(individual):
-    ''' Evaluates an individual based on the capacity/bus type chosen for each trip.
-
-    @param: individual - a possible timetable for a bus line, covering the whole day.
-    @return: a fitness score assigned in accordance with how close the requested
-    capacity is to the availed capacity on the individual
-    '''
-    individual.sort(key = itemgetter(2))
-
-    db = DB()
-    requests = db.getRequestsFromDB()
-    requests[:] = [request.time() for request in requests if request is not None]
-    fitnessVal = 0 # assumed initial fitness value TODO: put as class variable
-
-    for trip, item in enumerate(individual):
-        nrReqs = []
-        if trip == 0:
-            start = datetime.strptime('00:00', '%H:%M').time()
-            end   = datetime.strptime(individual[0][2], '%H:%M').time()
-            nrReqs = [i for i in requests if i > start and i <= end]
-
-            # Assign fitness values
-            if len(nrReqs) == individual[trip][1]:
-                fitnessVal += 0
-            elif len(nrReqs) < individual[trip][1]:
-                fitnessVal += 1
-            else:
-                fitnessVal += 1000000
-        else:
-            start = datetime.strptime(individual[trip-1][2], '%H:%M').time()
-            end   = datetime.strptime(individual[trip][2], '%H:%M').time()
-            nrReqs = [i for i in requests if i > start and i <= end]
-
-            # Assign fitness values
-            if len(nrReqs) == individual[trip][1]:
-                fitnessVal += 0
-            elif len(nrReqs) < individual[trip][1]:
-                fitnessVal += 1
-            else:
-                fitnessVal += 1000000
-
-    return fitnessVal
 
 
 
