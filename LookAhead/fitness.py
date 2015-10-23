@@ -160,11 +160,8 @@ class Fitness():
             # For each gene, the corresponding requests are returned
             for j in range(len(tripTimeTable)):
                 request = []
-                if j==0:
-                    request = db.getTravelRequestSummary2(datetime.combine(yesterday, datetime.strptime(intialTripTime, Fitness.formatTime).time()),datetime.combine(yesterday, datetime.strptime(tripTimeTable[j][1], Fitness.formatTime).time()), tripTimeTable[j][0])
-                    intialTripTime = tripTimeTable[j][1]
-                else:
-                    request = db.getTravelRequestSummary2(datetime.combine(yesterday, datetime.strptime(tripTimeTable[j-1][1], Fitness.formatTime).time()),datetime.combine(yesterday, datetime.strptime(tripTimeTable[j][1], Fitness.formatTime).time()), tripTimeTable[j][0])
+                request = db.getTravelRequestSummary2(datetime.combine(yesterday, datetime.strptime(intialTripTime, Fitness.formatTime).time()),datetime.combine(yesterday, datetime.strptime(tripTimeTable[j][1], Fitness.formatTime).time()), tripTimeTable[j][0])
+                intialTripTime = tripTimeTable[j][1]
                 if len(request)>0: 
                     diff = 0
                     count = 0
@@ -173,7 +170,4 @@ class Fitness():
                         count = count + int(request[k]["count"])
                     dif.append(diff)
                     cnt.append(count)
-
         return sum(dif)/sum(cnt),
-
-
