@@ -286,5 +286,6 @@ class DB():
         reqs = []
         requests = self.db.TravelRequestLookAhead.find()  # New collection for LookAhead
         for req in requests:
-            reqs.append(req.get('startTime', None))
+            reqs.append((req.get('startTime', None), req.get('startBusStop', None),
+                req.get('endBusStop', None)))
         return reqs
