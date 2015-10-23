@@ -161,9 +161,54 @@ class TestTravelPlanner(unittest.TestCase):
         self.tp._rankTrip(trip)
         self.assertEqual(self.tp.tripTuples, [trip1, trip6, trip2, trip3, trip4, trip5])
 
+    def test_insertTrip(self):
+        self.tp.tripTuples = []
+        self.tp.counter = 0
+        self.tp.startingWaypoint = [0]
+        self.tp.endingWaypoint = [1]
+        self.tp.startTime = TIME_1300H
+        self.tp.timeMode = Mode.startTime
+
+        trip = {"busstops": [{"time": TIME_1305H}, {"time": TIME_1315H}]}
+        self.tp._insertTrip(trip)
+        trip1 = (trip, TIMEDIFF_15MIN, TIME_1305H, TIME_1315H)
+        self.assertEqual(self.tp.tripTuples, [trip1])
+
+        trip = {"busstops": [{"time": TIME_1315H}, {"time": TIME_1320H}]}
+        self.tp._insertTrip(trip)
+        trip2 = (trip, TIMEDIFF_20MIN, TIME_1315H, TIME_1320H)
+        self.assertEqual(self.tp.tripTuples, [trip1, trip2])
+
+        self.tp.tripTuples = []
+        self.tp.endTime = TIME_1400H
+        self.tp.timeMode = Mode.arrivalTime
+
+        trip = {"busstops": [{"time": TIME_1330H}, {"time": TIME_1345H}]}
+        self.tp._insertTrip(trip)
+        trip1 = (trip, TIMEDIFF_15MIN, TIME_1330H, TIME_1345H)
+        self.assertEqual(self.tp.tripTuples, [trip1])
+
+        trip = {"busstops": [{"time": TIME_1345H}, {"time": TIME_1400H}]}
+        self.tp._insertTrip(trip)
+        trip2 = (trip, TIMEDIFF_0MIN, TIME_1345H, TIME_1400H)
+        self.assertEqual(self.tp.tripTuples, [trip2, trip1])
+
+
+    # Database dependency
+    def test_findBestRoute(self):
+        pass
+
+    # Database dependency
+    def test_updateDatabase(self):
+        pass
+
+    # Database dependency
+    def test_getBestRoutes(self):
+        pass
+
     # The number of tests is very important!
     def test_hereIsOneMoreTestThatWillSucceed(self):
-        pass
+        self.assertTrue(True)
 
 if __name__ == "__main__":
     unittest.main()
