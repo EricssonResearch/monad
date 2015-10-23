@@ -101,7 +101,9 @@ class TravelPlanner:
    
     def _isBetterTrip(self, i):
         if (self.timeMode == Mode.startTime):
-            if (self.timeToArrival <= self.tripTuples[i][RT_TIME_DIFFERENCE]):
+            if (self.timeToArrival < self.tripTuples[i][RT_TIME_DIFFERENCE]):
+                return True
+            elif (self.timeToArrival == self.tripTuples[i][RT_TIME_DIFFERENCE]):
                 if (self.dptTime > self.tripTuples[i][RT_DEPARTURE_TIME]):
                     if (self.routeMode == Mode.tripTime):
                         return True
@@ -109,7 +111,9 @@ class TravelPlanner:
                     if (self.routeMode == Mode.waitTime):
                         return True
         elif (self.timeMode == Mode.arrivalTime):
-            if (self.diffToArrTime <= self.tripTuples[i][RT_TIME_DIFFERENCE]):
+            if (self.diffToArrTime < self.tripTuples[i][RT_TIME_DIFFERENCE]):
+                return True
+            elif (self.diffToArrTime == self.tripTuples[i][RT_TIME_DIFFERENCE]):
                 if (self.dptTime > self.tripTuples[i][RT_DEPARTURE_TIME]):
                     if (self.routeMode == Mode.tripTime):
                         return True
