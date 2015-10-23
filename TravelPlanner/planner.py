@@ -51,16 +51,18 @@ class TravelPlanner:
 
     def __init__(self):
         self.client = MongoClient()
-        self.db = self.client.monad
+        self.travelRequest = self.client.monad.TravelRequest
+        self.route = self.client.monad.Route
+        self.timeTable = self.client.monad.timeTable
+        self.userTrip = self.client.monad.UserTrip
+
         self.fittingRoutes = []
         self.startingWaypoint = []
         self.endingWaypoint = []
-        self.routeList = []
-        self.counter = 0
 
 
     def _findFittingRoutes(self):
-        request = self.db.TravelRequest.find_one({"_id": self.requestID})
+        request = self.travelRequest.find_one({"_id": self.requestID})
         self.startPositionLat = request["startPositionLatitude"]
         self.startPositionLon = request["startPositionLongitude"]
         self.endPositionLat   = request["endPositionLatitude"]
@@ -84,7 +86,7 @@ class TravelPlanner:
         else:
             return
 
-        cursor = self.db.Route.find({"stop.name": self.startBusStop, "stop.name": self.endBusStop})
+        cursor = self.route.find({"stop.name": self.startBusStop, "stop.name": self.endBusStop})
         for route in cursor:
             self.fits = False
             for i in range(len(route["stop"])):
@@ -160,8 +162,8 @@ class TravelPlanner:
         self.counter = 0
         self.tripTuples = []
         for route in self.fittingRoutes:
-            self.timeTable = db.timeTable.find_one({"line": route["line"]})
-            for trip in self.timeTable["timetable"]:
+            self.schedule = timeTable.find_one({"line": route["line"]})
+            for trip in self.schedule["timetable"]:
                 for stop in trip["busstops"]:
                     if (self.timeMode == Mode.startTime):
                         if (stop["busstop"] == self.startBusStop):
@@ -205,7 +207,7 @@ class TravelPlanner:
             self.userTripList.append(userTripID)
             if (i >= NUM_OF_ROUTES_RETURNED):
                 break
-        db.UserTrip.insert_many(entryList)
+        userTrip.insert_many(entryList)
 
 
     def getBestRoutes(self, requestID, mode = Mode.tripTime):
