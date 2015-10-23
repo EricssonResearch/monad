@@ -284,13 +284,16 @@ class DB():
 
         @param: start - lower time bound
         @param: end - upper time bound
-        @return: total number of requests.
+        @return: yesterday's requests with fields startTime, startBusStop, endBusStop.
         '''
+        yesterday = datetime.date.today() - datetime.timedelta(days=1)
+        yesterdayStart = datetime.datetime(yesterday.year, yesterday.month, yesterday.day,0,0,0)
+        todayStart = datetime.datetime(datetime.date.today().year,datetime.date.today().month,datetime.date.today().day,0,0,0)
         reqs = []
-        requests = self.db.TravelRequestLookAhead.find()  # New collection for LookAhead
+        requests = self.db.TravelRequestLookAhead.find({"$and": [{"startTime": {"$gte": yesterdayStart}}, {"startTime": {"$lt": todayStart}}]}, {"startTime": 1, "startBusStop": 1, "endBusStop": 1, "_id": 0})  # New collection for LookAhead
         for req in requests:
-            reqs.append(req.get('startTime', None))
-        return reqs
+            reqs.append([req.get('startTime', None), req.get('startBusStop', None), req.get('endBusStop', None)])
+        return reqs   
 
     def getBusStopLatitude(self, busStop):
         return self.retrieveData(self.db.busStopLocation.find({"name": busStop}, {"latitude": 1}), "latitude")
