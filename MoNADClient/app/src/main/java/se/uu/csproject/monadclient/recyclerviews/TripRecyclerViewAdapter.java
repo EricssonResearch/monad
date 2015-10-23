@@ -88,10 +88,10 @@ public class TripRecyclerViewAdapter
 
     @Override
     public void onBindViewHolder(final TripViewHolder tripViewHolder, final int i) {
-        tripViewHolder.origin.setText(trips.get(i).startPosition);
-        tripViewHolder.destination.setText(trips.get(i).endPosition);
-        tripViewHolder.departureTime.setText(trips.get(i).startTime);
-        tripViewHolder.arrivalTime.setText(trips.get(i).endTime);
+        tripViewHolder.origin.setText(trips.get(i).getStartPosition());
+        tripViewHolder.destination.setText(trips.get(i).getEndPosition());
+        tripViewHolder.departureTime.setText(trips.get(i).getStartTime());
+        tripViewHolder.arrivalTime.setText(trips.get(i).getEndTime());
 
         if(trips.get(i).isCurrent()) {
             final long MILLISECONDS_TO_DEPARTURE = trips.get(i).getTimeToDeparture();
@@ -128,27 +128,37 @@ public class TripRecyclerViewAdapter
                 public void onClick(View v) {
                     Intent intent = new Intent(tripViewHolder.itemView.getContext(), RouteActivity.class);
                     Bundle bundle = new Bundle();
-                    //TODO: replace bundle content with departure/ arrival names/times etc
-                    bundle.putInt("element", i);
+                    bundle.putInt("tripId", trips.get(i).getTripId());
+                    bundle.putString("startPosition", trips.get(i).getStartPosition());
+                    bundle.putString("endPosition", trips.get(i).getEndPosition());
+                    bundle.putString("startTime", trips.get(i).getStartTime());
+                    bundle.putString("endTime", trips.get(i).getEndTime());
+                    bundle.putInt("duration", trips.get(i).getDurationMinutes());
                     intent.putExtras(bundle);
                     tripViewHolder.itemView.getContext().startActivity(intent);
                 }
-            });
+           });
 
             tripViewHolder.cancelButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(tripViewHolder.itemView.getContext(), TripCancelPopup.class);
                     Bundle bundle = new Bundle();
-                    //TODO: replace bundle content with departure/ arrival names/times etc
-                    bundle.putInt("element", i);
+                    bundle.putInt("tripId", trips.get(i).getTripId());
+                    bundle.putString("startPosition", trips.get(i).getStartPosition());
+                    bundle.putString("endPosition", trips.get(i).getEndPosition());
+                    bundle.putString("startTime", trips.get(i).getStartTime());
+                    bundle.putString("endTime", trips.get(i).getEndTime());
+                    bundle.putInt("MILLISECONDS", MILLISECONDS);
+                    bundle.putInt("duration", trips.get(i).getDurationMinutes());
+                    bundle.putInt("feedback", trips.get(i).getUserFeedback());
                     intent.putExtras(bundle);
                     tripViewHolder.itemView.getContext().startActivity(intent);
                 }
             });
         }
         else {
-            tripViewHolder.feedback.setRating(trips.get(i).userFeedback);
+            tripViewHolder.feedback.setRating(trips.get(i).getUserFeedback());
         }
     }
 

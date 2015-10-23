@@ -40,10 +40,9 @@ public class ProfileEditPopup extends AppCompatActivity {
             public void onClick(View vw) {
                 UpdateProfileTask task = new UpdateProfileTask();
                 try {
-                    // Get the username and password, send them with the request
+                    // Get the username and it them with the request
                     String clientid = ClientAuthentication.getClientId();
                     String username = ClientAuthentication.getUsername();
-                    String password = ClientAuthentication.getPassword();
                     String email = ClientAuthentication.getEmail();
                     String phone = ClientAuthentication.getPhone();
 
@@ -59,7 +58,7 @@ public class ProfileEditPopup extends AppCompatActivity {
                     else if(name.equals("email")){
                         email = input;
                     }
-                    String response = task.execute(clientid, username, password, email, phone).get();
+                    String response = task.execute(clientid, username, email, phone).get();
                     Toast.makeText(getApplicationContext(), response, Toast.LENGTH_LONG).show();
                     // If the reponse starts with the specific word, it means the user updated the profile successfully
                     if (response.startsWith("Success (1)")) {

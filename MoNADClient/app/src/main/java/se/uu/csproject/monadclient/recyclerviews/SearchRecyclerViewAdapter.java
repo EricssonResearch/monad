@@ -1,7 +1,6 @@
 package se.uu.csproject.monadclient.recyclerviews;
 
 import android.content.Intent;
-import android.media.Image;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -54,9 +53,9 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<SearchRecycl
 
     @Override
     public void onBindViewHolder(final SearchViewHolder searchViewHolder, final int i) {
-        String timeInfo = searchResults.get(i).startTime + " - " + searchResults.get(i).endTime
-                + " (" + searchResults.get(i).durationMinutes + "min)";
-        String routeInfo = searchResults.get(i).startPosition + " to " + searchResults.get(i).endPosition;
+        String timeInfo = searchResults.get(i).getStartTime() + " - " + searchResults.get(i).getEndTime()
+                + " (" + searchResults.get(i).getDurationMinutes() + "min)";
+        String routeInfo = searchResults.get(i).getStartPosition() + " to " + searchResults.get(i).getEndPosition();
         searchViewHolder.timeInfo.setText(timeInfo);
         searchViewHolder.routeInfo.setText(routeInfo);
         //TODO: check if getTimeToDeparture() is less than 30 minutes
@@ -69,8 +68,12 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<SearchRecycl
             public void onClick(View v) {
                 Intent intent = new Intent(searchViewHolder.itemView.getContext(), RouteActivity.class);
                 Bundle bundle = new Bundle();
-                //TODO: replace bundle content with departure/ arrival names/times etc
-                bundle.putInt("element", i);
+                bundle.putInt("tripId", searchResults.get(i).getTripId());
+                bundle.putString("startPosition", searchResults.get(i).getStartPosition());
+                bundle.putString("endPosition", searchResults.get(i).getEndPosition());
+                bundle.putString("startTime", searchResults.get(i).getStartTime());
+                bundle.putString("endTime", searchResults.get(i).getEndTime());
+                bundle.putInt("duration", searchResults.get(i).getDurationMinutes());
                 intent.putExtras(bundle);
                 searchViewHolder.itemView.getContext().startActivity(intent);
             }
