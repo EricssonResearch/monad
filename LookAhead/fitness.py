@@ -13,6 +13,7 @@ Unless required by applicable law or agreed to in writing, software distributed 
 See the License for the specific language governing permissions and limitations under the License.
 
 """
+import itertools
 import unittest
 from dbConnection import DB
 from operator import itemgetter
@@ -75,6 +76,18 @@ class Fitness():
     def getMinutes(self, td):
         return (td.seconds//Fitness.secondMinute) % Fitness.secondMinute
 
+    def getNumberOfRequests(self, requests, tripStart, tripEnd, tripStartTime):
+        ''' find the total number of requests that can be served by the trip
+
+        @param: request - all requests from db
+                tripStart - starting bus stop for trip
+                tripEnd - last bus stop for trip
+                tripStartTime - the departure time for this trip
+        @return number of requests
+        '''
+        # TODO
+        pass
+
     def evalIndividualCapacity(self, individual):
         ''' Evaluates an individual based on the capacity/bus type chosen for each trip.
 
@@ -85,16 +98,30 @@ class Fitness():
         individual.sort(key = itemgetter(2))
 
         db = DB()
-        requests = db.getRequestsFromDB()
-        requests[:] = [request.time() for request in requests if request is not None]
+        requests, routes = db.getRequestsFromDB()
+        # Sanitize the requests and routes
+        requests = [x for x in requests if x[0] is not None]
+        routes = [x for x in routes if x[0] is not None]
+        r = routes[0][1]
+        r[:] = [i[0] for i in r]
+
+        startBusStop = r[0][0]
+        endBusStop = r[len(r)-1][0]
         fitnessVal = 0 # assumed initial fitness value TODO: put as class variable
 
+        nrReqs = []
+        reqs = []
         for trip, item in enumerate(individual):
-            nrReqs = []
             if trip == 0:
                 start = datetime.strptime('00:00', '%H:%M').time()
                 end   = datetime.strptime(individual[0][2], '%H:%M').time()
-                nrReqs = [i for i in requests if i > start and i <= end]
+                for req in requests:
+                    print "in request"
+                    if (req[1], req[2]) in itertools.combinations(r, 2):
+                        reqs = [i[0].time() for i in requests if i[0].time() > start and 
+                                i[0].time() <= end]
+                        nrReqs.extend(reqs)
+                        reqs[:] = []
 
                 # Assign fitness values
                 if len(nrReqs) == individual[trip][1]:
@@ -106,8 +133,14 @@ class Fitness():
             else:
                 start = datetime.strptime(individual[trip-1][2], '%H:%M').time()
                 end   = datetime.strptime(individual[trip][2], '%H:%M').time()
-                nrReqs = [i for i in requests if i > start and i <= end]
-
+                for req in requests:
+                    print "in request 2"
+                    if (req[1], req[2]) in itertools.combinations(r, 2):
+                        reqs = [i[0].time() for i in requests if i[0].time() > start and 
+                                i[0].time() <= end]
+                        nrReqs.extend(reqs)
+                        reqs[:] = []
+ 
                 # Assign fitness values
                 if len(nrReqs) == individual[trip][1]:
                     fitnessVal += 0
@@ -115,6 +148,7 @@ class Fitness():
                     fitnessVal += 1
                 else:
                     fitnessVal += 1000000
+            nrReqs[:] = []
 
         return fitnessVal
 

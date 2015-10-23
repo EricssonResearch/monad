@@ -283,8 +283,12 @@ class DB():
         @return: total number of requests.
         '''
         reqs = []
+        routes = []
         requests = self.db.TravelRequestLookAhead.find()  # New collection for LookAhead
+        route = self.db.route.find()
         for req in requests:
-            reqs.append((req.get('startTime', None), req.get('startBusStop', None),
-                req.get('endBusStop', None)))
-        return reqs
+            reqs.append([req.get('startTime', None), req.get('startBusStop', None),
+                req.get('endBusStop', None)])
+        for r in route:
+            routes.append([r.get('goWay', None), r.get('stop')])
+        return reqs, routes
