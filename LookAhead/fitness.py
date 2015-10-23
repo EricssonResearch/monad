@@ -50,11 +50,11 @@ class Fitness():
         db = DB()
         request = []
         # DB calls can ve avoided by querying the whole Request Collection for a particular day
-        getTravelRequests = db.getTravelRequest
+
 
         # Replace the dates here from yesterday's date
-        yesterday = date.today() + timedelta(1)
-
+        yesterday = date.today() - timedelta(1)
+        print(yesterday)
         # The result here should be added into a file: the order is by hour, minute and initialBusStop
         request = db.getTravelRequestSummary(datetime.combine(yesterday,
                                                               datetime.strptime(Fitness.firstMinute,
@@ -175,5 +175,4 @@ class Fitness():
                     cnt.append(count)
 
         return sum(dif)/sum(cnt),
-
 
