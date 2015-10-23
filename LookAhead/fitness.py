@@ -53,7 +53,7 @@ class Fitness():
         getTravelRequests = db.getTravelRequest
 
         # Replace the dates here from yesterday's date
-        yesterday = date.today() + timedelta(1)
+        yesterday = date.today() - timedelta(3)
 
         # The result here should be added into a file: the order is by hour, minute and initialBusStop
         request = db.getTravelRequestSummary(datetime.combine(yesterday,
@@ -151,7 +151,7 @@ class Fitness():
         cnt = []
         intialTripTime = "00:00"
         # TODO: Change to timedelta(1)
-        yesterday = date.today() - timedelta(2)
+        yesterday = date.today() - timedelta(3)
         # The result here should be added into a file: the order is by hour, minute and initialBusStop
         # request = db.getTravelRequestSummary(datetime.combine(yesterday, datetime.strptime(Fitness.firstMinute, Fitness.formatTime).time()),datetime.combine(yesterday, datetime.strptime(Fitness.lastMinute, Fitness.formatTime).time()))
         for i in range(len(individual)):

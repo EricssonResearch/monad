@@ -32,6 +32,7 @@ class DB():
     minutesDay = 1440
     hoursDay = 24
     minutesHour = 60
+    formatTime = '%H:%M'
 
     # Constructor
     def __init__(self):
@@ -72,7 +73,7 @@ class DB():
         return req
 
     def getTravelRequestSummary(self, start, end):
-        keyf = "function(doc) { return { startBusStop: doc.startBusStop, hour: doc.startTime.getHours(), minute: doc.startTime.getMinutes()};}"
+        keyf = "function(doc) { return { startBusStop: doc.startBusStop, hour: doc.startTime.getHours()-2, minute: doc.startTime.getMinutes()};}"
         condition = {"startTime": {"$gte": start, "$lt": end}}
         initial = {"count": 0}
         reduce = "function(curr, result) { result.count++; }"
@@ -258,20 +259,23 @@ class DB():
     # Time Table
     def insertTimeTable(self, document):
         timeTable = []
-        # route5 = {"line": 5, "durationTime":39, routeStop2}
-        # {"line": document[i][0], "date": str(now.strftime("%Y-%m-%d")), "timetable": }
-        now = datetime.datetime.now()
+        bus = []
         for i in range(len(document)):
             j = 0
             trip = []
+            bus = []
+            busId = self.getRandomMinute()
+            bus.append(busId)
             # print document[i][2]
             for j in range(len(document[i][2])/2):
                 ind = j * 2
-                trip.append({"BusStop": document[i][2][ind],"DptTime": document[i][2][ind+1]})
-                # print trip
-            timeTable.append({"capacity": document[i][1],"trip": trip})
+                if len(document[i][2][ind+1]) < 5:
+                    print document[i][2][ind+1]
+                # trip.append({"busStop": document[i][2][ind],"time": datetime.datetime.strptime(document[i][2][ind+1],DB.formatTime).time(),"capacity": document[i][1],"latitude":self.getBusStopLatitude(document[i][2][ind]),"longitude":self.getBusStopLongitude(document[i][2][ind])})
+                trip.append({"busStop": document[i][2][ind],"time": datetime.datetime.strptime(document[i][2][ind+1],DB.formatTime),"capacity": document[i][1],"latitude":self.getBusStopLatitude(document[i][2][ind]),"longitude":self.getBusStopLongitude(document[i][2][ind])})
+            timeTable.append({"busId": bus,"busStops": trip})
         # print timeTable
-        self.db.timeTable.insert_one({"line": document[0][0], "date": str(now.strftime("%Y-%m-%d")), "timetable": timeTable})
+        self.db.timeTable.insert_one({"line": document[0][0], "date": datetime.datetime.now(), "timetable": timeTable})
 
 
     def getRequestsFromDB(self):
@@ -287,3 +291,10 @@ class DB():
         for req in requests:
             reqs.append(req.get('startTime', None))
         return reqs
+
+    def getBusStopLatitude(self, busStop):
+        return self.retrieveData(self.db.busStopLocation.find({"name": busStop}, {"latitude": 1}), "latitude")
+
+
+    def getBusStopLongitude(self, busStop):
+        return self.retrieveData(self.db.busStopLocation.find({"name": busStop}, {"longitude": 1}), "longitude")
