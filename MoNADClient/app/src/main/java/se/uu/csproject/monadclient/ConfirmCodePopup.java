@@ -4,11 +4,13 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 public class ConfirmCodePopup extends AppCompatActivity {
 
@@ -29,14 +31,27 @@ public class ConfirmCodePopup extends AppCompatActivity {
         confirmationCode = (EditText) findViewById(R.id.field_code);
         submitButton = (Button) findViewById(R.id.button_submit);
 
-        //TODO huijie: implement a way to verify the code sent to the user
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int codeValue = Integer.valueOf(confirmationCode.getText().toString());
-                if(codeValue == 000000){
+                //int codeValue = Integer.valueOf(confirmationCode.getText().toString());
+                String codeValue = confirmationCode.getText().toString();
+
+                Bundle extras = getIntent().getExtras();
+                String rightCode = null;
+
+                if (extras != null) {
+                    rightCode = extras.getString("CODE");
+                }
+
+                //Log.i("CODE GET", rightCode);
+
+                if(codeValue.equals(rightCode)){
                     ConfirmCodePopup.this.startActivity(
                             new Intent(ConfirmCodePopup.this, ResetPasswordActivity.class));
+                }
+                else{
+                    Toast.makeText(getApplicationContext(), "The code you entered is not right, please check your email and enter the right code.", Toast.LENGTH_LONG).show();
                 }
             }
         });

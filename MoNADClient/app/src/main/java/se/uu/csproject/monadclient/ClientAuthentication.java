@@ -316,12 +316,11 @@ public class ClientAuthentication extends Authentication {
         return responseMessage;
     }
 
-    public static String postProfileUpdateRequest(String clientId, String username, String password,
-                                                String email, String phone) {
+    public static String postProfileUpdateRequest(String clientId, String username, String email, String phone) {
 
         String request = AUTHENTICATION_HOST + AUTHENTICATION_PORT + "/client_profile_update";
         String urlParameters = "client_id=" + clientId + "&username=" + username
-                + "&password=" + password + "&email=" + email + "&phone=" + phone;
+                + "&email=" + email + "&phone=" + phone;
 
         /* Update profile: username, password, email, phone */
         // setProfileBeforeSignUp(username, password, email, phone);
@@ -335,11 +334,11 @@ public class ClientAuthentication extends Authentication {
         // response = response.trim();
 
         /* Process Authentication Module's response */
-        return processProfileUpdateResponse(username, password, email, phone, response);
+        return processProfileUpdateResponse(username, email, phone, response);
     }
 
     //// TODO Lefteris: implement processProfileUpdateResponse and return meaningful response message as string; also, if update succeeds, update the user profile here
-    public static String processProfileUpdateResponse(String username, String password, String email,
+    public static String processProfileUpdateResponse(String username, String email,
                                                     String phone, String response) {
         return "";
     }
