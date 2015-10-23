@@ -123,6 +123,7 @@ class TravelPlanner:
         return False
 
     def _rankTrip(self, trip):
+        self.tripProcessed = False
         for i in range(len(self.tripTuples)):
             if (self._isBetterTrip(i)):
                 if (self.timeMode == Mode.startTime):
@@ -133,7 +134,7 @@ class TravelPlanner:
                             (trip, self.diffToArrTime, self.dptTime, self.arrTime))
                 self.tripProcessed = True
                 break
-            if (i > NUM_OF_ROUTES_RETURNED):
+            if (i >= (NUM_OF_ROUTES_RETURNED - 1)):
                 self.tripProcessed = True
                 break
         if (self.tripProcessed == False):
@@ -143,7 +144,6 @@ class TravelPlanner:
                 self.tripTuples.append((trip, self.diffToArrTime, self.dptTime, self.arrTime))
 
     def _insertTrip(self, trip):
-        self.tripProcessed = False
         self.dptTime = trip["busstops"][self.startingWaypoint[self.counter]]["time"]
         self.arrTime = trip["busstops"][self.endingWaypoint[self.counter]]["time"]
         
