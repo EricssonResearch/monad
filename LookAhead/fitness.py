@@ -21,7 +21,6 @@ from datetime import timedelta
 from datetime import date
 
 
-
 class Fitness():
 
     # Main [class] variables
@@ -31,6 +30,39 @@ class Fitness():
     secondMinute = 60.0
     firstMinute = "00:00"
     lastMinute = "23:59"
+
+# A decorator is a function that can accept another function as
+# a parameter to be able to modify or extend it
+    def decorator(afunction):
+
+        # A wrapper function is used to wrap functionalites you want around the original function
+        def wrapper(*args):
+            # Checks whether or not the original function as been executed once
+            if not wrapper.has_run:
+                wrapper.has_run = True
+                return afunction(*args)
+
+        wrapper.has_run = False
+        return wrapper
+
+    @decorator
+    def runOnce(self):
+        db = DB()
+        request = []
+        # DB calls can ve avoided by querying the whole Request Collection for a particular day
+        getTravelRequests = db.getTravelRequest
+
+        # Replace the dates here from yesterday's date
+        yesterday = date.today() + timedelta(1)
+
+        # The result here should be added into a file: the order is by hour, minute and initialBusStop
+        request = db.getTravelRequestSummary(datetime.combine(yesterday,
+                                                              datetime.strptime(Fitness.firstMinute,
+                                                                                Fitness.formatTime).time()),
+                                             datetime.combine(yesterday, datetime.strptime(Fitness.lastMinute,
+                                                                                           Fitness.formatTime).time()))
+
+
 
     def timeDiff(self, time1, time2):
         ''' Evaluates the difference between two times.
@@ -87,23 +119,6 @@ class Fitness():
         return fitnessVal
 
     def evalIndividual(self, individual):
-        #print(sorted(individual, key = itemgetter(2)))
-
-        """
-        dataFile = open("data.bson", "w")
-
-        databaseClass = DB()
-        cursor = databaseClass.db.TravelRequest.find({}, {'_id': False})
-
-        for document in cursor:
-
-            json.dump(document, dataFile, default=json_util.default)
-
-            dataFile.write(",\n")
-
-        dataFile.close()
-        """
-
         ''' Evaluate an individual in the population. Based on how close the
         average bus request time is to the actual bus trip time.
 
@@ -113,13 +128,18 @@ class Fitness():
         according to the evolving timetable.
         Lower values are better.
         '''
+
+        self.runOnce()
+
         # DONE Store the date on mongo as datetime 
         # Store the requests of the previous day into a JSON file order them by date and KEEP IT during the whole iteration on memory
         # DONE Group by request query from the file to reduce the number of elements being processed
+
         # Use map function instead of LOOP
         # Multi thread the MAP functions
 
         # First, the randomly-generated starting times are sorted in order to check sequentially the number of requests for that particular trip
+
         individual = sorted(individual, key=itemgetter(2))
         # Second, we loop trough the number of genes in order to retrieve the number of requests for that particular trip
         # DB calls can ve avoided by querying the whole Request Collection for a particular day
@@ -153,54 +173,7 @@ class Fitness():
                         count = count + int(request[k]["count"])
                     dif.append(diff)
                     cnt.append(count)
-        print sum(dif)/sum(cnt)
+
         return sum(dif)/sum(cnt),
-        # print len(dif)
-        #print len(cnt)
-
-                # diff.append(self.getMinutes(self.timeDiff(tripTime,request[j]["StartTime"])))
-            
-            
-        #     req.append(request.count())
-        #     diff = []
-        #     for j in range(request.count()):
-        #         diff.append(self.getMinutes(self.timeDiff(tripTime,request[j]["StartTime"])))
-        #         tripTime = "20-10-2015 "+individual[i+1][2]
-        #     dif.append([diff])
-        # print req
-        # print dif
-        # Apply a map function to sum all elements of req and diff
-        # Then, perform diff / req
-        # The result is the value of the fitness function in waiting minutes
-
-        # The least and most possible time timedelta values
-        # timeDelta = timeDiff(individual[0][2], individual[0][2])
-        '''
-        minDiff = timedelta.max
-        #diffMinutes = 0
-        for reqTime in Fitness.avgBusRequestTime:
-            for i in range(len(individual)):
-                timeTableDiff = self.timeDiff(individual[i][2], reqTime)
-                if timeTableDiff >= timedelta(minutes=0) and timeTableDiff < minDiff:
-                    # waitMin = individual[i][2]
-                    # index = i
-                    minDiff = timeTableDiff
-            
-            print "Average req time (based on past requests)"
-            print reqTime
-            print "Best departure time"
-            print waitMin
-            print "Individual gene"
-            print individual[index]
-            
-            self.diffMinutes += minDiff.total_seconds() / Fitness.secondMinute
-            # print diffMinutes
-            minDiff = timedelta.max  # Reset minDiff for the next request time
-        return self.diffMinutes,
-        '''
-        # return 1, #TODO
-
-
-
 
 
