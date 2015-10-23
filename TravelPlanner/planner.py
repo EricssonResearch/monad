@@ -20,7 +20,6 @@ from pymongo import MongoClient
 
 NUM_OF_ROUTES_RETURNED = 5
 RT_ROUTE = 0
-RT_ARRIVAL_TIME = 1
 RT_TIME_DIFFERENCE = 1
 RT_DEPARTURE_TIME = 2
 RT_ARRIVAL_TIME = 3
@@ -102,8 +101,8 @@ class TravelPlanner:
    
     def _isBetterTrip(self, i):
         if (self.timeMode == Mode.startTime):
-            if (self.timeToArrival <= self.tripTuples[i][RT_ARRIVAL_TIME]):
-                if (self.dptTime < self.tripTuples[i][RT_DEPARTURE_TIME]):
+            if (self.timeToArrival <= self.tripTuples[i][RT_TIME_DIFFERENCE]):
+                if (self.dptTime > self.tripTuples[i][RT_DEPARTURE_TIME]):
                     if (self.routeMode == Mode.tripTime):
                         return True
                 else:
