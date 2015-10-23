@@ -16,11 +16,11 @@ See the License for the specific language governing permissions and limitations 
 import random
 import string
 import collections
-import json
 import datetime
 from pymongo import MongoClient
 from bson.objectid import ObjectId
 from operator import itemgetter
+
 
 
 class DB():
@@ -62,14 +62,34 @@ class DB():
             {"_id": ObjectId(self.getRandomTravelRequestId())})
         return req
 
-    def getTravelRequest(self, object, column):
-        req = self.db.TravelRequest.find({"_id": ObjectId(object)})
+    def getTravelRequest(self, column):
+        req = self.db.TravelRequestLookAhead.find({}, {"_id": False})
         return self.retrieveData(req, column)
 
     # These function will be called for every gene in order to get the difference
     def getTravelRequestBetween(self, start, end):
         req = self.db.TravelRequest.find({ "StartTime": {"$gte": start, "$lt": end}})
         return req
+
+    def getTravelRequestSummary(self, start, end):
+        keyf = "function(doc) { return { startBusStop: doc.startBusStop, hour: doc.startTime.getHours(), minute: doc.startTime.getMinutes()};}"
+        condition = {"startTime": {"$gte": start, "$lt": end}}
+        initial = {"count": 0}
+        reduce = "function(curr, result) { result.count++; }"
+        # req = self.db.TravelRequest.group(keyf, condition, initial, reduce)
+        req = self.db.TravelRequestLookAhead.group(keyf, condition, initial, reduce)
+        req = sorted(req, key=itemgetter("hour","minute"))
+        return req
+
+    def getTravelRequestSummary2(self, start, end, busStop):
+        keyf = "function(doc) { return { startBusStop: doc.startBusStop, hour: doc.startTime.getHours(), minute: doc.startTime.getMinutes()};}"
+        condition = {"startTime": {"$gte": start, "$lt": end}, "startBusStop": {"$eq": busStop}}
+        initial = {"count": 0}
+        reduce = "function(curr, result) { result.count++; }"
+        # req = self.db.TravelRequest.group(keyf, condition, initial, reduce)
+        req = self.db.TravelRequestLookAhead.group(keyf, condition, initial, reduce)
+        req = sorted(req, key=itemgetter("hour","minute"))
+        return req        
 
     # These function will be called for every gene in order to get the difference
     # def getTravelRequestBetween(self, start, end):
@@ -176,6 +196,18 @@ class DB():
     def generateStartingTripTime(self):
         return list([self.getRoute("line"), self.generateRandomCapacity(), self.generateTime(self.generateMinute(self.mergeRandomTime(self.getRandomHour(),self.getRandomMinute())))])
 
+    def generateFitnessTripTimeTable(self, line, startingTime):
+        tripTimeTable = []
+        busStop = self.getRouteStop(line)
+        minuteSeed = self.generateMinute(startingTime)
+        tripTimeTable.append([busStop[0][0],self.generateTime(minuteSeed)])
+        for j in range(len(busStop)-1):
+            minuteSeed = minuteSeed + busStop[j][1]
+            if minuteSeed > DB.minutesDay:
+                minuteSeed = minuteSeed - DB.minutesDay
+            tripTimeTable.append([busStop[j+1][0],self.generateTime(minuteSeed)])
+        return tripTimeTable
+
     def generateTripTimeTable(self, timetable):
         timeTable = []
         for i in range(len(timetable)):
@@ -240,3 +272,18 @@ class DB():
             timeTable.append({"capacity": document[i][1],"trip": trip})
         # print timeTable
         self.db.timeTable.insert_one({"line": document[0][0], "date": str(now.strftime("%Y-%m-%d")), "timetable": timeTable})
+
+
+    def getRequestsFromDB(self):
+        ''' Gets travel requests from the database. Attempts to cluster the requests based on time 
+        and calculates a count of the total requests between a time window.
+
+        @param: start - lower time bound
+        @param: end - upper time bound
+        @return: total number of requests.
+        '''
+        reqs = []
+        requests = self.db.TravelRequestLookAhead.find()  # New collection for LookAhead
+        for req in requests:
+            reqs.append(req.get('startTime', None))
+        return reqs

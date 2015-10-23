@@ -17,6 +17,8 @@ import numpy
 from dbConnection import DB
 import toolBox
 
+from fitness import Fitness
+
 # Variables
 MUTATION_PROB = 0.5
 CROSS_OVER_PROB = 0.5
@@ -25,10 +27,11 @@ POPULATION_SIZE = 1
 
 
 def main():
-
+    fitnessClass =Fitness()
     # Generate the population
     pop = toolBox.toolbox.population(n=POPULATION_SIZE)
 
+    fitnessClass.evalIndividualCapacity(pop[0])
     hof = tools.HallOfFame(1)
 
     stats = tools.Statistics(lambda ind: ind.fitness.values)

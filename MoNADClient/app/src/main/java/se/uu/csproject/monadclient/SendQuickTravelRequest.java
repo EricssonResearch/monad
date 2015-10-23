@@ -1,6 +1,5 @@
 package se.uu.csproject.monadclient;
 
-
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -15,7 +14,7 @@ import java.net.URL;
 import java.io.DataOutputStream;
 
 
-public class SendTravelRequest extends AsyncTask<String, Void, String> {
+public class SendQuickTravelRequest extends AsyncTask<String, Void, String>{
     private static String SERVER = "http://130.238.15.114";
 
     /* Send the data to the server via POST and receive the response */
@@ -69,13 +68,15 @@ public class SendTravelRequest extends AsyncTask<String, Void, String> {
     }
 
     /* Get the data from the interface and wrap them in a request */
-    public static String wrapRequest(String userId, String startTime, String endTime,
-                                   String requestTime, String stPosition, String edPosition, String priority) {
-        String request = SERVER + "/request";
+    public static String wrapRequest(String userId, String startTime, String endTime, String requestTime,
+                                     String startPositionLatitude, String startPositionLongitude,
+                                     String edPosition, String priority) {
+        String request = SERVER + "/quickRequest";
 
         String urlParameters = "userId=" + userId + "&startTime=" + startTime
                 + "&endTime=" + endTime + "&requestTime=" + requestTime
-                + "&stPosition=" + stPosition + "&edPosition=" + edPosition
+                + "&startPositionLatitude=" + startPositionLatitude
+                + "&startPositionLongitude=" + startPositionLongitude + "&edPosition=" + edPosition
                 + "&priority=" + priority;
         String response = postRequest(request, urlParameters);
 
@@ -87,8 +88,9 @@ public class SendTravelRequest extends AsyncTask<String, Void, String> {
     protected String doInBackground(String... params) {
         String response;
 
-        response = wrapRequest(params[0], params[1], params[2], params[3], params[4], params[5], params[6]);
+        response = wrapRequest(params[0], params[1], params[2], params[3], params[4], params[5], params[6], params[7]);
 
+        Log.d("goodJob", response);
         return response;
     }
 
@@ -100,5 +102,3 @@ public class SendTravelRequest extends AsyncTask<String, Void, String> {
         //TODO Stavros: set the scrollview with the response
     }
 }
-
-

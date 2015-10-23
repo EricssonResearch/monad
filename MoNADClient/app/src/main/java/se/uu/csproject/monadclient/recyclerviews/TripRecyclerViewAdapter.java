@@ -1,11 +1,14 @@
 package se.uu.csproject.monadclient.recyclerviews;
 
+import android.content.Intent;
 import android.graphics.Color;
+import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
@@ -14,24 +17,30 @@ import java.text.DecimalFormat;
 import java.util.List;
 
 import se.uu.csproject.monadclient.R;
+import se.uu.csproject.monadclient.RouteActivity;
+import se.uu.csproject.monadclient.TripCancelPopup;
 
 import static java.lang.Math.floor;
 
-public class TripRecyclerViewAdapter extends RecyclerView.Adapter<TripRecyclerViewAdapter.TripViewHolder>{
+public class TripRecyclerViewAdapter
+        extends RecyclerView.Adapter<TripRecyclerViewAdapter.TripViewHolder>{
 
-    public static class TripViewHolder extends RecyclerView.ViewHolder {
+    List<Trip> trips;
+
+    public class TripViewHolder extends RecyclerView.ViewHolder {
 
         TextView origin;
         TextView destination;
         TextView departureTime;
         TextView arrivalTime;
-        TextView countdownTime; //active trips only
         TextView date;
-        RatingBar feedback; // past trips only
         ImageView clockIcon;
+        TextView countdownTime; //active trips only
+        ImageButton routeInfoButton; //active trips only
+        ImageButton cancelButton; //active trips only
+        RatingBar feedback; // past trips only
 
-
-        TripViewHolder(View itemView) {
+        TripViewHolder(final View itemView) {
             super(itemView);
             origin = (TextView) itemView.findViewById(R.id.label_origin);
             destination = (TextView) itemView.findViewById(R.id.label_destination);
@@ -41,6 +50,8 @@ public class TripRecyclerViewAdapter extends RecyclerView.Adapter<TripRecyclerVi
             date = (TextView) itemView.findViewById(R.id.label_date);
             feedback = (RatingBar) itemView.findViewById(R.id.ratingbar);
             clockIcon = (ImageView) itemView.findViewById(R.id.icon_clock);
+            routeInfoButton = (ImageButton) itemView.findViewById(R.id.button_routeinfo);
+            cancelButton = (ImageButton) itemView.findViewById(R.id.cancel);
         }
     }
 
@@ -53,8 +64,6 @@ public class TripRecyclerViewAdapter extends RecyclerView.Adapter<TripRecyclerVi
             return 0;
         }
     }
-
-    List<Trip> trips;
 
     public TripRecyclerViewAdapter(List<Trip> trips){
         this.trips = trips;
@@ -78,11 +87,11 @@ public class TripRecyclerViewAdapter extends RecyclerView.Adapter<TripRecyclerVi
     }
 
     @Override
-    public void onBindViewHolder(final TripViewHolder tripViewHolder, int i) {
-        tripViewHolder.origin.setText(trips.get(i).startPosition);
-        tripViewHolder.destination.setText(trips.get(i).endPosition);
-        tripViewHolder.departureTime.setText(trips.get(i).startTime);
-        tripViewHolder.arrivalTime.setText(trips.get(i).endTime);
+    public void onBindViewHolder(final TripViewHolder tripViewHolder, final int i) {
+        tripViewHolder.origin.setText(trips.get(i).getStartPosition());
+        tripViewHolder.destination.setText(trips.get(i).getEndPosition());
+        tripViewHolder.departureTime.setText(trips.get(i).getStartTime());
+        tripViewHolder.arrivalTime.setText(trips.get(i).getEndTime());
 
         if(trips.get(i).isCurrent()) {
             final long MILLISECONDS_TO_DEPARTURE = trips.get(i).getTimeToDeparture();
@@ -113,9 +122,43 @@ public class TripRecyclerViewAdapter extends RecyclerView.Adapter<TripRecyclerVi
                     //tripViewHolder.clockIcon.setColorFilter(Color.parseColor("#2e7d32"));
                 }
             }.start();
+
+           tripViewHolder.routeInfoButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(tripViewHolder.itemView.getContext(), RouteActivity.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putInt("tripId", trips.get(i).getTripId());
+                    bundle.putString("startPosition", trips.get(i).getStartPosition());
+                    bundle.putString("endPosition", trips.get(i).getEndPosition());
+                    bundle.putString("startTime", trips.get(i).getStartTime());
+                    bundle.putString("endTime", trips.get(i).getEndTime());
+                    bundle.putInt("duration", trips.get(i).getDurationMinutes());
+                    intent.putExtras(bundle);
+                    tripViewHolder.itemView.getContext().startActivity(intent);
+                }
+           });
+
+            tripViewHolder.cancelButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(tripViewHolder.itemView.getContext(), TripCancelPopup.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putInt("tripId", trips.get(i).getTripId());
+                    bundle.putString("startPosition", trips.get(i).getStartPosition());
+                    bundle.putString("endPosition", trips.get(i).getEndPosition());
+                    bundle.putString("startTime", trips.get(i).getStartTime());
+                    bundle.putString("endTime", trips.get(i).getEndTime());
+                    bundle.putInt("MILLISECONDS", MILLISECONDS);
+                    bundle.putInt("duration", trips.get(i).getDurationMinutes());
+                    bundle.putInt("feedback", trips.get(i).getUserFeedback());
+                    intent.putExtras(bundle);
+                    tripViewHolder.itemView.getContext().startActivity(intent);
+                }
+            });
         }
         else {
-            tripViewHolder.feedback.setRating(trips.get(i).userFeedback);
+            tripViewHolder.feedback.setRating(trips.get(i).getUserFeedback());
         }
     }
 

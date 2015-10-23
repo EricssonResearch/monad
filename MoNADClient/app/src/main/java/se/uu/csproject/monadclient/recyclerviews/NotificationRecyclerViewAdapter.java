@@ -1,5 +1,7 @@
 package se.uu.csproject.monadclient.recyclerviews;
 
+import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -20,6 +22,7 @@ public class NotificationRecyclerViewAdapter extends RecyclerView.Adapter<Notifi
         TextView notificationName;
         TextView notificationTime;
         ImageView notificationPhoto;
+        ImageView hideNotificationButton;
 
         NotificationViewHolder(View itemView) {
             super(itemView);
@@ -27,6 +30,7 @@ public class NotificationRecyclerViewAdapter extends RecyclerView.Adapter<Notifi
             notificationName = (TextView)itemView.findViewById(R.id.text);
             notificationTime = (TextView)itemView.findViewById(R.id.time);
             notificationPhoto = (ImageView)itemView.findViewById(R.id.icon);
+            hideNotificationButton = (ImageView)itemView.findViewById(R.id.button_hidenotification);
         }
     }
 
@@ -49,10 +53,18 @@ public class NotificationRecyclerViewAdapter extends RecyclerView.Adapter<Notifi
     }
 
     @Override
-    public void onBindViewHolder(NotificationViewHolder notificationViewHolder, int i) {
+    public void onBindViewHolder(final NotificationViewHolder notificationViewHolder, final int i) {
         notificationViewHolder.notificationName.setText(notify.get(i).name);
         notificationViewHolder.notificationTime.setText(notify.get(i).time);
         notificationViewHolder.notificationPhoto.setImageResource(notify.get(i).iconId);
+
+        notificationViewHolder.hideNotificationButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //TODO: remove notification from database
+                notificationViewHolder.itemView.setVisibility(View.GONE);
+            }
+        });
     }
 
     @Override

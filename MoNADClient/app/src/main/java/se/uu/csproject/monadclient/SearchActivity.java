@@ -13,6 +13,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.format.DateFormat;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -28,14 +29,12 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
-import android.widget.RadioGroup.OnCheckedChangeListener;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 import se.uu.csproject.monadclient.recyclerviews.SearchRecyclerViewAdapter;
 import se.uu.csproject.monadclient.recyclerviews.Trip;
@@ -124,7 +123,7 @@ public class SearchActivity extends AppCompatActivity {
     }
 
     public void updateDate() {
-        final String DATE_FORMAT = "EEE dd MMM.";
+        final String DATE_FORMAT = "EEE dd MMM";
         SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT);
         String selectedDate = dateFormat.format(calendar.getTime());
         textViewTripDate.setText(selectedDate);
@@ -241,33 +240,48 @@ public class SearchActivity extends AppCompatActivity {
     }
 
     public void sendTravelRequest (View v) {
-        //// TODO Stavros: retrieve various fields from the UI and send them to SendTravelRequest
+        String stPosition, edPosition, userId, startTime, endTime, requestTime, priority;
+        int selectedId, currentYear;
 
-        String stPosition, edPosition, username, startTime, endTime, requestTime;
-        int selectedId;
         Date now = new Date();
-        SimpleDateFormat df = new SimpleDateFormat("yyyy, MM, dd, HH, mm, ss");
-
-        startTime = "";
-        endTime = "";
+        Calendar rightNow = Calendar.getInstance();
+        currentYear = rightNow.get(Calendar.YEAR);
+        SimpleDateFormat df = new SimpleDateFormat("yyyy EEE dd MMM HH:mm");
+        startTime = "null";
+        endTime = "null";
+        priority = "";
         requestTime = df.format(now);
-        username = ClientAuthentication.getUsername();
+        userId = ClientAuthentication.getClientId();
         stPosition = positionEditText.getText().toString();
         edPosition = destinationEditText.getText().toString();
+
         selectedId = tripTimeRadioGroup.getCheckedRadioButtonId();
 
         switch(selectedId){
             case R.id.radiobutton_search_departuretime:
-                startTime = textViewTripDate.getText().toString();
+                startTime = Integer.toString(currentYear) + " " + textViewTripDate.getText().toString() + " "
+                        + textViewTripTime.getText().toString();
                 break;
 
             case R.id.radiobutton_search_arrivaltime:
-                endTime = textViewTripTime.getText().toString();
+                endTime = Integer.toString(currentYear) + " " + textViewTripDate.getText().toString() + " "
+                        + textViewTripTime.getText().toString();
                 break;
         }
 
-        //TODO: send the correct starting and ending times
-        new SendTravelRequest().execute(username, requestTime, requestTime, requestTime, stPosition, edPosition);
+        selectedId = priorityRadioGroup.getCheckedRadioButtonId();
+
+        switch(selectedId){
+            case R.id.radiobutton_search_prioritytripdistance:
+                priority = "distance";
+                break;
+
+            case R.id.radiobutton_search_prioritytriptime:
+                priority = "time";
+                break;
+        }
+
+        new SendTravelRequest().execute(userId, startTime, endTime, requestTime, stPosition, edPosition, priority);
     }
 
     //TEMPORARY FUNCTION TODO: Remove this function once the database connection is set

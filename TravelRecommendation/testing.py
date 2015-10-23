@@ -1,6 +1,7 @@
 import unittest
 import datetime
 import TravelRecommendation as tr
+from geopy.distance import vincenty
 
 class TestStringMethods(unittest.TestCase):
 
@@ -77,6 +78,20 @@ class TestStringMethods(unittest.TestCase):
         self.assertEqual(tr.calculateDistance(b), [1.4142135623730951,
         2.2360679774997898])
         print "\nTest 8 - OK ... Calculating distance"
+
+    def test9_removeDuplicates(self):
+        a = [(1,2), (1,3), (1,4), (2,3)]
+        b = [(1,2), (2,2), (3,2)]
+        self.assertEqual(tr.removeDuplicates(a), [1,2])
+        self.assertEqual(tr.removeDuplicates(b), [1,2,3])
+        print "\nTest 9 - OK ... Removing duplicates"
+
+    def test10_timeApproximation(self):
+        self.assertEqual(tr.timeApproximation(59.851252, 17.593290,
+                                              59.858052, 17.644739), 18)
+        self.assertEqual(tr.timeApproximation(59.851252, 17.593290,
+                                              59.840427, 17.647628), 20)
+        print "\nTest 10 - OK ... Approximating time"
 
 if __name__ == "__main__":
     unittest.main()

@@ -316,6 +316,85 @@ public class ClientAuthentication extends Authentication {
         return responseMessage;
     }
 
+    public static String postGoogleSignInRequest(String email) {
+        String request = AUTHENTICATION_HOST + AUTHENTICATION_PORT + "/google_sign_in";
+        String urlParameters = "email=" + email;
+
+        /* Update profile: username, password, email, phone */
+        // setProfileBeforeSignUp(username, password, email, phone);
+
+        /* Send the request to the Authentication Module */
+        String response = postRequest(request, urlParameters);
+
+        /* By default, Erlang adds the newline '\n' character at the beginning of response */
+        /* For this reason substring() function is used */
+        response = response.substring(1);
+        // response = response.trim();
+
+        /* Process Authentication Module's response */
+        return processGoogleSignInResponse(email, response);
+    }
+
+    public static String processGoogleSignInResponse(String email, String response) {
+        String responseMessage = "";
+        String[] responseData = new String[8];
+        /* 0: id */
+        /* 1: username */
+        /* 2: phone */
+        /* 3: language */
+        /* 4: storeLocation */
+        /* 5: notificationsAlert */
+        /* 6 recommendationsAlert */
+        /* 7: theme */
+        String temp = "";
+        int index = 0;
+
+        /* Successful signIn request */
+        /* Response: "1|clientId|username|phone|language|storeLocation|notificationsAlert|recommendationsAlert|theme" */
+        if (response.startsWith("1|")) {
+
+            /* Process response and parse profile data */
+            for (int i = 2; i < response.length(); i++) {
+                char c = response.charAt(i);
+
+                if (c != '|') {
+                    temp = temp + c;
+                }
+                else {
+                    responseData[index] = temp;
+                    index++;
+                    temp = "";
+                }
+            }
+            responseData[index] = temp;
+
+            /* Update profile: clientId, username, password, email, phone,
+                               language, storeLocation, notificationsAlert,
+                               recommendationsAlert, theme */
+            updateProfile(responseData[0], responseData[1], "", email, responseData[2],
+                    responseData[3], responseData[4], responseData[5],
+                    responseData[6], responseData[7]);
+
+            responseMessage = "Success (1) - " + response + profileToString();
+        }
+
+        /*  */
+        /* Response: "2|clientId" */
+        else if (response.startsWith("2|")) {
+            /* Update profile: clientId, username, password, email, phone */
+            String clientId = response.substring(2);
+            updateProfileAfterSignUp(clientId, "", "", email, "");
+            responseMessage = "Success (1) - User Id: " + getClientId();
+        }
+        else {
+            responseMessage = "ERROR - " + response;
+//            System.out.println("ERROR - " + response);
+        }
+//        System.out.println("Response: " + responseMessage);
+        return responseMessage;
+    }
+
+
     public static String postProfileUpdateRequest(String clientId, String username, String email, String phone) {
 
         String request = AUTHENTICATION_HOST + AUTHENTICATION_PORT + "/client_profile_update";

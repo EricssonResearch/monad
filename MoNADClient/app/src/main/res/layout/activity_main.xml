@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="se.uu.csproject.monadclient.LoginActivity">
+    tools:context="se.uu.csproject.monadclient.MainActivity">
 
     <include
         android:id="@+id/actionToolBar"
@@ -25,6 +25,7 @@
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:id="@+id/main_search_destination"
                 android:layout_weight="1"
                 android:background="@color/black"
                 android:textColor="@color/white"
