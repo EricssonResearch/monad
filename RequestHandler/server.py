@@ -96,22 +96,70 @@ def application(env, start_response):
 				connection.close()										
 		else:
 			start_response("500 INTERNAL ERROR", [("Content-Type", "text/plain")])	
-			logging.error("Something went wrong with the data sent by the user's request.")
+			logging.error("Request: Something went wrong with the data sent by the user's request.")
 			return ["Something went wrong, please try again. We are sorry for the inconvenience."]
+			
 	elif data_env["PATH_INFO"] == "/resetPassword":
 		if "email" in data:
-			email = escape(data.getvalue("email"))
-			email_list = [email]
+			email = escape(data.getvalue("email"))			
+			email_list = [email]			
 			code = randint(1000, 9999)
 			message = "This is your confirmation code: {0}. Please type it into the appropriate field.".format(code)
 			send_email("project.monad2015@gmail.com", email_list, "Confirmation Code", message)
 			
 			start_response("200 OK", [("Content-Type", "text/plain")])				
-			return ["The confirmation code sent to the user is: {0}".format(code)]
+			return ["{0}".format(code)]
 		else:
 			start_response("500 INTERNAL ERROR", [("Content-Type", "text/plain")])	
-			logging.error("Something went wrong with the data sent by the user's request.")
+			logging.error("Reset Password: Something went wrong with the data sent by the user's request.")
 			return ["Something went wrong, please try again. We are sorry for the inconvenience."]
+			
+	elif data_env["PATH_INFO"] == "/quickRequest":
+		if ("userId" and "startTime" and "endTime" and "requestTime" and "startPositionLatitude"
+			and "startPositionLongitude" and "edPosition" and "priority" in data):
+			userId = int(escape(data.getvalue("userId")))
+			startTime = escape(data.getvalue("startTime"))
+			endTime = escape(data.getvalue("endTime"))
+			requestTime = escape(data.getvalue("requestTime"))
+			startPositionLatitude = float(escape(data.getvalue("startPositionLatitude")))
+			startPositionLongitude = float(escape(data.getvalue("startPositionLongitude")))
+			edPosition = escape(data.getvalue("edPosition"))
+			priority = escape(data.getvalue("priority"))	
+		
+			try:
+				requestTime = datetime.strptime(requestTime, "%Y %a %d %b %H:%M")
+				if startTime == "null":
+					endTime = datetime.strptime(endTime, "%Y %a %d %b %H:%M")
+				else:
+					startTime = datetime.strptime(startTime, "%Y %a %d %b %H:%M")
+			except ValueError as e:
+				start_response("500 INTERNAL ERROR", [("Content-Type", "text/plain")])
+				logging.error("Something went wrong with the date format: {0}".format(e))
+				return ["Something went wrong, please try again. We are sorry for the inconvenience."]			
+			
+			try:
+				connection = MongoClient(IP_ADDRESS_OF_MONGODB, PORT_OF_MONGODB, connectTimeoutMS = 5000, 
+										serverSelectionTimeoutMS = 5000)		
+				database = connection.monad
+				collection = database.TravelRequest		
+				document = {"userId": userId, "startTime": startTime, "endTime": endTime,
+							"requestTime": requestTime, "startPositionLatitude": startPositionLatitude,
+							"startPositionLongitude": startPositionLongitude, "edPosition": edPosition}			
+				insert_one_document(collection, document)
+			except pymongo.errors.PyMongoError as e:
+				start_response("500 INTERNAL ERROR", [("Content-Type", "text/plain")])	
+				logging.error("Something went wrong: {0}".format(e))
+				return ["Something went wrong, please try again. We are sorry for the inconvenience."]		
+			else:
+				start_response("200 OK", [("Content-Type", "text/plain")])				
+				return ["Data successfully written in the database! Go Mo.N.A.D team!"]
+			finally:					
+				connection.close()										
+		else:
+			start_response("500 INTERNAL ERROR", [("Content-Type", "text/plain")])	
+			logging.error("Quick request: Something went wrong with the data sent by the user's request.")
+			return ["Something went wrong, please try again. We are sorry for the inconvenience."]
+			
 	else:
 		start_response("403 FORBIDDEN", [("Content-Type", "text/plain")])
 		logging.warning("Someone is trying to access the server outside the app.")		
