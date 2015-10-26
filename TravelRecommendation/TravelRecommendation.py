@@ -76,14 +76,14 @@ def populateRequests(TravelRequest):
 def populateTimeTable(TimeTable):
     route = TimeTable.find()
     for res in route:
-        for i in range(len(res['Waypoints']) - 1):
-            for j in range(i+1,len(res['Waypoints'])):
-                routes.append([res['_id'], (res['Waypoints'][i]['latitude'],
-                res['Waypoints'][i]['longitude'],
-                res['Waypoints'][j]['latitude'],
-                res['Waypoints'][j]['longitude'],
-                res['Waypoints'][i]['DptTime'],
-                res['Waypoints'][j]['DptTime'])])
+        routes.append([res['_id'], res['Waypoints']])
+
+def iterator(waypoints):
+  Waypoints = []
+  for res in waypoints:
+    Waypoints.append((latNormalizer(res['latitude']), lonNormalizer(res['longitude']), timeNormalizer(toCoordinates(toSeconds(res['DptTime']))[0]), timeNormalizer(toCoordinates(toSeconds(res['DptTime']))[1])))
+  #print Waypoints
+  return Waypoints
 
 # Converting time object to seconds
 def toSeconds(dt):
@@ -147,6 +147,35 @@ def calculateDistance(tup1):
         distances.append(numpy.linalg.norm(current_route - centroid))
     return distances
 
+def calculateDistanceDeparture(tup1):
+  distances_departure = []
+  for i in selected_centroids:
+      centroid_departure = (i[0], i[1],i[4], i[5])
+      centroid_departure = numpy.array(centroid_departure)
+      temp_dist = []
+      for l in range(len(tup1)-1):
+        current_stop = numpy.array(tup1[l])
+        temp_dist.append(numpy.linalg.norm(current_stop - centroid_departure))
+      result = min(temp_dist)
+      distances_departure.append(result)
+  #print distances_departure
+  return distances_departure
+
+
+def calculateDistanceArrival(tup1):
+  distances_arrival = []
+  for i in selected_centroids:
+        centroid_arrival = (i[2], i[3], i[6], i[7])
+        centroid_arrival = numpy.array(centroid_arrival)
+        temp_dist = []
+        for l in range(1, len(tup1)):
+          current_stop = numpy.array(tup1[l])
+          temp_dist.append(numpy.linalg.norm(current_stop - centroid_arrival))
+        result = min(temp_dist)
+        distances_arrival.append(result)
+  return distances_arrival
+
+
 def removeDuplicates(alist):
     return list(set(map(lambda (x, y): x, alist)))
 
@@ -206,21 +235,14 @@ if __name__ == "__main__":
     time_t = retrieveTimeTable()
     populateTimeTable(time_t)
     myRoutes = sc.parallelize(routes).cache()
-    myRoutes = (myRoutes.map(lambda (y,x): (y, (x[0], x[1], x[2], x[3],
-                                 toCoordinates(toSeconds(x[4])),
-                                 toCoordinates(toSeconds(x[5])))))
-                       .map(lambda (y, (x1, x2, x3, x4, (x5, x6), (x7, x8))):
-                                 (y, (latNormalizer(x1), lonNormalizer(x2),
-                                 latNormalizer(x3), lonNormalizer(x4),
-                                 timeNormalizer(x5),timeNormalizer(x6),
-                                 timeNormalizer(x7),timeNormalizer(x8)))))
+    myRoutes = myRoutes.map(lambda (x,y): (x, iterator(y)))
 
     req = retrieveRequests()
     populateRequests(req)
     initialRdd = sc.parallelize(users).cache()
     userIdsRdd = (initialRdd.map(lambda (x,y): (x,1))
-                           .reduceByKey(lambda a, b: a + b)
-                           .collect())
+                            .reduceByKey(lambda a, b: a + b)
+                            .collect())
 
     for user in userIdsRdd:
         userIds.append(user[0])
@@ -243,9 +265,9 @@ if __name__ == "__main__":
                                      timeNormalizer(x5), timeNormalizer(x6),
                                      timeNormalizer(x7), timeNormalizer(x8))))
         selected_centroids = kmeans(optimalk(myRdd), myRdd)[1].centers
-        routesDistances = myRoutes.map(lambda x: (x[0], calculateDistance(x[1])))
+        routesDistances = myRoutes.map(lambda x: (x[0], calculateDistanceDeparture(x[1]), calculateDistanceArrival(x[1])))
         for i in range(len(selected_centroids)):
-            sortRoute = (routesDistances.map(lambda (x, y): (x, y[i]))
+            sortRoute = (routesDistances.map(lambda (x, y, z): (x, y[i] + z[i]))
                                         .map(lambda (x,y): (y,x)).sortByKey()
                                         .map(lambda (x,y): (y,x)))
             finalRecommendation.append(sortRoute.take(NUMBER_OF_RECOMMENDATIONS))
