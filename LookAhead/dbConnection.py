@@ -289,7 +289,7 @@ class DB():
             for j in range(len(document[i][2])/2):
                 ind = j * 2
                 if len(document[i][2][ind+1]) < 5:
-                    print document[i][2][ind+1]
+                    print (document[i][2][ind+1])
                 # trip.append({"busStop": document[i][2][ind],"time": datetime.datetime.strptime(document[i][2][ind+1],DB.formatTime).time(),"capacity": document[i][1],"latitude":self.getBusStopLatitude(document[i][2][ind]),"longitude":self.getBusStopLongitude(document[i][2][ind])})
                 trip.append({"busStop": document[i][2][ind],"time": datetime.datetime.strptime(document[i][2][ind+1],DB.formatTime),"capacity": document[i][1],"latitude":self.getBusStopLatitude(document[i][2][ind]),"longitude":self.getBusStopLongitude(document[i][2][ind])})
             timeTable.append({"busId": bus,"busStops": trip})

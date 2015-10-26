@@ -176,7 +176,7 @@ class Fitness():
                     for k in range(len(request)):
                         diff = diff + self.getMinutes(self.timeDiff(tripTimeTable[j][1],str(int(request[k]["hour"])) + ":" + str(int(request[k]["minute"]))))*int(request[k]["count"])
                         count = count + int(request[k]["count"])
-                        
+
                     dif.append(diff)
                     cnt.append(count)
 
