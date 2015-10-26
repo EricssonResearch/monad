@@ -124,6 +124,9 @@ class TravelPlanner:
 
     def _rankTrip(self, trip):
         self.tripProcessed = False
+        if (len(self.tripTuples) >= NUM_OF_ROUTES_RETURNED):
+            if (not self._isBetterTrip(-1)):
+                return
             
         for i in range(len(self.tripTuples)):
             if (self._isBetterTrip(i)):
@@ -135,19 +138,15 @@ class TravelPlanner:
                             (trip, self.diffToArrTime, self.dptTime, self.arrTime))
                 self.tripProcessed = True
                 break
-            if (i >= (NUM_OF_ROUTES_RETURNED - 1)):
-                self.tripProcessed = True
-                break
+
         if (self.tripProcessed == False):
             if (self.timeMode == Mode.startTime):
                 self.tripTuples.append((trip, self.timeToArrival, self.dptTime, self.arrTime))
             elif (self.timeMode == Mode.arrivalTime):
                 self.tripTuples.append((trip, self.diffToArrTime, self.dptTime, self.arrTime))
+        self.tripTuples = self.tripTuples[:NUM_OF_ROUTES_RETURNED]
 
     def _insertTrip(self, trip):
-        self.dptTime = trip["busstops"][self.startingWaypoint[self.counter]]["time"]
-        self.arrTime = trip["busstops"][self.endingWaypoint[self.counter]]["time"]
-        
         if (self.timeMode == Mode.startTime):
             self.timeToArrival = self.arrTime - self.startTime
             if (self.tripTuples == []):
@@ -168,13 +167,13 @@ class TravelPlanner:
         for route in self.fittingRoutes:
             self.schedule = timeTable.find_one({"line": route["line"]})
             for trip in self.schedule["timetable"]:
+                self.dptTime = trip["busstops"][self.startingWaypoint[self.counter]]["time"]
+                self.arrTime = trip["busstops"][self.endingWaypoint[self.counter]]["time"]
                 if (self.timeMode == Mode.startTime):
-                    stopTime = trip["busstops"][self.startingWaypoint[self.counter]]["time"]
-                    if (stop["time"] > self.startTime):
+                    if (self.dptTime > self.startTime):
                         self._insertTrip(trip)
                 elif (self.timeMode == Mode.arrivalTime):
-                    stopTime = trip["busstops"][self.endingWaypoint[self.counter]]["time"]
-                    if (stop["time"] < self.endTime):
+                    if (self.arrTime < self.endTime):
                         self._insertTrip(trip)
 
             self.counter = self.counter + 1
@@ -208,8 +207,6 @@ class TravelPlanner:
             i += 1
             self.entryList.append(newEntry)
             self.userTripList.append(userTripID)
-            if (i >= NUM_OF_ROUTES_RETURNED):
-                break
         userTrip.insert_many(entryList)
 
 
@@ -225,6 +222,6 @@ class TravelPlanner:
 
         self._updateDatabase()
 
-        return self.userTripList[:NUM_OF_ROUTES_RETURNED]
+        return self.userTripList
 
 
