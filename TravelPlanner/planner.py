@@ -74,14 +74,14 @@ class TravelPlanner:
         self.startBusStopPosition = ra.getBusStopPosition(self.startBusStop)
         self.endBusStopPosition   = ra.getBusStopPosition(self.endBusStop)
 
-        if (request["startTime"] == "null"):
-            self.startTime = 0
-            self.endTime   = request["EndTime"]
-            self.timeMode  = Mode.arrivalTime
-        elif (request["endTime"] == "null"):
+        if (request["endTime"] == "null"):
             self.startTime = request["StartTime"]
             self.endTime   = 0
             self.timeMode  = Mode.startTime
+        elif (request["startTime"] == "null"):
+            self.startTime = 0
+            self.endTime   = request["EndTime"]
+            self.timeMode  = Mode.arrivalTime
         else:
             return
 
@@ -124,6 +124,7 @@ class TravelPlanner:
 
     def _rankTrip(self, trip):
         self.tripProcessed = False
+            
         for i in range(len(self.tripTuples)):
             if (self._isBetterTrip(i)):
                 if (self.timeMode == Mode.startTime):
@@ -167,15 +168,14 @@ class TravelPlanner:
         for route in self.fittingRoutes:
             self.schedule = timeTable.find_one({"line": route["line"]})
             for trip in self.schedule["timetable"]:
-                for stop in trip["busstops"]:
-                    if (self.timeMode == Mode.startTime):
-                        if (stop["busstop"] == self.startBusStop):
-                            if (stop["time"] > self.startTime):
-                                self._insertTrip(trip)
-                    elif (self.timeMode == Mode.arrivalTime):
-                        if (stop["busstop"] == self.endBusStop):
-                            if (stop["time"] < self.endTime):
-                                self._insertTrip(trip)
+                if (self.timeMode == Mode.startTime):
+                    stopTime = trip["busstops"][self.startingWaypoint[self.counter]]["time"]
+                    if (stop["time"] > self.startTime):
+                        self._insertTrip(trip)
+                elif (self.timeMode == Mode.arrivalTime):
+                    stopTime = trip["busstops"][self.endingWaypoint[self.counter]]["time"]
+                    if (stop["time"] < self.endTime):
+                        self._insertTrip(trip)
 
             self.counter = self.counter + 1
 
