@@ -55,7 +55,7 @@
                     />
 
                 <TextView
-                    android:id="@+id/label_startposition"
+                    android:id="@+id/label_startbusstop"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     style="@style/importantText"
@@ -75,7 +75,7 @@
                     android:src="@drawable/ic_directions_bus_black_24dp"
                     android:contentDescription="@string/label_tripsactivity_buscontentdescription"
                     android:layout_centerHorizontal="true"
-                    android:layout_alignTop="@id/label_startposition"
+                    android:layout_alignTop="@id/label_startbusstop"
                     android:padding="@dimen/small_padding"
                     />
 
@@ -90,7 +90,7 @@
                     />
 
                 <TextView
-                    android:id="@+id/label_endposition"
+                    android:id="@+id/label_endbusstop"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     style="@style/importantText"
@@ -112,7 +112,7 @@
                     android:text="@string/label_tripsactivity_fromtime"
                     android:paddingTop="@dimen/small_padding"
                     android:paddingLeft="@dimen/layout_padding"
-                    android:layout_below="@id/label_startposition"
+                    android:layout_below="@id/label_startbusstop"
                     />
 
                 <TextView
@@ -124,7 +124,7 @@
                     android:text="@string/label_tripsactivity_totime"
                     android:paddingTop="@dimen/small_padding"
                     android:paddingLeft="@dimen/layout_padding"
-                    android:layout_below="@id/label_endposition"
+                    android:layout_below="@id/label_endbusstop"
                     android:layout_toRightOf="@id/bus1"
                     android:layout_toEndOf="@id/bus1"
                     />

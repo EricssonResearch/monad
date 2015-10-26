@@ -133,7 +133,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="@string/label_tripsactivity_day"
+            android:text="@string/non_available"
             android:textColor="@color/black"
             android:padding="@dimen/small_padding"
             android:layout_centerHorizontal="true"

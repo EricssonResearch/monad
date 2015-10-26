@@ -27,7 +27,9 @@ import com.google.android.gms.location.LocationServices;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import se.uu.csproject.monadclient.recyclerviews.SearchRecyclerViewAdapter;
@@ -187,10 +189,26 @@ public class MainActivity extends AppCompatActivity implements
 
     //TEMPORARY FUNCTION TODO: Remove this function once the database connection is set
     private void generateSearchResults(List<Trip> trips){
-        trips.add(new Trip(1, "Polacksbacken","12:36","Flogsta", "12:51", 15, 2));
-        trips.add(new Trip(2, "Polacksbacken","20:36","Flogsta", "20:51", 15, 4));
-        trips.add(new Trip(3, "Gamla Uppsala","19:17","Övre Slottsgatan", "19:35", 18, 3));
-        trips.add(new Trip(4, "Polacksbacken", "12:36", "Flogsta", "12:51", 15, 0));
+        Calendar calendar = new GregorianCalendar(2015, 10, 26, 10, 40, 0);
+        Date startdate1 = calendar.getTime();
+        calendar = new GregorianCalendar(2015, 10, 26, 10, 50, 0);
+        Date enddate1 = calendar.getTime();
+        calendar = new GregorianCalendar(2015, 10, 26, 10, 45, 0);
+        Date startdate2 = calendar.getTime();
+        calendar = new GregorianCalendar(2015, 10, 26, 11, 0, 0);
+        Date enddate2 = calendar.getTime();
+        calendar = new GregorianCalendar(2015, 10, 27, 9, 50, 0);
+        Date startdate3 = calendar.getTime();
+        calendar = new GregorianCalendar(2015, 10, 27, 10, 5, 0);
+        Date enddate3 = calendar.getTime();
+        calendar = new GregorianCalendar(2015, 10, 22, 11, 30, 0);
+        Date startdate4 = calendar.getTime();
+        calendar = new GregorianCalendar(2015, 10, 22, 12, 0, 0);
+        Date enddate4 = calendar.getTime();
+        trips.add(new Trip(1, "Polacksbacken",startdate1,"Flogsta", enddate1, 10, 0));
+        trips.add(new Trip(2, "Gamla Uppsala",startdate2,"Gottsunda", enddate2, 15, 0));
+        trips.add(new Trip(3, "Granby",startdate3,"Tunna Backar", enddate3, 15, 0));
+        trips.add(new Trip(4, "Kungsgatan", startdate4, "Observatoriet", enddate4, 30, 0));
     }
 
     @Override
