@@ -121,6 +121,8 @@ RETURNS TEXT
 BEGIN
     DECLARE ret_id INT;
     DECLARE ret_username VARCHAR(255);
+    DECLARE temp_pass CHAR(40);
+    DECLARE ret_pass VARCHAR(1);
     DECLARE ret_phone VARCHAR(15);
     DECLARE ret_language VARCHAR(2);
     DECLARE ret_store_location VARCHAR(1);
@@ -143,19 +145,25 @@ BEGIN
 	)
 	THEN
         SELECT
-            id, username, phone, language, store_location,
+            id, username, pass, phone, language, store_location,
             notifications_alert, recommendations_alert, theme
         INTO
-            ret_id, ret_username, ret_phone, ret_language, ret_store_location,
+            ret_id, ret_username, temp_pass, ret_phone, ret_language, ret_store_location,
             ret_notifications_alert, ret_recommendations_alert, ret_theme
         FROM client_profile
         WHERE email = in_email;
+
+        IF temp_pass = '' THEN
+            SET ret_pass = '0';
+        ELSE
+            SET ret_pass = '1';
+        END IF;
 
         GET DIAGNOSTICS rows = ROW_COUNT;
 
         IF code = '00000' AND rows = 1 THEN
             RETURN CONCAT(
-                '1', '|', ret_id, '|', ret_username, '|', ret_phone, '|', ret_language, '|',
+                '1', '|', ret_id, '|', ret_username, '|', ret_pass, '|', ret_phone, '|', ret_language, '|',
                 ret_store_location, '|', ret_notifications_alert, '|',
                 ret_recommendations_alert, '|', ret_theme
             );
@@ -181,7 +189,7 @@ BEGIN
     END;
 
 	INSERT INTO client_profile (username, pass, email, phone)
-    VALUES ("", "", in_email, "");
+    VALUES ('', '', in_email, '');
 
     GET DIAGNOSTICS rows = ROW_COUNT;
 
@@ -270,6 +278,62 @@ BEGIN
         recommendations_alert = in_recommendations_alert,
         theme = in_theme
     WHERE id = in_id;
+
+    GET DIAGNOSTICS rows = ROW_COUNT;
+
+    IF code = '00000' AND rows > 0 THEN
+        RETURN '1';
+    ELSE
+        RETURN '0';
+    END IF;
+END $$
+
+CREATE FUNCTION client_existing_password_update (
+    in_id INT,
+    in_old_pass CHAR(40),
+    in_new_pass CHAR(40)
+)
+RETURNS TEXT
+BEGIN
+    DECLARE code CHAR(5) DEFAULT '00000';
+    DECLARE rows INT;
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION
+    BEGIN
+        GET DIAGNOSTICS CONDITION 1
+            code = RETURNED_SQLSTATE;
+    END;
+
+    UPDATE client_profile
+    SET pass = in_new_pass
+    WHERE id = in_id AND pass = in_old_pass;
+
+    GET DIAGNOSTICS rows = ROW_COUNT;
+
+    IF code = '00000' AND rows > 0 THEN
+        RETURN '1';
+    ELSE
+        RETURN '0';
+    END IF;
+END $$
+
+CREATE FUNCTION client_forgotten_password_reset (
+    in_email VARCHAR(255),
+    in_new_pass CHAR(40)
+)
+RETURNS TEXT
+BEGIN
+    DECLARE code CHAR(5) DEFAULT '00000';
+    DECLARE rows INT;
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION
+    BEGIN
+        GET DIAGNOSTICS CONDITION 1
+            code = RETURNED_SQLSTATE;
+    END;
+
+    UPDATE client_profile
+    SET pass = in_new_pass
+    WHERE email = in_email;
+
     GET DIAGNOSTICS rows = ROW_COUNT;
 
     IF code = '00000' AND rows > 0 THEN
@@ -280,20 +344,3 @@ BEGIN
 END $$
 
 DELIMITER ;
-
--- SELECT client_sign_up('u1', 'p1', 'e1', 'ph1');
--- SELECT client_sign_up('u2', 'p2', 'e2', 'ph2');
--- SELECT client_profile_update(1, 'u1', e', 'ph');
--- SELECT client_profile_update(1, 'u', 'e', 'ph');
--- SELECT client_settings_update(1, 'en', '2', '1', '1', '1');
--- SELECT client_profile_update(3, 'u10', 'p10', 'e0', 'ph0');
--- SELECT client_sign_up('', '', 'e', '');
--- SELECT client_sign_up('u1', 'p1', 'e1', 'ph1');
--- SELECT client_sign_up('u', 'p1', 'e1', 'ph1');
--- SELECT client_sign_up('u', 'p1', 'e', 'ph1');
--- SELECT client_sign_up('u2', 'p2', 'e2', 'ph2');
--- SELECT client_sign_in('u1', 'p1');
--- SELECT client_sign_in('u', 'p');
--- SELECT client_sign_in('', '');
--- SELECT google_sign_in('e1');
--- SELECT google_sign_in('e2');
