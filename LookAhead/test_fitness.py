@@ -128,9 +128,11 @@ class FitnessTests(unittest.TestCase):
         for i, item in enumerate(ind1):
             ind1[i][1] = 0
 
+
         #self.assertGreater(fit.evalIndividualCapacity(ind2), fit.evalIndividualCapacity(ind1))
         #TODO - FIX self.assertGreater than function to work with test
         self.assertGreater(1,0)
+
 
     def testEvalIndividualCapacitySufficient(self):
         ''' test on individual that offers more than enough capacity to handle all requests
