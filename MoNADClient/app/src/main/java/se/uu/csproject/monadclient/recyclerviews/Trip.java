@@ -7,23 +7,23 @@ package se.uu.csproject.monadclient.recyclerviews;
 
 //TODO: change times data types
 public class Trip {
-    int tripId;
-    String startPosition; // this is the bus stop coordinate
-    String startTime;
-    String endPosition; // this is the bus stop coordinate
-    String endTime;
-    int durationMinutes;
-    int userFeedback;
+    private int tripId;
+    private String startPosition; // this is the bus stop name
+    private String startTime;
+    private String endPosition; // this is the bus stop name
+    private String endTime;
+    private int durationMinutes;
+    private int userFeedback;
 
     public Trip(int tripId, String startPosition, String startTime,
                  String endPosition, String endTime, int duration, int userFeedback) {
         this.tripId = tripId;
-        this.startPosition = startPosition;
-        this.startTime = startTime;
-        this.endPosition = endPosition;
-        this.endTime = endTime;
-        this.durationMinutes = duration;
-        this.userFeedback = userFeedback;
+        this.setStartPosition(startPosition);
+        this.setStartTime(startTime);
+        this.setEndPosition(endPosition);
+        this.setEndTime(endTime);
+        this.setDurationMinutes(duration);
+        this.setUserFeedback(userFeedback);
     }
 
     // returns time in Milliseconds
@@ -35,7 +35,7 @@ public class Trip {
     //determines if the trip has occurred yet, helps assign the right UI to the trip
     //TODO: replace function with the commented one once the data types are changed
     public boolean isCurrent(){
-        if(this.tripId > 2) {
+        if(this.getTripId() > 2) {
             return false;
         }
         else {
@@ -48,5 +48,58 @@ public class Trip {
         else {
             return false;
         }*/
+    }
+
+
+    public int getTripId() {
+        return tripId;
+    }
+
+    public String getStartPosition() {
+        return startPosition;
+    }
+
+    public void setStartPosition(String startPosition) {
+        this.startPosition = startPosition;
+    }
+
+    public String getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(String startTime) {
+        this.startTime = startTime;
+    }
+
+    public String getEndPosition() {
+        return endPosition;
+    }
+
+    public void setEndPosition(String endPosition) {
+        this.endPosition = endPosition;
+    }
+
+    public String getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(String endTime) {
+        this.endTime = endTime;
+    }
+
+    public int getDurationMinutes() {
+        return durationMinutes;
+    }
+
+    public void setDurationMinutes(int durationMinutes) {
+        this.durationMinutes = durationMinutes;
+    }
+
+    public int getUserFeedback() {
+        return userFeedback;
+    }
+
+    public void setUserFeedback(int userFeedback) {
+        this.userFeedback = userFeedback;
     }
 }

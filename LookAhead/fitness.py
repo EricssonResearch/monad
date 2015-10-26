@@ -51,11 +51,9 @@ class Fitness():
         db = DB()
         request = []
         # DB calls can ve avoided by querying the whole Request Collection for a particular day
-        getTravelRequests = db.getTravelRequest
 
         # Replace the dates here from yesterday's date
-        yesterday = date.today() + timedelta(1)
-
+        yesterday = date.today() - timedelta(3)
         # The result here should be added into a file: the order is by hour, minute and initialBusStop
         request = db.getTravelRequestSummary(datetime.combine(yesterday,
                                                               datetime.strptime(Fitness.firstMinute,
@@ -163,7 +161,7 @@ class Fitness():
         Lower values are better.
         '''
 
-        self.runOnce()
+        #self.runOnce()
 
         # DONE Store the date on mongo as datetime 
         # Store the requests of the previous day into a JSON file order them by date and KEEP IT during the whole iteration on memory
@@ -175,6 +173,8 @@ class Fitness():
         # First, the randomly-generated starting times are sorted in order to check sequentially the number of requests for that particular trip
 
         individual = sorted(individual, key=itemgetter(2))
+        print(individual)
+
         # Second, we loop trough the number of genes in order to retrieve the number of requests for that particular trip
         # DB calls can ve avoided by querying the whole Request Collection for a particular day
         # For the 1st trip, the starting time has to be selected
@@ -185,29 +185,33 @@ class Fitness():
         cnt = []
         intialTripTime = "00:00"
         # TODO: Change to timedelta(1)
-        yesterday = date.today() - timedelta(2)
+        yesterday = date.today() - timedelta(6)
+
         # The result here should be added into a file: the order is by hour, minute and initialBusStop
         # request = db.getTravelRequestSummary(datetime.combine(yesterday, datetime.strptime(Fitness.firstMinute, Fitness.formatTime).time()),datetime.combine(yesterday, datetime.strptime(Fitness.lastMinute, Fitness.formatTime).time()))
         for i in range(len(individual)):
-            tripTimeTable = []
+            #tripTimeTable = []
+
             tripTimeTable = db.generateFitnessTripTimeTable(individual[i][0], individual[i][2])
+            print(tripTimeTable)
             # For each gene, the corresponding requests are returned
             for j in range(len(tripTimeTable)):
-                request = []
-                if j==0:
-                    request = db.getTravelRequestSummary2(datetime.combine(yesterday, datetime.strptime(intialTripTime, Fitness.formatTime).time()),datetime.combine(yesterday, datetime.strptime(tripTimeTable[j][1], Fitness.formatTime).time()), tripTimeTable[j][0])
-                    intialTripTime = tripTimeTable[j][1]
-                else:
-                    request = db.getTravelRequestSummary2(datetime.combine(yesterday, datetime.strptime(tripTimeTable[j-1][1], Fitness.formatTime).time()),datetime.combine(yesterday, datetime.strptime(tripTimeTable[j][1], Fitness.formatTime).time()), tripTimeTable[j][0])
+                #request = []
+                #print(datetime.combine(yesterday, datetime.strptime(intialTripTime, Fitness.formatTime).time()))
+                request = db.getTravelRequestSummary2(datetime.combine(yesterday, datetime.strptime(intialTripTime, Fitness.formatTime).time()),
+                                                      datetime.combine(yesterday, datetime.strptime(tripTimeTable[j][1], Fitness.formatTime).time()),
+                                                      tripTimeTable[j][0])
+                print(request)
+                intialTripTime = tripTimeTable[j][1]
+
                 if len(request)>0: 
                     diff = 0
                     count = 0
                     for k in range(len(request)):
                         diff = diff + self.getMinutes(self.timeDiff(tripTimeTable[j][1],str(int(request[k]["hour"])) + ":" + str(int(request[k]["minute"]))))*int(request[k]["count"])
                         count = count + int(request[k]["count"])
+                        
                     dif.append(diff)
                     cnt.append(count)
 
         return sum(dif)/sum(cnt),
-
-
