@@ -1,7 +1,9 @@
 package se.uu.csproject.monadclient;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.location.Location;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
@@ -40,6 +42,7 @@ public class MainActivity extends AppCompatActivity implements
     private LocationRequest mLocationRequest;
     private double currentLatitude;
     private double currentLongitude;
+    final private int REQUEST_CODE_ASK_PERMISSIONS = 123;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,9 +65,6 @@ public class MainActivity extends AppCompatActivity implements
         buildGoogleApiClient();
         initializeLocationRequest();
         mGoogleApiClient.connect();
-        if (mGoogleApiClient.isConnected()){
-            Log.d("oops", "test3 passed");
-        }
     }
 
     public void openMainSearch (View view) {
@@ -96,8 +96,6 @@ public class MainActivity extends AppCompatActivity implements
     private void handleNewLocation(Location location) {
         currentLatitude = location.getLatitude();
         currentLongitude = location.getLongitude();
-        Log.d("oops", "latitude1: " + currentLatitude);
-        Log.d("oops", "longitude1: " + currentLongitude);
     }
 
     protected synchronized void buildGoogleApiClient() {
@@ -106,8 +104,6 @@ public class MainActivity extends AppCompatActivity implements
                 .addOnConnectionFailedListener(this)
                 .addApi(LocationServices.API)
                 .build();
-
-        Log.d("oops", "test1 passed");
     }
 
     protected void initializeLocationRequest() {
@@ -115,9 +111,16 @@ public class MainActivity extends AppCompatActivity implements
                 .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
                 .setInterval(10 * 1000)        // 30 seconds, in milliseconds
                 .setFastestInterval(1 * 1000); // 1 second, in milliseconds
-
-        Log.d("oops", "test2 passed");
     }
+
+    /*private void insertDummyContactWrapper() {
+        int hasWriteContactsPermission = checkSelfPermission(Manifest.permission.WRITE_CONTACTS);
+        if (hasWriteContactsPermission != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(new String[] {Manifest.permission.WRITE_CONTACTS},
+                    REQUEST_CODE_ASK_PERMISSIONS);
+            return;
+        }
+    }*/
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -193,18 +196,18 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     protected void onResume() {
         super.onResume();
-        /*if (!mGoogleApiClient.isConnected()){
+        if (!mGoogleApiClient.isConnected()){
             mGoogleApiClient.connect();
-        }*/
+        }
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        /*if (mGoogleApiClient.isConnected()) {
+        if (mGoogleApiClient.isConnected()) {
             LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
             mGoogleApiClient.disconnect();
-        }*/
+        }
     }
 
     @Override
@@ -212,12 +215,11 @@ public class MainActivity extends AppCompatActivity implements
         Location location = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
 
         if (location == null) {
-            Log.d("oops", "Did not work, lets try smth!");
+            Log.d("oops", "test6 passed");
             LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
-            Log.d("oops", "Something was tried!");
         }
         else {
-            Log.d("oops", "Should work!");
+            Log.d("oops", "test7 passed");
             handleNewLocation(location);
         };
     }
@@ -229,7 +231,8 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {
-        Log.d("oops", "ConnectionFailed");
+        Log.d("oops", Integer.toString(connectionResult.getErrorCode()));
+        //Log.d("oops", connectionResult.getErrorMessage());
     }
 
     @Override
