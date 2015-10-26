@@ -51,10 +51,8 @@ class Fitness():
         request = []
         # DB calls can ve avoided by querying the whole Request Collection for a particular day
 
-
         # Replace the dates here from yesterday's date
-        yesterday = date.today() - timedelta(1)
-        print(yesterday)
+        yesterday = date.today() - timedelta(3)
         # The result here should be added into a file: the order is by hour, minute and initialBusStop
         request = db.getTravelRequestSummary(datetime.combine(yesterday,
                                                               datetime.strptime(Fitness.firstMinute,
@@ -153,8 +151,8 @@ class Fitness():
         cnt = []
         intialTripTime = "00:00"
         # TODO: Change to timedelta(1)
-        yesterday = date.today() - timedelta(3)
-        print(yesterday)
+        yesterday = date.today() - timedelta(6)
+
         # The result here should be added into a file: the order is by hour, minute and initialBusStop
         # request = db.getTravelRequestSummary(datetime.combine(yesterday, datetime.strptime(Fitness.firstMinute, Fitness.formatTime).time()),datetime.combine(yesterday, datetime.strptime(Fitness.lastMinute, Fitness.formatTime).time()))
         for i in range(len(individual)):
@@ -178,6 +176,8 @@ class Fitness():
                     for k in range(len(request)):
                         diff = diff + self.getMinutes(self.timeDiff(tripTimeTable[j][1],str(int(request[k]["hour"])) + ":" + str(int(request[k]["minute"]))))*int(request[k]["count"])
                         count = count + int(request[k]["count"])
+                        
                     dif.append(diff)
                     cnt.append(count)
+
         return sum(dif)/sum(cnt),
