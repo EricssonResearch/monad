@@ -292,7 +292,8 @@ class DB():
         reqs = []
         requests = self.db.TravelRequestLookAhead.find({"$and": [{"startTime": {"$gte": yesterdayStart}}, {"startTime": {"$lt": todayStart}}]}, {"startTime": 1, "startBusStop": 1, "endBusStop": 1, "_id": 0})  # New collection for LookAhead
         for req in requests:
-            reqs.append([req.get('startTime', None), req.get('startBusStop', None), req.get('endBusStop', None)])
+            #reqs.append([req.get('startTime', None), req.get('startBusStop', None), req.get('endBusStop', None)])
+            reqs.append(req.get('startTime', None))
         return reqs   
 
     def getBusStopLatitude(self, busStop):
