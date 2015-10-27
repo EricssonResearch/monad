@@ -49,7 +49,7 @@ public class SendTravelRequest extends AsyncTask<String, Void, String> {
             BufferedReader br = new BufferedReader(new InputStreamReader((conn.getInputStream())));
             String line;
             while ((line = br.readLine()) != null) {
-                response = response + "\n" + line;
+                response = response + line + "\n";
             }
 
             // Close the connection
