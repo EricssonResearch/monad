@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.w3c.dom.Text;
 
@@ -33,13 +34,28 @@ public class ResetPasswordActivity extends AppCompatActivity {
         confirmPasswordField= (EditText) findViewById(R.id.field_verify_password);
         resetButton = (Button) findViewById(R.id.button_reset);
 
-        //TODO: update the password in the database
         resetButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String passwordValue = passwordField.getText().toString();
                 String confirmPasswordValue = confirmPasswordField.getText().toString();
-                if(passwordValue.length() > 6 && passwordValue.equals(confirmPasswordValue)){
+
+                Bundle extras = getIntent().getExtras();
+                String email = null;
+
+                if (extras != null) {
+                    email = extras.getString("EMAIL");
+                }
+
+                if(passwordValue.length() < 6){
+                    Toast.makeText(getApplicationContext(), "The password should contain at least 6 characters!", Toast.LENGTH_LONG).show();
+                }
+                else if(!passwordValue.equals(confirmPasswordValue)){
+                    Toast.makeText(getApplicationContext(), "Two passwords do not match!", Toast.LENGTH_LONG).show();
+                }
+                else{
+                    String response = ClientAuthentication.postForgottenPasswordResetRequest(email, passwordValue);
+                    Toast.makeText(getApplicationContext(), response, Toast.LENGTH_LONG).show();
                     ResetPasswordActivity.this.startActivity(
                             new Intent(ResetPasswordActivity.this, LoginActivity.class));
                 }

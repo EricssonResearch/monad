@@ -45,7 +45,7 @@ public class RegisterActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if(!password.getText().toString().equals(passwordVerify.getText().toString())){
-                    Toast.makeText(getApplicationContext(), "Password does not match!",
+                    Toast.makeText(getApplicationContext(), "Passwords do not match!",
                             Toast.LENGTH_LONG).show();
                 }
                 // initialize a new AsyncTask

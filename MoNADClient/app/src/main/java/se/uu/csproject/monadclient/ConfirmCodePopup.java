@@ -39,16 +39,17 @@ public class ConfirmCodePopup extends AppCompatActivity {
 
                 Bundle extras = getIntent().getExtras();
                 String rightCode = null;
+                String email = null;
 
                 if (extras != null) {
                     rightCode = extras.getString("CODE");
+                    email = extras.getString("EMAIL");
                 }
 
-                //Log.i("CODE GET", rightCode);
-
                 if(codeValue.equals(rightCode)){
-                    ConfirmCodePopup.this.startActivity(
-                            new Intent(ConfirmCodePopup.this, ResetPasswordActivity.class));
+                    Intent intent = new Intent(ConfirmCodePopup.this, ResetPasswordActivity.class);
+                    intent.putExtra("EMAIL", email);
+                    startActivity(intent);
                 }
                 else{
                     Toast.makeText(getApplicationContext(), "The code you entered is not right, please check your email and enter the right code.", Toast.LENGTH_LONG).show();
