@@ -22,7 +22,7 @@ from fitness import Fitness
 # Variables
 MUTATION_PROB = 0.5
 CROSS_OVER_PROB = 0.5
-NO_OF_GENERATION = 0
+NO_OF_GENERATION = 1
 POPULATION_SIZE = 1
 
 
@@ -31,7 +31,7 @@ def main():
     # Generate the population
     pop = toolBox.toolbox.population(n=POPULATION_SIZE)
 
-    fitnessClass.evalIndividualCapacity(pop[0])
+    #fitnessClass.evalIndividualCapacity(pop[0])
     hof = tools.HallOfFame(1)
 
     stats = tools.Statistics(lambda ind: ind.fitness.values)
