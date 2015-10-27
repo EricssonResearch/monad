@@ -48,7 +48,7 @@ public class ConfirmCodePopup extends AppCompatActivity {
                 if(codeValue.equals(rightCode)){
                     Intent intent = new Intent(ConfirmCodePopup.this, ResetPasswordActivity.class);
                     intent.putExtra("EMAIL", email);
-                    intent.putExtra("reset", true);
+                    intent.putExtra("RESET", true);
                     startActivity(intent);
                 }
                 else{

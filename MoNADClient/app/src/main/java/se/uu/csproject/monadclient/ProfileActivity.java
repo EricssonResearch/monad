@@ -59,7 +59,7 @@ public class ProfileActivity extends AppCompatActivity {
 
     public void changePassword(View v){
         Intent intent = new Intent(this, ResetPasswordActivity.class);
-        intent.putExtra("reset", false); //to determine how to display the ResetPasswordActivity
+        intent.putExtra("RESET", false); //to determine how to display the ResetPasswordActivity
         startActivityForResult(intent, 1);
     }
 

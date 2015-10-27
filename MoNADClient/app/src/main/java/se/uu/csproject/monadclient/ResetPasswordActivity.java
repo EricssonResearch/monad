@@ -42,7 +42,7 @@ public class ResetPasswordActivity extends AppCompatActivity {
          * It is false if it is accessed from ProfileActivity,
          * In the second casem labels are changed and the current password textfield is visible
          */
-        resetMode = getIntent().getExtras().getBoolean("reset");
+        resetMode = getIntent().getExtras().getBoolean("RESET");
         if (!resetMode) {
             oldPasswordField.setVisibility(View.VISIBLE);
             oldPasswordText.setVisibility(View.VISIBLE);
@@ -54,10 +54,17 @@ public class ResetPasswordActivity extends AppCompatActivity {
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                String passwordValue = passwordField.getText().toString();
+                String confirmPasswordValue = confirmPasswordField.getText().toString();
+
+                if(passwordValue.length() < 6){
+                    Toast.makeText(getApplicationContext(), "The password should contain at least 6 characters!", Toast.LENGTH_LONG).show();
+                }
+                else if(!passwordValue.equals(confirmPasswordValue)){
+                    Toast.makeText(getApplicationContext(), "Two passwords do not match!", Toast.LENGTH_LONG).show();
+                }
+
                 if(resetMode){
-                    String passwordValue = passwordField.getText().toString();
-                    String confirmPasswordValue = confirmPasswordField.getText().toString();
-                    
                     Bundle extras = getIntent().getExtras();
                     String email = null;
 
@@ -65,21 +72,17 @@ public class ResetPasswordActivity extends AppCompatActivity {
                         email = extras.getString("EMAIL");
                     }
 
-                    if(passwordValue.length() < 6){
-                        Toast.makeText(getApplicationContext(), "The password should contain at least 6 characters!", Toast.LENGTH_LONG).show();
-                    }
-                    else if(!passwordValue.equals(confirmPasswordValue)){
-                        Toast.makeText(getApplicationContext(), "Two passwords do not match!", Toast.LENGTH_LONG).show();
-                    }
-                    else{
-                        String response = ClientAuthentication.postForgottenPasswordResetRequest(email, passwordValue);
-                        Toast.makeText(getApplicationContext(), response, Toast.LENGTH_LONG).show();
-                        ResetPasswordActivity.this.startActivity(
-                                new Intent(ResetPasswordActivity.this, LoginActivity.class));
-                    }
+                    String response = ClientAuthentication.postForgottenPasswordResetRequest(email, passwordValue);
+                    Toast.makeText(getApplicationContext(), response, Toast.LENGTH_LONG).show();
+                    ResetPasswordActivity.this.startActivity(new Intent(ResetPasswordActivity.this, LoginActivity.class));
                 }
                 else {
-                    finish();
+                    String oldPassword = oldPasswordField.getText().toString();
+                    String response = ClientAuthentication.postExistingPasswordUpdateRequest(ClientAuthentication.getClientId(), oldPassword, passwordValue);
+                    Toast.makeText(getApplicationContext(), response, Toast.LENGTH_LONG).show();
+                    if(response.startsWith("Success (1)")) {
+                        finish();
+                    }
                 }
             }
         });
