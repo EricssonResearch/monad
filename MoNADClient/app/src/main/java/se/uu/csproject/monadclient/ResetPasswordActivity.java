@@ -19,45 +19,67 @@ public class ResetPasswordActivity extends AppCompatActivity {
 
     private EditText passwordField;
     private EditText confirmPasswordField;
-    private Button resetButton;
-    private Toolbar toolbar;
+    private Button submitButton;
+    private EditText oldPasswordField;
+    private boolean resetMode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reset_password);
 
-        toolbar = (Toolbar) findViewById(R.id.actionToolBar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.actionToolBar);
         setSupportActionBar(toolbar);
 
-        passwordField = (EditText) findViewById(R.id.field_password);
+        passwordField = (EditText) findViewById(R.id.field_newpassword);
         confirmPasswordField= (EditText) findViewById(R.id.field_verify_password);
-        resetButton = (Button) findViewById(R.id.button_reset);
+        submitButton = (Button) findViewById(R.id.button_reset);
+        TextView resetPasswordText = (TextView) findViewById(R.id.label_resetpassword);
+        TextView oldPasswordText = (TextView) findViewById(R.id.label_oldpassword);
+        oldPasswordField = (EditText) findViewById(R.id.field_oldpassword);
 
-        resetButton.setOnClickListener(new View.OnClickListener() {
+        /* resetMode is true if this activity is accessed from ConfirmCodePopup
+         * It is false if it is accessed from ProfileActivity,
+         * In the second casem labels are changed and the current password textfield is visible
+         */
+        resetMode = getIntent().getExtras().getBoolean("reset");
+        if (!resetMode) {
+            oldPasswordField.setVisibility(View.VISIBLE);
+            oldPasswordText.setVisibility(View.VISIBLE);
+            resetPasswordText.setText(getString(R.string.label_resetpassword_changepassword));
+            submitButton.setText(getString(R.string.label_profile_savechanges));
+        }
+
+        //TODO: update the password in the database
+        submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String passwordValue = passwordField.getText().toString();
-                String confirmPasswordValue = confirmPasswordField.getText().toString();
+                if(resetMode){
+                    String passwordValue = passwordField.getText().toString();
+                    String confirmPasswordValue = confirmPasswordField.getText().toString();
+                    
+                    Bundle extras = getIntent().getExtras();
+                    String email = null;
 
-                Bundle extras = getIntent().getExtras();
-                String email = null;
+                    if (extras != null) {
+                        email = extras.getString("EMAIL");
+                    }
 
-                if (extras != null) {
-                    email = extras.getString("EMAIL");
+                    if(passwordValue.length() < 6){
+                        Toast.makeText(getApplicationContext(), "The password should contain at least 6 characters!", Toast.LENGTH_LONG).show();
+                    }
+                    else if(!passwordValue.equals(confirmPasswordValue)){
+                        Toast.makeText(getApplicationContext(), "Two passwords do not match!", Toast.LENGTH_LONG).show();
+                    }
+                    else{
+                        String response = ClientAuthentication.postForgottenPasswordResetRequest(email, passwordValue);
+                        Toast.makeText(getApplicationContext(), response, Toast.LENGTH_LONG).show();
+                        ResetPasswordActivity.this.startActivity(
+                                new Intent(ResetPasswordActivity.this, LoginActivity.class));
+                    }
                 }
-
-                if(passwordValue.length() < 6){
-                    Toast.makeText(getApplicationContext(), "The password should contain at least 6 characters!", Toast.LENGTH_LONG).show();
-                }
-                else if(!passwordValue.equals(confirmPasswordValue)){
-                    Toast.makeText(getApplicationContext(), "Two passwords do not match!", Toast.LENGTH_LONG).show();
-                }
-                else{
-                    String response = ClientAuthentication.postForgottenPasswordResetRequest(email, passwordValue);
-                    Toast.makeText(getApplicationContext(), response, Toast.LENGTH_LONG).show();
-                    ResetPasswordActivity.this.startActivity(
-                            new Intent(ResetPasswordActivity.this, LoginActivity.class));
+                else {
+                    finish();
                 }
             }
         });

@@ -30,11 +30,15 @@ class Fitness():
     secondMinute = 60.0
     firstMinute = "00:00"
     lastMinute = "23:59"
+    requests = []
+    routes = []
+    request = []
+    requestIndex = []
+    yesterday = date.today() - timedelta(7)
 
 # A decorator is a function that can accept another function as
 # a parameter to be able to modify or extend it
     def decorator(afunction):
-
         # A wrapper function is used to wrap functionalites you want around the original function
         def wrapper(*args):
             # Checks whether or not the original function as been executed once
@@ -47,20 +51,12 @@ class Fitness():
 
     @decorator
     def runOnce(self):
-        db = DB()
-        request = []
         # DB calls can ve avoided by querying the whole Request Collection for a particular day
-
-        # Replace the dates here from yesterday's date
-        yesterday = date.today() - timedelta(3)
-        # The result here should be added into a file: the order is by hour, minute and initialBusStop
-        request = db.getTravelRequestSummary(datetime.combine(yesterday,
-                                                              datetime.strptime(Fitness.firstMinute,
-                                                                                Fitness.formatTime).time()),
-                                             datetime.combine(yesterday, datetime.strptime(Fitness.lastMinute,
-                                                                                           Fitness.formatTime).time()))
-
-
+        db = DB()
+        # The result here should be added into a class variable: the order is by hour, minute and initialBusStop
+        Fitness.request = db.getTravelRequestSummary(datetime.combine(Fitness.yesterday, datetime.strptime(Fitness.firstMinute, Fitness.formatTime).time()),
+                                                      datetime.combine(Fitness.yesterday, datetime.strptime(Fitness.lastMinute, Fitness.formatTime).time()))
+        self.createRequestIndex(Fitness.request)       
 
     def timeDiff(self, time1, time2):
         ''' Evaluates the difference between two times.
@@ -72,6 +68,42 @@ class Fitness():
 
     def getMinutes(self, td):
         return (td.seconds//Fitness.secondMinute) % Fitness.secondMinute
+
+    def createRequestIndex(self, request):
+        minute = 0
+        for i in range(len(request)):
+            if request[i]["minute"] != minute or i == 0:
+                Fitness.requestIndex.append([request[i]["hour"], request[i]["minute"], i])
+                minute = request[i]["minute"]
+
+    def searchRequestIndex(self, index, initialHour, initialMinute, finalHour, finalMinute):
+        result = []
+        for i in range(len(index)):
+            if index[i][0] == initialHour and index[i][1] == initialMinute:
+                result.append(index[i][2])
+                break
+        # TODO: Watch out with MIDNIGHT trips !!!!
+        if len(result) == 0:
+            result.append(len(Fitness.request))
+        # if result[0] > len(Fitness.request):
+        #    result[0] = len(Fitness.request)
+        for i in range(i, len(index)):
+            if index[i][0] == finalHour and index[i][1] == finalMinute:
+                result.append(index[i][2])
+                break
+        # TODO: Watch out with MIDNIGHT trips !!!!
+        if len(result) == 1:
+            result.append(len(Fitness.request))
+        return result
+
+    def searchRequest(self, initialTime, finalTime, busStop):
+        result = []
+        index = self.searchRequestIndex(Fitness.requestIndex, initialTime.hour, initialTime.minute, finalTime.hour, finalTime.minute)
+        request = Fitness.request[index[0]:index[1]]
+        for i in range(len(request)):
+            if request[i]["startBusStop"] == busStop:
+                result.append(request[i])
+        return result
 
     def evalIndividualCapacity(self, individual):
         ''' Evaluates an individual based on the capacity/bus type chosen for each trip.
@@ -126,58 +158,31 @@ class Fitness():
         according to the evolving timetable.
         Lower values are better.
         '''
-
-        #self.runOnce()
-
-        # DONE Store the date on mongo as datetime 
-        # Store the requests of the previous day into a JSON file order them by date and KEEP IT during the whole iteration on memory
-        # DONE Group by request query from the file to reduce the number of elements being processed
-
-        # Use map function instead of LOOP
+        # Query the DB only once to retrieve all the data needed
+        self.runOnce()
         # Multi thread the MAP functions
-
         # First, the randomly-generated starting times are sorted in order to check sequentially the number of requests for that particular trip
-
         individual = sorted(individual, key=itemgetter(2))
-        print(individual)
-
         # Second, we loop trough the number of genes in order to retrieve the number of requests for that particular trip
-        # DB calls can ve avoided by querying the whole Request Collection for a particular day
         # For the 1st trip, the starting time has to be selected
         db = DB()
-        # Replace the dates here from yesterday's date
         request = []
         dif = []
         cnt = []
         intialTripTime = "00:00"
-        # TODO: Change to timedelta(1)
-        yesterday = date.today() - timedelta(6)
-
-        # The result here should be added into a file: the order is by hour, minute and initialBusStop
-        # request = db.getTravelRequestSummary(datetime.combine(yesterday, datetime.strptime(Fitness.firstMinute, Fitness.formatTime).time()),datetime.combine(yesterday, datetime.strptime(Fitness.lastMinute, Fitness.formatTime).time()))
         for i in range(len(individual)):
-            #tripTimeTable = []
-
             tripTimeTable = db.generateFitnessTripTimeTable(individual[i][0], individual[i][2])
-            print(tripTimeTable)
             # For each gene, the corresponding requests are returned
             for j in range(len(tripTimeTable)):
-                #request = []
-                #print(datetime.combine(yesterday, datetime.strptime(intialTripTime, Fitness.formatTime).time()))
-                request = db.getTravelRequestSummary2(datetime.combine(yesterday, datetime.strptime(intialTripTime, Fitness.formatTime).time()),
-                                                      datetime.combine(yesterday, datetime.strptime(tripTimeTable[j][1], Fitness.formatTime).time()),
-                                                      tripTimeTable[j][0])
-                print(request)
+                # Search on Fitness.request array for the particular requests
+                request = self.searchRequest(datetime.combine(Fitness.yesterday, datetime.strptime(intialTripTime, Fitness.formatTime).time()), datetime.combine(Fitness.yesterday, datetime.strptime(tripTimeTable[j][1], Fitness.formatTime).time()), tripTimeTable[j][0])
                 intialTripTime = tripTimeTable[j][1]
-
-                if len(request)>0: 
+                if len(request) > 0:
                     diff = 0
                     count = 0
                     for k in range(len(request)):
-                        diff = diff + self.getMinutes(self.timeDiff(tripTimeTable[j][1],str(int(request[k]["hour"])) + ":" + str(int(request[k]["minute"]))))*int(request[k]["count"])
+                        diff = diff + self.getMinutes(self.timeDiff(tripTimeTable[j][1], str(int(request[k]["hour"])) + ":" + str(int(request[k]["minute"]))))*int(request[k]["count"])
                         count = count + int(request[k]["count"])
-
                     dif.append(diff)
                     cnt.append(count)
-
         return sum(dif)/sum(cnt),
