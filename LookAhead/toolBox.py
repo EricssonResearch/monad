@@ -17,11 +17,13 @@ from deap import base, creator, tools
 from dbConnection import DB
 from fitness import Fitness
 import mutation
+import inits
 
 # Constant
 BUS_LINE = 2
 # The individual size corresponds to the number of trips
 INDIVIDUAL_SIZE = 90
+INDIVIDUAL_SIZE_BOUNDS = [90,90]
 
 
 # Initialize the classes
@@ -40,8 +42,10 @@ toolbox = base.Toolbox()
 
 # Register the operations to be used in the toolbox
 toolbox.register("attribute", databaseClass.generateStartingTripTime)
-toolbox.register("individual", tools.initRepeat, creator.Individual,
-                 toolbox.attribute, INDIVIDUAL_SIZE)
+#toolbox.register("individual", tools.initRepeat, creator.Individual,
+#                 toolbox.attribute, INDIVIDUAL_SIZE)
+toolbox.register("individual", inits.initRepeatBound, creator.Individual,
+                  toolbox.attribute, INDIVIDUAL_SIZE_BOUNDS)
 toolbox.register("population", tools.initRepeat, list, toolbox.individual)
 toolbox.register("evaluate", fitnessClass.evalIndividual)
 toolbox.register("mate", tools.cxOnePoint)

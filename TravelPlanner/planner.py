@@ -15,8 +15,10 @@
 
 import pymongo
 import datetime
+import bson
 
 from pymongo import MongoClient
+from bson.objectid import ObjectId
 
 NUM_OF_ROUTES_RETURNED = 5
 RT_ROUTE = 0
@@ -27,18 +29,26 @@ POS_LATITUDE  = 0
 POS_LONGITUDE = 1
 
 # Dummy class, will be used for the moment until the real RA is ready
+LON_TOPELIUS = 17.648799
+LAT_TOPELIUS = 59.888213
+LON_STUDENTS = 17.613137
+LAT_STUDENTS = 59.857667
 import random
 class RouteAdministrator:
     def __init__(self):
         pass
 
-    def getBusStop(self, Latitude, Longitude):
-        availableStops = ["Flogsta Centrum", "Sernanders vag", "Ekeby hus", "Oslogatan", 
-                          "Studentstaden", "Ekonomikum", "Gotgatan", "Skolgatan"]
-        return random.choice(availableStops)
+    def getBusStop(self, latitude, longitude):
+        if (latitude == LAT_TOPELIUS and longitude == LON_TOPELIUS):
+            return "Topeliusgatan"
+        if (latitude == LAT_STUDENTS and longitude == LON_STUDENTS):
+            return "Studentstaden"
 
     def getBusStopPosition(self, name):
-        return (2.3, 1.4)
+        if (name == "Topeliusgatan"):
+            return (LAT_TOPELIUS, LON_TOPELIUS)
+        if (name == "Studentstaden"):
+            return (LAT_STUDENTS, LON_STUDENTS)
 
 class Mode:
     tripTime = 1
@@ -69,19 +79,19 @@ class TravelPlanner:
 
         #TODO: Use real RouteAdministrator
         ra = RouteAdministrator()
-        self.startBusStop = ra.getBusStop(self.startPositionLat, startPositionLon)
-        self.endBusStop   = ra.getBusStop(self.endPositionLat, endPositionLon)
+        self.startBusStop = ra.getBusStop(self.startPositionLat, self.startPositionLon)
+        self.endBusStop   = ra.getBusStop(self.endPositionLat, self.endPositionLon)
         self.startBusStopPosition = ra.getBusStopPosition(self.startBusStop)
         self.endBusStopPosition   = ra.getBusStopPosition(self.endBusStop)
 
-        if (request["startTime"] == "null"):
-            self.startTime = 0
-            self.endTime   = request["EndTime"]
-            self.timeMode  = Mode.arrivalTime
-        elif (request["endTime"] == "null"):
-            self.startTime = request["StartTime"]
+        if (request["endTime"] == "null"):
+            self.startTime = request["startTime"]
             self.endTime   = 0
             self.timeMode  = Mode.startTime
+        elif (request["startTime"] == "null"):
+            self.startTime = 0
+            self.endTime   = request["endTime"]
+            self.timeMode  = Mode.arrivalTime
         else:
             return
 
@@ -124,6 +134,10 @@ class TravelPlanner:
 
     def _rankTrip(self, trip):
         self.tripProcessed = False
+        if (len(self.tripTuples) >= NUM_OF_ROUTES_RETURNED):
+            if (not self._isBetterTrip(-1)):
+                return
+            
         for i in range(len(self.tripTuples)):
             if (self._isBetterTrip(i)):
                 if (self.timeMode == Mode.startTime):
@@ -134,19 +148,15 @@ class TravelPlanner:
                             (trip, self.diffToArrTime, self.dptTime, self.arrTime))
                 self.tripProcessed = True
                 break
-            if (i >= (NUM_OF_ROUTES_RETURNED - 1)):
-                self.tripProcessed = True
-                break
+
         if (self.tripProcessed == False):
             if (self.timeMode == Mode.startTime):
                 self.tripTuples.append((trip, self.timeToArrival, self.dptTime, self.arrTime))
             elif (self.timeMode == Mode.arrivalTime):
                 self.tripTuples.append((trip, self.diffToArrTime, self.dptTime, self.arrTime))
+        self.tripTuples = self.tripTuples[:NUM_OF_ROUTES_RETURNED]
 
     def _insertTrip(self, trip):
-        self.dptTime = trip["busstops"][self.startingWaypoint[self.counter]]["time"]
-        self.arrTime = trip["busstops"][self.endingWaypoint[self.counter]]["time"]
-        
         if (self.timeMode == Mode.startTime):
             self.timeToArrival = self.arrTime - self.startTime
             if (self.tripTuples == []):
@@ -165,17 +175,16 @@ class TravelPlanner:
         self.counter = 0
         self.tripTuples = []
         for route in self.fittingRoutes:
-            self.schedule = timeTable.find_one({"line": route["line"]})
+            self.schedule = self.timeTable.find_one({"line": route["line"]})
             for trip in self.schedule["timetable"]:
-                for stop in trip["busstops"]:
-                    if (self.timeMode == Mode.startTime):
-                        if (stop["busstop"] == self.startBusStop):
-                            if (stop["time"] > self.startTime):
-                                self._insertTrip(trip)
-                    elif (self.timeMode == Mode.arrivalTime):
-                        if (stop["busstop"] == self.endBusStop):
-                            if (stop["time"] < self.endTime):
-                                self._insertTrip(trip)
+                self.dptTime = trip["busStops"][self.startingWaypoint[self.counter]]["time"]
+                self.arrTime = trip["busStops"][self.endingWaypoint[self.counter]]["time"]
+                if (self.timeMode == Mode.startTime):
+                    if (self.dptTime > self.startTime):
+                        self._insertTrip(trip)
+                elif (self.timeMode == Mode.arrivalTime):
+                    if (self.arrTime < self.endTime):
+                        self._insertTrip(trip)
 
             self.counter = self.counter + 1
 
@@ -208,9 +217,10 @@ class TravelPlanner:
             i += 1
             self.entryList.append(newEntry)
             self.userTripList.append(userTripID)
-            if (i >= NUM_OF_ROUTES_RETURNED):
-                break
-        userTrip.insert_many(entryList)
+        self.userTrip.insert_many(self.entryList)
+
+        self.travelRequest.update_one({"_id": self.requestID},
+                {"$set": {"userTrip": self.userTripList}})
 
 
     def getBestRoutes(self, requestID, mode = Mode.tripTime):
@@ -225,6 +235,6 @@ class TravelPlanner:
 
         self._updateDatabase()
 
-        return self.userTripList[:NUM_OF_ROUTES_RETURNED]
+        return self.userTripList
 
 

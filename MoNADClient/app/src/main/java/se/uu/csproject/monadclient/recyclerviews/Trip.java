@@ -5,85 +5,99 @@ package se.uu.csproject.monadclient.recyclerviews;
  * Therefore, the class attributes are not comprehensive
  */
 
+import java.util.Calendar;
+import java.util.Date;
+
 //TODO: change times data types
 public class Trip {
     private int tripId;
-    private String startPosition; // this is the bus stop name
-    private String startTime;
-    private String endPosition; // this is the bus stop name
-    private String endTime;
+    private String startBusStop; // this is the bus stop name
+    private Date startTime;
+    private String endBusStop; // this is the bus stop name
+    private Date endTime;
     private int durationMinutes;
     private int userFeedback;
 
-    public Trip(int tripId, String startPosition, String startTime,
-                 String endPosition, String endTime, int duration, int userFeedback) {
+    public Trip(int tripId, String startBusStop, Date startTime,
+                 String endBusStop, Date endTime, int duration, int userFeedback) {
         this.tripId = tripId;
-        this.setStartPosition(startPosition);
+        this.setStartBusStop(startBusStop);
         this.setStartTime(startTime);
-        this.setEndPosition(endPosition);
+        this.setEndBusStop(endBusStop);
         this.setEndTime(endTime);
         this.setDurationMinutes(duration);
         this.setUserFeedback(userFeedback);
     }
 
     // returns time in Milliseconds
-    //TODO: return the difference between variable "startTime" and the current timestamp im milliseconds)
     public long getTimeToDeparture(){
-        return 15000;
+        return this.getStartTime().getTime() - Calendar.getInstance().getTimeInMillis();
     }
 
-    //determines if the trip has occurred yet, helps assign the right UI to the trip
-    //TODO: replace function with the commented one once the data types are changed
-    public boolean isCurrent(){
-        if(this.getTripId() > 2) {
-            return false;
-        }
-        else {
-            return true;
-        }
-
-        /*if(getTimeToDeparture() >= 0) {
+    //determines if the trip is happening now (true if: startTime < current time < endTime)
+    public boolean isInProgress(){
+        if(this.getStartTime().before(Calendar.getInstance().getTime()) &&
+                this.getEndTime().after(Calendar.getInstance().getTime())) {
             return true;
         }
         else {
             return false;
-        }*/
+        }
     }
 
+    //determines if the trip has occurred already (true: endTime < current time)
+    public boolean isHistory(){
+        if(this.getEndTime().before(Calendar.getInstance().getTime())) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
+    //returns a boolean: true if day, month and year are all identical
+    public boolean isToday() {
+        Calendar today = Calendar.getInstance();
+        Calendar startDate = Calendar.getInstance();
+        startDate.setTime(this.getStartTime());
+        return today.get(Calendar.DAY_OF_MONTH) == startDate.get(Calendar.DAY_OF_MONTH)
+                && today.get(Calendar.MONTH) == startDate.get(Calendar.MONTH)
+                && today.get(Calendar.YEAR) == startDate.get(Calendar.YEAR);
+    }
 
     public int getTripId() {
         return tripId;
     }
 
-    public String getStartPosition() {
-        return startPosition;
+    public String getStartBusStop() {
+        return startBusStop;
     }
 
-    public void setStartPosition(String startPosition) {
-        this.startPosition = startPosition;
+    public void setStartBusStop(String startBusStop) {
+        this.startBusStop = startBusStop;
     }
 
-    public String getStartTime() {
+    public Date getStartTime() {
         return startTime;
     }
 
-    public void setStartTime(String startTime) {
+    public void setStartTime(Date startTime) {
         this.startTime = startTime;
     }
 
-    public String getEndPosition() {
-        return endPosition;
+    public String getEndBusStop() {
+        return endBusStop;
     }
 
-    public void setEndPosition(String endPosition) {
-        this.endPosition = endPosition;
+    public void setEndBusStop(String endBusStop) {
+        this.endBusStop = endBusStop;
     }
 
-    public String getEndTime() {
+    public Date getEndTime() {
         return endTime;
     }
 
-    public void setEndTime(String endTime) {
+    public void setEndTime(Date endTime) {
         this.endTime = endTime;
     }
 

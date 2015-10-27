@@ -12,6 +12,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.text.DecimalFormat;
+import java.util.Calendar;
+import java.util.Date;
 
 import se.uu.csproject.monadclient.recyclerviews.Trip;
 
@@ -24,8 +26,8 @@ public class TripCancelPopup extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.popup_trip_cancel);
 
-        TextView startPosition = (TextView) findViewById(R.id.label_startposition);
-        TextView endPosition = (TextView) findViewById(R.id.label_endposition);
+        TextView startBusStop = (TextView) findViewById(R.id.label_startbusstop);
+        TextView endBusStop = (TextView) findViewById(R.id.label_endbusstop);
         TextView startTime = (TextView) findViewById(R.id.label_starttime);
         TextView endTime = (TextView) findViewById(R.id.label_endtime);
         final TextView date = (TextView) findViewById(R.id.label_date);
@@ -33,14 +35,16 @@ public class TripCancelPopup extends AppCompatActivity {
         final ImageView clockIcon = (ImageView) findViewById(R.id.icon_clock);
 
         final Bundle b = getIntent().getExtras();
-        Trip trip = new Trip(b.getInt("tripId"), b.getString("startPosition"),
-                b.getString("endPosition"), b.getString("startTime"), b.getString("endTime"),
+        Trip trip = new Trip(b.getInt("tripId"), b.getString("startBusStop"),
+                (Date) b.getSerializable("startTime"), b.getString("endBusStop"), (Date) b.getSerializable("endTime"),
                 b.getInt("duration"), b.getInt("feedback"));
-        startPosition.setText(trip.getStartPosition());
-        endPosition.setText(trip.getStartTime());
-        startTime.setText(trip.getEndPosition());
-        endTime.setText(trip.getEndTime());
-        date.setText("TODAY");
+        startBusStop.setText(trip.getStartBusStop());
+        endBusStop.setText(trip.getEndBusStop());
+        startTime.setText(formatTime(trip.getStartTime()));
+        endTime.setText(formatTime(trip.getEndTime()));
+        if(trip.isToday()){
+            date.setText("TODAY");
+        }
         final long MILLISECONDS_TO_DEPARTURE = trip.getTimeToDeparture();
         countdown.setText(String.valueOf(MILLISECONDS_TO_DEPARTURE));
 
@@ -105,5 +109,11 @@ public class TripCancelPopup extends AppCompatActivity {
         millisecondsTime %= (1000*60);
         String seconds = formatter.format( floor(millisecondsTime / 1000) );
         return hours + ":" + minutes + ":" + seconds;
+    }
+
+    private String formatTime(Date date){
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        return calendar.HOUR_OF_DAY + ":" + calendar.MINUTE;
     }
 }

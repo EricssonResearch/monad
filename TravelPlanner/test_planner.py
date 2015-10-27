@@ -1,6 +1,21 @@
+# Copyright 2015 Ericsson AB
+#
+# Licensed under the Apache License, Version 2.0 (the "License"); you may not 
+# use this file except in compliance with the License. You may obtain a copy 
+# of the License at
+#
+#    http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software 
+# distributed under the License is distributed on an "AS IS" BASIS, WITHOUT 
+# WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the 
+# License for the specific language governing permissions and limitations 
+# under the License.
+
 from planner import TravelPlanner, Mode
 import unittest
 import datetime
+import pytest
 
 YEAR  = 2015
 MONTH = 10
@@ -118,7 +133,7 @@ class TestTravelPlanner(unittest.TestCase):
         self.tp.arrTime = TIME_1320H
         trip6 = (trip, self.tp.timeToArrival, self.tp.dptTime, self.tp.arrTime)
         self.tp._rankTrip(trip)
-        self.assertEqual(self.tp.tripTuples, [trip1, trip6, trip2, trip3, trip4, trip5])
+        self.assertEqual(self.tp.tripTuples, [trip1, trip6, trip2, trip3, trip4])
 
         trip = "trip7"
         self.tp.timeToArrival = TIMEDIFF_60MIN
@@ -126,7 +141,7 @@ class TestTravelPlanner(unittest.TestCase):
         self.tp.arrTime = TIME_1400H
         trip7 = (trip, self.tp.timeToArrival, self.tp.dptTime, self.tp.arrTime)
         self.tp._rankTrip(trip)
-        self.assertEqual(self.tp.tripTuples, [trip1, trip6, trip2, trip3, trip4, trip5])
+        self.assertEqual(self.tp.tripTuples, [trip1, trip6, trip2, trip3, trip4])
 
     def test_rankTripArrivalTime(self):
         trip1 = ("trip1", TIMEDIFF_0MIN, TIME_1330H, TIME_1400H)
@@ -151,7 +166,7 @@ class TestTravelPlanner(unittest.TestCase):
         self.tp.arrTime = TIME_1345H
         trip6 = (trip, self.tp.diffToArrTime, self.tp.dptTime, self.tp.arrTime)
         self.tp._rankTrip(trip)
-        self.assertEqual(self.tp.tripTuples, [trip1, trip6, trip2, trip3, trip4, trip5])
+        self.assertEqual(self.tp.tripTuples, [trip1, trip6, trip2, trip3, trip4])
 
         trip = "trip7"
         self.tp.diffToArrTime = TIMEDIFF_60MIN
@@ -159,7 +174,7 @@ class TestTravelPlanner(unittest.TestCase):
         self.tp.arrTime = TIME_1255H
         trip7 = (trip, self.tp.diffToArrTime, self.tp.dptTime, self.tp.arrTime)
         self.tp._rankTrip(trip)
-        self.assertEqual(self.tp.tripTuples, [trip1, trip6, trip2, trip3, trip4, trip5])
+        self.assertEqual(self.tp.tripTuples, [trip1, trip6, trip2, trip3, trip4])
 
     def test_insertTrip(self):
         self.tp.tripTuples = []
@@ -169,12 +184,16 @@ class TestTravelPlanner(unittest.TestCase):
         self.tp.startTime = TIME_1300H
         self.tp.timeMode = Mode.startTime
 
-        trip = {"busstops": [{"time": TIME_1305H}, {"time": TIME_1315H}]}
+        trip = "trip1"
+        self.tp.dptTime = TIME_1305H
+        self.tp.arrTime = TIME_1315H
         self.tp._insertTrip(trip)
         trip1 = (trip, TIMEDIFF_15MIN, TIME_1305H, TIME_1315H)
         self.assertEqual(self.tp.tripTuples, [trip1])
 
-        trip = {"busstops": [{"time": TIME_1315H}, {"time": TIME_1320H}]}
+        trip = "trip2"
+        self.tp.dptTime = TIME_1315H
+        self.tp.arrTime = TIME_1320H
         self.tp._insertTrip(trip)
         trip2 = (trip, TIMEDIFF_20MIN, TIME_1315H, TIME_1320H)
         self.assertEqual(self.tp.tripTuples, [trip1, trip2])
@@ -183,12 +202,16 @@ class TestTravelPlanner(unittest.TestCase):
         self.tp.endTime = TIME_1400H
         self.tp.timeMode = Mode.arrivalTime
 
-        trip = {"busstops": [{"time": TIME_1330H}, {"time": TIME_1345H}]}
+        trip = "trip1"
+        self.tp.dptTime = TIME_1330H
+        self.tp.arrTime = TIME_1345H
         self.tp._insertTrip(trip)
         trip1 = (trip, TIMEDIFF_15MIN, TIME_1330H, TIME_1345H)
         self.assertEqual(self.tp.tripTuples, [trip1])
 
-        trip = {"busstops": [{"time": TIME_1345H}, {"time": TIME_1400H}]}
+        trip = "trip2"
+        self.tp.dptTime = TIME_1345H
+        self.tp.arrTime = TIME_1400H
         self.tp._insertTrip(trip)
         trip2 = (trip, TIMEDIFF_0MIN, TIME_1345H, TIME_1400H)
         self.assertEqual(self.tp.tripTuples, [trip2, trip1])

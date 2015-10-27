@@ -25,7 +25,9 @@ import com.google.android.gms.location.LocationServices;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import se.uu.csproject.monadclient.recyclerviews.SearchRecyclerViewAdapter;
@@ -62,9 +64,6 @@ public class MainActivity extends AppCompatActivity implements
         buildGoogleApiClient();
         initializeLocationRequest();
         mGoogleApiClient.connect();
-        if (mGoogleApiClient.isConnected()){
-            Log.d("oops", "test3 passed");
-        }
     }
 
     public void openMainSearch (View view) {
@@ -96,8 +95,6 @@ public class MainActivity extends AppCompatActivity implements
     private void handleNewLocation(Location location) {
         currentLatitude = location.getLatitude();
         currentLongitude = location.getLongitude();
-        Log.d("oops", "latitude1: " + currentLatitude);
-        Log.d("oops", "longitude1: " + currentLongitude);
     }
 
     protected synchronized void buildGoogleApiClient() {
@@ -106,17 +103,13 @@ public class MainActivity extends AppCompatActivity implements
                 .addOnConnectionFailedListener(this)
                 .addApi(LocationServices.API)
                 .build();
-
-        Log.d("oops", "test1 passed");
     }
 
     protected void initializeLocationRequest() {
         mLocationRequest = LocationRequest.create()
-                .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
-                .setInterval(10 * 1000)        // 30 seconds, in milliseconds
-                .setFastestInterval(1 * 1000); // 1 second, in milliseconds
-
-        Log.d("oops", "test2 passed");
+                .setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY)
+                .setInterval(600 * 1000)        // 10 minutes, in milliseconds
+                .setFastestInterval(60 * 1000); // 1 minute, in milliseconds
     }
 
     @Override
@@ -184,27 +177,43 @@ public class MainActivity extends AppCompatActivity implements
 
     //TEMPORARY FUNCTION TODO: Remove this function once the database connection is set
     private void generateSearchResults(List<Trip> trips){
-        trips.add(new Trip(1, "Polacksbacken","12:36","Flogsta", "12:51", 15, 2));
-        trips.add(new Trip(2, "Polacksbacken","20:36","Flogsta", "20:51", 15, 4));
-        trips.add(new Trip(3, "Gamla Uppsala","19:17","Övre Slottsgatan", "19:35", 18, 3));
-        trips.add(new Trip(4, "Polacksbacken", "12:36", "Flogsta", "12:51", 15, 0));
+        Calendar calendar = new GregorianCalendar(2015, 10, 26, 10, 40, 0);
+        Date startdate1 = calendar.getTime();
+        calendar = new GregorianCalendar(2015, 10, 26, 10, 50, 0);
+        Date enddate1 = calendar.getTime();
+        calendar = new GregorianCalendar(2015, 10, 26, 10, 45, 0);
+        Date startdate2 = calendar.getTime();
+        calendar = new GregorianCalendar(2015, 10, 26, 11, 0, 0);
+        Date enddate2 = calendar.getTime();
+        calendar = new GregorianCalendar(2015, 10, 27, 9, 50, 0);
+        Date startdate3 = calendar.getTime();
+        calendar = new GregorianCalendar(2015, 10, 27, 10, 5, 0);
+        Date enddate3 = calendar.getTime();
+        calendar = new GregorianCalendar(2015, 10, 22, 11, 30, 0);
+        Date startdate4 = calendar.getTime();
+        calendar = new GregorianCalendar(2015, 10, 22, 12, 0, 0);
+        Date enddate4 = calendar.getTime();
+        trips.add(new Trip(1, "Polacksbacken",startdate1,"Flogsta", enddate1, 10, 0));
+        trips.add(new Trip(2, "Gamla Uppsala",startdate2,"Gottsunda", enddate2, 15, 0));
+        trips.add(new Trip(3, "Granby",startdate3,"Tunna Backar", enddate3, 15, 0));
+        trips.add(new Trip(4, "Kungsgatan", startdate4, "Observatoriet", enddate4, 30, 0));
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        /*if (!mGoogleApiClient.isConnected()){
+        if (!mGoogleApiClient.isConnected()) {
             mGoogleApiClient.connect();
-        }*/
+        }
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        /*if (mGoogleApiClient.isConnected()) {
+        if (mGoogleApiClient.isConnected()) {
             LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
             mGoogleApiClient.disconnect();
-        }*/
+        }
     }
 
     @Override
@@ -212,24 +221,28 @@ public class MainActivity extends AppCompatActivity implements
         Location location = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
 
         if (location == null) {
-            Log.d("oops", "Did not work, lets try smth!");
-            LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
-            Log.d("oops", "Something was tried!");
+            // This exception will be thrown on android 6 devices
+            // TODO: Figure out a way to ask for location permissions at runtime per the new Android 6
+            // TODO: specifications, while also maintaining support for older Android versions
+            try{
+                LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
+            }catch(java.lang.SecurityException e){
+                Log.d("oops", e.toString());
+            }
         }
         else {
-            Log.d("oops", "Should work!");
             handleNewLocation(location);
-        };
+        }
     }
 
     @Override
     public void onConnectionSuspended(int i) {
-        Log.d("oops", "ConnectionSuspended");
+
     }
 
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {
-        Log.d("oops", "ConnectionFailed");
+        Log.d("oops", Integer.toString(connectionResult.getErrorCode()));
     }
 
     @Override
