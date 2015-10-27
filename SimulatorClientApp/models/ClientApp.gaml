@@ -7,19 +7,15 @@ global skills: [SQLSKILL] {
 
 	int nb_client_init <- 16;
 	
-	//Fetch position data from local csv file and put that into a matrix 
-	//file my_csv_file <- csv_file("../includes/a.csv",",");
-	//matrix position_mx <- matrix(my_csv_file);
-	
 
 	//connect to server 
 	map<string, string> PARAMS <- [
-	'host'::'localhost',
+	'host'::'130.238.15.114',
 	'dbtype'::'MySQL',
 	'database'::'test', // it may be a null string
 	'port'::'3306',
-	'user'::'root',
-	'passwd'::'maryam'];	
+	'user'::'testy',
+	'passwd'::'testy'];	
 	
 	
 	init {
@@ -224,7 +220,7 @@ species client skills: [SQLSKILL] {
 			start_time <- string(1970 + int(st_year) - 1)  + "-" + st_month + "-" + st_day + "," + st_hour + ":" + st_minute + ":" + st_second;
 	
 			save ["username = " + user_name + "; RequestTime = " + request_time + "; StartTime = " + start_time + "; StartPosition = " + start_position + "; EndPosition = " + end_position] 
-		    		to: "ClientRequest" type:text;
+		    		to: "ClientRequest" type:csv;
 		
 		}}
 		
