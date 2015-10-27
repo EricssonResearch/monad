@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -106,7 +107,7 @@ public class TripRecyclerViewAdapter
             else{
                 if(trips.get(i).isToday()){
                     tripViewHolder.date.setText("TODAY");
-                    tripViewHolder.date.setTextColor(Color.parseColor("#f44336"));
+                    tripViewHolder.date.setTextColor(ContextCompat.getColor(tripViewHolder.itemView.getContext(), R.color.warnColor));
                 }
                 else {
                     tripViewHolder.date.setText(formatDate(trips.get(i).getStartTime()));
@@ -115,14 +116,13 @@ public class TripRecyclerViewAdapter
                 final long MILLISECONDS_TO_DEPARTURE = trips.get(i).getTimeToDeparture();
                 tripViewHolder.countdownTime.setText(formatCountdownText(MILLISECONDS_TO_DEPARTURE));
 
-                //TODO (low priority): change parseColor() calls into theme colors
                 CountDownTimer timer = new CountDownTimer(MILLISECONDS_TO_DEPARTURE, MILLISECONDS) {
                     @Override
                     public void onTick(long millisUntilFinished) {
                         tripViewHolder.countdownTime.setText(formatCountdownText(millisUntilFinished));
                         //change value to 30min (30*60*1000 = 1 800 000ms)
                         if (millisUntilFinished < 1800000) {
-                            tripViewHolder.countdownTime.setTextColor(Color.parseColor("#f44336"));
+                            tripViewHolder.countdownTime.setTextColor(ContextCompat.getColor(tripViewHolder.itemView.getContext(), R.color.warnColor));
                             tripViewHolder.clockIcon.setVisibility(View.VISIBLE);
                         }
                     }
@@ -202,10 +202,10 @@ public class TripRecyclerViewAdapter
     private void formatAsInProgress(TripViewHolder tripViewHolder) {
         tripViewHolder.date.setText("TODAY");
         tripViewHolder.countdownTime.setText("Trip in Progress");
-        tripViewHolder.countdownTime.setTextColor(Color.parseColor("#2e7d32"));
-        tripViewHolder.date.setTextColor(Color.parseColor("#2e7d32"));
+        tripViewHolder.countdownTime.setTextColor(ContextCompat.getColor(tripViewHolder.itemView.getContext(), R.color.green));
+        tripViewHolder.date.setTextColor(ContextCompat.getColor(tripViewHolder.itemView.getContext(), R.color.green));
         tripViewHolder.clockIcon.setVisibility(View.INVISIBLE);
-        //tripViewHolder.clockIcon.setColorFilter(Color.parseColor("#2e7d32"));
+        //tripViewHolder.clockIcon.setColorFilter(ContextCompat.getColor(tripViewHolder.itemView.getContext(), R.color.green));
     }
 
     private String formatTime(Date date){
