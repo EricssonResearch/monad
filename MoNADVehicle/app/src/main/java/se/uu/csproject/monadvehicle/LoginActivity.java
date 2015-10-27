@@ -38,7 +38,7 @@ public class LoginActivity extends AppCompatActivity {
                 if(usernameField.getText().length() >= 0
                         && passwordField.getText().length() >= 0
                         && busNumberField.getText().length() >= 0) {
-                    startActivity(new Intent(v.getContext(), MainActivity2.class));
+                    startActivity(new Intent(v.getContext(), MainActivity.class));
                 }
             }
         });
