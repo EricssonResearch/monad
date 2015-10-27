@@ -32,14 +32,15 @@ public class ProfileActivity extends AppCompatActivity {
 
         //set the profile fields from the profile stored in ClientAuthentication
         EditText usernameField = (EditText)findViewById(R.id.textView_profile_user);
-        //usernameField.setText(ClientAuthentication.getUsername());
+        usernameField.setText(ClientAuthentication.getUsername());
 
         EditText phoneField = (EditText)findViewById(R.id.textView_profile_phone);
-        //phoneField.setText(ClientAuthentication.getPhone());
+        phoneField.setText(ClientAuthentication.getPhone());
 
         EditText emailField = (EditText)findViewById(R.id.textView_profile_email);
-      //  emailField.setText(ClientAuthentication.getEmail());
+        emailField.setText(ClientAuthentication.getEmail());
 
+        //TODO: call profileUpdate method in ClientAuthetication when submitButton is clicked
         submitButton = (Button) findViewById(R.id.button_updateprofile);
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
