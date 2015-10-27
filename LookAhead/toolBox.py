@@ -23,7 +23,7 @@ import inits
 BUS_LINE = 2
 # The individual size corresponds to the number of trips
 INDIVIDUAL_SIZE = 90
-INDIVIDUAL_SIZE_BOUNDS = [2,10]
+INDIVIDUAL_SIZE_BOUNDS = [90,90]
 
 
 # Initialize the classes
