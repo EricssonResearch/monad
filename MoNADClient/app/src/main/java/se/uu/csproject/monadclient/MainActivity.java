@@ -1,9 +1,7 @@
 package se.uu.csproject.monadclient;
 
-import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.location.Location;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
@@ -44,7 +42,6 @@ public class MainActivity extends AppCompatActivity implements
     private LocationRequest mLocationRequest;
     private double currentLatitude;
     private double currentLongitude;
-    final private int REQUEST_CODE_ASK_PERMISSIONS = 123;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -110,19 +107,10 @@ public class MainActivity extends AppCompatActivity implements
 
     protected void initializeLocationRequest() {
         mLocationRequest = LocationRequest.create()
-                .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
-                .setInterval(10 * 1000)        // 30 seconds, in milliseconds
-                .setFastestInterval(1 * 1000); // 1 second, in milliseconds
+                .setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY)
+                .setInterval(600 * 1000)        // 10 minutes, in milliseconds
+                .setFastestInterval(60 * 1000); // 1 minute, in milliseconds
     }
-
-    /*private void insertDummyContactWrapper() {
-        int hasWriteContactsPermission = checkSelfPermission(Manifest.permission.WRITE_CONTACTS);
-        if (hasWriteContactsPermission != PackageManager.PERMISSION_GRANTED) {
-            requestPermissions(new String[] {Manifest.permission.WRITE_CONTACTS},
-                    REQUEST_CODE_ASK_PERMISSIONS);
-            return;
-        }
-    }*/
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -214,7 +202,7 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     protected void onResume() {
         super.onResume();
-        if (!mGoogleApiClient.isConnected()){
+        if (!mGoogleApiClient.isConnected()) {
             mGoogleApiClient.connect();
         }
     }
@@ -233,24 +221,28 @@ public class MainActivity extends AppCompatActivity implements
         Location location = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
 
         if (location == null) {
-            Log.d("oops", "test6 passed");
-            LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
+            // This exception will be thrown on android 6 devices
+            // TODO: Figure out a way to ask for location permissions at runtime per the new Android 6
+            // TODO: specifications, while also maintaining support for older Android versions
+            try{
+                LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
+            }catch(java.lang.SecurityException e){
+                Log.d("oops", e.toString());
+            }
         }
         else {
-            Log.d("oops", "test7 passed");
             handleNewLocation(location);
-        };
+        }
     }
 
     @Override
     public void onConnectionSuspended(int i) {
-        Log.d("oops", "ConnectionSuspended");
+
     }
 
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {
         Log.d("oops", Integer.toString(connectionResult.getErrorCode()));
-        //Log.d("oops", connectionResult.getErrorMessage());
     }
 
     @Override
