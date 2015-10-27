@@ -276,6 +276,7 @@
                     />
 
                 <TextView
+                    android:id="@+id/label_countdown"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="@dimen/medium_padding"
