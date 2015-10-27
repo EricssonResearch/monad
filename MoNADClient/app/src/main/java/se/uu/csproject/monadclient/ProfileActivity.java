@@ -1,6 +1,7 @@
 package se.uu.csproject.monadclient;
 
 import android.content.Intent;
+import android.media.Image;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -8,13 +9,16 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.TextView;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageButton;
 
 
 public class ProfileActivity extends AppCompatActivity {
 
     Toolbar toolbar;
-
+    Button submitButton;
+    ImageButton passwordButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,14 +31,36 @@ public class ProfileActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         //set the profile fields from the profile stored in ClientAuthentication
-        TextView usernameField = (TextView)findViewById(R.id.textView_profile_user);
-        usernameField.setText(ClientAuthentication.getUsername());
+        EditText usernameField = (EditText)findViewById(R.id.textView_profile_user);
+        //usernameField.setText(ClientAuthentication.getUsername());
 
-        TextView phoneField = (TextView)findViewById(R.id.textView_profile_phone);
-        phoneField.setText(ClientAuthentication.getPhone());
+        EditText phoneField = (EditText)findViewById(R.id.textView_profile_phone);
+        //phoneField.setText(ClientAuthentication.getPhone());
 
-        TextView emailField = (TextView)findViewById(R.id.textView_profile_email);
-        emailField.setText(ClientAuthentication.getEmail());
+        EditText emailField = (EditText)findViewById(R.id.textView_profile_email);
+      //  emailField.setText(ClientAuthentication.getEmail());
+
+        submitButton = (Button) findViewById(R.id.button_updateprofile);
+        submitButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                editProfileInfo(v);
+            }
+        });
+
+        passwordButton = (ImageButton) findViewById(R.id.button_changepassword);
+        passwordButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                changePassword(v);
+            }
+        });
+    }
+
+    public void changePassword(View v){
+        Intent intent = new Intent(this, ResetPasswordActivity.class);
+        intent.putExtra("reset", false); //to determine how to display the ResetPasswordActivity
+        startActivityForResult(intent, 1);
     }
 
     @Override
@@ -88,6 +114,42 @@ public class ProfileActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+
+
+    public void editProfileInfo(View v){
+        /*UpdateProfileTask task = new UpdateProfileTask();
+        try {
+            String clientid = ClientAuthentication.getClientId();
+            String username = ClientAuthentication.getUsername();
+            String email = ClientAuthentication.getEmail();
+            String phone = ClientAuthentication.getPhone();
+
+            edittext_editprofile_textfield = (EditText)findViewById(R.id.edittext_editprofile_editfield);
+            String input = edittext_editprofile_textfield.getText().toString();
+
+            if(name.equals("username")){
+                username = input;
+            }
+            else if(name.equals("phone")){
+                phone = input;
+            }
+            else if(name.equals("email")){
+                email = input;
+            }
+            String response = task.execute(clientid, username, email, phone).get();
+            Toast.makeText(getApplicationContext(), response, Toast.LENGTH_LONG).show();
+            // If the reponse starts with the specific word, it means the user updated the profile successfully
+            if (response.startsWith("Success (1)")) {
+                startActivity(new Intent(ProfileEditPopup.this, ProfileActivity.class));
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }*/
+    }
+
+        /*
     public void editProfileUser (View v) {
         Intent intent = new Intent(this, ProfileEditPopup.class);
         intent.putExtra("name", "username");
@@ -110,6 +172,5 @@ public class ProfileActivity extends AppCompatActivity {
         startActivityForResult(intent, 1);
         //should not finish here, the user may want to continue editting other fields
         //finish();
-    }
-
+    }*/
 }

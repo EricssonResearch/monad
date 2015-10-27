@@ -55,14 +55,6 @@
     <!--Activity - Main (Search view) /yonatan-->
     <string name="label_main_searchtext">Where do you want to go ?</string>
     <string name="label_main_recommendations">Recommendations</string>
-    <string name="label_main_resulttime1">18:30 - 19:00 (30min)</string>
-    <string name="label_main_resultstop1">Uppsala Centrastation to Flogstavägen</string>
-    <string name="label_main_resulttime2">13:10 - 13:55 (45min)</string>
-    <string name="label_main_resultstop2">Polacksbacken to Ultuna</string>
-    <string name="label_main_resulttime3">09:20 - 10:10 (50min)</string>
-    <string name="label_main_resultstop3">Gottsunda to Övre Slottsgatan</string>
-    <string name="label_main_resulttime4">08:00 - 08:30 (30min)</string>
-    <string name="label_main_resultstop4">Flogstavägen to Uppsala Centralstation</string>
 
     <!--Activity - Notifications-->
     <!--Activity - Notifications- MALIN -->
@@ -76,16 +68,11 @@
     <string name="label_notification_reschedule">Bus 805: Delayed 20 min, click the icon to reschedule the trip</string>
 
     <!--Activity - Profile-->
-    <string name="label_profile_information">General Information</string>
-    <string name="label_profile_contactinformation">Contact Information</string>
+    <string name="label_profile_generalinfo">General Information</string>
+    <string name="label_profile_contactinfo">Contact Information</string>
     <string name="label_profile_username">Username:</string>
-    <string name="label_profile_user">userXYZ</string>
-    <string name="label_profile_phoneno">Phone No.:</string>
-    <string name="label_profile_phone">076123456</string>
-    <string name="label_profile_emailadd">E-Mail:</string>
-    <string name="label_profile_email">userxyz@example.com</string>
-    <string name="label_main_imagedescription" translatable="false">directions</string>
-    <string name="label_main_imagebuttondescription" translatable="false">image button</string>
+    <string name="label_profile_phone">Phone No.:</string>
+    <string name="label_profile_email">E-Mail:</string>
 
     <!--Activity -Register-->
     <string name="label_register_newaccount">New Account</string>
@@ -171,17 +158,7 @@
     <string name="label_trips_random">Random Trips</string>
     <string name="label_trips_from">From</string>
     <string name="label_trips_to">To</string>
-    <string name="label_trips_from_origin">Polacksbacken</string>
-    <string name="label_trips_to_destination" translatable="false">Flogsta</string>
-    <string name="label_trips_from_time">12:36</string>
-    <string name="label_trips_to_time" translatable="false">12:51</string>
     <string name="label_trips_day">TODAY</string>
-    <string name="label_trips_countdown">00:05:38</string>
-    <string name="label_trips_bus_content_description">Bus</string>
-    <string name="label_trips_clock_content_description">Clock</string>
-    <string name="label_trips_cancel_content_description">Cancel</string>
-    <string name="label_trips_button_content_description">Button</string>
-    <string name="label_trips_date">05/10/15</string>
 
     <!--Popup - Confirmation Code -->
     <string name="label_confirmcode_codesent">Confirmation code sent!</string>
@@ -243,4 +220,9 @@
     <string name="img_description">Icon Missing</string>
     <string name="non_available">n/a</string>
     <string name="hello_world">Hello world!</string>
+    <string name="label_profile_savechanges">Save Changes</string>
+    <string name="label_profile_changepassword">Change Password</string>
+    <string name="label_resetpassword_entercurrentpassword">Enter your current password</string>
+    <string name="label_profile_info">Profile Information</string>
+    <string name="label_resetpassword_changepassword">Change Password</string>
 </resources>
