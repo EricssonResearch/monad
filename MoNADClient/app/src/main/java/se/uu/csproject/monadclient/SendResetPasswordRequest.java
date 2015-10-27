@@ -1,21 +1,23 @@
 package se.uu.csproject.monadclient;
 
-
 import android.os.AsyncTask;
 import android.util.Log;
 
 import com.google.common.base.Charsets;
 
-import java.io.IOException;
 import java.io.BufferedReader;
+import java.io.DataOutputStream;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.io.DataOutputStream;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 
-public class SendTravelRequest extends AsyncTask<String, Void, String> {
+public class SendResetPasswordRequest extends AsyncTask<String, Void, String> {
     private static String SERVER = "http://130.238.15.114";
 
     /* Send the data to the server via POST and receive the response */
@@ -69,14 +71,24 @@ public class SendTravelRequest extends AsyncTask<String, Void, String> {
     }
 
     /* Get the data from the interface and wrap them in a request */
-    public static String wrapRequest(String userId, String startTime, String endTime,
-                                   String requestTime, String stPosition, String edPosition, String priority) {
-        String request = SERVER + "/request";
+    public static String wrapRequest(String email) {
+        String request = SERVER + "/resetPassword";
+        /*SimpleDateFormat df = new SimpleDateFormat("yyyy, MM, dd, HH, mm, ss");
 
-        String urlParameters = "userId=" + userId + "&startTime=" + startTime
-                + "&endTime=" + endTime + "&requestTime=" + requestTime
-                + "&stPosition=" + stPosition + "&edPosition=" + edPosition
-                + "&priority=" + priority;
+        Date startTime = null;
+        Date endTime = null;
+        Date requestTime = null;
+
+        try {
+        startTime = df.parse(startTimeString);
+        endTime = df.parse(endTimeString);
+        requestTime = df.parse(requestTimeString);
+        } catch (ParseException e) {
+        Log.d("oops", e.toString());
+        return("Something went wrong with the date formatting");
+        }*/
+
+        String urlParameters = "email=" + email;
         String response = postRequest(request, urlParameters);
 
         return response;
@@ -87,7 +99,7 @@ public class SendTravelRequest extends AsyncTask<String, Void, String> {
     protected String doInBackground(String... params) {
         String response;
 
-        response = wrapRequest(params[0], params[1], params[2], params[3], params[4], params[5], params[6]);
+        response = wrapRequest(params[0]);
 
         return response;
     }
@@ -95,10 +107,6 @@ public class SendTravelRequest extends AsyncTask<String, Void, String> {
     /* Deal with the response returned by the server */
     @Override
     protected void onPostExecute(String response) {
-        Log.d("goodJob", response);
-
-        //TODO Stavros: set the scrollview with the response
+        Log.i("Response", response);
     }
 }
-
-

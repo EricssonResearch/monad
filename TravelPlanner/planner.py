@@ -15,12 +15,40 @@
 
 import pymongo
 import datetime
+import bson
 
 from pymongo import MongoClient
+from bson.objectid import ObjectId
 
 NUM_OF_ROUTES_RETURNED = 5
-RT_ARRIVAL_TIME = 1
+RT_ROUTE = 0
+RT_TIME_DIFFERENCE = 1
 RT_DEPARTURE_TIME = 2
+RT_ARRIVAL_TIME = 3
+POS_LATITUDE  = 0
+POS_LONGITUDE = 1
+
+# Dummy class, will be used for the moment until the real RA is ready
+LON_TOPELIUS = 17.648799
+LAT_TOPELIUS = 59.888213
+LON_STUDENTS = 17.613137
+LAT_STUDENTS = 59.857667
+import random
+class RouteAdministrator:
+    def __init__(self):
+        pass
+
+    def getBusStop(self, latitude, longitude):
+        if (latitude == LAT_TOPELIUS and longitude == LON_TOPELIUS):
+            return "Topeliusgatan"
+        if (latitude == LAT_STUDENTS and longitude == LON_STUDENTS):
+            return "Studentstaden"
+
+    def getBusStopPosition(self, name):
+        if (name == "Topeliusgatan"):
+            return (LAT_TOPELIUS, LON_TOPELIUS)
+        if (name == "Studentstaden"):
+            return (LAT_STUDENTS, LON_STUDENTS)
 
 class Mode:
     tripTime = 1
@@ -32,155 +60,170 @@ class TravelPlanner:
 
     def __init__(self):
         self.client = MongoClient()
-        self.db = self.client.monad
-        self.busStops = []
-        self.busStopIDs = []
+        self.travelRequest = self.client.monad.TravelRequest
+        self.route = self.client.monad.Route
+        self.timeTable = self.client.monad.timeTable
+        self.userTrip = self.client.monad.UserTrip
+
         self.fittingRoutes = []
         self.startingWaypoint = []
         self.endingWaypoint = []
-        self.routeList = []
-        self.minTimeDiff = datetime.timedelta.max
-        self.bestRouteStartTime = datetime.datetime(2015, 1, 1)
-        self.bestTravelTime = datetime.timedelta.max
-        self.counter = 0
 
-        cursor = self.db.BusStopLocation.find({"Available": 1})
-        for stop in cursor:
-            self.busStops.append([stop["Longitude"], stop["Latitude"]])
-            self.busStopIDs.append(stop["_id"])
-
-
-    def _updateTimeTableDB(self):
-        for point in self.bestRoute["Waypoints"]:
-            if (point["BusStopID"] == self.startID):
-                point["PsgGetOn"] += 1
-            if (point["BusStopID"] == self.endID):
-                point["PsgGetOff"] += 1
-                break
-        updated = self.db.TimeTable.update_one(
-            {"_id": self.bestRoute["_id"]},
-            {"$set": {"Waypoints": self.bestRoute["Waypoints"]}})
-
-    def _updateRequestDB(self):
-        updated = self.db.TravelRequest.update_one(
-            {"_id": self.requestID},
-            {"$set": {
-                "AssignedRoute.StartID": self.startID,
-                "AssignedRoute.EndID":   self.endID,
-                "AssignedRoute.RouteID": self.bestRoute["_id"],
-                "Duration": self.bestTravelTime.total_seconds() 
-                }
-            })
-
-
-    def _startpointFits(self, dptTime):
-        if ((self.timeMode == Mode.startTime) and (self.startTime < dptTime)):
-            return True
-        elif ((self.timeMode == Mode.arrivalTime) and (self.endTime > dptTime)):
-            return True
-        return False
-
-    def _endpointFits(self, dptTime):
-        if (self.fits):
-            if ((self.timeMode == Mode.arrivalTime) and (self.endTime > dptTime)):
-                del self.startingWaypoint[-1]
-                del self.fittingRoutes[-1]
-                return False
-            return True
-        return False
 
     def _findFittingRoutes(self):
-        request = self.db.TravelRequest.find_one({"_id": self.requestID})
-        self.startPosition = request["StartPosition"]
-        self.endPosition   = request["EndPosition"]
-        self.startID = self.busStopIDs[self.busStops.index(self.startPosition)]
-        self.endID   = self.busStopIDs[self.busStops.index(self.endPosition)]
-        if (request["StartTime"] == ""):
-            self.startTime = 0
-            self.endTime   = request["EndTime"]
-            self.timeMode  = Mode.arrivalTime
-        else:
-            self.startTime = request["StartTime"]
+        request = self.travelRequest.find_one({"_id": self.requestID})
+        self.startPositionLat = request["startPositionLatitude"]
+        self.startPositionLon = request["startPositionLongitude"]
+        self.endPositionLat   = request["endPositionLatitude"]
+        self.endPositionLon   = request["endPositionLongitude"]
+
+        #TODO: Use real RouteAdministrator
+        ra = RouteAdministrator()
+        self.startBusStop = ra.getBusStop(self.startPositionLat, self.startPositionLon)
+        self.endBusStop   = ra.getBusStop(self.endPositionLat, self.endPositionLon)
+        self.startBusStopPosition = ra.getBusStopPosition(self.startBusStop)
+        self.endBusStopPosition   = ra.getBusStopPosition(self.endBusStop)
+
+        if (request["endTime"] == "null"):
+            self.startTime = request["startTime"]
             self.endTime   = 0
             self.timeMode  = Mode.startTime
+        elif (request["startTime"] == "null"):
+            self.startTime = 0
+            self.endTime   = request["endTime"]
+            self.timeMode  = Mode.arrivalTime
+        else:
+            return
 
-        cursor = self.db.TimeTable.find({"Waypoints.BusStopID": self.endID, 
-            "StartBusstop": {"$ne": self.endPosition}})
+        cursor = self.route.find({"stop.name": self.startBusStop, "stop.name": self.endBusStop})
         for route in cursor:
             self.fits = False
-            for i in range(len(route["Waypoints"])):
-                if (route["Waypoints"][i]["BusStopID"] == self.startID):
-                    if (self._startpointFits(route["Waypoints"][i]["DptTime"])):
-                        self.startingWaypoint.append(i)
-                        self.fittingRoutes.append(route)
-                        self.fits = True
-                elif (route["Waypoints"][i]["BusStopID"] == self.endID):
-                    if (self._endpointFits(route["Waypoints"][i]["DptTime"])):
+            for i in range(len(route["stop"])):
+                if (route["stop"][i]["name"] == self.startBusStop):
+                    self.startingWaypoint.append(i)
+                    self.fittingRoutes.append(route)
+                    self.fits = True
+                elif (route["stop"][i]["name"] == self.endBusStop):
+                    if (self.fits):
                         self.endingWaypoint.append(i)
                     break
 
-    def _isBetterRoute(self, i):
-        if (self.timeToArrival <= self.routeTuples[i][RT_ARRIVAL_TIME]):
-            if (self.dptTime < self.routeTuples[i][RT_DEPARTURE_TIME]):
-                if (self.routeMode == Mode.tripTime):
-                    return True
-            else:
-                if (self.routeMode == Mode.waitTime):
-                    return True
+   
+    def _isBetterTrip(self, i):
+        if (self.timeMode == Mode.startTime):
+            if (self.timeToArrival < self.tripTuples[i][RT_TIME_DIFFERENCE]):
+                return True
+            elif (self.timeToArrival == self.tripTuples[i][RT_TIME_DIFFERENCE]):
+                if (self.dptTime > self.tripTuples[i][RT_DEPARTURE_TIME]):
+                    if (self.routeMode == Mode.tripTime):
+                        return True
+                else:
+                    if (self.routeMode == Mode.waitTime):
+                        return True
+        elif (self.timeMode == Mode.arrivalTime):
+            if (self.diffToArrTime < self.tripTuples[i][RT_TIME_DIFFERENCE]):
+                return True
+            elif (self.diffToArrTime == self.tripTuples[i][RT_TIME_DIFFERENCE]):
+                if (self.dptTime > self.tripTuples[i][RT_DEPARTURE_TIME]):
+                    if (self.routeMode == Mode.tripTime):
+                        return True
+                else:
+                    if (self.routeMode == Mode.waitTime):
+                        return True
         return False
 
-    def _findBestRoute(self):
-        self.bestRoute = self.fittingRoutes[0]
-        self.counter = 0
-        self.routeTuples = []
-        for route in self.fittingRoutes:
-            self.routeAdded = False
-            self.dptTime = route["Waypoints"][self.startingWaypoint[self.counter]]["DptTime"]
-            self.arrTime = route["Waypoints"][self.endingWaypoint[self.counter]]["DptTime"]
-            self.travelTime = self.arrTime - self.dptTime
+    def _rankTrip(self, trip):
+        self.tripProcessed = False
+        if (len(self.tripTuples) >= NUM_OF_ROUTES_RETURNED):
+            if (not self._isBetterTrip(-1)):
+                return
+            
+        for i in range(len(self.tripTuples)):
+            if (self._isBetterTrip(i)):
+                if (self.timeMode == Mode.startTime):
+                    self.tripTuples.insert(i, 
+                            (trip, self.timeToArrival, self.dptTime, self.arrTime))
+                elif (self.timeMode == Mode.arrivalTime):
+                    self.tripTuples.insert(i, 
+                            (trip, self.diffToArrTime, self.dptTime, self.arrTime))
+                self.tripProcessed = True
+                break
 
+        if (self.tripProcessed == False):
             if (self.timeMode == Mode.startTime):
-                self.timeToArrival = self.arrTime - self.startTime
-                if (self.routeTuples == []):
-                    self.routeTuples.append((route, self.timeToArrival, self.dptTime))
-                    continue
-
-                #TODO can probably be summarised in one short function
-                if (self.routeMode == Mode.tripTime):
-                    for i in range(len(self.routeTuples)):
-                        if (self._isBetterRoute(i)):
-                            self.routeTuples.insert(i, (route, self.timeToArrival, self.dptTime))
-                            self.routeAdded = True
-                            break
-                        if (i > NUM_OF_ROUTES_RETURNED):
-                            break
-                    if (self.routeAdded == False):
-                        self.routeTuples.append((route, self.timeToArrival, self.dptTime))
-
-                elif (self.routeMode == Mode.waitTime):
-                    for i in range(len(self.routeTuples)):
-                        if (self._isBetterRoute(i)):
-                            self.routeTuples.insert(i, (route, self.timeToArrival, self.dptTime))
-                            self.routeAdded = True
-                            break
-                        if (i > NUM_OF_ROUTES_RETURNED):
-                            break
-                    if (self.routeAdded == False):
-                        self.routeTuples.append((route, self.timeToArrival, self.dptTime))
-
-
-            #TODO Implementation
+                self.tripTuples.append((trip, self.timeToArrival, self.dptTime, self.arrTime))
             elif (self.timeMode == Mode.arrivalTime):
-                self.arrivalBeforeSetTime = self.endTime - self.arrTime
+                self.tripTuples.append((trip, self.diffToArrTime, self.dptTime, self.arrTime))
+        self.tripTuples = self.tripTuples[:NUM_OF_ROUTES_RETURNED]
 
-                pass
+    def _insertTrip(self, trip):
+        if (self.timeMode == Mode.startTime):
+            self.timeToArrival = self.arrTime - self.startTime
+            if (self.tripTuples == []):
+                self.tripTuples.append((trip, self.timeToArrival, self.dptTime, self.arrTime))
+                return
+            self._rankTrip(trip)
+
+        elif (self.timeMode == Mode.arrivalTime):
+            self.diffToArrTime = self.endTime - self.arrTime
+            if (self.tripTuples == []):
+                self.tripTuples.append((trip, self.diffToArrTime, self.dptTime, self.arrTime))
+                return
+            self._rankTrip(trip)
+
+    def _findBestRoute(self):
+        self.counter = 0
+        self.tripTuples = []
+        for route in self.fittingRoutes:
+            self.schedule = self.timeTable.find_one({"line": route["line"]})
+            for trip in self.schedule["timetable"]:
+                self.dptTime = trip["busStops"][self.startingWaypoint[self.counter]]["time"]
+                self.arrTime = trip["busStops"][self.endingWaypoint[self.counter]]["time"]
+                if (self.timeMode == Mode.startTime):
+                    if (self.dptTime > self.startTime):
+                        self._insertTrip(trip)
+                elif (self.timeMode == Mode.arrivalTime):
+                    if (self.arrTime < self.endTime):
+                        self._insertTrip(trip)
 
             self.counter = self.counter + 1
-        for (route, arrTime, dptTime) in self.routeTuples:
-            self.routeList.append(route)
 
 
-    def getBestRoute(self, requestID, mode = Mode.tripTime):
+    def _updateDatabase(self):
+        self.entryList = []
+        self.userTripList = []
+        i = 0
+        for (trip, timeDiff, dptTime, arrTime) in self.tripTuples:
+            userTripID = ObjectId()
+            newEntry = {
+                    "_id": userTripID,
+                    "travelRequest": self.requestID,
+                    "busId": trip["busId"],
+                    "startTime": dptTime,
+                    "endTime": arrTime,
+                    "trajectory": [
+                        {
+                            "latitude":  self.startBusStopPosition[POS_LATITUDE],
+                            "longitude": self.startBusStopPosition[POS_LONGITUDE],
+                            "name": self.startBusStop
+                        },
+                        {
+                            "latitude":  self.endBusStopPosition[POS_LATITUDE],
+                            "longitude": self.endBusStopPosition[POS_LONGITUDE],
+                            "name": self.endBusStop
+                        }
+                    ]
+            }
+            i += 1
+            self.entryList.append(newEntry)
+            self.userTripList.append(userTripID)
+        self.userTrip.insert_many(self.entryList)
+
+        self.travelRequest.update_one({"_id": self.requestID},
+                {"$set": {"userTrip": self.userTripList}})
+
+
+    def getBestRoutes(self, requestID, mode = Mode.tripTime):
         self.requestID = requestID
         self.routeMode = mode
         self._findFittingRoutes()
@@ -190,9 +233,8 @@ class TravelPlanner:
 
         self._findBestRoute()
 
-#        self._updateRequestDB()
-#        self._updateTimeTableDB()
+        self._updateDatabase()
 
-        return self.routeList[:NUM_OF_ROUTES_RETURNED]
+        return self.userTripList
 
 

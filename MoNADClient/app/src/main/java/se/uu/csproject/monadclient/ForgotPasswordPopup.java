@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -14,6 +15,9 @@ import android.widget.EditText;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.view.ViewGroup.LayoutParams;
+import android.widget.Toast;
+
+import java.util.concurrent.ExecutionException;
 
 public class ForgotPasswordPopup extends AppCompatActivity {
     private EditText emailField;
@@ -33,13 +37,25 @@ public class ForgotPasswordPopup extends AppCompatActivity {
         int height = dm.heightPixels;
         getWindow().setLayout((int) (width*.94),(int) (height*.30));
 
-        //// TODO Huijie: send code to the user's email
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(emailField.getText().length() > 0
-                        && emailField.getText().toString().contains("@"))
-                startActivity(new Intent(v.getContext(), ConfirmCodePopup.class));
+                        && emailField.getText().toString().contains("@")) {
+                    SendResetPasswordRequest sendResetPasswordRequest = new SendResetPasswordRequest();
+                    try {
+                        String response = sendResetPasswordRequest.execute(emailField.getText().toString()).get();
+                        Toast.makeText(getApplicationContext(), "The code has been sent to the email you entered, please check your email and enter the code.", Toast.LENGTH_LONG).show();//response is only the code now, nothing else
+                        Intent intent = new Intent(v.getContext(), ConfirmCodePopup.class);
+                        //Log.i("CODE PASSED", response.substring(1));
+                        intent.putExtra("CODE", response.substring(1));
+                        startActivity(intent);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    } catch (ExecutionException e) {
+                        e.printStackTrace();
+                    }
+                }
             }
         });
     }

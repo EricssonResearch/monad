@@ -1,34 +1,57 @@
 package se.uu.csproject.monadclient;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Location;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationListener;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
+
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import se.uu.csproject.monadclient.recyclerviews.SearchRecyclerViewAdapter;
 import se.uu.csproject.monadclient.recyclerviews.Trip;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements
+        GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
 
     private Toolbar toolbar;
+    private EditText destination;
+    private GoogleApiClient mGoogleApiClient;
+    private LocationRequest mLocationRequest;
+    private double currentLatitude;
+    private double currentLongitude;
+    final private int REQUEST_CODE_ASK_PERMISSIONS = 123;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         toolbar = (Toolbar) findViewById(R.id.actionToolBar);
+        destination = (EditText) findViewById(R.id.main_search_destination);
         setSupportActionBar(toolbar);
 
         getSupportActionBar().setHomeButtonEnabled(true);
@@ -41,13 +64,65 @@ public class MainActivity extends AppCompatActivity {
         generateSearchResults(searchResults);
         SearchRecyclerViewAdapter adapter = new SearchRecyclerViewAdapter(searchResults);
         recyclerView.setAdapter(adapter);
+        buildGoogleApiClient();
+        initializeLocationRequest();
+        mGoogleApiClient.connect();
     }
 
-    //TODO Stavros: call the search function using SendTravelRequest (same for SearchActivity)
     public void openMainSearch (View view) {
+        // Make a quick search based on the current time and the user's current location
+        String startPositionLatitude, startPositionLongitude, edPosition, userId, startTime, endTime;
+        String requestTime, priority;
+        Date now = new Date();
+        SimpleDateFormat df = new SimpleDateFormat("yyyy EEE dd MMM HH:mm");
+
+        // Provide some default values since this is a quick search
+        startPositionLatitude = String.valueOf(currentLatitude);
+        startPositionLongitude = String.valueOf(currentLongitude);
+        edPosition = destination.getText().toString();
+        userId = ClientAuthentication.getClientId();
+        startTime = df.format(now);
+        endTime = "null";
+        requestTime = df.format(now);
+        priority = "distance";
+
+        Log.d("oops", "latitude: " + startPositionLatitude);
+        Log.d("oops", "longitude: " + startPositionLongitude);
+        new SendQuickTravelRequest().execute(userId, startTime, endTime, requestTime, startPositionLatitude,
+                startPositionLongitude, edPosition, priority);
+
         Intent myIntent = new Intent(MainActivity.this, SearchActivity.class);
         MainActivity.this.startActivity(myIntent);
     }
+
+    private void handleNewLocation(Location location) {
+        currentLatitude = location.getLatitude();
+        currentLongitude = location.getLongitude();
+    }
+
+    protected synchronized void buildGoogleApiClient() {
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .addApi(LocationServices.API)
+                .build();
+    }
+
+    protected void initializeLocationRequest() {
+        mLocationRequest = LocationRequest.create()
+                .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
+                .setInterval(10 * 1000)        // 30 seconds, in milliseconds
+                .setFastestInterval(1 * 1000); // 1 second, in milliseconds
+    }
+
+    /*private void insertDummyContactWrapper() {
+        int hasWriteContactsPermission = checkSelfPermission(Manifest.permission.WRITE_CONTACTS);
+        if (hasWriteContactsPermission != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(new String[] {Manifest.permission.WRITE_CONTACTS},
+                    REQUEST_CODE_ASK_PERMISSIONS);
+            return;
+        }
+    }*/
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -114,9 +189,72 @@ public class MainActivity extends AppCompatActivity {
 
     //TEMPORARY FUNCTION TODO: Remove this function once the database connection is set
     private void generateSearchResults(List<Trip> trips){
-        trips.add(new Trip(1, "Polacksbacken","12:36","Flogsta", "12:51", 15, 2));
-        trips.add(new Trip(2, "Polacksbacken","20:36","Flogsta", "20:51", 15, 4));
-        trips.add(new Trip(3, "Gamla Uppsala","19:17","Övre Slottsgatan", "19:35", 18, 3));
-        trips.add(new Trip(4, "Polacksbacken", "12:36", "Flogsta", "12:51", 15, 0));
+        Calendar calendar = new GregorianCalendar(2015, 10, 26, 10, 40, 0);
+        Date startdate1 = calendar.getTime();
+        calendar = new GregorianCalendar(2015, 10, 26, 10, 50, 0);
+        Date enddate1 = calendar.getTime();
+        calendar = new GregorianCalendar(2015, 10, 26, 10, 45, 0);
+        Date startdate2 = calendar.getTime();
+        calendar = new GregorianCalendar(2015, 10, 26, 11, 0, 0);
+        Date enddate2 = calendar.getTime();
+        calendar = new GregorianCalendar(2015, 10, 27, 9, 50, 0);
+        Date startdate3 = calendar.getTime();
+        calendar = new GregorianCalendar(2015, 10, 27, 10, 5, 0);
+        Date enddate3 = calendar.getTime();
+        calendar = new GregorianCalendar(2015, 10, 22, 11, 30, 0);
+        Date startdate4 = calendar.getTime();
+        calendar = new GregorianCalendar(2015, 10, 22, 12, 0, 0);
+        Date enddate4 = calendar.getTime();
+        trips.add(new Trip(1, "Polacksbacken",startdate1,"Flogsta", enddate1, 10, 0));
+        trips.add(new Trip(2, "Gamla Uppsala",startdate2,"Gottsunda", enddate2, 15, 0));
+        trips.add(new Trip(3, "Granby",startdate3,"Tunna Backar", enddate3, 15, 0));
+        trips.add(new Trip(4, "Kungsgatan", startdate4, "Observatoriet", enddate4, 30, 0));
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (!mGoogleApiClient.isConnected()){
+            mGoogleApiClient.connect();
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (mGoogleApiClient.isConnected()) {
+            LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
+            mGoogleApiClient.disconnect();
+        }
+    }
+
+    @Override
+    public void onConnected(Bundle bundle) {
+        Location location = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+
+        if (location == null) {
+            Log.d("oops", "test6 passed");
+            LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
+        }
+        else {
+            Log.d("oops", "test7 passed");
+            handleNewLocation(location);
+        };
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+        Log.d("oops", "ConnectionSuspended");
+    }
+
+    @Override
+    public void onConnectionFailed(ConnectionResult connectionResult) {
+        Log.d("oops", Integer.toString(connectionResult.getErrorCode()));
+        //Log.d("oops", connectionResult.getErrorMessage());
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+        handleNewLocation(location);
     }
 }

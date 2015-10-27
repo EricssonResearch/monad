@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="se.uu.csproject.monadclient.tripDetails">
+    tools:context="se.uu.csproject.monadclient.RouteActivity">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -55,7 +55,7 @@
                     />
 
                 <TextView
-                    android:id="@+id/info_origin1"
+                    android:id="@+id/label_startbusstop"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     style="@style/importantText"
@@ -75,7 +75,7 @@
                     android:src="@drawable/ic_directions_bus_black_24dp"
                     android:contentDescription="@string/label_tripsactivity_buscontentdescription"
                     android:layout_centerHorizontal="true"
-                    android:layout_alignTop="@id/info_origin1"
+                    android:layout_alignTop="@id/label_startbusstop"
                     android:padding="@dimen/small_padding"
                     />
 
@@ -90,7 +90,7 @@
                     />
 
                 <TextView
-                    android:id="@+id/info_destination1"
+                    android:id="@+id/label_endbusstop"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     style="@style/importantText"
@@ -104,7 +104,7 @@
                     />
 
                 <TextView
-                    android:id="@+id/info_origin_time1"
+                    android:id="@+id/label_starttime"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     style="@style/importantText"
@@ -112,11 +112,11 @@
                     android:text="@string/label_tripsactivity_fromtime"
                     android:paddingTop="@dimen/small_padding"
                     android:paddingLeft="@dimen/layout_padding"
-                    android:layout_below="@id/info_origin1"
+                    android:layout_below="@id/label_startbusstop"
                     />
 
                 <TextView
-                    android:id="@+id/info_destination_time1"
+                    android:id="@+id/label_endtime"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     style="@style/importantText"
@@ -124,14 +124,14 @@
                     android:text="@string/label_tripsactivity_totime"
                     android:paddingTop="@dimen/small_padding"
                     android:paddingLeft="@dimen/layout_padding"
-                    android:layout_below="@id/info_destination1"
+                    android:layout_below="@id/label_endbusstop"
                     android:layout_toRightOf="@id/bus1"
                     android:layout_toEndOf="@id/bus1"
                     />
 
                 <!--clock icon-->
                 <ImageView
-                    android:id="@+id/clock1"
+                    android:id="@+id/icon_clock"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:cropToPadding="false"
@@ -144,26 +144,26 @@
 
                 <!--text: countdown info-->
                 <TextView
-                    android:id="@+id/info_date1"
+                    android:id="@+id/label_date"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:text="@string/label_tripsactivity_day"
                     android:padding="@dimen/small_padding"
                     android:layout_centerHorizontal="true"
-                    android:layout_below="@id/clock1"
+                    android:layout_below="@id/icon_clock"
                     style="@style/importantText"
                     />
 
                 <TextView
-                    android:id="@+id/countdown1"
+                    android:id="@+id/label_countdown"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="@dimen/header_textlarge"
                     android:text="@string/label_tripsactivity_countdown"
                     android:layout_centerHorizontal="true"
                     style="@style/importantText"
-                    android:layout_below="@id/info_date1"/>
+                    android:layout_below="@id/label_date"/>
 
             </RelativeLayout>
 
@@ -184,6 +184,7 @@
                 android:text="@string/label_tripcancel_buttonback"
                 android:layout_gravity="center_vertical"
                 android:layout_weight="1"
+                android:onClick="backButtonClick"
                 />
 
             <Button

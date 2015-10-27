@@ -155,7 +155,7 @@
     <string name="label_fragmentsettingsalert_buttoncancel">Cancel</string>
     <string name="label_fragmentsettingsalert_buttonok">OK</string>
     <string name="label_fragmentsettingsalert_title">Notifications</string>
-    <string name="label_fragmentsettingsalert_recommendationsswitch">ON</string>
+    <string name="label_fragmentsettingsalert_recommendationsswitch">ON </string>
 
     <!-- Settings - Theme setting /yonatan -->
     <string name="label_fragmentsettingstheme_title">Themes</string>

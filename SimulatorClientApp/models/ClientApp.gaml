@@ -46,15 +46,14 @@ species client skills: [SQLSKILL] {
 	
 	float st_time;
 	string start_time_str; 
-	
+
 	/*
 	Define variables for caculating rush time.
 	Assume client alwasy send request for tomorrow's travel.
 	We follow UL's rush hour, it's 6-9 in morning(peak at 7:30) and 3-6 in afternoon(peak at 16:30)
 	Using Gauss distribution to simulate rush time.
 	We random pick one from morning and afternoon
-	*/
-	
+	*/	
 	float tom_start_time;
 	float today_cur_sec;
 	float rush_time;
@@ -62,6 +61,7 @@ species client skills: [SQLSKILL] {
 	float a_day_in_ms <- (24.0 * 60 * 60 * 1000);
 	float mor_rush <- (7.5 * 60 * 60 * 1000);
 	float aft_rush <- (16.5 * 60 * 60 * 1000);
+	
 	float hot_station;
 	int cen_plk_rnd <- rnd(1) update: rnd(1);
 		

@@ -16,11 +16,11 @@ See the License for the specific language governing permissions and limitations 
 import random
 import string
 import collections
-import json
 import datetime
 from pymongo import MongoClient
 from bson.objectid import ObjectId
 from operator import itemgetter
+
 
 
 class DB():
@@ -32,6 +32,7 @@ class DB():
     minutesDay = 1440
     hoursDay = 24
     minutesHour = 60
+    formatTime = '%H:%M'
 
     # Constructor
     def __init__(self):
@@ -62,8 +63,8 @@ class DB():
             {"_id": ObjectId(self.getRandomTravelRequestId())})
         return req
 
-    def getTravelRequest(self, object, column):
-        req = self.db.TravelRequest.find({"_id": ObjectId(object)})
+    def getTravelRequest(self, column):
+        req = self.db.TravelRequestLookAhead.find({}, {"_id": False})
         return self.retrieveData(req, column)
 
     # These function will be called for every gene in order to get the difference
@@ -71,6 +72,41 @@ class DB():
         req = self.db.TravelRequest.find({ "StartTime": {"$gte": start, "$lt": end}})
         return req
 
+    def getTravelRequestSummary(self, start, end):
+        keyf = "function(doc) { return { startBusStop: doc.startBusStop, hour: doc.startTime.getHours()-2, minute: doc.startTime.getMinutes()};}"
+        condition = {"startTime": {"$gte": start, "$lt": end}}
+        initial = {"count": 0}
+        reduce = "function(curr, result) { result.count++; }"
+        # req = self.db.TravelRequest.group(keyf, condition, initial, reduce)
+        req = self.db.TravelRequestLookAhead.group(keyf, condition, initial, reduce)
+        req = sorted(req, key=itemgetter("hour","minute"))
+        return req
+
+    def getTravelRequestSummary2(self, start, end, busStop):
+
+        keyf = "function(doc) { return { startBusStop: doc.startBusStop, hour: doc.startTime.getHours(), minute: doc.startTime.getMinutes()};}"
+        condition = {"startTime": {"$gte": start, "$lt": end}, "startBusStop": {"$eq": busStop} }
+        initial = {"count": 0}
+        reduce = "function(curr, result) { result.count++; }"
+        # req = self.db.TravelRequest.group(keyf, condition, initial, reduce)
+        req = self.db.TravelRequestLookAhead.group(keyf, condition, initial, reduce)
+        req = sorted(req, key=itemgetter("hour","minute"))
+
+        return req        
+
+    """
+        req = []
+        condition = {"startTime": {"$gte": start, "$lt": end}, "startBusStop": {"$eq": busStop}}
+        req = self.db.TravelRequestLookAhead.find(condition).count()
+
+        for reqs in req:
+            print("THIS IS THE REQUEST TIME ITNERVAL")
+            print(reqs)
+
+
+
+        return req
+    """
     # These function will be called for every gene in order to get the difference
     # def getTravelRequestBetween(self, start, end):
     #    for doc in self.db.TravelRequest.find({'time': {'$gte': start, '$lt': end}}):
@@ -176,6 +212,22 @@ class DB():
     def generateStartingTripTime(self):
         return list([self.getRoute("line"), self.generateRandomCapacity(), self.generateTime(self.generateMinute(self.mergeRandomTime(self.getRandomHour(),self.getRandomMinute())))])
 
+    def generateFitnessTripTimeTable(self, line, startingTime):
+        tripTimeTable = []
+        busStop = self.getRouteStop(line)
+
+        minuteSeed = self.generateMinute(startingTime)
+
+        tripTimeTable.append([busStop[0][0],self.generateTime(minuteSeed)])
+        for j in range(len(busStop)-1):
+            minuteSeed = minuteSeed + busStop[j][1]
+
+            if minuteSeed > DB.minutesDay:
+                minuteSeed = minuteSeed - DB.minutesDay
+            tripTimeTable.append([busStop[j+1][0],self.generateTime(minuteSeed)])
+
+        return tripTimeTable
+
     def generateTripTimeTable(self, timetable):
         timeTable = []
         for i in range(len(timetable)):
@@ -226,17 +278,46 @@ class DB():
     # Time Table
     def insertTimeTable(self, document):
         timeTable = []
-        # route5 = {"line": 5, "durationTime":39, routeStop2}
-        # {"line": document[i][0], "date": str(now.strftime("%Y-%m-%d")), "timetable": }
-        now = datetime.datetime.now()
+        bus = []
         for i in range(len(document)):
             j = 0
             trip = []
+            bus = []
+            busId = self.getRandomMinute()
+            bus.append(busId)
             # print document[i][2]
             for j in range(len(document[i][2])/2):
                 ind = j * 2
-                trip.append({"BusStop": document[i][2][ind],"DptTime": document[i][2][ind+1]})
-                # print trip
-            timeTable.append({"capacity": document[i][1],"trip": trip})
+                if len(document[i][2][ind+1]) < 5:
+                    print (document[i][2][ind+1])
+                # trip.append({"busStop": document[i][2][ind],"time": datetime.datetime.strptime(document[i][2][ind+1],DB.formatTime).time(),"capacity": document[i][1],"latitude":self.getBusStopLatitude(document[i][2][ind]),"longitude":self.getBusStopLongitude(document[i][2][ind])})
+                trip.append({"busStop": document[i][2][ind],"time": datetime.datetime.strptime(document[i][2][ind+1],DB.formatTime),"capacity": document[i][1],"latitude":self.getBusStopLatitude(document[i][2][ind]),"longitude":self.getBusStopLongitude(document[i][2][ind])})
+            timeTable.append({"busId": bus,"busStops": trip})
         # print timeTable
-        self.db.timeTable.insert_one({"line": document[0][0], "date": str(now.strftime("%Y-%m-%d")), "timetable": timeTable})
+        self.db.timeTable.insert_one({"line": document[0][0], "date": datetime.datetime.now(), "timetable": timeTable})
+
+
+    def getRequestsFromDB(self):
+        ''' Gets travel requests from the database. Attempts to cluster the requests based on time 
+        and calculates a count of the total requests between a time window.
+
+        @param: start - lower time bound
+        @param: end - upper time bound
+        @return: yesterday's requests with fields startTime, startBusStop, endBusStop.
+        '''
+        yesterday = datetime.date.today() - datetime.timedelta(days=1)
+        yesterdayStart = datetime.datetime(yesterday.year, yesterday.month, yesterday.day,0,0,0)
+        todayStart = datetime.datetime(datetime.date.today().year,datetime.date.today().month,datetime.date.today().day,0,0,0)
+        reqs = []
+        requests = self.db.TravelRequestLookAhead.find({"$and": [{"startTime": {"$gte": yesterdayStart}}, {"startTime": {"$lt": todayStart}}]}, {"startTime": 1, "startBusStop": 1, "endBusStop": 1, "_id": 0})  # New collection for LookAhead
+        for req in requests:
+            #reqs.append([req.get('startTime', None), req.get('startBusStop', None), req.get('endBusStop', None)])
+            reqs.append(req.get('startTime', None))
+        return reqs   
+
+    def getBusStopLatitude(self, busStop):
+        return self.retrieveData(self.db.busStopLocation.find({"name": busStop}, {"latitude": 1}), "latitude")
+
+
+    def getBusStopLongitude(self, busStop):
+        return self.retrieveData(self.db.busStopLocation.find({"name": busStop}, {"longitude": 1}), "longitude")

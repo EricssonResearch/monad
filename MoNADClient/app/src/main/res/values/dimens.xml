@@ -24,4 +24,5 @@
     <dimen name="large_block">100dp</dimen>
     <dimen name="popup_size">120dp</dimen>
     <dimen name="popup_layoutsize">350dp</dimen>
+    <dimen name="cardview_null_radius">0dp</dimen>
 </resources>
