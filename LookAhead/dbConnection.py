@@ -82,10 +82,10 @@ class DB():
         req = sorted(req, key=itemgetter("hour","minute"))
         return req
 
-    def getTravelRequestSummary2(self, start, end, busStop):
-
+    def getTravelRequestSummary2(self, start, end):
+        """
         keyf = "function(doc) { return { startBusStop: doc.startBusStop, hour: doc.startTime.getHours(), minute: doc.startTime.getMinutes()};}"
-        condition = {"startTime": {"$gte": start, "$lt": end}, "startBusStop": {"$eq": busStop} }
+        condition = {"startTime": {"$gte": start, "$lt": end}, "startBusStop": {"$eq": busStop}}
         initial = {"count": 0}
         reduce = "function(curr, result) { result.count++; }"
         # req = self.db.TravelRequest.group(keyf, condition, initial, reduce)
@@ -93,20 +93,19 @@ class DB():
         req = sorted(req, key=itemgetter("hour","minute"))
 
         return req        
+        """
+        queryResults = []
+        # A query is made to group request made to a busstop and counting the number of similar requests made
+        pipline = [{"$match": {"startTime": {"$gte": start, "$lt": end}}},
+            {"$group": {"_id": {"RequestTime": "$startTime", "BusStop": "$startBusStop"},"total": {"$sum": 1}}}]
 
-    """
-        req = []
-        condition = {"startTime": {"$gte": start, "$lt": end}, "startBusStop": {"$eq": busStop}}
-        req = self.db.TravelRequestLookAhead.find(condition).count()
+        groupQuery = self.db.TravelRequestLookAhead.aggregate(pipline)
 
-        for reqs in req:
-            print("THIS IS THE REQUEST TIME ITNERVAL")
-            print(reqs)
+        for x in groupQuery:
+            queryResults.append(x)
 
+        return queryResults
 
-
-        return req
-    """
     # These function will be called for every gene in order to get the difference
     # def getTravelRequestBetween(self, start, end):
     #    for doc in self.db.TravelRequest.find({'time': {'$gte': start, '$lt': end}}):
