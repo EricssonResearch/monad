@@ -131,12 +131,17 @@ class DB():
             route = self.db.route.find({"line": r})
             return self.retrieveData(route, column)
 
+    def getLine(self, line):
+        line = self.db.route.find({"line": line})
+        return self.retrieveData(line, None)
+
     def dropRoute(self):
         self.db.route.drop()
 
     def getTripDay(self, line):
-        tripDay = self.db.route.find({"line": line}, {"tripDay": 1})
-        return self.retrieveData(tripDay, "tripDay")
+        frequency = self.db.route.find({"line": line}, {"frequency": 1})
+        frequency = self.retrieveData(frequency, "frequency")
+        return DB.minutesDay / frequency
 
     def getRouteStop(self, line):
         routeStop = self.db.route.find({"line": line}, {"stop": 1})
@@ -211,26 +216,25 @@ class DB():
         return self.mergeRandomTime(hours, minutes)
 
     # Trip
-    # Generate TT from seed random starting time
-    def generateStartingTripTime(self):
-        return list([self.getRoute("line"), self.generateRandomCapacity(), self.generateTime(self.generateMinute(self.mergeRandomTime(self.getRandomHour(),self.getRandomMinute())))])
+    # Generate TT from seed random starting time. Called when generating the initial population
+    def generateStartingTripTime(self, line):
+        return list([line, self.generateRandomCapacity(), self.generateTime(self.generateMinute(self.mergeRandomTime(self.getRandomHour(),self.getRandomMinute())))])
 
+    # Fitness trip time table
+    # This is the function that changes the genotype into a phenotype. It generates the time table for a particular individual.
     def generateFitnessTripTimeTable(self, line, startingTime):
         tripTimeTable = []
         busStop = self.getRouteStop(line)
-
         minuteSeed = self.generateMinute(startingTime)
-
-        tripTimeTable.append([busStop[0][0],self.generateTime(minuteSeed)])
+        tripTimeTable.append([busStop[0]["name"],self.generateTime(minuteSeed)])
         for j in range(len(busStop)-1):
-            minuteSeed = minuteSeed + busStop[j][1]
-
+            minuteSeed = minuteSeed + busStop[j]["interval"]
             if minuteSeed > DB.minutesDay:
                 minuteSeed = minuteSeed - DB.minutesDay
-            tripTimeTable.append([busStop[j+1][0],self.generateTime(minuteSeed)])
-
+            tripTimeTable.append([busStop[j+1]["name"],self.generateTime(minuteSeed)])
         return tripTimeTable
 
+    # After GA, this function is called to generate all the bus stops given the initial starting times based on the best individual
     def generateTripTimeTable(self, timetable):
         timeTable = []
         for i in range(len(timetable)):
@@ -239,34 +243,14 @@ class DB():
             # print numberStop
             minuteSeed = self.generateMinute(timetable[i][2])
             tripTimeTable = []
-            tripTimeTable.append([busStop[0][0],self.generateTime(minuteSeed)])
+            tripTimeTable.append([busStop[0]["name"],self.generateTime(minuteSeed)])
             for j in range(numberStop):
-                minuteSeed = minuteSeed + busStop[j][1]
+                minuteSeed = minuteSeed + busStop[j]["interval"]
                 if minuteSeed > DB.minutesDay:
                     minuteSeed = minuteSeed - DB.minutesDay
-                tripTimeTable.append([busStop[j+1][0],self.generateTime(minuteSeed)])
+                tripTimeTable.append([busStop[j+1]["name"],self.generateTime(minuteSeed)])
             timeTable.append([timetable[i][0], timetable[i][1], list(self.flatten(tripTimeTable))])
         return sorted(timeTable, key = itemgetter(2))
-
-    def generateTripTimeTable2(self, line):
-        tripTimeTable = []
-        seed = self.mergeRandomTime(self.getRandomHour(),self.getRandomMinute())
-        busStop = self.getRouteStop(line)
-        numberStop = len(busStop)
-        minuteSeed = self.generateMinute(seed)
-        for i in range(numberStop):
-            minuteSeed = minuteSeed + busStop[i][1]
-            if minuteSeed > DB.minutesDay:
-                minuteSeed = minuteSeed - DB.minutesDay
-            tripTimeTable.append(self.generateTime(minuteSeed))
-        return list(self.flatten([self.getRoute("line"), self.generateRandomCapacity(), list(self.flatten(tripTimeTable))]))
-
-    def generateTimeTable(self, line):
-        timeTable = []
-        tripDay = int(self.getTripDay(line))
-        for i in range(tripDay):
-            timeTable.append(self.generateTripTimeTable(line))
-        return timeTable
 
     # Dont forget to credit this function on Stack Overflow
     # http://stackoverflow.com/questions/14820273/confused-by-chain-enumeration
@@ -279,6 +263,7 @@ class DB():
                 yield el
 
     # Time Table
+    # This function takes the result from generateTripTimeTable, and generates a JSON document with the DB layout. Then, it proceeds to insert it on the DB.
     def insertTimeTable(self, document):
         timeTable = []
         bus = []
@@ -293,10 +278,8 @@ class DB():
                 ind = j * 2
                 if len(document[i][2][ind+1]) < 5:
                     print (document[i][2][ind+1])
-                # trip.append({"busStop": document[i][2][ind],"time": datetime.datetime.strptime(document[i][2][ind+1],DB.formatTime).time(),"capacity": document[i][1],"latitude":self.getBusStopLatitude(document[i][2][ind]),"longitude":self.getBusStopLongitude(document[i][2][ind])})
-                trip.append({"busStop": document[i][2][ind],"time": datetime.datetime.strptime(document[i][2][ind+1],DB.formatTime),"capacity": document[i][1],"latitude":self.getBusStopLatitude(document[i][2][ind]),"longitude":self.getBusStopLongitude(document[i][2][ind])})
-            timeTable.append({"busId": bus,"busStops": trip})
-        # print timeTable
+                trip.append({"busStop": document[i][2][ind], "time": datetime.datetime.strptime(document[i][2][ind+1], DB.formatTime), "capacity": document[i][1], "latitude": self.getBusStopLatitude(document[i][2][ind]), "longitude": self.getBusStopLongitude(document[i][2][ind])})
+            timeTable.append({"busId": bus, "busStops": trip})
         self.db.timeTable.insert_one({"line": document[0][0], "date": datetime.datetime.now(), "timetable": timeTable})
 
 
