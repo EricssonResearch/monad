@@ -15,7 +15,6 @@ import android.widget.Toast;
 public class ConfirmCodePopup extends AppCompatActivity {
 
     private EditText confirmationCode;
-    private Button submitButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,7 +28,7 @@ public class ConfirmCodePopup extends AppCompatActivity {
         getWindow().setLayout((int) (width*.94),(int) (height*.30));
 
         confirmationCode = (EditText) findViewById(R.id.field_code);
-        submitButton = (Button) findViewById(R.id.button_submit);
+        Button submitButton = (Button) findViewById(R.id.button_submit);
 
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -39,16 +38,18 @@ public class ConfirmCodePopup extends AppCompatActivity {
 
                 Bundle extras = getIntent().getExtras();
                 String rightCode = null;
+                String email = null;
 
                 if (extras != null) {
                     rightCode = extras.getString("CODE");
+                    email = extras.getString("EMAIL");
                 }
 
-                //Log.i("CODE GET", rightCode);
-
                 if(codeValue.equals(rightCode)){
-                    ConfirmCodePopup.this.startActivity(
-                            new Intent(ConfirmCodePopup.this, ResetPasswordActivity.class));
+                    Intent intent = new Intent(ConfirmCodePopup.this, ResetPasswordActivity.class);
+                    intent.putExtra("EMAIL", email);
+                    intent.putExtra("RESET", true);
+                    startActivity(intent);
                 }
                 else{
                     Toast.makeText(getApplicationContext(), "The code you entered is not right, please check your email and enter the right code.", Toast.LENGTH_LONG).show();

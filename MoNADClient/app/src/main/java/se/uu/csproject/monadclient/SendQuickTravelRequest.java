@@ -90,15 +90,12 @@ public class SendQuickTravelRequest extends AsyncTask<String, Void, String>{
 
         response = wrapRequest(params[0], params[1], params[2], params[3], params[4], params[5], params[6], params[7]);
 
-        Log.d("goodJob", response);
         return response;
     }
 
     /* Deal with the response returned by the server */
     @Override
     protected void onPostExecute(String response) {
-        Log.d("goodJob", response);
-
-        //TODO Stavros: set the scrollview with the response
+        Log.d("oops", response);
     }
 }

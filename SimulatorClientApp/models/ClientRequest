@@ -1,43 +1,80 @@
-['username = 393492; RequestTime = 2015-05-25,09:28:16; StartTime = 2015-05-26,06:56:53; StartPosition = Vaksala torg; EndPosition = Sernanders v\u00E4g']
-['username = 159343; RequestTime = 2015-05-25,09:28:16; StartTime = 2015-05-26,14:39:39; StartPosition = Skolgatan; EndPosition = Sernanders v\u00E4g']
-['username = 381731; RequestTime = 2015-05-25,09:28:16; StartTime = 2015-05-26,16:12:03; StartPosition = Flogsta v\u00E5rdcentral; EndPosition = Sernanders v\u00E4g']
-['username = 254035; RequestTime = 2015-05-25,09:28:16; StartTime = 2015-05-26,15:05:27; StartPosition = Rickomberga; EndPosition = Vaksala torg']
-['username = 338673; RequestTime = 2015-05-25,09:28:16; StartTime = 2015-05-26,08:16:21; StartPosition = Vaksala torg; EndPosition = Sernanders v\u00E4g']
-['username = 339780; RequestTime = 2015-05-25,09:28:16; StartTime = 2015-05-26,06:20:55; StartPosition = Stadshuset; EndPosition = Sernanders v\u00E4g']
-['username = 144331; RequestTime = 2015-05-25,09:28:16; StartTime = 2015-05-26,18:15:06; StartPosition = Flogsta v\u00E5rdcentral; EndPosition = G\u00F6tgatan']
-['username = 105370; RequestTime = 2015-05-25,09:28:16; StartTime = 2015-05-26,16:08:08; StartPosition = Sernanders v\u00E4g; EndPosition = Stadshuset']
-['username = 356509; RequestTime = 2015-05-25,09:28:16; StartTime = 2015-05-26,07:48:28; StartPosition = Sernanders v\u00E4g; EndPosition = Stadshuset']
-['username = 138388; RequestTime = 2015-05-25,09:28:16; StartTime = 2015-05-26,10:31:52; StartPosition = Vaksala torg; EndPosition = Flogsta v\u00E5rdcentral']
-['username = 5936; RequestTime = 2015-05-25,09:28:16; StartTime = 2015-05-26,06:50:06; StartPosition = Flogsta v\u00E5rdcentral; EndPosition = Vaksala torg']
-['username = 148635; RequestTime = 2015-05-25,09:28:16; StartTime = 2015-05-26,05:48:46; StartPosition = Dj\u00E4knegatan; EndPosition = Flogsta v\u00E5rdcentral']
-['username = 341814; RequestTime = 2015-05-25,09:28:16; StartTime = 2015-05-26,16:02:49; StartPosition = Vaksala torg; EndPosition = Stadshuset']
-['username = 32228; RequestTime = 2015-05-25,09:28:16; StartTime = 2015-05-26,16:31:30; StartPosition = G\u00F6tgatan; EndPosition = Rickomberga']
-['username = 309291; RequestTime = 2015-05-25,09:28:16; StartTime = 2015-05-26,07:51:49; StartPosition = Dj\u00E4knegatan; EndPosition = Vaksala torg']
-['username = 38748; RequestTime = 2015-05-25,09:28:16; StartTime = 2015-05-26,07:42:31; StartPosition = Stadshuset; EndPosition = Sernanders v\u00E4g']
-['username = 41313; RequestTime = 2015-05-25,09:28:16; StartTime = 2015-05-26,15:03:34; StartPosition = V\u00E4derkvarnsgatan; EndPosition = Flogsta v\u00E5rdcentral']
-['username = 492758; RequestTime = 2015-05-25,09:28:16; StartTime = 2015-05-26,16:19:51; StartPosition = Stadshuset; EndPosition = G\u00F6tgatan']
-['username = 459017; RequestTime = 2015-05-25,09:28:16; StartTime = 2015-05-26,15:48:07; StartPosition = Vaksala torg; EndPosition = Vaksala torg']
-['username = 53158; RequestTime = 2015-05-25,09:28:16; StartTime = 2015-05-26,18:13:51; StartPosition = Kantorsgatan; EndPosition = Sernanders v\u00E4g']
-['username = 172358; RequestTime = 2015-05-25,09:28:16; StartTime = 2015-05-26,15:20:52; StartPosition = Sernanders v\u00E4g; EndPosition = G\u00F6tgatan']
-['username = 235169; RequestTime = 2015-05-25,09:28:16; StartTime = 2015-05-26,16:42:04; StartPosition = G\u00F6tgatan; EndPosition = Ekebyhus']
-['username = 296213; RequestTime = 2015-05-25,09:28:16; StartTime = 2015-05-26,09:31:50; StartPosition = Stadshuset; EndPosition = Stadshuset']
-['username = 14194; RequestTime = 2015-05-25,09:28:16; StartTime = 2015-05-26,17:12:11; StartPosition = Dj\u00E4knegatan; EndPosition = Vaksala torg']
-['username = 163570; RequestTime = 2015-05-25,09:28:16; StartTime = 2015-05-26,17:10:27; StartPosition = Sernanders v\u00E4g; EndPosition = Sernanders v\u00E4g']
-['username = 495376; RequestTime = 2015-05-25,09:28:17; StartTime = 2015-05-26,16:09:30; StartPosition = Ekonomikum; EndPosition = Stadshuset']
-['username = 282008; RequestTime = 2015-05-25,09:28:17; StartTime = 2015-05-26,06:08:08; StartPosition = Sernanders v\u00E4g; EndPosition = Rickomberga']
-['username = 99953; RequestTime = 2015-05-25,09:28:17; StartTime = 2015-05-26,08:35:14; StartPosition = Stadshuset; EndPosition = Sernanders v\u00E4g']
-['username = 328300; RequestTime = 2015-05-25,09:28:17; StartTime = 2015-05-26,10:16:15; StartPosition = Vaksala torg; EndPosition = G\u00F6tgatan']
-['username = 4170; RequestTime = 2015-05-25,09:28:17; StartTime = 2015-05-26,06:15:06; StartPosition = Stadshuset; EndPosition = Sernanders v\u00E4g']
-['username = 86302; RequestTime = 2015-05-25,09:28:17; StartTime = 2015-05-26,07:19:34; StartPosition = Huges v\u00E4g; EndPosition = Ekebyhus']
-['username = 72271; RequestTime = 2015-05-25,09:28:17; StartTime = 2015-05-26,18:17:41; StartPosition = V\u00E4rnlundsgatan; EndPosition = Flogsta v\u00E5rdcentral']
-['username = 172623; RequestTime = 2015-05-25,09:28:17; StartTime = 2015-05-26,06:42:18; StartPosition = Vaksala torg; EndPosition = Sernanders v\u00E4g']
-['username = 342558; RequestTime = 2015-05-25,09:28:17; StartTime = 2015-05-26,06:55:25; StartPosition = Kantorsgatan; EndPosition = Stadshuset']
-['username = 123887; RequestTime = 2015-05-25,09:28:17; StartTime = 2015-05-26,07:14:41; StartPosition = Flogsta v\u00E5rdcentral; EndPosition = Huges v\u00E4g']
-['username = 457736; RequestTime = 2015-05-25,09:28:17; StartTime = 2015-05-26,14:40:51; StartPosition = Ekonomikum; EndPosition = V\u00E4derkvarnsgatan']
-['username = 20382; RequestTime = 2015-05-25,09:28:17; StartTime = 2015-05-26,13:19:02; StartPosition = Stadshuset; EndPosition = G\u00F6tgatan']
-['username = 157597; RequestTime = 2015-05-25,09:28:17; StartTime = 2015-05-26,18:40:48; StartPosition = Vaksala torg; EndPosition = Rickomberga']
-['username = 210058; RequestTime = 2015-05-25,09:28:17; StartTime = 2015-05-26,16:51:55; StartPosition = Dj\u00E4knegatan; EndPosition = Flogsta v\u00E5rdcentral']
-['username = 31856; RequestTime = 2015-05-25,09:28:17; StartTime = 2015-05-26,14:53:11; StartPosition = Stadshuset; EndPosition = V\u00E4derkvarnsgatan']
-['username = 94034; RequestTime = 2015-05-25,09:28:17; StartTime = 2015-05-26,17:21:49; StartPosition = Sernanders v\u00E4g; EndPosition = Flogsta v\u00E5rdcentral']
-['username = 342735; RequestTime = 2015-05-25,09:28:17; StartTime = 2015-05-26,17:48:08; StartPosition = Ekebyhus; EndPosition = G\u00F6tgatan']
-['username = 142080; RequestTime = 2015-05-25,09:28:17; StartTime = 2015-05-26,15:22:55; StartPosition = Dj\u00E4knegatan; EndPosition = Skolgatan']
+username = 268968; RequestTime = 2015-05-25,13:49:44; StartTime = 2015-05-26,10:11:44; StartPosition = Vaksala torg; EndPosition = Vaksala torg
+username = 451354; RequestTime = 2015-05-25,13:49:44; StartTime = 2015-05-26,17:27:25; StartPosition = Sernanders väg; EndPosition = Vaksala torg
+username = 460370; RequestTime = 2015-05-25,13:49:44; StartTime = 2015-05-26,08:42:48; StartPosition = Vaksala torg; EndPosition = Rickomberga
+username = 226638; RequestTime = 2015-05-25,13:49:44; StartTime = 2015-05-26,14:53:03; StartPosition = Värnlundsgatan; EndPosition = Stadshuset
+username = 433473; RequestTime = 2015-05-25,13:49:44; StartTime = 2015-05-26,14:31:05; StartPosition = Ekebyhus; EndPosition = Vaksala torg
+username = 49550; RequestTime = 2015-05-25,13:49:44; StartTime = 2015-05-26,16:31:29; StartPosition = Djäknegatan; EndPosition = Flogsta vårdcentral
+username = 454444; RequestTime = 2015-05-25,13:49:44; StartTime = 2015-05-26,16:15:46; StartPosition = Stadshuset; EndPosition = Vaksala torg
+username = 278437; RequestTime = 2015-05-25,13:49:44; StartTime = 2015-05-26,04:54:22; StartPosition = Flogsta vårdcentral; EndPosition = Topeliusgatan
+username = 332345; RequestTime = 2015-05-25,13:49:44; StartTime = 2015-05-26,18:06:58; StartPosition = Djäknegatan; EndPosition = Flogsta vårdcentral
+username = 179139; RequestTime = 2015-05-25,13:49:44; StartTime = 2015-05-26,14:52:04; StartPosition = Djäknegatan; EndPosition = Flogsta vårdcentral
+username = 438143; RequestTime = 2015-05-25,13:49:44; StartTime = 2015-05-26,08:28:02; StartPosition = Stadshuset; EndPosition = Flogsta vårdcentral
+username = 173718; RequestTime = 2015-05-25,13:49:44; StartTime = 2015-05-26,15:41:34; StartPosition = Sernanders väg; EndPosition = Sernanders väg
+username = 381627; RequestTime = 2015-05-25,13:49:44; StartTime = 2015-05-26,17:08:54; StartPosition = Värnlundsgatan; EndPosition = Stadshuset
+username = 253702; RequestTime = 2015-05-25,13:49:44; StartTime = 2015-05-26,05:49:39; StartPosition = Vaksala torg; EndPosition = Vaksala torg
+username = 397234; RequestTime = 2015-05-25,13:49:44; StartTime = 2015-05-26,05:41:29; StartPosition = Stadshuset; EndPosition = Vaksala torg
+username = 39332; RequestTime = 2015-05-25,13:49:44; StartTime = 2015-05-26,08:19:19; StartPosition = Götgatan; EndPosition = Vaksala torg
+username = 238851; RequestTime = 2015-05-25,13:49:44; StartTime = 2015-05-26,08:38:09; StartPosition = Ekebyhus; EndPosition = Flogsta vårdcentral
+username = 360771; RequestTime = 2015-05-25,13:49:44; StartTime = 2015-05-26,09:47:23; StartPosition = Stadshuset; EndPosition = Rickomberga
+username = 473664; RequestTime = 2015-05-25,13:49:44; StartTime = 2015-05-26,17:28:49; StartPosition = Sernanders väg; EndPosition = Stadshuset
+username = 143252; RequestTime = 2015-05-25,13:49:44; StartTime = 2015-05-26,15:46:33; StartPosition = Djäknegatan; EndPosition = Sernanders väg
+username = 180657; RequestTime = 2015-05-25,13:49:45; StartTime = 2015-05-26,06:56:36; StartPosition = Vaksala torg; EndPosition = Sernanders väg
+username = 139550; RequestTime = 2015-05-25,13:49:45; StartTime = 2015-05-26,09:01:22; StartPosition = Flogsta vårdcentral; EndPosition = Flogsta vårdcentral
+username = 366270; RequestTime = 2015-05-25,13:49:45; StartTime = 2015-05-26,18:17:44; StartPosition = Flogsta vårdcentral; EndPosition = Flogsta vårdcentral
+username = 69153; RequestTime = 2015-05-25,13:49:45; StartTime = 2015-05-26,17:30:18; StartPosition = Stadshuset; EndPosition = Ekebyhus
+username = 332738; RequestTime = 2015-05-25,13:49:45; StartTime = 2015-05-26,05:39:24; StartPosition = Rickomberga; EndPosition = Vaksala torg
+username = 239178; RequestTime = 2015-05-25,13:49:45; StartTime = 2015-05-26,16:03:07; StartPosition = Portalgatan; EndPosition = Flogsta vårdcentral
+username = 415051; RequestTime = 2015-05-25,13:49:45; StartTime = 2015-05-26,16:53:36; StartPosition = Flogsta vårdcentral; EndPosition = Sernanders väg
+username = 217060; RequestTime = 2015-05-25,13:49:45; StartTime = 2015-05-26,16:18:36; StartPosition = Vaksala torg; EndPosition = Flogsta vårdcentral
+username = 23030; RequestTime = 2015-05-25,13:49:45; StartTime = 2015-05-26,15:32:02; StartPosition = Stadshuset; EndPosition = Sernanders väg
+username = 58581; RequestTime = 2015-05-25,13:49:45; StartTime = 2015-05-26,04:55:17; StartPosition = Djäknegatan; EndPosition = Vaksala torg
+username = 395021; RequestTime = 2015-05-25,13:49:45; StartTime = 2015-05-26,07:58:40; StartPosition = Stadshuset; EndPosition = Stadshuset
+username = 243354; RequestTime = 2015-05-25,13:49:45; StartTime = 2015-05-26,17:31:10; StartPosition = Sernanders väg; EndPosition = Flogsta vårdcentral
+username = 129584; RequestTime = 2015-05-25,13:49:45; StartTime = 2015-05-26,16:58:15; StartPosition = Kantorsgatan; EndPosition = Vaksala torg
+username = 41592; RequestTime = 2015-05-25,13:49:45; StartTime = 2015-05-26,08:21:53; StartPosition = Flogsta vårdcentral; EndPosition = Stadshuset
+username = 223176; RequestTime = 2015-05-25,13:49:45; StartTime = 2015-05-26,09:12:51; StartPosition = Djäknegatan; EndPosition = Sernanders väg
+username = 66946; RequestTime = 2015-05-25,13:49:45; StartTime = 2015-05-26,15:03:27; StartPosition = Stadshuset; EndPosition = Vaksala torg
+username = 430520; RequestTime = 2015-05-25,13:49:46; StartTime = 2015-05-26,09:39:19; StartPosition = Portalgatan; EndPosition = Flogsta vårdcentral
+username = 442097; RequestTime = 2015-05-25,13:49:46; StartTime = 2015-05-26,13:46:51; StartPosition = Sernanders väg; EndPosition = Sernanders väg
+username = 331441; RequestTime = 2015-05-25,13:49:46; StartTime = 2015-05-26,16:33:32; StartPosition = Vaksala torg; EndPosition = Flogsta vårdcentral
+username = 368086; RequestTime = 2015-05-25,13:49:46; StartTime = 2015-05-26,16:08:34; StartPosition = Flogsta vårdcentral; EndPosition = Flogsta vårdcentral
+username = 258624; RequestTime = 2015-05-25,13:49:46; StartTime = 2015-05-26,17:27:22; StartPosition = Vaksala torg; EndPosition = Stadshuset
+username = 182881; RequestTime = 2015-05-25,13:49:46; StartTime = 2015-05-26,06:07:11; StartPosition = Djäknegatan; EndPosition = Flogsta vårdcentral
+username = 471477; RequestTime = 2015-05-25,13:49:46; StartTime = 2015-05-26,05:44:15; StartPosition = Topeliusgatan; EndPosition = Djäknegatan
+username = 7786; RequestTime = 2015-05-25,13:49:46; StartTime = 2015-05-26,18:38:41; StartPosition = Stadshuset; EndPosition = Vaksala torg
+username = 197806; RequestTime = 2015-05-25,13:49:46; StartTime = 2015-05-26,07:18:23; StartPosition = Vaksala torg; EndPosition = Stadshuset
+username = 182761; RequestTime = 2015-05-25,13:49:46; StartTime = 2015-05-26,17:14:15; StartPosition = Stadshuset; EndPosition = Sernanders väg
+username = 244940; RequestTime = 2015-05-25,13:49:46; StartTime = 2015-05-26,18:23:28; StartPosition = Djäknegatan; EndPosition = Stadshuset
+username = 414414; RequestTime = 2015-05-25,13:49:46; StartTime = 2015-05-26,14:40:31; StartPosition = Ekonomikum; EndPosition = Rickomberga
+username = 320259; RequestTime = 2015-05-25,13:49:46; StartTime = 2015-05-26,08:04:45; StartPosition = Flogsta vårdcentral; EndPosition = Ekebyhus
+username = 12820; RequestTime = 2015-05-25,13:49:46; StartTime = 2015-05-26,15:34:39; StartPosition = Portalgatan; EndPosition = Sernanders väg
+username = 44308; RequestTime = 2015-05-25,13:49:46; StartTime = 2015-05-26,06:56:33; StartPosition = Portalgatan; EndPosition = Stadshuset
+username = 334667; RequestTime = 2015-05-25,13:49:46; StartTime = 2015-05-26,06:19:24; StartPosition = Kantorsgatan; EndPosition = Vaksala torg
+username = 52395; RequestTime = 2015-05-25,13:49:46; StartTime = 2015-05-26,14:39:14; StartPosition = Stadshuset; EndPosition = Ihres väg
+username = 154523; RequestTime = 2015-05-25,13:49:46; StartTime = 2015-05-26,16:23:21; StartPosition = Stadshuset; EndPosition = Stadshuset
+username = 370946; RequestTime = 2015-05-25,13:49:46; StartTime = 2015-05-26,07:03:58; StartPosition = Ekebyhus; EndPosition = Stadshuset
+username = 148698; RequestTime = 2015-05-25,13:49:46; StartTime = 2015-05-26,16:45:28; StartPosition = Stadshuset; EndPosition = Stadshuset
+username = 210255; RequestTime = 2015-05-25,13:49:46; StartTime = 2015-05-26,09:12:10; StartPosition = Stadshuset; EndPosition = Vaksala torg
+username = 193921; RequestTime = 2015-05-25,13:49:47; StartTime = 2015-05-26,07:05:05; StartPosition = Sernanders väg; EndPosition = Stadshuset
+username = 195634; RequestTime = 2015-05-25,13:49:47; StartTime = 2015-05-26,15:44:53; StartPosition = Götgatan; EndPosition = Sernanders väg
+username = 231493; RequestTime = 2015-05-25,13:49:47; StartTime = 2015-05-26,16:51:29; StartPosition = Sernanders väg; EndPosition = Sernanders väg
+username = 80024; RequestTime = 2015-05-25,13:49:47; StartTime = 2015-05-26,17:23:01; StartPosition = Flogsta vårdcentral; EndPosition = Flogsta vårdcentral
+username = 240030; RequestTime = 2015-05-25,13:49:47; StartTime = 2015-05-26,05:19:54; StartPosition = Stadshuset; EndPosition = Sernanders väg
+username = 486394; RequestTime = 2015-05-25,13:49:47; StartTime = 2015-05-26,13:12:50; StartPosition = Stadshuset; EndPosition = Flogsta vårdcentral
+username = 129920; RequestTime = 2015-05-25,13:49:47; StartTime = 2015-05-26,15:27:41; StartPosition = Stadshuset; EndPosition = Portalgatan
+username = 186246; RequestTime = 2015-05-25,13:49:47; StartTime = 2015-05-26,15:54:39; StartPosition = Djäknegatan; EndPosition = Skolgatan
+username = 357595; RequestTime = 2015-05-25,13:49:47; StartTime = 2015-05-26,09:09:22; StartPosition = Sernanders väg; EndPosition = Vaksala torg
+username = 102421; RequestTime = 2015-05-25,13:49:47; StartTime = 2015-05-26,14:00:26; StartPosition = Flogsta vårdcentral; EndPosition = Stadshuset
+username = 450216; RequestTime = 2015-05-25,13:49:47; StartTime = 2015-05-26,16:22:36; StartPosition = Sernanders väg; EndPosition = Sernanders väg
+username = 338309; RequestTime = 2015-05-25,13:49:47; StartTime = 2015-05-26,07:58:24; StartPosition = Flogsta vårdcentral; EndPosition = Vaksala torg
+username = 364645; RequestTime = 2015-05-25,13:49:47; StartTime = 2015-05-26,07:13:51; StartPosition = Sernanders väg; EndPosition = Sernanders väg
+username = 110282; RequestTime = 2015-05-25,13:49:47; StartTime = 2015-05-26,06:02:49; StartPosition = Vaksala torg; EndPosition = Vaksala torg
+username = 248362; RequestTime = 2015-05-25,13:49:47; StartTime = 2015-05-26,17:08:32; StartPosition = Flogsta vårdcentral; EndPosition = Djäknegatan
+username = 189808; RequestTime = 2015-05-25,13:49:47; StartTime = 2015-05-26,14:55:45; StartPosition = Flogsta vårdcentral; EndPosition = Stadshuset
+username = 425458; RequestTime = 2015-05-25,13:49:47; StartTime = 2015-05-26,08:08:26; StartPosition = Vaksala torg; EndPosition = Värnlundsgatan
+username = 384023; RequestTime = 2015-05-25,13:49:48; StartTime = 2015-05-26,07:22:16; StartPosition = Stadshuset; EndPosition = Sernanders väg
+username = 77000; RequestTime = 2015-05-25,13:49:48; StartTime = 2015-05-26,07:51:29; StartPosition = Värnlundsgatan; EndPosition = Värnlundsgatan
+username = 363204; RequestTime = 2015-05-25,13:49:48; StartTime = 2015-05-26,05:59:29; StartPosition = Flogsta vårdcentral; EndPosition = Flogsta vårdcentral
+username = 91985; RequestTime = 2015-05-25,13:49:48; StartTime = 2015-05-26,16:29:57; StartPosition = Sernanders väg; EndPosition = Flogsta vårdcentral
+username = 61118; RequestTime = 2015-05-25,13:49:48; StartTime = 2015-05-26,07:04:19; StartPosition = Sernanders väg; EndPosition = Skolgatan
+username = 373125; RequestTime = 2015-05-25,13:49:48; StartTime = 2015-05-26,18:31:04; StartPosition = Vaksala torg; EndPosition = Stadshuset

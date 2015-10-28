@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="se.uu.csproject.monadclient.tripDetails">
+    tools:context="se.uu.csproject.monadclient.RouteConfirmPopup">
 
     <RelativeLayout
         android:id="@+id/popupinfo"
@@ -167,7 +167,8 @@
                     android:layout_height="@dimen/button_sizelarge"
                     android:textStyle="bold"
                     android:layout_gravity="center_vertical"
-                    android:layout_weight="1"/>
+                    android:layout_weight="1"
+                    android:onClick="confirmTrip"/>
 
 
             </LinearLayout>

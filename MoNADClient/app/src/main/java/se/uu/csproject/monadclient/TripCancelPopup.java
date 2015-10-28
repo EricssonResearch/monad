@@ -3,6 +3,7 @@ package se.uu.csproject.monadclient;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.CountDownTimer;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
@@ -48,15 +49,14 @@ public class TripCancelPopup extends AppCompatActivity {
         final long MILLISECONDS_TO_DEPARTURE = trip.getTimeToDeparture();
         countdown.setText(String.valueOf(MILLISECONDS_TO_DEPARTURE));
 
-        //TODO (low priority): change parseColor() calls into theme colors
         final int MILLISECONDS = b.getInt("MILLISECONDS");
         CountDownTimer timer = new CountDownTimer(MILLISECONDS_TO_DEPARTURE, MILLISECONDS) {
             @Override
             public void onTick(long millisUntilFinished) {
                 countdown.setText(formatCoundownText(millisUntilFinished));
                 if (millisUntilFinished < 10000) {
-                    countdown.setTextColor(Color.parseColor("#f44336"));
-                    date.setTextColor(Color.parseColor("#f44336"));
+                    countdown.setTextColor(ContextCompat.getColor(countdown.getContext(), R.color.warnColor));
+                    date.setTextColor(ContextCompat.getColor(date.getContext(), R.color.warnColor));
                     clockIcon.setVisibility(View.VISIBLE);
                 }
             }
@@ -64,10 +64,10 @@ public class TripCancelPopup extends AppCompatActivity {
             @Override
             public void onFinish() {
                 countdown.setText("Trip in Progress");
-                countdown.setTextColor(Color.parseColor("#2e7d32"));
-                date.setTextColor(Color.parseColor("#2e7d32"));
+                countdown.setTextColor(ContextCompat.getColor(countdown.getContext(), R.color.green));
+                date.setTextColor(ContextCompat.getColor(countdown.getContext(), R.color.green));
                 clockIcon.setVisibility(View.INVISIBLE);
-                //clockIcon.setColorFilter(Color.parseColor("#2e7d32"));
+                //clockIcon.setColorFilter(ContextCompat.getColor(clockIcon.getContext(), R.color.green));
             }
         }.start();
 
