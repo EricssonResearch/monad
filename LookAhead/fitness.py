@@ -58,9 +58,8 @@ class Fitness():
     @decorator
     def runOnce(self):
         db = DB()
-<<<<<<< HEAD
         #request = []
-        Fitness.requests, Fitness.routes = db.getRequestsFromDB()
+        #Fitness.requests, Fitness.routes = db.getRequestsFromDB()
         #self.routes[:] = self.routes[0][1]
         #print self.routes
         #print Fitness.routes[0][1]
@@ -74,7 +73,6 @@ class Fitness():
         Fitness.request = db.getTravelRequestSummary(datetime.combine(Fitness.yesterday, datetime.strptime(Fitness.firstMinute, Fitness.formatTime).time()),
                                                       datetime.combine(Fitness.yesterday, datetime.strptime(Fitness.lastMinute, Fitness.formatTime).time()))
         self.createRequestIndex(Fitness.request)       
-=======
 
         # Setting the start time boundary of request that we want
         startTime = datetime.combine(Fitness.yesterday, datetime.strptime(Fitness.firstMinute, Fitness.formatTime).time())
@@ -83,8 +81,6 @@ class Fitness():
         Fitness.request = db.getTravelRequestSummary2(startTime, endTime)
 
         self.createRequestIndex(Fitness.request)
-
->>>>>>> upstream/Development
 
     def timeDiff(self, time1, time2):
         ''' Evaluates the difference between two times.
