@@ -86,15 +86,14 @@ class Fitness():
         return (td.seconds//Fitness.secondMinute) % Fitness.secondMinute
 
     def getNumberOfRequests(self, tripStartTime, lineNumber=2):
-        ''' find the total number of requests that can be served by the trip
+        ''' find the total number of requests that can be served by the trip for all requests with startBusStop along the
+        bus line. For these requests, find the maximum number of requests in transit
 
-        @param: request - all requests from db
-                tripStart - starting bus stop for trip
-                tripEnd - last bus stop for trip
-                tripStartTime - the departure time for this trip
-        @return number of requests
+        @param: tripStartTime - departure time for this trip
+        @return maximum number of requests between two stops in the trip
         '''
         self.expectedTimes = {}
+        self.stopsCount = {}
         self.reqGroup = []
         for i, item in enumerate(self.routes):
             if item[2] == 2:
@@ -103,12 +102,18 @@ class Fitness():
                 for i, stop in enumerate(self.busStops):
                     self.expectedTimes[stop[0]] = self.expTime.time()
                     self.expTime = self.expTime + timedelta(minutes=stop[1])
+                    self.stopsCount[stop[0]] = 0
 
         for req in self.requests:
             if req[1] in self.expectedTimes:
                 if req[0].time() < self.expectedTimes[req[1]]:
                     self.reqGroup.append(req)
-        return len(self.reqGroup)
+                    self.stopsCount[req[1]] += 1
+                    self.stopsCount[req[2]] -= 1
+
+        #print "sum of requests ", sum(self.stopsCount.itervalues())
+        #print "Max request count", self.stopsCount[max(self.stopsCount, key = self.stopsCount.get)]
+        return self.stopsCount[max(self.stopsCount, key = self.stopsCount.get)]
 
     def createRequestIndex(self, request):
         minute = 0
@@ -154,14 +159,13 @@ class Fitness():
         capacity is to the availed capacity on the individual
         '''
         individual.sort(key = itemgetter(2))
-
         self.expectedTimes = {}
-        self.fitnessVal = 0
         for trip, item in enumerate(individual):
             if trip == 0:
                 self.start = datetime.strptime('00:00', '%H:%M')
                 self.end   = datetime.strptime(individual[0][2], '%H:%M')
-                self.nrReqs = self.getNumberOfRequests(self.start)
+                self.nrReqs = self.getNumberOfRequests(self.start) 
+                print "max number of requests for trip " + str(trip) + " is " + str(self.nrReqs)
 
             else:
                 self.start = datetime.strptime(individual[trip-1][2], '%H:%M')
@@ -211,7 +215,6 @@ class Fitness():
             for j in range(len(tripTimeTable)):
                 # Search on Fitness.request array for the particular requests
                 request = self.searchRequest(datetime.combine(Fitness.yesterday, datetime.strptime(intialTripTime, Fitness.formatTime).time()), datetime.combine(Fitness.yesterday, datetime.strptime(tripTimeTable[j][1], Fitness.formatTime).time()), tripTimeTable[j][0])
->>>>>>> upstream/Development
                 intialTripTime = tripTimeTable[j][1]
                 if len(request) > 0:
                     diff = 0
