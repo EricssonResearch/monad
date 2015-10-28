@@ -86,8 +86,8 @@ class Fitness():
         return (td.seconds//Fitness.secondMinute) % Fitness.secondMinute
 
     def getNumberOfRequests(self, tripStartTime, lineNumber=2):
-        ''' find the total number of requests that can be served by the trip for all requests with startBusStop along the
-        bus line. For these requests, find the maximum number of requests in transit
+        ''' finds the max # of transit requests that can be served by the trip with startBusStop along the
+        bus line
 
         @param: tripStartTime - departure time for this trip
         @return maximum number of requests between two stops in the trip
@@ -95,6 +95,8 @@ class Fitness():
         self.expectedTimes = {}
         self.stopsCount = {}
         self.reqGroup = []
+        print "routes....................."
+        print self.routes
         for i, item in enumerate(self.routes):
             if item[2] == 2:
                 self.busStops = [[i[0], i[1]] for i in self.routes[i][1]]
@@ -111,9 +113,31 @@ class Fitness():
                     self.stopsCount[req[1]] += 1
                     self.stopsCount[req[2]] -= 1
 
-        #print "sum of requests ", sum(self.stopsCount.itervalues())
         #print "Max request count", self.stopsCount[max(self.stopsCount, key = self.stopsCount.get)]
         return self.stopsCount[max(self.stopsCount, key = self.stopsCount.get)]
+
+    def evalIndividualCapacity(self, individual):
+        ''' Evaluates an individual based on the capacity/bus type chosen for each trip.
+
+        @param: individual - a possible timetable for a bus line, covering the whole day.
+        @return: a fitness score assigned in accordance with how close the requested
+        capacity is to the availed capacity on the individual
+        '''
+        individual.sort(key = itemgetter(2))
+        self.expectedTimes = {}
+        for trip, item in enumerate(individual):
+            if trip == 0:
+                self.start = datetime.strptime('00:00', '%H:%M')
+                self.end   = datetime.strptime(individual[0][2], '%H:%M')
+                self.nrReqs = self.getNumberOfRequests(self.start) 
+                print "max number of requests for trip " + str(trip) + " is " + str(self.nrReqs)
+
+            else:
+                self.start = datetime.strptime(individual[trip-1][2], '%H:%M')
+                self.end   = datetime.strptime(individual[trip][2], '%H:%M')
+                self.nrReqs = self.getNumberOfRequests(self.start)
+
+        return self.nrReqs
 
     def createRequestIndex(self, request):
         ''' Creates a structure that stores the hour, the minute and the position on the request array for this particular time
@@ -169,28 +193,6 @@ class Fitness():
                 result.append(request[i])
         return result
 
-    def evalIndividualCapacity(self, individual):
-        ''' Evaluates an individual based on the capacity/bus type chosen for each trip.
-
-        @param: individual - a possible timetable for a bus line, covering the whole day.
-        @return: a fitness score assigned in accordance with how close the requested
-        capacity is to the availed capacity on the individual
-        '''
-        individual.sort(key = itemgetter(2))
-        self.expectedTimes = {}
-        for trip, item in enumerate(individual):
-            if trip == 0:
-                self.start = datetime.strptime('00:00', '%H:%M')
-                self.end   = datetime.strptime(individual[0][2], '%H:%M')
-                self.nrReqs = self.getNumberOfRequests(self.start) 
-                print "max number of requests for trip " + str(trip) + " is " + str(self.nrReqs)
-
-            else:
-                self.start = datetime.strptime(individual[trip-1][2], '%H:%M')
-                self.end   = datetime.strptime(individual[trip][2], '%H:%M')
-                self.nrReqs = self.getNumberOfRequests(self.start)
-
-        return self.nrReqs
 
     def evalIndividual(self, individual):
         ''' Evaluate an individual in the population. Based on how close the
