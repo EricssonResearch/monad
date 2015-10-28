@@ -35,7 +35,7 @@ class Fitness():
     routes = []
     request = []
     requestIndex = []
-    yesterday = date.today() - timedelta(7)
+    yesterday = date.today() - timedelta(8)
 
 # A decorator is a function that can accept another function as
 # a parameter to be able to modify or extend it
@@ -58,6 +58,7 @@ class Fitness():
     @decorator
     def runOnce(self):
         db = DB()
+<<<<<<< HEAD
         #request = []
         Fitness.requests, Fitness.routes = db.getRequestsFromDB()
         #self.routes[:] = self.routes[0][1]
@@ -73,6 +74,17 @@ class Fitness():
         Fitness.request = db.getTravelRequestSummary(datetime.combine(Fitness.yesterday, datetime.strptime(Fitness.firstMinute, Fitness.formatTime).time()),
                                                       datetime.combine(Fitness.yesterday, datetime.strptime(Fitness.lastMinute, Fitness.formatTime).time()))
         self.createRequestIndex(Fitness.request)       
+=======
+
+        # Setting the start time boundary of request that we want
+        startTime = datetime.combine(Fitness.yesterday, datetime.strptime(Fitness.firstMinute, Fitness.formatTime).time())
+        # Setting the end time boundary of request that we want
+        endTime = datetime.combine(Fitness.yesterday, datetime.strptime(Fitness.lastMinute, Fitness.formatTime).time())
+        Fitness.request = db.getTravelRequestSummary2(startTime, endTime)
+
+        self.createRequestIndex(Fitness.request)
+
+>>>>>>> upstream/Development
 
     def timeDiff(self, time1, time2):
         ''' Evaluates the difference between two times.
@@ -145,10 +157,12 @@ class Fitness():
         @param: request (array): Structure that stores the requests grouped by bus stop, hour and minute. It also includes a COUNT column
         '''
         minute = 0
+
         for i in range(len(request)):
-            if request[i]["minute"] != minute or i == 0:
-                Fitness.requestIndex.append([request[i]["hour"], request[i]["minute"], i])
-                minute = request[i]["minute"]
+            #print(request[1]["_id"]["RequestTime"].hour)
+            if request[i]["_id"]["RequestTime"].minute != minute or i == 0:
+                Fitness.requestIndex.append([request[i]["_id"]["RequestTime"].hour, request[i]["_id"]["RequestTime"].minute, i])
+                minute = request[i]["_id"]["RequestTime"].minute
 
     def searchRequestIndex(self, index, initialHour, initialMinute, finalHour, finalMinute):
         ''' Search the index to get the position on the request array for a specific time frame
@@ -189,7 +203,7 @@ class Fitness():
         index = self.searchRequestIndex(Fitness.requestIndex, initialTime.hour, initialTime.minute, finalTime.hour, finalTime.minute)
         request = Fitness.request[index[0]:index[1]]
         for i in range(len(request)):
-            if request[i]["startBusStop"] == busStop:
+            if request[i]["_id"]["BusStop"] == busStop:
                 result.append(request[i])
         return result
 
@@ -210,12 +224,13 @@ class Fitness():
 
         # Use map function instead of LOOP
         # Query the DB only once to retrieve all the data needed
+
         # Multi thread the MAP functions
         # First, the randomly-generated starting times are sorted in order to check sequentially the number of requests for that particular trip
         individual = sorted(individual, key=itemgetter(2))
+
         # Second, we loop trough the number of genes in order to retrieve the number of requests for that particular trip
         # For the 1st trip, the starting time has to be selected
-        db = DB()
         # Replace the dates here from yesterday's date
         request = Fitness.requests
         dif = []
@@ -229,19 +244,26 @@ class Fitness():
         dif = []
         cnt = []
         intialTripTime = "00:00"
+
         for i in range(len(individual)):
             tripTimeTable = db.generateFitnessTripTimeTable(individual[i][0], individual[i][2])
-            # For each gene, the corresponding requests are returned
+
+
             for j in range(len(tripTimeTable)):
+
                 # Search on Fitness.request array for the particular requests
-                request = self.searchRequest(datetime.combine(Fitness.yesterday, datetime.strptime(intialTripTime, Fitness.formatTime).time()), datetime.combine(Fitness.yesterday, datetime.strptime(tripTimeTable[j][1], Fitness.formatTime).time()), tripTimeTable[j][0])
+                request = self.searchRequest(datetime.combine(Fitness.yesterday, datetime.strptime(intialTripTime, Fitness.formatTime).time()),
+                                             datetime.combine(Fitness.yesterday, datetime.strptime(tripTimeTable[j][1], Fitness.formatTime).time()),
+                                             tripTimeTable[j][0])
+
                 intialTripTime = tripTimeTable[j][1]
                 if len(request) > 0:
                     diff = 0
                     count = 0
                     for k in range(len(request)):
-                        diff = diff + self.getMinutes(self.timeDiff(tripTimeTable[j][1], str(int(request[k]["hour"])) + ":" + str(int(request[k]["minute"]))))*int(request[k]["count"])
-                        count = count + int(request[k]["count"])
+                        diff = diff + self.getMinutes(self.timeDiff(tripTimeTable[j][1], str(int(request[k]["_id"]["RequestTime"].hour)) + ":" + str(int(request[k]["_id"]["RequestTime"].minute))))*int(request[k]["total"])
+                        count = count + int(request[k]["total"])
                     dif.append(diff)
                     cnt.append(count)
         return sum(dif)/sum(cnt),
+
