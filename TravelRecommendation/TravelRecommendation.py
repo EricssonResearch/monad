@@ -35,6 +35,7 @@ client = MongoClient()
 db = client.monad
 client2 = MongoClient('130.238.15.114')
 db2 = client2.monad
+start = datetime.datetime.now()
 
 def timeApproximation(lat1, lon1, lat2, lon2):
     point1 = (lat1, lon1)
@@ -43,45 +44,53 @@ def timeApproximation(lat1, lon1, lat2, lon2):
     return int(round(distance / 10 * 60))
 
 def retrieveRequests():
-    TravelRequest = db.TravelRequest
+    TravelRequest = db.TravelRequestNew
     return TravelRequest
 
-def retrieveTimeTable():
-    TimeTable = db.TimeTable
-    return TimeTable
+'''def retrieveTimeTable():
+    TimeTable = db.TimeTableNew
+    return TimeTable'''
 
 def populateRequests(TravelRequest):
     results = TravelRequest.find()
     for res in results:
-        dist = timeApproximation(res['start_position_lat'],
-                                 res['start_position_lon'],
-                                 res['end_position_lat'],
-                                 res['end_position_lon'])
-        if res['start_time'] == "null":
-            users.append((res['username'],(res['start_position_lat'], res['start_position_lon'],
-            res['end_position_lat'], res['end_position_lon'],
-            (res['end_time'] - datetime.timedelta(minutes = dist)).time(),
-            (res['end_time']).time())))
-        elif res['end_time'] == "null":
-            users.append((res['username'],(res['start_position_lat'], res['start_position_lon'],
-            res['end_position_lat'], res['end_position_lon'],
-            (res['start_time']).time(),
-            (res['start_time'] + datetime.timedelta(minutes = dist)).time())))
+        dist = timeApproximation(res['startPositionLatitude'],
+                                 res['startPositionLongitude'],
+                                 res['endPositionLatitude'],
+                                 res['endPositionLongitude'])
+        if res['startTime'] == "null":
+            users.append((res['userId'],(res['startPositionLatitude'], res['startPositionLongitude'],
+            res['endPositionLatitude'], res['endPositionLongitude'],
+            (res['endTime'] - datetime.timedelta(minutes = dist)).time(),
+            (res['endTime']).time())))
+        elif res['endTime'] == "null":
+            users.append((res['userId'],(res['startPositionLatitude'], res['startPositionLongitude'],
+            res['endPositionLatitude'], res['endPositionLongitude'],
+            (res['startTime']).time(),
+            (res['startTime'] + datetime.timedelta(minutes = dist)).time())))
         else:
-            users.append((res['username'],(res['start_position_lat'], res['start_position_lon'],
-            res['end_position_lat'], res['end_position_lon'],
-            (res['start_time']).time(),
-            (res['end_time']).time())))
+            users.append((res['userId'],(res['startPositionLatitude'], res['startPositionLongitude'],
+            res['endPositionLatitude'], res['endPositionLongitude'],
+            (res['startTime']).time(),
+            (res['endTime']).time())))
 
-def populateTimeTable(TimeTable):
-    route = TimeTable.find()
+def getTodayTimeTable():
+    TimeTable = db.TimeTableNew
+    first = datetime.datetime.today()
+    first = first.replace(hour = 0, minute = 0, second = 0, microsecond = 0)
+    route = TimeTable.find({'date': {'$gte': first}})
+    return route
+
+def populateTimeTable():
+    route = getTodayTimeTable()
     for res in route:
-        routes.append([res['_id'], res['Waypoints']])
+        for res1 in res['timetable']:
+            routes.append([res1['routeId'], res1['busStops']])
 
 def iterator(waypoints):
   Waypoints = []
   for res in waypoints:
-    Waypoints.append((latNormalizer(res['latitude']), lonNormalizer(res['longitude']), timeNormalizer(toCoordinates(toSeconds(res['DptTime']))[0]), timeNormalizer(toCoordinates(toSeconds(res['DptTime']))[1])))
+    Waypoints.append((latNormalizer(res['latitude']), lonNormalizer(res['longitude']), timeNormalizer(toCoordinates(toSeconds(res['time']))[0]), timeNormalizer(toCoordinates(toSeconds(res['time']))[1])))
   #print Waypoints
   return Waypoints
 
@@ -180,20 +189,22 @@ def removeDuplicates(alist):
     return list(set(map(lambda (x, y): x, alist)))
 
 def recommendationsToReturn(alist):
-    for sug in alist:
-        to_return.append( time_t.find_one({"_id": sug},
-                                 {"StartBusstop":1, "EndBusstop":1,
-                                  "StartTime":1, "EndTime":1, "VehicleID":1}))
-
+    result = getTodayTimeTable()
+    for res in result:
+        for res1 in res['timetable']:
+            if res1['routeId'] in alist: 
+                    to_return.append((res1['routeId'], res1['busStops'][0]['busstop'], res1['busStops'][len(res1['busStops'])-1]['busstop'], res1['busStops'][0]['time'],
+                                        res1['busStops'][len(res1['busStops'])-1]['time'], res1['busId']))
+                            
 def recommendationsToDB(alist):
     rec_list = []
     for item in alist:
-        route_id = item['_id']
-        start_place = item['StartBusstop']
-        end_place = item['EndBusstop']
-        start_time = item['StartTime']
-        end_time = item['EndTime']
-        vehicle_no = item['VehicleID']
+        route_id = item[0]
+        start_place = item[1]
+        end_place = item[2]
+        start_time = item[3]
+        end_time = item[4]
+        vehicle_no = item[5]
         new_record = {
             "routeId" : route_id,
             "startPlace" : start_place,
@@ -232,8 +243,8 @@ if __name__ == "__main__":
 
     sc = SparkContext()
 
-    time_t = retrieveTimeTable()
-    populateTimeTable(time_t)
+    #time_t = getTodayTimeTable()
+    populateTimeTable()
     myRoutes = sc.parallelize(routes).cache()
     myRoutes = myRoutes.map(lambda (x,y): (x, iterator(y)))
 
