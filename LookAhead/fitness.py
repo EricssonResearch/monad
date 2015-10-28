@@ -125,7 +125,7 @@ class Fitness():
         index = self.searchRequestIndex(Fitness.requestIndex, initialTime.hour, initialTime.minute, finalTime.hour, finalTime.minute)
         request = Fitness.request[index[0]:index[1]]
         for i in range(len(request)):
-            if request[i]["startBusStop"] == busStop:
+            if request[i]["_id"]["BusStop"] == busStop:
                 result.append(request[i])
         return result
 
@@ -191,11 +191,9 @@ class Fitness():
         # Second, we loop trough the number of genes in order to retrieve the number of requests for that particular trip
         # For the 1st trip, the starting time has to be selected
         db = DB()
-        request = []
         dif = []
         cnt = []
         intialTripTime = "00:00"
-
 
         for i in range(len(individual)):
             tripTimeTable = db.generateFitnessTripTimeTable(individual[i][0], individual[i][2])
@@ -213,8 +211,8 @@ class Fitness():
                     diff = 0
                     count = 0
                     for k in range(len(request)):
-                        diff = diff + self.getMinutes(self.timeDiff(tripTimeTable[j][1], str(int(request[k]["hour"])) + ":" + str(int(request[k]["minute"]))))*int(request[k]["count"])
-                        count = count + int(request[k]["count"])
+                        diff = diff + self.getMinutes(self.timeDiff(tripTimeTable[j][1], str(int(request[k]["_id"]["RequestTime"].hour)) + ":" + str(int(request[k]["_id"]["RequestTime"].minute))))*int(request[k]["total"])
+                        count = count + int(request[k]["total"])
                     dif.append(diff)
                     cnt.append(count)
         return sum(dif)/sum(cnt),
