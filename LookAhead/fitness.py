@@ -116,6 +116,10 @@ class Fitness():
         return self.stopsCount[max(self.stopsCount, key = self.stopsCount.get)]
 
     def createRequestIndex(self, request):
+        ''' Creates a structure that stores the hour, the minute and the position on the request array for this particular time
+        
+        @param: request (array): Structure that stores the requests grouped by bus stop, hour and minute. It also includes a COUNT column
+        '''
         minute = 0
         for i in range(len(request)):
             if request[i]["minute"] != minute or i == 0:
@@ -123,6 +127,14 @@ class Fitness():
                 minute = request[i]["minute"]
 
     def searchRequestIndex(self, index, initialHour, initialMinute, finalHour, finalMinute):
+        ''' Search the index to get the position on the request array for a specific time frame
+        
+        @param: index (array): Structure that stores hour, minute and the request's array position for this time
+        @param: initialHour (int): Initial hour to perform the search over the index
+        @param: initialMinute (int): Final minute to perform the search over the index
+        @param: finalHour (int): Final hour to perform the search over the index
+        @param: finalMinute (int): Final minute to perform the search over the index
+        '''
         result = []
         for i in range(len(index)):
             if index[i][0] == initialHour and index[i][1] == initialMinute:
@@ -143,6 +155,12 @@ class Fitness():
         return result
 
     def searchRequest(self, initialTime, finalTime, busStop):
+        ''' Search on the request array based on an inital time, a final time and a particular bus stop
+        
+        @param: initialTime (datetime): Initial time to perform the request's search
+        @param: finalTime (datetime): Final time to perform the request's search
+        @param: busStop (string): Bus stop name used on the request's search
+        '''
         result = []
         index = self.searchRequestIndex(Fitness.requestIndex, initialTime.hour, initialTime.minute, finalTime.hour, finalTime.minute)
         request = Fitness.request[index[0]:index[1]]
