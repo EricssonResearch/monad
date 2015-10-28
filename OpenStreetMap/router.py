@@ -27,22 +27,34 @@ picSize = 3000
 # The max speed on a road that does not have a set max speed.
 standardSpeed = 50
 # Roads buses can drive on
-busRoadTypes = ('motorway','motorway_link','trunk','trunk_link','primary',
-                'primary_link','secondary','secondary_link','tertiary',
-                'tertiary_link','unclassified','residential','service')
+busRoadTypes = ('motorway', 'motorway_link', 'trunk', 'trunk_link', 'primary',
+                'primary_link', 'secondary', 'secondary_link', 'tertiary',
+                'tertiary_link', 'unclassified', 'residential', 'service')
+
 
 class RouteHandler(handler.ContentHandler):
+    """
+
+    """
+
     def __init__(self):
         # all nodes in the map
         self.nodes = {}
         # all bus stop nodes
         self.busStops = {}
         self.edges = {}
+        # Roads
+        self.roads = {}
 
         # Used as temp
         self.nd = []
         self.tag = {}
         self.stop = 0
+
+        self.maxlat = 0.0
+        self.maxlon = 0.0
+        self.minlat = 0.0
+        self.minlon = 0.0
 
     def startElement(self, name, attributes):
         """
@@ -58,13 +70,13 @@ class RouteHandler(handler.ContentHandler):
 
         elif name == 'node':
             # Add every node
-            id = int(attributes.get('id'))
+            nodeId = int(attributes.get('id'))
             lat = float(attributes.get('lat'))
             lon = float(attributes.get('lon'))
-            self.nodes[id] = (lon,lat)
-            self.stop = id
+            self.nodes[nodeId] = (lon, lat)
+            self.stop = nodeId
         elif name == 'way':
-            pass
+            self.roadId = int(attributes.get('id'))
         elif name == 'nd':
             # Add the nodes in the temp array, used for way attributes
             # to collect the nodes in that way
@@ -82,42 +94,49 @@ class RouteHandler(handler.ContentHandler):
         """
         if name == 'way':
             highway = self.tag.get('highway', '')
-            oneway = self.tag.get('oneway', '') in ('yes','true','1')
+            oneway = self.tag.get('oneway', '') in ('yes', 'true', '1')
             maxspeed = self.tag.get('maxspeed', standardSpeed)
+            motorcar = self.tag.get('motorcar', '')
+            junction = self.tag.get('junction', '')
+            roadName = self.tag.get('name', '')
 
             # If the way is a road and if the bus can drive on it
-            if highway in busRoadTypes:
-                roadInt = busRoadTypes.index(highway)
-                # add edges between nodes that can be accessed by a bus
-                for nd in range(len(self.nd)-1):
-                    self.addEdge(self.nd[nd], self.nd[nd+1], maxspeed, roadInt)
-                    if not oneway:
-                        self.addEdge(self.nd[nd+1], self.nd[nd], maxspeed,
-                                     roadInt)
+            if motorcar != 'no':
+                if highway in busRoadTypes:
+                    roadInt = busRoadTypes.index(highway)
+                    # add edges between nodes that can be accessed by a bus
+                    for nd in range(len(self.nd) - 1):
+                        self.addEdge(self.nd[nd], self.nd[nd + 1], maxspeed,
+                                     roadInt, wayID=self.roadId)
+                        if not oneway:
+                            self.addEdge(self.nd[nd + 1], self.nd[nd],
+                                         maxspeed, roadInt, wayID=self.roadId)
+
+                    self.roads[self.roadId] = [(roadName, junction)]
 
         elif name == 'node':
             # Look for nodes that are bus stops
-            highway = self.tag.get('highway','')
-            stopName = self.tag.get('name','')
+            highway = self.tag.get('highway', '')
+            stopName = self.tag.get('name', '')
             if highway == 'bus_stop':
-                self.addBusStop(stopName,self.stop)
+                self.addBusStop(stopName, self.stop)
 
         # Clean up
-        if name in('node','way','relation'):
+        if name in ('node', 'way', 'relation'):
             self.nd = []
             self.tag = {}
             self.stop = 0
 
-    def addEdge(self, fromNode, toNode, maxspeed, roadInt):
+    def addEdge(self, fromNode, toNode, maxspeed, roadInt, wayID):
         """
         Adds an edge between fromNode to toNode in self.edges with
         attributes maxspeed, roadInt (type of road)
         """
         if fromNode in self.edges:
-            self.edges[fromNode].append((toNode, maxspeed, roadInt))
+            self.edges[fromNode].append((toNode, maxspeed, roadInt, wayID))
         else:
-            self.edges[fromNode] = [(toNode, maxspeed, roadInt)]
-        if not toNode in self.edges:
+            self.edges[fromNode] = [(toNode, maxspeed, roadInt, wayID)]
+        if toNode not in self.edges:
             self.edges[toNode] = []
 
     def addBusStop(self, name, stop):
@@ -137,7 +156,7 @@ class AStar:
         graph self.edges.
         """
         openSet = []
-        heappush(openSet,(0,start))
+        heappush(openSet, (0, start))
         path = {}
         cost = {}
         path[start] = 0
@@ -160,7 +179,7 @@ class AStar:
 
             # For all nodes connected to the one we are looking at for the
             # moment.
-            for nextNode, speed, roadInt in edges[current]:
+            for nextNode, speed, roadInt, _ in edges[current]:
 
                 # How fast you can go on a road matters on the type of the road
                 # It can be seen as a penalty for "smaller" roads.
@@ -174,7 +193,7 @@ class AStar:
                                           toNode[1])
 
                 timeOnRoad = (roadLength /
-                             (speedDecrease * (float(speed) * 1000/3600)))
+                              (speedDecrease * (float(speed) * 1000 / 3600)))
 
                 newCost = cost[current] + timeOnRoad
 
@@ -183,18 +202,17 @@ class AStar:
 
                     weight = (newCost + (roadInt ** 1) +
                               (self.heuristic(nodes[nextNode], nodes[goal]) /
-                              (float(standardSpeed)*1000/3600)))
+                               (float(standardSpeed) * 1000 / 3600)))
 
-                    heappush(openSet,(weight,nextNode))
+                    heappush(openSet, (weight, nextNode))
                     path[nextNode] = current
 
         return self.reconstruct_path(path, start, goal), cost
 
     def heuristic(self, node, goal):
-        x1,y1 = node
-        x2,y2 = goal
-        return self.measure(x1,y1,x2,y2)
-
+        x1, y1 = node
+        x2, y2 = goal
+        return self.measure(x1, y1, x2, y2)
 
     def measure(self, lon1, lat1, lon2, lat2):
         """
@@ -206,11 +224,11 @@ class AStar:
         dLat = (lat2 - lat1) * math.pi / 180
         dLon = (lon2 - lon1) * math.pi / 180
 
-        a = (math.sin(dLat/2) * math.sin(dLat/2) +
+        a = (math.sin(dLat / 2) * math.sin(dLat / 2) +
              math.cos(lat1 * math.pi / 180) * math.cos(lat2 * math.pi / 180) *
-             math.sin(dLon/2) * math.sin(dLon/2))
+             math.sin(dLon / 2) * math.sin(dLon / 2))
 
-        c = 2 * math.atan2(math.sqrt(a), math.sqrt(1-a))
+        c = 2 * math.atan2(math.sqrt(a), math.sqrt(1 - a))
         meters = earthRadius * c
         return meters
 
@@ -234,8 +252,14 @@ class Map:
         self.omsfile = omsfilepath
         self.astar = AStar()
         self.handler = RouteHandler()
+        self.nodes = {}
+        self.edges = {}
 
     def parsData(self):
+        """
+        Called when it is time to pars the osm map file. The map is supplied
+        when initializing the class.
+        """
         self.handler = RouteHandler()
         parser = make_parser()
         parser.setContentHandler(self.handler)
@@ -244,9 +268,57 @@ class Map:
         self.edges = self.handler.edges
 
     def findRoute(self, startNode, endNode):
+        """
+        Finds a route between two points in the map. Uses the A* algorithm to
+        find this path.
+
+        :param startNode: id of the starting node
+        :param endNode: id of the ending node
+        :return: a path between the start and ending point
+        """
         path, cost = self.astar.findPath(self.nodes, self.edges, startNode,
                                          endNode)
         return path
+
+    def findWayPoints(self, startNode, endNode):
+        """
+        Finds path and way points between two nodes. Used for finding the route
+        between two points (nodes) in the road map. The points have to be
+        located on the road.
+        """
+        route = self.findRoute(startNode, endNode)
+        return route, self.getWayPointsFromPath(route)
+
+    def findWayPointsFromList(self, nodeList):
+        """
+        Finds the path and way points between multiple points (intermediate
+        points). The path will go from N to N+1. list[0] is the starting point
+        the last element of the list will be the ending point.
+        """
+        path = []
+        waypoints = []
+        if len(nodeList) >1:
+            path.append(nodeList[0])
+            for n in range(0,len(nodeList)-1):
+                nPath = self.findRoute(nodeList[n], nodeList[n+1])
+                [path.append(x) for x in nPath[1:]]
+            waypoints = self.getWayPointsFromPath(path)
+
+        return path, waypoints
+
+    def getWayPointsFromPath(self, path):
+        """
+        Given a path it will return the way points on that path.
+        """
+        nodeList = []
+        for n in range(1, len(path) - 2):
+
+            roadIDfrom = [item for item in self.edges[path[n-1]] if item[0] == path[n]][0][3]
+            roadIDto = [item for item in self.edges[path[n]] if item[0] == path[n+1]][0][3]
+
+            if roadIDfrom != roadIDto:
+                nodeList.append(path[n])
+        return nodeList
 
     def inEdgeList(self, sid):
         return self.handler.edges.has_key(sid)
@@ -264,7 +336,6 @@ class Map:
         return 180.0 / math.pi * (math.log(math.tan(math.pi / 4.0 + a *
                                                     (math.pi / 180.0) / 2.0)))
 
-
     # Contains some drawing functions that can/should be left out. They are
     # mainly used for testing the other functions.
     def drawInit(self, x):
@@ -273,7 +344,7 @@ class Map:
 
         y = ((self.lat2y(self.handler.maxlat) -
               self.lat2y(self.handler.minlat)) *
-              self.imgScaling)
+             self.imgScaling)
 
         self.im = Image.new('RGBA', (x, int(y)), 'white')
         self.draw = ImageDraw.Draw(self.im)
@@ -290,7 +361,18 @@ class Map:
         for id, n in nodes.items():
             pointX = (n[0] - self.handler.minlon) * self.imgScaling
             pointY = y - (self.lat2y(n[1]) - y1) * self.imgScaling
-            self.draw.point((pointX,pointY), colour)
+            self.draw.point((pointX, pointY), colour)
+
+    def drawNodeIds(self, nodeIds, colour):
+        y1 = self.lat2y(self.handler.minlat)
+        y2 = self.lat2y(self.handler.maxlat)
+        y = (y2 - y1) * self.imgScaling
+
+        for nd in nodeIds:
+            n = self.nodes[nd]
+            pointX = (n[0] - self.handler.minlon) * self.imgScaling
+            pointY = y - (self.lat2y(n[1]) - y1) * self.imgScaling
+            self.draw.point((pointX, pointY), colour)
 
 
     def drawRoads(self, edges, nodes):
@@ -301,15 +383,14 @@ class Map:
         for id, n in edges.items():
             a = nodes[id]
 
-            for k,z,i in n:
+            for k, z, i, _ in n:
                 b = nodes[k]
 
-                colr = 255 - min(int(255*(float(z)/120)), 255)
+                colr = 255 - min(int(255 * (float(z) / 120)), 255)
                 if int(z) < 31:
                     colr = 220
                 self.drawLine(y, y1, a[0], a[1], b[0], b[1], self.imgScaling,
-                              (colr,colr,colr,255))
-
+                              (colr, colr, colr, 255))
 
     def drawBusStops(self, busStops, nodes):
         y1 = self.lat2y(self.handler.minlat)
@@ -322,12 +403,11 @@ class Map:
                 for bid in stopIDs:
                     stop = nodes[bid]
                     self.drawCircle(y, y1, stop[0], stop[1], radius,
-                                    self.imgScaling, (110,50,200))
+                                    self.imgScaling, (110, 50, 200))
             else:
                 stop = nodes[stopIDs[0]]
                 self.drawCircle(y, y1, stop[0], stop[1], radius,
-                                self.imgScaling, (254,122,85))
-
+                                self.imgScaling, (254, 122, 85))
 
     def drawPath(self, path, colour):
         y1 = self.lat2y(self.handler.minlat)
@@ -341,36 +421,36 @@ class Map:
                 fromNode = toNode
             else:
                 self.drawLine(y, y1, fromNode[0], fromNode[1], toNode[0],
-                              toNode[1], self.imgScaling,colour)
+                              toNode[1], self.imgScaling, colour)
 
                 fromNode = toNode
 
-
     def drawPoint(self, y, y1, lon, lat, scale, colour):
-        pointPX = (lon-self.minlon)*scale
-        pointPY = y-((self.lat2y(lat)-y1)*scale)
-        self.draw.point((pointPX,int(pointPY)), colour)
+        pointPX = (lon - self.minlon) * scale
+        pointPY = y - ((self.lat2y(lat) - y1) * scale)
+        self.draw.point((pointPX, int(pointPY)), colour)
 
     def drawLine(self, y, y1, aLon, aLat, bLon, bLat, scale, colour):
-        pointAX = (aLon-self.handler.minlon)*scale
-        pointAY = y-((self.lat2y(aLat)-y1)*scale)
-        pointBX = (bLon-self.handler.minlon)*scale
-        pointBY = y-((self.lat2y(bLat)-y1)*scale)
+        pointAX = (aLon - self.handler.minlon) * scale
+        pointAY = y - ((self.lat2y(aLat) - y1) * scale)
+        pointBX = (bLon - self.handler.minlon) * scale
+        pointBY = y - ((self.lat2y(bLat) - y1) * scale)
         self.draw.line((pointAX, pointAY, pointBX, pointBY), colour)
 
     def drawCircle(self, y, y1, lon, lat, r, scale, colour):
-        pointCX = (lon-self.handler.minlon)*scale
-        pointCY = y-((self.lat2y(lat)-y1)*scale)
-        self.draw.ellipse((pointCX-r, pointCY-r, pointCX+r, pointCY+r),
+        pointCX = (lon - self.handler.minlon) * scale
+        pointCY = y - ((self.lat2y(lat) - y1) * scale)
+        self.draw.ellipse((pointCX - r, pointCY - r, pointCX + r, pointCY + r),
                           fill=colour)
+
 
 if __name__ == '__main__':
     """
     If the program is run by it self and not used as a library.It will take a
     osm-file as the first argument, img-file name,  and too IDs of points on
     roads.
-    -- python router.py map.png map.osm <ID> <ID>
-    If the IDs are left out it will only drae the map.
+    -- python router.py map.png map.osm
+    If the IDs are left out it will only draw the map.
     """
     print "router.py"
 
@@ -391,11 +471,29 @@ if __name__ == '__main__':
     myPath = myMap.findRoute(nFrom, nTo)
     print "Found path in: %f sec" % (time.time() - timer)
 
+    wayP = myMap.getWayPointsFromPath(myPath)
+
+    print "Finding path with four points"
+    # Flogsta vardcentral
+    nTo = 2198905720
+    # Kungsgatan
+    nThrough = 25734373
+    # Bruno Liljeforsgata
+    nThrough2 = 31996288
+    # Polacksbacken
+    nFrom = 1125461154
+
+    timer = time.time()
+    my4Path, _ = myMap.findWayPointsFromList([nFrom, nThrough, nThrough2, nTo])
+    print "Found path in: %f sec" % (time.time() - timer)
+
     print "Draw image ..."
     myMap.drawInit(3000)
-    myMap.drawNodes(myMap.nodes, (227, 254, 212,255))
+    myMap.drawNodes(myMap.nodes, (227, 254, 212, 255))
     myMap.drawRoads(myMap.edges, myMap.nodes)
     myMap.drawBusStops(myMap.handler.busStops, myMap.nodes)
     myMap.drawPath(myPath, 'red')
+    myMap.drawNodeIds(wayP, 'blue')
+    myMap.drawPath(my4Path, 'green')
     myMap.drawSave(sys.argv[1])
     print "Image done"
