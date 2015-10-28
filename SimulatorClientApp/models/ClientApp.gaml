@@ -1,8 +1,3 @@
-/**
- *  ClientApp
- *  Author: tingwei
- *  Description: 
- */
 
 model ClientApp
 
@@ -12,44 +7,41 @@ global skills: [SQLSKILL] {
 
 	int nb_client_init <- 16;
 	
-	//Fetch position data from local csv file and put that into a matrix 
-	file my_csv_file <- csv_file("../includes/position.csv",",");
-	matrix position_mx <- matrix(my_csv_file);
 
-	/* connect to server 
+	//connect to server 
 	map<string, string> PARAMS <- [
 	'host'::'130.238.15.114',
 	'dbtype'::'MySQL',
-	'database'::'', // it may be a null string
+	'database'::'test', // it may be a null string
 	'port'::'3306',
-	'user'::'test',
-	'passwd'::'test'];	
-	*/
+	'user'::'testy',
+	'passwd'::'testy'];	
+	
 	
 	init {
 		create client number: nb_client_init ;
 		
-		/* Test server
+		// Test server
 		if (self testConnection (params: PARAMS) = true){
 			write "Connection is OK" ;
 			}else{
 			write "Connection is false" ;
 		}
-		*/
+	
+	
 	}
 }
 
 species client skills: [SQLSKILL] {
-
-	int street_amount <- position_mx.rows - 1;
-	int stposition_rnd <- rnd(street_amount) update: rnd(street_amount);
-	int edposition_rnd <- rnd(street_amount) update: rnd(street_amount);
-	string start_position <- string(position_mx [1, stposition_rnd]) update: string(position_mx [1, stposition_rnd]);
-	string end_position <- string(position_mx [1, edposition_rnd]) update: string(position_mx [1, edposition_rnd]);
 	
+
 	int user_name <- rnd(500000) update: rnd(500000);
 	float current_time <- machine_time update: machine_time;
 	string cur_time_str <- (current_time/1000) as_date "%Y y %M m %D d %h h %m m %s seconds" update: (current_time/1000) as_date "%Y y %M m %D d %h h %m m %s seconds"; 
+	int cts_length <- length(cur_time_str) update: length(cur_time_str);
+	
+	float st_time;
+	string start_time_str; 
 
 	/*
 	Define variables for caculating rush time.
@@ -66,9 +58,10 @@ species client skills: [SQLSKILL] {
 	float mor_rush <- (7.5 * 60 * 60 * 1000);
 	float aft_rush <- (16.5 * 60 * 60 * 1000);
 	
+	float hot_station;
+	int cen_plk_rnd <- rnd(1) update: rnd(1);
+		
 	//Define variable to form request time and start time
-	float st_time;
-	string start_time_str; 			
 	string year;
 	string month;
 	string day;
@@ -100,100 +93,136 @@ species client skills: [SQLSKILL] {
 	string request_time;
 	string start_time;
 	
+	
+	string start_position;
+	string end_position;
+	
+	
 	/* Executed every cycle to update start_time and request_time */
 	reflex update_att { 
 		
-		//Form request time
-		ct_y_index <- cur_time_str index_of "y";
-		year <- cur_time_str at (ct_y_index-3) + cur_time_str at (ct_y_index-2); 
-		ct_mth_index <- cur_time_str index_of "m";
-		month <- cur_time_str at (ct_mth_index - 3) + cur_time_str at (ct_mth_index - 2);
-		if int(month) < 10{
-			month <- '0' + string(int(month));
-		}
-		ct_d_index <- cur_time_str index_of "d";
-		day <- cur_time_str at (ct_d_index - 3) + cur_time_str at (ct_d_index - 2);
-		if int(day) < 10{
-			day <- '0' + string(int(day));
-		}		
-		ct_h_index <- cur_time_str index_of "h";
-		hour <- cur_time_str at (ct_h_index - 3) + cur_time_str at (ct_h_index - 2);
-		if int(hour) = 0{
-			hour <- "00";
-		} else if int(hour) < 10{
-			hour <- '0' + string(int(hour));
-		}		
-		ct_min_index <- cur_time_str last_index_of "m";
-		minute <- cur_time_str at (ct_min_index - 3) + cur_time_str at (ct_min_index - 2);
-		if int(minute) = 0{
-			minute <- "00";
-		} else if int(minute) < 10{
-			minute <- '0' + string(int(minute));
-		}				
-		ct_sec_index <- cur_time_str index_of "seconds";
-		second <- cur_time_str at (ct_sec_index - 3) + cur_time_str at (ct_sec_index - 2);
-		if int(second) = 0{
-			second <- "00";
-		} else if int(second) < 10{
-			second <- '0' + string(int(second));
-		}	
-				
-		//Using Gauss distribution to simulate rush time for start time , either in moring or in afternoon
-		//Calculate Tomorrow's start time 00:00
-		today_cur_sec <- float(hour) * 60 * 60 + float(minute) * 60 + float(second);
-		tom_start_time <- current_time - today_cur_sec * 1000 + a_day_in_ms;
+		//Normal Distribution to define hot bus_stops for start position		 
+		float hot_stop_weight_st <- gauss(5,1);
+	    	int hot_stop_st <- int(hot_stop_weight_st); 
+
+		//Retrieve hot bus_stop for start position from database
+		list<list> spname_ls <- list<list> (self select(params:PARAMS, 
+                                select:"SELECT stopName FROM station where stopWeight = " + hot_stop_st)); 
+		                                
+       		 int hot_st_lgt <- length(spname_ls[2]);
+
+		//Normal Distribution to define hot bus_stops for End position
+		float hot_stop_weight_ed <- gauss(5,1);
+		int hot_stop_ed <- int(hot_stop_weight_ed);
+
+		//Retrieve hot bus_stop for End position from database     
+		list<list> spname_ed_ls <- list<list> (self select(params:PARAMS, 
+                                select:"SELECT stopName FROM station where stopWeight = " + hot_stop_ed)); 
+		       
+		int hot_ed_lgt <- length(spname_ed_ls[2]);
+
+		//Condition to avoid empty list from database
+		if (hot_st_lgt != 0 and hot_ed_lgt !=0){ 
+			//choose a random hot bus_stop from list
+			start_position <- string(spname_ls[2][rnd(hot_st_lgt-1)][0]);
+                	end_position <- string(spname_ed_ls[2][rnd(hot_ed_lgt-1)][0]); 
+      	
+			write  start_position;
+			write end_position ;   
+        
+			//Form request time
+			ct_y_index <- cur_time_str index_of "y";
+			year <- cur_time_str at (ct_y_index-3) + cur_time_str at (ct_y_index-2); 
+			ct_mth_index <- cur_time_str index_of "m";
+			month <- cur_time_str at (ct_mth_index - 3) + cur_time_str at (ct_mth_index - 2);
+			if int(month) < 10{
+				month <- '0' + string(int(month));
+			}
+			ct_d_index <- cur_time_str index_of "d";
+			day <- cur_time_str at (ct_d_index - 3) + cur_time_str at (ct_d_index - 2);
+			if int(day) < 10{
+				day <- '0' + string(int(day));
+			}		
+			ct_h_index <- cur_time_str index_of "h";
+			hour <- cur_time_str at (ct_h_index - 3) + cur_time_str at (ct_h_index - 2);
+			if int(hour) = 0{
+				hour <- "00";
+			} else if int(hour) < 10{
+				hour <- '0' + string(int(hour));
+			}		
+			ct_min_index <- cur_time_str last_index_of "m";
+			minute <- cur_time_str at (ct_min_index - 3) + cur_time_str at (ct_min_index - 2);
+			if int(minute) = 0{
+				minute <- "00";
+			} else if int(minute) < 10{
+				minute <- '0' + string(int(minute));
+			}				
+			ct_sec_index <- cur_time_str index_of "seconds";
+			second <- cur_time_str at (ct_sec_index - 3) + cur_time_str at (ct_sec_index - 2);
+			if int(second) = 0{
+				second <- "00";
+			} else if int(second) < 10{
+				second <- '0' + string(int(second));
+			}	
+	
+			//Using Gauss distribution to simulate rush time for start time , either in moring or in afternoon
+			//Calculate Tomorrow's start time 00:00
+			today_cur_sec <- float(hour) * 60 * 60 + float(minute) * 60 + float(second);
+			tom_start_time <- current_time - today_cur_sec * 1000 + a_day_in_ms;
 		
-		if mor_aft_rnd = 0 {
-			rush_time <- tom_start_time + mor_rush;
-		} else if mor_aft_rnd = 1{
-			rush_time <- tom_start_time + aft_rush;
-		}
+			//condition
+			if mor_aft_rnd = 0 {
+				rush_time <- tom_start_time + mor_rush;
+			} else if mor_aft_rnd = 1{
+				rush_time <- tom_start_time + aft_rush;
+			}
+		
 			
-		st_time <- gauss (rush_time, 5000000);
-		start_time_str <- (st_time/1000) as_date "%Y y %M m %D d %h h %m m %s seconds";
+			st_time <- gauss (rush_time, 5000000);
+			start_time_str <- (st_time/1000) as_date "%Y y %M m %D d %h h %m m %s seconds";
 						
-		//Form start time
-		st_y_index <- start_time_str index_of "y";
-		st_year <- start_time_str at (st_y_index-3) + start_time_str at (st_y_index-2); 
-		st_mth_index <- start_time_str index_of "m";
-		st_month <- start_time_str at (st_mth_index - 3) + start_time_str at (st_mth_index - 2);
-		if int(st_month) < 10{
-			st_month <- '0' + string(int(st_month));
-		}
-		st_d_index <- start_time_str index_of "d";
-		st_day <- start_time_str at (st_d_index - 3) + start_time_str at (st_d_index - 2);
-		if int(st_day) < 10{
-			st_day <- '0' + string(int(st_day));
-		}		
-		st_h_index <- start_time_str index_of "h";
-		st_hour <- start_time_str at (st_h_index - 3) + start_time_str at (st_h_index - 2);
-		if int(st_hour) = 0{
-			st_hour <- "00";
-		} else if int(st_hour) < 10{
-			st_hour <- '0' + string(int(st_hour));
-		}		
-		st_min_index <- start_time_str last_index_of "m";
-		st_minute <- start_time_str at (st_min_index - 3) + start_time_str at (st_min_index - 2);
-		if int(st_minute) = 0{
-			st_minute <- "00";
-		} else if int(st_minute) < 10{
-			st_minute <- '0' + string(int(st_minute));
-		}				
-		st_sec_index <- start_time_str index_of "seconds";
-		st_second <- start_time_str at (st_sec_index - 3) + start_time_str at (st_sec_index - 2);
-		if int(st_second) = 0{
-			st_second <- "00";
-		} else if int(st_second) < 10{
-			st_second <- '0' + string(int(st_second));
-		}	
+			//Form start time
+			st_y_index <- start_time_str index_of "y";
+			st_year <- start_time_str at (st_y_index-3) + start_time_str at (st_y_index-2); 
+			st_mth_index <- start_time_str index_of "m";
+			st_month <- start_time_str at (st_mth_index - 3) + start_time_str at (st_mth_index - 2);
+			if int(st_month) < 10{
+				st_month <- '0' + string(int(st_month));
+			}
+			st_d_index <- start_time_str index_of "d";
+			st_day <- start_time_str at (st_d_index - 3) + start_time_str at (st_d_index - 2);
+			if int(st_day) < 10{
+				st_day <- '0' + string(int(st_day));
+			}		
+			st_h_index <- start_time_str index_of "h";
+			st_hour <- start_time_str at (st_h_index - 3) + start_time_str at (st_h_index - 2);
+			if int(st_hour) = 0{
+				st_hour <- "00";
+			} else if int(st_hour) < 10{
+				st_hour <- '0' + string(int(st_hour));
+			}		
+			st_min_index <- start_time_str last_index_of "m";
+			st_minute <- start_time_str at (st_min_index - 3) + start_time_str at (st_min_index - 2);
+			if int(st_minute) = 0{
+				st_minute <- "00";
+			} else if int(st_minute) < 10{
+				st_minute <- '0' + string(int(st_minute));
+			}				
+			st_sec_index <- start_time_str index_of "seconds";
+			st_second <- start_time_str at (st_sec_index - 3) + start_time_str at (st_sec_index - 2);
+			if int(st_second) = 0{
+				st_second <- "00";
+			} else if int(st_second) < 10{
+				st_second <- '0' + string(int(st_second));
+			}	
 
-		request_time <- string(1970 + int(year) - 1)  + "-" + month + "-" + day + "," + hour + ":" + minute + ":" + second;
-		start_time <- string(1970 + int(st_year) - 1)  + "-" + st_month + "-" + st_day + "," + st_hour + ":" + st_minute + ":" + st_second;
-		write start_time;
-		save ["username = " + user_name + "; RequestTime = " + request_time + "; StartTime = " + start_time + "; StartPosition = " + start_position + "; EndPosition = " + end_position] 
-		     to: "ClientRequest" type:text;
-
-	}
+			request_time <- string(1970 + int(year) - 1)  + "-" + month + "-" + day + "," + hour + ":" + minute + ":" + second;
+			start_time <- string(1970 + int(st_year) - 1)  + "-" + st_month + "-" + st_day + "," + st_hour + ":" + st_minute + ":" + st_second;
+	
+			save ["username = " + user_name + "; RequestTime = " + request_time + "; StartTime = " + start_time + "; StartPosition = " + start_position + "; EndPosition = " + end_position] 
+		    		to: "ClientRequest" type:csv;
+		
+		}}
 		
 	aspect base {
 		draw string(user_name) color: #red size: 3;

@@ -69,7 +69,7 @@ class DB():
 
     # These function will be called for every gene in order to get the difference
     def getTravelRequestBetween(self, start, end):
-        req = self.db.TravelRequest.find({ "StartTime": {"$gte": start, "$lt": end}})
+        req = self.db.TravelRequest.find({"StartTime": {"$gte": start, "$lt": end}})
         return req
 
     def getTravelRequestSummary(self, start, end):
@@ -79,17 +79,21 @@ class DB():
         reduce = "function(curr, result) { result.count++; }"
         # req = self.db.TravelRequest.group(keyf, condition, initial, reduce)
         req = self.db.TravelRequestLookAhead.group(keyf, condition, initial, reduce)
-        req = sorted(req, key=itemgetter("hour","minute"))
+        req = sorted(req, key=itemgetter("hour", "minute"))
         return req
 
     def getTravelRequestSummary2(self, start, end):
         """
+=======
+    def getTravelRequestSummary2(self, start, end, busStop):
+>>>>>>> d5b18297f30bc04559b91cc38f3902a88cee361d
         keyf = "function(doc) { return { startBusStop: doc.startBusStop, hour: doc.startTime.getHours(), minute: doc.startTime.getMinutes()};}"
         condition = {"startTime": {"$gte": start, "$lt": end}, "startBusStop": {"$eq": busStop}}
         initial = {"count": 0}
         reduce = "function(curr, result) { result.count++; }"
         # req = self.db.TravelRequest.group(keyf, condition, initial, reduce)
         req = self.db.TravelRequestLookAhead.group(keyf, condition, initial, reduce)
+<<<<<<< HEAD
         req = sorted(req, key=itemgetter("hour","minute"))
 
         return req        

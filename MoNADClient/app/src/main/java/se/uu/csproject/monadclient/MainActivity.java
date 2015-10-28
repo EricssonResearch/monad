@@ -5,7 +5,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.os.Build;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.NavUtils;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -44,7 +47,7 @@ public class MainActivity extends AppCompatActivity implements
     private LocationRequest mLocationRequest;
     private double currentLatitude;
     private double currentLongitude;
-    final private int REQUEST_CODE_ASK_PERMISSIONS = 123;
+    private final int MY_PERMISSIONS_REQUEST = 123;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,7 +69,12 @@ public class MainActivity extends AppCompatActivity implements
         recyclerView.setAdapter(adapter);
         buildGoogleApiClient();
         initializeLocationRequest();
-        mGoogleApiClient.connect();
+
+        if (Build.VERSION.SDK_INT >= 23){
+            checkForPermission();
+        } else {
+            mGoogleApiClient.connect();
+        }
     }
 
     public void openMainSearch (View view) {
@@ -86,13 +94,34 @@ public class MainActivity extends AppCompatActivity implements
         requestTime = df.format(now);
         priority = "distance";
 
-        Log.d("oops", "latitude: " + startPositionLatitude);
-        Log.d("oops", "longitude: " + startPositionLongitude);
         new SendQuickTravelRequest().execute(userId, startTime, endTime, requestTime, startPositionLatitude,
                 startPositionLongitude, edPosition, priority);
 
         Intent myIntent = new Intent(MainActivity.this, SearchActivity.class);
         MainActivity.this.startActivity(myIntent);
+    }
+
+    private void checkForPermission(){
+        if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED){
+            ActivityCompat.requestPermissions(MainActivity.this,
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, MY_PERMISSIONS_REQUEST);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case MY_PERMISSIONS_REQUEST: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    mGoogleApiClient.connect();
+                } else {
+                    // Permission denied, boo! Disable the functionality that depends on this permission.
+                }
+                return;
+            }
+        }
     }
 
     private void handleNewLocation(Location location) {
@@ -111,18 +140,9 @@ public class MainActivity extends AppCompatActivity implements
     protected void initializeLocationRequest() {
         mLocationRequest = LocationRequest.create()
                 .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
-                .setInterval(10 * 1000)        // 30 seconds, in milliseconds
-                .setFastestInterval(1 * 1000); // 1 second, in milliseconds
+                .setInterval(60 * 1000)        // 1 minute, in milliseconds
+                .setFastestInterval(10 * 1000); // 10 seconds, in milliseconds
     }
-
-    /*private void insertDummyContactWrapper() {
-        int hasWriteContactsPermission = checkSelfPermission(Manifest.permission.WRITE_CONTACTS);
-        if (hasWriteContactsPermission != PackageManager.PERMISSION_GRANTED) {
-            requestPermissions(new String[] {Manifest.permission.WRITE_CONTACTS},
-                    REQUEST_CODE_ASK_PERMISSIONS);
-            return;
-        }
-    }*/
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -214,8 +234,13 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     protected void onResume() {
         super.onResume();
-        if (!mGoogleApiClient.isConnected()){
-            mGoogleApiClient.connect();
+        if (!mGoogleApiClient.isConnected()) {
+            if (Build.VERSION.SDK_INT >= 23){
+                checkForPermission();
+                mGoogleApiClient.connect();
+            } else {
+                mGoogleApiClient.connect();
+            }
         }
     }
 
@@ -233,24 +258,26 @@ public class MainActivity extends AppCompatActivity implements
         Location location = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
 
         if (location == null) {
-            Log.d("oops", "test6 passed");
-            LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
+            // This exception will be thrown on android 6 devices where the user hasn't given location permission
+            try{
+                LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
+            }catch(java.lang.SecurityException e){
+                Log.d("oops", e.toString());
+            }
         }
         else {
-            Log.d("oops", "test7 passed");
             handleNewLocation(location);
-        };
+        }
     }
 
     @Override
     public void onConnectionSuspended(int i) {
-        Log.d("oops", "ConnectionSuspended");
+
     }
 
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {
-        Log.d("oops", Integer.toString(connectionResult.getErrorCode()));
-        //Log.d("oops", connectionResult.getErrorMessage());
+        Log.d("oops", "Connection failed with error code: " + Integer.toString(connectionResult.getErrorCode()));
     }
 
     @Override

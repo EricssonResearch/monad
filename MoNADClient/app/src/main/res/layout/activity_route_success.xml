@@ -111,7 +111,7 @@
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="2"
-                        android:text="@string/label_trips_from_origin"
+                        android:text="@string/non_available"
                         android:textSize="@dimen/medium_text"
                         style="@style/whiteText"
                         android:gravity="center"
@@ -122,7 +122,7 @@
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
-                        android:text="@string/label_trips_from_time"
+                        android:text="@string/non_available"
                         android:textSize="@dimen/medium_text"
                         style="@style/whiteText"
                         />
@@ -151,7 +151,7 @@
                         android:id="@+id/trip_arrive_stop_name_text_view"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:text="@string/label_trips_to_destination"
+                        android:text="@string/non_available"
                         android:textSize="@dimen/medium_text"
                         style="@style/whiteText"
                         android:layout_weight="2"
@@ -163,7 +163,7 @@
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
-                        android:text="@string/label_trips_to_time"
+                        android:text="@string/non_available"
                         android:textSize="@dimen/medium_text"
                         style="@style/whiteText"
                         />
@@ -276,10 +276,11 @@
                     />
 
                 <TextView
+                    android:id="@+id/label_countdown"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="@dimen/medium_padding"
-                    android:text="@string/label_trips_countdown"
+                    android:text="@string/non_available"
                     android:textSize="@dimen/header_textlarge"
                     android:layout_centerHorizontal="true"
                     android:textColor="@color/warnColor"

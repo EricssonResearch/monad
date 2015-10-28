@@ -34,7 +34,7 @@
         android:layout_toRightOf="@+id/label_timeinfo"
         android:layout_toEndOf="@+id/label_timeinfo"
         android:layout_margin="@dimen/small_padding"
-        android:contentDescription="@string/label_main_imagedescription"
+        android:contentDescription="@string/img_description"
         android:visibility="invisible"
         />
 
