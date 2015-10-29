@@ -1,7 +1,6 @@
 package se.uu.csproject.monadclient;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.CountDownTimer;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -94,6 +93,7 @@ public class TripCancelPopup extends AppCompatActivity {
     }
     //TODO Stavros: remove trip from user's schedule if the confirm button is clicked
     public void dropTrip(View view) {
+        //new SendBookingCancelRequest().execute(objectId);
         startActivity(new Intent(this, MainActivity.class));
     }
 

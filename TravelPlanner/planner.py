@@ -58,8 +58,8 @@ class Mode:
 
 class TravelPlanner:
 
-    def __init__(self):
-        self.client = MongoClient()
+    def __init__(self, client):
+        self.client = client
         self.travelRequest = self.client.monad.TravelRequest
         self.route = self.client.monad.Route
         self.timeTable = self.client.monad.timeTable
