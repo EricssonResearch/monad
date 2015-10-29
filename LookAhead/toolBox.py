@@ -58,8 +58,8 @@ def evalIndividual(individual):
     for i, trip in enumerate(individual):
         tripTimeTable = db.generateFitnessTripTimeTable(individual[i][0], individual[i][2])
         tripStartTime = trip[2]
-        start = '00:00' if i == 0 else individual[i-1][2]
-        end = individual[i][2]
+        start = '2015-10-21 00:00:00' if i == 0 else '2015-10-21 ' + individual[i-1][2] + ':00'
+        end = '2015-10-21 ' + individual[i][2] + ':00'
         stopsAndRequests = db.MaxReqNumTrip(start, end)
         count = 0
         for i, stop in enumerate(stopsAndRequests):
