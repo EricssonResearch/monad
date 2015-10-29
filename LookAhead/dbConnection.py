@@ -82,29 +82,31 @@ class DB():
         req = sorted(req, key=itemgetter("hour", "minute"))
         return req
 
-    def getTravelRequestSummary2(self, start, end, busStop):
+    def grpReqByBusstopAndTime(self, start, end):
+        """
+        def getTravelRequestSummary2(self, start, end, busStop):
         keyf = "function(doc) { return { startBusStop: doc.startBusStop, hour: doc.startTime.getHours(), minute: doc.startTime.getMinutes()};}"
         condition = {"startTime": {"$gte": start, "$lt": end}, "startBusStop": {"$eq": busStop}}
         initial = {"count": 0}
         reduce = "function(curr, result) { result.count++; }"
         # req = self.db.TravelRequest.group(keyf, condition, initial, reduce)
         req = self.db.TravelRequestLookAhead.group(keyf, condition, initial, reduce)
-        req = sorted(req, key=itemgetter("hour", "minute"))
-        return req
+        req = sorted(req, key=itemgetter("hour","minute"))
 
-    """
-        req = []
-        condition = {"startTime": {"$gte": start, "$lt": end}, "startBusStop": {"$eq": busStop}}
-        req = self.db.TravelRequestLookAhead.find(condition).count()
+        return req        
+        """
+        queryResults = []
+        # A query is made to group request made to a busstop and counting the number of similar requests made
+        pipline = [{"$match": {"startTime": {"$gte": start, "$lt": end}}},
+            {"$group": {"_id": {"RequestTime": "$startTime", "BusStop": "$startBusStop"},"total": {"$sum": 1}}}]
 
-        for reqs in req:
-            print("THIS IS THE REQUEST TIME ITNERVAL")
-            print(reqs)
+        groupQuery = self.db.TravelRequestLookAhead.aggregate(pipline)
 
+        for x in groupQuery:
+            queryResults.append(x)
 
+        return queryResults
 
-        return req
-    """
     # These function will be called for every gene in order to get the difference
     # def getTravelRequestBetween(self, start, end):
     #    for doc in self.db.TravelRequest.find({'time': {'$gte': start, '$lt': end}}):
@@ -114,28 +116,33 @@ class DB():
     def populateRoute(self, route):
         # route5 = {"line": 5, "durationTime":39, routeStop2}
         # routeStop5 = ["Stenhagenskolan","Herrhagens Byväg","Kiselvägen","Stenhagens Centrum","Stenröset","Stenhällen","Gatstenen","Hedensbergsvägen","Flogsta centrum","Rickomberga","Studentstaden","Ekonomikum","Götgatan","Skolgatan","Stadshuset","Centralstationen","Samariterhemmet","Strandbodgatan","Kungsängsesplanaden","Vimpelgatan","Lilla Ultuna","Kuggebro","Vilan","Nämndemansvägen","Lapplandsresan","Ölandsresan","Daneport","Västgötaresan","Gotlandsresan","Smålandsvägen"]
-        self.db.route.insert_one(route)
+        self.db.Route.insert_one(route)
 
     def getRouteId(self):
-        route = self.db.route.find().distinct("line")
+        route = self.db.Route.find().distinct("line")
         return route
 
     def getRoute(self, column):
         routeId = self.getRouteId()
         for r in routeId:
-            route = self.db.route.find({"line": r})
+            route = self.db.Route.find({"line": r})
             return self.retrieveData(route, column)
 
+    def getLine(self, line):
+        line = self.db.Route.find({"line": line})
+        return self.retrieveData(line, None)
+
     def dropRoute(self):
-        self.db.route.drop()
+        self.db.Route.drop()
 
     def getTripDay(self, line):
-        tripDay = self.db.route.find({"line": line}, {"tripDay": 1})
-        return self.retrieveData(tripDay, "tripDay")
+        frequency = self.db.Route.find({"line": line}, {"frequency": 1})
+        frequency = self.retrieveData(frequency, "frequency")
+        return DB.minutesDay / frequency
 
     def getRouteStop(self, line):
-        routeStop = self.db.route.find({"line": line}, {"stop": 1})
-        return self.retrieveData(routeStop, "stop")
+        routeStop = self.db.Route.find({"line": line}, {"trajectory": 1})
+        return self.retrieveData(routeStop, "trajectory")
 
     # Bus
     # https://www.ul.se/en/About-UL/About-our-public-function/
@@ -206,26 +213,25 @@ class DB():
         return self.mergeRandomTime(hours, minutes)
 
     # Trip
-    # Generate TT from seed random starting time
-    def generateStartingTripTime(self):
-        return list([self.getRoute("line"), self.generateRandomCapacity(), self.generateTime(self.generateMinute(self.mergeRandomTime(self.getRandomHour(),self.getRandomMinute())))])
+    # Generate TT from seed random starting time. Called when generating the initial population
+    def generateStartingTripTime(self, line):
+        return list([line, self.generateRandomCapacity(), self.generateTime(self.generateMinute(self.mergeRandomTime(self.getRandomHour(),self.getRandomMinute())))])
 
+    # Fitness trip time table
+    # This is the function that changes the genotype into a phenotype. It generates the time table for a particular individual.
     def generateFitnessTripTimeTable(self, line, startingTime):
         tripTimeTable = []
         busStop = self.getRouteStop(line)
-
         minuteSeed = self.generateMinute(startingTime)
-
-        tripTimeTable.append([busStop[0][0],self.generateTime(minuteSeed)])
+        tripTimeTable.append([self.getBusStopName(busStop[0]["busStop"]),self.generateTime(minuteSeed)])
         for j in range(len(busStop)-1):
-            minuteSeed = minuteSeed + busStop[j][1]
-
+            minuteSeed = minuteSeed + busStop[j]["interval"]
             if minuteSeed > DB.minutesDay:
                 minuteSeed = minuteSeed - DB.minutesDay
-            tripTimeTable.append([busStop[j+1][0],self.generateTime(minuteSeed)])
-
+            tripTimeTable.append([self.getBusStopName(busStop[j+1]["busStop"]),self.generateTime(minuteSeed)])
         return tripTimeTable
 
+    # After GA, this function is called to generate all the bus stops given the initial starting times based on the best individual
     def generateTripTimeTable(self, timetable):
         timeTable = []
         for i in range(len(timetable)):
@@ -234,34 +240,14 @@ class DB():
             # print numberStop
             minuteSeed = self.generateMinute(timetable[i][2])
             tripTimeTable = []
-            tripTimeTable.append([busStop[0][0],self.generateTime(minuteSeed)])
+            tripTimeTable.append([busStop[0]["name"],self.generateTime(minuteSeed)])
             for j in range(numberStop):
-                minuteSeed = minuteSeed + busStop[j][1]
+                minuteSeed = minuteSeed + busStop[j]["interval"]
                 if minuteSeed > DB.minutesDay:
                     minuteSeed = minuteSeed - DB.minutesDay
-                tripTimeTable.append([busStop[j+1][0],self.generateTime(minuteSeed)])
+                tripTimeTable.append([busStop[j+1]["name"],self.generateTime(minuteSeed)])
             timeTable.append([timetable[i][0], timetable[i][1], list(self.flatten(tripTimeTable))])
         return sorted(timeTable, key = itemgetter(2))
-
-    def generateTripTimeTable2(self, line):
-        tripTimeTable = []
-        seed = self.mergeRandomTime(self.getRandomHour(),self.getRandomMinute())
-        busStop = self.getRouteStop(line)
-        numberStop = len(busStop)
-        minuteSeed = self.generateMinute(seed)
-        for i in range(numberStop):
-            minuteSeed = minuteSeed + busStop[i][1]
-            if minuteSeed > DB.minutesDay:
-                minuteSeed = minuteSeed - DB.minutesDay
-            tripTimeTable.append(self.generateTime(minuteSeed))
-        return list(self.flatten([self.getRoute("line"), self.generateRandomCapacity(), list(self.flatten(tripTimeTable))]))
-
-    def generateTimeTable(self, line):
-        timeTable = []
-        tripDay = int(self.getTripDay(line))
-        for i in range(tripDay):
-            timeTable.append(self.generateTripTimeTable(line))
-        return timeTable
 
     # Dont forget to credit this function on Stack Overflow
     # http://stackoverflow.com/questions/14820273/confused-by-chain-enumeration
@@ -274,6 +260,7 @@ class DB():
                 yield el
 
     # Time Table
+    # This function takes the result from generateTripTimeTable, and generates a JSON document with the DB layout. Then, it proceeds to insert it on the DB.
     def insertTimeTable(self, document):
         timeTable = []
         bus = []
@@ -288,10 +275,8 @@ class DB():
                 ind = j * 2
                 if len(document[i][2][ind+1]) < 5:
                     print (document[i][2][ind+1])
-                # trip.append({"busStop": document[i][2][ind],"time": datetime.datetime.strptime(document[i][2][ind+1],DB.formatTime).time(),"capacity": document[i][1],"latitude":self.getBusStopLatitude(document[i][2][ind]),"longitude":self.getBusStopLongitude(document[i][2][ind])})
-                trip.append({"busStop": document[i][2][ind],"time": datetime.datetime.strptime(document[i][2][ind+1],DB.formatTime),"capacity": document[i][1],"latitude":self.getBusStopLatitude(document[i][2][ind]),"longitude":self.getBusStopLongitude(document[i][2][ind])})
-            timeTable.append({"busId": bus,"busStops": trip})
-        # print timeTable
+                trip.append({"busStop": document[i][2][ind], "time": datetime.datetime.strptime(document[i][2][ind+1], DB.formatTime), "capacity": document[i][1], "latitude": self.getBusStopLatitude(document[i][2][ind]), "longitude": self.getBusStopLongitude(document[i][2][ind])})
+            timeTable.append({"busId": bus, "busStops": trip})
         self.db.timeTable.insert_one({"line": document[0][0], "date": datetime.datetime.now(), "timetable": timeTable})
 
 
@@ -309,13 +294,58 @@ class DB():
         reqs = []
         requests = self.db.TravelRequestLookAhead.find({"$and": [{"startTime": {"$gte": yesterdayStart}}, {"startTime": {"$lt": todayStart}}]}, {"startTime": 1, "startBusStop": 1, "endBusStop": 1, "_id": 0})  # New collection for LookAhead
         for req in requests:
-            #reqs.append([req.get('startTime', None), req.get('startBusStop', None), req.get('endBusStop', None)])
-            reqs.append(req.get('startTime', None))
+            reqs.append([req.get('startTime', None), req.get('startBusStop', None), req.get('endBusStop', None)])
+            #reqs.append(req.get('startTime', None))
         return reqs   
 
+    # Bus Stop Location
     def getBusStopLatitude(self, busStop):
-        return self.retrieveData(self.db.busStopLocation.find({"name": busStop}, {"latitude": 1}), "latitude")
-
+        return self.retrieveData(self.db.BusStop.find({"name": busStop}, {"latitude": 1}), "latitude")
 
     def getBusStopLongitude(self, busStop):
-        return self.retrieveData(self.db.busStopLocation.find({"name": busStop}, {"longitude": 1}), "longitude")
+        return self.retrieveData(self.db.BusStop.find({"name": busStop}, {"longitude": 1}), "longitude")
+
+    def getBusStopId(self, busStop):
+        return self.retrieveData(self.db.BusStop.find({"name": busStop}), "_id")
+
+    def getBusStopName(self, id):
+        return self.retrieveData(self.db.BusStop.find({"_id": id}), "name")
+    def MaxReqNumTrip(self,trip_sTime,lineNum):
+
+        #create dic
+        BusStplist = []
+        dirlist =[]
+        #get the trip time table
+        trip_time_table = self.generateFitnessTripTimeTable(lineNum,trip_sTime)
+        for i in trip_time_table:
+            BusStplist.append([i[0],0])
+            dirlist.append(i[0])
+
+
+        #get all requests where starting time is more than trip starting time
+        Requests = self.getRequestsFromDB()
+
+        #get only the requests with start location in bus stops and end location in bus stps
+        counter = 0
+        counter2 = 0
+        for req in Requests:
+            for i in BusStplist:
+                if (req[1], req[2]) in itertools.combinations(dirlist, 2):
+                    if req[1] == i[0]:
+                        i[1] += 1
+                        counter +=1
+                    if req[2] == i[0]:
+                        i[1] += -1
+                        counter2 +=1
+
+        print BusStplist
+        sum = 0;
+        for i in BusStplist:
+            sum += i[1]
+            i[1] = sum
+        print "after aggregation "
+        print BusStplist
+        print counter
+        print counter2
+
+    

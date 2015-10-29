@@ -7,19 +7,15 @@ global skills: [SQLSKILL] {
 
 	int nb_client_init <- 16;
 	
-	//Fetch position data from local csv file and put that into a matrix 
-	//file my_csv_file <- csv_file("../includes/a.csv",",");
-	//matrix position_mx <- matrix(my_csv_file);
-	
 
 	//connect to server 
 	map<string, string> PARAMS <- [
-	'host'::'localhost',
+	'host'::'130.238.15.114',
 	'dbtype'::'MySQL',
 	'database'::'test', // it may be a null string
 	'port'::'3306',
-	'user'::'root',
-	'passwd'::'maryam'];	
+	'user'::'testy',
+	'passwd'::'testy'];	
 	
 	
 	init {
@@ -36,24 +32,27 @@ global skills: [SQLSKILL] {
 	}
 }
 
-species client skills: [SQLSKILL] {
+species client skills: [SQLSKILL,communicating] {
 	
-
 	int user_name <- rnd(500000) update: rnd(500000);
 	float current_time <- machine_time update: machine_time;
 	string cur_time_str <- (current_time/1000) as_date "%Y y %M m %D d %h h %m m %s seconds" update: (current_time/1000) as_date "%Y y %M m %D d %h h %m m %s seconds"; 
 	int cts_length <- length(cur_time_str) update: length(cur_time_str);
 	
 	float st_time;
-	string start_time_str; 
-
+	int st_end_rnd <- rnd(1) update: rnd(1);
+	string start_time_str;
+	int priority_rnd <- rnd(1) update: rnd(1);
+	string priority;
+	
 	/*
 	Define variables for caculating rush time.
 	Assume client alwasy send request for tomorrow's travel.
 	We follow UL's rush hour, it's 6-9 in morning(peak at 7:30) and 3-6 in afternoon(peak at 16:30)
 	Using Gauss distribution to simulate rush time.
 	We random pick one from morning and afternoon
-	*/	
+	*/
+	
 	float tom_start_time;
 	float today_cur_sec;
 	float rush_time;
@@ -61,7 +60,6 @@ species client skills: [SQLSKILL] {
 	float a_day_in_ms <- (24.0 * 60 * 60 * 1000);
 	float mor_rush <- (7.5 * 60 * 60 * 1000);
 	float aft_rush <- (16.5 * 60 * 60 * 1000);
-	
 	float hot_station;
 	int cen_plk_rnd <- rnd(1) update: rnd(1);
 		
@@ -78,7 +76,7 @@ species client skills: [SQLSKILL] {
 	string st_day;
 	string st_hour;
 	string st_minute;
-	string st_second;
+	
 
 	int ct_y_index;
 	int ct_mth_index;
@@ -92,10 +90,11 @@ species client skills: [SQLSKILL] {
 	int st_d_index;
 	int st_h_index;
 	int st_min_index;
-	int st_sec_index;
+	
 	
 	string request_time;
 	string start_time;
+	string end_time;
 	
 	
 	string start_position;
@@ -104,6 +103,12 @@ species client skills: [SQLSKILL] {
 	
 	/* Executed every cycle to update start_time and request_time */
 	reflex update_att { 
+		
+		if priority_rnd = 0 {
+			priority <- "distance";
+		} else {
+			priority <- "time";
+		}
 		
 		//Normal Distribution to define hot bus_stops for start position		 
 		float hot_stop_weight_st <- gauss(5,1);
@@ -212,19 +217,24 @@ species client skills: [SQLSKILL] {
 			} else if int(st_minute) < 10{
 				st_minute <- '0' + string(int(st_minute));
 			}				
-			st_sec_index <- start_time_str index_of "seconds";
-			st_second <- start_time_str at (st_sec_index - 3) + start_time_str at (st_sec_index - 2);
-			if int(st_second) = 0{
-				st_second <- "00";
-			} else if int(st_second) < 10{
-				st_second <- '0' + string(int(st_second));
-			}	
-
-			request_time <- string(1970 + int(year) - 1)  + "-" + month + "-" + day + "," + hour + ":" + minute + ":" + second;
-			start_time <- string(1970 + int(st_year) - 1)  + "-" + st_month + "-" + st_day + "," + st_hour + ":" + st_minute + ":" + st_second;
 	
-			save ["username = " + user_name + "; RequestTime = " + request_time + "; StartTime = " + start_time + "; StartPosition = " + start_position + "; EndPosition = " + end_position] 
-		    		to: "ClientRequest" type:text;
+
+			request_time <- string(1970 + int(year) - 1)  + "-" + month + "-" + day + " " + hour + ":" + minute;
+			if st_end_rnd = 0{
+				start_time <- string(1970 + int(st_year) - 1)  + "-" + st_month + "-" + st_day + " " + st_hour + ":" + st_minute ;	
+				end_time <- "null";
+			} else{
+				start_time <- "null";
+				end_time <- string(1970 + int(st_year) - 1)  + "-" + st_month + "-" + st_day + " " + st_hour + ":" + st_minute;
+			}
+			
+
+			save ["userId=" + user_name + "&" + start_time + "&" + end_time + "&" + request_time  + "&stPosition=" + start_position + "&edPosition=" + end_position + "&priority=" + priority] 
+		    		to: "ClientRequest" type:csv;
+
+		    		
+		   ///send to server
+		
 		
 		}}
 		
@@ -238,7 +248,7 @@ experiment ClientApp type: gui {
 	parameter "Initial number of clients: " var: nb_client_init min: 1 max: 300 category: "client" ;
 	output {
 		display main_display {
-			species client aspect: base ;
+			species client aspect: base;
 		}
 
 		//Or output file using following code

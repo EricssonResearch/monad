@@ -44,10 +44,11 @@ public class ForgotPasswordPopup extends AppCompatActivity {
                         && emailField.getText().toString().contains("@")) {
                     SendResetPasswordRequest sendResetPasswordRequest = new SendResetPasswordRequest();
                     try {
-                        String response = sendResetPasswordRequest.execute(emailField.getText().toString()).get();
+                        String email = emailField.getText().toString();
+                        String response = sendResetPasswordRequest.execute(email).get();
                         Toast.makeText(getApplicationContext(), "The code has been sent to the email you entered, please check your email and enter the code.", Toast.LENGTH_LONG).show();//response is only the code now, nothing else
                         Intent intent = new Intent(v.getContext(), ConfirmCodePopup.class);
-                        //Log.i("CODE PASSED", response.substring(1));
+                        intent.putExtra("EMAIL", email);
                         intent.putExtra("CODE", response.substring(1));
                         startActivity(intent);
                     } catch (InterruptedException e) {

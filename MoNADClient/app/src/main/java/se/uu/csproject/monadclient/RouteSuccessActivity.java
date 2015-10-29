@@ -1,17 +1,34 @@
 package se.uu.csproject.monadclient;
 
 import android.content.Intent;
+import android.os.CountDownTimer;
 import android.support.v4.app.NavUtils;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
+
+import org.w3c.dom.Text;
+
+import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+
+import se.uu.csproject.monadclient.recyclerviews.Trip;
+
+import static java.lang.Math.floor;
 
 public class RouteSuccessActivity extends AppCompatActivity {
 
     Toolbar toolbar;
+    Trip trip;
+    TextView countdownTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,7 +39,54 @@ public class RouteSuccessActivity extends AppCompatActivity {
 
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        //TODO: copy the countdown code from TripRecyclerView to make the countdown active
+
+        countdownTime = (TextView) findViewById(R.id.label_countdown);
+        //TODO: replace the Trip instance with the one passed from RouteConfirmPopup
+        Calendar calendar = new GregorianCalendar(2015, 9, 28, 11, 40, 0);
+        Date startdate1 = calendar.getTime();
+        calendar = new GregorianCalendar(2015, 9, 28, 12, 0, 0);
+        Date enddate1 = calendar.getTime();
+        trip = new Trip(1, "Polacksbacken",startdate1,"Flogsta", enddate1, 20, 0);
+        final long MILLISECONDS = 1000;
+        final long MILLISECONDS_TO_DEPARTURE = trip.getTimeToDeparture();
+        countdownTime.setText(formatCountdownText(MILLISECONDS_TO_DEPARTURE));
+
+        CountDownTimer timer = new CountDownTimer(MILLISECONDS_TO_DEPARTURE, MILLISECONDS) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                countdownTime.setText(formatCountdownText(millisUntilFinished));
+                //change value to 30min (30*60*1000 = 1 800 000ms)
+                if (millisUntilFinished < 1800000) {
+                    countdownTime.setTextColor(ContextCompat.getColor(countdownTime.getContext(), R.color.warnColor));
+                }
+            }
+
+            @Override
+            public void onFinish() {
+                countdownTime.setText("Trip in Progress");
+                countdownTime.setTextColor(ContextCompat.getColor(countdownTime.getContext(), R.color.green));
+            }
+        }.start();
+    }
+
+    private String formatCountdownText(long millisecondsTime){
+        DecimalFormat formatter = new DecimalFormat("00");
+        String days = formatter.format(floor(millisecondsTime / (1000 * 60 * 60 * 24)));
+        millisecondsTime %= (1000*60*60*24);
+        String hours = formatter.format( floor(millisecondsTime / (1000 * 60 * 60)) );
+        millisecondsTime %= (1000*60*60);
+        String minutes = formatter.format(floor(millisecondsTime / (1000 * 60)));
+        millisecondsTime %= (1000*60);
+        String seconds = formatter.format(floor(millisecondsTime / 1000));
+        if(days.equals("00")){
+            return hours + ":" + minutes + ":" + seconds;
+        }
+        else if(days.equals("01")){
+            return days + " day, " + hours + ":" + minutes + ":" + seconds;
+        }
+        else{
+            return days + " day(s), " + hours + ":" + minutes + ":" + seconds;
+        }
     }
 
     @Override

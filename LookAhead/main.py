@@ -12,6 +12,8 @@ under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
 CONDITIONS OF ANY KIND, either express or implied. See the License for the 
 specific language governing permissions and limitations under the License.
 """
+import itertools
+from operator import itemgetter
 from deap import tools, algorithms
 import numpy
 from dbConnection import DB
@@ -31,7 +33,6 @@ def main():
     # Generate the population
     pop = toolBox.toolbox.population(n=POPULATION_SIZE)
 
-    fitnessClass.evalIndividualCapacity(pop[0])
     hof = tools.HallOfFame(1)
 
     stats = tools.Statistics(lambda ind: ind.fitness.values)

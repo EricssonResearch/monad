@@ -16,6 +16,8 @@ import android.widget.Toast;
 
 import java.util.concurrent.ExecutionException;
 
+import org.apache.commons.validator.routines.EmailValidator;
+
 public class RegisterActivity extends AppCompatActivity {
 
     private Toolbar toolbar;
@@ -44,10 +46,38 @@ public class RegisterActivity extends AppCompatActivity {
         registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(!password.getText().toString().equals(passwordVerify.getText().toString())){
-                    Toast.makeText(getApplicationContext(), "Password does not match!",
+                String passwordEntered = password.getText().toString();
+                String passwordVerifyEntered = passwordVerify.getText().toString();
+                String emailEntered = email.getText().toString();
+                String phoneEntered = phone.getText().toString();
+
+                //check if the fields entered are valid or not
+                if(!passwordEntered.equals(passwordVerifyEntered)) {
+                    Toast.makeText(getApplicationContext(), "Passwords do not match!",
                             Toast.LENGTH_LONG).show();
+                    return;
                 }
+
+                if(passwordEntered.length() < 6) {
+                    Toast.makeText(getApplicationContext(), "Password must have at least 6 characters!",
+                            Toast.LENGTH_LONG).show();
+                    return;
+                }
+
+                EmailValidator validator = EmailValidator.getInstance();
+
+                if (!validator.isValid(emailEntered)) {
+                    Toast.makeText(getApplicationContext(), "Please enter a valid email address!",
+                            Toast.LENGTH_LONG).show();
+                    return;
+                }
+
+                if(!phoneEntered.matches("\\d+")) {
+                    Toast.makeText(getApplicationContext(), "Please enter a valid phone number!",
+                            Toast.LENGTH_LONG).show();
+                    return;
+                }
+
                 // initialize a new AsyncTask
                 SignUpTask task = new SignUpTask();
                 try {

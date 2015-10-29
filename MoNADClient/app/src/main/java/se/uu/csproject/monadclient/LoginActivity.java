@@ -58,7 +58,7 @@ public class LoginActivity extends AppCompatActivity {
                     String response = task.execute(usernameField.getText().toString(), passwordField.getText().toString()).get();
                     Toast.makeText(getApplicationContext(), response,
                             Toast.LENGTH_LONG).show();
-                    // If the reponse starts with the specific word, it means the users loged in successfully
+                    // If the sreponse starts with the specific word, it means the users loged in successfully
                     if (response.startsWith("Success (1)")) {
                         LoginActivity.this.startActivity(new Intent(LoginActivity.this, MainActivity.class));
                     }

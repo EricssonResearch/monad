@@ -49,7 +49,7 @@ def insert_one_document(collection, document):
   			
 
 def application(env, start_response):
-	"""Get data from the client and insert them into the database"""
+	"""Get data from the client and handle them according to the type of the request"""
 	data_env = env.copy()
 	# Remove the query string from the request, we only accept data through POST
 	data_env["QUERY_STRING"] = ""	
@@ -101,7 +101,7 @@ def application(env, start_response):
 			
 	elif data_env["PATH_INFO"] == "/resetPassword":
 		if "email" in data:
-			email = escape(data.getvalue("email"))			
+			email = data.getvalue("email")			
 			email_list = [email]			
 			code = randint(1000, 9999)
 			message = "This is your confirmation code: {0}. Please type it into the appropriate field.".format(code)
@@ -158,6 +158,60 @@ def application(env, start_response):
 		else:
 			start_response("500 INTERNAL ERROR", [("Content-Type", "text/plain")])	
 			logging.error("Quick request: Something went wrong with the data sent by the user's request.")
+			return ["Something went wrong, please try again. We are sorry for the inconvenience."]
+			
+	elif data_env["PATH_INFO"] == "/bookingRequest":
+		if ("busId" and "userId" and "startTime" and "endTime" and "stPosition" and "edPosition" in data):
+			userId = int(escape(data.getvalue("userId")))
+			busId = int(escape(data.getvalue("busId")))
+			startTime = escape(data.getvalue("startTime"))
+			endTime = escape(data.getvalue("endTime"))
+			stPosition = escape(data.getvalue("stPosition"))
+			edPosition = escape(data.getvalue("edPosition"))
+			
+			try:
+				endTime = datetime.strptime(endTime, "%Y %m %d %H:%M")				
+				startTime = datetime.strptime(startTime, "%Y %m %d %H:%M")
+			except ValueError as e:
+				start_response("500 INTERNAL ERROR", [("Content-Type", "text/plain")])
+				logging.error("Something went wrong with the date format: {0}".format(e))
+				return ["Something went wrong, please try again. We are sorry for the inconvenience."]
+				
+			try:
+				connection = MongoClient(IP_ADDRESS_OF_MONGODB, PORT_OF_MONGODB, connectTimeoutMS = 5000, 
+										serverSelectionTimeoutMS = 5000)		
+				database = connection.monad
+				
+				collection = database.TravelRequest
+				cursor = collection.find({"userId": userId}).sort('requestTime', pymongo.DESCENDING).limit(1)
+				first_document = cursor[0]
+				logging.info("First document: {0}".format(first_document))
+				travelRequest = first_document["_id"]
+				logging.info("travelRequest: {0}".format(travelRequest))
+				
+				collection = database.UserTrip		
+				document = {"busId": busId, "travelRequest": travelRequest, "startTime": startTime, "endTime": endTime,
+							"stPosition": stPosition, "edPosition": edPosition}			
+				insert_one_document(collection, document)
+				cursor = collection.find({"travelRequest": travelRequest})
+				first_document = cursor[0]
+				userTrip = first_document["_id"]
+				
+				collection = database.TravelRequest
+				collection.update({"_id": userTrip}, {"$set": {"userTrip": userTrip}}, upsert = False)
+				
+			except pymongo.errors.PyMongoError as e:
+				start_response("500 INTERNAL ERROR", [("Content-Type", "text/plain")])	
+				logging.error("Something went wrong: {0}".format(e))
+				return ["Something went wrong, please try again. We are sorry for the inconvenience."]		
+			else:
+				start_response("200 OK", [("Content-Type", "text/plain")])				
+				return ["Data successfully written in the database! Go Mo.N.A.D team!"]
+			finally:					
+				connection.close()
+		else:
+			start_response("500 INTERNAL ERROR", [("Content-Type", "text/plain")])	
+			logging.error("Booking request: Something went wrong with the data sent by the user's request.")
 			return ["Something went wrong, please try again. We are sorry for the inconvenience."]
 			
 	else:
