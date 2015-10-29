@@ -236,17 +236,15 @@ class DB():
     def generateTripTimeTable(self, timetable):
         timeTable = []
         for i in range(len(timetable)):
-            busStop = self.getRouteStop(timetable[i][0])
-            numberStop = len(busStop)-1
-            # print numberStop
-            minuteSeed = self.generateMinute(timetable[i][2])
             tripTimeTable = []
-            tripTimeTable.append([busStop[0]["name"],self.generateTime(minuteSeed)])
-            for j in range(numberStop):
+            busStop = self.getRouteStop(timetable[i][0])
+            minuteSeed = self.generateMinute(timetable[i][2])
+            tripTimeTable.append([self.getBusStopName(busStop[0]["busStop"]),self.generateTime(minuteSeed)])
+            for j in range(len(busStop)-1):
                 minuteSeed = minuteSeed + busStop[j]["interval"]
                 if minuteSeed > DB.minutesDay:
                     minuteSeed = minuteSeed - DB.minutesDay
-                tripTimeTable.append([busStop[j+1]["name"],self.generateTime(minuteSeed)])
+                tripTimeTable.append([self.getBusStopName(busStop[j+1]["busStop"]),self.generateTime(minuteSeed)])
             timeTable.append([timetable[i][0], timetable[i][1], list(self.flatten(tripTimeTable))])
         return sorted(timeTable, key = itemgetter(2))
 

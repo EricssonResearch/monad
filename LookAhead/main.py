@@ -24,8 +24,8 @@ from fitness import Fitness
 # Variables
 MUTATION_PROB = 0.5
 CROSS_OVER_PROB = 0.5
-NO_OF_GENERATION = 0
-POPULATION_SIZE = 1
+NO_OF_GENERATION = 5
+POPULATION_SIZE = 10
 
 
 def main():
@@ -70,7 +70,7 @@ def main():
     # The Best Individual found
     best_ind = tools.selBest(pop, 1)[0]
     print("Best individual is %s, %s" % (best_ind, best_ind.fitness.values))
-    #generateTimeTable(best_ind)
+    generateTimeTable(best_ind)
 
 
 # def crossover(offspring):
