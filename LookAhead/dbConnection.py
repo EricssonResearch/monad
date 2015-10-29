@@ -162,7 +162,7 @@ class DB():
         print type(t)
         print t
         Requests = self.getTravelRequestBetween(t,e)
-        print "rrrrrrrrrrrrrrr"
+       
         print Requests
 
         #get only the requests with start location in bus stops and end location in bus stps
@@ -185,9 +185,9 @@ class DB():
             i[1] = sum
         print "after aggregation "
         return BusStplist
-        
 
-      
+
+
 
         # These function will be called for every gene in order to get the difference
         # def getTravelRequestBetween(self, start, end):
@@ -321,15 +321,17 @@ class DB():
     def generateTripTimeTable(self, timetable):
         timeTable = []
         for i in range(len(timetable)):
-            tripTimeTable = []
             busStop = self.getRouteStop(timetable[i][0])
+            numberStop = len(busStop)-1
+            # print numberStop
             minuteSeed = self.generateMinute(timetable[i][2])
-            tripTimeTable.append([self.getBusStopName(busStop[0]["busStop"]),self.generateTime(minuteSeed)])
-            for j in range(len(busStop)-1):
+            tripTimeTable = []
+            tripTimeTable.append([busStop[0]["name"],self.generateTime(minuteSeed)])
+            for j in range(numberStop):
                 minuteSeed = minuteSeed + busStop[j]["interval"]
                 if minuteSeed > DB.minutesDay:
                     minuteSeed = minuteSeed - DB.minutesDay
-                tripTimeTable.append([self.getBusStopName(busStop[j+1]["busStop"]),self.generateTime(minuteSeed)])
+                tripTimeTable.append([busStop[j+1]["name"],self.generateTime(minuteSeed)])
             timeTable.append([timetable[i][0], timetable[i][1], list(self.flatten(tripTimeTable))])
         return sorted(timeTable, key = itemgetter(2))
 
