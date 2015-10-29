@@ -73,7 +73,8 @@ class DB():
         return req
 
     def getTravelRequestSummary(self, start, end):
-        keyf = "function(doc) { return { startBusStop: doc.startBusStop, hour: doc.startTime.getHours()-2, minute: doc.startTime.getMinutes()};}"
+        # keyf = "function(doc) { return { startBusStop: doc.startBusStop, hour: doc.startTime.getHours()-2, minute: doc.startTime.getMinutes()};}"
+        keyf = "function(doc) { return { startBusStop: doc.startBusStop, hour: doc.startTime.getHours(), minute: doc.startTime.getMinutes()};}"
         condition = {"startTime": {"$gte": start, "$lt": end}}
         initial = {"count": 0}
         reduce = "function(curr, result) { result.count++; }"
@@ -98,13 +99,11 @@ class DB():
         queryResults = []
         # A query is made to group request made to a busstop and counting the number of similar requests made
         pipline = [{"$match": {"startTime": {"$gte": start, "$lt": end}}},
+            {"$sort": {"startTime": 1}},
             {"$group": {"_id": {"RequestTime": "$startTime", "BusStop": "$startBusStop"},"total": {"$sum": 1}}}]
-
         groupQuery = self.db.TravelRequestLookAhead.aggregate(pipline)
-
         for x in groupQuery:
             queryResults.append(x)
-
         return queryResults
 
     # These function will be called for every gene in order to get the difference
@@ -136,13 +135,15 @@ class DB():
         self.db.Route.drop()
 
     def getTripDay(self, line):
-        frequency = self.db.Route.find({"line": line}, {"frequency": 1})
-        frequency = self.retrieveData(frequency, "frequency")
-        return DB.minutesDay / frequency
+        return DB.minutesDay / self.getFrequency(line)
 
     def getRouteStop(self, line):
         routeStop = self.db.Route.find({"line": line}, {"trajectory": 1})
         return self.retrieveData(routeStop, "trajectory")
+
+    def getFrequency(self, line):
+        return self.retrieveData(self.db.Route.find({"line": line}, {"frequency": 1}), "frequency")
+
 
     # Bus
     # https://www.ul.se/en/About-UL/About-our-public-function/
