@@ -51,32 +51,18 @@ class Fitness():
                 return afunction(*args)
             else:
                 pass
-
         wrapper.has_run = False
         return wrapper
 
     @decorator
     def runOnce(self):
         db = DB()
-        #request = []
-        #Fitness.requests, Fitness.routes = db.getRequestsFromDB()
-        #self.routes[:] = self.routes[0][1]
-        #print self.routes
-        #print Fitness.routes[0][1]
-        # DB calls can ve avoided by querying the whole Request Collection for a particular day
-
-        # Replace the dates here from yesterday's date
-        #yesterday = date.today() - timedelta(3)
-
-
-
-
         # Setting the start time boundary of request that we want
         startTime = datetime.combine(Fitness.yesterday, datetime.strptime(Fitness.firstMinute, Fitness.formatTime).time())
         # Setting the end time boundary of request that we want
         endTime = datetime.combine(Fitness.yesterday, datetime.strptime(Fitness.lastMinute, Fitness.formatTime).time())
-        Fitness.request = db.grpReqByBusstopAndTime(startTime, endTime)
-
+        # Fitness.request = db.grpReqByBusstopAndTime(startTime, endTime)
+        Fitness.request = db.getTravelRequestSummary(startTime, endTime)
         self.createRequestIndex(Fitness.request)
 
     def timeDiff(self, time1, time2):
@@ -150,12 +136,13 @@ class Fitness():
         @param: request (array): Structure that stores the requests grouped by bus stop, hour and minute. It also includes a COUNT column
         '''
         minute = 0
-
         for i in range(len(request)):
-            #print(request[1]["_id"]["RequestTime"].hour)
-            if request[i]["_id"]["RequestTime"].minute != minute or i == 0:
-                Fitness.requestIndex.append([request[i]["_id"]["RequestTime"].hour, request[i]["_id"]["RequestTime"].minute, i])
-                minute = request[i]["_id"]["RequestTime"].minute
+            #if request[i]["_id"]["RequestTime"].minute != minute or i == 0:
+            if request[i]["minute"] != minute or i == 0:
+                # Fitness.requestIndex.append([request[i]["_id"]["RequestTime"].hour, request[i]["_id"]["RequestTime"].minute, i])
+                Fitness.requestIndex.append([request[i]["hour"], request[i]["minute"], i])
+                # minute = request[i]["_id"]["RequestTime"].minute
+                minute = request[i]["minute"]
 
     def searchRequestIndex(self, index, initialHour, initialMinute, finalHour, finalMinute):
         ''' Search the index to get the position on the request array for a specific time frame
@@ -168,7 +155,8 @@ class Fitness():
         '''
         result = []
         for i in range(len(index)):
-            if index[i][0] == initialHour and index[i][1] == initialMinute:
+            # if index[i][0] == initialHour and index[i][1] == initialMinute:
+            if index[i][0] >= initialHour and index[i][1] >= initialMinute:
                 result.append(index[i][2])
                 break
         # TODO: Watch out with MIDNIGHT trips !!!!
@@ -177,7 +165,8 @@ class Fitness():
         # if result[0] > len(Fitness.request):
         #    result[0] = len(Fitness.request)
         for i in range(i, len(index)):
-            if index[i][0] == finalHour and index[i][1] == finalMinute:
+            # if index[i][0] == finalHour and index[i][1] == finalMinute:
+            if index[i][0] >= finalHour and index[i][1] >= finalMinute:
                 result.append(index[i][2])
                 break
         # TODO: Watch out with MIDNIGHT trips !!!!
@@ -196,69 +185,17 @@ class Fitness():
         index = self.searchRequestIndex(Fitness.requestIndex, initialTime.hour, initialTime.minute, finalTime.hour, finalTime.minute)
         request = Fitness.request[index[0]:index[1]]
         for i in range(len(request)):
-            if request[i]["_id"]["BusStop"] == busStop:
+            # if request[i]["_id"]["BusStop"] == busStop:
+            if request[i]["startBusStop"] == busStop:
                 result.append(request[i])
-        return result
-
-
-    def evalIndividual(self, individual):
-        ''' Evaluate an individual in the population. Based on how close the
-        average bus request time is to the actual bus trip time.
-
-        @param an individual in the population
-        @return a summation of the difference between past past requests'
-        average trip starting time and actual start time
-        according to the evolving timetable.
-        Lower values are better.
         '''
-        # DONE Store the date on mongo as datetime 
-        # Store the requests of the previous day into a JSON file order them by date and KEEP IT during the whole iteration on memory
-        # DONE Group by request query from the file to reduce the number of elements being processed
-
-        # Use map function instead of LOOP
-        # Query the DB only once to retrieve all the data needed
-
-        # Multi thread the MAP functions
-        # First, the randomly-generated starting times are sorted in order to check sequentially the number of requests for that particular trip
-        individual = sorted(individual, key=itemgetter(2))
-
-        # Second, we loop trough the number of genes in order to retrieve the number of requests for that particular trip
-        # For the 1st trip, the starting time has to be selected
-        # Replace the dates here from yesterday's date
-        request = Fitness.requests
-        dif = []
-        cnt = []
-        intialTripTime = "00:00"
-        # TODO: Change to timedelta(1)
-        yesterday = date.today() - timedelta(6)
-
-        # The result here should be added into a file: the order is by hour, minute and initialBusStop
-        request = []
-        dif = []
-        cnt = []
-        intialTripTime = "00:00"
-        db = DB()
-        for i in range(len(individual)):
-            tripTimeTable = db.generateFitnessTripTimeTable(individual[i][0], individual[i][2])
-
-
-            for j in range(len(tripTimeTable)):
-
-                # Search on Fitness.request array for the particular requests
-                request = self.searchRequest(datetime.combine(Fitness.yesterday, datetime.strptime(intialTripTime, Fitness.formatTime).time()),
-                                             datetime.combine(Fitness.yesterday, datetime.strptime(tripTimeTable[j][1], Fitness.formatTime).time()),
-                                             tripTimeTable[j][0])
-
-                intialTripTime = tripTimeTable[j][1]
-                if len(request) > 0:
-                    diff = 0
-                    count = 0
-                    for k in range(len(request)):
-                        diff = diff + self.getMinutes(self.timeDiff(tripTimeTable[j][1], str(int(request[k]["_id"]["RequestTime"].hour)) + ":" + str(int(request[k]["_id"]["RequestTime"].minute))))*int(request[k]["total"])
-                        count = count + int(request[k]["total"])
-                    dif.append(diff)
-                    cnt.append(count)
-        return sum(dif)/sum(cnt),
+        if len(result) > 100:
+            print str(initialTime.hour)+":"+str(initialTime.minute)
+            print index[0]
+            print str(finalTime.hour)+":"+str(finalTime.minute)
+            print index[1]
+        '''
+        return result
 
     def calculateCost(self, individual, totalWaitingTime, penaltyOverCapacity):
         ''' Calculate cost for an individual in the population. 
