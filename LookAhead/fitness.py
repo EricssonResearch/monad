@@ -260,3 +260,32 @@ class Fitness():
                     cnt.append(count)
         return sum(dif)/sum(cnt),
 
+    def calculateCost(self, individual, totalWaitingTime, penaltyOverCapacity):
+        ''' Calculate cost for an individual in the population. 
+
+        @param  individual: individual in the population; 
+                averageWaitingTime: average waiting time for that individual
+                penaltyOverCapacity: a positive integer to represent a large cost to individual if capacity cannot handle all request of that trip
+        @return cost: positive integer for this individual, if input param is out of range, cost will be -1
+
+        Less cost, better individual
+        Assume one minute's waiting per person equals to 1kr
+        '''
+        cost = 0
+        costOfBus = [[20, 1000], [60, 1200], [120, 1400]]
+        waitingCostPerMin = 1
+        busCost = 0
+
+        if penaltyOverCapacity < 0 or individual is None or totalWaitingTime < 0:
+            cost = -1
+        else:
+            for i in range(len(individual)):
+                busCapacity = individual[i][1]
+                for j in range(len(costOfBus)):
+                    if busCapacity == costOfBus[j][0]:
+                        busCost = busCost + costOfBus[j][1]
+                        break
+            waitingCost = totalWaitingTime * waitingCostPerMin
+
+            cost = busCost + waitingCost + penaltyOverCapacity
+        return cost
