@@ -57,7 +57,7 @@ class Fitness():
         startTime = datetime.combine(Fitness.yesterday, datetime.strptime(Fitness.firstMinute, Fitness.formatTime).time())
         # Setting the end time boundary of request that we want
         endTime = datetime.combine(Fitness.yesterday, datetime.strptime(Fitness.lastMinute, Fitness.formatTime).time())
-        Fitness.request = db.getTravelRequestSummary2(startTime, endTime)
+        Fitness.request = db.grpReqByBusstopAndTime(startTime, endTime)
 
         self.createRequestIndex(Fitness.request)
 
