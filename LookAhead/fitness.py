@@ -216,6 +216,26 @@ class Fitness():
         cnt = []
         initialTripTime = "00:00"
         db = DB()
+        tripWaitingTime = timedelta(minutes=0) # waiting time due to insufficient capacity
+        for i, trip in enumerate(individual):
+            tripTimeTable = db.generateFitnessTripTimeTable(individual[i][0], individual[i][2])
+            tripStartTime = trip[2]
+            self.start = '00:00' if i == 0 else individual[i-1][2]
+            self.end = individual[i][2]
+            stopsAndRequests = db.MaxReqNumTrip(self.start, self.end)
+            count = 0
+            for i, stop in enumerate(stopsAndRequests):
+                if stop[1] > trip[1] and i < len(individual)-1:
+                    nextTripTime = individual[i+1][2]
+                    nextTripWait = self.timeDiff(nextTripTime, individual[i][2])
+                    tripWaitingTime += nextTripWait
+                    count += (stop[1] - trip[1])   # must wait for the next bus trip
+                    #print "Next trip is in..." + str(nextTripWait) + " minutes"
+                    #print nextTripTime
+                else:
+                    pass
+                    #print "Requested capacity " + str(stopsAndRequests[i][1])
+                    #print "Bus capacity " + str(trip[1])
         for i in range(len(individual)):
             tripTimeTable = db.generateFitnessTripTimeTable(individual[i][0], individual[i][2])
             for j in range(len(tripTimeTable)):
@@ -238,7 +258,7 @@ class Fitness():
                         count = count + int(request[k]["count"])
                     dif.append(diff)
                     cnt.append(count)
-        return sum(dif)/sum(cnt),
+        return (sum(dif) + tripWaitingTime.total_seconds()/60.0)/(sum(cnt) + count),
 
     def calculateCost(self, individual, totalWaitingTime, penaltyOverCapacity):
         ''' Calculate cost for an individual in the population. 
