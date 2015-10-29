@@ -197,69 +197,6 @@ class Fitness():
         '''
         return result
 
-    def evalIndividual(self, individual):
-        ''' Evaluate an individual in the population. Based on how close the
-        average bus request time is to the actual bus trip time.
-
-        @param an individual in the population
-        @return a summation of the difference between past past requests'
-        average trip starting time and actual start time
-        according to the evolving timetable.
-        Lower values are better.
-        '''
-        # First, the randomly-generated starting times are sorted in order to check sequentially the number of requests for that particular trip
-        individual = sorted(individual, key=itemgetter(2))
-        # Second, we loop trough the number of genes in order to retrieve the number of requests for that particular trip
-        # For the 1st trip, the starting time has to be selected
-        request = []
-        dif = []
-        cnt = []
-        initialTripTime = "00:00"
-        db = DB()
-        tripWaitingTime = timedelta(minutes=0) # waiting time due to insufficient capacity
-        for i, trip in enumerate(individual):
-            tripTimeTable = db.generateFitnessTripTimeTable(individual[i][0], individual[i][2])
-            tripStartTime = trip[2]
-            self.start = '00:00' if i == 0 else individual[i-1][2]
-            self.end = individual[i][2]
-            stopsAndRequests = db.MaxReqNumTrip(self.start, self.end)
-            count = 0
-            for i, stop in enumerate(stopsAndRequests):
-                if stop[1] > trip[1] and i < len(individual)-1:
-                    nextTripTime = individual[i+1][2]
-                    nextTripWait = self.timeDiff(nextTripTime, individual[i][2])
-                    tripWaitingTime += nextTripWait
-                    count += (stop[1] - trip[1])   # must wait for the next bus trip
-                    #print "Next trip is in..." + str(nextTripWait) + " minutes"
-                    #print nextTripTime
-                else:
-                    pass
-                    #print "Requested capacity " + str(stopsAndRequests[i][1])
-                    #print "Bus capacity " + str(trip[1])
-        for i in range(len(individual)):
-            tripTimeTable = db.generateFitnessTripTimeTable(individual[i][0], individual[i][2])
-            for j in range(len(tripTimeTable)):
-                # TODO: Fix trips that finish at the next day
-                # TODO: it might be that some dates have no INDEX since there are no requests. A function has to be added to prevent them to get the LAST POSITION
-                initialTrip = datetime.combine(Fitness.yesterday, datetime.strptime(initialTripTime, Fitness.formatTime).time())
-                lastTrip = datetime.combine(Fitness.yesterday, datetime.strptime(tripTimeTable[j][1], Fitness.formatTime).time())
-                if initialTrip > lastTrip:
-                    initialTrip = lastTrip - timedelta(minutes=db.getFrequency(individual[i][0]))
-                # Search on Fitness.request array for the particular requests
-                request = self.searchRequest(initialTrip, lastTrip, tripTimeTable[j][0])
-                initialTripTime = tripTimeTable[j][1]
-                if len(request) > 0:
-                    diff = 0
-                    count = 0
-                    for k in range(len(request)):
-                        # diff = diff + self.getMinutes(self.timeDiff(tripTimeTable[j][1], str(int(request[k]["_id"]["RequestTime"].hour)) + ":" + str(int(request[k]["_id"]["RequestTime"].minute))))*int(request[k]["total"])
-                        diff = diff + self.getMinutes(self.timeDiff(tripTimeTable[j][1], str(int(request[k]["hour"])) + ":" + str(int(request[k]["minute"]))))*int(request[k]["count"])
-                        # count = count + int(request[k]["total"])
-                        count = count + int(request[k]["count"])
-                    dif.append(diff)
-                    cnt.append(count)
-        return (sum(dif) + tripWaitingTime.total_seconds()/60.0)/(sum(cnt) + count),
-
     def calculateCost(self, individual, totalWaitingTime, penaltyOverCapacity):
         ''' Calculate cost for an individual in the population. 
 
