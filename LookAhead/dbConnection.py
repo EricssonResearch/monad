@@ -119,33 +119,33 @@ class DB():
     def populateRoute(self, route):
         # route5 = {"line": 5, "durationTime":39, routeStop2}
         # routeStop5 = ["Stenhagenskolan","Herrhagens Byväg","Kiselvägen","Stenhagens Centrum","Stenröset","Stenhällen","Gatstenen","Hedensbergsvägen","Flogsta centrum","Rickomberga","Studentstaden","Ekonomikum","Götgatan","Skolgatan","Stadshuset","Centralstationen","Samariterhemmet","Strandbodgatan","Kungsängsesplanaden","Vimpelgatan","Lilla Ultuna","Kuggebro","Vilan","Nämndemansvägen","Lapplandsresan","Ölandsresan","Daneport","Västgötaresan","Gotlandsresan","Smålandsvägen"]
-        self.db.route.insert_one(route)
+        self.db.Route.insert_one(route)
 
     def getRouteId(self):
-        route = self.db.route.find().distinct("line")
+        route = self.db.Route.find().distinct("line")
         return route
 
     def getRoute(self, column):
         routeId = self.getRouteId()
         for r in routeId:
-            route = self.db.route.find({"line": r})
+            route = self.db.Route.find({"line": r})
             return self.retrieveData(route, column)
 
     def getLine(self, line):
-        line = self.db.route.find({"line": line})
+        line = self.db.Route.find({"line": line})
         return self.retrieveData(line, None)
 
     def dropRoute(self):
-        self.db.route.drop()
+        self.db.Route.drop()
 
     def getTripDay(self, line):
-        frequency = self.db.route.find({"line": line}, {"frequency": 1})
+        frequency = self.db.Route.find({"line": line}, {"frequency": 1})
         frequency = self.retrieveData(frequency, "frequency")
         return DB.minutesDay / frequency
 
     def getRouteStop(self, line):
-        routeStop = self.db.route.find({"line": line}, {"stop": 1})
-        return self.retrieveData(routeStop, "stop")
+        routeStop = self.db.Route.find({"line": line}, {"trajectory": 1})
+        return self.retrieveData(routeStop, "trajectory")
 
     # Bus
     # https://www.ul.se/en/About-UL/About-our-public-function/
@@ -226,12 +226,12 @@ class DB():
         tripTimeTable = []
         busStop = self.getRouteStop(line)
         minuteSeed = self.generateMinute(startingTime)
-        tripTimeTable.append([busStop[0]["name"],self.generateTime(minuteSeed)])
+        tripTimeTable.append([self.getBusStopName(busStop[0]["busStop"]),self.generateTime(minuteSeed)])
         for j in range(len(busStop)-1):
             minuteSeed = minuteSeed + busStop[j]["interval"]
             if minuteSeed > DB.minutesDay:
                 minuteSeed = minuteSeed - DB.minutesDay
-            tripTimeTable.append([busStop[j+1]["name"],self.generateTime(minuteSeed)])
+            tripTimeTable.append([self.getBusStopName(busStop[j+1]["busStop"]),self.generateTime(minuteSeed)])
         return tripTimeTable
 
     # After GA, this function is called to generate all the bus stops given the initial starting times based on the best individual
@@ -301,9 +301,15 @@ class DB():
             reqs.append(req.get('startTime', None))
         return reqs   
 
+    # Bus Stop Location
     def getBusStopLatitude(self, busStop):
-        return self.retrieveData(self.db.busStopLocation.find({"name": busStop}, {"latitude": 1}), "latitude")
-
+        return self.retrieveData(self.db.BusStop.find({"name": busStop}, {"latitude": 1}), "latitude")
 
     def getBusStopLongitude(self, busStop):
-        return self.retrieveData(self.db.busStopLocation.find({"name": busStop}, {"longitude": 1}), "longitude")
+        return self.retrieveData(self.db.BusStop.find({"name": busStop}, {"longitude": 1}), "longitude")
+
+    def getBusStopId(self, busStop):
+        return self.retrieveData(self.db.BusStop.find({"name": busStop}), "_id")
+
+    def getBusStopName(self, id):
+        return self.retrieveData(self.db.BusStop.find({"_id": id}), "name")
