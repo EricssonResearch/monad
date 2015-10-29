@@ -79,29 +79,6 @@ class DB():
         req = sorted(req, key=itemgetter("hour", "minute"))
         return req
 
-    def grpReqByBusstopAndTime(self, start, end):
-        """
-        def getTravelRequestSummary2(self, start, end, busStop):
-        keyf = "function(doc) { return { startBusStop: doc.startBusStop, hour: doc.startTime.getHours(), minute: doc.startTime.getMinutes()};}"
-        condition = {"startTime": {"$gte": start, "$lt": end}, "startBusStop": {"$eq": busStop}}
-        initial = {"count": 0}
-        reduce = "function(curr, result) { result.count++; }"
-        # req = self.db.TravelRequest.group(keyf, condition, initial, reduce)
-        req = self.db.TravelRequestLookAhead.group(keyf, condition, initial, reduce)
-        req = sorted(req, key=itemgetter("hour","minute"))
-        return req        
-        """
-        queryResults = []
-        # A query is made to group request made to a busstop and counting the number of similar requests made
-        pipline = [{"$match": {"startTime": {"$gte": start, "$lt": end}}},
-            {"$group": {"_id": {"RequestTime": "$startTime", "BusStop": "$startBusStop"},"total": {"$sum": 1}}}]
-
-        groupQuery = self.db.TravelRequestLookAhead.aggregate(pipline)
-
-        for x in groupQuery:
-            queryResults.append(x)
-
-        return queryResults
     def getReqStartEndTime(self, start, end):
 
 
@@ -115,15 +92,11 @@ class DB():
         for req in requests:
             reqs.append([req.get('startTime', None), req.get('startBusStop', None), req.get('endBusStop', None)])
 
-        print reqs
         return reqs
 
 
     def getTravelRequestBetween(self, start, end):
-        print start
-        print end
         requests = self.db.TravelRequestLookAhead.find({"startTime": {"$gte": start, "$lt": end}})
-        print requests
         reqs =[]
         for req in requests:
             reqs.append([req.get('startTime', None), req.get('startBusStop', None), req.get('endBusStop', None)])
@@ -140,7 +113,7 @@ class DB():
         requestSum = self.db.TravelRequestLookAhead.aggregate(pipline)
 
         return self.retrieveData(requestSum, 'count')
-    def MaxReqNumTrip(self,trip_sTime,end,lineNum):
+    def MaxReqNumTrip(self,trip_sTime,end,lineNum = 2):
 
         #create dic
         BusStplist = []
@@ -150,20 +123,15 @@ class DB():
         e =datetime.datetime.strptime(end,'%Y-%m-%d %H:%M:%S').time()
 
 
-        trip_time_table = self.generateFitnessTripTimeTable(lineNum,t)
+        trip_time_table = self.generateFitnessTripTimeTable(lineNum,trip_sTime[11:16])
         for i in trip_time_table:
             BusStplist.append([i[0],0])
             dirlist.append(i[0])
         t =datetime.datetime.strptime(trip_sTime,'%Y-%m-%d %H:%M:%S')
         e =datetime.datetime.strptime(end,'%Y-%m-%d %H:%M:%S')
-        print t
-        print e
         #get all requests where starting t is more than trip starting time
-        print type(t)
-        print t
         Requests = self.getTravelRequestBetween(t,e)
        
-        print Requests
 
         #get only the requests with start location in bus stops and end location in bus stps
         counter = 0
@@ -178,12 +146,10 @@ class DB():
                         i[1] += -1
                         counter2 +=1
 
-        print BusStplist
         sum = 0;
         for i in BusStplist:
             sum += i[1]
             i[1] = sum
-        print "after aggregation "
         return BusStplist
 
 
@@ -304,17 +270,14 @@ class DB():
     def generateFitnessTripTimeTable(self, line, startingTime):
         tripTimeTable = []
         busStop = self.getRouteStop(line)
-        print type (startingTime)
-        print startingTime.minute
-        #minuteSeed = self.generateMinute(startingTime)
-        minuteSeed =startingTime.minute
+        minuteSeed = self.generateMinute(startingTime)
+        #minuteSeed =startingTime.minute
         tripTimeTable.append([self.getBusStopName(busStop[0]["busStop"]),self.generateTime(minuteSeed)])
         for j in range(len(busStop)-1):
             minuteSeed = minuteSeed + busStop[j]["interval"]
             if minuteSeed > DB.minutesDay:
                 minuteSeed = minuteSeed - DB.minutesDay
             tripTimeTable.append([self.getBusStopName(busStop[j+1]["busStop"]),self.generateTime(minuteSeed)])
-        print tripTimeTable
         return tripTimeTable
 
     # After GA, this function is called to generate all the bus stops given the initial starting times based on the best individual
