@@ -120,15 +120,12 @@ class Fitness():
             if trip == 0:
                 self.start = datetime.strptime('00:00', '%H:%M')
                 self.end   = datetime.strptime(individual[0][2], '%H:%M')
-                self.nrReqs = self.getNumberOfRequests(self.start) 
-                print ("max number of requests for trip " + str(trip) + " is " + str(self.nrReqs))
 
             else:
                 self.start = datetime.strptime(individual[trip-1][2], '%H:%M')
                 self.end   = datetime.strptime(individual[trip][2], '%H:%M')
-                self.nrReqs = self.getNumberOfRequests(self.start)
 
-        return self.nrReqs
+        return 1 
 
     def createRequestIndex(self, request):
         ''' Creates a structure that stores the hour, the minute and the position on the request array for this particular time
