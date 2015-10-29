@@ -37,5 +37,6 @@ dependencies {
     testCompile 'org.assertj:assertj-core:1.7.0'
     testCompile 'org.robolectric:robolectric:3.0'
     compile files('libs/guava-18.0.jar')
+    compile files('libs/commons-validator-1.4.1.jar')
 }
 
