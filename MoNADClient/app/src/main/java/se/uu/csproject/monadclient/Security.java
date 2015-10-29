@@ -13,16 +13,42 @@ public class Security {
 
         for (int i = 0; i < username.length(); i++) {
             Character c = username.charAt(i);
-            int ascii = (int) c;
 
-//            if (ascii < 33 || ascii > 133)
+            if (!validateUsernameCharacter(c)) {
+                return false;
+            }
 
+        }
+        return true;
+    }
+
+    public static boolean isNumber(int ascii) {
+        if (ascii > 47 && ascii < 58) {
+            return true;
+        }
+        return false;
+    }
+
+    public static boolean isCapital(int ascii) {
+        if (ascii > 64 && ascii < 91) {
+            return true;
+        }
+        return false;
+    }
+
+    public static boolean isSmallCase(int ascii) {
+        if (ascii > 96 && ascii < 121) {
+            return true;
         }
         return false;
     }
 
     public static boolean validateUsernameCharacter(Character c) {
-//        Character[] invalid = {':', ',', '<', '>', '&', '', '', '', '', '', '', '', '', '', '', '', '', };
+        int ascii = (int) c;
+
+        if (isNumber(ascii) || isCapital(ascii) || isSmallCase(ascii)) {
+            return true;
+        }
         return false;
     }
 
@@ -36,6 +62,19 @@ public class Security {
         catch (AddressException e) {
             return false;
         }
+    }
+
+    public static boolean validatePhone(String phone) {
+
+        for (int i = 0; i < phone.length(); i++) {
+            Character c = phone.charAt(i);
+            int ascii = (int) c;
+
+            if (!isNumber(ascii) && (i > 0 || c != '+')) {
+                return false;
+            }
+        }
+        return true;
     }
 
     public static String encryptPassword(String password) {
@@ -53,5 +92,17 @@ public class Security {
             e.printStackTrace();
         }
         return encryptedPassword;
+    }
+
+    public static String invalidUsernameMessage() {
+        return "ERROR - Invalid username. Valid characters: (a-z, A-Z, 0-9)";
+    }
+
+    public static String invalidEmailMessage() {
+        return "ERROR - Invalid email address";
+    }
+
+    public static String invalidPhoneMessage() {
+        return "ERROR - Phone number contains invalid characters";
     }
 }
