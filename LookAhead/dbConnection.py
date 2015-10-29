@@ -1,17 +1,13 @@
 # -*- coding: utf-8 -*-
 """
 Copyright 2015 Ericsson AB
-
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
-
 http://www.apache.org/licenses/LICENSE-2.0
-
 Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
 "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and limitations under the License.
-
 """
 import random
 import string
@@ -20,6 +16,7 @@ import datetime
 from pymongo import MongoClient
 from bson.objectid import ObjectId
 from operator import itemgetter
+import itertools
 
 
 
@@ -73,8 +70,7 @@ class DB():
         return req
 
     def getTravelRequestSummary(self, start, end):
-        # keyf = "function(doc) { return { startBusStop: doc.startBusStop, hour: doc.startTime.getHours()-2, minute: doc.startTime.getMinutes()};}"
-        keyf = "function(doc) { return { startBusStop: doc.startBusStop, hour: doc.startTime.getHours(), minute: doc.startTime.getMinutes()};}"
+        keyf = "function(doc) { return { startBusStop: doc.startBusStop, hour: doc.startTime.getHours()-2, minute: doc.startTime.getMinutes()};}"
         condition = {"startTime": {"$gte": start, "$lt": end}}
         initial = {"count": 0}
         reduce = "function(curr, result) { result.count++; }"
@@ -93,25 +89,112 @@ class DB():
         # req = self.db.TravelRequest.group(keyf, condition, initial, reduce)
         req = self.db.TravelRequestLookAhead.group(keyf, condition, initial, reduce)
         req = sorted(req, key=itemgetter("hour","minute"))
-
         return req        
         """
         queryResults = []
         # A query is made to group request made to a busstop and counting the number of similar requests made
         pipline = [{"$match": {"startTime": {"$gte": start, "$lt": end}}},
-            {"$sort": {"startTime": 1}},
             {"$group": {"_id": {"RequestTime": "$startTime", "BusStop": "$startBusStop"},"total": {"$sum": 1}}}]
+
         groupQuery = self.db.TravelRequestLookAhead.aggregate(pipline)
+
         for x in groupQuery:
             queryResults.append(x)
+
         return queryResults
+    def getReqStartEndTime(self, start, end):
 
-    # These function will be called for every gene in order to get the difference
-    # def getTravelRequestBetween(self, start, end):
-    #    for doc in self.db.TravelRequest.find({'time': {'$gte': start, '$lt': end}}):
-    #        print doc
 
-    # Routes
+        # A query is made to group request which have same startBusStop and between specific duration
+        # return summary of request
+        #pipline = [{"$match": {"startTime": {"$gte": start, "$lt": end}}}]
+        pipline = [{"$match": [{"startTime": {"$gte": start, "$lt": end}}]}]
+
+        reqs =[]
+        requests = self.db.TravelRequestLookAhead.aggregate(pipline)
+        for req in requests:
+            reqs.append([req.get('startTime', None), req.get('startBusStop', None), req.get('endBusStop', None)])
+
+        print reqs
+        return reqs
+
+
+    def getTravelRequestBetween(self, start, end):
+        print start
+        print end
+        requests = self.db.TravelRequestLookAhead.find({"startTime": {"$gte": start, "$lt": end}})
+        print requests
+        reqs =[]
+        for req in requests:
+            reqs.append([req.get('startTime', None), req.get('startBusStop', None), req.get('endBusStop', None)])
+
+        return reqs
+
+    def getTravelRequestSummaryByEndBusStop(self, start, end, endBusStop):
+
+        # A query is made to group request which have same endBusStop and between specific duration
+        # return summary of request
+        pipline = [{"$match": {"$and": [{"startTime": {"$gte": start, "$lt": end}}, {"endBusStop" : endBusStop}]}},
+            {"$group": {"_id": "$endBusStop", "count": {"$sum": 1}}}]
+
+        requestSum = self.db.TravelRequestLookAhead.aggregate(pipline)
+
+        return self.retrieveData(requestSum, 'count')
+    def MaxReqNumTrip(self,trip_sTime,end,lineNum):
+
+        #create dic
+        BusStplist = []
+        dirlist =[]
+        #get the trip time table
+        t =datetime.datetime.strptime(trip_sTime,'%Y-%m-%d %H:%M:%S').time()
+        e =datetime.datetime.strptime(end,'%Y-%m-%d %H:%M:%S').time()
+
+
+        trip_time_table = self.generateFitnessTripTimeTable(lineNum,t)
+        for i in trip_time_table:
+            BusStplist.append([i[0],0])
+            dirlist.append(i[0])
+        t =datetime.datetime.strptime(trip_sTime,'%Y-%m-%d %H:%M:%S')
+        e =datetime.datetime.strptime(end,'%Y-%m-%d %H:%M:%S')
+        print t
+        print e
+        #get all requests where starting t is more than trip starting time
+        print type(t)
+        print t
+        Requests = self.getTravelRequestBetween(t,e)
+        print "rrrrrrrrrrrrrrr"
+        print Requests
+
+        #get only the requests with start location in bus stops and end location in bus stps
+        counter = 0
+        counter2 = 0
+        for req in Requests:
+            for i in BusStplist:
+                if (req[1], req[2]) in itertools.combinations(dirlist, 2):
+                    if req[1] == i[0]:
+                        i[1] += 1
+                        counter +=1
+                    if req[2] == i[0]:
+                        i[1] += -1
+                        counter2 +=1
+
+        print BusStplist
+        sum = 0;
+        for i in BusStplist:
+            sum += i[1]
+            i[1] = sum
+        print "after aggregation "
+        return BusStplist
+        
+
+      
+
+        # These function will be called for every gene in order to get the difference
+        # def getTravelRequestBetween(self, start, end):
+        #    for doc in self.db.TravelRequest.find({'time': {'$gte': start, '$lt': end}}):
+        #        print doc
+
+
     def populateRoute(self, route):
         # route5 = {"line": 5, "durationTime":39, routeStop2}
         # routeStop5 = ["Stenhagenskolan","Herrhagens Byväg","Kiselvägen","Stenhagens Centrum","Stenröset","Stenhällen","Gatstenen","Hedensbergsvägen","Flogsta centrum","Rickomberga","Studentstaden","Ekonomikum","Götgatan","Skolgatan","Stadshuset","Centralstationen","Samariterhemmet","Strandbodgatan","Kungsängsesplanaden","Vimpelgatan","Lilla Ultuna","Kuggebro","Vilan","Nämndemansvägen","Lapplandsresan","Ölandsresan","Daneport","Västgötaresan","Gotlandsresan","Smålandsvägen"]
@@ -135,15 +218,13 @@ class DB():
         self.db.Route.drop()
 
     def getTripDay(self, line):
-        return DB.minutesDay / self.getFrequency(line)
+        frequency = self.db.Route.find({"line": line}, {"frequency": 1})
+        frequency = self.retrieveData(frequency, "frequency")
+        return DB.minutesDay / frequency
 
     def getRouteStop(self, line):
         routeStop = self.db.Route.find({"line": line}, {"trajectory": 1})
         return self.retrieveData(routeStop, "trajectory")
-
-    def getFrequency(self, line):
-        return self.retrieveData(self.db.Route.find({"line": line}, {"frequency": 1}), "frequency")
-
 
     # Bus
     # https://www.ul.se/en/About-UL/About-our-public-function/
@@ -223,13 +304,17 @@ class DB():
     def generateFitnessTripTimeTable(self, line, startingTime):
         tripTimeTable = []
         busStop = self.getRouteStop(line)
-        minuteSeed = self.generateMinute(startingTime)
+        print type (startingTime)
+        print startingTime.minute
+        #minuteSeed = self.generateMinute(startingTime)
+        minuteSeed =startingTime.minute
         tripTimeTable.append([self.getBusStopName(busStop[0]["busStop"]),self.generateTime(minuteSeed)])
         for j in range(len(busStop)-1):
             minuteSeed = minuteSeed + busStop[j]["interval"]
             if minuteSeed > DB.minutesDay:
                 minuteSeed = minuteSeed - DB.minutesDay
             tripTimeTable.append([self.getBusStopName(busStop[j+1]["busStop"]),self.generateTime(minuteSeed)])
+        print tripTimeTable
         return tripTimeTable
 
     # After GA, this function is called to generate all the bus stops given the initial starting times based on the best individual
@@ -279,23 +364,12 @@ class DB():
         self.db.timeTable.insert_one({"line": document[0][0], "date": datetime.datetime.now(), "timetable": timeTable})
 
 
-    def getRequestsFromDB(self, start, end):
-        ''' Gets travel requests from the database. Attempts to cluster the requests based on time 
-        and calculates a count of the total requests between a time window.
-
-        @param: start - lower time bound
-        @param: end - upper time bound
-        @return: yesterday's requests with fields startTime, startBusStop, endBusStop.
-        '''
-        yesterday = datetime.date.today() - datetime.timedelta(days=1)
-        yesterdayStart = datetime.datetime(yesterday.year, yesterday.month, yesterday.day,0,0,0)
-        todayStart = datetime.datetime(datetime.date.today().year,datetime.date.today().month,datetime.date.today().day,0,0,0)
+    def getRequestsFromDB(self,start,end):
         reqs = []
-        requests = self.db.TravelRequestLookAhead.find({"$and": [{"startTime": {"$gte": start}}, {"startTime": {"$lt":
-            end}}]}, {"startTime": 1, "startBusStop": 1, "endBusStop": 1, "_id": 0})  # New collection for LookAhead
+        requests = self.db.TravelRequestLookAhead.find({"$and": [{"startTime": {"$gte": start}}, {"startTime": {"$lt": end}}]}, {"startTime": 1, "startBusStop": 1, "endBusStop": 1, "_id": 0})  # New collection for LookAhead
         for req in requests:
             reqs.append([req.get('startTime', None), req.get('startBusStop', None), req.get('endBusStop', None)])
-            #reqs.append(req.get('startTime', None))
+
         return reqs   
 
     # Bus Stop Location
@@ -310,43 +384,3 @@ class DB():
 
     def getBusStopName(self, id):
         return self.retrieveData(self.db.BusStop.find({"_id": id}), "name")
-    def MaxReqNumTrip(self,trip_sTime,tripEnd, lineNum = 2):
-
-        #create dic
-        BusStplist = []
-        dirlist =[]
-        #get the trip time table
-        trip_time_table = self.generateFitnessTripTimeTable(lineNum,trip_sTime)
-        for i in trip_time_table:
-            BusStplist.append([i[0],0])
-            dirlist.append(i[0])
-
-
-        #get all requests where starting time is more than trip starting time
-        Requests = self.getRequestsFromDB(trip_sTime, tripEnd)
-
-        #get only the requests with start location in bus stops and end location in bus stps
-        counter = 0
-        counter2 = 0
-        for req in Requests:
-            for i in BusStplist:
-                if (req[1], req[2]) in itertools.combinations(dirlist, 2):
-                    if req[1] == i[0]:
-                        i[1] += 1
-                        counter +=1
-                    if req[2] == i[0]:
-                        i[1] += -1
-                        counter2 +=1
-
-        sum = 0;
-        for i in BusStplist:
-            sum += i[1]
-            i[1] = sum
-        '''
-        print "after aggregation "
-        print BusStplist
-        print counter
-        print counter2
-        '''
-        return BusStplist
-
