@@ -12,6 +12,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.Toast;
+
+import org.apache.commons.validator.routines.EmailValidator;
 
 
 public class ProfileActivity extends AppCompatActivity {
@@ -19,6 +22,10 @@ public class ProfileActivity extends AppCompatActivity {
     Toolbar toolbar;
     Button submitButton;
     ImageButton passwordButton;
+    private EditText usernameField;
+    private EditText emailField;
+    private EditText phoneField;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,13 +38,13 @@ public class ProfileActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         //set the profile fields from the profile stored in ClientAuthentication
-        EditText usernameField = (EditText)findViewById(R.id.textView_profile_user);
+        usernameField = (EditText)findViewById(R.id.textView_profile_user);
         usernameField.setText(ClientAuthentication.getUsername());
 
-        EditText phoneField = (EditText)findViewById(R.id.textView_profile_phone);
+        phoneField = (EditText)findViewById(R.id.textView_profile_phone);
         phoneField.setText(ClientAuthentication.getPhone());
 
-        EditText emailField = (EditText)findViewById(R.id.textView_profile_email);
+        emailField = (EditText)findViewById(R.id.textView_profile_email);
         emailField.setText(ClientAuthentication.getEmail());
 
         //TODO: call profileUpdate method in ClientAuthetication when submitButton is clicked
@@ -118,6 +125,33 @@ public class ProfileActivity extends AppCompatActivity {
 
 
     public void editProfileInfo(View v){
+        String userEntered = usernameField.getText().toString();
+        String emailEntered = emailField.getText().toString();
+        String phoneEntered = phoneField.getText().toString();
+
+
+        EmailValidator validator = EmailValidator.getInstance();
+
+        if (!validator.isValid(emailEntered)) {
+            Toast.makeText(getApplicationContext(), "Please enter a valid email address!",
+                    Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        if(!phoneEntered.matches("\\d+")) {
+            Toast.makeText(getApplicationContext(), "Please enter a valid phone number!",
+                    Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        String response = ClientAuthentication.postProfileUpdateRequest(ClientAuthentication.getClientId(), userEntered, emailEntered, phoneEntered);
+        Toast.makeText(getApplicationContext(), response, Toast.LENGTH_LONG).show();
+
+        if(response.startsWith("Success (1)")){
+            usernameField.setText(ClientAuthentication.getUsername());
+            emailField.setText(ClientAuthentication.getEmail());
+            phoneField.setText(ClientAuthentication.getPhone());
+        }
         /*UpdateProfileTask task = new UpdateProfileTask();
         try {
             String clientid = ClientAuthentication.getClientId();
