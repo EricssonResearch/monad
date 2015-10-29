@@ -13,7 +13,7 @@ specific language governing permissions and limitations under the License.
 """
 import unittest
 
-#import toolBox
+import toolBox
 from fitness import Fitness
 from datetime import datetime, timedelta
 
@@ -175,14 +175,13 @@ class FitnessTests(unittest.TestCase):
         #self.assertFalse(fit.getNumberOfRequests(datetime.strptime('00:00', '%H:%M')) < 0)
 
     def testCalculateCost(self):
-        '''
         pop = toolBox.toolbox.population(n=1)
         fit = Fitness()
         self.assertEqual(fit.calculateCost(None, -10, 0), -1)
         self.assertEqual(fit.calculateCost(pop[0], -10, 0), -1)
         self.assertEqual(fit.calculateCost(pop[0], 3000, -2), -1)
         self.assertGreater(fit.calculateCost(pop[0], 3000, 0), 0)
-        self.assertGreater(fit.calculateCost(pop[0], 3000, 10000), 0)'''
+        self.assertGreater(fit.calculateCost(pop[0], 3000, 10000), 0)
 
 if __name__ == '__main__':
     main()
