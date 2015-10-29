@@ -82,18 +82,15 @@ class DB():
         req = sorted(req, key=itemgetter("hour", "minute"))
         return req
 
-    def getTravelRequestSummary2(self, start, end):
+    def grpReqByBusstopAndTime(self, start, end):
         """
-=======
-    def getTravelRequestSummary2(self, start, end, busStop):
->>>>>>> d5b18297f30bc04559b91cc38f3902a88cee361d
+        def getTravelRequestSummary2(self, start, end, busStop):
         keyf = "function(doc) { return { startBusStop: doc.startBusStop, hour: doc.startTime.getHours(), minute: doc.startTime.getMinutes()};}"
         condition = {"startTime": {"$gte": start, "$lt": end}, "startBusStop": {"$eq": busStop}}
         initial = {"count": 0}
         reduce = "function(curr, result) { result.count++; }"
         # req = self.db.TravelRequest.group(keyf, condition, initial, reduce)
         req = self.db.TravelRequestLookAhead.group(keyf, condition, initial, reduce)
-<<<<<<< HEAD
         req = sorted(req, key=itemgetter("hour","minute"))
 
         return req        
@@ -297,8 +294,8 @@ class DB():
         reqs = []
         requests = self.db.TravelRequestLookAhead.find({"$and": [{"startTime": {"$gte": yesterdayStart}}, {"startTime": {"$lt": todayStart}}]}, {"startTime": 1, "startBusStop": 1, "endBusStop": 1, "_id": 0})  # New collection for LookAhead
         for req in requests:
-            #reqs.append([req.get('startTime', None), req.get('startBusStop', None), req.get('endBusStop', None)])
-            reqs.append(req.get('startTime', None))
+            reqs.append([req.get('startTime', None), req.get('startBusStop', None), req.get('endBusStop', None)])
+            #reqs.append(req.get('startTime', None))
         return reqs   
 
     # Bus Stop Location

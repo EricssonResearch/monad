@@ -16,6 +16,8 @@ from planner import TravelPlanner, Mode
 import unittest
 import datetime
 import pytest
+import pymongo
+from pymongo import MongoClient
 
 YEAR  = 2015
 MONTH = 10
@@ -40,7 +42,8 @@ TIME_1400H = datetime.datetime(YEAR, MONTH, DAY, 14, 00)
 
 class TestTravelPlanner(unittest.TestCase):
 
-    tp = TravelPlanner()
+    client = MongoClient()
+    tp = TravelPlanner(client)
 
     def test_init(self):
         requestDBString = "Collection(Database(MongoClient('localhost', 27017), u'monad'), " + \

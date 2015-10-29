@@ -13,6 +13,7 @@ Unless required by applicable law or agreed to in writing, software distributed 
 See the License for the specific language governing permissions and limitations under the License.
 
 """
+import itertools
 import unittest
 from dbConnection import DB
 from operator import itemgetter
@@ -38,6 +39,9 @@ class Fitness():
 
 # A decorator is a function that can accept another function as
 # a parameter to be able to modify or extend it
+    def __init__(self):
+        self.runOnce()
+
     def decorator(afunction):
         # A wrapper function is used to wrap functionalites you want around the original function
         def wrapper(*args):
@@ -45,6 +49,8 @@ class Fitness():
             if not wrapper.has_run:
                 wrapper.has_run = True
                 return afunction(*args)
+            else:
+                pass
 
         wrapper.has_run = False
         return wrapper
@@ -52,15 +58,26 @@ class Fitness():
     @decorator
     def runOnce(self):
         db = DB()
+        #request = []
+        #Fitness.requests, Fitness.routes = db.getRequestsFromDB()
+        #self.routes[:] = self.routes[0][1]
+        #print self.routes
+        #print Fitness.routes[0][1]
+        # DB calls can ve avoided by querying the whole Request Collection for a particular day
+
+        # Replace the dates here from yesterday's date
+        #yesterday = date.today() - timedelta(3)
+
+
+
 
         # Setting the start time boundary of request that we want
         startTime = datetime.combine(Fitness.yesterday, datetime.strptime(Fitness.firstMinute, Fitness.formatTime).time())
         # Setting the end time boundary of request that we want
         endTime = datetime.combine(Fitness.yesterday, datetime.strptime(Fitness.lastMinute, Fitness.formatTime).time())
-        Fitness.request = db.getTravelRequestSummary2(startTime, endTime)
+        Fitness.request = db.grpReqByBusstopAndTime(startTime, endTime)
 
         self.createRequestIndex(Fitness.request)
-
 
     def timeDiff(self, time1, time2):
         ''' Evaluates the difference between two times.
@@ -72,6 +89,60 @@ class Fitness():
 
     def getMinutes(self, td):
         return (td.seconds//Fitness.secondMinute) % Fitness.secondMinute
+
+    def getNumberOfRequests(self, tripStartTime, lineNumber=2):
+        ''' finds the max # of transit requests that can be served by the trip with startBusStop along the
+        bus line
+
+        @param: tripStartTime - departure time for this trip
+        @return maximum number of requests between two stops in the trip
+        '''
+        self.expectedTimes = {}
+        self.stopsCount = {}
+        self.reqGroup = []
+        print ("routes.....................")
+        print (self.routes)
+        for i, item in enumerate(self.routes):
+            if item[2] == 2:
+                self.busStops = [[i[0], i[1]] for i in self.routes[i][1]]
+                self.expTime = tripStartTime;
+                for i, stop in enumerate(self.busStops):
+                    self.expectedTimes[stop[0]] = self.expTime.time()
+                    self.expTime = self.expTime + timedelta(minutes=stop[1])
+                    self.stopsCount[stop[0]] = 0
+
+        for req in self.requests:
+            if req[1] in self.expectedTimes:
+                if req[0].time() < self.expectedTimes[req[1]]:
+                    self.reqGroup.append(req)
+                    self.stopsCount[req[1]] += 1
+                    self.stopsCount[req[2]] -= 1
+
+        #print "Max request count", self.stopsCount[max(self.stopsCount, key = self.stopsCount.get)]
+        return self.stopsCount[max(self.stopsCount, key = self.stopsCount.get)]
+
+    def evalIndividualCapacity(self, individual):
+        ''' Evaluates an individual based on the capacity/bus type chosen for each trip.
+
+        @param: individual - a possible timetable for a bus line, covering the whole day.
+        @return: a fitness score assigned in accordance with how close the requested
+        capacity is to the availed capacity on the individual
+        '''
+        individual.sort(key = itemgetter(2))
+        self.expectedTimes = {}
+        for trip, item in enumerate(individual):
+            if trip == 0:
+                self.start = datetime.strptime('00:00', '%H:%M')
+                self.end   = datetime.strptime(individual[0][2], '%H:%M')
+                self.nrReqs = self.getNumberOfRequests(self.start) 
+                print ("max number of requests for trip " + str(trip) + " is " + str(self.nrReqs))
+
+            else:
+                self.start = datetime.strptime(individual[trip-1][2], '%H:%M')
+                self.end   = datetime.strptime(individual[trip][2], '%H:%M')
+                self.nrReqs = self.getNumberOfRequests(self.start)
+
+        return self.nrReqs
 
     def createRequestIndex(self, request):
         ''' Creates a structure that stores the hour, the minute and the position on the request array for this particular time
@@ -129,48 +200,6 @@ class Fitness():
                 result.append(request[i])
         return result
 
-    def evalIndividualCapacity(self, individual):
-        ''' Evaluates an individual based on the capacity/bus type chosen for each trip.
-
-        @param: individual - a possible timetable for a bus line, covering the whole day.
-        @return: a fitness score assigned in accordance with how close the requested
-        capacity is to the availed capacity on the individual
-        '''
-        individual.sort(key = itemgetter(2))
-
-        db = DB()
-        requests = db.getRequestsFromDB()
-        requests[:] = [request.time() for request in requests if request is not None]
-        fitnessVal = 0 # assumed initial fitness value TODO: put as class variable
-
-        for trip, item in enumerate(individual):
-            nrReqs = []
-            if trip == 0:
-                start = datetime.strptime('00:00', '%H:%M').time()
-                end   = datetime.strptime(individual[0][2], '%H:%M').time()
-                nrReqs = [i for i in requests if i > start and i <= end]
-
-                # Assign fitness values
-                if len(nrReqs) == individual[trip][1]:
-                    fitnessVal += 0
-                elif len(nrReqs) < individual[trip][1]:
-                    fitnessVal += 1
-                else:
-                    fitnessVal += 1000000
-            else:
-                start = datetime.strptime(individual[trip-1][2], '%H:%M').time()
-                end   = datetime.strptime(individual[trip][2], '%H:%M').time()
-                nrReqs = [i for i in requests if i > start and i <= end]
-
-                # Assign fitness values
-                if len(nrReqs) == individual[trip][1]:
-                    fitnessVal += 0
-                elif len(nrReqs) < individual[trip][1]:
-                    fitnessVal += 1
-                else:
-                    fitnessVal += 1000000
-
-        return fitnessVal
 
     def evalIndividual(self, individual):
         ''' Evaluate an individual in the population. Based on how close the
@@ -182,7 +211,12 @@ class Fitness():
         according to the evolving timetable.
         Lower values are better.
         '''
-        self.runOnce()
+        # DONE Store the date on mongo as datetime 
+        # Store the requests of the previous day into a JSON file order them by date and KEEP IT during the whole iteration on memory
+        # DONE Group by request query from the file to reduce the number of elements being processed
+
+        # Use map function instead of LOOP
+        # Query the DB only once to retrieve all the data needed
 
         # Multi thread the MAP functions
         # First, the randomly-generated starting times are sorted in order to check sequentially the number of requests for that particular trip
@@ -190,11 +224,20 @@ class Fitness():
 
         # Second, we loop trough the number of genes in order to retrieve the number of requests for that particular trip
         # For the 1st trip, the starting time has to be selected
-        db = DB()
+        # Replace the dates here from yesterday's date
+        request = Fitness.requests
         dif = []
         cnt = []
         intialTripTime = "00:00"
+        # TODO: Change to timedelta(1)
+        yesterday = date.today() - timedelta(6)
 
+        # The result here should be added into a file: the order is by hour, minute and initialBusStop
+        request = []
+        dif = []
+        cnt = []
+        intialTripTime = "00:00"
+        db = DB()
         for i in range(len(individual)):
             tripTimeTable = db.generateFitnessTripTimeTable(individual[i][0], individual[i][2])
 
@@ -217,3 +260,32 @@ class Fitness():
                     cnt.append(count)
         return sum(dif)/sum(cnt),
 
+    def calculateCost(self, individual, totalWaitingTime, penaltyOverCapacity):
+        ''' Calculate cost for an individual in the population. 
+
+        @param  individual: individual in the population; 
+                averageWaitingTime: average waiting time for that individual
+                penaltyOverCapacity: a positive integer to represent a large cost to individual if capacity cannot handle all request of that trip
+        @return cost: positive integer for this individual, if input param is out of range, cost will be -1
+
+        Less cost, better individual
+        Assume one minute's waiting per person equals to 1kr
+        '''
+        cost = 0
+        costOfBus = [[20, 1000], [60, 1200], [120, 1400]]
+        waitingCostPerMin = 1
+        busCost = 0
+
+        if penaltyOverCapacity < 0 or individual is None or totalWaitingTime < 0:
+            cost = -1
+        else:
+            for i in range(len(individual)):
+                busCapacity = individual[i][1]
+                for j in range(len(costOfBus)):
+                    if busCapacity == costOfBus[j][0]:
+                        busCost = busCost + costOfBus[j][1]
+                        break
+            waitingCost = totalWaitingTime * waitingCostPerMin
+
+            cost = busCost + waitingCost + penaltyOverCapacity
+        return cost
