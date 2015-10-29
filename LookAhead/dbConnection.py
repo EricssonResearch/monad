@@ -310,3 +310,42 @@ class DB():
 
     def getBusStopName(self, id):
         return self.retrieveData(self.db.BusStop.find({"_id": id}), "name")
+    def MaxReqNumTrip(self,trip_sTime,lineNum):
+
+        #create dic
+        BusStplist = []
+        dirlist =[]
+        #get the trip time table
+        trip_time_table = self.generateFitnessTripTimeTable(lineNum,trip_sTime)
+        for i in trip_time_table:
+            BusStplist.append([i[0],0])
+            dirlist.append(i[0])
+
+
+        #get all requests where starting time is more than trip starting time
+        Requests = self.getRequestsFromDB()
+
+        #get only the requests with start location in bus stops and end location in bus stps
+        counter = 0
+        counter2 = 0
+        for req in Requests:
+            for i in BusStplist:
+                if (req[1], req[2]) in itertools.combinations(dirlist, 2):
+                    if req[1] == i[0]:
+                        i[1] += 1
+                        counter +=1
+                    if req[2] == i[0]:
+                        i[1] += -1
+                        counter2 +=1
+
+        print BusStplist
+        sum = 0;
+        for i in BusStplist:
+            sum += i[1]
+            i[1] = sum
+        print "after aggregation "
+        print BusStplist
+        print counter
+        print counter2
+
+    

@@ -146,8 +146,8 @@ public class SettingsActivity extends AppCompatActivity {
             page = getArguments().getInt(TAB_POSITION);
         }
 
-        //TODO 2 Ilyass: save settings changes in their respective fragments
-        //// TODO: update changes in the database
+        //TODO 2 Ilyass: finalize language settings
+        //TODO: update language settings in database
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
             View layout;
@@ -182,9 +182,23 @@ public class SettingsActivity extends AppCompatActivity {
                         if(switchrecommendation.isChecked()) {
                             // The space after ON should be kept for UI formatting purposes
                             recommendationsSwitch.setText("ON ");
+                            ClientAuthentication.postSettingsUpdateRequest(
+                                    ClientAuthentication.getClientId(),
+                                    ClientAuthentication.getLanguage(),
+                                    ClientAuthentication.getStoreLocation(),
+                                    ClientAuthentication.getNotificationsAlert(),
+                                    "1",
+                                    ClientAuthentication.getTheme());
                         }
                         else {
                             recommendationsSwitch.setText("OFF");
+                            ClientAuthentication.postSettingsUpdateRequest(
+                                    ClientAuthentication.getClientId(),
+                                    ClientAuthentication.getLanguage(),
+                                    ClientAuthentication.getStoreLocation(),
+                                    ClientAuthentication.getNotificationsAlert(),
+                                    "0",
+                                    ClientAuthentication.getTheme());
                         }
                     }
                 });
@@ -195,9 +209,23 @@ public class SettingsActivity extends AppCompatActivity {
                         if(switchalert.isChecked()){
                             // The space after ON should be kept for UI formatting purposes
                             remindersSwitch.setText("ON ");
+                            ClientAuthentication.postSettingsUpdateRequest(
+                                    ClientAuthentication.getClientId(),
+                                    ClientAuthentication.getLanguage(),
+                                    ClientAuthentication.getStoreLocation(),
+                                    "1",
+                                    ClientAuthentication.getRecommendationsAlert(),
+                                    ClientAuthentication.getTheme());
                         }
                         else {
                             remindersSwitch.setText("OFF");
+                            ClientAuthentication.postSettingsUpdateRequest(
+                                    ClientAuthentication.getClientId(),
+                                    ClientAuthentication.getLanguage(),
+                                    ClientAuthentication.getStoreLocation(),
+                                    "0",
+                                    ClientAuthentication.getRecommendationsAlert(),
+                                    ClientAuthentication.getTheme());
                         }
                     }
                 });
@@ -217,15 +245,35 @@ public class SettingsActivity extends AppCompatActivity {
 
                 if(radiobutton_lighttheme.isChecked()){
                     //change the theme to light
+                    ClientAuthentication.postSettingsUpdateRequest(
+                            ClientAuthentication.getClientId(),
+                            ClientAuthentication.getLanguage(),
+                            ClientAuthentication.getStoreLocation(),
+                            ClientAuthentication.getNotificationsAlert(),
+                            ClientAuthentication.getRecommendationsAlert(),
+                            "0");
                 }
 
                 if(radiobutton_defaulttheme.isChecked()){
-                    //change the theme to light
-
+                    //change the theme to default
+                    ClientAuthentication.postSettingsUpdateRequest(
+                            ClientAuthentication.getClientId(),
+                            ClientAuthentication.getLanguage(),
+                            ClientAuthentication.getStoreLocation(),
+                            ClientAuthentication.getNotificationsAlert(),
+                            ClientAuthentication.getRecommendationsAlert(),
+                            "1");
                 }
 
                 if(radiobutton_darktheme.isChecked()){
                     //change the theme to dark
+                    ClientAuthentication.postSettingsUpdateRequest(
+                            ClientAuthentication.getClientId(),
+                            ClientAuthentication.getLanguage(),
+                            ClientAuthentication.getStoreLocation(),
+                            ClientAuthentication.getNotificationsAlert(),
+                            ClientAuthentication.getRecommendationsAlert(),
+                            "2");
                 }
             }
             else{

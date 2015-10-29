@@ -113,6 +113,7 @@ public class ClientAuthentication extends Authentication {
     public static void setTheme(String theme) {
         profile[9] = theme;
     }
+    //theme mappings: 0: light; 1: default; 2: dark
     public static String getTheme() {
         return profile[9];
     }

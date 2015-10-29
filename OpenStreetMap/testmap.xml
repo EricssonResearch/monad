@@ -1,0 +1,600 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version='0.6'>
+  <bounds minlat='59.7249' minlon='17.2877' maxlat='59.7507' maxlon='17.3473' />
+  <node id='-440078' lat='59.73534965949' lon='17.30859409073'>
+    <tag k='bus' v='yes' />
+    <tag k='highway' v='bus_stop' />
+    <tag k='name' v='Centrum' />
+    <tag k='public_transport' v='stop_position' />
+  </node>
+  <node id='-440076' lat='59.73538154568' lon='17.30835052306'>
+    <tag k='bus' v='yes' />
+    <tag k='highway' v='bus_stop' />
+    <tag k='name' v='Centrum' />
+    <tag k='public_transport' v='stop_position' />
+  </node>
+  <node id='-440047' lat='59.73494607708' lon='17.30839512338' />
+  <node id='-440045' lat='59.7356977318' lon='17.30876569336' />
+  <node id='-440040' lat='59.73463961333' lon='17.30854172588' />
+  <node id='-440038' lat='59.73518747993' lon='17.30825299286' />
+  <node id='-440036' lat='59.73555160699' lon='17.30843598999' />
+  <node id='-440034' lat='59.73584780952' lon='17.30910431727' />
+  <node id='-440013' lat='59.73786840662' lon='17.31019067222'>
+    <tag k='bus' v='yes' />
+    <tag k='highway' v='bus_stop' />
+    <tag k='name' v='I' />
+    <tag k='public_transport' v='stop_position' />
+  </node>
+  <node id='-440011' lat='59.73876730584' lon='17.30790094594'>
+    <tag k='bus' v='yes' />
+    <tag k='highway' v='bus_stop' />
+    <tag k='name' v='I' />
+    <tag k='public_transport' v='stop_position' />
+  </node>
+  <node id='-440009' lat='59.73893639157' lon='17.30655305642'>
+    <tag k='bus' v='yes' />
+    <tag k='highway' v='bus_stop' />
+    <tag k='name' v='I' />
+    <tag k='public_transport' v='stop_position' />
+  </node>
+  <node id='-439956' lat='59.73202050048' lon='17.30605121504'>
+    <tag k='bus' v='yes' />
+    <tag k='highway' v='bus_stop' />
+    <tag k='name' v='F3' />
+    <tag k='public_transport' v='stop_position' />
+  </node>
+  <node id='-439954' lat='59.73058974344' lon='17.30606057639'>
+    <tag k='bus' v='yes' />
+    <tag k='highway' v='bus_stop' />
+    <tag k='name' v='F3' />
+    <tag k='public_transport' v='stop_position' />
+  </node>
+  <node id='-439952' lat='59.73030466593' lon='17.30356165815'>
+    <tag k='bus' v='yes' />
+    <tag k='highway' v='bus_stop' />
+    <tag k='name' v='F3' />
+    <tag k='public_transport' v='stop_position' />
+  </node>
+  <node id='-439909' lat='59.72619677975' lon='17.28972615558'>
+    <tag k='bus' v='yes' />
+    <tag k='highway' v='bus_stop' />
+    <tag k='name' v='E' />
+    <tag k='public_transport' v='stop_position' />
+  </node>
+  <node id='-439907' lat='59.72638364319' lon='17.2884362872'>
+    <tag k='bus' v='yes' />
+    <tag k='highway' v='bus_stop' />
+    <tag k='name' v='E' />
+    <tag k='public_transport' v='stop_position' />
+  </node>
+  <node id='-439895' lat='59.74226829329' lon='17.28854208688'>
+    <tag k='bus' v='yes' />
+    <tag k='highway' v='bus_stop' />
+    <tag k='name' v='D' />
+    <tag k='public_transport' v='stop_position' />
+  </node>
+  <node id='-439893' lat='59.74236348403' lon='17.28832101988'>
+    <tag k='bus' v='yes' />
+    <tag k='highway' v='bus_stop' />
+    <tag k='name' v='D' />
+    <tag k='public_transport' v='stop_position' />
+  </node>
+  <node id='-439850' lat='59.74929480895' lon='17.34273329445'>
+    <tag k='highway' v='bus_stop' />
+    <tag k='name' v='C' />
+    <tag k='public_transport' v='stop_position' />
+  </node>
+  <node id='-439845' lat='59.74784787213' lon='17.3425718622'>
+    <tag k='highway' v='bus_stop' />
+    <tag k='name' v='C' />
+    <tag k='public_transport' v='stop_position' />
+  </node>
+  <node id='-439812' lat='59.7389031725' lon='17.31628266767' />
+  <node id='-439810' lat='59.74065389664' lon='17.3154959133' />
+  <node id='-439766' lat='59.739102176' lon='17.31977091042'>
+    <tag k='bus' v='yes' />
+    <tag k='highway' v='bus_stop' />
+    <tag k='name' v='B' />
+    <tag k='public_transport' v='stop_position' />
+  </node>
+  <node id='-439764' lat='59.73903493607' lon='17.31859228975'>
+    <tag k='bus' v='yes' />
+    <tag k='highway' v='bus_stop' />
+    <tag k='name' v='B' />
+    <tag k='public_transport' v='stop_position' />
+  </node>
+  <node id='-439746' lat='59.74299138384' lon='17.32124167833'>
+    <tag k='highway' v='bus_stop' />
+    <tag k='name' v='A' />
+    <tag k='public_transport' v='stop_position' />
+  </node>
+  <node id='-439744' lat='59.74296217941' lon='17.32185971008'>
+    <tag k='highway' v='bus_stop' />
+    <tag k='name' v='A' />
+    <tag k='public_transport' v='stop_position' />
+  </node>
+  <node id='-439724' lat='59.72622661485' lon='17.28952021233' />
+  <node id='-439722' lat='59.73301051673' lon='17.29832601271' />
+  <node id='-439720' lat='59.73256991478' lon='17.30050637892' />
+  <node id='-439718' lat='59.7261130853' lon='17.29030387361'>
+    <tag k='highway' v='stop' />
+  </node>
+  <node id='-439716' lat='59.72568655257' lon='17.29502852667' />
+  <node id='-439714' lat='59.72588783836' lon='17.29151117932'>
+    <tag k='highway' v='stop' />
+  </node>
+  <node id='-439695' lat='59.73481521789' lon='17.30864980647'>
+    <tag k='traffic_calming' v='chicane' />
+  </node>
+  <node id='-439625' lat='59.74577550765' lon='17.34141929764' />
+  <node id='-439583' lat='59.74963828743' lon='17.34587099311' />
+  <node id='-439578' lat='59.74939883154' lon='17.34479439963'>
+    <tag k='highway' v='stop' />
+  </node>
+  <node id='-439576' lat='59.74937967499' lon='17.34498927968'>
+    <tag k='highway' v='stop' />
+  </node>
+  <node id='-439267' lat='59.74933551448' lon='17.32814557024' />
+  <node id='-439265' lat='59.74957450159' lon='17.34478435882' />
+  <node id='-439263' lat='59.74898832893' lon='17.34379394007' />
+  <node id='-439261' lat='59.74828393545' lon='17.34353850406' />
+  <node id='-439259' lat='59.74972657154' lon='17.34324273604' />
+  <node id='-439218' lat='59.72584644042' lon='17.34400294967'>
+    <tag k='bus' v='yes' />
+    <tag k='highway' v='bus_stop' />
+    <tag k='name' v='H' />
+    <tag k='public_transport' v='stop_position' />
+  </node>
+  <node id='-439216' lat='59.72565411774' lon='17.31069522057' />
+  <node id='-439214' lat='59.75021949259' lon='17.31670634529' />
+  <node id='-439211' lat='59.74875466158' lon='17.34429136811' />
+  <node id='-439209' lat='59.74905495105' lon='17.34297227367' />
+  <node id='-439206' lat='59.7498247769' lon='17.3442308701' />
+  <node id='-439204' lat='59.74935714624' lon='17.34473727259' />
+  <node id='-439201' lat='59.74940668056' lon='17.34502412021' />
+  <node id='-439199' lat='59.74899570901' lon='17.34432336979' />
+  <node id='-439197' lat='59.74841142239' lon='17.3439811414' />
+  <node id='-439194' lat='59.7494458901' lon='17.34272630397' />
+  <node id='-439192' lat='59.74983859631' lon='17.34394311602' />
+  <node id='-439190' lat='59.74962123117' lon='17.34627969811' />
+  <node id='-439187' lat='59.72575293191' lon='17.2893860316' />
+  <node id='-439185' lat='59.72540049215' lon='17.28913731758' />
+  <node id='-439183' lat='59.72508871543' lon='17.28961457961' />
+  <node id='-439181' lat='59.72524460415' lon='17.29054893767' />
+  <node id='-439177' lat='59.74977713014' lon='17.34719025388' />
+  <node id='-439174' lat='59.7488624032' lon='17.34184768845' />
+  <node id='-439171' lat='59.74978848605' lon='17.30901361999' />
+  <node id='-439169' lat='59.74050096994' lon='17.29408048738' />
+  <node id='-439167' lat='59.73508472927' lon='17.34390231737'>
+    <tag k='bus' v='yes' />
+    <tag k='highway' v='bus_stop' />
+    <tag k='name' v='G' />
+    <tag k='public_transport' v='stop_position' />
+  </node>
+  <node id='-439165' lat='59.73491224612' lon='17.32629656794' />
+  <node id='-439163' lat='59.73598491332' lon='17.30916466663' />
+  <node id='-439161' lat='59.74257101571' lon='17.30979822394' />
+  <node id='-439159' lat='59.74285553273' lon='17.3091529119' />
+  <node id='-439155' lat='59.73825088014' lon='17.31044124101'>
+    <tag k='traffic_calming' v='chicane' />
+  </node>
+  <node id='-439152' lat='59.73864418618' lon='17.31174304422' />
+  <node id='-439150' lat='59.7384372367' lon='17.31681902846' />
+  <node id='-439148' lat='59.73895791671' lon='17.32580042902' />
+  <node id='-439146' lat='59.73962575355' lon='17.32894856486' />
+  <node id='-439143' lat='59.73027812964' lon='17.30009746755' />
+  <node id='-439141' lat='59.73174870631' lon='17.30319529072' />
+  <node id='-439138' lat='59.73114423637' lon='17.30483859865' />
+  <node id='-439136' lat='59.73210469977' lon='17.30222747538' />
+  <node id='-439134' lat='59.73373522053' lon='17.30398210874' />
+  <node id='-439132' lat='59.72497520418' lon='17.31266002006' />
+  <node id='-439130' lat='59.7266289488' lon='17.30787395575' />
+  <node id='-439128' lat='59.73150104212' lon='17.30533235976' />
+  <node id='-439126' lat='59.74171759529' lon='17.33024859294' />
+  <node id='-439124' lat='59.74283225733' lon='17.32460914837' />
+  <node id='-439122' lat='59.74170094835' lon='17.32564433644'>
+    <tag k='traffic_calming' v='bump' />
+  </node>
+  <node id='-439120' lat='59.72640211512' lon='17.28830878006' />
+  <node id='-439117' lat='59.7260372885' lon='17.2905751092' />
+  <node id='-439114' lat='59.72596751352' lon='17.29105751542' />
+  <node id='-439112' lat='59.74078383843' lon='17.3225235391' />
+  <node id='-439110' lat='59.74142997046' lon='17.32333196829' />
+  <node id='-439107' lat='59.74212463787' lon='17.31671828474' />
+  <node id='-439105' lat='59.74140483721' lon='17.32237842537' />
+  <node id='-439103' lat='59.74232674913' lon='17.32730020325' />
+  <node id='-439100' lat='59.72908464588' lon='17.30198856348' />
+  <node id='-439098' lat='59.73096235742' lon='17.29901326621' />
+  <node id='-439096' lat='59.72900643677' lon='17.29719668755' />
+  <node id='-439094' lat='59.73412396247' lon='17.30194985964' />
+  <node id='-439092' lat='59.73308743455' lon='17.30758642006' />
+  <node id='-439090' lat='59.74032575757' lon='17.34679790389' />
+  <node id='-439088' lat='59.73978377729' lon='17.33542427915' />
+  <node id='-439086' lat='59.7413755771' lon='17.33247749534' />
+  <node id='-439083' lat='59.73876891466' lon='17.31392933419' />
+  <node id='-439081' lat='59.74316429831' lon='17.31758240612' />
+  <node id='-439079' lat='59.74182258131' lon='17.33314977281' />
+  <node id='-439073' lat='59.72630392113' lon='17.29814091035' />
+  <node id='-439071' lat='59.73251435272' lon='17.30673464549' />
+  <node id='-439069' lat='59.73856171289' lon='17.31056835528' />
+  <node id='-439067' lat='59.74255594326' lon='17.28787405863' />
+  <node id='-439065' lat='59.74075481124' lon='17.29205685007' />
+  <node id='-439063' lat='59.73853200388' lon='17.30977667563'>
+    <tag k='traffic_calming' v='yes' />
+  </node>
+  <node id='-439061' lat='59.73968175028' lon='17.32993012529' />
+  <node id='-439060' lat='59.74822695908' lon='17.34278270263' />
+  <node id='-439057' lat='59.73645113472' lon='17.34665364757' />
+  <node id='-439055' lat='59.73599119647' lon='17.32604389338' />
+  <node id='-439053' lat='59.73694939403' lon='17.3078677633' />
+  <node id='-439051' lat='59.73702604865' lon='17.2979051146' />
+  <node id='-439050' lat='59.73913398179' lon='17.28862692268' />
+  <node id='-439036' lat='59.73264856926' lon='17.29891479202' />
+  <node id='-439035' lat='59.73946007343' lon='17.30372532698' />
+  <node id='-439034' lat='59.74517229759' lon='17.31537005291' />
+  <node id='-439033' lat='59.74768190106' lon='17.3308496964' />
+  <node id='-439031' lat='59.72591258819' lon='17.29003923659' />
+  <node id='-439030' lat='59.74886146151' lon='17.34087945923' />
+  <node id='-439028' lat='59.72562310491' lon='17.2910033448' />
+  <node id='-439026' lat='59.73254145783' lon='17.29935007892' />
+  <node id='-439024' lat='59.73932560549' lon='17.30414127638' />
+  <node id='-439022' lat='59.74495885126' lon='17.31562494016' />
+  <node id='-439020' lat='59.74744943953' lon='17.33098719236' />
+  <node id='-439019' lat='59.74876171331' lon='17.34088329665' />
+  <way id='-440051' visible='true'>
+    <nd ref='-440047' />
+    <nd ref='-440040' />
+    <tag k='highway' v='service' />
+    <tag k='maxspeed' v='20' />
+  </way>
+  <way id='-440050' visible='true'>
+    <nd ref='-440045' />
+    <nd ref='-440036' />
+    <nd ref='-440076' />
+    <nd ref='-440038' />
+    <nd ref='-440047' />
+    <tag k='highway' v='service' />
+    <tag k='maxspeed' v='20' />
+    <tag k='oneway' v='yes' />
+  </way>
+  <way id='-440048' visible='true'>
+    <nd ref='-440047' />
+    <nd ref='-440078' />
+    <nd ref='-440045' />
+    <tag k='highway' v='service' />
+    <tag k='maxspeed' v='20' />
+    <tag k='oneway' v='yes' />
+  </way>
+  <way id='-440037' visible='true'>
+    <nd ref='-440034' />
+    <nd ref='-440045' />
+    <tag k='highway' v='service' />
+    <tag k='maxspeed' v='20' />
+  </way>
+  <way id='-439813' visible='true'>
+    <nd ref='-439810' />
+    <nd ref='-439812' />
+    <tag k='highway' v='residential' />
+    <tag k='maxspeed' v='30' />
+  </way>
+  <way id='-439784' visible='true'>
+    <nd ref='-439722' />
+    <nd ref='-439724' />
+    <tag k='highway' v='unclassified' />
+  </way>
+  <way id='-439723' visible='true'>
+    <nd ref='-439720' />
+    <nd ref='-439722' />
+    <tag k='cutting' v='yes' />
+    <tag k='highway' v='unclassified' />
+    <tag k='lanes' v='2' />
+    <tag k='maxspeed' v='20' />
+    <tag k='surface' v='unpaved' />
+  </way>
+  <way id='-439658' visible='true'>
+    <nd ref='-439128' />
+    <nd ref='-439138' />
+    <nd ref='-439952' />
+    <nd ref='-439100' />
+    <nd ref='-439073' />
+    <nd ref='-439716' />
+    <nd ref='-439714' />
+    <nd ref='-439114' />
+    <nd ref='-439117' />
+    <nd ref='-439718' />
+    <nd ref='-439909' />
+    <nd ref='-439724' />
+    <nd ref='-439907' />
+    <nd ref='-439120' />
+    <tag k='highway' v='secondary' />
+    <tag k='lanes' v='2' />
+    <tag k='maxspeed' v='50' />
+    <tag k='surface' v='asphalt' />
+  </way>
+  <way id='-439642' visible='true'>
+    <nd ref='-439069' />
+    <nd ref='-439063' />
+    <nd ref='-440011' />
+    <nd ref='-440009' />
+    <nd ref='-439169' />
+    <nd ref='-439065' />
+    <nd ref='-439895' />
+    <nd ref='-439893' />
+    <nd ref='-439067' />
+    <tag k='highway' v='tertiary' />
+  </way>
+  <way id='-439568' visible='true'>
+    <nd ref='-439194' />
+    <nd ref='-439850' />
+    <nd ref='-439060' />
+    <tag k='highway' v='secondary' />
+  </way>
+  <way id='-439408' visible='true'>
+    <nd ref='-439211' />
+    <nd ref='-439199' />
+    <nd ref='-439576' />
+    <nd ref='-439201' />
+    <tag k='highway' v='primary_link' />
+    <tag k='lanes' v='1' />
+    <tag k='maxspeed' v='70' />
+    <tag k='oneway' v='yes' />
+    <tag k='surface' v='asphalt' />
+  </way>
+  <way id='-439403' visible='true'>
+    <nd ref='-439206' />
+    <nd ref='-439192' />
+    <nd ref='-439259' />
+    <nd ref='-439194' />
+    <tag k='highway' v='primary_link' />
+    <tag k='lanes' v='2' />
+    <tag k='maxspeed' v='70' />
+    <tag k='surface' v='asphalt' />
+  </way>
+  <way id='-439238' visible='true'>
+    <nd ref='-439031' />
+    <nd ref='-439187' />
+    <nd ref='-439185' />
+    <nd ref='-439183' />
+    <nd ref='-439181' />
+    <nd ref='-439028' />
+    <nd ref='-439114' />
+    <nd ref='-439026' />
+    <nd ref='-439024' />
+    <nd ref='-439161' />
+    <nd ref='-439022' />
+    <nd ref='-439020' />
+    <nd ref='-439019' />
+    <tag k='highway' v='primary' />
+    <tag k='maxspeed' v='100' />
+    <tag k='oneway' v='yes' />
+    <tag k='ref' v='11' />
+    <tag k='surface' v='asphalt' />
+  </way>
+  <way id='-439237' visible='true'>
+    <nd ref='-439019' />
+    <nd ref='-439174' />
+    <tag k='highway' v='primary' />
+    <tag k='maxspeed' v='100' />
+    <tag k='oneway' v='yes' />
+    <tag k='ref' v='11' />
+    <tag k='surface' v='asphalt' />
+  </way>
+  <way id='-439219' visible='true'>
+    <nd ref='-439216' />
+    <nd ref='-439218' />
+    <tag k='highway' v='unclassified' />
+  </way>
+  <way id='-439215' visible='true'>
+    <nd ref='-439194' />
+    <nd ref='-439267' />
+    <nd ref='-439214' />
+    <tag k='highway' v='unclassified' />
+  </way>
+  <way id='-439212' visible='true'>
+    <nd ref='-439209' />
+    <nd ref='-439263' />
+    <nd ref='-439211' />
+    <tag k='highway' v='primary_link' />
+    <tag k='maxspeed' v='70' />
+    <tag k='oneway' v='yes' />
+    <tag k='surface' v='asphalt' />
+  </way>
+  <way id='-439207' visible='true'>
+    <nd ref='-439206' />
+    <nd ref='-439265' />
+    <nd ref='-439578' />
+    <nd ref='-439204' />
+    <tag k='highway' v='primary_link' />
+    <tag k='oneway' v='yes' />
+  </way>
+  <way id='-439198' visible='true'>
+    <nd ref='-439060' />
+    <nd ref='-439261' />
+    <nd ref='-439197' />
+    <nd ref='-439211' />
+    <tag k='highway' v='primary_link' />
+    <tag k='lanes' v='2' />
+    <tag k='maxspeed' v='70' />
+  </way>
+  <way id='-439193' visible='true'>
+    <nd ref='-439190' />
+    <nd ref='-439583' />
+    <nd ref='-439206' />
+    <tag k='highway' v='primary_link' />
+    <tag k='oneway' v='yes' />
+  </way>
+  <way id='-439178' visible='true'>
+    <nd ref='-439174' />
+    <nd ref='-439209' />
+    <nd ref='-439204' />
+    <nd ref='-439201' />
+    <nd ref='-439190' />
+    <nd ref='-439177' />
+    <tag k='highway' v='primary' />
+    <tag k='lanes' v='2' />
+    <tag k='maxspeed' v='80' />
+    <tag k='ref' v='11' />
+    <tag k='surface' v='asphalt' />
+  </way>
+  <way id='-439172' visible='true'>
+    <nd ref='-439169' />
+    <nd ref='-439171' />
+    <tag k='highway' v='unclassified' />
+  </way>
+  <way id='-439166' visible='true'>
+    <nd ref='-439163' />
+    <nd ref='-439165' />
+    <nd ref='-439167' />
+    <tag k='highway' v='unclassified' />
+  </way>
+  <way id='-439149' visible='true'>
+    <nd ref='-439146' />
+    <nd ref='-439148' />
+    <nd ref='-439150' />
+    <nd ref='-439152' />
+    <tag k='highway' v='residential' />
+    <tag k='maxspeed' v='30' />
+  </way>
+  <way id='-439144' visible='true'>
+    <nd ref='-439141' />
+    <nd ref='-439143' />
+    <tag k='highway' v='residential' />
+    <tag k='maxspeed' v='30' />
+  </way>
+  <way id='-439137' visible='true'>
+    <nd ref='-439134' />
+    <nd ref='-439136' />
+    <nd ref='-439141' />
+    <nd ref='-439138' />
+    <tag k='highway' v='residential' />
+    <tag k='maxspeed' v='30' />
+  </way>
+  <way id='-439131' visible='true'>
+    <nd ref='-439128' />
+    <nd ref='-439954' />
+    <nd ref='-439130' />
+    <nd ref='-439216' />
+    <nd ref='-439132' />
+    <tag k='highway' v='tertiary' />
+  </way>
+  <way id='-439113' visible='true'>
+    <nd ref='-439110' />
+    <nd ref='-439112' />
+    <tag k='highway' v='residential' />
+    <tag k='maxspeed' v='30' />
+    <tag k='name' v='Gammelvägen' />
+  </way>
+  <way id='-439106' visible='true'>
+    <nd ref='-439103' />
+    <nd ref='-439122' />
+    <nd ref='-439110' />
+    <nd ref='-439105' />
+    <nd ref='-439107' />
+    <tag k='highway' v='residential' />
+    <tag k='maxspeed' v='30' />
+  </way>
+  <way id='-439101' visible='true'>
+    <nd ref='-439098' />
+    <nd ref='-439143' />
+    <nd ref='-439100' />
+    <tag k='highway' v='residential' />
+    <tag k='maxspeed' v='30' />
+  </way>
+  <way id='-439095' visible='true'>
+    <nd ref='-439092' />
+    <nd ref='-439134' />
+    <nd ref='-439094' />
+    <nd ref='-439720' />
+    <nd ref='-439098' />
+    <nd ref='-439096' />
+    <tag k='highway' v='residential' />
+    <tag k='maxspeed' v='30' />
+  </way>
+  <way id='-439089' visible='true'>
+    <nd ref='-439086' />
+    <nd ref='-439088' />
+    <nd ref='-439090' />
+    <tag k='highway' v='tertiary' />
+  </way>
+  <way id='-439082' visible='true'>
+    <nd ref='-439079' />
+    <nd ref='-439126' />
+    <nd ref='-439103' />
+    <nd ref='-439124' />
+    <nd ref='-439744' />
+    <nd ref='-439746' />
+    <nd ref='-439081' />
+    <nd ref='-439107' />
+    <nd ref='-439810' />
+    <nd ref='-439083' />
+    <tag k='highway' v='unclassified' />
+    <tag k='maxspeed' v='50' />
+  </way>
+  <way id='-439072' visible='true'>
+    <nd ref='-439069' />
+    <nd ref='-440013' />
+    <nd ref='-439163' />
+    <nd ref='-440034' />
+    <nd ref='-439695' />
+    <nd ref='-440040' />
+    <nd ref='-439092' />
+    <nd ref='-439071' />
+    <nd ref='-439956' />
+    <nd ref='-439128' />
+    <tag k='highway' v='secondary' />
+    <tag k='lanes' v='2' />
+    <tag k='maxspeed' v='30' />
+    <tag k='surface' v='asphalt' />
+  </way>
+  <way id='-439062' visible='true'>
+    <nd ref='-439060' />
+    <nd ref='-439845' />
+    <nd ref='-439625' />
+    <nd ref='-439079' />
+    <nd ref='-439086' />
+    <nd ref='-439061' />
+    <nd ref='-439146' />
+    <nd ref='-439766' />
+    <nd ref='-439764' />
+    <nd ref='-439812' />
+    <nd ref='-439083' />
+    <nd ref='-439152' />
+    <nd ref='-439069' />
+    <tag k='highway' v='secondary' />
+    <tag k='lanes' v='2' />
+    <tag k='maxspeed' v='50' />
+    <tag k='surface' v='asphalt' />
+  </way>
+  <way id='-439052' visible='true'>
+    <nd ref='-439050' />
+    <nd ref='-439051' />
+    <nd ref='-439053' />
+    <nd ref='-439055' />
+    <nd ref='-439057' />
+    <tag k='waterway' v='river' />
+  </way>
+  <way id='-439032' visible='true'>
+    <nd ref='-439030' />
+    <nd ref='-439033' />
+    <nd ref='-439034' />
+    <nd ref='-439159' />
+    <nd ref='-439035' />
+    <nd ref='-439036' />
+    <nd ref='-439117' />
+    <nd ref='-439031' />
+    <tag k='highway' v='primary' />
+    <tag k='maxspeed' v='100' />
+    <tag k='oneway' v='yes' />
+    <tag k='ref' v='11' />
+    <tag k='surface' v='asphalt' />
+  </way>
+  <way id='-439021' visible='true'>
+    <nd ref='-439174' />
+    <nd ref='-439030' />
+    <tag k='highway' v='primary' />
+    <tag k='maxspeed' v='100' />
+    <tag k='oneway' v='yes' />
+    <tag k='ref' v='11' />
+    <tag k='surface' v='asphalt' />
+  </way>
+</osm>
