@@ -280,7 +280,7 @@ class DB():
         self.db.timeTable.insert_one({"line": document[0][0], "date": datetime.datetime.now(), "timetable": timeTable})
 
 
-    def getRequestsFromDB(self):
+    def getRequestsFromDB(self, start, end):
         ''' Gets travel requests from the database. Attempts to cluster the requests based on time 
         and calculates a count of the total requests between a time window.
 
@@ -292,7 +292,8 @@ class DB():
         yesterdayStart = datetime.datetime(yesterday.year, yesterday.month, yesterday.day,0,0,0)
         todayStart = datetime.datetime(datetime.date.today().year,datetime.date.today().month,datetime.date.today().day,0,0,0)
         reqs = []
-        requests = self.db.TravelRequestLookAhead.find({"$and": [{"startTime": {"$gte": yesterdayStart}}, {"startTime": {"$lt": todayStart}}]}, {"startTime": 1, "startBusStop": 1, "endBusStop": 1, "_id": 0})  # New collection for LookAhead
+        requests = self.db.TravelRequestLookAhead.find({"$and": [{"startTime": {"$gte": start}}, {"startTime": {"$lt":
+            end}}]}, {"startTime": 1, "startBusStop": 1, "endBusStop": 1, "_id": 0})  # New collection for LookAhead
         for req in requests:
             reqs.append([req.get('startTime', None), req.get('startBusStop', None), req.get('endBusStop', None)])
             #reqs.append(req.get('startTime', None))
@@ -310,7 +311,7 @@ class DB():
 
     def getBusStopName(self, id):
         return self.retrieveData(self.db.BusStop.find({"_id": id}), "name")
-    def MaxReqNumTrip(self,trip_sTime,lineNum):
+    def MaxReqNumTrip(self,trip_sTime,tripEnd, lineNum = 2):
 
         #create dic
         BusStplist = []
@@ -323,7 +324,7 @@ class DB():
 
 
         #get all requests where starting time is more than trip starting time
-        Requests = self.getRequestsFromDB()
+        Requests = self.getRequestsFromDB(trip_sTime, tripEnd)
 
         #get only the requests with start location in bus stops and end location in bus stps
         counter = 0
@@ -338,14 +339,15 @@ class DB():
                         i[1] += -1
                         counter2 +=1
 
-        print BusStplist
         sum = 0;
         for i in BusStplist:
             sum += i[1]
             i[1] = sum
+        '''
         print "after aggregation "
         print BusStplist
         print counter
         print counter2
+        '''
+        return BusStplist
 
-    

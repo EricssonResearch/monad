@@ -241,27 +241,28 @@ class Fitness():
         tripWaitingTime = timedelta(minutes=0) # waiting time due to insufficient capacity
         for i, trip in enumerate(individual):
             tripTimeTable = db.generateFitnessTripTimeTable(individual[i][0], individual[i][2])
-            #print individual
-            #print tripTimeTable
+
             tripStartTime = trip[2]
-            stopsAndRequests = {'stop A': 100}
+            self.start = '00:00' if i == 0 else individual[i-1][2]
+            self.end = individual[i][2]
+            stopsAndRequests = db.MaxReqNumTrip(self.start, self.end)
             count = 0
-            for stop in stopsAndRequests:
-                if stopsAndRequests[stop] > trip[1] and i < len(individual)-1:
+            for i, stop in enumerate(stopsAndRequests):
+                if stop[1] > trip[1] and i < len(individual)-1:
                     nextTripTime = individual[i+1][2]
                     nextTripWait = self.timeDiff(nextTripTime, individual[i][2])
                     tripWaitingTime += nextTripWait
-                    count += (stopsAndRequests[stop] - trip[1])
+                    count += (stop[1] - trip[1])   # must wait for the next bus trip
                     #print "Next trip is in..." + str(nextTripWait) + " minutes"
                     #print nextTripTime
                 else:
                     pass
-                    #print "Requested capacity " + str(stopsAndRequests[stop])
+                    #print "Requested capacity " + str(stopsAndRequests[i][1])
                     #print "Bus capacity " + str(trip[1])
 
-            if count is not 0:
-                pass
-                #print "Average Trip waiting time = " + str((tripWaitingTime.total_seconds()/60.0)/count) 
+        for i in range(len(individual)):
+            tripTimeTable = db.generateFitnessTripTimeTable(individual[i][0], individual[i][2])
+
             for j in range(len(tripTimeTable)):
 
                 # Search on Fitness.request array for the particular requests
