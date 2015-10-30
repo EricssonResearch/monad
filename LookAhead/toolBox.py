@@ -15,7 +15,7 @@ specific language governing permissions and limitations under the License.
 from deap import base
 from deap import creator
 from deap import tools
-#from scoop import futures
+from scoop import futures
 from dbConnection import DB
 from fitness import Fitness
 from operator import itemgetter
