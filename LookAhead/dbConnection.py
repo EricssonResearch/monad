@@ -17,6 +17,7 @@ import random
 import string
 import collections
 import datetime
+import itertools
 from pymongo import MongoClient
 from bson.objectid import ObjectId
 from operator import itemgetter
@@ -314,41 +315,33 @@ class DB():
         return self.retrieveData(self.db.BusStop.find({"_id": id}), "name")
     def MaxReqNumTrip(self,trip_sTime,tripEnd, lineNum = 2):
 
-        #create dic
         BusStplist = []
         dirlist =[]
+        t =datetime.datetime.strptime(trip_sTime,'%Y-%m-%d %H:%M:%S').time()
+        e =datetime.datetime.strptime(tripEnd,'%Y-%m-%d %H:%M:%S').time()
         #get the trip time table
-        trip_time_table = self.generateFitnessTripTimeTable(lineNum,trip_sTime)
+        trip_time_table = self.generateFitnessTripTimeTable(lineNum,trip_sTime[11:16])
         for i in trip_time_table:
             BusStplist.append([i[0],0])
             dirlist.append(i[0])
-
+        t = datetime.datetime.strptime(trip_sTime,'%Y-%m-%d %H:%M:%S')
+        e =datetime.datetime.strptime(tripEnd,'%Y-%m-%d %H:%M:%S')
 
         #get all requests where starting time is more than trip starting time
-        Requests = self.getRequestsFromDB(trip_sTime, tripEnd)
+        Requests = self.getRequestsFromDB(t, e)
 
         #get only the requests with start location in bus stops and end location in bus stps
-        counter = 0
-        counter2 = 0
         for req in Requests:
             for i in BusStplist:
                 if (req[1], req[2]) in itertools.combinations(dirlist, 2):
                     if req[1] == i[0]:
                         i[1] += 1
-                        counter +=1
                     if req[2] == i[0]:
                         i[1] += -1
-                        counter2 +=1
 
         sum = 0;
         for i in BusStplist:
             sum += i[1]
             i[1] = sum
-        '''
-        print "after aggregation "
-        print BusStplist
-        print counter
-        print counter2
-        '''
         return BusStplist
 
