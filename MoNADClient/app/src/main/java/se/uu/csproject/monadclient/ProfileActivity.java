@@ -14,8 +14,6 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
-import org.apache.commons.validator.routines.EmailValidator;
-
 
 public class ProfileActivity extends AppCompatActivity {
 
@@ -128,15 +126,6 @@ public class ProfileActivity extends AppCompatActivity {
         String userEntered = usernameField.getText().toString();
         String emailEntered = emailField.getText().toString();
         String phoneEntered = phoneField.getText().toString();
-
-
-        EmailValidator validator = EmailValidator.getInstance();
-
-        if (!validator.isValid(emailEntered)) {
-            Toast.makeText(getApplicationContext(), "Please enter a valid email address!",
-                    Toast.LENGTH_LONG).show();
-            return;
-        }
 
         if(!phoneEntered.matches("\\d+")) {
             Toast.makeText(getApplicationContext(), "Please enter a valid phone number!",
