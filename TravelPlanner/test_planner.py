@@ -50,7 +50,7 @@ class TestTravelPlanner(unittest.TestCase):
                 "u'TravelRequest')"
         routeDBString = "Collection(Database(MongoClient('localhost', 27017), u'monad'), u'Route')"
         timetableDBString = "Collection(Database(MongoClient('localhost', 27017), u'monad'), " + \
-                "u'timeTable')"
+                "u'TimeTable')"
         usertripDBString = "Collection(Database(MongoClient('localhost', 27017), u'monad'), " + \
                 "u'UserTrip')"
 

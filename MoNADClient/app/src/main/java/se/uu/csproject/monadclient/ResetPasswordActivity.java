@@ -1,9 +1,11 @@
 package se.uu.csproject.monadclient;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -14,6 +16,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import org.w3c.dom.Text;
+
+import java.util.concurrent.ExecutionException;
 
 public class ResetPasswordActivity extends AppCompatActivity {
 
@@ -72,13 +76,32 @@ public class ResetPasswordActivity extends AppCompatActivity {
                         email = extras.getString("EMAIL");
                     }
 
-                    String response = ClientAuthentication.postForgottenPasswordResetRequest(email, passwordValue);
+                    ResetPasswordTask task = new ResetPasswordTask();
+
+                    String response = null;
+                    try {
+                        response = task.execute(email, passwordValue).get();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    } catch (ExecutionException e) {
+                        e.printStackTrace();
+                    }
                     Toast.makeText(getApplicationContext(), response, Toast.LENGTH_LONG).show();
                     ResetPasswordActivity.this.startActivity(new Intent(ResetPasswordActivity.this, LoginActivity.class));
                 }
                 else {
                     String oldPassword = oldPasswordField.getText().toString();
-                    String response = ClientAuthentication.postExistingPasswordUpdateRequest(ClientAuthentication.getClientId(), oldPassword, passwordValue);
+
+                    UpdatePasswordTask task = new UpdatePasswordTask();
+
+                    String response = null;
+                    try {
+                        response = task.execute(ClientAuthentication.getClientId(), oldPassword, passwordValue).get();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    } catch (ExecutionException e) {
+                        e.printStackTrace();
+                    }
                     Toast.makeText(getApplicationContext(), response, Toast.LENGTH_LONG).show();
                     if(response.startsWith("Success (1)")) {
                         finish();
@@ -108,5 +131,25 @@ public class ResetPasswordActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private class ResetPasswordTask extends AsyncTask<String, Void, String>{
+
+        @Override
+        protected String doInBackground(String... params) {
+            String response = ClientAuthentication.postForgottenPasswordResetRequest(params[0], params[1]);
+
+            return response;
+        }
+    }
+
+    private class UpdatePasswordTask extends AsyncTask<String, Void, String>{
+
+        @Override
+        protected String doInBackground(String... params) {
+            String response = ClientAuthentication.postExistingPasswordUpdateRequest(params[0], params[1], params[2]);
+
+            return response;
+        }
     }
 }

@@ -17,6 +17,7 @@ import random
 import string
 import collections
 import datetime
+import itertools
 from pymongo import MongoClient
 from bson.objectid import ObjectId
 from operator import itemgetter, attrgetter
@@ -74,7 +75,8 @@ class DB():
         return req
 
     def getTravelRequestSummary(self, start, end):
-        keyf = "function(doc) { return { startBusStop: doc.startBusStop, hour: doc.startTime.getHours()-2, minute: doc.startTime.getMinutes()};}"
+        # keyf = "function(doc) { return { startBusStop: doc.startBusStop, hour: doc.startTime.getHours()-2, minute: doc.startTime.getMinutes()};}"
+        keyf = "function(doc) { return { startBusStop: doc.startBusStop, hour: doc.startTime.getHours(), minute: doc.startTime.getMinutes()};}"
         condition = {"startTime": {"$gte": start, "$lt": end}}
         initial = {"count": 0}
         reduce = "function(curr, result) { result.count++; }"
@@ -99,27 +101,17 @@ class DB():
         dataFile = open("/home/ziring/result.txt", "w")
         queryResults = []
         # A query is made to group request made to a busstop and counting the number of similar requests made
-        pipline = [
-                   {"$match": {"startTime": {"$gte": start, "$lt": end}}},
-                   {"$group": {"_id": {"RequestTime": "$startTime", "BusStop": "$startBusStop"}, "total": {"$sum": 1}}},
-                   {"$sort": {"_id.RequestTime": 1}}
 
-        ]
+        pipline = [{"$match": {"startTime": {"$gte": start, "$lt": end}}},
+                   {"$group": {"_id": {"RequestTime": "$startTime", "BusStop": "$startBusStop"}, "total": {"$sum": 1}}},
+                   {"$sort": {"_id.RequestTime": 1}}]
 
         groupQuery = self.db.TravelRequestLookAhead.aggregate(pipline)
-
         for x in groupQuery:
             queryResults.append(x)
             dataFile.write(str(x)+'\n'+'\n')
 
-       # dataFile.write(str(sorted(queryResults, key=operator.itemgetter("RequestTime"))))
-
         dataFile.close()
-        #print (queryResults.sort(lambda x:(x[0])))
-        #print(sorted(queryResults, key=lambda student: student[0]))
-        #print(sorted(queryResults, key=itemgetter("_id","total")))
-
-        #print(type(queryResults))
         return queryResults
 
     # These function will be called for every gene in order to get the difference
@@ -151,13 +143,15 @@ class DB():
         self.db.Route.drop()
 
     def getTripDay(self, line):
-        frequency = self.db.Route.find({"line": line}, {"frequency": 1})
-        frequency = self.retrieveData(frequency, "frequency")
-        return DB.minutesDay / frequency
+        return DB.minutesDay / self.getFrequency(line)
 
     def getRouteStop(self, line):
         routeStop = self.db.Route.find({"line": line}, {"trajectory": 1})
         return self.retrieveData(routeStop, "trajectory")
+
+    def getFrequency(self, line):
+        return self.retrieveData(self.db.Route.find({"line": line}, {"frequency": 1}), "frequency")
+
 
     # Bus
     # https://www.ul.se/en/About-UL/About-our-public-function/
@@ -297,7 +291,7 @@ class DB():
         self.db.timeTable.insert_one({"line": document[0][0], "date": datetime.datetime.now(), "timetable": timeTable})
 
 
-    def getRequestsFromDB(self):
+    def getRequestsFromDB(self, start, end):
         ''' Gets travel requests from the database. Attempts to cluster the requests based on time 
         and calculates a count of the total requests between a time window.
 
@@ -309,7 +303,8 @@ class DB():
         yesterdayStart = datetime.datetime(yesterday.year, yesterday.month, yesterday.day,0,0,0)
         todayStart = datetime.datetime(datetime.date.today().year,datetime.date.today().month,datetime.date.today().day,0,0,0)
         reqs = []
-        requests = self.db.TravelRequestLookAhead.find({"$and": [{"startTime": {"$gte": yesterdayStart}}, {"startTime": {"$lt": todayStart}}]}, {"startTime": 1, "startBusStop": 1, "endBusStop": 1, "_id": 0})  # New collection for LookAhead
+        requests = self.db.TravelRequestLookAhead.find({"$and": [{"startTime": {"$gte": start}}, {"startTime": {"$lt":
+            end}}]}, {"startTime": 1, "startBusStop": 1, "endBusStop": 1, "_id": 0})  # New collection for LookAhead
         for req in requests:
             reqs.append([req.get('startTime', None), req.get('startBusStop', None), req.get('endBusStop', None)])
             #reqs.append(req.get('startTime', None))
@@ -327,3 +322,35 @@ class DB():
 
     def getBusStopName(self, id):
         return self.retrieveData(self.db.BusStop.find({"_id": id}), "name")
+    def MaxReqNumTrip(self,trip_sTime,tripEnd, lineNum = 2):
+
+        BusStplist = []
+        dirlist =[]
+        t =datetime.datetime.strptime(trip_sTime,'%Y-%m-%d %H:%M:%S').time()
+        e =datetime.datetime.strptime(tripEnd,'%Y-%m-%d %H:%M:%S').time()
+        #get the trip time table
+        trip_time_table = self.generateFitnessTripTimeTable(lineNum,trip_sTime[11:16])
+        for i in trip_time_table:
+            BusStplist.append([i[0],0])
+            dirlist.append(i[0])
+        t = datetime.datetime.strptime(trip_sTime,'%Y-%m-%d %H:%M:%S')
+        e =datetime.datetime.strptime(tripEnd,'%Y-%m-%d %H:%M:%S')
+
+        #get all requests where starting time is more than trip starting time
+        Requests = self.getRequestsFromDB(t, e)
+
+        #get only the requests with start location in bus stops and end location in bus stps
+        for req in Requests:
+            for i in BusStplist:
+                if (req[1], req[2]) in itertools.combinations(dirlist, 2):
+                    if req[1] == i[0]:
+                        i[1] += 1
+                    if req[2] == i[0]:
+                        i[1] += -1
+
+        sum = 0;
+        for i in BusStplist:
+            sum += i[1]
+            i[1] = sum
+        return BusStplist
+
