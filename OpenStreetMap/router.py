@@ -32,6 +32,16 @@ busRoadTypes = ('motorway', 'motorway_link', 'trunk', 'trunk_link', 'primary',
                 'tertiary_link', 'unclassified', 'residential', 'service')
 
 
+class BusStop:
+
+    def __init__(self, nodeId, longitude, latitude):
+		self.id = nodeId
+		self.coordinates = (longitude, latitude)
+		self.busStopName = ""
+
+    def addBusStopName(self, name):
+        self.busStopName = name
+
 class RouteHandler(handler.ContentHandler):
     """
 
@@ -41,10 +51,12 @@ class RouteHandler(handler.ContentHandler):
         # all nodes in the map
         self.nodes = {}
         # all bus stop nodes
-        self.busStops = {}
+        self.busStops = []
         self.edges = {}
         # Roads
         self.roads = {}
+
+        self.index = 0
 
         # Used as temp
         self.nd = []
@@ -74,6 +86,8 @@ class RouteHandler(handler.ContentHandler):
             lat = float(attributes.get('lat'))
             lon = float(attributes.get('lon'))
             self.nodes[nodeId] = (lon, lat)
+            self.busStops.append( BusStop(nodeId, lon, lat) )
+            self.index += 1
             self.stop = nodeId
         elif name == 'way':
             self.roadId = int(attributes.get('id'))
@@ -119,7 +133,7 @@ class RouteHandler(handler.ContentHandler):
             highway = self.tag.get('highway', '')
             stopName = self.tag.get('name', '')
             if highway == 'bus_stop':
-                self.addBusStop(stopName, self.stop)
+                self.busStops[self.index-1].addBusStopName(stopName)
 
         # Clean up
         if name in ('node', 'way', 'relation'):
@@ -139,16 +153,15 @@ class RouteHandler(handler.ContentHandler):
         if toNode not in self.edges:
             self.edges[toNode] = []
 
-    def addBusStop(self, name, stop):
-        if name in self.busStops:
-            self.busStops[name].append(stop)
-        else:
-            self.busStops[name] = [stop]
-
-
 class AStar:
     def __init__(self):
         pass
+
+    def	getNodeById(self, nodes, nodeId):
+        for nd in nodes:
+            if nd.id == nodeId:
+                return nd
+        return -1
 
     def findPath(self, nodes, edges, start, goal):
         """
@@ -180,11 +193,9 @@ class AStar:
             # For all nodes connected to the one we are looking at for the
             # moment.
             for nextNode, speed, roadInt, _ in edges[current]:
-
                 # How fast you can go on a road matters on the type of the road
                 # It can be seen as a penalty for "smaller" roads.
                 speedDecrease = (1 - (float(roadInt) / 50))
-
                 fromNode = nodes[current]
                 toNode = nodes[nextNode]
                 roadLength = self.measure(fromNode[0],
@@ -253,6 +264,7 @@ class Map:
         self.astar = AStar()
         self.handler = RouteHandler()
         self.nodes = {}
+        self.busStopList = []
         self.edges = {}
 
     def parsData(self):
@@ -265,7 +277,27 @@ class Map:
         parser.setContentHandler(self.handler)
         parser.parse(self.omsfile)
         self.nodes = self.handler.nodes
+        self.busStopList = self.handler.busStops
         self.edges = self.handler.edges
+
+    def findBusStopName(self, lon, lat):
+        for nd in self.busStopList:
+            if nd.coordinates[0] == lon and nd.coordinates[1] == lat:
+                return nd.busStopName
+        return "no stop found"
+
+    def findBusStopPosition(self, name):
+        for nd in self.busStopList:
+            if nd.busStopName == name:
+                return nd.coordinates
+        return "no such stop name"
+
+    def	getNodebyId(self, nodeId):
+        for nd in self.busStopList:
+            print nd.id
+            if nd.id == nodeId:
+                return nd
+        return -1
 
     def findRoute(self, startNode, endNode):
         """
@@ -461,12 +493,18 @@ if __name__ == '__main__':
     print "Loading data ..."
     myMap.parsData()
     print "Data loaded in: %f sec" % (time.time() - timer)
+    print "We have " + str(len(myMap.nodes)) + " nodes in total"
+    print "We have " + str(myMap.handler.index) + " bus stops in total"
 
     print "Finding path... "
     # flogsta vardcentral
     nTo = 2198905720
     # polacksbacken
     nFrom = 1125461154
+
+    print "Find a bus stop name: " + myMap.findBusStopName(17.6666581, 59.8556742)
+    print "Find a bus stop position: " + str(myMap.findBusStopPosition("Danmarksgatan"))
+
     timer = time.time()
     myPath = myMap.findRoute(nFrom, nTo)
     print "Found path in: %f sec" % (time.time() - timer)
@@ -491,7 +529,7 @@ if __name__ == '__main__':
     myMap.drawInit(3000)
     myMap.drawNodes(myMap.nodes, (227, 254, 212, 255))
     myMap.drawRoads(myMap.edges, myMap.nodes)
-    myMap.drawBusStops(myMap.handler.busStops, myMap.nodes)
+#    myMap.drawBusStops(myMap.handler.busStops, myMap.nodes)
     myMap.drawPath(myPath, 'red')
     myMap.drawNodeIds(wayP, 'blue')
     myMap.drawPath(my4Path, 'green')
