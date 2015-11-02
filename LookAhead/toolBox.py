@@ -93,10 +93,10 @@ def evalIndividual(individual):
                 diff = 0
                 count = 0
                 for k in range(len(request)):
-                    # diff = diff + self.getMinutes(self.timeDiff(tripTimeTable[j][1], str(int(request[k]["_id"]["RequestTime"].hour)) + ":" + str(int(request[k]["_id"]["RequestTime"].minute))))*int(request[k]["total"])
-                    diff = diff + fitnessClass.getMinutes(fitnessClass.timeDiff(tripTimeTable[j][1], str(int(request[k]["hour"])) + ":" + str(int(request[k]["minute"]))))*int(request[k]["count"])
-                    # count = count + int(request[k]["total"])
-                    count = count + int(request[k]["count"])
+                     diff = diff + fitnessClass.getMinutes(fitnessClass.timeDiff(tripTimeTable[j][1], str(int(request[k]["_id"]["RequestTime"].hour)) + ":" + str(int(request[k]["_id"]["RequestTime"].minute))))*int(request[k]["total"])
+                    #diff = diff + fitnessClass.getMinutes(fitnessClass.timeDiff(tripTimeTable[j][1], str(int(request[k]["hour"])) + ":" + str(int(request[k]["minute"]))))*int(request[k]["count"])
+                     count = count + int(request[k]["total"])
+                    #count = count + int(request[k]["count"])
                 dif.append(diff)
                 cnt.append(count)
     return (sum(dif) + tripWaitingTime.total_seconds()/60.0)/(sum(cnt) + count),
