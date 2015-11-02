@@ -1,12 +1,9 @@
 
-
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
-
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -19,11 +16,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.text.DateFormat;
 
-
-
 import java.nio.charset.StandardCharsets;
 import java.io.DataOutputStream;
-
 
 
 class csvReader{
@@ -41,66 +35,46 @@ private static String SERVER = "http://130.238.15.114";
 		
 	    try {
 		
-		//Create a new list of request to be filled by CSV file
+		/*Create a new list of request to be filled by txt file*/
 		List requests = new ArrayList();
-		
-
 
 		String line = "";
 		String txtSplitBy = "&";
 	
 
-		//Read the file
-				
+		/*Read the file*/		
 		fileReader = new BufferedReader(new FileReader("Request.txt"));	
 
-		System.out.println("Read TXT file:");
-		
-
-		//Read the CSV file header to skip it (check if we need it)
-		//fileReader.readLine();
-
-		//Read the file line by line
+		/*Read the file line by line*/
 		while ((line = fileReader.readLine()) != null) {
-			//Get all tokens available in line
+			/*To put each line in an array splited by "&" */
 			String[] request = line.split(txtSplitBy);
 
-			DateFormat df2 = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+			/*Change format of the time*/
+			DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 			DateFormat requestFormat = new SimpleDateFormat("yyyy EEE dd MMM HH:mm");
 		
-			//Change format of the time
 			if (request[1].contains("null")){
 				request[1] = "startTime=null";
 				String edTime= request[2];
-				
-				String endT = requestFormat.format(df2.parse(edTime));
-				
+				String endT = requestFormat.format(df.parse(edTime));
 				request[2] = "endTime=" + endT;
-
-
 			} else {
 				request[2] = "endTime=null";
 				String stTime = request[1];
-				Date d1 = df2.parse(stTime);
-				String stT = requestFormat.format(df2.parse(stTime));
-				
+				Date d1 = df.parse(stTime);
+				String stT = requestFormat.format(df.parse(stTime));
 				request[1] = "startTime=" + stT;
-				
-				}
+			}
+
 			String reqTime = request[3];
-			Date d3 = df2.parse(reqTime);
-			String reqT = requestFormat.format(df2.parse(reqTime));
-			
+			Date d3 = df.parse(reqTime);
+			String reqT = requestFormat.format(df.parse(reqTime));
 			request[3] = "requestTime=" + reqT;
 			
-			//System.out.println(line);
+	
 			System.out.println(request[0]+ "&" +request[1]+ "&" + request[2]+ "&"+request[3]+ "&"+ request[4]+ "&" + request[5] + "&" + request[6]);
-			/*String guess = "&";
-			int timeInd = line.indexOf(guess);
-			while (timeInd >= 0){
-				System.out.println(timeInd);
-				timeInd = line.indexOf(guess, timeInd + 1);
-			}*/
+		
 			String urlparams = request[0]+ "&" +request[1]+ "&" + request[2]+ "&"+request[3]+ "&"+ request[4]+ "&" + request[5] + "&" + request[6];
 			doInBackground(urlparams);
 		}

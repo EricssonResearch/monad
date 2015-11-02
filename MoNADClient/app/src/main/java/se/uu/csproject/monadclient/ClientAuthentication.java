@@ -182,6 +182,22 @@ public class ClientAuthentication extends Authentication {
     }
 
     public static String postSignUpRequest(String username, String password, String email, String phone) {
+
+        /* Validate username */
+        if (!Security.validateUsername(username)) {
+            return Security.invalidUsernameMessage();
+        }
+        /* Validate email */
+        if (!Security.validateEmail(email)) {
+            return Security.invalidEmailMessage();
+        }
+        /* Validate phone */
+        if (!Security.validatePhone(phone)) {
+            return Security.invalidPhoneMessage();
+        }
+        /* Encrypt password */
+        password = Security.encryptPassword(password);
+
         String request = AUTHENTICATION_HOST + AUTHENTICATION_PORT + "/client_sign_up";
         String urlParameters = "username=" + username + "&password=" + password
                              + "&email=" + email + "&phone=" + phone;
@@ -232,6 +248,14 @@ public class ClientAuthentication extends Authentication {
     }
 
     public static String postSignInRequest(String username, String password) {
+
+        /* Validate username */
+        if (!Security.validateUsername(username)) {
+            return Security.invalidUsernameMessage();
+        }
+        /* Encrypt password */
+        password = Security.encryptPassword(password);
+
         String request = AUTHENTICATION_HOST + AUTHENTICATION_PORT + "/client_sign_in";
         String urlParameters = "username=" + username + "&password=" + password;
 
@@ -297,9 +321,9 @@ public class ClientAuthentication extends Authentication {
 
             responseMessage = "Success (1) - " + response + profileToString();
         }
-        /* Wrong crendentials */
+        /* Wrong credentials */
         else if (response.startsWith("0")) {
-            responseMessage = "Wrong Crendentials (0)";
+            responseMessage = "Wrong Credentials (0)";
         }
         /* ERROR case */
         else {
@@ -395,6 +419,20 @@ public class ClientAuthentication extends Authentication {
     }
 
     public static String postProfileUpdateRequest(String clientId, String username, String email, String phone) {
+
+        /* Validate username */
+        if (!Security.validateUsername(username)) {
+            return Security.invalidUsernameMessage();
+        }
+        /* Validate email */
+        if (!Security.validateEmail(email)) {
+            return Security.invalidEmailMessage();
+        }
+        /* Validate phone */
+        if (!Security.validatePhone(phone)) {
+            return Security.invalidPhoneMessage();
+        }
+
         String request = AUTHENTICATION_HOST + AUTHENTICATION_PORT + "/client_profile_update";
         String urlParameters = "client_id=" + clientId + "&username=" + username
                              + "&email=" + email + "&phone=" + phone;
@@ -485,6 +523,11 @@ public class ClientAuthentication extends Authentication {
     }
 
     public static String postExistingPasswordUpdateRequest(String clientId, String oldPassword, String newPassword) {
+
+        /* Encrypt passwords */
+        oldPassword = Security.encryptPassword(oldPassword);
+        newPassword = Security.encryptPassword(newPassword);
+
         String request = AUTHENTICATION_HOST + AUTHENTICATION_PORT + "/client_existing_password_update";
         String urlParameters = "client_id=" + clientId
                              + "&old_password=" + oldPassword
@@ -520,6 +563,10 @@ public class ClientAuthentication extends Authentication {
     }
 
     public static String postForgottenPasswordResetRequest(String email, String newPassword) {
+
+        /* Encrypt password */
+        newPassword = Security.encryptPassword(newPassword);
+
         String request = AUTHENTICATION_HOST + AUTHENTICATION_PORT + "/client_forgotten_password_reset";
         String urlParameters = "email=" + email + "&new_password=" + newPassword;
 
