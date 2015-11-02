@@ -98,7 +98,7 @@ class DB():
 
         return req        
         """
-        dataFile = open("/home/ziring/result.txt", "w")
+        #dataFile = open("/home/ziring/result.txt", "w")
         queryResults = []
         # A query is made to group request made to a busstop and counting the number of similar requests made
 
@@ -109,9 +109,9 @@ class DB():
         groupQuery = self.db.TravelRequestLookAhead.aggregate(pipline)
         for x in groupQuery:
             queryResults.append(x)
-            dataFile.write(str(x)+'\n'+'\n')
+            #dataFile.write(str(x)+'\n'+'\n')
 
-        dataFile.close()
+        #dataFile.close()
         return queryResults
 
     # These function will be called for every gene in order to get the difference
