@@ -47,7 +47,7 @@ class RouterTester(unittest.TestCase):
         self.assertGreater(len(self._map.findRoute(-439079, -439083)), 0)
 
         # The path from one node to itself should be itself.
-        #self.assertEqual(self._map.findRoute(-439079, -439079), [-439079])
+        self.assertEqual(self._map.findRoute(-439079, -439079), [-439079])
 
     @unittest.skipUnless(os.path.isfile(FILE), "fileNotFound")
     def test(self):

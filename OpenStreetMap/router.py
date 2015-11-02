@@ -22,6 +22,9 @@ import Image, ImageDraw
 from xml.sax import make_parser, handler
 from heapq import heappush, heappop
 
+from busStop import BusStop
+from coordinate import Coordinate
+
 # The size width of the produced image in pixels
 picSize = 3000
 # The max speed on a road that does not have a set max speed.
@@ -32,15 +35,15 @@ busRoadTypes = ('motorway', 'motorway_link', 'trunk', 'trunk_link', 'primary',
                 'tertiary_link', 'unclassified', 'residential', 'service')
 
 
-class BusStop:
+#class BusStop:
+#    def __init__(self, nodeId, longitude, latitude):
+#        self.id = nodeId
+#        self.coordinates = (longitude, latitude)
+#        self.busStopName = ""
+#
+#    def addBusStopName(self, name):
+#        self.busStopName = name
 
-    def __init__(self, nodeId, longitude, latitude):
-		self.id = nodeId
-		self.coordinates = (longitude, latitude)
-		self.busStopName = ""
-
-    def addBusStopName(self, name):
-        self.busStopName = name
 
 class RouteHandler(handler.ContentHandler):
     """
@@ -85,9 +88,9 @@ class RouteHandler(handler.ContentHandler):
             nodeId = int(attributes.get('id'))
             lat = float(attributes.get('lat'))
             lon = float(attributes.get('lon'))
-            self.nodes[nodeId] = (lon, lat)
-            self.busStops.append( BusStop(nodeId, lon, lat) )
-            self.index += 1
+            self.nodes[nodeId] = Coordinate(latitude=lat, longitude=lon)
+            #self.busStops.append(BusStop(nodeId, lon, lat))
+            #self.index += 1
             self.stop = nodeId
         elif name == 'way':
             self.roadId = int(attributes.get('id'))
@@ -133,7 +136,10 @@ class RouteHandler(handler.ContentHandler):
             highway = self.tag.get('highway', '')
             stopName = self.tag.get('name', '')
             if highway == 'bus_stop':
-                self.busStops[self.index-1].addBusStopName(stopName)
+                #self.busStops[self.index - 1].addBusStopName(stopName)
+                self.busStops.append(BusStop(stopName,
+                                             self.nodes[self.stop].longitude,
+                                             self.nodes[self.stop].latitude))
 
         # Clean up
         if name in ('node', 'way', 'relation'):
@@ -153,11 +159,12 @@ class RouteHandler(handler.ContentHandler):
         if toNode not in self.edges:
             self.edges[toNode] = []
 
+
 class AStar:
     def __init__(self):
         pass
 
-    def	getNodeById(self, nodes, nodeId):
+    def getNodeById(self, nodes, nodeId):
         for nd in nodes:
             if nd.id == nodeId:
                 return nd
@@ -177,7 +184,7 @@ class AStar:
 
         if start == goal:
             cost[goal] = 0
-            return path, cost
+            return self.reconstruct_path(path,start, goal), cost
 
         # A high value that a real path should not have.
         cost[goal] = 300000
@@ -198,10 +205,10 @@ class AStar:
                 speedDecrease = (1 - (float(roadInt) / 50))
                 fromNode = nodes[current]
                 toNode = nodes[nextNode]
-                roadLength = self.measure(fromNode[0],
-                                          fromNode[1],
-                                          toNode[0],
-                                          toNode[1])
+                roadLength = self.measure(fromNode.longitude,
+                                          fromNode.latitude,
+                                          toNode.longitude,
+                                          toNode.latitude)
 
                 timeOnRoad = (roadLength /
                               (speedDecrease * (float(speed) * 1000 / 3600)))
@@ -221,8 +228,8 @@ class AStar:
         return self.reconstruct_path(path, start, goal), cost
 
     def heuristic(self, node, goal):
-        x1, y1 = node
-        x2, y2 = goal
+        x1, y1 = node.coordinates
+        x2, y2 = goal.coordinates
         return self.measure(x1, y1, x2, y2)
 
     def measure(self, lon1, lat1, lon2, lat2):
@@ -282,7 +289,7 @@ class Map:
 
     def findBusStopName(self, lon, lat):
         for nd in self.busStopList:
-            if nd.coordinates[0] == lon and nd.coordinates[1] == lat:
+            if nd.longitude == lon and nd.latitude == lat:
                 return nd.busStopName
         return "no stop found"
 
@@ -292,12 +299,13 @@ class Map:
                 return nd.coordinates
         return "no such stop name"
 
-    def	getNodebyId(self, nodeId):
-        for nd in self.busStopList:
-            print nd.id
-            if nd.id == nodeId:
-                return nd
-        return -1
+    #def getNodebyId(self, nodeId):
+    #   return
+    #    for nd in self.busStopList:
+    #       #print nd.id
+    #        if nd.id == nodeId:
+    #            return nd
+    #    return -1
 
     def findRoute(self, startNode, endNode):
         """
@@ -329,10 +337,10 @@ class Map:
         """
         path = []
         waypoints = []
-        if len(nodeList) >1:
+        if len(nodeList) > 1:
             path.append(nodeList[0])
-            for n in range(0,len(nodeList)-1):
-                nPath = self.findRoute(nodeList[n], nodeList[n+1])
+            for n in range(0, len(nodeList) - 1):
+                nPath = self.findRoute(nodeList[n], nodeList[n + 1])
                 [path.append(x) for x in nPath[1:]]
             waypoints = self.getWayPointsFromPath(path)
 
@@ -345,8 +353,12 @@ class Map:
         nodeList = []
         for n in range(1, len(path) - 2):
 
-            roadIDfrom = [item for item in self.edges[path[n-1]] if item[0] == path[n]][0][3]
-            roadIDto = [item for item in self.edges[path[n]] if item[0] == path[n+1]][0][3]
+            roadIDfrom = \
+            [item for item in self.edges[path[n - 1]] if item[0] == path[n]][
+                0][3]
+            roadIDto = \
+            [item for item in self.edges[path[n]] if item[0] == path[n + 1]][
+                0][3]
 
             if roadIDfrom != roadIDto:
                 nodeList.append(path[n])
@@ -391,8 +403,8 @@ class Map:
         y = (y2 - y1) * self.imgScaling
 
         for id, n in nodes.items():
-            pointX = (n[0] - self.handler.minlon) * self.imgScaling
-            pointY = y - (self.lat2y(n[1]) - y1) * self.imgScaling
+            pointX = (n.longitude - self.handler.minlon) * self.imgScaling
+            pointY = y - (self.lat2y(n.latitude) - y1) * self.imgScaling
             self.draw.point((pointX, pointY), colour)
 
     def drawNodeIds(self, nodeIds, colour):
@@ -401,11 +413,10 @@ class Map:
         y = (y2 - y1) * self.imgScaling
 
         for nd in nodeIds:
-            n = self.nodes[nd]
+            n = self.nodes[nd].coordinates
             pointX = (n[0] - self.handler.minlon) * self.imgScaling
             pointY = y - (self.lat2y(n[1]) - y1) * self.imgScaling
             self.draw.point((pointX, pointY), colour)
-
 
     def drawRoads(self, edges, nodes):
         y1 = self.lat2y(self.handler.minlat)
@@ -413,10 +424,10 @@ class Map:
         y = (y2 - y1) * self.imgScaling
 
         for id, n in edges.items():
-            a = nodes[id]
+            a = nodes[id].coordinates
 
             for k, z, i, _ in n:
-                b = nodes[k]
+                b = nodes[k].coordinates
 
                 colr = 255 - min(int(255 * (float(z) / 120)), 255)
                 if int(z) < 31:
@@ -448,7 +459,7 @@ class Map:
 
         fromNode = 0
         for pid in path:
-            toNode = self.nodes[pid]
+            toNode = self.nodes[pid].coordinates
             if fromNode == 0:
                 fromNode = toNode
             else:
@@ -502,7 +513,8 @@ if __name__ == '__main__':
     # polacksbacken
     nFrom = 1125461154
 
-    print "Find a bus stop name: " + myMap.findBusStopName(17.6666581, 59.8556742)
+    print "Find a bus stop name: " + myMap.findBusStopName(17.6666581,
+                                                           59.8556742)
     print "Find a bus stop position: " + str(myMap.findBusStopPosition("Danmarksgatan"))
 
     timer = time.time()
@@ -529,9 +541,9 @@ if __name__ == '__main__':
     myMap.drawInit(3000)
     myMap.drawNodes(myMap.nodes, (227, 254, 212, 255))
     myMap.drawRoads(myMap.edges, myMap.nodes)
-#    myMap.drawBusStops(myMap.handler.busStops, myMap.nodes)
+    #    myMap.drawBusStops(myMap.handler.busStops, myMap.nodes)
     myMap.drawPath(myPath, 'red')
     myMap.drawNodeIds(wayP, 'blue')
     myMap.drawPath(my4Path, 'green')
     myMap.drawSave(sys.argv[1])
-    print "Image done"
+    print "Image done,", sys.argv[1]
