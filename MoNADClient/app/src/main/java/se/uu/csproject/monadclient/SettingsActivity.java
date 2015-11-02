@@ -2,6 +2,7 @@ package se.uu.csproject.monadclient;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -24,9 +25,11 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 import se.uu.csproject.monadclient.recyclerviews.LanguageRecyclerViewAdapter;
 import se.uu.csproject.monadclient.tabs.SlidingTabLayout;
@@ -180,25 +183,65 @@ public class SettingsActivity extends AppCompatActivity {
                     @Override
                     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                         if(switchrecommendation.isChecked()) {
-                            // The space after ON should be kept for UI formatting purposes
-                            recommendationsSwitch.setText("ON ");
-                            ClientAuthentication.postSettingsUpdateRequest(
-                                    ClientAuthentication.getClientId(),
-                                    ClientAuthentication.getLanguage(),
-                                    ClientAuthentication.getStoreLocation(),
-                                    ClientAuthentication.getNotificationsAlert(),
-                                    "1",
-                                    ClientAuthentication.getTheme());
+                            UpdateSettingsTask task = new UpdateSettingsTask();
+
+                            String response = null;
+                            try {
+                                response = task.execute(
+                                        ClientAuthentication.getClientId(),
+                                        ClientAuthentication.getLanguage(),
+                                        ClientAuthentication.getStoreLocation(),
+                                        ClientAuthentication.getNotificationsAlert(),
+                                        "1",
+                                        ClientAuthentication.getTheme()).get();
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            } catch (ExecutionException e) {
+                                e.printStackTrace();
+                            }
+                            if(response.startsWith("Success (1)")){
+                                // The space after ON should be kept for UI formatting purposes
+                                recommendationsSwitch.setText("ON ");
+                            }
+                            Toast.makeText(getActivity().getApplicationContext(), response, Toast.LENGTH_LONG).show();
+
+//                            ClientAuthentication.postSettingsUpdateRequest(
+//                                    ClientAuthentication.getClientId(),
+//                                    ClientAuthentication.getLanguage(),
+//                                    ClientAuthentication.getStoreLocation(),
+//                                    ClientAuthentication.getNotificationsAlert(),
+//                                    "1",
+//                                    ClientAuthentication.getTheme());
                         }
                         else {
-                            recommendationsSwitch.setText("OFF");
-                            ClientAuthentication.postSettingsUpdateRequest(
-                                    ClientAuthentication.getClientId(),
-                                    ClientAuthentication.getLanguage(),
-                                    ClientAuthentication.getStoreLocation(),
-                                    ClientAuthentication.getNotificationsAlert(),
-                                    "0",
-                                    ClientAuthentication.getTheme());
+                            UpdateSettingsTask task = new UpdateSettingsTask();
+
+                            String response = null;
+                            try {
+                                response = task.execute(
+                                        ClientAuthentication.getClientId(),
+                                        ClientAuthentication.getLanguage(),
+                                        ClientAuthentication.getStoreLocation(),
+                                        ClientAuthentication.getNotificationsAlert(),
+                                        "0",
+                                        ClientAuthentication.getTheme()).get();
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            } catch (ExecutionException e) {
+                                e.printStackTrace();
+                            }
+                            if(response.startsWith("Success (1)")){
+                                // The space after ON should be kept for UI formatting purposes
+                                recommendationsSwitch.setText("OFF");
+                            }
+                            Toast.makeText(getActivity().getApplicationContext(), response, Toast.LENGTH_LONG).show();
+//                            ClientAuthentication.postSettingsUpdateRequest(
+//                                    ClientAuthentication.getClientId(),
+//                                    ClientAuthentication.getLanguage(),
+//                                    ClientAuthentication.getStoreLocation(),
+//                                    ClientAuthentication.getNotificationsAlert(),
+//                                    "0",
+//                                    ClientAuthentication.getTheme());
                         }
                     }
                 });
@@ -208,24 +251,66 @@ public class SettingsActivity extends AppCompatActivity {
                     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                         if(switchalert.isChecked()){
                             // The space after ON should be kept for UI formatting purposes
-                            remindersSwitch.setText("ON ");
-                            ClientAuthentication.postSettingsUpdateRequest(
-                                    ClientAuthentication.getClientId(),
-                                    ClientAuthentication.getLanguage(),
-                                    ClientAuthentication.getStoreLocation(),
-                                    "1",
-                                    ClientAuthentication.getRecommendationsAlert(),
-                                    ClientAuthentication.getTheme());
+                            UpdateSettingsTask task = new UpdateSettingsTask();
+
+                            String response = null;
+                            try {
+                                response = task.execute(
+                                        ClientAuthentication.getClientId(),
+                                        ClientAuthentication.getLanguage(),
+                                        ClientAuthentication.getStoreLocation(),
+                                        "1",
+                                        ClientAuthentication.getRecommendationsAlert(),
+                                        ClientAuthentication.getTheme()).get();
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            } catch (ExecutionException e) {
+                                e.printStackTrace();
+                            }
+                            if(response.startsWith("Success (1)")){
+                                // The space after ON should be kept for UI formatting purposes
+                                remindersSwitch.setText("ON ");
+                            }
+                            Toast.makeText(getActivity().getApplicationContext(), response, Toast.LENGTH_LONG).show();
+//                            remindersSwitch.setText("ON ");
+//                            ClientAuthentication.postSettingsUpdateRequest(
+//                                    ClientAuthentication.getClientId(),
+//                                    ClientAuthentication.getLanguage(),
+//                                    ClientAuthentication.getStoreLocation(),
+//                                    "1",
+//                                    ClientAuthentication.getRecommendationsAlert(),
+//                                    ClientAuthentication.getTheme());
                         }
                         else {
-                            remindersSwitch.setText("OFF");
-                            ClientAuthentication.postSettingsUpdateRequest(
-                                    ClientAuthentication.getClientId(),
-                                    ClientAuthentication.getLanguage(),
-                                    ClientAuthentication.getStoreLocation(),
-                                    "0",
-                                    ClientAuthentication.getRecommendationsAlert(),
-                                    ClientAuthentication.getTheme());
+                            UpdateSettingsTask task = new UpdateSettingsTask();
+
+                            String response = null;
+                            try {
+                                response = task.execute(
+                                        ClientAuthentication.getClientId(),
+                                        ClientAuthentication.getLanguage(),
+                                        ClientAuthentication.getStoreLocation(),
+                                        "0",
+                                        ClientAuthentication.getRecommendationsAlert(),
+                                        ClientAuthentication.getTheme()).get();
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            } catch (ExecutionException e) {
+                                e.printStackTrace();
+                            }
+                            if(response.startsWith("Success (1)")){
+                                // The space after ON should be kept for UI formatting purposes
+                                remindersSwitch.setText("OFF");
+                            }
+                            Toast.makeText(getActivity().getApplicationContext(), response, Toast.LENGTH_LONG).show();
+//                            remindersSwitch.setText("OFF");
+//                            ClientAuthentication.postSettingsUpdateRequest(
+//                                    ClientAuthentication.getClientId(),
+//                                    ClientAuthentication.getLanguage(),
+//                                    ClientAuthentication.getStoreLocation(),
+//                                    "0",
+//                                    ClientAuthentication.getRecommendationsAlert(),
+//                                    ClientAuthentication.getTheme());
                         }
                     }
                 });
@@ -291,6 +376,15 @@ public class SettingsActivity extends AppCompatActivity {
             languages.add(new Language("Deutsch", "de", R.drawable.lang_de));
             languages.add(new Language("Norsk", "nr", R.drawable.lang_nr));
             languages.add(new Language("Suomi", "fi", R.drawable.lang_fi));
+        }
+    }
+
+    private static class UpdateSettingsTask extends AsyncTask<String, Void, String>{
+
+        @Override
+        protected String doInBackground(String... params) {
+            String response = ClientAuthentication.postSettingsUpdateRequest(params[0], params[1], params[2], params[3], params[4], params[5]);;
+            return response;
         }
     }
 

@@ -14,6 +14,8 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
+import java.util.concurrent.ExecutionException;
+
 
 public class ProfileActivity extends AppCompatActivity {
 
@@ -133,7 +135,16 @@ public class ProfileActivity extends AppCompatActivity {
             return;
         }
 
-        String response = ClientAuthentication.postProfileUpdateRequest(ClientAuthentication.getClientId(), userEntered, emailEntered, phoneEntered);
+        UpdateProfileTask task = new UpdateProfileTask();
+
+        String response = null;
+        try {
+            response = task.execute(ClientAuthentication.getClientId(), userEntered, emailEntered, phoneEntered).get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
         Toast.makeText(getApplicationContext(), response, Toast.LENGTH_LONG).show();
 
         if(response.startsWith("Success (1)")){
@@ -172,29 +183,4 @@ public class ProfileActivity extends AppCompatActivity {
             e.printStackTrace();
         }*/
     }
-
-        /*
-    public void editProfileUser (View v) {
-        Intent intent = new Intent(this, ProfileEditPopup.class);
-        intent.putExtra("name", "username");
-        startActivityForResult(intent, 1);
-        //should not finish here, the user may want to continue editting other fields
-        //finish();
-    }
-
-    public void editProfilePhone(View v) {
-        Intent intent = new Intent(this, ProfileEditPopup.class);
-        intent.putExtra("name","phone");
-        startActivityForResult(intent, 1);
-        //should not finish here, the user may want to continue editting other fields
-        //finish();
-    }
-
-    public void editProfileEmail(View v) {
-        Intent intent = new Intent(this, ProfileEditPopup.class);
-        intent.putExtra("name","email");
-        startActivityForResult(intent, 1);
-        //should not finish here, the user may want to continue editting other fields
-        //finish();
-    }*/
 }
