@@ -19,7 +19,8 @@ import collections
 import datetime
 from pymongo import MongoClient
 from bson.objectid import ObjectId
-from operator import itemgetter
+from operator import itemgetter, attrgetter
+import operator
 
 
 
@@ -95,16 +96,30 @@ class DB():
 
         return req        
         """
+        dataFile = open("/home/ziring/result.txt", "w")
         queryResults = []
         # A query is made to group request made to a busstop and counting the number of similar requests made
-        pipline = [{"$match": {"startTime": {"$gte": start, "$lt": end}}},
-            {"$group": {"_id": {"RequestTime": "$startTime", "BusStop": "$startBusStop"},"total": {"$sum": 1}}}]
+        pipline = [
+                   {"$match": {"startTime": {"$gte": start, "$lt": end}}},
+                   {"$group": {"_id": {"RequestTime": "$startTime", "BusStop": "$startBusStop"}, "total": {"$sum": 1}}},
+                   {"$sort": {"_id.RequestTime": 1}}
+
+        ]
 
         groupQuery = self.db.TravelRequestLookAhead.aggregate(pipline)
 
         for x in groupQuery:
             queryResults.append(x)
+            dataFile.write(str(x)+'\n'+'\n')
 
+       # dataFile.write(str(sorted(queryResults, key=operator.itemgetter("RequestTime"))))
+
+        dataFile.close()
+        #print (queryResults.sort(lambda x:(x[0])))
+        #print(sorted(queryResults, key=lambda student: student[0]))
+        #print(sorted(queryResults, key=itemgetter("_id","total")))
+
+        #print(type(queryResults))
         return queryResults
 
     # These function will be called for every gene in order to get the difference
@@ -229,6 +244,8 @@ class DB():
             if minuteSeed > DB.minutesDay:
                 minuteSeed = minuteSeed - DB.minutesDay
             tripTimeTable.append([self.getBusStopName(busStop[j+1]["busStop"]),self.generateTime(minuteSeed)])
+
+
         return tripTimeTable
 
     # After GA, this function is called to generate all the bus stops given the initial starting times based on the best individual
