@@ -176,8 +176,21 @@ public class SettingsActivity extends AppCompatActivity {
                 // switch button for alerts and recommendations
                 switchrecommendation = (Switch)layout.findViewById(R.id.switch_fragmentsettingsalert_recommendations);
                 switchalert = (Switch)layout.findViewById(R.id.switch_fragmentsettingsalert_alerts);
-                switchrecommendation.setChecked(true);
-                switchalert.setChecked(true);
+                if(ClientAuthentication.getRecommendationsAlert().equals("1")) {
+                    switchrecommendation.setChecked(true);
+                }
+                else{
+                    switchrecommendation.setChecked(false);
+                    recommendationsSwitch.setText("OFF");
+                }
+
+                if(ClientAuthentication.getNotificationsAlert().equals("1")) {
+                    switchalert.setChecked(true);
+                }
+                else{
+                    switchalert.setChecked(false);
+                    remindersSwitch.setText("OFF");
+                }
 
                 switchrecommendation.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                     @Override
@@ -328,37 +341,17 @@ public class SettingsActivity extends AppCompatActivity {
                 radiobutton_lighttheme = (RadioButton)layout.findViewById(R.id.radiobutton_fragmentsettingstheme_light);
                 radiobutton_darktheme = (RadioButton)layout.findViewById(R.id.radiobutton_fragmentsettingstheme_dark);
 
+                //TODO: add RadioGroup to enable onCheckedChangedListener to update theme change in user settings
                 if(radiobutton_lighttheme.isChecked()){
                     //change the theme to light
-                    ClientAuthentication.postSettingsUpdateRequest(
-                            ClientAuthentication.getClientId(),
-                            ClientAuthentication.getLanguage(),
-                            ClientAuthentication.getStoreLocation(),
-                            ClientAuthentication.getNotificationsAlert(),
-                            ClientAuthentication.getRecommendationsAlert(),
-                            "0");
                 }
 
                 if(radiobutton_defaulttheme.isChecked()){
                     //change the theme to default
-                    ClientAuthentication.postSettingsUpdateRequest(
-                            ClientAuthentication.getClientId(),
-                            ClientAuthentication.getLanguage(),
-                            ClientAuthentication.getStoreLocation(),
-                            ClientAuthentication.getNotificationsAlert(),
-                            ClientAuthentication.getRecommendationsAlert(),
-                            "1");
                 }
 
                 if(radiobutton_darktheme.isChecked()){
                     //change the theme to dark
-                    ClientAuthentication.postSettingsUpdateRequest(
-                            ClientAuthentication.getClientId(),
-                            ClientAuthentication.getLanguage(),
-                            ClientAuthentication.getStoreLocation(),
-                            ClientAuthentication.getNotificationsAlert(),
-                            ClientAuthentication.getRecommendationsAlert(),
-                            "2");
                 }
             }
             else{

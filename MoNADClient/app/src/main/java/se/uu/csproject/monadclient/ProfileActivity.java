@@ -47,7 +47,6 @@ public class ProfileActivity extends AppCompatActivity {
         emailField = (EditText)findViewById(R.id.textView_profile_email);
         emailField.setText(ClientAuthentication.getEmail());
 
-        //TODO: call profileUpdate method in ClientAuthetication when submitButton is clicked
         submitButton = (Button) findViewById(R.id.button_updateprofile);
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
