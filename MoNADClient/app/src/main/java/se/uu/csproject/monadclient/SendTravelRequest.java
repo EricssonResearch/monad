@@ -67,10 +67,10 @@ public class SendTravelRequest extends AsyncTask<String, Void, String> {
             conn.disconnect();
 
         } catch (MalformedURLException e) {
-            return ("MalformedURLException: " + e.toString());
+            return (e.toString());
 
         } catch (IOException e) {
-            return ("IOException: " + e.toString());
+            return (e.toString());
 
         } catch (RuntimeException e) {
             return (e.toString());

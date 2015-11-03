@@ -13,8 +13,6 @@ Unless required by applicable law or agreed to in writing, software distributed 
 See the License for the specific language governing permissions and limitations under the License.
 
 """
-import itertools
-import unittest
 from dbConnection import DB
 from operator import itemgetter
 from datetime import datetime
@@ -63,7 +61,6 @@ class Fitness():
         # Setting the end time boundary of request that we want
         endTime = datetime.combine(Fitness.yesterday, datetime.strptime(Fitness.lastMinute, Fitness.formatTime).time())
         Fitness.request = db.grpReqByBusstopAndTime(startTime, endTime)
-        # Fitness.request = db.getTravelRequestSummary(startTime, endTime)
         self.createRequestIndex(Fitness.request)
 
     def timeDiff(self, time1, time2):
@@ -77,9 +74,6 @@ class Fitness():
     def getMinutes(self, td):
         return (td.seconds//Fitness.secondMinute) % Fitness.secondMinute
 
-
-
-
     def createRequestIndex(self, request):
         ''' Creates a structure that stores the hour, the minute and the position on the request array for this particular time
         
@@ -88,11 +82,8 @@ class Fitness():
         minute = 0
         for i in range(len(request)):
             if request[i]["_id"]["RequestTime"].minute != minute or i == 0:
-            # if request[i]["minute"] != minute or i == 0:
                 Fitness.requestIndex.append([request[i]["_id"]["RequestTime"].hour, request[i]["_id"]["RequestTime"].minute, i])
-                # Fitness.requestIndex.append([request[i]["hour"], request[i]["minute"], i])
                 minute = request[i]["_id"]["RequestTime"].minute
-                # minute = request[i]["minute"]
 
     def searchRequestIndex(self, index, initialHour, initialMinute, finalHour, finalMinute):
         ''' Search the index to get the position on the request array for a specific time frame
@@ -105,17 +96,13 @@ class Fitness():
         '''
         result = []
         for i in range(len(index)):
-            # if index[i][0] == initialHour and index[i][1] == initialMinute:
             if index[i][0] >= initialHour and index[i][1] >= initialMinute:
                 result.append(index[i][2])
                 break
         # TODO: Watch out with MIDNIGHT trips !!!!
         if len(result) == 0:
             result.append(len(Fitness.request))
-        # if result[0] > len(Fitness.request):
-        #    result[0] = len(Fitness.request)
         for i in range(i, len(index)):
-            # if index[i][0] == finalHour and index[i][1] == finalMinute:
             if index[i][0] >= finalHour and index[i][1] >= finalMinute:
                 result.append(index[i][2])
                 break
@@ -137,13 +124,6 @@ class Fitness():
         for i in range(len(request)):
             if request[i]["_id"]["BusStop"] == busStop:
                 result.append(request[i])
-        '''
-        if len(result) > 100:
-            print str(initialTime.hour)+":"+str(initialTime.minute)
-            print index[0]
-            print str(finalTime.hour)+":"+str(finalTime.minute)
-            print index[1]
-        '''
         return result
 
     def calculateCost(self, individual, totalWaitingTime, penaltyOverCapacity):
@@ -161,7 +141,6 @@ class Fitness():
         costOfBus = [[20, 1000], [60, 1200], [120, 1400]]
         waitingCostPerMin = 1
         busCost = 0
-
         if penaltyOverCapacity < 0 or individual is None or totalWaitingTime < 0:
             cost = -1
         else:
@@ -172,6 +151,5 @@ class Fitness():
                         busCost = busCost + costOfBus[j][1]
                         break
             waitingCost = totalWaitingTime * waitingCostPerMin
-
             cost = busCost + waitingCost + penaltyOverCapacity
         return cost
