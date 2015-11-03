@@ -18,10 +18,10 @@ import string
 import collections
 import datetime
 import itertools
+from datetime import timedelta
 from pymongo import MongoClient
 from bson.objectid import ObjectId
 from operator import itemgetter
-
 
 
 class DB():
@@ -143,8 +143,7 @@ class DB():
         return self.retrieveData(routeStop, "trajectory")
 
     def getFrequency(self, line):
-        return self.retrieveData(self.db.Route.find({"line": line}, {"frequency": 1}), "frequency")
-
+        return self.retrieveData(self.db.Route.find({"line": line},{"frequency": 1}), "frequency")
 
     # Bus
     # https://www.ul.se/en/About-UL/About-our-public-function/
@@ -217,20 +216,23 @@ class DB():
     # Trip
     # Generate TT from seed random starting time. Called when generating the initial population
     def generateStartingTripTime(self, line):
-        return list([line, self.generateRandomCapacity(), self.generateTime(self.generateMinute(self.mergeRandomTime(self.getRandomHour(),self.getRandomMinute())))])
+        # today = datetime.date.today()
+        today = datetime.date.today() - timedelta(13)
+        hourFormat = "%H:%M"
+        hour = self.generateTime(self.generateMinute(self.mergeRandomTime(self.getRandomHour(),self.getRandomMinute())))
+        return list([line, self.generateRandomCapacity(),datetime.datetime.combine(today,datetime.datetime.strptime(hour, hourFormat).time())])
 
     # Fitness trip time table
     # This is the function that changes the genotype into a phenotype. It generates the time table for a particular individual.
     def generateFitnessTripTimeTable(self, line, startingTime):
         tripTimeTable = []
         busStop = self.getRouteStop(line)
-        minuteSeed = self.generateMinute(startingTime)
-        tripTimeTable.append([self.getBusStopName(busStop[0]["busStop"]),self.generateTime(minuteSeed)])
+        startingBusStopTime = startingTime
+        tripTimeTable.append([self.getBusStopName(busStop[0]["busStop"]), startingTime])
         for j in range(len(busStop)-1):
-            minuteSeed = minuteSeed + busStop[j]["interval"]
-            if minuteSeed > DB.minutesDay:
-                minuteSeed = minuteSeed - DB.minutesDay
-            tripTimeTable.append([self.getBusStopName(busStop[j+1]["busStop"]),self.generateTime(minuteSeed)])
+            startingBusStopTime = startingBusStopTime + timedelta(minutes=busStop[j]["interval"])
+            #tripTimeTable.append([self.getBusStopName(busStop[j+1]["busStop"]),self.generateTime(minuteSeed)])
+            tripTimeTable.append([self.getBusStopName(busStop[j+1]["busStop"]),startingBusStopTime])
         return tripTimeTable
 
     # After GA, this function is called to generate all the bus stops given the initial starting times based on the best individual
@@ -238,17 +240,23 @@ class DB():
         timeTable = []
         for i in range(len(timetable)):
             busStop = self.getRouteStop(timetable[i][0])
-            numberStop = len(busStop)-1
+            # numberStop = len(busStop)-1
             # print numberStop
-            minuteSeed = self.generateMinute(timetable[i][2])
+            # minuteSeed = self.generateMinute(timetable[i][2])
             tripTimeTable = []
-            tripTimeTable.append([busStop[0]["name"],self.generateTime(minuteSeed)])
-            for j in range(numberStop):
-                minuteSeed = minuteSeed + busStop[j]["interval"]
-                if minuteSeed > DB.minutesDay:
-                    minuteSeed = minuteSeed - DB.minutesDay
-                tripTimeTable.append([busStop[j+1]["name"],self.generateTime(minuteSeed)])
+            # tripTimeTable.append([busStop[0]["name"],self.generateTime(minuteSeed)])
+            tripTimeTable.append([busStop[0]["name"],timetable[i][2]])
+            startingBusStopTime = timetable[i][2]
+            # for j in range(numberStop):
+            for j in range(len(busStop)-1):
+                startingBusStopTime = startingBusStopTime + timedelta(minutes=busStop[j]["interval"])
+                # minuteSeed = minuteSeed + busStop[j]["interval"]
+                # if minuteSeed > DB.minutesDay:
+                #     minuteSeed = minuteSeed - DB.minutesDay
+                # tripTimeTable.append([busStop[j+1]["name"],self.generateTime(minuteSeed)])
+                tripTimeTable.append([busStop[j+1]["name"],startingBusStopTime])
             timeTable.append([timetable[i][0], timetable[i][1], list(self.flatten(tripTimeTable))])
+        print "sorted failing"
         return sorted(timeTable, key = itemgetter(2))
 
     # Dont forget to credit this function on Stack Overflow
@@ -313,23 +321,23 @@ class DB():
 
     def getBusStopName(self, id):
         return self.retrieveData(self.db.BusStop.find({"_id": id}), "name")
+    
     def MaxReqNumTrip(self,trip_sTime,tripEnd, lineNum = 2):
-
         BusStplist = []
         dirlist =[]
-        t =datetime.datetime.strptime(trip_sTime,'%Y-%m-%d %H:%M:%S').time()
-        e =datetime.datetime.strptime(tripEnd,'%Y-%m-%d %H:%M:%S').time()
+        a = datetime.datetime.strptime(trip_sTime, '%Y-%m-%d %H:%M:%S')
+        # t =datetime.datetime.strptime(trip_sTime,'%Y-%m-%d %H:%M:%S').time()
+        # e =datetime.datetime.strptime(tripEnd,'%Y-%m-%d %H:%M:%S').time()
         #get the trip time table
-        trip_time_table = self.generateFitnessTripTimeTable(lineNum,trip_sTime[11:16])
+        # trip_time_table = self.generateFitnessTripTimeTable(lineNum,trip_sTime[11:16])
+        trip_time_table = self.generateFitnessTripTimeTable(lineNum,a)
         for i in trip_time_table:
             BusStplist.append([i[0],0])
             dirlist.append(i[0])
         t = datetime.datetime.strptime(trip_sTime,'%Y-%m-%d %H:%M:%S')
         e =datetime.datetime.strptime(tripEnd,'%Y-%m-%d %H:%M:%S')
-
         #get all requests where starting time is more than trip starting time
         Requests = self.getRequestsFromDB(t, e)
-
         #get only the requests with start location in bus stops and end location in bus stps
         for req in Requests:
             for i in BusStplist:
@@ -338,10 +346,8 @@ class DB():
                         i[1] += 1
                     if req[2] == i[0]:
                         i[1] += -1
-
         sum = 0;
         for i in BusStplist:
             sum += i[1]
             i[1] = sum
         return BusStplist
-

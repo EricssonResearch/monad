@@ -27,13 +27,14 @@ import inits
 # Constant
 BUS_LINE = 2
 # The individual size corresponds to the number of trips
-INDIVIDUAL_SIZE = 90
+INDIVIDUAL_SIZE =  10 # 90
 INDIVIDUAL_SIZE_BOUNDS = [90,90]
 
 
 # Initialize the classes
 databaseClass = DB()
 fitnessClass = Fitness()
+
 
 def evalIndividual(individual):
     ''' Evaluate an individual in the population. Based on how close the
@@ -52,20 +53,28 @@ def evalIndividual(individual):
     request = []
     dif = []
     cnt = []
-    initialTripTime = "00:00"
+    # initialTripTime = "00:00"
+    initialTripTime = datetime.combine(fitnessClass.yesterday, datetime.strptime("00:00", fitnessClass.formatTime).time())
     db = DB()
     tripWaitingTime = timedelta(minutes=0) # waiting time due to insufficient capacity
     for i, trip in enumerate(individual):
         tripTimeTable = db.generateFitnessTripTimeTable(individual[i][0], individual[i][2])
         tripStartTime = trip[2]
-        start = '2015-10-21 00:00:00' if i == 0 else '2015-10-21 ' + trip[2] + ':00'
-        end = '2015-10-21 ' + trip[2] + ':00'
+        # start = '2015-10-21 00:00:00' if i == 0 else '2015-10-21 ' + trip[2] + ':00'
+        if len(str(trip[2].hour))==1:
+            temp = "0"+str(trip[2].hour)+":"+str(trip[2].minute)
+        else:
+            temp = str(trip[2].hour)+":"+str(trip[2].minute)
+        start = '2015-10-21 00:00:00' if i == 0 else '2015-10-21 ' + temp + ':00'
+        # end = '2015-10-21 ' + trip[2] + ':00'
+        end = '2015-10-21 ' + temp + ':00'
         stopsAndRequests = db.MaxReqNumTrip(start, end)
         count = 0
         for i, stop in enumerate(stopsAndRequests):
             if stop[1] > trip[1] and i < len(individual)-1:
                 nextTripTime = individual[i+1][2]
-                nextTripWait = fitnessClass.timeDiff(nextTripTime, individual[i][2])
+                # nextTripWait = fitnessClass.timeDiff(nextTripTime, individual[i][2])
+                nextTripWait = nextTripTime - individual[i][2]
                 count += (stop[1] - trip[1])   # must wait for the next bus trip
                 tripWaitingTime += nextTripWait*(stop[1] - trip[1])
                 #print "Next trip is in..." + str(nextTripWait) + " minutes"
@@ -76,14 +85,16 @@ def evalIndividual(individual):
                 #print "Bus capacity " + str(trip[1])
 
         tripWaitingTime = timedelta(minutes=0) # reset on each trip
-
+    # Evaluate average time
     for i in range(len(individual)):
         tripTimeTable = db.generateFitnessTripTimeTable(individual[i][0], individual[i][2])
         for j in range(len(tripTimeTable)):
             # TODO: Fix trips that finish at the next day
             # TODO: it might be that some dates have no INDEX since there are no requests. A function has to be added to prevent them to get the LAST POSITION
-            initialTrip = datetime.combine(fitnessClass.yesterday, datetime.strptime(initialTripTime, fitnessClass.formatTime).time())
-            lastTrip = datetime.combine(fitnessClass.yesterday, datetime.strptime(tripTimeTable[j][1], fitnessClass.formatTime).time())
+            # initialTrip = datetime.combine(fitnessClass.yesterday, datetime.strptime(initialTripTime, fitnessClass.formatTime).time())
+            initialTrip = initialTripTime
+            # lastTrip = datetime.combine(fitnessClass.yesterday, datetime.strptime(tripTimeTable[j][1], fitnessClass.formatTime).time())
+            lastTrip = tripTimeTable[j][1]
             if initialTrip > lastTrip:
                 initialTrip = lastTrip - timedelta(minutes=db.getFrequency(individual[i][0]))
             # Search on Fitness.request array for the particular requests
@@ -94,9 +105,25 @@ def evalIndividual(individual):
                 count = 0
                 for k in range(len(request)):
                     # diff = diff + self.getMinutes(self.timeDiff(tripTimeTable[j][1], str(int(request[k]["_id"]["RequestTime"].hour)) + ":" + str(int(request[k]["_id"]["RequestTime"].minute))))*int(request[k]["total"])
-                    diff = diff + fitnessClass.getMinutes(fitnessClass.timeDiff(tripTimeTable[j][1], str(int(request[k]["hour"])) + ":" + str(int(request[k]["minute"]))))*int(request[k]["count"])
-                    # count = count + int(request[k]["total"])
-                    count = count + int(request[k]["count"])
+                    # diff = diff + fitnessClass.getMinutes(fitnessClass.timeDiff(tripTimeTable[j][1], str(int(request[k]["hour"])) + ":" + str(int(request[k]["minute"]))))*int(request[k]["count"])
+                    '''
+                    print "--- Values ---"
+                    print request[k]["_id"]["RequestTime"]
+                    print tripTimeTable[j][1] 
+                    '''
+                    z = (tripTimeTable[j][1] - request[k]["_id"]["RequestTime"])
+                    # CHECK REQUESTS RETRIEVED FROM THE DB !!!!!!
+                    '''
+                    print "--- Difference ---"
+                    print z
+                    '''
+                    # print z
+                    # print (z.days * 1440) + (z.seconds / 60)
+                    diff = diff + (z.days * 1440) + (z.seconds / 60)
+                    # fitnessClass.getMinutes(fitnessClass.timeDiff(tripTimeTable[j][1], str(int(request[k]["hour"])) + ":" + str(int(request[k]["minute"]))))*int(request[k]["count"])
+                    # print request[k]
+                    count = count + int(request[k]["total"])
+                    # count = count + int(request[k]["count"])
                 dif.append(diff)
                 cnt.append(count)
     return (sum(dif) + tripWaitingTime.total_seconds()/60.0)/(sum(cnt) + count),
