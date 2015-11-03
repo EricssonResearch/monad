@@ -12,6 +12,8 @@ under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
 CONDITIONS OF ANY KIND, either express or implied. See the License for the 
 specific language governing permissions and limitations under the License.
 """
+import mutation
+import inits
 from deap import base
 from deap import creator
 from deap import tools
@@ -21,14 +23,12 @@ from fitness import Fitness
 from operator import itemgetter
 from datetime import datetime
 from datetime import timedelta
-import mutation
-import inits
 
 # Constant
 BUS_LINE = 2
 # The individual size corresponds to the number of trips
-INDIVIDUAL_SIZE =  10 # 90
-INDIVIDUAL_SIZE_BOUNDS = [90,90]
+# INDIVIDUAL_SIZE =  10
+INDIVIDUAL_SIZE_BOUNDS = [2, 10]
 
 
 # Initialize the classes

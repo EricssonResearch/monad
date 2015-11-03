@@ -149,10 +149,7 @@ class DB():
         return self.parseData(routeStop, "trajectory")
 
     def getFrequency(self, line):
-
         return self.parseData(self.db.Route.find({"line": line}, {"frequency": 1}), "frequency")
-
-
 
     # Bus
     # https://www.ul.se/en/About-UL/About-our-public-function/
@@ -212,24 +209,22 @@ class DB():
 
     def generateMinute(self, time):
         hours, minutes = time.split(DB.timeSeparator)
-        if int(hours) == 24:
+        if int(hours) == DB.hoursDay:
             hours = "0"
         return int(hours) * DB.minutesHour + int(minutes)
 
     def generateTime(self, time):
         hours, minutes = divmod(time, DB.minutesHour)
-        if hours == 24:
+        if hours == DB.hoursDay:
             hours = 0
         return self.mergeRandomTime(hours, minutes)
 
     # Trip
     # Generate TT from seed random starting time. Called when generating the initial population
     def generateStartingTripTime(self, line):
-        # today = datetime.date.today()
         today = datetime.date.today() - timedelta(13)
-        hourFormat = "%H:%M"
-        hour = self.generateTime(self.generateMinute(self.mergeRandomTime(self.getRandomHour(),self.getRandomMinute())))
-        return list([line, self.generateRandomCapacity(),datetime.datetime.combine(today,datetime.datetime.strptime(hour, hourFormat).time())])
+        hour = self.generateTime(self.generateMinute(self.mergeRandomTime(self.getRandomHour(), self.getRandomMinute())))
+        return list([line, self.generateRandomCapacity(), datetime.datetime.combine(today, datetime.datetime.strptime(hour, self.formatTime).time())])
 
     # Fitness trip time table
     # This is the function that changes the genotype into a phenotype. It generates the time table for a particular individual.
@@ -240,7 +235,7 @@ class DB():
         tripTimeTable.append([self.getBusStopName(busStop[0]["busStop"]), startingTime])
         for j in range(len(busStop)-1):
             startingBusStopTime = startingBusStopTime + timedelta(minutes=busStop[j]["interval"])
-            tripTimeTable.append([self.getBusStopName(busStop[j+1]["busStop"]),startingBusStopTime])
+            tripTimeTable.append([self.getBusStopName(busStop[j+1]["busStop"]), startingBusStopTime])
         return tripTimeTable
 
     # After GA, this function is called to generate all the bus stops given the initial starting times based on the best individual
@@ -249,13 +244,13 @@ class DB():
         for i in range(len(timetable)):
             busStop = self.getRouteStop(timetable[i][0])
             tripTimeTable = []
-            tripTimeTable.append([busStop[0]["name"],timetable[i][2]])
+            tripTimeTable.append([busStop[0]["name"], timetable[i][2]])
             startingBusStopTime = timetable[i][2]
             for j in range(len(busStop)-1):
                 startingBusStopTime = startingBusStopTime + timedelta(minutes=busStop[j]["interval"])
-                tripTimeTable.append([busStop[j+1]["name"],startingBusStopTime])
+                tripTimeTable.append([busStop[j+1]["name"], startingBusStopTime])
             timeTable.append([timetable[i][0], timetable[i][1], list(self.flatten(tripTimeTable))])
-        return sorted(timeTable, key = itemgetter(2))
+        return sorted(timeTable, key=itemgetter(2))
 
     # Dont forget to credit this function on Stack Overflow
     # http://stackoverflow.com/questions/14820273/confused-by-chain-enumeration
