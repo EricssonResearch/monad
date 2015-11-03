@@ -42,10 +42,10 @@ public class SendBookingCancelRequest extends AsyncTask<String, Void, String>{
 
             // Get the response from the server
             int responseCode = conn.getResponseCode();
-            if (responseCode != 200 && responseCode != 500 && responseCode != 403) {
+            if (responseCode != 200) {
                 throw new RuntimeException("Something went wrong - HTTP error code: " + responseCode);
             }
-            BufferedReader br = new BufferedReader(new InputStreamReader((conn.getInputStream())));
+            BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream(), "utf-8"), 8);
             String line;
             while ((line = br.readLine()) != null) {
                 response = response + line + "\n";
@@ -55,10 +55,10 @@ public class SendBookingCancelRequest extends AsyncTask<String, Void, String>{
             conn.disconnect();
 
         } catch (MalformedURLException e) {
-            return ("MalformedURLException: " + e.toString());
+            return (e.toString());
 
         } catch (IOException e) {
-            return ("IOException: " + e.toString());
+            return (e.toString());
 
         } catch (RuntimeException e) {
             return (e.toString());
@@ -68,10 +68,10 @@ public class SendBookingCancelRequest extends AsyncTask<String, Void, String>{
     }
 
     /* Get the data from the interface and wrap them in a request */
-    public static String wrapRequest(String objectId) {
+    public static String wrapRequest(String userTripId) {
         String request = SERVER + "/bookingCancelRequest";
 
-        String urlParameters = "objectId=" + objectId;
+        String urlParameters = "userTripId=" + userTripId;
         String response = postRequest(request, urlParameters);
 
         return response;
