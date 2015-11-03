@@ -1,6 +1,6 @@
-DROP DATABASE IF EXISTS users;
-CREATE DATABASE users;
-USE users;
+DROP DATABASE IF EXISTS clients;
+CREATE DATABASE clients;
+USE clients;
 
 CREATE TABLE client_profile (
 	id INT NOT NULL AUTO_INCREMENT,
@@ -343,4 +343,36 @@ BEGIN
     END IF;
 END $$
 
-DELIMITER ;
+--------------------------------------------------- DEBUGGING CODE ----------------------------------------------------
+
+-- SELECT client_sign_up('u1', 'p1', 'e1', 'ph1');
+-- SELECT client_existing_password_update(1, 'p1', 'p');
+-- SELECT client_existing_password_update(1, 'p1', 'p2');
+-- SELECT client_existing_password_update(2, 'p1', 'p3');
+-- SELECT client_forgotten_password_reset('e1', 'p10');
+-- SELECT client_forgotten_password_reset('e', 'p100');
+--
+-- SELECT google_sign_in('e8');
+-- SELECT google_new_password_register(1, 'p30');
+-- SELECT google_new_password_register(2, 'p30');
+-- SELECT client_profile_update(2, 'u10', 'e8', 'ph0');
+-- SELECT google_new_password_register(2, 'p30');
+-- SELECT client_sign_up('u2', 'p2', 'e2', 'ph2');
+-- SELECT client_profile_update(1, 'u1', e', 'ph');
+-- SELECT client_profile_update(1, 'u', 'e', 'ph');
+-- SELECT client_settings_update(1, 'en', '2', '1', '1', '1');
+-- SELECT client_profile_update(3, 'u10', 'p10', 'e0', 'ph0');
+-- SELECT client_sign_up('', '', 'e', '');
+-- SELECT client_sign_up('u1', 'p1', 'e1', 'ph1');
+-- SELECT client_sign_up('u', 'p1', 'e1', 'ph1');
+-- SELECT client_sign_up('u', 'p1', 'e', 'ph1');
+-- SELECT client_sign_up('u2', 'p2', 'e2', 'ph2');
+-- SELECT client_sign_in('u1', 'p1');
+-- SELECT client_sign_in('u', 'p');
+-- SELECT client_sign_in('', '');
+-- SELECT google_sign_in('e1');
+-- SELECT google_sign_in('e2');
+-- SELECT google_sign_in('e1');
+-- SELECT google_sign_in('e2');
+
+-----------------------------------------------------------------------------------------------------------------------
