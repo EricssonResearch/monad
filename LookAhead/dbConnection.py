@@ -155,7 +155,6 @@ class DB():
 
 
 
-
     # Bus
     # https://www.ul.se/en/About-UL/About-our-public-function/
     # In total we deploy around 125 city buses, 250 regional buses and 11
@@ -332,6 +331,7 @@ class DB():
 
     def getBusStopName(self, id):
         return self.parseData(self.db.BusStop.find({"_id": id}), "name")
+
 
     def MaxReqNumTrip(self,trip_sTime,tripEnd, lineNum = 2):
         BusStplist = []
