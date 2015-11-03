@@ -77,56 +77,8 @@ class Fitness():
     def getMinutes(self, td):
         return (td.seconds//Fitness.secondMinute) % Fitness.secondMinute
 
-    def getNumberOfRequests(self, tripStartTime, lineNumber=2):
-        ''' finds the max # of transit requests that can be served by the trip with startBusStop along the
-        bus line
 
-        @param: tripStartTime - departure time for this trip
-        @return maximum number of requests between two stops in the trip
-        '''
-        self.expectedTimes = {}
-        self.stopsCount = {}
-        self.reqGroup = []
-        print ("routes.....................")
-        print (self.routes)
-        for i, item in enumerate(self.routes):
-            if item[2] == 2:
-                self.busStops = [[i[0], i[1]] for i in self.routes[i][1]]
-                self.expTime = tripStartTime;
-                for i, stop in enumerate(self.busStops):
-                    self.expectedTimes[stop[0]] = self.expTime.time()
-                    self.expTime = self.expTime + timedelta(minutes=stop[1])
-                    self.stopsCount[stop[0]] = 0
 
-        for req in self.requests:
-            if req[1] in self.expectedTimes:
-                if req[0].time() < self.expectedTimes[req[1]]:
-                    self.reqGroup.append(req)
-                    self.stopsCount[req[1]] += 1
-                    self.stopsCount[req[2]] -= 1
-
-        #print "Max request count", self.stopsCount[max(self.stopsCount, key = self.stopsCount.get)]
-        return self.stopsCount[max(self.stopsCount, key = self.stopsCount.get)]
-
-    def evalIndividualCapacity(self, individual):
-        ''' Evaluates an individual based on the capacity/bus type chosen for each trip.
-
-        @param: individual - a possible timetable for a bus line, covering the whole day.
-        @return: a fitness score assigned in accordance with how close the requested
-        capacity is to the availed capacity on the individual
-        '''
-        individual.sort(key = itemgetter(2))
-        self.expectedTimes = {}
-        for trip, item in enumerate(individual):
-            if trip == 0:
-                self.start = datetime.strptime('00:00', '%H:%M')
-                self.end   = datetime.strptime(individual[0][2], '%H:%M')
-
-            else:
-                self.start = datetime.strptime(individual[trip-1][2], '%H:%M')
-                self.end   = datetime.strptime(individual[trip][2], '%H:%M')
-
-        return 1 
 
     def createRequestIndex(self, request):
         ''' Creates a structure that stores the hour, the minute and the position on the request array for this particular time
