@@ -24,6 +24,8 @@ from operator import itemgetter
 from datetime import datetime
 from datetime import timedelta
 
+
+
 # Constant
 BUS_LINE = 2
 # The individual size corresponds to the number of trips
@@ -48,6 +50,7 @@ def evalIndividual(individual):
     '''
     # First, the randomly-generated starting times are sorted in order to check sequentially the number of requests for that particular trip
     individual = sorted(individual, key=itemgetter(2))
+
     # Second, we loop trough the number of genes in order to retrieve the number of requests for that particular trip
     # For the 1st trip, the starting time has to be selected
     request = []
@@ -58,7 +61,7 @@ def evalIndividual(individual):
     db = DB()
     tripWaitingTime = timedelta(minutes=0) # waiting time due to insufficient capacity
     for i, trip in enumerate(individual):
-        tripTimeTable = db.generateFitnessTripTimeTable(individual[i][0], individual[i][2])
+        #tripTimeTable = db.generateFitnessTripTimeTable(individual[i][0], individual[i][2])
         tripStartTime = trip[2]
         # start = '2015-10-21 00:00:00' if i == 0 else '2015-10-21 ' + trip[2] + ':00'
         if len(str(trip[2].hour))==1:
@@ -68,6 +71,7 @@ def evalIndividual(individual):
         start = '2015-10-21 00:00:00' if i == 0 else '2015-10-21 ' + temp + ':00'
         # end = '2015-10-21 ' + trip[2] + ':00'
         end = '2015-10-21 ' + temp + ':00'
+
         stopsAndRequests = db.MaxReqNumTrip(start, end)
         count = 0
         for i, stop in enumerate(stopsAndRequests):
@@ -88,10 +92,13 @@ def evalIndividual(individual):
     # Evaluate average time
     for i in range(len(individual)):
         tripTimeTable = db.generateFitnessTripTimeTable(individual[i][0], individual[i][2])
+
         for j in range(len(tripTimeTable)):
             # TODO: Fix trips that finish at the next day
+
             initialTrip = initialTripTime
             lastTrip = tripTimeTable[j][1]
+
             if initialTrip > lastTrip:
                 initialTrip = lastTrip - timedelta(minutes=db.getFrequency(individual[i][0]))
             # Search on Fitness.request array for the particular requests
@@ -101,14 +108,16 @@ def evalIndividual(individual):
                 diff = 0
                 count = 0
                 for k in range(len(request)):
-                    z = (tripTimeTable[j][1] - request[k]["_id"]["RequestTime"])
+
+                    z = tripTimeTable[j][1] - request[k]["_id"]["RequestTime"]
+                    
                     diff = diff + (z.days * databaseClass.minutesDay) + (z.seconds / databaseClass.minutesHour)
                     count = count + int(request[k]["total"])
                 dif.append(diff)
                 cnt.append(count)
+
     totalWaitingTime = (sum(dif) + tripWaitingTime.total_seconds()/60.0)/(sum(cnt) + count)
     return fitnessClass.calculateCost(individual, totalWaitingTime, 0),
-
 
 
 # Creating a minimizing fitness class to minimize a single objective that
