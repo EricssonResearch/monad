@@ -54,7 +54,7 @@ public class ResetPasswordActivity extends AppCompatActivity {
             submitButton.setText(getString(R.string.label_profile_savechanges));
         }
 
-        //TODO: update the password in the database
+        //TODO: check if password check is done in clientAuthentication and if yes, delete the check in the following part
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -6,6 +6,9 @@ import android.util.Log;
 
 import com.google.common.base.Charsets;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.IOException;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -20,7 +23,8 @@ public class SendTravelRequest extends AsyncTask<String, Void, String> {
 
     /* Send the data to the server via POST and receive the response */
     public static String postRequest(String request, String urlParameters) {
-        String response = "";
+        String response;
+        int numberOfRecommendedTrips;
 
         try {
             URL url = new URL(request);
@@ -43,14 +47,21 @@ public class SendTravelRequest extends AsyncTask<String, Void, String> {
 
             // Get the response from the server
             int responseCode = conn.getResponseCode();
-            if (responseCode != 200 && responseCode != 500 && responseCode != 403) {
+            if (responseCode != 200) {
                 throw new RuntimeException("Something went wrong - HTTP error code: " + responseCode);
             }
-            BufferedReader br = new BufferedReader(new InputStreamReader((conn.getInputStream())));
-            String line;
-            while ((line = br.readLine()) != null) {
-                response = response + line + "\n";
+            BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream(), "utf-8"), 8);
+            StringBuilder sb = new StringBuilder();
+            String inputStr;
+
+            while ((inputStr = br.readLine()) != null){
+                sb.append(inputStr);
             }
+            JSONObject trips = new JSONObject(sb.toString());
+
+            numberOfRecommendedTrips = trips.length();
+            Log.d("oops", "Number of trips: " +  numberOfRecommendedTrips);
+            response = "Woohoo it works!";
 
             // Close the connection
             conn.disconnect();
@@ -62,6 +73,9 @@ public class SendTravelRequest extends AsyncTask<String, Void, String> {
             return ("IOException: " + e.toString());
 
         } catch (RuntimeException e) {
+            return (e.toString());
+
+        } catch (JSONException e) {
             return (e.toString());
         }
 
@@ -96,8 +110,6 @@ public class SendTravelRequest extends AsyncTask<String, Void, String> {
     @Override
     protected void onPostExecute(String response) {
         Log.d("oops", response);
-
-        //TODO Stavros: set the scrollview with the response
     }
 }
 
