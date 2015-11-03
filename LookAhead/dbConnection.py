@@ -21,8 +21,7 @@ import itertools
 from datetime import timedelta
 from pymongo import MongoClient
 from bson.objectid import ObjectId
-from operator import itemgetter, attrgetter
-import operator
+from operator import itemgetter
 
 
 class DB():
@@ -38,13 +37,13 @@ class DB():
 
     # Constructor
     def __init__(self):
-        self.client = MongoClient(DB.server, DB.port)
+        self.client = MongoClient(DB.server, DB.port, maxPoolSize=200)
         self.db = self.client[DB.database]
 
     def createCollection(self, name):
         self.db.createCollection(name)
 
-    def retrieveData(self, data, column):
+    def parseData(self, data, column):
         if column is None:
             for document in data:
                 return document
@@ -67,7 +66,7 @@ class DB():
 
     def getTravelRequest(self, column):
         req = self.db.TravelRequestLookAhead.find({}, {"_id": False})
-        return self.retrieveData(req, column)
+        return self.parseData(req, column)
 
     # These function will be called for every gene in order to get the difference
     def getTravelRequestBetween(self, start, end):
@@ -133,11 +132,11 @@ class DB():
         routeId = self.getRouteId()
         for r in routeId:
             route = self.db.Route.find({"line": r})
-            return self.retrieveData(route, column)
+            return self.parseData(route, column)
 
     def getLine(self, line):
         line = self.db.Route.find({"line": line})
-        return self.retrieveData(line, None)
+        return self.parseData(line, None)
 
     def dropRoute(self):
         self.db.Route.drop()
@@ -147,10 +146,13 @@ class DB():
 
     def getRouteStop(self, line):
         routeStop = self.db.Route.find({"line": line}, {"trajectory": 1})
-        return self.retrieveData(routeStop, "trajectory")
+        return self.parseData(routeStop, "trajectory")
 
     def getFrequency(self, line):
-        return self.retrieveData(self.db.Route.find({"line": line},{"frequency": 1}), "frequency")
+
+        return self.parseData(self.db.Route.find({"line": line}, {"frequency": 1}), "frequency")
+
+
 
     # Bus
     # https://www.ul.se/en/About-UL/About-our-public-function/
@@ -187,7 +189,7 @@ class DB():
     def getRandomBus(self, column):
         bus = self.db.bus.find(
             {"_id": ObjectId(self.getRandomBusId())})
-        return self.retrieveData(bus, column)
+        return self.parseData(bus, column)
 
     # Generate fake time table
     # Let's create a trip every headway minutes
@@ -238,7 +240,6 @@ class DB():
         tripTimeTable.append([self.getBusStopName(busStop[0]["busStop"]), startingTime])
         for j in range(len(busStop)-1):
             startingBusStopTime = startingBusStopTime + timedelta(minutes=busStop[j]["interval"])
-            #tripTimeTable.append([self.getBusStopName(busStop[j+1]["busStop"]),self.generateTime(minuteSeed)])
             tripTimeTable.append([self.getBusStopName(busStop[j+1]["busStop"]),startingBusStopTime])
         return tripTimeTable
 
@@ -247,23 +248,13 @@ class DB():
         timeTable = []
         for i in range(len(timetable)):
             busStop = self.getRouteStop(timetable[i][0])
-            # numberStop = len(busStop)-1
-            # print numberStop
-            # minuteSeed = self.generateMinute(timetable[i][2])
             tripTimeTable = []
-            # tripTimeTable.append([busStop[0]["name"],self.generateTime(minuteSeed)])
             tripTimeTable.append([busStop[0]["name"],timetable[i][2]])
             startingBusStopTime = timetable[i][2]
-            # for j in range(numberStop):
             for j in range(len(busStop)-1):
                 startingBusStopTime = startingBusStopTime + timedelta(minutes=busStop[j]["interval"])
-                # minuteSeed = minuteSeed + busStop[j]["interval"]
-                # if minuteSeed > DB.minutesDay:
-                #     minuteSeed = minuteSeed - DB.minutesDay
-                # tripTimeTable.append([busStop[j+1]["name"],self.generateTime(minuteSeed)])
                 tripTimeTable.append([busStop[j+1]["name"],startingBusStopTime])
             timeTable.append([timetable[i][0], timetable[i][1], list(self.flatten(tripTimeTable))])
-        print "sorted failing"
         return sorted(timeTable, key = itemgetter(2))
 
     # Dont forget to credit this function on Stack Overflow
@@ -318,17 +309,18 @@ class DB():
 
     # Bus Stop Location
     def getBusStopLatitude(self, busStop):
-        return self.retrieveData(self.db.BusStop.find({"name": busStop}, {"latitude": 1}), "latitude")
+        return self.parseData(self.db.BusStop.find({"name": busStop}, {"latitude": 1}), "latitude")
 
     def getBusStopLongitude(self, busStop):
-        return self.retrieveData(self.db.BusStop.find({"name": busStop}, {"longitude": 1}), "longitude")
+        return self.parseData(self.db.BusStop.find({"name": busStop}, {"longitude": 1}), "longitude")
 
     def getBusStopId(self, busStop):
-        return self.retrieveData(self.db.BusStop.find({"name": busStop}), "_id")
+        return self.parseData(self.db.BusStop.find({"name": busStop}), "_id")
 
     def getBusStopName(self, id):
-        return self.retrieveData(self.db.BusStop.find({"_id": id}), "name")
-    
+        return self.parseData(self.db.BusStop.find({"_id": id}), "name")
+
+
     def MaxReqNumTrip(self,trip_sTime,tripEnd, lineNum = 2):
         BusStplist = []
         dirlist =[]

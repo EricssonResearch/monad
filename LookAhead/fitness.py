@@ -13,8 +13,6 @@ Unless required by applicable law or agreed to in writing, software distributed 
 See the License for the specific language governing permissions and limitations under the License.
 
 """
-import itertools
-import unittest
 from dbConnection import DB
 from operator import itemgetter
 from datetime import datetime
@@ -63,7 +61,6 @@ class Fitness():
         # Setting the end time boundary of request that we want
         endTime = datetime.combine(Fitness.yesterday, datetime.strptime(Fitness.lastMinute, Fitness.formatTime).time())
         Fitness.request = db.grpReqByBusstopAndTime(startTime, endTime)
-        # Fitness.request = db.getTravelRequestSummary(startTime, endTime)
         self.createRequestIndex(Fitness.request)
 
     def timeDiff(self, time1, time2):
@@ -141,6 +138,7 @@ class Fitness():
                 # Fitness.requestIndex.append([request[i]["hour"], request[i]["minute"], i])
                 minute = request[i]["_id"]["RequestTime"].minute
                 # minute = request[i]["minute"]
+        # print Fitness.requestIndex
 
     def searchRequestIndex(self, index, initialHour, initialMinute, finalHour, finalMinute):
         ''' Search the index to get the position on the request array for a specific time frame
@@ -185,13 +183,6 @@ class Fitness():
         for i in range(len(request)):
             if request[i]["_id"]["BusStop"] == busStop:
                 result.append(request[i])
-        '''
-        if len(result) > 100:
-            print str(initialTime.hour)+":"+str(initialTime.minute)
-            print index[0]
-            print str(finalTime.hour)+":"+str(finalTime.minute)
-            print index[1]
-        '''
         return result
 
     def calculateCost(self, individual, totalWaitingTime, penaltyOverCapacity):
