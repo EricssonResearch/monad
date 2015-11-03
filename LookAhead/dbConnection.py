@@ -358,3 +358,57 @@ class DB():
             sum += i[1]
             i[1] = sum
         return BusStplist
+
+    def insertBusTrip(self, individual):
+        '''
+        Insert trip details to BusTrip by best individual
+        @param: individual, best individual selected by GA
+        '''
+
+        tripObjectList = []
+        for i in range(len(individual)):
+            objID = ObjectId()
+            tripObjectList.append(objID)
+            line = individual[i][0]
+            capacity = individual[i][1]
+            startTime = individual[i][2]
+   
+            trajectory = self.getRoute("trajectory")
+
+            for j in range(len(trajectory)):
+                interval = int(trajectory[j]["interval"])
+                if j == 0:
+                    trajectory[j]["time"] = startTime + datetime.timedelta(minutes=interval)
+                else: 
+                    trajectory[j]["time"] = trajectory[j-1]["time"] + datetime.timedelta(minutes=interval)
+                del trajectory[j]["interval"]
+
+            trip = {
+                "_id": objID,
+                "capacity": capacity,
+                "line": line,
+                "startTime": startTime,
+                "endTime": trajectory[len(trajectory)-1]["time"],
+                "trajectory": trajectory 
+            }
+            #print trip
+            self.db.BusTrip.insert_one(trip)
+        self.insertTimeTable1(line, startTime, tripObjectList)
+
+    def insertTimeTable1(self, line, startTime, tripObjectList):            
+        ''' 
+        Insert object list of BusTrip to TimeTable
+        @param: line, lineNo
+        @param: startTime, the date of timetable will be used for
+        @param: tripObjectList, list of trip object id of specific line
+        '''
+
+        objID = ObjectId()
+        timeTable = {
+            "_id": objID,
+            "line": line,
+            "date": datetime.datetime(startTime.date().year, startTime.date().month, startTime.date().day, 0, 0, 0),
+            "timetable": tripObjectList
+        }    
+        #print timeTable
+        self.db.TimeTable.insert_one(timeTable) 

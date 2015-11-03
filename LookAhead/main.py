@@ -25,7 +25,7 @@ from fitness import Fitness
 MUTATION_PROB = 0.5
 CROSS_OVER_PROB = 0.5
 NO_OF_GENERATION = 1
-POPULATION_SIZE = 3
+POPULATION_SIZE = 1
 
 
 def main():
@@ -69,6 +69,10 @@ def main():
 
     # The Best Individual found
     best_ind = tools.selBest(pop, 1)[0]
+
+    #print "InsertBusTrip and TimeTable......"
+    #databaseClass = DB()
+    #databaseClass.insertBusTrip(best_ind)
     print("Best individual is %s, %s" % (best_ind, best_ind.fitness.values))
     #generateTimeTable(best_ind)
 
