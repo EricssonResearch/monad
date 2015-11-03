@@ -12,13 +12,12 @@ under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
 CONDITIONS OF ANY KIND, either express or implied. See the License for the 
 specific language governing permissions and limitations under the License.
 """
+import numpy
+import toolBox
 from deap import tools
 from deap import algorithms
-import numpy
 from dbConnection import DB
-import toolBox
 
-from fitness import Fitness
 
 # Variables
 MUTATION_PROB = 0.5
@@ -28,7 +27,6 @@ POPULATION_SIZE = 20
 
 
 def main():
-    fitnessClass =Fitness()
     # Generate the population
     pop = toolBox.toolbox.population(n=POPULATION_SIZE)
 
@@ -68,6 +66,7 @@ def main():
 
     # The Best Individual found
     best_ind = tools.selBest(pop, 1)[0]
+    print len(best_ind)
     print("Best individual is %s, %s" % (best_ind, best_ind.fitness.values))
     #generateTimeTable(best_ind)
 
