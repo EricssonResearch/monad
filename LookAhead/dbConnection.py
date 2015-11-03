@@ -230,6 +230,7 @@ class DB():
     # This is the function that changes the genotype into a phenotype. It generates the time table for a particular individual.
     def generateFitnessTripTimeTable(self, line, startingTime):
         tripTimeTable = []
+
         busStop = self.getRouteStop(line)
         minuteSeed = self.generateMinute(startingTime)
         tripTimeTable.append([self.getBusStopName(busStop[0]["busStop"]),self.generateTime(minuteSeed)])

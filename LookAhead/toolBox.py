@@ -23,6 +23,7 @@ from datetime import datetime
 from datetime import timedelta
 import mutation
 import inits
+import random
 
 # Constant
 BUS_LINE = 2
@@ -47,6 +48,7 @@ def evalIndividual(individual):
     '''
     # First, the randomly-generated starting times are sorted in order to check sequentially the number of requests for that particular trip
     individual = sorted(individual, key=itemgetter(2))
+
     # Second, we loop trough the number of genes in order to retrieve the number of requests for that particular trip
     # For the 1st trip, the starting time has to be selected
     request = []
@@ -58,6 +60,7 @@ def evalIndividual(individual):
     for i, trip in enumerate(individual):
         tripTimeTable = db.generateFitnessTripTimeTable(individual[i][0], individual[i][2])
         tripStartTime = trip[2]
+
         start = '2015-10-21 00:00:00' if i == 0 else '2015-10-21 ' + trip[2] + ':00'
         end = '2015-10-21 ' + trip[2] + ':00'
         stopsAndRequests = db.MaxReqNumTrip(start, end)
@@ -79,11 +82,14 @@ def evalIndividual(individual):
 
     for i in range(len(individual)):
         tripTimeTable = db.generateFitnessTripTimeTable(individual[i][0], individual[i][2])
+
         for j in range(len(tripTimeTable)):
             # TODO: Fix trips that finish at the next day
             # TODO: it might be that some dates have no INDEX since there are no requests. A function has to be added to prevent them to get the LAST POSITION
             initialTrip = datetime.combine(fitnessClass.yesterday, datetime.strptime(initialTripTime, fitnessClass.formatTime).time())
+
             lastTrip = datetime.combine(fitnessClass.yesterday, datetime.strptime(tripTimeTable[j][1], fitnessClass.formatTime).time())
+
             if initialTrip > lastTrip:
                 initialTrip = lastTrip - timedelta(minutes=db.getFrequency(individual[i][0]))
             # Search on Fitness.request array for the particular requests
@@ -94,11 +100,15 @@ def evalIndividual(individual):
                 count = 0
                 for k in range(len(request)):
                      diff = diff + fitnessClass.getMinutes(fitnessClass.timeDiff(tripTimeTable[j][1], str(int(request[k]["_id"]["RequestTime"].hour)) + ":" + str(int(request[k]["_id"]["RequestTime"].minute))))*int(request[k]["total"])
-                    #diff = diff + fitnessClass.getMinutes(fitnessClass.timeDiff(tripTimeTable[j][1], str(int(request[k]["hour"])) + ":" + str(int(request[k]["minute"]))))*int(request[k]["count"])
+                     #diff = diff + fitnessClass.getMinutes(fitnessClass.timeDiff(tripTimeTable[j][1], str(int(request[k]["hour"])) + ":" + str(int(request[k]["minute"]))))*int(request[k]["count"])
                      count = count + int(request[k]["total"])
+
                     #count = count + int(request[k]["count"])
+
                 dif.append(diff)
                 cnt.append(count)
+
+    print(dif)
     return (sum(dif) + tripWaitingTime.total_seconds()/60.0)/(sum(cnt) + count),
 
 

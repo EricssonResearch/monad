@@ -35,7 +35,7 @@ class Fitness():
     routes = []
     request = []
     requestIndex = []
-    yesterday = date.today() - timedelta(12)
+    yesterday = date.today() - timedelta(13)
 
 
 # A decorator is a function that can accept another function as
@@ -141,8 +141,9 @@ class Fitness():
                  Fitness.requestIndex.append([request[i]["_id"]["RequestTime"].hour, request[i]["_id"]["RequestTime"].minute, i])
                 #Fitness.requestIndex.append([request[i]["hour"], request[i]["minute"], i])
                  minute = request[i]["_id"]["RequestTime"].minute
-               # minute = request[i]["minute"]
 
+               # minute = request[i]["minute"]
+        print(Fitness.requestIndex)
     def searchRequestIndex(self, index, initialHour, initialMinute, finalHour, finalMinute):
         ''' Search the index to get the position on the request array for a specific time frame
         
