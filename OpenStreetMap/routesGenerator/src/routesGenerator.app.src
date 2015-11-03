@@ -1,0 +1,9 @@
+%% -*- erlang -*-
+{application, routesGenerator,
+ [{description, "routesGenerator"},
+  {vsn, "0.1"},
+  {modules, []},
+  {registered, []},
+  {mod, {'routesGenerator_app', []}},
+  {env, []},
+  {applications, [kernel, stdlib, crypto]}]}.

@@ -3,6 +3,7 @@ package se.uu.csproject.monadclient;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.IntentSender;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -15,6 +16,8 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
 import com.google.android.gms.common.api.Scope;
 import com.google.android.gms.plus.Plus;
+
+import java.util.concurrent.ExecutionException;
 
 public class GoogleLogIn extends Activity implements
         GoogleApiClient.ConnectionCallbacks,
@@ -108,10 +111,17 @@ public class GoogleLogIn extends Activity implements
 
         String email = Plus.AccountApi.getAccountName(mGoogleApiClient);
 
-        Toast.makeText(getApplicationContext(), "Sign In Successfully, email: " + email, Toast.LENGTH_LONG).show();
-        //// TODO Huijie: register the user with gmail and possibly other available information when he/she first login with the google account
-
-        setContentView(R.layout.activity_main);
+        GoogleSignUpTask googleSignUpTask = new GoogleSignUpTask();
+        try {
+            String response = googleSignUpTask.execute(email).get();
+            Toast.makeText(getApplicationContext(), response, Toast.LENGTH_LONG).show();
+            if(response.startsWith("Success (1)"))
+            GoogleLogIn.this.startActivity(new Intent(GoogleLogIn.this, MainActivity.class));
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -131,6 +141,15 @@ public class GoogleLogIn extends Activity implements
                 mIntentInProgress = false;
                 mGoogleApiClient.connect();
             }
+        }
+    }
+
+    private class GoogleSignUpTask extends AsyncTask<String, Void, String>{
+
+        @Override
+        protected String doInBackground(String... params) {
+            String response = ClientAuthentication.postGoogleSignInRequest(params[0]);
+            return response;
         }
     }
 }

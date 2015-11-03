@@ -25,4 +25,5 @@
     <dimen name="popup_size">120dp</dimen>
     <dimen name="popup_layoutsize">350dp</dimen>
     <dimen name="cardview_null_radius">0dp</dimen>
+    <dimen name="icon_mini">16dp</dimen>
 </resources>

@@ -104,24 +104,11 @@ def evalIndividual(individual):
                 diff = 0
                 count = 0
                 for k in range(len(request)):
-                    # diff = diff + self.getMinutes(self.timeDiff(tripTimeTable[j][1], str(int(request[k]["_id"]["RequestTime"].hour)) + ":" + str(int(request[k]["_id"]["RequestTime"].minute))))*int(request[k]["total"])
                     # diff = diff + fitnessClass.getMinutes(fitnessClass.timeDiff(tripTimeTable[j][1], str(int(request[k]["hour"])) + ":" + str(int(request[k]["minute"]))))*int(request[k]["count"])
-                    '''
-                    print "--- Values ---"
-                    print request[k]["_id"]["RequestTime"]
-                    print tripTimeTable[j][1] 
-                    '''
                     z = (tripTimeTable[j][1] - request[k]["_id"]["RequestTime"])
                     # CHECK REQUESTS RETRIEVED FROM THE DB !!!!!!
-                    '''
-                    print "--- Difference ---"
-                    print z
-                    '''
-                    # print z
-                    # print (z.days * 1440) + (z.seconds / 60)
                     diff = diff + (z.days * 1440) + (z.seconds / 60)
                     # fitnessClass.getMinutes(fitnessClass.timeDiff(tripTimeTable[j][1], str(int(request[k]["hour"])) + ":" + str(int(request[k]["minute"]))))*int(request[k]["count"])
-                    # print request[k]
                     count = count + int(request[k]["total"])
                     # count = count + int(request[k]["count"])
                 dif.append(diff)

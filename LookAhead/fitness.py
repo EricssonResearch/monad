@@ -37,6 +37,7 @@ class Fitness():
     requestIndex = []
     yesterday = date.today() - timedelta(13)
 
+
 # A decorator is a function that can accept another function as
 # a parameter to be able to modify or extend it
     def __init__(self):
@@ -183,7 +184,6 @@ class Fitness():
         request = Fitness.request[index[0]:index[1]]
         for i in range(len(request)):
             if request[i]["_id"]["BusStop"] == busStop:
-            # if request[i]["startBusStop"] == busStop:
                 result.append(request[i])
         '''
         if len(result) > 100:
