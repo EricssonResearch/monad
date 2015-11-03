@@ -35,7 +35,7 @@ class Fitness():
     routes = []
     request = []
     requestIndex = []
-    yesterday = date.today() - timedelta(12)
+    yesterday = date.today() - timedelta(13)
 
 
 # A decorator is a function that can accept another function as
