@@ -225,4 +225,6 @@
     <string name="label_resetpassword_entercurrentpassword">Enter your current password</string>
     <string name="label_profile_info">Profile Information</string>
     <string name="label_resetpassword_changepassword">Change Password</string>
+    <string name="action_notification">Notification</string>
+    <string name="action_all_notes">All notes</string>
 </resources>
