@@ -21,8 +21,7 @@ import itertools
 from datetime import timedelta
 from pymongo import MongoClient
 from bson.objectid import ObjectId
-from operator import itemgetter, attrgetter
-import operator
+from operator import itemgetter
 
 
 class DB():
@@ -238,7 +237,6 @@ class DB():
         tripTimeTable.append([self.getBusStopName(busStop[0]["busStop"]), startingTime])
         for j in range(len(busStop)-1):
             startingBusStopTime = startingBusStopTime + timedelta(minutes=busStop[j]["interval"])
-            #tripTimeTable.append([self.getBusStopName(busStop[j+1]["busStop"]),self.generateTime(minuteSeed)])
             tripTimeTable.append([self.getBusStopName(busStop[j+1]["busStop"]),startingBusStopTime])
         return tripTimeTable
 
@@ -247,23 +245,13 @@ class DB():
         timeTable = []
         for i in range(len(timetable)):
             busStop = self.getRouteStop(timetable[i][0])
-            # numberStop = len(busStop)-1
-            # print numberStop
-            # minuteSeed = self.generateMinute(timetable[i][2])
             tripTimeTable = []
-            # tripTimeTable.append([busStop[0]["name"],self.generateTime(minuteSeed)])
             tripTimeTable.append([busStop[0]["name"],timetable[i][2]])
             startingBusStopTime = timetable[i][2]
-            # for j in range(numberStop):
             for j in range(len(busStop)-1):
                 startingBusStopTime = startingBusStopTime + timedelta(minutes=busStop[j]["interval"])
-                # minuteSeed = minuteSeed + busStop[j]["interval"]
-                # if minuteSeed > DB.minutesDay:
-                #     minuteSeed = minuteSeed - DB.minutesDay
-                # tripTimeTable.append([busStop[j+1]["name"],self.generateTime(minuteSeed)])
                 tripTimeTable.append([busStop[j+1]["name"],startingBusStopTime])
             timeTable.append([timetable[i][0], timetable[i][1], list(self.flatten(tripTimeTable))])
-        print "sorted failing"
         return sorted(timeTable, key = itemgetter(2))
 
     # Dont forget to credit this function on Stack Overflow

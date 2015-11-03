@@ -12,9 +12,8 @@ under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
 CONDITIONS OF ANY KIND, either express or implied. See the License for the 
 specific language governing permissions and limitations under the License.
 """
-import itertools
-from operator import itemgetter
-from deap import tools, algorithms
+from deap import tools
+from deap import algorithms
 import numpy
 from dbConnection import DB
 import toolBox
@@ -24,8 +23,8 @@ from fitness import Fitness
 # Variables
 MUTATION_PROB = 0.5
 CROSS_OVER_PROB = 0.5
-NO_OF_GENERATION = 1
-POPULATION_SIZE = 3
+NO_OF_GENERATION = 5
+POPULATION_SIZE = 20
 
 
 def main():
