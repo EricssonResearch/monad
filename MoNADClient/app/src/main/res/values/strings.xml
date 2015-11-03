@@ -53,7 +53,7 @@
 
     <!--Activity - Main (Search view)-->
     <!--Activity - Main (Search view) /yonatan-->
-    <string name="label_main_searchtext">Where do you want to go ?</string>
+    <string name="label_main_searchtext">Where do you want to go?</string>
     <string name="label_main_recommendations">Recommendations</string>
 
     <!--Activity - Notifications-->

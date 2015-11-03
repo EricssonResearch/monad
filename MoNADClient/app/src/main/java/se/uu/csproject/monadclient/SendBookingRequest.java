@@ -42,10 +42,10 @@ public class SendBookingRequest extends AsyncTask<String, Void, String>{
 
             // Get the response from the server
             int responseCode = conn.getResponseCode();
-            if (responseCode != 200 && responseCode != 500 && responseCode != 403) {
+            if (responseCode != 200) {
                 throw new RuntimeException("Something went wrong - HTTP error code: " + responseCode);
             }
-            BufferedReader br = new BufferedReader(new InputStreamReader((conn.getInputStream())));
+            BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream(), "utf-8"), 8);
             String line;
             while ((line = br.readLine()) != null) {
                 response = response + line + "\n";
@@ -55,10 +55,10 @@ public class SendBookingRequest extends AsyncTask<String, Void, String>{
             conn.disconnect();
 
         } catch (MalformedURLException e) {
-            return ("MalformedURLException: " + e.toString());
+            return (e.toString());
 
         } catch (IOException e) {
-            return ("IOException: " + e.toString());
+            return (e.toString());
 
         } catch (RuntimeException e) {
             return (e.toString());
@@ -68,12 +68,10 @@ public class SendBookingRequest extends AsyncTask<String, Void, String>{
     }
 
     /* Get the data from the interface and wrap them in a request */
-    public static String wrapRequest(String busId, String userId, String startTime, String endTime, String stPosition,
-                                     String edPosition) {
+    public static String wrapRequest(String userTripId) {
         String request = SERVER + "/bookingRequest";
 
-        String urlParameters = "busId=" + busId + "&userId=" + userId + "&startTime=" + startTime
-                + "&endTime=" + endTime + "&stPosition=" + stPosition + "&edPosition=" + edPosition;
+        String urlParameters = "userTripId=" + userTripId;
         String response = postRequest(request, urlParameters);
 
         return response;
@@ -84,7 +82,7 @@ public class SendBookingRequest extends AsyncTask<String, Void, String>{
     protected String doInBackground(String... params) {
         String response;
 
-        response = wrapRequest(params[0], params[1], params[2], params[3], params[4], params[5]);
+        response = wrapRequest(params[0]);
 
         return response;
     }

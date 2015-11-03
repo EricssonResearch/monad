@@ -6,23 +6,67 @@
 -module(authentication_web).
 -author("Mochi Media <dev@mochimedia.com>").
 
--export([start/1, stop/0, loop/3, broadcast_server/0]).
+-export([start/1, stop/0, loop/2, broadcast_server/0]).
 
 %% External API
 
 start(Options) ->
-    Broadcaster = spawn_link(?MODULE, broadcast_server, []),
+    start_broadcaster(),
+    % start_python(),
+    start_emysql(),
+
     {DocRoot, Options1} = get_option(docroot, Options),
     Loop = fun (Req) ->
-                   ?MODULE:loop(Req, DocRoot, Broadcaster)
+                   ?MODULE:loop(Req, DocRoot)
            end,
 
-    start_emysql(),
     mochiweb_http:start([{name, ?MODULE}, {loop, Loop} | Options1]).
 
 stop() ->
+    % stop_python(),
     stop_emysql(),
+    stop_broadcaster(),
     mochiweb_http:stop(?MODULE).
+
+start_broadcaster() ->
+    Broadcaster = spawn_link(?MODULE, broadcast_server, []),
+    register(broadcaster, Broadcaster),
+    Msg = [{message, "Broadcaster: started"},
+           {process, Broadcaster}],
+    Broadcaster ! {broadcast, Msg}.
+
+broadcast_server() ->
+    receive
+        {broadcast, Message} ->
+            io:format("~n~p~n", [Message]);
+        Msg ->
+            io:format("~nBroadcaster - Unknown message: ~p~n", [Msg])
+    end,
+    erlang:hibernate(?MODULE, broadcast_server, []).
+
+stop_broadcaster() ->
+    Broadcaster = whereis(broadcaster),
+    exit(Broadcaster, normal),
+    Msg = [{message, "Broadcaster: stopped"},
+           {process, Broadcaster}],
+    io:format("~n~p~n", [Msg]).
+
+% start_python() ->
+%     {ok, PythonInstance} = python:start([{python_path, "src/python"}]),
+%     register(python_instance, PythonInstance),
+%     python:call(PythonInstance, rooter, start, []),
+%     Broadcaster = whereis(broadcaster),
+%     Msg = [{message, "PythonInstance: started"},
+%            {process, PythonInstance}],
+%     Broadcaster ! {broadcast, Msg}.
+%
+% stop_python() ->
+%     PythonInstance = whereis(python_instance),
+%     python:stop(PythonInstance),
+%     Broadcaster = whereis(broadcaster),
+%     Msg = [{message, "PythonInstance: stopped"},
+%            {process, PythonInstance}],
+%     Broadcaster ! {broadcast, Msg}.
 
 start_emysql() ->
     application:start(emysql),
@@ -33,21 +77,28 @@ start_emysql() ->
         {host, ""},
         {port, 3306},
         {database, ""},
-        {encoding, utf8}]).
+        {encoding, utf8}]),
+
+    Broadcaster = whereis(broadcaster),
+    Msg = [{message, "eMySQL: started"},
+           {process, self()}],
+    Broadcaster ! {broadcast, Msg}.
 
 stop_emysql() ->
-    application:stop(emysql).
+    application:stop(emysql),
+    Broadcaster = whereis(broadcaster),
+    Msg = [{message, "eMySQL: stopped"},
+           {process, self()}],
+    Broadcaster ! {broadcast, Msg}.
 
-broadcast_server() ->
-    receive
-        {broadcast, Message} ->
-            io:format("~n~p~n", [Message]);
-        Msg ->
-            io:format("Unknown message: ~n~p~n", [Msg])
-    end,
-    erlang:hibernate(?MODULE, broadcast_server, []).
+% test(PythonInstance, ClientId) ->
+%     {Numy, _} = string:to_integer(ClientId),
+%     io:format("ToInt: ~p~n", [Numy]),
+%     Response = python:call(PythonInstance, recommendationsParser, parse, [Numy]),
+%     io:format("Test Response: ~p~n" , [Response]),
+%     Response.
 
-loop(Req, DocRoot, Broadcaster) ->
+loop(Req, DocRoot) ->
     "/" ++ Path = Req:get(path),
     try
         case Req:get(method) of
@@ -56,19 +107,21 @@ loop(Req, DocRoot, Broadcaster) ->
             'POST' ->
                 case Path of
                     "client_sign_up" ->
-                        client_sign_up(Req, Broadcaster);
+                        client_sign_up(Req);
                     "client_sign_in" ->
-                        client_sign_in(Req, Broadcaster);
+                        client_sign_in(Req);
                     "google_sign_in" ->
-                        google_sign_in(Req, Broadcaster);
+                        google_sign_in(Req);
                     "client_profile_update" ->
-                        client_profile_update(Req, Broadcaster);
+                        client_profile_update(Req);
                     "client_settings_update" ->
-                        client_settings_update(Req, Broadcaster);
+                        client_settings_update(Req);
                     "client_existing_password_update" ->
-                        client_existing_password_update(Req, Broadcaster);
+                        client_existing_password_update(Req);
                     "client_forgotten_password_reset" ->
-                        client_forgotten_password_reset(Req, Broadcaster);
+                        client_forgotten_password_reset(Req);
+                    "get_recommendations" ->
+                        get_recommendations(Req);
                     _ ->
                         Req:not_found()
                 end;
@@ -84,7 +137,7 @@ loop(Req, DocRoot, Broadcaster) ->
             handle_error(Report, Req)
     end.
 
-client_sign_up(Req, Broadcaster) ->
+client_sign_up(Req) ->
     % Parse username, password, email, phone
     PostData = Req:parse_post(),
     Username = proplists:get_value("username", PostData, "Anonymous"),
@@ -105,6 +158,7 @@ client_sign_up(Req, Broadcaster) ->
                        {response, Response},
                        {process, self()}],
                 % io:format("~n~p~n", [Msg]),
+                Broadcaster = whereis(broadcaster),
                 Broadcaster ! {broadcast, Msg},
                 Req:respond({200, [{"Content-Type", "text/plain"}], Response});
             _ ->
@@ -121,7 +175,7 @@ client_sign_up(Req, Broadcaster) ->
             handle_error(Report, Req)
     end.
 
-client_sign_in(Req, Broadcaster) ->
+client_sign_in(Req) ->
     % Parse username, password
     PostData = Req:parse_post(),
     Username = proplists:get_value("username", PostData, "Anonymous"),
@@ -138,6 +192,7 @@ client_sign_in(Req, Broadcaster) ->
                        {response, Response},
                        {process, self()}],
                 % io:format("~n~p~n", [Msg]),
+                Broadcaster = whereis(broadcaster),
                 Broadcaster ! {broadcast, Msg},
                 Req:respond({200, [{"Content-Type", "text/plain"}], Response});
             _ ->
@@ -154,7 +209,7 @@ client_sign_in(Req, Broadcaster) ->
             handle_error(Report, Req)
     end.
 
-google_sign_in(Req, Broadcaster) ->
+google_sign_in(Req) ->
     % Parse email
     PostData = Req:parse_post(),
     Email = proplists:get_value("email", PostData, "Anonymous"),
@@ -169,6 +224,7 @@ google_sign_in(Req, Broadcaster) ->
                        {response, Response},
                        {process, self()}],
                 % io:format("~n~p~n", [Msg]),
+                Broadcaster = whereis(broadcaster),
                 Broadcaster ! {broadcast, Msg},
                 Req:respond({200, [{"Content-Type", "text/plain"}], Response});
             _ ->
@@ -185,7 +241,7 @@ google_sign_in(Req, Broadcaster) ->
             handle_error(Report, Req)
     end.
 
-client_profile_update(Req, Broadcaster) ->
+client_profile_update(Req) ->
     % Parse client_id, username, email, phone
     PostData = Req:parse_post(),
     ClientId = proplists:get_value("client_id", PostData, "Anonymous"),
@@ -206,6 +262,7 @@ client_profile_update(Req, Broadcaster) ->
                        {response, Response},
                        {process, self()}],
                 % io:format("~n~p~n", [Msg]),
+                Broadcaster = whereis(broadcaster),
                 Broadcaster ! {broadcast, Msg},
                 Req:respond({200, [{"Content-Type", "text/plain"}], Response});
             _ ->
@@ -222,7 +279,7 @@ client_profile_update(Req, Broadcaster) ->
             handle_error(Report, Req)
     end.
 
-client_settings_update(Req, Broadcaster) ->
+client_settings_update(Req) ->
     % Parse client_id, language, store_location, notifications_alert, recommendations_alert, theme
     PostData = Req:parse_post(),
     ClientId = proplists:get_value("client_id", PostData, "Anonymous"),
@@ -248,6 +305,7 @@ client_settings_update(Req, Broadcaster) ->
                        {response, Response},
                        {process, self()}],
                 % io:format("~n~p~n", [Msg]),
+                Broadcaster = whereis(broadcaster),
                 Broadcaster ! {broadcast, Msg},
                 Req:respond({200, [{"Content-Type", "text/plain"}], Response});
             _ ->
@@ -264,7 +322,7 @@ client_settings_update(Req, Broadcaster) ->
             handle_error(Report, Req)
     end.
 
-client_existing_password_update(Req, Broadcaster) ->
+client_existing_password_update(Req) ->
     % Parse client_id, old_password, new_password
     PostData = Req:parse_post(),
     ClientId = proplists:get_value("client_id", PostData, "Anonymous"),
@@ -285,6 +343,7 @@ client_existing_password_update(Req, Broadcaster) ->
                        {response, Response},
                        {process, self()}],
                 % io:format("~n~p~n", [Msg]),
+                Broadcaster = whereis(broadcaster),
                 Broadcaster ! {broadcast, Msg},
                 Req:respond({200, [{"Content-Type", "text/plain"}], Response});
             _ ->
@@ -301,7 +360,7 @@ client_existing_password_update(Req, Broadcaster) ->
             handle_error(Report, Req)
     end.
 
-client_forgotten_password_reset(Req, Broadcaster) ->
+client_forgotten_password_reset(Req) ->
     % Parse email, new_password
     PostData = Req:parse_post(),
     Email = proplists:get_value("email", PostData, "Anonymous"),
@@ -320,6 +379,7 @@ client_forgotten_password_reset(Req, Broadcaster) ->
                        {response, Response},
                        {process, self()}],
                 % io:format("~n~p~n", [Msg]),
+                Broadcaster = whereis(broadcaster),
                 Broadcaster ! {broadcast, Msg},
                 Req:respond({200, [{"Content-Type", "text/plain"}], Response});
             _ ->
@@ -335,6 +395,24 @@ client_forgotten_password_reset(Req, Broadcaster) ->
                       {trace, erlang:get_stacktrace()}],
             handle_error(Report, Req)
     end.
+
+get_recommendations(Req) ->
+    Req:respond({200, [{"Content-Type", "text/plain"}], "TODO"}).
+    % PostData = Req:parse_post(),
+    % ClientId = proplists:get_value("client_id", PostData, "Anonymous"),
+    % io:format("Temp: ~p~n", [ClientId]),
+    % try
+    %     PythonInstance = whereis(python_instance),
+    %     Response = test(PythonInstance, ClientId),
+	% io:format("Test: ~p~n", [Response]),
+    %     Req:respond({200, [{"Content-Type", "text/plain"}], Response})
+    % catch
+    %     Type:What ->
+    %             Report = ["Failed Request: get_recommendations",
+    %                       {type, Type}, {what, What},
+    %                       {trace, erlang:get_stacktrace()}],
+    %             handle_error(Report, Req)
+    % end.
 
 handle_error(Report, Req) ->
     error_logger:error_report(Report),

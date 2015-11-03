@@ -13,8 +13,6 @@ Unless required by applicable law or agreed to in writing, software distributed 
 See the License for the specific language governing permissions and limitations under the License.
 
 """
-import itertools
-import unittest
 from dbConnection import DB
 from operator import itemgetter
 from datetime import datetime
@@ -35,7 +33,8 @@ class Fitness():
     routes = []
     request = []
     requestIndex = []
-    yesterday = date.today() - timedelta(8)
+    yesterday = date.today() - timedelta(13)
+
 
 # A decorator is a function that can accept another function as
 # a parameter to be able to modify or extend it
@@ -61,8 +60,7 @@ class Fitness():
         startTime = datetime.combine(Fitness.yesterday, datetime.strptime(Fitness.firstMinute, Fitness.formatTime).time())
         # Setting the end time boundary of request that we want
         endTime = datetime.combine(Fitness.yesterday, datetime.strptime(Fitness.lastMinute, Fitness.formatTime).time())
-        # Fitness.request = db.grpReqByBusstopAndTime(startTime, endTime)
-        Fitness.request = db.getTravelRequestSummary(startTime, endTime)
+        Fitness.request = db.grpReqByBusstopAndTime(startTime, endTime)
         self.createRequestIndex(Fitness.request)
 
     def timeDiff(self, time1, time2):
@@ -107,26 +105,6 @@ class Fitness():
         #print "Max request count", self.stopsCount[max(self.stopsCount, key = self.stopsCount.get)]
         return self.stopsCount[max(self.stopsCount, key = self.stopsCount.get)]
 
-    def evalIndividualCapacity(self, individual):
-        ''' Evaluates an individual based on the capacity/bus type chosen for each trip.
-
-        @param: individual - a possible timetable for a bus line, covering the whole day.
-        @return: a fitness score assigned in accordance with how close the requested
-        capacity is to the availed capacity on the individual
-        '''
-        individual.sort(key = itemgetter(2))
-        self.expectedTimes = {}
-        for trip, item in enumerate(individual):
-            if trip == 0:
-                self.start = datetime.strptime('00:00', '%H:%M')
-                self.end   = datetime.strptime(individual[0][2], '%H:%M')
-
-            else:
-                self.start = datetime.strptime(individual[trip-1][2], '%H:%M')
-                self.end   = datetime.strptime(individual[trip][2], '%H:%M')
-
-        return 1 
-
     def createRequestIndex(self, request):
         ''' Creates a structure that stores the hour, the minute and the position on the request array for this particular time
         
@@ -134,12 +112,9 @@ class Fitness():
         '''
         minute = 0
         for i in range(len(request)):
-            #if request[i]["_id"]["RequestTime"].minute != minute or i == 0:
-            if request[i]["minute"] != minute or i == 0:
-                # Fitness.requestIndex.append([request[i]["_id"]["RequestTime"].hour, request[i]["_id"]["RequestTime"].minute, i])
-                Fitness.requestIndex.append([request[i]["hour"], request[i]["minute"], i])
-                # minute = request[i]["_id"]["RequestTime"].minute
-                minute = request[i]["minute"]
+            if request[i]["_id"]["RequestTime"].minute != minute or i == 0:
+                Fitness.requestIndex.append([request[i]["_id"]["RequestTime"].hour, request[i]["_id"]["RequestTime"].minute, i])
+                minute = request[i]["_id"]["RequestTime"].minute
 
     def searchRequestIndex(self, index, initialHour, initialMinute, finalHour, finalMinute):
         ''' Search the index to get the position on the request array for a specific time frame
@@ -152,17 +127,13 @@ class Fitness():
         '''
         result = []
         for i in range(len(index)):
-            # if index[i][0] == initialHour and index[i][1] == initialMinute:
             if index[i][0] >= initialHour and index[i][1] >= initialMinute:
                 result.append(index[i][2])
                 break
         # TODO: Watch out with MIDNIGHT trips !!!!
         if len(result) == 0:
             result.append(len(Fitness.request))
-        # if result[0] > len(Fitness.request):
-        #    result[0] = len(Fitness.request)
         for i in range(i, len(index)):
-            # if index[i][0] == finalHour and index[i][1] == finalMinute:
             if index[i][0] >= finalHour and index[i][1] >= finalMinute:
                 result.append(index[i][2])
                 break
@@ -182,16 +153,8 @@ class Fitness():
         index = self.searchRequestIndex(Fitness.requestIndex, initialTime.hour, initialTime.minute, finalTime.hour, finalTime.minute)
         request = Fitness.request[index[0]:index[1]]
         for i in range(len(request)):
-            # if request[i]["_id"]["BusStop"] == busStop:
-            if request[i]["startBusStop"] == busStop:
+            if request[i]["_id"]["BusStop"] == busStop:
                 result.append(request[i])
-        '''
-        if len(result) > 100:
-            print str(initialTime.hour)+":"+str(initialTime.minute)
-            print index[0]
-            print str(finalTime.hour)+":"+str(finalTime.minute)
-            print index[1]
-        '''
         return result
 
     def calculateCost(self, individual, totalWaitingTime, penaltyOverCapacity):
@@ -209,7 +172,6 @@ class Fitness():
         costOfBus = [[20, 1000], [60, 1200], [120, 1400]]
         waitingCostPerMin = 1
         busCost = 0
-
         if penaltyOverCapacity < 0 or individual is None or totalWaitingTime < 0:
             cost = -1
         else:
@@ -220,6 +182,5 @@ class Fitness():
                         busCost = busCost + costOfBus[j][1]
                         break
             waitingCost = totalWaitingTime * waitingCostPerMin
-
             cost = busCost + waitingCost + penaltyOverCapacity
         return cost
