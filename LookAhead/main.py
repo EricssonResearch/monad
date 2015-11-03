@@ -25,7 +25,7 @@ from fitness import Fitness
 MUTATION_PROB = 0.5
 CROSS_OVER_PROB = 0.5
 NO_OF_GENERATION = 1
-POPULATION_SIZE = 10
+POPULATION_SIZE = 3
 
 
 def main():

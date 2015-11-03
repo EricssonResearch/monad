@@ -62,8 +62,8 @@ class Fitness():
         startTime = datetime.combine(Fitness.yesterday, datetime.strptime(Fitness.firstMinute, Fitness.formatTime).time())
         # Setting the end time boundary of request that we want
         endTime = datetime.combine(Fitness.yesterday, datetime.strptime(Fitness.lastMinute, Fitness.formatTime).time())
-        # Fitness.request = db.grpReqByBusstopAndTime(startTime, endTime)
         Fitness.request = db.grpReqByBusstopAndTime(startTime, endTime)
+        # Fitness.request = db.getTravelRequestSummary(startTime, endTime)
         self.createRequestIndex(Fitness.request)
 
     def timeDiff(self, time1, time2):
@@ -135,13 +135,12 @@ class Fitness():
         '''
         minute = 0
         for i in range(len(request)):
-
             if request[i]["_id"]["RequestTime"].minute != minute or i == 0:
-            #if request[i]["minute"] != minute or i == 0:
-                 Fitness.requestIndex.append([request[i]["_id"]["RequestTime"].hour, request[i]["_id"]["RequestTime"].minute, i])
-                #Fitness.requestIndex.append([request[i]["hour"], request[i]["minute"], i])
-                 minute = request[i]["_id"]["RequestTime"].minute
-               # minute = request[i]["minute"]
+            # if request[i]["minute"] != minute or i == 0:
+                Fitness.requestIndex.append([request[i]["_id"]["RequestTime"].hour, request[i]["_id"]["RequestTime"].minute, i])
+                # Fitness.requestIndex.append([request[i]["hour"], request[i]["minute"], i])
+                minute = request[i]["_id"]["RequestTime"].minute
+                # minute = request[i]["minute"]
 
     def searchRequestIndex(self, index, initialHour, initialMinute, finalHour, finalMinute):
         ''' Search the index to get the position on the request array for a specific time frame
@@ -185,7 +184,6 @@ class Fitness():
         request = Fitness.request[index[0]:index[1]]
         for i in range(len(request)):
             if request[i]["_id"]["BusStop"] == busStop:
-            #if request[i]["startBusStop"] == busStop:
                 result.append(request[i])
         '''
         if len(result) > 100:

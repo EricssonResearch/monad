@@ -95,6 +95,8 @@ species client skills: [SQLSKILL,communicating] {
 	string request_time;
 	string start_time;
 	string end_time;
+	float day_past <- current_time/(1000*1000*24*60*60) update: current_time/(1000*1000*24*60*60);
+	int weekday <- (day_past + 4) mod 7 update: (day_past + 4) mod 7;
 	
 	
 	string start_position;
@@ -109,6 +111,7 @@ species client skills: [SQLSKILL,communicating] {
 		} else {
 			priority <- "time";
 		}
+
 		
 		//Normal Distribution to define hot bus_stops for start position		 
 		float hot_stop_weight_st <- gauss(5,1);
@@ -134,10 +137,7 @@ species client skills: [SQLSKILL,communicating] {
 		if (hot_st_lgt != 0 and hot_ed_lgt !=0){ 
 			//choose a random hot bus_stop from list
 			start_position <- string(spname_ls[2][rnd(hot_st_lgt-1)][0]);
-                	end_position <- string(spname_ed_ls[2][rnd(hot_ed_lgt-1)][0]); 
-      	
-			write  start_position;
-			write end_position ;   
+            end_position <- string(spname_ed_ls[2][rnd(hot_ed_lgt-1)][0]); 
         
 			//Form request time
 			ct_y_index <- cur_time_str index_of "y";
@@ -228,6 +228,9 @@ species client skills: [SQLSKILL,communicating] {
 				end_time <- string(1970 + int(st_year) - 1)  + "-" + st_month + "-" + st_day + " " + st_hour + ":" + st_minute;
 			}
 			
+			write start_time;
+			write end_time;	
+			write weekday;
 
 			save ["userId=" + user_name + "&" + start_time + "&" + end_time + "&" + request_time  + "&stPosition=" + start_position + "&edPosition=" + end_position + "&priority=" + priority] 
 		    		to: "ClientRequest" type:csv;
