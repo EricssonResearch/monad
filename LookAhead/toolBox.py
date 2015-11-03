@@ -101,6 +101,12 @@ def evalIndividual(individual):
                 cnt.append(count)
     return (sum(dif) + tripWaitingTime.total_seconds()/60.0)/(sum(cnt) + count),
 
+def getPassengerNumbers(individual):
+    ''' Calculate the total number of passengers in bus, boarding and departing passengers for the next bus stop.
+    @param individual - best individual
+    @return totalPassengers, boarding and departing passengers.
+    '''
+    pass
 
 
 # Creating a minimizing fitness class to minimize a single objective that
