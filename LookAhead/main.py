@@ -26,6 +26,7 @@ NO_OF_GENERATION = 5
 POPULATION_SIZE = 20
 
 
+
 def main():
     # Generate the population
     pop = toolBox.toolbox.population(n=POPULATION_SIZE)
