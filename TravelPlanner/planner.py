@@ -369,7 +369,7 @@ class TravelPlanner:
                         "endTime": arrivalTime,
                         "requestTime": self.requestTime,
                         "feedback": -1,
-                        "requestId": self.requestID,
+                        "requestID": self.requestID,
                         "booked": False
                 }
                 started = False
