@@ -120,6 +120,7 @@
                 android:layout_marginEnd="@dimen/activity_horizontal_margin"
                 />
             <TextView
+                android:id="@+id/label_walkend"
                 android:text="@string/label_trips_info3"
                 android:layout_width="0dp"
                 android:layout_weight="1"
@@ -128,6 +129,7 @@
                 android:textStyle="bold"
                 style="@style/importantText"/>
             <TextView
+                android:id="@+id/label_timeend"
                 android:text="@string/label_trips_time2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

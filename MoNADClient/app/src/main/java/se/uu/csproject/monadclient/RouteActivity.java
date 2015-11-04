@@ -20,6 +20,7 @@ import java.util.List;
 
 import se.uu.csproject.monadclient.recyclerviews.Notify;
 import se.uu.csproject.monadclient.recyclerviews.RouteRecyclerViewAdapter;
+import se.uu.csproject.monadclient.recyclerviews.Trip;
 
 
 public class RouteActivity extends AppCompatActivity {
@@ -51,9 +52,15 @@ public class RouteActivity extends AppCompatActivity {
 
         TextView timeStart = (TextView) findViewById(R.id.label_timestart);
         TextView walkStart = (TextView) findViewById(R.id.label_walkstart);
+        TextView timeEnd = (TextView) findViewById(R.id.label_timeend);
+        TextView walkEnd = (TextView) findViewById(R.id.label_walkend);
+
         Bundle b = getIntent().getExtras();
-        walkStart.setText("Walk to bus stop " + b.getString("startBusStop"));
-        timeStart.setText(formatTime((Date) b.getSerializable("startTime")));
+        Trip trip = b.getParcelable("trip");
+        walkStart.setText("Walk to bus stop " + trip.getStartBusStop());
+        timeStart.setText(formatTime(trip.getStartTime()));
+        walkEnd.setText("Leave the bus at stop " + trip.getEndBusStop());
+        timeEnd.setText(formatTime(trip.getEndTime()));
         Button btn_join_trips = (Button)findViewById(R.id.btn_join_trips);
         btn_join_trips.setOnClickListener(new View.OnClickListener() {
             public void onClick(View vw) {
@@ -97,6 +104,12 @@ public class RouteActivity extends AppCompatActivity {
     }
 
     private void initializeData(List<Notify> busStops){
+        busStops.add(new Notify("Bus 805: 5 min delay", "15:59", R.drawable.ic_directions_bus_black_18dp));
+        busStops.add(new Notify("Bus 805: Coming in 5 min", "15:43", R.drawable.ic_directions_bus_black_18dp));
+        busStops.add(new Notify("Bus 805: Departing now", "15:38", R.drawable.ic_directions_bus_black_18dp));
+        busStops.add(new Notify("Bus 801: 5 min delay", "15:15", R.drawable.ic_directions_bus_black_18dp));
+        busStops.add(new Notify("Bus 801: Coming in 5 min", "15:11", R.drawable.ic_directions_bus_black_18dp));
+        busStops.add(new Notify("Bus 801: Departing now", "15:06", R.drawable.ic_directions_bus_black_18dp));
         busStops.add(new Notify("Bus 805: 5 min delay", "15:59", R.drawable.ic_directions_bus_black_18dp));
         busStops.add(new Notify("Bus 805: Coming in 5 min", "15:43", R.drawable.ic_directions_bus_black_18dp));
         busStops.add(new Notify("Bus 805: Departing now", "15:38", R.drawable.ic_directions_bus_black_18dp));

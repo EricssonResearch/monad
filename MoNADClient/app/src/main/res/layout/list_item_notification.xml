@@ -24,7 +24,7 @@
             android:layout_width="@dimen/icon_medium"
             android:layout_height="@dimen/icon_medium"
             android:layout_gravity="center_vertical"
-            android:contentDescription="@string/label_notification_cancelcontentdescription"
+            android:contentDescription="@string/img_description"
             />
 
 
@@ -55,7 +55,7 @@
             android:layout_height="@dimen/cancel_size"
             android:src="@mipmap/ic_launcher"
             android:layout_gravity="center_vertical"
-            android:contentDescription="@string/label_notification_cancelcontentdescription"
+            android:contentDescription="@string/img_description"
             android:id="@+id/image1"
             />
 
