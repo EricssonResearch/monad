@@ -34,7 +34,7 @@ class DB():
     hoursDay = 24
     minutesHour = 60
     formatTime = '%H:%M'
-    yesterday = datetime(2015, 10, 21)
+    yesterday = datetime.datetime(2015, 10, 21)
 
     # Constructor
     def __init__(self):
