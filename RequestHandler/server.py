@@ -24,7 +24,7 @@ from pymongo import errors
 from datetime import datetime
 from random import randint
 from bson.objectid import ObjectId
-#from planner import TravelPlanner, Mode
+from planner import TravelPlanner, Mode
 
 
 def escape(text):
@@ -64,14 +64,14 @@ def application(env, start_response):
 			priority = escape(data.getvalue("priority"))	
 			
 			# dummy coordinates, have to update to real ones when Ilyass implements the required module
-			startPositionLatitude = 59.840728
-			startPositionLongitude = 17.6466147
-			endPositionLatitude = 59.8758
-			endPositionLongitude = 17.6627
+			startPositionLatitude = 59.8572316
+			startPositionLongitude = 17.6479787
+			endPositionLatitude = 58.8167503
+			endPositionLongitude = 16.8683923
 			
 			# dummy bus stops, have to update to real ones when Jens implements the required module
-			startBusStop = "Polacksbacken"
-			endBusStop = "Almqvistgatan"
+			startBusStop = ObjectId("5639d6ff73b2390f1ab17951")
+			endBusStop = ObjectId("5639d6ff73b2390f1ab17956")
 			
 			try:
 				requestTime = datetime.strptime(requestTime, serverConfig.DATE_FORMAT)
@@ -86,9 +86,9 @@ def application(env, start_response):
 			
 			try:
 				connection = serverConfig.MONGO_CLIENT		
-				database = connection.monad
+				database = connection.monad1
 				collection = database.TravelRequest		
-				document = {"userId": userId, "startTime": startTime, "endTime": endTime,
+				document = {"userID": userId, "startTime": startTime, "endTime": endTime,
 							"requestTime": requestTime, "startPositionLatitude": startPositionLatitude,
 							"startPositionLongitude": startPositionLongitude, "startBusStop": startBusStop,
 							"endPositionLatitude": endPositionLatitude, "endBusStop": endBusStop,
@@ -96,17 +96,16 @@ def application(env, start_response):
 				result = collection.insert_one(document)
 				requestId = result.inserted_id
 				
-				"""travelPlanner = TravelPlanner(connection)
+				travelPlanner = TravelPlanner(connection)
 				if priority == "distance":
 					userTripJson = travelPlanner.getBestRoutes(requestID = requestId, mode = Mode.tripTime)
 				else:
-					userTripJson = travelPlanner.getBestRoutes(requestID = requestId, mode = Mode.waitTime)"""				
+					userTripJson = travelPlanner.getBestRoutes(requestID = requestId, mode = Mode.waitTime)								
+				#logging.info(json.dumps(userTripJson, indent=4))
 				
-				# dummy data, have to update when Travel Planner is ready
-				userTripJson = {"1": {"id": 123, "dest": "hoho"},
-								"2": {"id": 456, "dest": "hihi"},
-								"3": {"id": 789, "dest": "huhu"}}				
-			
+				if userTripJson == None:
+					userTripJson = {"error": 1}
+				
 			except pymongo.errors.PyMongoError as e:
 				start_response("500 INTERNAL ERROR", [("Content-Type", "text/plain")])	
 				logging.error("Something went wrong: {0}".format(e))
@@ -150,12 +149,12 @@ def application(env, start_response):
 			priority = escape(data.getvalue("priority"))
 			
 			# dummy coordinates, have to update to real ones when Ilyass implements the required module
-			endPositionLatitude = 59.8758
-			endPositionLongitude = 17.6627
+			endPositionLatitude = 58.8167503
+			endPositionLongitude = 16.8683923
 			
 			# dummy bus stops, have to update to real ones when Jens implements the required module
-			startBusStop = "Polacksbacken"
-			endBusStop = "Almqvistgatan"	
+			startBusStop = ObjectId("5639d6ff73b2390f1ab17951")
+			endBusStop = ObjectId("5639d6ff73b2390f1ab17956")	
 		
 			try:
 				requestTime = datetime.strptime(requestTime, serverConfig.DATE_FORMAT)
@@ -170,9 +169,9 @@ def application(env, start_response):
 			
 			try:
 				connection = serverConfig.MONGO_CLIENT		
-				database = connection.monad
+				database = connection.monad1
 				collection = database.TravelRequest		
-				document = {"userId": userId, "startTime": startTime, "endTime": endTime,
+				document = {"userID": userId, "startTime": startTime, "endTime": endTime,
 							"requestTime": requestTime, "startPositionLatitude": startPositionLatitude,
 							"startPositionLongitude": startPositionLongitude, "startBusStop": startBusStop,
 							"endPositionLatitude": endPositionLatitude, "endBusStop": endBusStop,
@@ -180,16 +179,15 @@ def application(env, start_response):
 				result = collection.insert_one(document)
 				requestId = result.inserted_id
 				
-				"""travelPlanner = TravelPlanner(connection)
+				travelPlanner = TravelPlanner(connection)
 				if priority == "distance":
 					userTripJson = travelPlanner.getBestRoutes(requestID = requestId, mode = Mode.tripTime)
 				else:
-					userTripJson = travelPlanner.getBestRoutes(requestID = requestId, mode = Mode.waitTime)"""				
+					userTripJson = travelPlanner.getBestRoutes(requestID = requestId, mode = Mode.waitTime)	
 				
-				# dummy data, have to update when Travel Planner is ready
-				userTripJson = {"1": {"id": 123, "dest": "hoho"},
-								"2": {"id": 456, "dest": "hihi"},
-								"3": {"id": 789, "dest": "huhu"}}				
+				if userTripJson == None:
+					userTripJson = {"error": 1}			
+				#logging.info(json.dumps(userTripJson, indent=4))								
 				
 			except pymongo.errors.PyMongoError as e:
 				start_response("500 INTERNAL ERROR", [("Content-Type", "text/plain")])	
