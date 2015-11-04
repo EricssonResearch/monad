@@ -8,7 +8,8 @@
 
     <include
         android:id="@+id/actionToolBar"
-        layout="@layout/app_bar" />
+        layout="@layout/app_bar"
+        />
 
     <android.support.v7.widget.RecyclerView
         xmlns:android="http://schemas.android.com/apk/res/android"

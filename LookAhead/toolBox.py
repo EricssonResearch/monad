@@ -12,6 +12,8 @@ under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
 CONDITIONS OF ANY KIND, either express or implied. See the License for the 
 specific language governing permissions and limitations under the License.
 """
+import mutation
+import inits
 from deap import base
 from deap import creator
 from deap import tools
@@ -21,14 +23,14 @@ from fitness import Fitness
 from operator import itemgetter
 from datetime import datetime
 from datetime import timedelta
-import mutation
-import inits
+
+
 
 # Constant
 BUS_LINE = 2
 # The individual size corresponds to the number of trips
-INDIVIDUAL_SIZE =  10 # 90
-INDIVIDUAL_SIZE_BOUNDS = [90,90]
+# INDIVIDUAL_SIZE =  10
+INDIVIDUAL_SIZE_BOUNDS = [2, 10]
 
 
 # Initialize the classes
@@ -48,6 +50,7 @@ def evalIndividual(individual):
     '''
     # First, the randomly-generated starting times are sorted in order to check sequentially the number of requests for that particular trip
     individual = sorted(individual, key=itemgetter(2))
+
     # Second, we loop trough the number of genes in order to retrieve the number of requests for that particular trip
     # For the 1st trip, the starting time has to be selected
     request = []
@@ -58,16 +61,29 @@ def evalIndividual(individual):
     db = DB()
     tripWaitingTime = timedelta(minutes=0) # waiting time due to insufficient capacity
     for i, trip in enumerate(individual):
-        tripTimeTable = db.generateFitnessTripTimeTable(individual[i][0], individual[i][2])
+        #tripTimeTable = db.generateFitnessTripTimeTable(individual[i][0], individual[i][2])
         tripStartTime = trip[2]
         # start = '2015-10-21 00:00:00' if i == 0 else '2015-10-21 ' + trip[2] + ':00'
         if len(str(trip[2].hour))==1:
             temp = "0"+str(trip[2].hour)+":"+str(trip[2].minute)
         else:
             temp = str(trip[2].hour)+":"+str(trip[2].minute)
+
+        # for the last trip, the end is just before the end of the day
+        try:
+            if len(str(individual[i+1][2].hour))==1:
+                temp1 = "0"+str(individual[i+1][2].hour)+":"+str(individual[i+1][2].minute)
+            else:
+                temp1 = str(individual[i+1][2].hour)+":"+str(individual[i+1][2].minute)
+        except IndexError:
+            temp1 = '23:59'
+
         start = '2015-10-21 00:00:00' if i == 0 else '2015-10-21 ' + temp + ':00'
         # end = '2015-10-21 ' + trip[2] + ':00'
-        end = '2015-10-21 ' + temp + ':00'
+        end = '2015-10-21 ' + temp1 + ':00'
+        print "Start...." + str(start)
+        print "End....." + str(end)
+
         stopsAndRequests = db.MaxReqNumTrip(start, end)
         count = 0
         for i, stop in enumerate(stopsAndRequests):
@@ -88,13 +104,13 @@ def evalIndividual(individual):
     # Evaluate average time
     for i in range(len(individual)):
         tripTimeTable = db.generateFitnessTripTimeTable(individual[i][0], individual[i][2])
+
         for j in range(len(tripTimeTable)):
             # TODO: Fix trips that finish at the next day
-            # TODO: it might be that some dates have no INDEX since there are no requests. A function has to be added to prevent them to get the LAST POSITION
-            # initialTrip = datetime.combine(fitnessClass.yesterday, datetime.strptime(initialTripTime, fitnessClass.formatTime).time())
+
             initialTrip = initialTripTime
-            # lastTrip = datetime.combine(fitnessClass.yesterday, datetime.strptime(tripTimeTable[j][1], fitnessClass.formatTime).time())
             lastTrip = tripTimeTable[j][1]
+
             if initialTrip > lastTrip:
                 initialTrip = lastTrip - timedelta(minutes=db.getFrequency(individual[i][0]))
             # Search on Fitness.request array for the particular requests
@@ -104,16 +120,13 @@ def evalIndividual(individual):
                 diff = 0
                 count = 0
                 for k in range(len(request)):
-                    # diff = diff + fitnessClass.getMinutes(fitnessClass.timeDiff(tripTimeTable[j][1], str(int(request[k]["hour"])) + ":" + str(int(request[k]["minute"]))))*int(request[k]["count"])
-                    z = (tripTimeTable[j][1] - request[k]["_id"]["RequestTime"])
-                    # CHECK REQUESTS RETRIEVED FROM THE DB !!!!!!
-                    diff = diff + (z.days * 1440) + (z.seconds / 60)
-                    # fitnessClass.getMinutes(fitnessClass.timeDiff(tripTimeTable[j][1], str(int(request[k]["hour"])) + ":" + str(int(request[k]["minute"]))))*int(request[k]["count"])
+                    z = tripTimeTable[j][1] - request[k]["_id"]["RequestTime"]
+                    diff = diff + (z.days * databaseClass.minutesDay) + (z.seconds / databaseClass.minutesHour)
                     count = count + int(request[k]["total"])
-                    # count = count + int(request[k]["count"])
                 dif.append(diff)
                 cnt.append(count)
-    return (sum(dif) + tripWaitingTime.total_seconds()/60.0)/(sum(cnt) + count),
+    totalWaitingTime = (sum(dif) + tripWaitingTime.total_seconds()/60.0)/(sum(cnt) + count)
+    return fitnessClass.calculateCost(individual, totalWaitingTime, 0),
 
 def getPassengerNumbers(individual):
     ''' Calculate the total number of passengers in bus, boarding and departing passengers for the next bus stop.

@@ -40,7 +40,6 @@
                 android:id="@+id/imagebutton_main_searchbutton"
                 android:background="@color/primaryColor"
                 android:src="@drawable/ic_location_on_white_48dp"
-                android:contentDescription="@string/label_main_imagebuttondescription"
                 android:onClick="openMainSearch" />
         </LinearLayout>
 

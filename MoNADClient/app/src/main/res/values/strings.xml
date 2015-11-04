@@ -53,7 +53,7 @@
 
     <!--Activity - Main (Search view)-->
     <!--Activity - Main (Search view) /yonatan-->
-    <string name="label_main_searchtext">Where do you want to go ?</string>
+    <string name="label_main_searchtext">Where do you want to go?</string>
     <string name="label_main_recommendations">Recommendations</string>
 
     <!--Activity - Notifications-->
@@ -225,4 +225,6 @@
     <string name="label_resetpassword_entercurrentpassword">Enter your current password</string>
     <string name="label_profile_info">Profile Information</string>
     <string name="label_resetpassword_changepassword">Change Password</string>
+    <string name="action_notification">Notification</string>
+    <string name="action_all_notes">All notes</string>
 </resources>
