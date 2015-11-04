@@ -50,6 +50,7 @@ public class ConfirmCodePopup extends AppCompatActivity {
                     intent.putExtra("EMAIL", email);
                     intent.putExtra("RESET", true);
                     startActivity(intent);
+                    finish();
                 }
                 else{
                     Toast.makeText(getApplicationContext(), "The code you entered is not right, please check your email and enter the right code.", Toast.LENGTH_LONG).show();

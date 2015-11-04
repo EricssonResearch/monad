@@ -22,6 +22,7 @@ import com.google.android.gms.common.SignInButton;
 import java.util.concurrent.ExecutionException;
 
 public class LoginActivity extends AppCompatActivity {
+    private final int GOOGLE_LOGIN_REQUEST = 1;
 
     private EditText usernameField;
     private EditText passwordField;
@@ -45,7 +46,7 @@ public class LoginActivity extends AppCompatActivity {
         googleLogInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                LoginActivity.this.startActivity(new Intent(LoginActivity.this, GoogleLogIn.class));
+                LoginActivity.this.startActivityForResult(new Intent(LoginActivity.this, GoogleLogIn.class), GOOGLE_LOGIN_REQUEST);
             }
         });
 
@@ -61,6 +62,7 @@ public class LoginActivity extends AppCompatActivity {
                     // If the sreponse starts with the specific word, it means the users loged in successfully
                     if (response.startsWith("Success (1)")) {
                         LoginActivity.this.startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                        finish();
                     }
                 } catch (InterruptedException e) {
                     e.printStackTrace();
@@ -83,6 +85,18 @@ public class LoginActivity extends AppCompatActivity {
                 LoginActivity.this.startActivity(new Intent(v.getContext(), RegisterActivity.class));
             }
         });
+    }
+
+    /* if google login succeeds, then the login activity is destroyed
+     * a user cannot go back to login back if he/she is already logged in
+     * the user can only sign out and then he/she will be shown the login layout again
+     */
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        //super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == GOOGLE_LOGIN_REQUEST && resultCode == RESULT_OK){
+            finish();
+        }
     }
 
     @Override

@@ -94,7 +94,8 @@ public class TripCancelPopup extends AppCompatActivity {
     //TODO Stavros: remove trip from user's schedule if the confirm button is clicked
     public void dropTrip(View view) {
         //new SendBookingCancelRequest().execute(objectId);
-        startActivity(new Intent(this, MainActivity.class));
+        //startActivity(new Intent(this, MainActivity.class));
+        finish();
     }
 
     public void backButtonClick(View view) {

@@ -141,9 +141,11 @@ public class RouteSuccessActivity extends AppCompatActivity {
 
     public void linkToTripDetails(View view) {
         startActivity(new Intent(this, RouteActivity.class));
+        finish();
     }
 
     public void linkToSearch(View view){
         startActivity(new Intent(this, MainActivity.class));
+        finish();
     }
 }

@@ -88,6 +88,7 @@ public class ResetPasswordActivity extends AppCompatActivity {
                     }
                     Toast.makeText(getApplicationContext(), response, Toast.LENGTH_LONG).show();
                     ResetPasswordActivity.this.startActivity(new Intent(ResetPasswordActivity.this, LoginActivity.class));
+                    finish();
                 }
                 else {
                     String oldPassword = oldPasswordField.getText().toString();

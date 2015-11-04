@@ -71,5 +71,6 @@ public class RouteConfirmPopup extends AppCompatActivity {
         //new SendBookingRequest().execute(busId, userId, startTime, endTime, stPosition, edPosition);
 
         startActivity(new Intent(RouteConfirmPopup.this, RouteSuccessActivity.class));
+        finish();
     }
 }
