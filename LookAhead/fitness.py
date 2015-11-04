@@ -83,7 +83,8 @@ class Fitness():
             if request[i]["_id"]["RequestTime"].minute != minute or i == 0:
                 Fitness.requestIndex.append([request[i]["_id"]["RequestTime"].hour, request[i]["_id"]["RequestTime"].minute, i])
                 minute = request[i]["_id"]["RequestTime"].minute
-
+               # minute = request[i]["minute"]
+        print(Fitness.requestIndex)
     def searchRequestIndex(self, index, initialHour, initialMinute, finalHour, finalMinute):
         ''' Search the index to get the position on the request array for a specific time frame
         
