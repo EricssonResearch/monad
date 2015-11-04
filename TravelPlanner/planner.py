@@ -279,7 +279,7 @@ class TravelPlanner:
             elif (self.timeMode == Mode.arrivalTime):
                 ttCollection = self.timeTable.find_one({"line": route[DR_LINE2]})
                 schedules = self.busTrip.find({"_id": {"$in": ttCollection["timetable"]}})
-                for trip in schedules["timetable"]:
+                for trip in schedules:
                     self.dptSwitch = trip["trajectory"][route[DR_START2]]["time"]
                     self.arrTime   = trip["trajectory"][route[DR_END2]]["time"]
                     if (self.arrTime < self.endTime):
