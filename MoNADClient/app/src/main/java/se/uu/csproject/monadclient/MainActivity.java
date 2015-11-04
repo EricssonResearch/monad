@@ -156,9 +156,16 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+
+        if(ClientAuthentication.getPassword().equals("0")){
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
+        getMenuInflater().inflate(R.menu.menu_main_google, menu);
         return true;
+    }
+        else {
+            getMenuInflater().inflate(R.menu.menu_main, menu);
+            return true;
+        }
     }
 
     public boolean onTouchEvent(MotionEvent event) {

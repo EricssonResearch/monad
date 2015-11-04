@@ -18,6 +18,8 @@ import datetime
 import pytest
 import pymongo
 from pymongo import MongoClient
+import bson
+from bson.objectid import ObjectId
 
 YEAR  = 2015
 MONTH = 10
@@ -46,22 +48,37 @@ class TestTravelPlanner(unittest.TestCase):
     tp = TravelPlanner(client)
 
     def test_init(self):
-        requestDBString = "Collection(Database(MongoClient('localhost', 27017), u'monad'), " + \
-                "u'TravelRequest')"
-        routeDBString = "Collection(Database(MongoClient('localhost', 27017), u'monad'), u'Route')"
-        timetableDBString = "Collection(Database(MongoClient('localhost', 27017), u'monad'), " + \
-                "u'TimeTable')"
-        usertripDBString = "Collection(Database(MongoClient('localhost', 27017), u'monad'), " + \
-                "u'UserTrip')"
+        dbName = "monad1"
+        requestDBString = "Collection(Database(MongoClient('localhost', 27017), u'" + dbName + \
+                "'), u'TravelRequest')"
+        routeDBString = "Collection(Database(MongoClient('localhost', 27017), u'" + dbName + \
+                "'), u'Route')"
+        timetableDBString = "Collection(Database(MongoClient('localhost', 27017), u'" + dbName + \
+                "'), u'TimeTable')"
+        usertripDBString = "Collection(Database(MongoClient('localhost', 27017), u'" + dbName + \
+                "'), u'UserTrip')"
+        busTripDBString = "Collection(Database(MongoClient('localhost', 27017), u'" + dbName + \
+                "'), u'BusTrip')"
 
         self.assertEqual(self.tp.fittingRoutes, [])
         self.assertEqual(self.tp.startingWaypoint, [])
         self.assertEqual(self.tp.endingWaypoint, [])
+        self.assertEqual(self.tp.doubleRoutes, [])
+        self.assertEqual(self.tp.possibleRoutes, [])
+        self.assertEqual(self.tp.tripTuples, [])
+        self.assertEqual(self.tp.lineTuples, [])
+        self.assertEqual(self.tp.bestFirstTrip, None)
+        self.assertEqual(self.tp.bestSecondTrip, None)
 
         self.assertEqual(str(self.tp.travelRequest), requestDBString)
         self.assertEqual(str(self.tp.route), routeDBString)
         self.assertEqual(str(self.tp.timeTable), timetableDBString)
         self.assertEqual(str(self.tp.userTrip), usertripDBString)
+        self.assertEqual(str(self.tp.busTrip), busTripDBString)
+
+    def test_isDoubleRoute(self):
+        self.assertTrue(self.tp._isDoubleRoute(("trip A", "trip B")))
+        self.assertFalse(self.tp._isDoubleRoute("trip A"))
 
     # Database dependency
     def test_findFittingRoutes(self):
@@ -227,6 +244,71 @@ class TestTravelPlanner(unittest.TestCase):
     # Database dependency
     def test_updateDatabase(self):
         pass
+
+    def test_convertToJason(self):
+        objectID = ObjectId()
+        objectIDstr = str(objectID)
+        time = TIME_1300H
+        timeStr = str(time)
+        self.tp.userTripDict = {1:[
+                {
+                    "_id": objectID,
+                    "userID" : 4711,
+                    "line": 2,
+                    "busID": 56,
+                    "startBusStop": objectID,
+                    "endBusStop": objectID,
+                    "startTime": time,
+                    "endTime": time,
+                    "requestTime": time,
+                    "feedback": -1,
+                    "requestID": objectID,
+                    "next": objectID,
+                    "booked": False,
+                    "trajectory": [objectID, objectID]
+                },
+                {
+                    "_id": objectID,
+                    "userID" : 4711,
+                    "line": 14,
+                    "busID": 57,
+                    "startBusStop": objectID,
+                    "endBusStop": objectID,
+                    "startTime": time,
+                    "endTime": time,
+                    "requestTime": time,
+                    "feedback": -1,
+                    "requestID": objectID,
+                    "booked": False,
+                    "trajectory": [objectID, objectID]
+                }
+            ]
+        }
+        self.tp._convertToJson()
+        jsonObject = self.tp.jsonObject
+        self.assertEqual(objectIDstr, jsonObject[1][0]["_id"])
+        self.assertEqual(objectIDstr, jsonObject[1][0]["startBusStop"])
+        self.assertEqual(objectIDstr, jsonObject[1][0]["endBusStop"])
+        self.assertEqual(objectIDstr, jsonObject[1][0]["requestID"])
+        self.assertEqual(objectIDstr, jsonObject[1][0]["next"])
+        self.assertEqual(objectIDstr, jsonObject[1][0]["trajectory"][0])
+        self.assertEqual(objectIDstr, jsonObject[1][0]["trajectory"][1])
+        self.assertEqual(objectIDstr, jsonObject[1][1]["_id"])
+        self.assertEqual(objectIDstr, jsonObject[1][1]["startBusStop"])
+        self.assertEqual(objectIDstr, jsonObject[1][1]["endBusStop"])
+        self.assertEqual(objectIDstr, jsonObject[1][1]["requestID"])
+        self.assertEqual(objectIDstr, jsonObject[1][1]["trajectory"][0])
+        self.assertEqual(objectIDstr, jsonObject[1][1]["trajectory"][1])
+
+        self.assertEqual(timeStr, jsonObject[1][0]["startTime"])
+        self.assertEqual(timeStr, jsonObject[1][0]["endTime"])
+        self.assertEqual(timeStr, jsonObject[1][0]["requestTime"])
+        self.assertEqual(timeStr, jsonObject[1][1]["startTime"])
+        self.assertEqual(timeStr, jsonObject[1][1]["endTime"])
+        self.assertEqual(timeStr, jsonObject[1][1]["requestTime"])
+
+        self.assertTrue("next" in jsonObject[1][0])
+        self.assertFalse("next" in jsonObject[1][1])
 
     # Database dependency
     def test_getBestRoutes(self):

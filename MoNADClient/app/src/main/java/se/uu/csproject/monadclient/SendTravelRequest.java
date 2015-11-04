@@ -76,7 +76,7 @@ public class SendTravelRequest extends AsyncTask<String, Void, String> {
             return (e.toString());
 
         } catch (JSONException e) {
-            return (e.toString());
+            return ("Could not find any trips matching your criteria.");
         }
 
         return response;
