@@ -23,6 +23,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
 import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
@@ -35,6 +36,7 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
+import se.uu.csproject.monadclient.googlecloudmessaging.RegistrationIntentService;
 import se.uu.csproject.monadclient.recyclerviews.SearchRecyclerViewAdapter;
 import se.uu.csproject.monadclient.recyclerviews.Trip;
 
@@ -48,6 +50,10 @@ public class MainActivity extends AppCompatActivity implements
     private double currentLatitude;
     private double currentLongitude;
     private final int MY_PERMISSIONS_REQUEST = 123;
+
+    //Google Cloud Services
+    private static final String TAG = "MainActivity";
+    private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,6 +81,10 @@ public class MainActivity extends AppCompatActivity implements
         } else {
             mGoogleApiClient.connect();
         }
+
+
+
+
     }
 
     public void openMainSearch (View view) {
@@ -146,9 +156,16 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+
+        if(ClientAuthentication.getPassword().equals("0")){
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
+        getMenuInflater().inflate(R.menu.menu_main_google, menu);
         return true;
+    }
+        else {
+            getMenuInflater().inflate(R.menu.menu_main, menu);
+            return true;
+        }
     }
 
     public boolean onTouchEvent(MotionEvent event) {
@@ -284,4 +301,23 @@ public class MainActivity extends AppCompatActivity implements
     public void onLocationChanged(Location location) {
         handleNewLocation(location);
     }
+
+
+    private boolean checkPlayServices() {
+
+        GoogleApiAvailability apiAvailability = GoogleApiAvailability.getInstance();
+        int resultCode = apiAvailability.isGooglePlayServicesAvailable(this);
+        if (resultCode != ConnectionResult.SUCCESS) {
+            if (apiAvailability.isUserResolvableError(resultCode)) {
+                apiAvailability.getErrorDialog(this, resultCode, PLAY_SERVICES_RESOLUTION_REQUEST)
+                        .show();
+            } else {
+                Log.i(TAG, "This device is not supported.");
+                finish();
+            }
+            return false;
+        }
+        return true;
+    }
+
 }

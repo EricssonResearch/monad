@@ -1,0 +1,14 @@
+The following experiments were done for a population size of 100 and for 10 generations.
+
+Experiment 1: Both single-point crossover and mutation
+nevals avg min max
+14     2.07459 2.03916 2.10536
+13     2.02098 1.90987 2.22173
+13     2.07431 2.00089 2.55107
+17     2.53625 2.07213 8.57258
+13     2.18838 2.13901 2.22271
+
+Experiment 2: Only crossover
+
+
+

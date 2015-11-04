@@ -44,8 +44,6 @@ DR_LINE2  = 7
 # position
 POS_LATITUDE  = 0
 POS_LONGITUDE = 1
-# debugging constant
-DEBUG = True
 # end of constants
 
 
@@ -58,12 +56,11 @@ class Mode:
 class TravelPlanner:
 
     def __init__(self, client, debug = False):
-        self.db = client.monad
+        self.db = client.monad1
         self.travelRequest = self.db.TravelRequest
         self.route = self.db.Route
         self.timeTable = self.db.TimeTable
         self.userTrip = self.db.UserTrip
-        self.busStop = self.db.BusStop
         self.busTrip = self.db.BusTrip
 
         self.fittingRoutes = []
@@ -72,12 +69,19 @@ class TravelPlanner:
         self.doubleRoutes = []
         self.possibleRoutes = []
         self.tripTuples = []
+        self.lineTuples = []
 
         self.bestSecondTrip = None
         self.bestFirstTrip = None
 
-        DEBUG = debug
+        self.debug = debug
 
+
+    def _isDoubleRoute(self, trip):
+        if (isinstance(trip, tuple)):
+            return True
+        else:
+            return False
 
     def _searchOtherRoutes(self, busLine, busStopID):
         cursor = self.route.find({"trajectory.busStop": busStopID, 
@@ -102,8 +106,6 @@ class TravelPlanner:
 
     def _findFittingRoutes(self):
         request = self.travelRequest.find_one({"_id": self.requestID})
-#        self.startBusStop = self.busStop.find_one({"_id": request["startBusStop"]})
-#        self.endBusStop   = self.busStop.find_one({"_id": request["endBusStop"]})
         self.startBusStop = request["startBusStop"]
         self.endBusStop   = request["endBusStop"]
         self.userID = request["userID"]
@@ -201,6 +203,8 @@ class TravelPlanner:
 
     def _insertTrip(self, trip):
         if (self.timeMode == Mode.startTime):
+            if (self._isDoubleRoute(trip)):
+                self.arrTime = self.bestArrivalTime
             self.timeToArrival = self.arrTime - self.startTime
             if (self.tripTuples == []):
                 self.tripTuples.append((trip, self.timeToArrival, self.dptTime, self.arrTime))
@@ -208,6 +212,8 @@ class TravelPlanner:
             self._rankTrip(trip)
 
         elif (self.timeMode == Mode.arrivalTime):
+            if (self._isDoubleRoute(trip)):
+                self.dptTime = self.bestDepartureTime
             self.diffToArrTime = self.endTime - self.arrTime
             if (self.tripTuples == []):
                 self.tripTuples.append((trip, self.diffToArrTime, self.dptTime, self.arrTime))
@@ -254,8 +260,12 @@ class TravelPlanner:
 
             counter = counter + 1
 
-        for route in self.doubleRoutes: 
-            if (DEBUG):
+        for route in self.doubleRoutes:
+            if ((route[DR_LINE1], route[DR_LINE2]) in self.lineTuples):
+                continue
+            else:
+                self.lineTuples.append((route[DR_LINE1], route[DR_LINE2]))
+            if (self.debug):
                 print "Line 1: " + str(route[DR_LINE1]) + " - Line 2: " + str(route[DR_LINE2])
             if (self.timeMode == Mode.startTime):
                 ttCollection = self.timeTable.find_one({"line": route[DR_LINE1]})
@@ -269,7 +279,7 @@ class TravelPlanner:
             elif (self.timeMode == Mode.arrivalTime):
                 ttCollection = self.timeTable.find_one({"line": route[DR_LINE2]})
                 schedules = self.busTrip.find({"_id": {"$in": ttCollection["timetable"]}})
-                for trip in schedules["timetable"]:
+                for trip in schedules:
                     self.dptSwitch = trip["trajectory"][route[DR_START2]]["time"]
                     self.arrTime   = trip["trajectory"][route[DR_END2]]["time"]
                     if (self.arrTime < self.endTime):
@@ -277,13 +287,12 @@ class TravelPlanner:
                         self._insertTrip((route, trip, self.bestFirstTrip))
 
 
-    #TODO: Implement storing of double routes
     def _updateDatabase(self):
         entryList = []
         self.userTripDict = {}
         i = 0
         for (trip, timeDiff, departureTime, arrivalTime) in self.tripTuples:
-            if (isinstance(trip, tuple)):
+            if (self._isDoubleRoute(trip)):
                 if (self.timeMode == Mode.startTime):
                     (route, startTrip, endTrip) = trip
                 elif (self.timeMode == Mode.arrivalTime):
@@ -301,7 +310,7 @@ class TravelPlanner:
                         "startTime": departureTime,
                         "endTime": startTrip["trajectory"][route[DR_END1]]["time"],
                         "requestTime": self.requestTime,
-                        "feedbck": -1,
+                        "feedback": -1,
                         "requestID": self.requestID,
                         "next": endID,
                         "booked": False
@@ -329,7 +338,7 @@ class TravelPlanner:
                         "startTime": endTrip["trajectory"][route[DR_START2]]["time"],
                         "endTime": arrivalTime,
                         "requestTime": self.requestTime,
-                        "feedbck": -1,
+                        "feedback": -1,
                         "requestID": self.requestID,
                         "booked": False
                 }
@@ -360,7 +369,7 @@ class TravelPlanner:
                         "endTime": arrivalTime,
                         "requestTime": self.requestTime,
                         "feedback": -1,
-                        "requestId": self.requestID,
+                        "requestID": self.requestID,
                         "booked": False
                 }
                 started = False
@@ -382,6 +391,34 @@ class TravelPlanner:
         if (entryList != []):
             self.userTrip.insert_many(entryList)
 
+    def _convertToJson(self):
+        self.jsonObject = {}
+        for ut in self.userTripDict:
+            entries = []
+            for entry in self.userTripDict[ut]:
+                newEntry = {
+                        "_id": str(entry["_id"]),
+                        "userID" : entry["userID"],
+                        "line": entry["line"],
+                        "busID": entry["busID"],
+                        "startBusStop": str(entry["startBusStop"]),
+                        "endBusStop": str(entry["endBusStop"]),
+                        "startTime": str(entry["startTime"]),
+                        "endTime": str(entry["endTime"]),
+                        "requestTime": str(entry["requestTime"]),
+                        "feedback": -1,
+                        "requestID": str(entry["requestID"]),
+                        "booked": False
+                }
+                if ("next" in entry):
+                    newEntry["next"] = str(entry["next"])
+                trajectory = []
+                for stop in entry["trajectory"]:
+                    trajectory.append(str(stop))
+                newEntry["trajectory"] = trajectory
+                entries.append(newEntry)
+            self.jsonObject[ut] = entries
+
 
     def getBestRoutes(self, requestID, mode = Mode.tripTime):
         self.requestID = requestID
@@ -389,22 +426,25 @@ class TravelPlanner:
         self._findFittingRoutes()
         
         if ((self.fittingRoutes == []) and (self.doubleRoutes == [])):
-            print "No fitting routes found"
+            if (self.debug):
+                print "No fitting routes found"
             return None
-        if (DEBUG):
+        if (self.debug):
             print "Found " + str(len(self.fittingRoutes)) + "/" + str(len(self.doubleRoutes)) + \
                     " fitting/double Routes"
 
         self._findBestRoute()
-        if (DEBUG):
+        if (self.debug):
             print "Found " + str(len(self.tripTuples)) + " tripTuples"
 
         if (self.tripTuples == []):
-            print "No best route found"
+            if (self.debug):
+                print "No best route found"
             return None
 
         self._updateDatabase()
+        self._convertToJson()
 
-        return self.userTripDict
+        return self.jsonObject
 
 

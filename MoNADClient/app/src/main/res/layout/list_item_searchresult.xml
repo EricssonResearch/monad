@@ -47,7 +47,7 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
         android:padding="@dimen/layout_padding"
-        android:contentDescription="@string/label_main_imagebuttondescription"
+        android:contentDescription="@string/img_description"
         android:onClick="openTripDetail"/>
 
 </RelativeLayout>

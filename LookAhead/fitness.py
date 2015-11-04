@@ -14,7 +14,6 @@ See the License for the specific language governing permissions and limitations 
 
 """
 from dbConnection import DB
-from operator import itemgetter
 from datetime import datetime
 from datetime import timedelta
 from datetime import date
@@ -33,7 +32,9 @@ class Fitness():
     routes = []
     request = []
     requestIndex = []
-    yesterday = date.today() - timedelta(13)
+    # yesterday = date.today() - timedelta(13)
+    yesterday = datetime(2015, 10, 21)
+
 
 
 # A decorator is a function that can accept another function as
@@ -74,57 +75,6 @@ class Fitness():
     def getMinutes(self, td):
         return (td.seconds//Fitness.secondMinute) % Fitness.secondMinute
 
-    def getNumberOfRequests(self, tripStartTime, lineNumber=2):
-        ''' finds the max # of transit requests that can be served by the trip with startBusStop along the
-        bus line
-
-        @param: tripStartTime - departure time for this trip
-        @return maximum number of requests between two stops in the trip
-        '''
-        self.expectedTimes = {}
-        self.stopsCount = {}
-        self.reqGroup = []
-        print ("routes.....................")
-        print (self.routes)
-        for i, item in enumerate(self.routes):
-            if item[2] == 2:
-                self.busStops = [[i[0], i[1]] for i in self.routes[i][1]]
-                self.expTime = tripStartTime;
-                for i, stop in enumerate(self.busStops):
-                    self.expectedTimes[stop[0]] = self.expTime.time()
-                    self.expTime = self.expTime + timedelta(minutes=stop[1])
-                    self.stopsCount[stop[0]] = 0
-
-        for req in self.requests:
-            if req[1] in self.expectedTimes:
-                if req[0].time() < self.expectedTimes[req[1]]:
-                    self.reqGroup.append(req)
-                    self.stopsCount[req[1]] += 1
-                    self.stopsCount[req[2]] -= 1
-
-        #print "Max request count", self.stopsCount[max(self.stopsCount, key = self.stopsCount.get)]
-        return self.stopsCount[max(self.stopsCount, key = self.stopsCount.get)]
-
-    def evalIndividualCapacity(self, individual):
-        ''' Evaluates an individual based on the capacity/bus type chosen for each trip.
-
-        @param: individual - a possible timetable for a bus line, covering the whole day.
-        @return: a fitness score assigned in accordance with how close the requested
-        capacity is to the availed capacity on the individual
-        '''
-        individual.sort(key = itemgetter(2))
-        self.expectedTimes = {}
-        for trip, item in enumerate(individual):
-            if trip == 0:
-                self.start = datetime.strptime('00:00', '%H:%M')
-                self.end   = datetime.strptime(individual[0][2], '%H:%M')
-
-            else:
-                self.start = datetime.strptime(individual[trip-1][2], '%H:%M')
-                self.end   = datetime.strptime(individual[trip][2], '%H:%M')
-
-        return 1 
-
     def createRequestIndex(self, request):
         ''' Creates a structure that stores the hour, the minute and the position on the request array for this particular time
         
@@ -133,12 +83,9 @@ class Fitness():
         minute = 0
         for i in range(len(request)):
             if request[i]["_id"]["RequestTime"].minute != minute or i == 0:
-            # if request[i]["minute"] != minute or i == 0:
                 Fitness.requestIndex.append([request[i]["_id"]["RequestTime"].hour, request[i]["_id"]["RequestTime"].minute, i])
-                # Fitness.requestIndex.append([request[i]["hour"], request[i]["minute"], i])
                 minute = request[i]["_id"]["RequestTime"].minute
-                # minute = request[i]["minute"]
-        # print Fitness.requestIndex
+
 
     def searchRequestIndex(self, index, initialHour, initialMinute, finalHour, finalMinute):
         ''' Search the index to get the position on the request array for a specific time frame
@@ -151,20 +98,21 @@ class Fitness():
         '''
         result = []
         for i in range(len(index)):
-            # if index[i][0] == initialHour and index[i][1] == initialMinute:
             if index[i][0] >= initialHour and index[i][1] >= initialMinute:
                 result.append(index[i][2])
                 break
         # TODO: Watch out with MIDNIGHT trips !!!!
         if len(result) == 0:
             result.append(len(Fitness.request))
-        # if result[0] > len(Fitness.request):
-        #    result[0] = len(Fitness.request)
-        for i in range(i, len(index)):
-            # if index[i][0] == finalHour and index[i][1] == finalMinute:
-            if index[i][0] >= finalHour and index[i][1] >= finalMinute:
-                result.append(index[i][2])
-                break
+
+        try:
+            for i in range(i, len(index)):
+                if index[i][0] >= finalHour and index[i][1] >= finalMinute:
+                    result.append(index[i][2])
+                    break
+        except UnboundLocalError:
+            print "Length of index is " + str(len(index))
+
         # TODO: Watch out with MIDNIGHT trips !!!!
         if len(result) == 1:
             result.append(len(Fitness.request))
@@ -189,7 +137,7 @@ class Fitness():
         ''' Calculate cost for an individual in the population. 
 
         @param  individual: individual in the population; 
-                averageWaitingTime: average waiting time for that individual
+                totalWaitingTime: total waiting time for that individual
                 penaltyOverCapacity: a positive integer to represent a large cost to individual if capacity cannot handle all request of that trip
         @return cost: positive integer for this individual, if input param is out of range, cost will be -1
 
@@ -200,7 +148,6 @@ class Fitness():
         costOfBus = [[20, 1000], [60, 1200], [120, 1400]]
         waitingCostPerMin = 1
         busCost = 0
-
         if penaltyOverCapacity < 0 or individual is None or totalWaitingTime < 0:
             cost = -1
         else:
@@ -211,6 +158,5 @@ class Fitness():
                         busCost = busCost + costOfBus[j][1]
                         break
             waitingCost = totalWaitingTime * waitingCostPerMin
-
             cost = busCost + waitingCost + penaltyOverCapacity
         return cost

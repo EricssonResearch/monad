@@ -38,7 +38,7 @@
                     android:layout_height="@dimen/cancel_size"
                     android:background="?android:selectableItemBackground"
                     android:src="@drawable/ic_clear_black_24dp"
-                    android:contentDescription="@string/label_tripsactivity_cancelcontentdescription"
+                    android:contentDescription="@string/img_description"
                     android:layout_alignParentTop="true"
                     android:layout_alignParentRight="true"
                     android:layout_alignParentEnd="true" />
@@ -144,7 +144,7 @@
                         android:layout_height="wrap_content"
                         android:cropToPadding="false"
                         android:src="@drawable/ic_directions_bus_white_24dp"
-                        android:contentDescription="@string/label_tripsactivity_buscontentdescription"
+                        android:contentDescription="@string/img_description"
                         android:layout_centerVertical="true"/>
 
                     <TextView

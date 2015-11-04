@@ -53,17 +53,14 @@
 
     <!--Activity - Main (Search view)-->
     <!--Activity - Main (Search view) /yonatan-->
-    <string name="label_main_searchtext">Where do you want to go ?</string>
+    <string name="label_main_searchtext">Where do you want to go?</string>
     <string name="label_main_recommendations">Recommendations</string>
 
     <!--Activity - Notifications-->
-    <!--Activity - Notifications- MALIN -->
     <string name="label_notifications_recent">Recent</string>
     <string name="label_notification_one">Bus 801: 5 min lateness</string>
     <string name="label_notification_two">Bus 801: 5 min to departure</string>
     <string name="label_notification_three">Bus 801 at destination</string>
-    <string name="label_notification_cancelcontentdescription">Cancel</string>
-    <string name="label_notification_iconcontentdescription">Icon</string>
     <string name="label_notification_time">13:55</string>
     <string name="label_notification_reschedule">Bus 805: Delayed 20 min, click the icon to reschedule the trip</string>
 
@@ -73,6 +70,9 @@
     <string name="label_profile_username">Username:</string>
     <string name="label_profile_phone">Phone No.:</string>
     <string name="label_profile_email">E-Mail:</string>
+    <string name="label_profile_info">Profile Information</string>
+    <string name="label_profile_savechanges">Save Changes</string>
+    <string name="label_profile_changepassword">Change Password</string>
 
     <!--Activity -Register-->
     <string name="label_register_newaccount">New Account</string>
@@ -88,19 +88,18 @@
     <string name="label_resetpassword_enternewpassword">Enter your new password</string>
     <string name="label_resetpassword_confirmnewpassword">Confirm your new password</string>
     <string name="label_resetpassword_resetbutton">Reset</string>
+    <string name="label_resetpassword_entercurrentpassword">Enter your current password</string>
+    <string name="label_resetpassword_changepassword">Change Password</string>
 
     <!--Activity - Route -->
     <string name="label_trips_info">Walk 100m to Polacksbacken Bus stop</string>
     <string name="label_trips_info2">Board Bus No 801</string>
     <string name="label_trips_info3">Walk 100m to Ultuna Bus stop</string>
-    <string name="label_trips_img">IMG here</string>
-    <string name="label_trips_time">12:00</string>
+    <string name="label_trips_time">00:00</string>
     <string name="label_trips_time2">12:05</string>
     <string name="label_trips_join">Join Trip</string>
-    <string name="label_route_mapcontentdescription">Map</string>
-    <string name="label_route_iconcontentdescription">Icon</string>
 
-    <!--Activity - Route Success- MALIN -->
+    <!--Activity - Route Success -->
     <string name="label_routesuccess_arrivaltime">13:55</string>
     <string name="label_routesuccess_success">Your booking was successful.</string>
     <string name="label_routesuccess_depart">Depart:</string>
@@ -108,8 +107,6 @@
     <string name="label_routesuccess_instruction">Walk to Polacksbacken</string>
     <string name="label_routesuccess_businfo">Bus 801</string>
     <string name="label_routesuccess_countdowntext">Countdown to Departure</string>
-    <string name="label_routesuccess_pinpointcontentdescription">Pinpoint</string>
-    <string name="label_routesuccess_iconcontentdescription">Icon</string>
 
     <!--Activity - Search-->
     <string name="label_search_from">From</string>
@@ -136,7 +133,7 @@
     </string-array>
     <string name="label_settings_selectlanguage">Please select your language</string>
 
-    <!--Settings - Alert setting /yonatan -->
+    <!--Settings - Alert settings -->
     <string name="label_fragmentsettingsalert_recommendation">Recommendations</string>
     <string name="label_fragmentsettingsalert_alert">Reminders about trips</string>
     <string name="label_fragmentsettingsalert_buttoncancel">Cancel</string>
@@ -144,7 +141,7 @@
     <string name="label_fragmentsettingsalert_title">Notifications</string>
     <string name="label_fragmentsettingsalert_recommendationsswitch">ON </string>
 
-    <!-- Settings - Theme setting /yonatan -->
+    <!-- Settings - Theme settings -->
     <string name="label_fragmentsettingstheme_title">Themes</string>
     <string name="label_fragmentsettingstheme_light">Light</string>
     <string name="label_fragmentsettingstheme_dark">Dark</string>
@@ -173,13 +170,6 @@
     <string name="label_forgotpassword_email">Email Address</string>
     <string name="label_forgotpassword_submit">Submit</string>
 
-    <!-- Popup - EditProfile /yonatan -->
-    <string name="label_editprofile_editText">Edit Profile</string>
-    <string name="label_editprofile_textname">Username</string>
-    <string name="label_editprofile_editname" translatable="false">xyz</string>
-    <string name="label_editprofile_btnok">OK</string>
-    <string name="label_editprofile_btncancel">Cancel</string>
-
     <!--Popup - Route Confirmation -->
     <string name="label_trips_tv_back">Cancel</string>
     <string name="label_trip_confirmation">Confirm your Trip</string>
@@ -200,29 +190,17 @@
     <string name="label_tripsactivity_totime" translatable="false">12:51</string>
     <string name="label_tripsactivity_day">TODAY</string>
     <string name="label_tripsactivity_countdown" translatable="false">00:05:38</string>
-    <string name="label_tripsactivity_buscontentdescription">Bus</string>
-    <string name="label_tripsactivity_clockcontentdescription">Clock</string>
-    <string name="label_tripsactivity_cancelcontentdescription">Cancel</string>
-    <string name="label_tripsactivity_buttoncontentdescription">Button</string>
     <string name="label_tripsactivity_date" translatable="false">05/10/15</string>
 
     <!--Popup - Trip Cancellation -->
-    <!--Popup - MALIN EDITING Trip Cancellation -->
     <string name="label_tripcancel_buttonback">Back</string>
     <string name="label_tripcancel_buttoncancel">Cancel Trip</string>
     <string name="label_tripcancel_cancellation">Confirm your cancellation</string>
-    <string name="label_tripcancel_buscontentdescription">Bus</string>
-    <string name="label_tripcancel_clockcontentdescription">Clock</string>
-    <string name="label_tripcancel_cancelcontentdescription">Cancel</string>
-    <string name="label_tripcancel_buttoncontentdescription">Button</string>
 
     <!--MISCELLANEOUS-->
     <string name="img_description">Icon Missing</string>
     <string name="non_available">n/a</string>
     <string name="hello_world">Hello world!</string>
-    <string name="label_profile_savechanges">Save Changes</string>
-    <string name="label_profile_changepassword">Change Password</string>
-    <string name="label_resetpassword_entercurrentpassword">Enter your current password</string>
-    <string name="label_profile_info">Profile Information</string>
-    <string name="label_resetpassword_changepassword">Change Password</string>
+    <string name="action_all_notes">All notes</string>
+    <string name="label_notification_notification">Notification</string>
 </resources>
