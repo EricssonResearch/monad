@@ -110,12 +110,15 @@ def evalIndividual(individual):
                 for k in range(len(request)):
 
                     z = tripTimeTable[j][1] - request[k]["_id"]["RequestTime"]
-                    
+                    print(tripTimeTable[j][1])
+                    print(request[k]["_id"]["RequestTime"])
+                    print(z)
+                    print("\n")
                     diff = diff + (z.days * databaseClass.minutesDay) + (z.seconds / databaseClass.minutesHour)
                     count = count + int(request[k]["total"])
                 dif.append(diff)
                 cnt.append(count)
-
+                print("ONE TRIP DONE")
     totalWaitingTime = (sum(dif) + tripWaitingTime.total_seconds()/60.0)/(sum(cnt) + count)
     return fitnessClass.calculateCost(individual, totalWaitingTime, 0),
 
