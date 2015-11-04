@@ -222,7 +222,7 @@ class DB():
     # Trip
     # Generate TT from seed random starting time. Called when generating the initial population
     def generateStartingTripTime(self, line):
-        today = datetime.date.today() - timedelta(13)
+        today = datetime.date.today() - timedelta(14)
         hour = self.generateTime(self.generateMinute(self.mergeRandomTime(self.getRandomHour(), self.getRandomMinute())))
         return list([line, self.generateRandomCapacity(), datetime.datetime.combine(today, datetime.datetime.strptime(hour, self.formatTime).time())])
 
