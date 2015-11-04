@@ -21,6 +21,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
@@ -35,6 +36,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.Locale;
 
 import se.uu.csproject.monadclient.recyclerviews.FullTrip;
 import se.uu.csproject.monadclient.recyclerviews.PartialTrip;
@@ -79,10 +81,6 @@ public class MainActivity extends AppCompatActivity implements
         } else {
             mGoogleApiClient.connect();
         }
-
-
-
-
     }
 
     public void openMainSearch (View view) {
@@ -90,7 +88,7 @@ public class MainActivity extends AppCompatActivity implements
         String startPositionLatitude, startPositionLongitude, edPosition, userId, startTime, endTime;
         String requestTime, priority;
         Date now = new Date();
-        SimpleDateFormat df = new SimpleDateFormat("yyyy EEE dd MMM HH:mm");
+        SimpleDateFormat df = new SimpleDateFormat("yyyy EEE dd MMM HH:mm", Locale.ENGLISH);
 
         // Provide some default values since this is a quick search
         startPositionLatitude = String.valueOf(currentLatitude);
@@ -102,11 +100,20 @@ public class MainActivity extends AppCompatActivity implements
         requestTime = df.format(now);
         priority = "distance";
 
-        new SendQuickTravelRequest().execute(userId, startTime, endTime, requestTime, startPositionLatitude,
-                startPositionLongitude, edPosition, priority);
+        if(edPosition != null && !edPosition.trim().isEmpty()){
+            new SendQuickTravelRequest().execute(userId, startTime, endTime, requestTime, startPositionLatitude,
+                                                    startPositionLongitude, edPosition, priority);
+            Intent myIntent = new Intent(MainActivity.this, SearchActivity.class);
+            MainActivity.this.startActivity(myIntent);
+        }
+        else {
+            Context context = getApplicationContext();
+            CharSequence text = "Please enter a destination address.";
+            int duration = Toast.LENGTH_SHORT;
 
-        Intent myIntent = new Intent(MainActivity.this, SearchActivity.class);
-        MainActivity.this.startActivity(myIntent);
+            Toast toast = Toast.makeText(context, text, duration);
+            toast.show();
+        }
     }
 
     private void checkForPermission(){

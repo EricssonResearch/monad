@@ -26,6 +26,7 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -33,6 +34,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.Locale;
 
 import se.uu.csproject.monadclient.recyclerviews.FullTrip;
 import se.uu.csproject.monadclient.recyclerviews.PartialTrip;
@@ -123,14 +125,14 @@ public class SearchActivity extends AppCompatActivity {
 
     public void updateDate() {
         final String DATE_FORMAT = "EEE dd MMM";
-        SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT);
+        SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT, Locale.ENGLISH);
         String selectedDate = dateFormat.format(calendar.getTime());
         textViewTripDate.setText(selectedDate);
     }
 
     public void updateTime() {
         final String TIME_FORMAT = "HH:mm";
-        SimpleDateFormat timeFormat = new SimpleDateFormat(TIME_FORMAT);
+        SimpleDateFormat timeFormat = new SimpleDateFormat(TIME_FORMAT, Locale.ENGLISH);
         String selectedTime = timeFormat.format(calendar.getTime());
         textViewTripTime.setText(selectedTime);
     }
@@ -252,7 +254,7 @@ public class SearchActivity extends AppCompatActivity {
         Date now = new Date();
         Calendar rightNow = Calendar.getInstance();
         currentYear = rightNow.get(Calendar.YEAR);
-        SimpleDateFormat df = new SimpleDateFormat("yyyy EEE dd MMM HH:mm");
+        SimpleDateFormat df = new SimpleDateFormat("yyyy EEE dd MMM HH:mm", Locale.ENGLISH);
         startTime = "null";
         endTime = "null";
         priority = "";
@@ -287,7 +289,25 @@ public class SearchActivity extends AppCompatActivity {
                 break;
         }
 
-        new SendTravelRequest().execute(userId, startTime, endTime, requestTime, stPosition, edPosition, priority);
+        if(stPosition != null && !stPosition.trim().isEmpty() && edPosition != null && !edPosition.trim().isEmpty()){
+            new SendTravelRequest().execute(userId, startTime, endTime, requestTime, stPosition, edPosition, priority);
+        }
+        else if (stPosition == null || stPosition.trim().isEmpty()) {
+            Context context = getApplicationContext();
+            CharSequence text = "Please enter a departure address.";
+            int duration = Toast.LENGTH_SHORT;
+
+            Toast toast = Toast.makeText(context, text, duration);
+            toast.show();
+        }
+        else if (edPosition == null || edPosition.trim().isEmpty()) {
+            Context context = getApplicationContext();
+            CharSequence text = "Please enter a destination address.";
+            int duration = Toast.LENGTH_SHORT;
+
+            Toast toast = Toast.makeText(context, text, duration);
+            toast.show();
+        }
     }
 
     //TEMPORARY FUNCTION TODO: Remove this function once the database connection is set
