@@ -34,9 +34,8 @@ NUMBER_OF_RECOMMENDATIONS = 1
 client = MongoClient()
 db = client.monad
 client2 = MongoClient('130.238.15.114')
-db2 = client2.monad1
+db2 = client2.monad
 start = datetime.datetime.now()
-dontGoBehind = 0
 
 def timeApproximation(lat1, lon1, lat2, lon2):
     point1 = (lat1, lon1)
@@ -45,8 +44,12 @@ def timeApproximation(lat1, lon1, lat2, lon2):
     return int(round(distance / 10 * 60))
 
 def retrieveRequests():
-    TravelRequest = db2.TravelRequest
+    TravelRequest = db.TravelRequestNew
     return TravelRequest
+
+'''def retrieveTimeTable():
+    TimeTable = db.TimeTableNew
+    return TimeTable'''
 
 def populateRequests(TravelRequest):
     results = TravelRequest.find()
@@ -56,23 +59,23 @@ def populateRequests(TravelRequest):
                                  res['endPositionLatitude'],
                                  res['endPositionLongitude'])
         if res['startTime'] == "null":
-            users.append((res['userID'],(res['startPositionLatitude'], res['startPositionLongitude'],
+            users.append((res['userId'],(res['startPositionLatitude'], res['startPositionLongitude'],
             res['endPositionLatitude'], res['endPositionLongitude'],
             (res['endTime'] - datetime.timedelta(minutes = dist)).time(),
             (res['endTime']).time())))
         elif res['endTime'] == "null":
-            users.append((res['userID'],(res['startPositionLatitude'], res['startPositionLongitude'],
+            users.append((res['userId'],(res['startPositionLatitude'], res['startPositionLongitude'],
             res['endPositionLatitude'], res['endPositionLongitude'],
             (res['startTime']).time(),
             (res['startTime'] + datetime.timedelta(minutes = dist)).time())))
         else:
-            users.append((res['userID'],(res['startPositionLatitude'], res['startPositionLongitude'],
+            users.append((res['userId'],(res['startPositionLatitude'], res['startPositionLongitude'],
             res['endPositionLatitude'], res['endPositionLongitude'],
             (res['startTime']).time(),
             (res['endTime']).time())))
 
 def getTodayTimeTable():
-    TimeTable = db2.TimeTable
+    TimeTable = db.TimeTableNew
     first = datetime.datetime.today()
     first = first.replace(hour = 0, minute = 0, second = 0, microsecond = 0)
     route = TimeTable.find({'date': {'$gte': first}})
@@ -80,20 +83,14 @@ def getTodayTimeTable():
 
 def populateTimeTable():
     route = getTodayTimeTable()
-    waypoints = []
     for res in route:
         for res1 in res['timetable']:
-            for res2 in db2.BusTrip.find({'_id': res1}):
-                for res3 in res2['trajectory']: 
-                    for res4 in db2.BusStop.find({'_id':res3['busStop']}): 
-                        waypoints.append((res3['time'],res4['latitude'],res4['longitude']))
-                routes.append((res1, waypoints))
-                waypoints = []
+            routes.append([res1['routeId'], res1['busStops']])
 
 def iterator(waypoints):
   Waypoints = []
   for res in waypoints:
-    Waypoints.append((latNormalizer(res[1]), lonNormalizer(res[2]), timeNormalizer(toCoordinates(toSeconds(res[0]))[0]), timeNormalizer(toCoordinates(toSeconds(res[0]))[1])))
+    Waypoints.append((latNormalizer(res['latitude']), lonNormalizer(res['longitude']), timeNormalizer(toCoordinates(toSeconds(res['time']))[0]), timeNormalizer(toCoordinates(toSeconds(res['time']))[1])))
   #print Waypoints
   return Waypoints
 
@@ -159,7 +156,7 @@ def calculateDistance(tup1):
         distances.append(numpy.linalg.norm(current_route - centroid))
     return distances
 
-'''def calculateDistanceDeparture(tup1):
+def calculateDistanceDeparture(tup1):
   distances_departure = []
   for i in selected_centroids:
       centroid_departure = (i[0], i[1],i[4], i[5])
@@ -173,7 +170,8 @@ def calculateDistance(tup1):
   #print distances_departure
   return distances_departure
 
-  def calculateDistanceArrival(tup1):
+
+def calculateDistanceArrival(tup1):
   distances_arrival = []
   for i in selected_centroids:
         centroid_arrival = (i[2], i[3], i[6], i[7])
@@ -184,45 +182,8 @@ def calculateDistance(tup1):
           temp_dist.append(numpy.linalg.norm(current_stop - centroid_arrival))
         result = min(temp_dist)
         distances_arrival.append(result)
-  return distances_arrival'''
-#-------------------------------------------------------------------
-def calculateDistanceDeparture(tup1):
-    distances_departure = []
-    position = -1
-    min_value = 1000000000
-    min_position = 0
-    for i in selected_centroids:
-      centroid_departure = (i[0], i[1],i[4], i[5])
-      centroid_departure = numpy.array(centroid_departure)
-      temp_dist = []
-      for l in range(len(tup1)-2):
-        current_stop = numpy.array(tup1[l])
-        distance = numpy.linalg.norm(current_stop - centroid_departure)
-        #temp_dist.append(a)
-        position = position + 1
-        if (distance < min_value):
-            min_value = distance
-            min_position = position
-      #result = min(temp_dist)
-      dontGoBehind = min_position #Need to create a 'dontGoBehind' Global variable
-      result = min_value
-      distances_departure.append(result)
-    return distances_departure
-
-def calculateDistanceArrival(tup1):
-  distances_arrival = []
-  for i in selected_centroids:
-        centroid_arrival = (i[2], i[3], i[6], i[7])
-        centroid_arrival = numpy.array(centroid_arrival)
-        temp_dist = []
-        for l in range(dontGoBehind+1, len(tup1)):
-          current_stop = numpy.array(tup1[l])
-          temp_dist.append(numpy.linalg.norm(current_stop - centroid_arrival))
-        result = min(temp_dist)
-        distances_arrival.append(result)
   return distances_arrival
 
-#------------------------------------------------------------------
 
 def removeDuplicates(alist):
     return list(set(map(lambda (x, y): x, alist)))
@@ -231,32 +192,28 @@ def recommendationsToReturn(alist):
     result = getTodayTimeTable()
     for res in result:
         for res1 in res['timetable']:
-            if res1 in alist: 
-                for res2 in db2.BusTrip.find({'_id': res1}):
-                    #for res3 in res2['trajectory']:
-                        for res4 in db2.BusStop.find({'_id': res2['trajectory'][0]['busStop']}):
-                            for res5 in db2.BusStop.find({'_id': res2['trajectory'][len(res2['trajectory'])-1]['busStop']}):
-                                to_return.append((res1, res4['name'], res5['name'], res2['trajectory'][0]['time'],
-                                                  res2['trajectory'][len(res2['trajectory'])-1]['time'], res2['busID']))
+            if res1['routeId'] in alist: 
+                    to_return.append((res1['routeId'], res1['busStops'][0]['busstop'], res1['busStops'][len(res1['busStops'])-1]['busstop'], res1['busStops'][0]['time'],
+                                        res1['busStops'][len(res1['busStops'])-1]['time'], res1['busId']))
                             
 def recommendationsToDB(alist):
     rec_list = []
     for item in alist:
-      route_id = item[0]
-      start_place = item[1]
-      end_place = item[2]
-      start_time = item[3]
-      end_time = item[4]
-      vehicle_no = item[5]
-      new_record = {
-          "routeID" : route_id,
-          "startPlace" : start_place,
-          "endPlace" : end_place,
-          "startTime" : start_time,
-          "endTime" : end_time,
-          "vehicleNo" : vehicle_no
-      }
-      rec_list.append(new_record)
+        route_id = item[0]
+        start_place = item[1]
+        end_place = item[2]
+        start_time = item[3]
+        end_time = item[4]
+        vehicle_no = item[5]
+        new_record = {
+            "routeId" : route_id,
+            "startPlace" : start_place,
+            "endPlace" : end_place,
+            "startTime" : start_time,
+            "endTime" : end_time,
+            "vehicleNo" : vehicle_no
+        }
+        rec_list.append(new_record)
     return rec_list
 
 def insertToDB(user, recs):
@@ -289,8 +246,6 @@ if __name__ == "__main__":
     #time_t = getTodayTimeTable()
     populateTimeTable()
     myRoutes = sc.parallelize(routes).cache()
-    coucou = myRoutes
-    
     myRoutes = myRoutes.map(lambda (x,y): (x, iterator(y)))
 
     req = retrieveRequests()
@@ -335,5 +290,3 @@ if __name__ == "__main__":
         recommendationsToReturn(recommendations)
         recs = recommendationsToDB(to_return)
         insertToDB(userId, recs)
-
-       

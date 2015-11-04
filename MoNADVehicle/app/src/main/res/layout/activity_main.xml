@@ -18,24 +18,30 @@
             android:text="@string/label_main_nextdestination"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:theme="@style/darkTheme.mediumText"
+            android:theme="@style/darkTheme"
+            style="@style/mediumText"
             android:layout_marginLeft="@dimen/passenger_frame_width"
             />
 
     </android.support.v7.widget.Toolbar>
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/toolBar">
 
         <LinearLayout
+            android:id="@+id/side_bar"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:background="?attr/colorPrimaryDark"
             android:orientation="vertical"
             android:layout_gravity="start"
-            android:padding="@dimen/sideframe_padding">
+            android:padding="@dimen/sideframe_padding"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            >
 
             <ImageButton
                 android:layout_width="@dimen/button_size_large"
@@ -74,52 +80,59 @@
                 />
 
             <View
-                android:layout_width="fill_parent"
+                android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:background="#ffffff"
                 android:layout_marginBottom="@dimen/action_button_vertical_margin"
-
                 />
 
             <TextView
                 android:text="@string/label_main_distance"
-                android:layout_width="fill_parent"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:theme="@style/darkTheme"
+                style="@style/mediumText"
                 />
             <TextView
                 android:text="@string/label_main_distance_value"
-                android:layout_width="fill_parent"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:theme="@style/darkTheme.mediumText"
+                android:theme="@style/darkTheme"
+                style="@style/mediumText"
                 android:layout_marginBottom="@dimen/action_button_vertical_margin"
                 />
 
             <TextView
                 android:text="@string/label_main_arrivaltime"
-                android:layout_width="fill_parent"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:theme="@style/darkTheme"
+                style="@style/mediumText"
                 />
             <TextView
                 android:text="@string/label_main_arrivaltime_duration"
-                android:layout_width="fill_parent"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:theme="@style/darkTheme.mediumText"
+                android:theme="@style/darkTheme"
+                style="@style/mediumText"
                 />
             <TextView
                 android:text="@string/label_main_arrivaltime_value"
-                android:layout_width="fill_parent"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:theme="@style/darkTheme.bigBoldText"
+                android:theme="@style/darkTheme"
+                style="@style/bigBoldText"
                 />
 
         </LinearLayout>
 
+
         <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/mapLayout">
+            android:id="@+id/mapLayout"
+            android:layout_toRightOf="@+id/side_bar"
+            android:layout_toEndOf="@+id/side_bar">
 
             <org.mapsforge.map.android.view.MapView
                 android:id="@+id/mapView"
@@ -129,7 +142,24 @@
 
         </RelativeLayout>
 
-    </LinearLayout>
+        <LinearLayout
+            android:layout_width="300dp"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:layout_toRightOf="@+id/side_bar"
+            android:layout_toEndOf="@+id/side_bar"
+            android:background="@color/warnColor"
+            android:padding="@dimen/sideframe_padding">
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="@dimen/display_bar_margin_top"/>
+
+            <include layout="@layout/list_item_busstop"/>
+
+        </LinearLayout>
+
+    </RelativeLayout>
 
     <LinearLayout
         android:layout_width="@dimen/passenger_frame_width"
@@ -139,21 +169,22 @@
 
         <LinearLayout
             android:layout_width="@dimen/passenger_frame_height"
-            android:layout_height="fill_parent"
+            android:layout_height="match_parent"
             android:orientation="vertical">
 
             <TextView
                 android:text="@string/label_main_boardingnumber"
                 android:textColor="@color/boardingPassengersColor"
-                android:layout_width="fill_parent"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:theme="@style/darkTheme.bigBoldText"
+                android:theme="@style/darkTheme"
+                style="@style/bigBoldText"
                 android:id="@+id/boarding_number"
                 android:layout_weight="2"
                 />
             <TextView
                 android:text="@string/label_main_boardingpassengers"
-                android:layout_width="fill_parent"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/boarding_passengers"
                 android:gravity="center_horizontal"
@@ -164,21 +195,22 @@
 
         <LinearLayout
             android:layout_width="@dimen/passenger_frame_height"
-            android:layout_height="fill_parent"
+            android:layout_height="match_parent"
             android:orientation="vertical">
 
             <TextView
                 android:text="@string/label_main_leavingnumber"
                 android:textColor="@color/leavingPassengersColor"
-                android:layout_width="fill_parent"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:theme="@style/darkTheme.bigBoldText"
+                android:theme="@style/darkTheme"
+                style="@style/bigBoldText"
                 android:id="@+id/leaving_number"
                 android:layout_weight="2"
                 />
             <TextView
                 android:text="@string/label_main_leavingpassengers"
-                android:layout_width="fill_parent"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/leaving_passengers"
                 android:gravity="center_horizontal"

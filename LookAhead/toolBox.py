@@ -57,7 +57,9 @@ def evalIndividual(individual):
     dif = []
     cnt = []
     # initialTripTime = "00:00"
-    initialTripTime = datetime.combine(fitnessClass.yesterday, datetime.strptime("00:00", fitnessClass.formatTime).time())
+    initialTripTime = datetime.combine(fitnessClass.yesterday, 
+                                       datetime.strptime("00:00", 
+                                       fitnessClass.formatTime).time())
     db = DB()
     tripWaitingTime = timedelta(minutes=0) # waiting time due to insufficient capacity
     NoOfLeftOvers = 0
@@ -86,13 +88,10 @@ def evalIndividual(individual):
     # Evaluate average time
     for i in range(len(individual)):
         tripTimeTable = db.generateFitnessTripTimeTable(individual[i][0], individual[i][2])
-
         for j in range(len(tripTimeTable)):
             # TODO: Fix trips that finish at the next day
-
             initialTrip = initialTripTime
             lastTrip = tripTimeTable[j][1]
-
             if initialTrip > lastTrip:
                 initialTrip = lastTrip - timedelta(minutes=db.getFrequency(individual[i][0]))
             # Search on Fitness.request array for the particular requests
@@ -108,8 +107,8 @@ def evalIndividual(individual):
                 dif.append(diff)
                 cnt.append(count)
 
-
     totalWaitingTime = (sum(dif) + tripWaitingTime.total_seconds()/60.0)/(sum(cnt) + NoOfLeftOvers)
+
     return fitnessClass.calculateCost(individual, totalWaitingTime, 0),
 
 
