@@ -22,7 +22,7 @@ from operator import itemgetter
 
 # Variables
 MUTATION_PROB = 0.5
-CROSS_OVER_PROB = 0.5
+CROSS_OVER_PROB = 0.0
 NO_OF_GENERATION = 5
 POPULATION_SIZE = 25 
 
