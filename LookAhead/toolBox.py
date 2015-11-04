@@ -101,7 +101,7 @@ def evalIndividual(individual):
                 diff = 0
                 count = 0
                 for k in range(len(request)):
-                    z = (tripTimeTable[j][1] - request[k]["_id"]["RequestTime"])
+                    z = tripTimeTable[j][1] - request[k]["_id"]["RequestTime"]
                     diff = diff + (z.days * databaseClass.minutesDay) + (z.seconds / databaseClass.minutesHour)
                     count = count + int(request[k]["total"])
                 dif.append(diff)
