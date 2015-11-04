@@ -9,4 +9,5 @@
     <dimen name="action_button_vertical_margin">24dp</dimen>
     <dimen name="big_bold_text_size">32dp</dimen>
     <dimen name="medium_text_size">24dp</dimen>
+    <dimen name="display_bar_margin_top">32dp</dimen>
 </resources>

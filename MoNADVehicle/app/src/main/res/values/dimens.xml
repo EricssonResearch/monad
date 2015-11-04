@@ -14,4 +14,5 @@
     <dimen name="big_bold_text_size">24dp</dimen>
     <dimen name="medium_text_size">18dp</dimen>
     <dimen name="button_elevation">6dp</dimen>
+    <dimen name="display_bar_margin_top">24dp</dimen>
 </resources>
