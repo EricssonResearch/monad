@@ -30,7 +30,7 @@ from datetime import timedelta
 BUS_LINE = 2
 # The individual size corresponds to the number of trips
 # INDIVIDUAL_SIZE =  10
-INDIVIDUAL_SIZE_BOUNDS = [2, 10]
+INDIVIDUAL_SIZE_BOUNDS = [30, 90]
 
 
 # Initialize the classes
@@ -83,8 +83,6 @@ def evalIndividual(individual):
         start = '2015-10-21 00:00:00' if i == 0 else '2015-10-21 ' + temp + ':00'
         # end = '2015-10-21 ' + trip[2] + ':00'
         end = '2015-10-21 ' + temp1 + ':00'
-        print "Start...." + str(start)
-        print "End....." + str(end)
 
         stopsAndRequests = db.MaxReqNumTrip(start, end)
         count = 0
@@ -124,8 +122,10 @@ def evalIndividual(individual):
                     count = count + int(request[k]["total"])
                 dif.append(diff)
                 cnt.append(count)
+
     totalWaitingTime = (sum(dif) + tripWaitingTime.total_seconds()/60.0)/(sum(cnt) + count)
-    return fitnessClass.calculateCost(individual, totalWaitingTime, 0),
+    waitingTime = sum(dif) + tripWaitingTime.total_seconds()/60.0
+    return fitnessClass.calculateCost(individual, waitingTime, 0),
 
 def getPassengerNumbers(individual):
     ''' Calculate the total number of passengers in bus, boarding and departing passengers for the next bus stop.
