@@ -391,6 +391,34 @@ class TravelPlanner:
         if (entryList != []):
             self.userTrip.insert_many(entryList)
 
+    def _convertToJson(self):
+        self.jsonObject = {}
+        for ut in self.userTripDict:
+            entries = []
+            for entry in self.userTripDict[ut]:
+                newEntry = {
+                        "_id": str(entry["_id"]),
+                        "userID" : entry["userID"],
+                        "line": entry["line"],
+                        "busID": entry["busID"],
+                        "startBusStop": str(entry["startBusStop"]),
+                        "endBusStop": str(entry["endBusStop"]),
+                        "startTime": str(entry["startTime"]),
+                        "endTime": str(entry["endTime"]),
+                        "requestTime": str(entry["requestTime"]),
+                        "feedback": -1,
+                        "requestID": str(entry["requestID"]),
+                        "booked": False
+                }
+                if ("next" in entry):
+                    newEntry["next"] = str(entry["next"])
+                trajectory = []
+                for stop in entry["trajectory"]:
+                    trajectory.append(str(stop))
+                newEntry["trajectory"] = trajectory
+                entries.append(newEntry)
+            self.jsonObject[ut] = entries
+
 
     def getBestRoutes(self, requestID, mode = Mode.tripTime):
         self.requestID = requestID
@@ -413,7 +441,8 @@ class TravelPlanner:
             return None
 
         self._updateDatabase()
+        self._convertToJson()
 
-        return self.userTripDict
+        return self.jsonObject
 
 
