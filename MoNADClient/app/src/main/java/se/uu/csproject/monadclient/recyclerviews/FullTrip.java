@@ -1,5 +1,9 @@
 package se.uu.csproject.monadclient.recyclerviews;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -8,10 +12,10 @@ import java.util.GregorianCalendar;
 /**
  *
  */
-public class FullTrip {
+public class FullTrip implements Parcelable {
     private String id;
     private ArrayList<PartialTrip> partialTrips = new ArrayList<>();
-    private int duration;
+    private int duration; //minutes
     private boolean booked;
     private int feedback;
 
@@ -21,6 +25,19 @@ public class FullTrip {
         this.duration = duration;
         this.booked = booked;
         this.feedback = feedback;
+    }
+
+    protected FullTrip(Parcel in) {
+        id = in.readString();
+        if (in.readByte() == 0x01) {
+            partialTrips = new ArrayList<PartialTrip>();
+            in.readList(partialTrips, PartialTrip.class.getClassLoader());
+        } else {
+            partialTrips = null;
+        }
+        duration = in.readInt();
+        booked = in.readByte() != 0x00;
+        feedback = in.readInt();
     }
 
 //    public void test() {
@@ -99,6 +116,14 @@ public class FullTrip {
         return partialTrips.get(partialTrips.size() - 1).getEndTime();
     }
 
+    public String getBusLines(){
+        String busLines = "";
+        for(int i = 0; i < partialTrips.size(); i++) {
+            busLines.concat(String.valueOf(partialTrips.get(i).getLine() + " "));
+        }
+        return busLines;
+    }
+
     // determines if the trip is happening now (true if: startTime < current time < endTime)
     public boolean isInProgress() {
         if (partialTrips.get(0).getStartTime().before(Calendar.getInstance().getTime()) &&
@@ -129,5 +154,36 @@ public class FullTrip {
                 && today.get(Calendar.MONTH) == startDate.get(Calendar.MONTH)
                 && today.get(Calendar.YEAR) == startDate.get(Calendar.YEAR);
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(id);
+        if (partialTrips == null) {
+            dest.writeByte((byte) (0x00));
+        } else {
+            dest.writeByte((byte) (0x01));
+            dest.writeList(partialTrips);
+        }
+        dest.writeInt(duration);
+        dest.writeByte((byte) (booked ? 0x01 : 0x00));
+        dest.writeInt(feedback);
+    }
+
+    public static final Parcelable.Creator<FullTrip> CREATOR = new Parcelable.Creator<FullTrip>() {
+        @Override
+        public FullTrip createFromParcel(Parcel in) {
+            return new FullTrip(in);
+        }
+
+        @Override
+        public FullTrip[] newArray(int size) {
+            return new FullTrip[size];
+        }
+    };
 
 }

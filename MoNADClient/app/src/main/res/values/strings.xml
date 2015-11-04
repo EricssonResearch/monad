@@ -19,7 +19,6 @@
     <string name="title_activity_route_confirm_popup">Confirm?</string>
     <string name="title_activity_trip_cancel_popup">Cancel?</string>
     <string name="title_activity_google_log_in">Google log in</string>
-    <string name="title_activity_profile_edit_popup" translatable="false">ProfileEditPopup</string>
 
     <!--Toolbar/Actionbar menu items-->
     <string name="action_search">Search</string>
@@ -43,7 +42,6 @@
 
     <!--Activity - Login-->
     <string name="label_login_login">Log In</string>
-    <string name="label_login_googlelogin">Log In with Google</string>
     <string name="label_login_username">Username</string>
     <string name="label_login_password">Password</string>
     <string name="label_login_anonymous">Stay anonymous</string>
@@ -58,11 +56,7 @@
 
     <!--Activity - Notifications-->
     <string name="label_notifications_recent">Recent</string>
-    <string name="label_notification_one">Bus 801: 5 min lateness</string>
-    <string name="label_notification_two">Bus 801: 5 min to departure</string>
-    <string name="label_notification_three">Bus 801 at destination</string>
-    <string name="label_notification_time">13:55</string>
-    <string name="label_notification_reschedule">Bus 805: Delayed 20 min, click the icon to reschedule the trip</string>
+    <string name="label_notification_notification">Notification</string>
 
     <!--Activity - Profile-->
     <string name="label_profile_generalinfo">General Information</string>
@@ -100,12 +94,11 @@
     <string name="label_trips_join">Join Trip</string>
 
     <!--Activity - Route Success -->
-    <string name="label_routesuccess_arrivaltime">13:55</string>
     <string name="label_routesuccess_success">Your booking was successful.</string>
     <string name="label_routesuccess_depart">Depart:</string>
     <string name="label_routesuccess_arrive">Arrive:  </string>
     <string name="label_routesuccess_instruction">Walk to Polacksbacken</string>
-    <string name="label_routesuccess_businfo">Bus 801</string>
+    <string name="label_routesuccess_businfo">Bus </string>
     <string name="label_routesuccess_countdowntext">Countdown to Departure</string>
 
     <!--Activity - Search-->
@@ -116,8 +109,6 @@
     <string name="label_search_depature">Depature</string>
     <string name="label_search_arrival">Arrival</string>
     <string name="label_search_priority">Priority</string>
-    <string name="label_search_triptimedate">Fri, Oct. 2</string>
-    <string name="label_search_triptimehour">11:45 AM</string>
     <string name="label_search_shortesttriptime">Shortest trip time</string>
     <string name="label_search_shortesttripdistance">Shortest trip distance</string>
     <string name="label_search_results">Results</string>
@@ -136,8 +127,6 @@
     <!--Settings - Alert settings -->
     <string name="label_fragmentsettingsalert_recommendation">Recommendations</string>
     <string name="label_fragmentsettingsalert_alert">Reminders about trips</string>
-    <string name="label_fragmentsettingsalert_buttoncancel">Cancel</string>
-    <string name="label_fragmentsettingsalert_buttonok">OK</string>
     <string name="label_fragmentsettingsalert_title">Notifications</string>
     <string name="label_fragmentsettingsalert_recommendationsswitch">ON </string>
 
@@ -149,17 +138,8 @@
     <string name="label_fragmentsettingstheme_buttoncancel">Cancel</string>
     <string name="label_fragmentsettingstheme_ok">Apply</string>
 
-    <!--Activity - Trips-->
-    <string name="label_trips_current">Active Trips</string>
-    <string name="label_trips_expired">Past Trips</string>
-    <string name="label_trips_random">Random Trips</string>
-    <string name="label_trips_from">From</string>
-    <string name="label_trips_to">To</string>
-    <string name="label_trips_day">TODAY</string>
-
     <!--Popup - Confirmation Code -->
     <string name="label_confirmcode_codesent">Confirmation code sent!</string>
-    <string name="label_confirmcode_entercode">Please enter your code</string>
     <string name="label_confirmcode_code">Confirmation code</string>
     <string name="label_confirmcode_codehint" translatable="false">000000</string>
     <string name="label_confirmcode_submit">Submit</string>
@@ -168,20 +148,12 @@
     <string name="label_forgotpassword_enteremail">Please enter your email</string>
     <string name="label_forgotpassword_emailhint" translatable="false">somebody@example.com</string>
     <string name="label_forgotpassword_email">Email Address</string>
-    <string name="label_forgotpassword_submit">Submit</string>
 
     <!--Popup - Route Confirmation -->
-    <string name="label_trips_tv_back">Cancel</string>
     <string name="label_trip_confirmation">Confirm your Trip</string>
     <string name="label_trip_depart">Depart:</string>
-    <string name="label_trip_departName">Polacksbacken 12:05</string>
     <string name="label_trip_arrive">Arrive:</string>
-    <string name="label_trip_ariveName">Flogsta Centrum 12:20</string>
-    <string name="label_trip_busInfo">Bus 1234</string>
     <string name="label_trip_button_confirm">Confirm</string>
-    <string name="label_tripsactivity_current">Active Trips</string>
-    <string name="label_tripsactivity_expired">Past Trips</string>
-    <string name="label_tripsactivity_random">Random Trips</string>
     <string name="label_tripsactivity_from">From</string>
     <string name="label_tripsactivity_to">To</string>
     <string name="label_tripsactivity_fromorigin" translatable="false">Polacksbacken</string>
@@ -201,6 +173,4 @@
     <string name="img_description">Icon Missing</string>
     <string name="non_available">n/a</string>
     <string name="hello_world">Hello world!</string>
-    <string name="action_all_notes">All notes</string>
-    <string name="label_notification_notification">Notification</string>
 </resources>

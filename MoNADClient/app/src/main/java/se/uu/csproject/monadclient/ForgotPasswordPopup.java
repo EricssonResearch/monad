@@ -4,24 +4,17 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.PopupWindow;
-import android.widget.TextView;
-import android.view.ViewGroup.LayoutParams;
 import android.widget.Toast;
 
 import java.util.concurrent.ExecutionException;
 
 public class ForgotPasswordPopup extends AppCompatActivity {
     private EditText emailField;
-    private Button submitButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,7 +22,7 @@ public class ForgotPasswordPopup extends AppCompatActivity {
         setContentView(R.layout.popup_forgot_password);
 
         emailField = (EditText) findViewById(R.id.field_email);
-        submitButton = (Button) findViewById(R.id.button_submit);
+        Button submitButton = (Button) findViewById(R.id.button_submit);
 
         DisplayMetrics dm = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(dm);

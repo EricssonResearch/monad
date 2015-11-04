@@ -19,7 +19,8 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
-import se.uu.csproject.monadclient.recyclerviews.Trip;
+import se.uu.csproject.monadclient.recyclerviews.FullTrip;
+import se.uu.csproject.monadclient.recyclerviews.PartialTrip;
 import se.uu.csproject.monadclient.recyclerviews.TripRecyclerViewAdapter;
 
 
@@ -38,7 +39,7 @@ public class TripsActivity extends AppCompatActivity {
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        List<Trip> trips = new ArrayList<>();
+        List<FullTrip> trips = new ArrayList<>();
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler_view_active);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getApplicationContext());
         recyclerView.setLayoutManager(linearLayoutManager);
@@ -114,30 +115,41 @@ public class TripsActivity extends AppCompatActivity {
     }
 
     //TEMPORARY FUNCTION TODO: Remove this function once the database connection is set
-    private void generateTrips(List<Trip> trips){
-        Calendar calendar = new GregorianCalendar(2015, 10, 4, 13, 40, 0);
+    private void generateTrips(List<FullTrip> trips){
+        Calendar calendar = new GregorianCalendar(2015, 10, 26, 10, 40, 0);
         Date startdate1 = calendar.getTime();
-        calendar = new GregorianCalendar(2015, 10, 4, 13, 45, 0);
+        calendar = new GregorianCalendar(2015, 10, 26, 10, 50, 0);
         Date enddate1 = calendar.getTime();
-        calendar = new GregorianCalendar(2015, 10, 4, 19, 55, 0);
+        calendar = new GregorianCalendar(2015, 10, 26, 10, 45, 0);
         Date startdate2 = calendar.getTime();
-        calendar = new GregorianCalendar(2015, 10, 4, 20, 0, 0);
+        calendar = new GregorianCalendar(2015, 10, 26, 11, 0, 0);
         Date enddate2 = calendar.getTime();
-        calendar = new GregorianCalendar(2015, 10, 4, 11, 50, 0);
+        calendar = new GregorianCalendar(2015, 10, 27, 9, 50, 0);
         Date startdate3 = calendar.getTime();
-        calendar = new GregorianCalendar(2015, 10, 4, 12, 5, 0);
+        calendar = new GregorianCalendar(2015, 10, 27, 10, 5, 0);
         Date enddate3 = calendar.getTime();
-        calendar = new GregorianCalendar(2015, 9, 22, 11, 30, 0);
+        calendar = new GregorianCalendar(2015, 10, 22, 11, 30, 0);
         Date startdate4 = calendar.getTime();
-        calendar = new GregorianCalendar(2015, 9, 22, 12, 0, 0);
+        calendar = new GregorianCalendar(2015, 10, 22, 12, 0, 0);
         Date enddate4 = calendar.getTime();
-        trips.add(new Trip(1, "Polacksbacken",startdate1,"Flogsta", enddate1, 10, 0));
-        trips.add(new Trip(2, "Gamla Uppsala",startdate2,"Gottsunda", enddate2, 15, 0));
-        trips.add(new Trip(3, "Granby",startdate3,"Tunna Backar", enddate3, 15, 0));
-        trips.add(new Trip(4, "Kungsgatan", startdate4, "Observatoriet", enddate4, 30, 0));
-        trips.add(new Trip(1, "Polacksbacken",startdate1,"Flogsta", enddate1, 10, 0));
-        trips.add(new Trip(2, "Gamla Uppsala",startdate2,"Gottsunda", enddate2, 15, 0));
-        trips.add(new Trip(3, "Granby",startdate3,"Tunna Backar", enddate3, 15, 0));
-        trips.add(new Trip(4, "Kungsgatan", startdate4, "Observatoriet", enddate4, 30, 0));
+
+        ArrayList<PartialTrip> partialTrips = new ArrayList<>();
+        ArrayList<String> trajectory = new ArrayList<>();
+        trajectory.add("BMC");
+        trajectory.add("Akademiska Sjukhuset");
+        trajectory.add("Ekeby Bruk");
+        trajectory.add("Ekeby");
+        PartialTrip partialTrip = new PartialTrip(1, "Polacksbacken",startdate1,"Flogsta", enddate1, trajectory);
+        partialTrips.add(partialTrip);
+        trips.add(new FullTrip("1", partialTrips, 10, false, 0));
+        partialTrip = new PartialTrip(2, "Gamla Uppsala",startdate2,"Gottsunda", enddate2, trajectory);
+        partialTrips.clear(); partialTrips.add(partialTrip);
+        trips.add(new FullTrip("2", partialTrips, 15, false, 0));
+        partialTrip = new PartialTrip(3, "Granby",startdate3,"Tunna Backar", enddate3, trajectory);
+        partialTrips.clear(); partialTrips.add(partialTrip);
+        trips.add(new FullTrip("3", partialTrips, 15, false, 0));
+        partialTrip = new PartialTrip(4, "Kungsgatan", startdate4, "Observatoriet", enddate4, trajectory);
+        partialTrips.clear(); partialTrips.add(partialTrip);
+        trips.add(new FullTrip("4", partialTrips, 30, false, 0));
     }
 }

@@ -12,22 +12,16 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
-import org.w3c.dom.Text;
-
 import java.text.DecimalFormat;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
 
-import se.uu.csproject.monadclient.recyclerviews.Trip;
+import se.uu.csproject.monadclient.recyclerviews.FullTrip;
 
 import static java.lang.Math.floor;
 
 public class RouteSuccessActivity extends AppCompatActivity {
 
     Toolbar toolbar;
-    Trip trip;
+    FullTrip trip;
     TextView countdownTime;
 
     @Override
@@ -41,12 +35,9 @@ public class RouteSuccessActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         countdownTime = (TextView) findViewById(R.id.label_countdown);
-        //TODO: replace the Trip instance with the one passed from RouteConfirmPopup
-        Calendar calendar = new GregorianCalendar(2015, 9, 28, 11, 40, 0);
-        Date startdate1 = calendar.getTime();
-        calendar = new GregorianCalendar(2015, 9, 28, 12, 0, 0);
-        Date enddate1 = calendar.getTime();
-        trip = new Trip(1, "Polacksbacken",startdate1,"Flogsta", enddate1, 20, 0);
+        Bundle b = getIntent().getExtras();
+        trip = b.getParcelable("selectedTrip");
+
         final long MILLISECONDS = 1000;
         final long MILLISECONDS_TO_DEPARTURE = trip.getTimeToDeparture();
         countdownTime.setText(formatCountdownText(MILLISECONDS_TO_DEPARTURE));

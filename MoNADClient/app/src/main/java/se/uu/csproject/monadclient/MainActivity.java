@@ -36,14 +36,13 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
-import se.uu.csproject.monadclient.googlecloudmessaging.RegistrationIntentService;
+import se.uu.csproject.monadclient.recyclerviews.FullTrip;
+import se.uu.csproject.monadclient.recyclerviews.PartialTrip;
 import se.uu.csproject.monadclient.recyclerviews.SearchRecyclerViewAdapter;
-import se.uu.csproject.monadclient.recyclerviews.Trip;
 
 public class MainActivity extends AppCompatActivity implements
         GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
 
-    private Toolbar toolbar;
     private EditText destination;
     private GoogleApiClient mGoogleApiClient;
     private LocationRequest mLocationRequest;
@@ -59,14 +58,13 @@ public class MainActivity extends AppCompatActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        toolbar = (Toolbar) findViewById(R.id.actionToolBar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.actionToolBar);
         destination = (EditText) findViewById(R.id.main_search_destination);
         setSupportActionBar(toolbar);
 
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-        List<Trip> searchResults = new ArrayList<>();
+        List<FullTrip> searchResults = new ArrayList<>();
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler_view_main);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getApplicationContext());
         recyclerView.setLayoutManager(linearLayoutManager);
@@ -225,7 +223,7 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     //TEMPORARY FUNCTION TODO: Remove this function once the database connection is set
-    private void generateSearchResults(List<Trip> trips){
+    private void generateSearchResults(List<FullTrip> trips){
         Calendar calendar = new GregorianCalendar(2015, 10, 26, 10, 40, 0);
         Date startdate1 = calendar.getTime();
         calendar = new GregorianCalendar(2015, 10, 26, 10, 50, 0);
@@ -242,10 +240,21 @@ public class MainActivity extends AppCompatActivity implements
         Date startdate4 = calendar.getTime();
         calendar = new GregorianCalendar(2015, 10, 22, 12, 0, 0);
         Date enddate4 = calendar.getTime();
-        trips.add(new Trip(1, "Polacksbacken",startdate1,"Flogsta", enddate1, 10, 0));
-        trips.add(new Trip(2, "Gamla Uppsala",startdate2,"Gottsunda", enddate2, 15, 0));
-        trips.add(new Trip(3, "Granby",startdate3,"Tunna Backar", enddate3, 15, 0));
-        trips.add(new Trip(4, "Kungsgatan", startdate4, "Observatoriet", enddate4, 30, 0));
+
+        ArrayList<PartialTrip> partialTrips = new ArrayList<>();
+        ArrayList<String> trajectory = new ArrayList<>();
+        trajectory.add("BMC");
+        trajectory.add("Akademiska Sjukhuset");
+        trajectory.add("Ekeby Bruk");
+        trajectory.add("Ekeby");
+        partialTrips.add(new PartialTrip(1, "Polacksbacken",startdate1,"Flogsta", enddate1, trajectory));
+        trips.add(new FullTrip("1", partialTrips, 10, false, 0));
+        partialTrips.clear(); partialTrips.add(new PartialTrip(2, "Gamla Uppsala",startdate2,"Gottsunda", enddate2, trajectory));
+        trips.add(new FullTrip("2", partialTrips, 15, false, 0));
+        partialTrips.clear(); partialTrips.add(new PartialTrip(3, "Granby",startdate3,"Tunna Backar", enddate3, trajectory));
+        trips.add(new FullTrip("3", partialTrips, 15, false, 0));
+        partialTrips.clear(); partialTrips.add(new PartialTrip(4, "Kungsgatan", startdate4, "Observatoriet", enddate4, trajectory));
+        trips.add(new FullTrip("4", partialTrips, 30, false, 0));
     }
 
     @Override

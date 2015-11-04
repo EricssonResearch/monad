@@ -15,6 +15,7 @@ import java.text.DecimalFormat;
 import java.util.Calendar;
 import java.util.Date;
 
+import se.uu.csproject.monadclient.recyclerviews.FullTrip;
 import se.uu.csproject.monadclient.recyclerviews.Trip;
 
 import static java.lang.Math.floor;
@@ -34,10 +35,8 @@ public class TripCancelPopup extends AppCompatActivity {
         final TextView countdown = (TextView) findViewById(R.id.label_countdown);
         final ImageView clockIcon = (ImageView) findViewById(R.id.icon_clock);
 
-        final Bundle b = getIntent().getExtras();
-        Trip trip = new Trip(b.getInt("tripId"), b.getString("startBusStop"),
-                (Date) b.getSerializable("startTime"), b.getString("endBusStop"), (Date) b.getSerializable("endTime"),
-                b.getInt("duration"), b.getInt("feedback"));
+        Bundle b = getIntent().getExtras();
+        final FullTrip trip = b.getParcelable("fulltrip");
         startBusStop.setText(trip.getStartBusStop());
         endBusStop.setText(trip.getEndBusStop());
         startTime.setText(formatTime(trip.getStartTime()));

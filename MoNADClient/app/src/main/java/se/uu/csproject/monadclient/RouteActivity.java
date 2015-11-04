@@ -18,10 +18,9 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import se.uu.csproject.monadclient.recyclerviews.FullTrip;
 import se.uu.csproject.monadclient.recyclerviews.Notify;
 import se.uu.csproject.monadclient.recyclerviews.RouteRecyclerViewAdapter;
-import se.uu.csproject.monadclient.recyclerviews.Trip;
-
 
 public class RouteActivity extends AppCompatActivity {
 
@@ -56,15 +55,17 @@ public class RouteActivity extends AppCompatActivity {
         TextView walkEnd = (TextView) findViewById(R.id.label_walkend);
 
         Bundle b = getIntent().getExtras();
-        Trip trip = b.getParcelable("trip");
+        final FullTrip trip = b.getParcelable("fulltrip");
         walkStart.setText("Walk to bus stop " + trip.getStartBusStop());
         timeStart.setText(formatTime(trip.getStartTime()));
         walkEnd.setText("Leave the bus at stop " + trip.getEndBusStop());
         timeEnd.setText(formatTime(trip.getEndTime()));
+
         Button btn_join_trips = (Button)findViewById(R.id.btn_join_trips);
         btn_join_trips.setOnClickListener(new View.OnClickListener() {
             public void onClick(View vw) {
                 Intent myIntent = new Intent(RouteActivity.this, RouteConfirmPopup.class);
+                myIntent.putExtra("selectedTrip", trip);
                 RouteActivity.this.startActivity(myIntent);
             }
         });
