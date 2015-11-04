@@ -36,6 +36,7 @@ class Fitness():
     yesterday = datetime(2015, 10, 21)
 
 
+
 # A decorator is a function that can accept another function as
 # a parameter to be able to modify or extend it
     def __init__(self):
@@ -84,7 +85,7 @@ class Fitness():
             if request[i]["_id"]["RequestTime"].minute != minute or i == 0:
                 Fitness.requestIndex.append([request[i]["_id"]["RequestTime"].hour, request[i]["_id"]["RequestTime"].minute, i])
                 minute = request[i]["_id"]["RequestTime"].minute
-                # minute = request[i]["minute"]
+
 
     def searchRequestIndex(self, index, initialHour, initialMinute, finalHour, finalMinute):
         ''' Search the index to get the position on the request array for a specific time frame

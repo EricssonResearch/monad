@@ -62,6 +62,7 @@ def evalIndividual(individual):
                                        fitnessClass.formatTime).time())
     db = DB()
     tripWaitingTime = timedelta(minutes=0) # waiting time due to insufficient capacity
+    NoOfLeftOvers = 0
     for i, trip in enumerate(individual):
         #tripTimeTable = db.generateFitnessTripTimeTable(individual[i][0], individual[i][2])
         tripStartTime = trip[2]
@@ -85,21 +86,14 @@ def evalIndividual(individual):
         end = '2015-10-21 ' + temp1 + ':00'
 
         stopsAndRequests = db.MaxReqNumTrip(start, end)
-        count = 0
+
         for i, stop in enumerate(stopsAndRequests):
             if stop[1] > trip[1] and i < len(individual)-1:
                 nextTripTime = individual[i+1][2]
                 # nextTripWait = fitnessClass.timeDiff(nextTripTime, individual[i][2])
                 nextTripWait = nextTripTime - individual[i][2]
-                count += (stop[1] - trip[1])   # must wait for the next bus trip
+                NoOfLeftOvers = NoOfLeftOvers + (stop[1] - trip[1])   # must wait for the next bus trip
                 tripWaitingTime += nextTripWait*(stop[1] - trip[1])
-                #print "Next trip is in..." + str(nextTripWait) + " minutes"
-                #print nextTripTime
-            else:
-                pass
-                #print "Requested capacity " + str(stopsAndRequests[i][1])
-                #print "Bus capacity " + str(trip[1])
-
         tripWaitingTime = timedelta(minutes=0) # reset on each trip
     # Evaluate average time
     for i in range(len(individual)):
@@ -126,13 +120,6 @@ def evalIndividual(individual):
     totalWaitingTime = (sum(dif) + tripWaitingTime.total_seconds()/60.0)/(sum(cnt) + count)
     waitingTime = sum(dif) + tripWaitingTime.total_seconds()/60.0
     return fitnessClass.calculateCost(individual, waitingTime, 0),
-
-def getPassengerNumbers(individual):
-    ''' Calculate the total number of passengers in bus, boarding and departing passengers for the next bus stop.
-    @param individual - best individual
-    @return totalPassengers, boarding and departing passengers.
-    '''
-    pass
 
 
 # Creating a minimizing fitness class to minimize a single objective that

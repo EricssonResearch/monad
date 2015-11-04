@@ -178,14 +178,6 @@
             android:label="@string/title_activity_reset_password" >
         </activity>
         <activity
-            android:name=".ProfileEditPopup"
-            android:label="@string/title_activity_profile_edit_popup"
-            android:parentActivityName=".ProfileActivity" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="se.uu.csproject.monadclient.ProfileActivity" />
-        </activity>
-        <activity
             android:name=".GoogleLogIn"
             android:label="@string/title_activity_google_log_in">
         </activity>
