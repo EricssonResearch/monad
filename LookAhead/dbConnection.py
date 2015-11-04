@@ -34,6 +34,7 @@ class DB():
     hoursDay = 24
     minutesHour = 60
     formatTime = '%H:%M'
+    yesterday = datetime.datetime(2015, 10, 21)
 
     # Constructor
     def __init__(self):
@@ -222,7 +223,8 @@ class DB():
     # Trip
     # Generate TT from seed random starting time. Called when generating the initial population
     def generateStartingTripTime(self, line):
-        today = datetime.date.today() - timedelta(13)
+        # today = datetime.date.today() - timedelta(13)
+        today = DB.yesterday
         hour = self.generateTime(self.generateMinute(self.mergeRandomTime(self.getRandomHour(), self.getRandomMinute())))
         return list([line, self.generateRandomCapacity(), datetime.datetime.combine(today, datetime.datetime.strptime(hour, self.formatTime).time())])
 
@@ -230,7 +232,6 @@ class DB():
     # This is the function that changes the genotype into a phenotype. It generates the time table for a particular individual.
     def generateFitnessTripTimeTable(self, line, startingTime):
         tripTimeTable = []
-
         busStop = self.getRouteStop(line)
         startingBusStopTime = startingTime
         tripTimeTable.append([self.getBusStopName(busStop[0]["busStop"]), startingTime])
@@ -316,7 +317,6 @@ class DB():
     def getBusStopName(self, id):
         return self.parseData(self.db.BusStop.find({"_id": id}), "name")
 
-
     def MaxReqNumTrip(self,trip_sTime,tripEnd, lineNum = 2):
         BusStplist = []
         dirlist =[]
@@ -325,7 +325,7 @@ class DB():
         # e =datetime.datetime.strptime(tripEnd,'%Y-%m-%d %H:%M:%S').time()
         #get the trip time table
         # trip_time_table = self.generateFitnessTripTimeTable(lineNum,trip_sTime[11:16])
-        trip_time_table = self.generateFitnessTripTimeTable(lineNum,a)
+        trip_time_table = self.generateFitnessTripTimeTable(lineNum, a)
         for i in trip_time_table:
             BusStplist.append([i[0],0])
             dirlist.append(i[0])
