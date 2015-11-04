@@ -56,7 +56,7 @@ class Mode:
 class TravelPlanner:
 
     def __init__(self, client, debug = False):
-        self.db = client.monad
+        self.db = client.monad1
         self.travelRequest = self.db.TravelRequest
         self.route = self.db.Route
         self.timeTable = self.db.TimeTable
@@ -426,7 +426,8 @@ class TravelPlanner:
         self._findFittingRoutes()
         
         if ((self.fittingRoutes == []) and (self.doubleRoutes == [])):
-            print "No fitting routes found"
+            if (self.debug):
+                print "No fitting routes found"
             return None
         if (self.debug):
             print "Found " + str(len(self.fittingRoutes)) + "/" + str(len(self.doubleRoutes)) + \
@@ -437,7 +438,8 @@ class TravelPlanner:
             print "Found " + str(len(self.tripTuples)) + " tripTuples"
 
         if (self.tripTuples == []):
-            print "No best route found"
+            if (self.debug):
+                print "No best route found"
             return None
 
         self._updateDatabase()

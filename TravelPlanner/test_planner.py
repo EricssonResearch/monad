@@ -48,15 +48,17 @@ class TestTravelPlanner(unittest.TestCase):
     tp = TravelPlanner(client)
 
     def test_init(self):
-        requestDBString = "Collection(Database(MongoClient('localhost', 27017), u'monad'), " + \
-                "u'TravelRequest')"
-        routeDBString = "Collection(Database(MongoClient('localhost', 27017), u'monad'), u'Route')"
-        timetableDBString = "Collection(Database(MongoClient('localhost', 27017), u'monad'), " + \
-                "u'TimeTable')"
-        usertripDBString = "Collection(Database(MongoClient('localhost', 27017), u'monad'), " + \
-                "u'UserTrip')"
-        busTripDBString = "Collection(Database(MongoClient('localhost', 27017), u'monad'), " + \
-                "u'BusTrip')"
+        dbName = "monad1"
+        requestDBString = "Collection(Database(MongoClient('localhost', 27017), u'" + dbName + \
+                "'), u'TravelRequest')"
+        routeDBString = "Collection(Database(MongoClient('localhost', 27017), u'" + dbName + \
+                "'), u'Route')"
+        timetableDBString = "Collection(Database(MongoClient('localhost', 27017), u'" + dbName + \
+                "'), u'TimeTable')"
+        usertripDBString = "Collection(Database(MongoClient('localhost', 27017), u'" + dbName + \
+                "'), u'UserTrip')"
+        busTripDBString = "Collection(Database(MongoClient('localhost', 27017), u'" + dbName + \
+                "'), u'BusTrip')"
 
         self.assertEqual(self.tp.fittingRoutes, [])
         self.assertEqual(self.tp.startingWaypoint, [])
