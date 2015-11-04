@@ -18,7 +18,7 @@ import java.util.Date;
 
 
 public class SendResetPasswordRequest extends AsyncTask<String, Void, String> {
-    private static String SERVER = "http://130.238.15.114";
+    private static String SERVER = "http://130.238.15.114:2001";
 
     /* Send the data to the server via POST and receive the response */
     public static String postRequest(String request, String urlParameters) {
