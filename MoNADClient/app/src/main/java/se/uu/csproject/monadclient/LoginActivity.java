@@ -6,6 +6,7 @@ import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -17,9 +18,13 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.SignInButton;
 
 import java.util.concurrent.ExecutionException;
+
+import se.uu.csproject.monadclient.googlecloudmessaging.RegistrationIntentService;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -28,6 +33,10 @@ public class LoginActivity extends AppCompatActivity {
     private SignInButton googleLogInButton;
     private TextView wrongCredentialsTextView;
 
+    //Google Cloud Services
+    private static final String TAG = "MainActivity";
+    private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,6 +44,12 @@ public class LoginActivity extends AppCompatActivity {
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.actionToolBar);
         setSupportActionBar(toolbar);
+
+        if (checkPlayServices()) {
+            Intent intent = new Intent(this,RegistrationIntentService.class);
+            startService(intent);
+
+        }
 
         usernameField = (EditText) findViewById(R.id.field_username);
         passwordField = (EditText) findViewById(R.id.field_password);
@@ -142,5 +157,22 @@ public class LoginActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private boolean checkPlayServices() {
+
+        GoogleApiAvailability apiAvailability = GoogleApiAvailability.getInstance();
+        int resultCode = apiAvailability.isGooglePlayServicesAvailable(this);
+        if (resultCode != ConnectionResult.SUCCESS) {
+            if (apiAvailability.isUserResolvableError(resultCode)) {
+                apiAvailability.getErrorDialog(this, resultCode, PLAY_SERVICES_RESOLUTION_REQUEST)
+                        .show();
+            } else {
+                Log.i(TAG, "This device is not supported.");
+                finish();
+            }
+            return false;
+        }
+        return true;
     }
 }

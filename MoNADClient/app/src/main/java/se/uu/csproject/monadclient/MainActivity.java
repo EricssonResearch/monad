@@ -82,11 +82,7 @@ public class MainActivity extends AppCompatActivity implements
             mGoogleApiClient.connect();
         }
 
-        if (checkPlayServices()) {
-            Intent intent = new Intent(this,RegistrationIntentService.class);
-            startService(intent);
 
-        }
 
 
     }

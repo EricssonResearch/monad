@@ -11,6 +11,8 @@ import android.util.Log;
 import com.google.android.gms.gcm.GcmPubSub;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.google.android.gms.iid.InstanceID;
+
+import se.uu.csproject.monadclient.ClientAuthentication;
 import se.uu.csproject.monadclient.R;
 import java.io.IOException;
 
@@ -41,8 +43,7 @@ public class RegistrationIntentService extends IntentService {
             // [END get_token]
             Log.i(TAG, "MY GCM Registration Token: " + token);
 
-
-
+            ClientAuthentication.setGoogleRegistrationToken(token);
 
             // TODO: Implement this method to send any registration to your app's servers.
             sendRegistrationToServer(token);
