@@ -21,50 +21,6 @@
 
 
 
-    <!--Google Cloud messaging  manifest-->
-    <receiver
-        android:name="com.google.android.gms.gcm.GcmReceiver"
-        android:exported="true"
-        android:permission="com.google.android.c2dm.permission.SEND" >
-        <intent-filter>
-            <action android:name="com.google.android.c2dm.intent.RECEIVE" />
-            <category android:name="se.uu.csproject.monadclient" />
-        </intent-filter>
-    </receiver >
-
-
-
-    <service
-        android:name="se.uu.csproject.monadclient.googlecloudmessaging.MyGcmListenerService"
-        android:exported="false" >
-        <intent-filter>
-            <action android:name="com.google.android.c2dm.intent.RECEIVE" />
-        </intent-filter>
-    </service>
-
-    <service
-        android:name="se.uu.csproject.monadclient.googlecloudmessaging.MyInstanceIDListenerService"
-        android:exported="false">
-        <intent-filter>
-            <action android:name="com.google.android.gms.iid.InstanceID"/>
-        </intent-filter>
-    </service>
-
-
-    <service android:name="se.uu.csproject.monadclient.googlecloudmessaging.MyInstanceIDService" android:exported="false">
-        <intent-filter>
-            <action android:name="com.google.android.gms.iid.InstanceID"/>
-        </intent-filter>
-    </service>
-
-    <service
-        android:name="se.uu.csproject.monadclient.googlecloudmessaging.RegistrationIntentService"
-        android:exported="false">
-    </service>
-
-
-
-    <!--end of my manifest-->
 
 
 
@@ -181,6 +137,51 @@
             android:name=".GoogleLogIn"
             android:label="@string/title_activity_google_log_in">
         </activity>
+        <!--Google Cloud messaging  manifest-->
+        <receiver
+            android:name="com.google.android.gms.gcm.GcmReceiver"
+            android:exported="true"
+            android:permission="com.google.android.c2dm.permission.SEND" >
+            <intent-filter>
+                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+                <category android:name="se.uu.csproject.monadclient" />
+            </intent-filter>
+        </receiver >
+
+
+
+        <service
+            android:name="se.uu.csproject.monadclient.googlecloudmessaging.MyGcmListenerService"
+            android:exported="false" >
+            <intent-filter>
+                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+            </intent-filter>
+        </service>
+
+        <service
+            android:name="se.uu.csproject.monadclient.googlecloudmessaging.MyInstanceIDListenerService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.android.gms.iid.InstanceID"/>
+            </intent-filter>
+        </service>
+
+
+        <service android:name="se.uu.csproject.monadclient.googlecloudmessaging.MyInstanceIDService" android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.android.gms.iid.InstanceID"/>
+            </intent-filter>
+        </service>
+
+        <service
+            android:name="se.uu.csproject.monadclient.googlecloudmessaging.RegistrationIntentService"
+            android:exported="false">
+        </service>
+
+
+
+        <!--end of my manifest-->
+
     </application>
 
 </manifest>
