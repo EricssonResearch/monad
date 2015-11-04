@@ -103,9 +103,6 @@ def application(env, start_response):
 					userTripJson = travelPlanner.getBestRoutes(requestID = requestId, mode = Mode.waitTime)								
 				#logging.info(json.dumps(userTripJson, indent=4))
 				
-				if userTripJson == None:
-					userTripJson = {"error": 1}
-				
 			except pymongo.errors.PyMongoError as e:
 				start_response("500 INTERNAL ERROR", [("Content-Type", "text/plain")])	
 				logging.error("Something went wrong: {0}".format(e))
@@ -183,11 +180,7 @@ def application(env, start_response):
 				if priority == "distance":
 					userTripJson = travelPlanner.getBestRoutes(requestID = requestId, mode = Mode.tripTime)
 				else:
-					userTripJson = travelPlanner.getBestRoutes(requestID = requestId, mode = Mode.waitTime)	
-				
-				if userTripJson == None:
-					userTripJson = {"error": 1}			
-				#logging.info(json.dumps(userTripJson, indent=4))								
+					userTripJson = travelPlanner.getBestRoutes(requestID = requestId, mode = Mode.waitTime)											
 				
 			except pymongo.errors.PyMongoError as e:
 				start_response("500 INTERNAL ERROR", [("Content-Type", "text/plain")])	
