@@ -26,6 +26,7 @@ public class LoginActivity extends AppCompatActivity {
     private EditText usernameField;
     private EditText passwordField;
     private SignInButton googleLogInButton;
+    private TextView wrongCredentialsTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +41,7 @@ public class LoginActivity extends AppCompatActivity {
         Button logInButton = (Button) findViewById(R.id.button_login);
         TextView forgotPasswordTextView = (TextView) findViewById(R.id.forgotpassword_text_view);
         TextView registerTextView = (TextView) findViewById(R.id.textview_register);
+        wrongCredentialsTextView = (TextView) findViewById(R.id.wrong_credentials);
         googleLogInButton = (SignInButton) findViewById(R.id.google_login_button);
 
         googleLogInButton.setOnClickListener(new View.OnClickListener() {
@@ -61,6 +63,9 @@ public class LoginActivity extends AppCompatActivity {
                     // If the sreponse starts with the specific word, it means the users loged in successfully
                     if (response.startsWith("Success (1)")) {
                         LoginActivity.this.startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                    }
+                    else if (response.startsWith("Wrong Credentials (0)")) {
+                        wrongCredentialsTextView.setVisibility(View.VISIBLE);
                     }
                 } catch (InterruptedException e) {
                     e.printStackTrace();
