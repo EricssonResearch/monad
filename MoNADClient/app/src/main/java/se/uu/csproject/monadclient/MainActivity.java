@@ -133,6 +133,13 @@ public class MainActivity extends AppCompatActivity implements
                     mGoogleApiClient.connect();
                 } else {
                     // Permission denied, boo! Disable the functionality that depends on this permission.
+                    Context context = getApplicationContext();
+                    CharSequence text = "If you don't give location permission then the quick search " +
+                                        "will not work correctly";
+                    int duration = Toast.LENGTH_LONG;
+
+                    Toast toast = Toast.makeText(context, text, duration);
+                    toast.show();
                 }
                 return;
             }
@@ -255,13 +262,13 @@ public class MainActivity extends AppCompatActivity implements
         trajectory.add("Ekeby Bruk");
         trajectory.add("Ekeby");
         partialTrips.add(new PartialTrip(1, "Polacksbacken",startdate1,"Flogsta", enddate1, trajectory));
-        trips.add(new FullTrip("1", partialTrips, 10, false, 0));
+        trips.add(new FullTrip("1", "2", partialTrips, 10, false, 0));
         partialTrips.clear(); partialTrips.add(new PartialTrip(2, "Gamla Uppsala",startdate2,"Gottsunda", enddate2, trajectory));
-        trips.add(new FullTrip("2", partialTrips, 15, false, 0));
+        trips.add(new FullTrip("2", "3", partialTrips, 15, false, 0));
         partialTrips.clear(); partialTrips.add(new PartialTrip(3, "Granby",startdate3,"Tunna Backar", enddate3, trajectory));
-        trips.add(new FullTrip("3", partialTrips, 15, false, 0));
+        trips.add(new FullTrip("3", "4", partialTrips, 15, false, 0));
         partialTrips.clear(); partialTrips.add(new PartialTrip(4, "Kungsgatan", startdate4, "Observatoriet", enddate4, trajectory));
-        trips.add(new FullTrip("4", partialTrips, 30, false, 0));
+        trips.add(new FullTrip("4", "5", partialTrips, 30, false, 0));
     }
 
     @Override
@@ -270,7 +277,6 @@ public class MainActivity extends AppCompatActivity implements
         if (!mGoogleApiClient.isConnected()) {
             if (Build.VERSION.SDK_INT >= 23){
                 checkForPermission();
-                mGoogleApiClient.connect();
             } else {
                 mGoogleApiClient.connect();
             }
@@ -280,10 +286,10 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     protected void onPause() {
         super.onPause();
-        if (mGoogleApiClient.isConnected()) {
+        /*if (mGoogleApiClient.isConnected()) {
             LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
             mGoogleApiClient.disconnect();
-        }
+        }*/
     }
 
     @Override

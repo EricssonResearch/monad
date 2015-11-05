@@ -1,6 +1,5 @@
 package se.uu.csproject.monadclient;
 
-
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -16,6 +15,9 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.io.DataOutputStream;
+import java.util.ArrayList;
+
+import se.uu.csproject.monadclient.recyclerviews.FullTrip;
 
 
 public class SendTravelRequest extends AsyncTask<String, Void, String> {
@@ -24,7 +26,7 @@ public class SendTravelRequest extends AsyncTask<String, Void, String> {
     /* Send the data to the server via POST and receive the response */
     public static String postRequest(String request, String urlParameters) {
         String response;
-        int numberOfRecommendedTrips;
+        ArrayList<FullTrip> recommendedTrips;
 
         try {
             URL url = new URL(request);
@@ -58,10 +60,13 @@ public class SendTravelRequest extends AsyncTask<String, Void, String> {
                 sb.append(inputStr);
             }
             JSONObject trips = new JSONObject(sb.toString());
+            recommendedTrips = new StoreTrips().storeTheTrips(trips);
 
-            numberOfRecommendedTrips = trips.length();
-            Log.d("oops", "Number of trips: " +  numberOfRecommendedTrips);
-            response = "Woohoo it works!";
+            if (!recommendedTrips.isEmpty()){
+                response = "Recommended trips successfully retrieved from the server.";
+            } else {
+                response = "Something went wrong while storing the recommended trips.";
+            }
 
             // Close the connection
             conn.disconnect();
@@ -76,7 +81,11 @@ public class SendTravelRequest extends AsyncTask<String, Void, String> {
             return (e.toString());
 
         } catch (JSONException e) {
-            return ("Could not find any trips matching your criteria.");
+            if (e.toString().contains("Value null of type")){
+                return ("Could not find any trips matching your criteria.");
+            } else {
+                return (e.toString());
+            }
         }
 
         return response;

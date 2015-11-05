@@ -141,15 +141,15 @@ public class TripsActivity extends AppCompatActivity {
         trajectory.add("Ekeby");
         PartialTrip partialTrip = new PartialTrip(1, "Polacksbacken",startdate1,"Flogsta", enddate1, trajectory);
         partialTrips.add(partialTrip);
-        trips.add(new FullTrip("1", partialTrips, 10, false, 0));
+        trips.add(new FullTrip("1", "2", partialTrips, 10, false, 0));
         partialTrip = new PartialTrip(2, "Gamla Uppsala",startdate2,"Gottsunda", enddate2, trajectory);
         partialTrips.clear(); partialTrips.add(partialTrip);
-        trips.add(new FullTrip("2", partialTrips, 15, false, 0));
+        trips.add(new FullTrip("2", "3", partialTrips, 15, false, 0));
         partialTrip = new PartialTrip(3, "Granby",startdate3,"Tunna Backar", enddate3, trajectory);
         partialTrips.clear(); partialTrips.add(partialTrip);
-        trips.add(new FullTrip("3", partialTrips, 15, false, 0));
+        trips.add(new FullTrip("3", "4", partialTrips, 15, false, 0));
         partialTrip = new PartialTrip(4, "Kungsgatan", startdate4, "Observatoriet", enddate4, trajectory);
         partialTrips.clear(); partialTrips.add(partialTrip);
-        trips.add(new FullTrip("4", partialTrips, 30, false, 0));
+        trips.add(new FullTrip("4", "5", partialTrips, 30, false, 0));
     }
 }

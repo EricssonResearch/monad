@@ -2,6 +2,7 @@ package se.uu.csproject.monadclient.recyclerviews;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Log;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -13,14 +14,16 @@ import java.util.GregorianCalendar;
  *
  */
 public class FullTrip implements Parcelable {
-    private String id;
+    private String id, requestID;
     private ArrayList<PartialTrip> partialTrips = new ArrayList<>();
-    private int duration; //minutes
+    private long duration; //minutes
     private boolean booked;
     private int feedback;
 
-    public FullTrip(String id, ArrayList<PartialTrip> partialTrips, int duration, boolean booked, int feedback) {
+    public FullTrip(String id, String requestID, ArrayList<PartialTrip> partialTrips, long duration,
+                    boolean booked, int feedback) {
         this.id = id;
+        this.requestID = requestID;
         this.partialTrips = partialTrips;
         this.duration = duration;
         this.booked = booked;
@@ -63,6 +66,14 @@ public class FullTrip implements Parcelable {
         this.id = id;
     }
 
+    public String getRequestID(){
+        return requestID;
+    }
+
+    public void setRequestID(String requestID){
+        this.requestID = requestID;
+    }
+
     public ArrayList<PartialTrip> getPartialTrips() {
         return partialTrips;
     }
@@ -71,7 +82,7 @@ public class FullTrip implements Parcelable {
         this.partialTrips = partialTrips;
     }
 
-    public int getDuration() {
+    public long getDuration() {
         return duration;
     }
 
@@ -155,6 +166,13 @@ public class FullTrip implements Parcelable {
                 && today.get(Calendar.YEAR) == startDate.get(Calendar.YEAR);
     }
 
+    public void printValues(){
+        Log.d("oops", "ID: " + getId());
+        Log.d("oops", "Request ID: " + getRequestID());
+        Log.d("oops", "Duration: " + getDuration());
+        Log.d("oops", "Feedback: " + getFeedback());
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -169,7 +187,7 @@ public class FullTrip implements Parcelable {
             dest.writeByte((byte) (0x01));
             dest.writeList(partialTrips);
         }
-        dest.writeInt(duration);
+        dest.writeLong(duration);
         dest.writeByte((byte) (booked ? 0x01 : 0x00));
         dest.writeInt(feedback);
     }

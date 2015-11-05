@@ -2,6 +2,7 @@ package se.uu.csproject.monadclient.recyclerviews;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -101,6 +102,17 @@ public class PartialTrip implements Parcelable {
 
     public void setStartBusStop(String startBusStop) {
         this.startBusStop = startBusStop;
+    }
+
+    public void printValues(){
+        Log.d("oops", "Line: " + getLine());
+        Log.d("oops", "Start time: " + getStartTime());
+        Log.d("oops", "End time: " + getEndTime());
+        Log.d("oops", "Start bus stop: " + getStartBusStop());
+        Log.d("oops", "End bus stop: " + getEndBusStop());
+        for (int i = 0; i < trajectory.size(); i++){
+            Log.d("oops", "Trajectory number " + (i+1) + ": " + trajectory.get(i));
+        }
     }
 
     @Override
