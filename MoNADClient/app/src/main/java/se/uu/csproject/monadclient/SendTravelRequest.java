@@ -19,7 +19,7 @@ import java.io.DataOutputStream;
 
 
 public class SendTravelRequest extends AsyncTask<String, Void, String> {
-    private static String SERVER = "http://130.238.15.114";
+    private static String SERVER = "http://130.238.15.114:2001";
 
     /* Send the data to the server via POST and receive the response */
     public static String postRequest(String request, String urlParameters) {
@@ -67,16 +67,16 @@ public class SendTravelRequest extends AsyncTask<String, Void, String> {
             conn.disconnect();
 
         } catch (MalformedURLException e) {
-            return ("MalformedURLException: " + e.toString());
+            return (e.toString());
 
         } catch (IOException e) {
-            return ("IOException: " + e.toString());
+            return (e.toString());
 
         } catch (RuntimeException e) {
             return (e.toString());
 
         } catch (JSONException e) {
-            return (e.toString());
+            return ("Could not find any trips matching your criteria.");
         }
 
         return response;

@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -50,6 +49,7 @@ public class ConfirmCodePopup extends AppCompatActivity {
                     intent.putExtra("EMAIL", email);
                     intent.putExtra("RESET", true);
                     startActivity(intent);
+                    finish();
                 }
                 else{
                     Toast.makeText(getApplicationContext(), "The code you entered is not right, please check your email and enter the right code.", Toast.LENGTH_LONG).show();

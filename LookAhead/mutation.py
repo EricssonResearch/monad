@@ -1,35 +1,33 @@
-import random
-from datetime import datetime,  timedelta
-import struct
-import time
-from itertools import repeat
-from collections import Sequence
+# -*- coding: utf-8 -*-
+"""
+Copyright 2015 Ericsson AB
 
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and limitations under the License.
+
+"""
+import random
+from datetime import datetime
+from fitness import Fitness
+from dbConnection import DB
+
+# Initialize the classes
+
+databaseClass = DB()
+fitnessClass = Fitness()
 formatString = '%H:%M'
 
 
-def strTimeProp(start, end, format, prop):
-    """Get a time at a proportion of a range of two formatted times.
-
-    start and end should be strings specifying times formated in the
-    given format (strftime-style), giving an interval [start, end].
-    prop specifies how a proportion of the interval to be taken after
-    start.  The returned time will be in the specified format.
-    """
-
-    stime = time.mktime(time.strptime(start, format))
-    etime = time.mktime(time.strptime(end, format))
-
-    ptime = stime + prop * (etime - stime)
-
-    return time.strftime(format, time.localtime(ptime))
-
-
-def randomDate(start, end, prop):
-    return strTimeProp(start, end, formatString, prop)
-
 def mutUniformTime(individual):
-    """Mutate an individual by replacing attributes, with probability *indpb*,
+    '''
+    Mutate an individual by replacing attributes, with probability *indpb*,
     by a integer uniformly drawn between *low* and *up* inclusively.
 
     :param individual: :term:`Sequence <sequence>` individual to be mutated.
@@ -41,42 +39,16 @@ def mutUniformTime(individual):
                integer.
     :param indpb: Independent probability for each attribute to be mutated.
     :returns: A tuple of one individual.
-    """
-    size = len(individual)
+    '''
+    # Choose a random gene from the individual, the mutation will be applied on its random time and capacity
     mutLocation = random.randint(0, len(individual)-1)
-    # print "Location indices ", mutLocation
-    # print "Before mutation"
-    # print individual[mutLocation]
-
-
-    '''
-    if not isinstance(low, Sequence):
-        low = repeat(low, size)
-    elif len(low) < size:
-        raise IndexError("low must be at least the size of individual: %d < %d" % (len(low), size))
-    if not isinstance(up, Sequence):
-        up = repeat(up, size)
-    elif len(up) < size:
-        raise IndexError("up must be at least the size of individual: %d < %d" % (len(up), size))
-    '''
-
-    # Repairing the mutant
-    timeDiff = datetime.strptime(randomDate("00:00", "23:59", random.random()),formatString)
-
-    individual[mutLocation][2] = timeDiff.time().strftime(formatString)
-    
-    # Update the gene's bus stops after mutation, assumes time between 2 bus stops is 120 seconds
-    # TODO: use variable time from database
-    for trip in range(3, len(individual[mutLocation])):
-        individual[mutLocation][trip] = (timeDiff + timedelta(0, 120*(trip-2))).time().strftime(formatString)
-
-    # print "After mutation"
-    # print individual[mutLocation]
-
-    '''
-    for i, xl, xu in zip(range(size), low, up):
-        if random.random() < indpb:
-            individual[i] = strTimeProp(xl, xu, '%H:%M', random.random())
-            #print(individual[i])
-    '''
+    # Generate a random time
+    # TODO: Consider Olle's suggestion to change the time between a delta value
+    hour = databaseClass.generateTime(databaseClass.generateMinute(databaseClass.mergeRandomTime(databaseClass.getRandomHour(), databaseClass.getRandomMinute())))
+    # Generate a random capacity
+    # TODO: Some code could be added so creating a similar capacity is avoided
+    capacity = databaseClass.generateRandomCapacity()
+    # Assign new values to the gene
+    individual[mutLocation][1] = capacity
+    individual[mutLocation][2] = datetime.combine(fitnessClass.yesterday, datetime.strptime(hour, formatString).time())
     return individual,

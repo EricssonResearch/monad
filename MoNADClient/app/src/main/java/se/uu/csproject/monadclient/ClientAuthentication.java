@@ -6,7 +6,7 @@ package se.uu.csproject.monadclient;
  *
  */
 public class ClientAuthentication extends Authentication {
-    private static String[] profile = new String[10];
+    private static String[] profile = new String[11];
     /*
      * 0: clientId ("1", "2", ...)
      * 1: username
@@ -18,6 +18,7 @@ public class ClientAuthentication extends Authentication {
      * 7: notificationsAlert ("0" or "1")
      * 8 recommendationsAlert ("0" or "1")
      * 9: theme ("0", "1", ...)
+     * 10: googleRegistrationToken
      */
 
     public static void setClientId(String clientId) {
@@ -110,6 +111,13 @@ public class ClientAuthentication extends Authentication {
         }
     }
 
+    public static void setGoogleRegistrationToken(String googleRegistrationTokenToken) {
+        profile[9] = googleRegistrationTokenToken;
+    }
+    public static String getGoogleRegistrationToken() {
+        return profile[9];
+    }
+
     public static void setTheme(String theme) {
         profile[9] = theme;
     }
@@ -200,7 +208,8 @@ public class ClientAuthentication extends Authentication {
 
         String request = AUTHENTICATION_HOST + AUTHENTICATION_PORT + "/client_sign_up";
         String urlParameters = "username=" + username + "&password=" + password
-                             + "&email=" + email + "&phone=" + phone;
+                             + "&email=" + email + "&phone=" + phone
+                             + "&google_registration_token=" + getGoogleRegistrationToken();
 
         /* Send the request to the Authentication Module */
         String response = postRequest(request, urlParameters);
@@ -257,7 +266,8 @@ public class ClientAuthentication extends Authentication {
         password = Security.encryptPassword(password);
 
         String request = AUTHENTICATION_HOST + AUTHENTICATION_PORT + "/client_sign_in";
-        String urlParameters = "username=" + username + "&password=" + password;
+        String urlParameters = "username=" + username + "&password=" + password
+                             + "&google_registration_token=" + getGoogleRegistrationToken();
 
         /* Send the request to the Authentication Module */
         String response = postRequest(request, urlParameters);
@@ -334,7 +344,7 @@ public class ClientAuthentication extends Authentication {
 
     public static String postGoogleSignInRequest(String email) {
         String request = AUTHENTICATION_HOST + AUTHENTICATION_PORT + "/google_sign_in";
-        String urlParameters = "email=" + email;
+        String urlParameters = "email=" + email + "&google_registration_token=" + getGoogleRegistrationToken();
 
         /* Send the request to the Authentication Module */
         String response = postRequest(request, urlParameters);

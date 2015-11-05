@@ -21,8 +21,10 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
@@ -34,14 +36,15 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.Locale;
 
+import se.uu.csproject.monadclient.recyclerviews.FullTrip;
+import se.uu.csproject.monadclient.recyclerviews.PartialTrip;
 import se.uu.csproject.monadclient.recyclerviews.SearchRecyclerViewAdapter;
-import se.uu.csproject.monadclient.recyclerviews.Trip;
 
 public class MainActivity extends AppCompatActivity implements
         GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
 
-    private Toolbar toolbar;
     private EditText destination;
     private GoogleApiClient mGoogleApiClient;
     private LocationRequest mLocationRequest;
@@ -49,18 +52,21 @@ public class MainActivity extends AppCompatActivity implements
     private double currentLongitude;
     private final int MY_PERMISSIONS_REQUEST = 123;
 
+    //Google Cloud Services
+    private static final String TAG = "MainActivity";
+    private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        toolbar = (Toolbar) findViewById(R.id.actionToolBar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.actionToolBar);
         destination = (EditText) findViewById(R.id.main_search_destination);
         setSupportActionBar(toolbar);
 
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-        List<Trip> searchResults = new ArrayList<>();
+        List<FullTrip> searchResults = new ArrayList<>();
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler_view_main);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getApplicationContext());
         recyclerView.setLayoutManager(linearLayoutManager);
@@ -82,7 +88,7 @@ public class MainActivity extends AppCompatActivity implements
         String startPositionLatitude, startPositionLongitude, edPosition, userId, startTime, endTime;
         String requestTime, priority;
         Date now = new Date();
-        SimpleDateFormat df = new SimpleDateFormat("yyyy EEE dd MMM HH:mm");
+        SimpleDateFormat df = new SimpleDateFormat("yyyy EEE dd MMM HH:mm", Locale.ENGLISH);
 
         // Provide some default values since this is a quick search
         startPositionLatitude = String.valueOf(currentLatitude);
@@ -94,11 +100,20 @@ public class MainActivity extends AppCompatActivity implements
         requestTime = df.format(now);
         priority = "distance";
 
-        new SendQuickTravelRequest().execute(userId, startTime, endTime, requestTime, startPositionLatitude,
-                startPositionLongitude, edPosition, priority);
+        if(edPosition != null && !edPosition.trim().isEmpty()){
+            new SendQuickTravelRequest().execute(userId, startTime, endTime, requestTime, startPositionLatitude,
+                                                    startPositionLongitude, edPosition, priority);
+            Intent myIntent = new Intent(MainActivity.this, SearchActivity.class);
+            MainActivity.this.startActivity(myIntent);
+        }
+        else {
+            Context context = getApplicationContext();
+            CharSequence text = "Please enter a destination address.";
+            int duration = Toast.LENGTH_SHORT;
 
-        Intent myIntent = new Intent(MainActivity.this, SearchActivity.class);
-        MainActivity.this.startActivity(myIntent);
+            Toast toast = Toast.makeText(context, text, duration);
+            toast.show();
+        }
     }
 
     private void checkForPermission(){
@@ -146,9 +161,16 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+
+        if(ClientAuthentication.getPassword().equals("0")){
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
+        getMenuInflater().inflate(R.menu.menu_main_google, menu);
         return true;
+    }
+        else {
+            getMenuInflater().inflate(R.menu.menu_main, menu);
+            return true;
+        }
     }
 
     public boolean onTouchEvent(MotionEvent event) {
@@ -208,7 +230,7 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     //TEMPORARY FUNCTION TODO: Remove this function once the database connection is set
-    private void generateSearchResults(List<Trip> trips){
+    private void generateSearchResults(List<FullTrip> trips){
         Calendar calendar = new GregorianCalendar(2015, 10, 26, 10, 40, 0);
         Date startdate1 = calendar.getTime();
         calendar = new GregorianCalendar(2015, 10, 26, 10, 50, 0);
@@ -225,10 +247,21 @@ public class MainActivity extends AppCompatActivity implements
         Date startdate4 = calendar.getTime();
         calendar = new GregorianCalendar(2015, 10, 22, 12, 0, 0);
         Date enddate4 = calendar.getTime();
-        trips.add(new Trip(1, "Polacksbacken",startdate1,"Flogsta", enddate1, 10, 0));
-        trips.add(new Trip(2, "Gamla Uppsala",startdate2,"Gottsunda", enddate2, 15, 0));
-        trips.add(new Trip(3, "Granby",startdate3,"Tunna Backar", enddate3, 15, 0));
-        trips.add(new Trip(4, "Kungsgatan", startdate4, "Observatoriet", enddate4, 30, 0));
+
+        ArrayList<PartialTrip> partialTrips = new ArrayList<>();
+        ArrayList<String> trajectory = new ArrayList<>();
+        trajectory.add("BMC");
+        trajectory.add("Akademiska Sjukhuset");
+        trajectory.add("Ekeby Bruk");
+        trajectory.add("Ekeby");
+        partialTrips.add(new PartialTrip(1, "Polacksbacken",startdate1,"Flogsta", enddate1, trajectory));
+        trips.add(new FullTrip("1", partialTrips, 10, false, 0));
+        partialTrips.clear(); partialTrips.add(new PartialTrip(2, "Gamla Uppsala",startdate2,"Gottsunda", enddate2, trajectory));
+        trips.add(new FullTrip("2", partialTrips, 15, false, 0));
+        partialTrips.clear(); partialTrips.add(new PartialTrip(3, "Granby",startdate3,"Tunna Backar", enddate3, trajectory));
+        trips.add(new FullTrip("3", partialTrips, 15, false, 0));
+        partialTrips.clear(); partialTrips.add(new PartialTrip(4, "Kungsgatan", startdate4, "Observatoriet", enddate4, trajectory));
+        trips.add(new FullTrip("4", partialTrips, 30, false, 0));
     }
 
     @Override
@@ -284,4 +317,23 @@ public class MainActivity extends AppCompatActivity implements
     public void onLocationChanged(Location location) {
         handleNewLocation(location);
     }
+
+
+    private boolean checkPlayServices() {
+
+        GoogleApiAvailability apiAvailability = GoogleApiAvailability.getInstance();
+        int resultCode = apiAvailability.isGooglePlayServicesAvailable(this);
+        if (resultCode != ConnectionResult.SUCCESS) {
+            if (apiAvailability.isUserResolvableError(resultCode)) {
+                apiAvailability.getErrorDialog(this, resultCode, PLAY_SERVICES_RESOLUTION_REQUEST)
+                        .show();
+            } else {
+                Log.i(TAG, "This device is not supported.");
+                finish();
+            }
+            return false;
+        }
+        return true;
+    }
+
 }

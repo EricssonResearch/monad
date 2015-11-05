@@ -1,0 +1,49 @@
+<android.support.v7.widget.CardView
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/cv"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    card_view:cardCornerRadius="@dimen/cardview_null_radius"
+    card_view:cardElevation="@dimen/cardview_default_elevation"
+    android:layout_marginLeft="@dimen/activity_horizontal_margin"
+    android:layout_marginStart="@dimen/activity_horizontal_margin"
+    android:layout_marginRight="@dimen/activity_horizontal_margin"
+    android:layout_marginEnd="@dimen/activity_horizontal_margin"
+    >
+
+    <LinearLayout
+        android:id="@+id/first_notification"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:background="@color/white"
+        android:gravity="center_vertical"
+        android:padding="@dimen/small_padding"
+        >
+
+        <ImageView
+            android:layout_width="@dimen/icon_mini"
+            android:layout_height="@dimen/icon_mini"
+            android:src="@drawable/ic_directions_bus_black_18dp"
+            android:contentDescription="@string/img_description"
+            android:id="@+id/bus3"
+            />
+        <TextView
+            android:id="@+id/text1"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:textStyle="italic"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_marginStart="@dimen/activity_horizontal_margin"
+            />
+        <TextView
+            android:id="@+id/time2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/primaryColorDark"
+            />
+
+    </LinearLayout>
+</android.support.v7.widget.CardView>

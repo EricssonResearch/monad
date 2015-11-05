@@ -13,7 +13,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.format.DateFormat;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -23,7 +22,6 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -36,9 +34,11 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.Locale;
 
+import se.uu.csproject.monadclient.recyclerviews.FullTrip;
+import se.uu.csproject.monadclient.recyclerviews.PartialTrip;
 import se.uu.csproject.monadclient.recyclerviews.SearchRecyclerViewAdapter;
-import se.uu.csproject.monadclient.recyclerviews.Trip;
 
 public class SearchActivity extends AppCompatActivity {
     private TextView textViewTripDate;
@@ -101,7 +101,7 @@ public class SearchActivity extends AppCompatActivity {
         tripTimeRadioGroup.check(depatureTimeRadioButton.getId());
         priorityRadioGroup.check(tripTimeButton.getId());
 
-        List<Trip> searchResults = new ArrayList<>();
+        List<FullTrip> searchResults = new ArrayList<>();
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler_view_search);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getApplicationContext());
         recyclerView.setLayoutManager(linearLayoutManager);
@@ -125,14 +125,14 @@ public class SearchActivity extends AppCompatActivity {
 
     public void updateDate() {
         final String DATE_FORMAT = "EEE dd MMM";
-        SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT);
+        SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT, Locale.ENGLISH);
         String selectedDate = dateFormat.format(calendar.getTime());
         textViewTripDate.setText(selectedDate);
     }
 
     public void updateTime() {
         final String TIME_FORMAT = "HH:mm";
-        SimpleDateFormat timeFormat = new SimpleDateFormat(TIME_FORMAT);
+        SimpleDateFormat timeFormat = new SimpleDateFormat(TIME_FORMAT, Locale.ENGLISH);
         String selectedTime = timeFormat.format(calendar.getTime());
         textViewTripTime.setText(selectedTime);
     }
@@ -187,9 +187,16 @@ public class SearchActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
+
+        if(ClientAuthentication.getPassword().equals("0")){
+            // Inflate the menu; this adds items to the action bar if it is present.
+            getMenuInflater().inflate(R.menu.menu_main_google, menu);
+            return true;
+        }
+        else {
+            getMenuInflater().inflate(R.menu.menu_main, menu);
+            return true;
+        }
     }
 
     @Override
@@ -247,7 +254,7 @@ public class SearchActivity extends AppCompatActivity {
         Date now = new Date();
         Calendar rightNow = Calendar.getInstance();
         currentYear = rightNow.get(Calendar.YEAR);
-        SimpleDateFormat df = new SimpleDateFormat("yyyy EEE dd MMM HH:mm");
+        SimpleDateFormat df = new SimpleDateFormat("yyyy EEE dd MMM HH:mm", Locale.ENGLISH);
         startTime = "null";
         endTime = "null";
         priority = "";
@@ -282,30 +289,63 @@ public class SearchActivity extends AppCompatActivity {
                 break;
         }
 
-        new SendTravelRequest().execute(userId, startTime, endTime, requestTime, stPosition, edPosition, priority);
+        if(stPosition != null && !stPosition.trim().isEmpty() && edPosition != null && !edPosition.trim().isEmpty()){
+            new SendTravelRequest().execute(userId, startTime, endTime, requestTime, stPosition, edPosition, priority);
+        }
+        else if (stPosition == null || stPosition.trim().isEmpty()) {
+            Context context = getApplicationContext();
+            CharSequence text = "Please enter a departure address.";
+            int duration = Toast.LENGTH_SHORT;
+
+            Toast toast = Toast.makeText(context, text, duration);
+            toast.show();
+        }
+        else if (edPosition == null || edPosition.trim().isEmpty()) {
+            Context context = getApplicationContext();
+            CharSequence text = "Please enter a destination address.";
+            int duration = Toast.LENGTH_SHORT;
+
+            Toast toast = Toast.makeText(context, text, duration);
+            toast.show();
+        }
     }
 
     //TEMPORARY FUNCTION TODO: Remove this function once the database connection is set
-    private void generateSearchResults(List<Trip> trips){
-        Calendar calendar = new GregorianCalendar(2015, 9, 26, 10, 40, 0);
+    private void generateSearchResults(List<FullTrip> trips){
+        Calendar calendar = new GregorianCalendar(2015, 10, 26, 10, 40, 0);
         Date startdate1 = calendar.getTime();
-        calendar = new GregorianCalendar(2015, 9, 26, 10, 50, 0);
+        calendar = new GregorianCalendar(2015, 10, 26, 10, 50, 0);
         Date enddate1 = calendar.getTime();
-        calendar = new GregorianCalendar(2015, 9, 26, 10, 45, 0);
+        calendar = new GregorianCalendar(2015, 10, 26, 10, 45, 0);
         Date startdate2 = calendar.getTime();
-        calendar = new GregorianCalendar(2015, 9, 26, 11, 0, 0);
+        calendar = new GregorianCalendar(2015, 10, 26, 11, 0, 0);
         Date enddate2 = calendar.getTime();
-        calendar = new GregorianCalendar(2015, 9, 26, 9, 50, 0);
+        calendar = new GregorianCalendar(2015, 10, 27, 9, 50, 0);
         Date startdate3 = calendar.getTime();
-        calendar = new GregorianCalendar(2015, 9, 27, 10, 5, 0);
+        calendar = new GregorianCalendar(2015, 10, 27, 10, 5, 0);
         Date enddate3 = calendar.getTime();
-        calendar = new GregorianCalendar(2015, 9, 22, 11, 30, 0);
+        calendar = new GregorianCalendar(2015, 10, 22, 11, 30, 0);
         Date startdate4 = calendar.getTime();
-        calendar = new GregorianCalendar(2015, 9, 22, 12, 0, 0);
+        calendar = new GregorianCalendar(2015, 10, 22, 12, 0, 0);
         Date enddate4 = calendar.getTime();
-        trips.add(new Trip(1, "Polacksbacken",startdate1,"Flogsta", enddate1, 10, 0));
-        trips.add(new Trip(2, "Gamla Uppsala",startdate2,"Gottsunda", enddate2, 15, 0));
-        trips.add(new Trip(3, "Granby",startdate3,"Tunna Backar", enddate3, 15, 0));
-        trips.add(new Trip(4, "Kungsgatan", startdate4, "Observatoriet", enddate4, 30, 0));
+
+        ArrayList<PartialTrip> partialTrips = new ArrayList<>();
+        ArrayList<String> trajectory = new ArrayList<>();
+        trajectory.add("BMC");
+        trajectory.add("Akademiska Sjukhuset");
+        trajectory.add("Ekeby Bruk");
+        trajectory.add("Ekeby");
+        PartialTrip partialTrip = new PartialTrip(1, "Polacksbacken",startdate1,"Flogsta", enddate1, trajectory);
+        partialTrips.add(partialTrip);
+        trips.add(new FullTrip("1", partialTrips, 10, false, 0));
+        partialTrip = new PartialTrip(2, "Gamla Uppsala",startdate2,"Gottsunda", enddate2, trajectory);
+        partialTrips.clear(); partialTrips.add(partialTrip);
+        trips.add(new FullTrip("2", partialTrips, 15, false, 0));
+        partialTrip = new PartialTrip(3, "Granby",startdate3,"Tunna Backar", enddate3, trajectory);
+        partialTrips.clear(); partialTrips.add(partialTrip);
+        trips.add(new FullTrip("3", partialTrips, 15, false, 0));
+        partialTrip = new PartialTrip(4, "Kungsgatan", startdate4, "Observatoriet", enddate4, trajectory);
+        partialTrips.clear(); partialTrips.add(partialTrip);
+        trips.add(new FullTrip("4", partialTrips, 30, false, 0));
     }
 }

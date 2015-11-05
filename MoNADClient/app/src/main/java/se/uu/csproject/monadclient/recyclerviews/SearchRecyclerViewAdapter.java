@@ -1,7 +1,6 @@
 package se.uu.csproject.monadclient.recyclerviews;
 
 import android.content.Intent;
-import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,7 +11,6 @@ import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.GregorianCalendar;
 import java.util.List;
 
 import se.uu.csproject.monadclient.R;
@@ -36,9 +34,9 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<SearchRecycl
         }
     }
 
-    List<Trip> searchResults;
+    List<FullTrip> searchResults;
 
-    public SearchRecyclerViewAdapter(List<Trip> searchResults){
+    public SearchRecyclerViewAdapter(List<FullTrip> searchResults){
         this.searchResults = searchResults;
     }
 
@@ -60,7 +58,7 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<SearchRecycl
         searchViewHolder.timeInfo.setText(formatTripTime(searchResults.get(i)));
         searchViewHolder.routeInfo.setText(routeInfo);
         //TODO: check if getTimeToDeparture() is less than 30 minutes
-        if(!searchResults.get(i).isHistory()){
+        if(!searchResults.get(i).isHistory() && searchResults.get(i).getTimeToDeparture() < 1800000){
             searchViewHolder.hurryAlertIcon.setVisibility(View.VISIBLE);
         }
 
@@ -68,14 +66,7 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<SearchRecycl
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(searchViewHolder.itemView.getContext(), RouteActivity.class);
-                Bundle bundle = new Bundle();
-                bundle.putInt("tripId", searchResults.get(i).getTripId());
-                bundle.putString("startBusStop", searchResults.get(i).getStartBusStop());
-                bundle.putString("endBusStop", searchResults.get(i).getEndBusStop());
-                bundle.putSerializable("startTime", searchResults.get(i).getStartTime());
-                bundle.putSerializable("endTime", searchResults.get(i).getEndTime());
-                bundle.putInt("duration", searchResults.get(i).getDurationMinutes());
-                intent.putExtras(bundle);
+                intent.putExtra("fulltrip", searchResults.get(i));
                 searchViewHolder.itemView.getContext().startActivity(intent);
             }
         });
@@ -86,17 +77,17 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<SearchRecycl
         return searchResults.size();
     }
 
-    private String formatTripTime(Trip trip){
+    private String formatTripTime(FullTrip fulltrip){
 
         Calendar calendar = Calendar.getInstance();
-        calendar.setTime(trip.getStartTime());
+        calendar.setTime(fulltrip.getStartTime());
         SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
         String startTime = timeFormat.format(calendar.getTime());
-        calendar.setTime(trip.getEndTime());
+        calendar.setTime(fulltrip.getEndTime());
         String endTime = timeFormat.format(calendar.getTime());
 
         String timeInfo = startTime + " - " + endTime + " (" +
-                trip.getDurationMinutes() + "min)";
+                fulltrip.getDuration() + "min)";
         return timeInfo;
     }
 }

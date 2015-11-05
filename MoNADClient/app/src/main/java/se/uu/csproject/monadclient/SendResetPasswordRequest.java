@@ -18,7 +18,7 @@ import java.util.Date;
 
 
 public class SendResetPasswordRequest extends AsyncTask<String, Void, String> {
-    private static String SERVER = "http://130.238.15.114";
+    private static String SERVER = "http://130.238.15.114:2001";
 
     /* Send the data to the server via POST and receive the response */
     public static String postRequest(String request, String urlParameters) {
@@ -45,7 +45,7 @@ public class SendResetPasswordRequest extends AsyncTask<String, Void, String> {
 
             // Get the response from the server
             int responseCode = conn.getResponseCode();
-            if (responseCode != 200 && responseCode != 500 && responseCode != 403) {
+            if (responseCode != 200) {
                 throw new RuntimeException("Something went wrong - HTTP error code: " + responseCode);
             }
             BufferedReader br = new BufferedReader(new InputStreamReader((conn.getInputStream())));
@@ -58,10 +58,10 @@ public class SendResetPasswordRequest extends AsyncTask<String, Void, String> {
             conn.disconnect();
 
         } catch (MalformedURLException e) {
-            return ("MalformedURLException: " + e.toString());
+            return (e.toString());
 
         } catch (IOException e) {
-            return ("IOException: " + e.toString());
+            return (e.toString());
 
         } catch (RuntimeException e) {
             return (e.toString());
