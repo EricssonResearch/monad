@@ -55,7 +55,7 @@ public class RouteActivity extends AppCompatActivity {
         TextView walkEnd = (TextView) findViewById(R.id.label_walkend);
 
         Bundle b = getIntent().getExtras();
-        final FullTrip trip = b.getParcelable("fulltrip");
+        final FullTrip trip = b.getParcelable("selectedTrip");
         walkStart.setText("Walk to bus stop " + trip.getStartBusStop());
         timeStart.setText(formatTime(trip.getStartTime()));
         walkEnd.setText("Leave the bus at stop " + trip.getEndBusStop());

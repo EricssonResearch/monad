@@ -82,8 +82,8 @@ public class RouteConfirmPopup extends AppCompatActivity {
         edPosition = endPositionView.getText().toString();
 
         //new SendBookingRequest().execute(busId, userId, startTime, endTime, stPosition, edPosition);
-        Intent intent = new Intent(RouteConfirmPopup.this, RouteSuccessActivity.class);
-        intent.putExtra("selectedTrip", trip);
+        Intent intent = new Intent(RouteConfirmPopup.this, TripsActivity.class);
+        //intent.putExtra("selectedTrip", trip);
         startActivity(intent);
         finish();
     }

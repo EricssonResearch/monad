@@ -138,7 +138,7 @@ public class TripRecyclerViewAdapter
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(tripViewHolder.itemView.getContext(), RouteActivity.class);
-                    intent.putExtra("fulltrip", trips.get(i));
+                    intent.putExtra("selectedTrip", trips.get(i));
                     tripViewHolder.itemView.getContext().startActivity(intent);
                 }
            });
@@ -147,7 +147,7 @@ public class TripRecyclerViewAdapter
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(tripViewHolder.itemView.getContext(), TripCancelPopup.class);
-                    intent.putExtra("fulltrip", trips.get(i));
+                    intent.putExtra("selectedTrip", trips.get(i));
                     tripViewHolder.itemView.getContext().startActivity(intent);
                 }
             });

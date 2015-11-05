@@ -66,7 +66,7 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<SearchRecycl
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(searchViewHolder.itemView.getContext(), RouteActivity.class);
-                intent.putExtra("fulltrip", searchResults.get(i));
+                intent.putExtra("selectedTrip", searchResults.get(i));
                 searchViewHolder.itemView.getContext().startActivity(intent);
             }
         });

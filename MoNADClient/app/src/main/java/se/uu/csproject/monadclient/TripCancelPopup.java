@@ -36,7 +36,7 @@ public class TripCancelPopup extends AppCompatActivity {
         final ImageView clockIcon = (ImageView) findViewById(R.id.icon_clock);
 
         Bundle b = getIntent().getExtras();
-        final FullTrip trip = b.getParcelable("fulltrip");
+        final FullTrip trip = b.getParcelable("selectedTrip");
         startBusStop.setText(trip.getStartBusStop());
         endBusStop.setText(trip.getEndBusStop());
         startTime.setText(formatTime(trip.getStartTime()));
