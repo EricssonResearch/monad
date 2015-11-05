@@ -187,8 +187,6 @@ class TravelPlanner:
         if (len(self.tripTuples) >= NUM_OF_ROUTES_RETURNED):
             if (not self._isBetterTrip(-1)):
                 return
-        if (hasattr(self, 'bestArrivalTime')):
-            print "dpt: " + str(self.dptTime) + " - arr: " + str(self.arrTime) + " - best: " + str(self.bestArrivalTime)
             
         for i in range(len(self.tripTuples)):
             if (self._isBetterTrip(i)):
@@ -235,13 +233,10 @@ class TravelPlanner:
         else:
             trips = self.lineSchedules[route[DR_LINE2]].rewind()
         self.bestArrivalTime = datetime.datetime.max
-#        print "finding second trip: " + str(trips)
         for trip in trips:
             self.dptSwitch = trip["trajectory"][route[DR_START2]]["time"]
             self.arrTime   = trip["trajectory"][route[DR_END2]]["time"]
-#            print "1: " + str(self.dptTime) + " - 2: " + str(self.arrSwitch) + " - 3: " + str(self.dptSwitch) + " - 4: " + str(self.arrTime)
             if ((self.arrSwitch < self.dptSwitch) and (self.arrTime < self.bestArrivalTime)):
-#                print "best: " + str(self.arrTime)
                 self.bestSecondTrip = trip
                 self.bestArrivalTime = self.arrTime
 
