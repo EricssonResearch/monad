@@ -4,10 +4,6 @@
     android:layout_height="match_parent"
     tools:context="se.uu.csproject.monadclient.RouteActivity">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
         <RelativeLayout
             android:id="@+id/cancelpopupheader"
             android:layout_width="match_parent"
@@ -37,13 +33,8 @@
             android:layout_below="@id/cancelpopupheader"
             android:layout_gravity="center"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="@dimen/medium_padding"
-                >
+            android:layout_height="wrap_content"
+            android:padding="@dimen/medium_padding">
 
                 <!--text: to from -->
                 <TextView
@@ -165,8 +156,6 @@
                     style="@style/importantText"
                     android:layout_below="@id/label_date"/>
 
-            </RelativeLayout>
-
         </RelativeLayout>
 
         <LinearLayout
@@ -199,8 +188,5 @@
                 />
 
         </LinearLayout>
-
-    </RelativeLayout>
-
 
 </RelativeLayout>

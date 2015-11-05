@@ -114,6 +114,7 @@
             android:layout_height="@dimen/ratingbar_height"
             android:isIndicator="false"
             android:layout_alignRight="@id/label_date"
+            android:layout_alignEnd="@id/label_date"
             android:layout_alignBottom="@id/label_arrivaltime"
             android:numStars="5"
             android:rating="4"

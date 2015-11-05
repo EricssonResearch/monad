@@ -177,6 +177,7 @@
             android:textAllCaps="true"
             android:textStyle="bold"
             android:layout_marginLeft="@dimen/medium_padding"
+            android:layout_marginStart="@dimen/medium_padding"
             android:textColor="@color/primaryColor"/>
 
         <View

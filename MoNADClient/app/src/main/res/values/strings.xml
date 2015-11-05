@@ -55,11 +55,9 @@
     <string name="label_main_recommendations">Recommendations</string>
 
     <!--Activity - Notifications-->
-    <string name="label_notifications_recent">Recent</string>
     <string name="label_notification_notification">Notification</string>
 
     <!--Activity - Profile-->
-    <string name="label_profile_generalinfo">General Information</string>
     <string name="label_profile_contactinfo">Contact Information</string>
     <string name="label_profile_username">Username:</string>
     <string name="label_profile_phone">Phone No.:</string>
@@ -122,21 +120,16 @@
         <item>Alerts</item>
         <item>Theme</item>
     </string-array>
-    <string name="label_settings_selectlanguage">Please select your language</string>
 
     <!--Settings - Alert settings -->
     <string name="label_fragmentsettingsalert_recommendation">Recommendations</string>
     <string name="label_fragmentsettingsalert_alert">Reminders about trips</string>
-    <string name="label_fragmentsettingsalert_title">Notifications</string>
     <string name="label_fragmentsettingsalert_recommendationsswitch">ON </string>
 
     <!-- Settings - Theme settings -->
-    <string name="label_fragmentsettingstheme_title">Themes</string>
     <string name="label_fragmentsettingstheme_light">Light</string>
     <string name="label_fragmentsettingstheme_dark">Dark</string>
     <string name="label_fragmentsettingstheme_default">Default</string>
-    <string name="label_fragmentsettingstheme_buttoncancel">Cancel</string>
-    <string name="label_fragmentsettingstheme_ok">Apply</string>
 
     <!--Popup - Confirmation Code -->
     <string name="label_confirmcode_codesent">Confirmation code sent!</string>
