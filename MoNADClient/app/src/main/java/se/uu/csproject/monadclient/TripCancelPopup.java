@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -21,19 +22,26 @@ import se.uu.csproject.monadclient.recyclerviews.Trip;
 import static java.lang.Math.floor;
 
 public class TripCancelPopup extends AppCompatActivity {
+    TextView startBusStop;
+    TextView endBusStop;
+    TextView startTime;
+    TextView endTime;
+    TextView date;
+    TextView countdown;
+    ImageView clockIcon;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.popup_trip_cancel);
 
-        TextView startBusStop = (TextView) findViewById(R.id.label_startbusstop);
-        TextView endBusStop = (TextView) findViewById(R.id.label_endbusstop);
-        TextView startTime = (TextView) findViewById(R.id.label_starttime);
-        TextView endTime = (TextView) findViewById(R.id.label_endtime);
-        final TextView date = (TextView) findViewById(R.id.label_date);
-        final TextView countdown = (TextView) findViewById(R.id.label_countdown);
-        final ImageView clockIcon = (ImageView) findViewById(R.id.icon_clock);
+        startBusStop = (TextView) findViewById(R.id.label_startbusstop);
+        endBusStop = (TextView) findViewById(R.id.label_endbusstop);
+        startTime = (TextView) findViewById(R.id.label_starttime);
+        endTime = (TextView) findViewById(R.id.label_endtime);
+        date = (TextView) findViewById(R.id.label_date);
+        countdown = (TextView) findViewById(R.id.label_countdown);
+        clockIcon = (ImageView) findViewById(R.id.icon_clock);
 
         Bundle b = getIntent().getExtras();
         final FullTrip trip = b.getParcelable("selectedTrip");
@@ -41,34 +49,70 @@ public class TripCancelPopup extends AppCompatActivity {
         endBusStop.setText(trip.getEndBusStop());
         startTime.setText(formatTime(trip.getStartTime()));
         endTime.setText(formatTime(trip.getEndTime()));
-        if(trip.isToday()){
-            date.setText("TODAY");
+//        if(trip.isToday()){
+//            date.setText("TODAY");
+//        }
+//        final long MILLISECONDS_TO_DEPARTURE = trip.getTimeToDeparture();
+//        countdown.setText(String.valueOf(MILLISECONDS_TO_DEPARTURE));
+//
+//        final int MILLISECONDS = b.getInt("MILLISECONDS");
+//        CountDownTimer timer = new CountDownTimer(MILLISECONDS_TO_DEPARTURE, MILLISECONDS) {
+//            @Override
+//            public void onTick(long millisUntilFinished) {
+//                countdown.setText(formatCoundownText(millisUntilFinished));
+//                if (millisUntilFinished < 1800000) {
+//                    countdown.setTextColor(ContextCompat.getColor(countdown.getContext(), R.color.warnColor));
+//                    date.setTextColor(ContextCompat.getColor(date.getContext(), R.color.warnColor));
+//                    clockIcon.setVisibility(View.VISIBLE);
+//                }
+//            }
+//
+//            @Override
+//            public void onFinish() {
+//                countdown.setText("Trip in Progress");
+//                countdown.setTextColor(ContextCompat.getColor(countdown.getContext(), R.color.green));
+//                date.setTextColor(ContextCompat.getColor(countdown.getContext(), R.color.green));
+//                clockIcon.setVisibility(View.INVISIBLE);
+//                //clockIcon.setColorFilter(ContextCompat.getColor(clockIcon.getContext(), R.color.green));
+//            }
+//        }.start();
+
+
+        final int MILLISECONDS = 1000;
+        if(trip.isInProgress()){
+            formatAsInProgress();
         }
-        final long MILLISECONDS_TO_DEPARTURE = trip.getTimeToDeparture();
-        countdown.setText(String.valueOf(MILLISECONDS_TO_DEPARTURE));
+        else{
+            if(trip.isToday()){
+                date.setText("TODAY");
+                date.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.warnColor));
+            }
+            else {
+                date.setText(formatDate(trip.getStartTime()));
+            }
 
-        final int MILLISECONDS = b.getInt("MILLISECONDS");
-        CountDownTimer timer = new CountDownTimer(MILLISECONDS_TO_DEPARTURE, MILLISECONDS) {
-            @Override
-            public void onTick(long millisUntilFinished) {
-                countdown.setText(formatCoundownText(millisUntilFinished));
-                if (millisUntilFinished < 10000) {
-                    countdown.setTextColor(ContextCompat.getColor(countdown.getContext(), R.color.warnColor));
-                    date.setTextColor(ContextCompat.getColor(date.getContext(), R.color.warnColor));
-                    clockIcon.setVisibility(View.VISIBLE);
+            final long MILLISECONDS_TO_DEPARTURE = trip.getTimeToDeparture();
+            countdown.setText(formatCountdownText(MILLISECONDS_TO_DEPARTURE));
+
+            CountDownTimer timer = new CountDownTimer(MILLISECONDS_TO_DEPARTURE, MILLISECONDS) {
+                @Override
+                public void onTick(long millisUntilFinished) {
+                    countdown.setText(formatCountdownText(millisUntilFinished));
+                    //change value to 30min (30*60*1000 = 1 800 000ms)
+                    if (millisUntilFinished < 1800000) {
+                        countdown.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.warnColor));
+                        clockIcon.setVisibility(View.VISIBLE);
+                    }
                 }
-            }
 
-            @Override
-            public void onFinish() {
-                countdown.setText("Trip in Progress");
-                countdown.setTextColor(ContextCompat.getColor(countdown.getContext(), R.color.green));
-                date.setTextColor(ContextCompat.getColor(countdown.getContext(), R.color.green));
-                clockIcon.setVisibility(View.INVISIBLE);
-                //clockIcon.setColorFilter(ContextCompat.getColor(clockIcon.getContext(), R.color.green));
-            }
-        }.start();
+                @Override
+                public void onFinish() {
+                    formatAsInProgress();
+                }
+            }.start();
+        }
 
+        //////////////////////////////////////////
         DisplayMetrics dm = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(dm);
         int width = dm.widthPixels;
@@ -101,7 +145,7 @@ public class TripCancelPopup extends AppCompatActivity {
         finish();
     }
 
-    private String formatCoundownText(long millisecondsTime){
+    private String formatCountdownText(long millisecondsTime){
         DecimalFormat formatter = new DecimalFormat("00");
         String hours = formatter.format( floor(millisecondsTime / (1000 * 60 * 60)) );
         millisecondsTime %= (1000*60*60);
@@ -114,6 +158,22 @@ public class TripCancelPopup extends AppCompatActivity {
     private String formatTime(Date date){
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
-        return calendar.HOUR_OF_DAY + ":" + calendar.MINUTE;
+        SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
+        return timeFormat.format(calendar.getTime());
+    }
+
+    private String formatDate(Date date){
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        SimpleDateFormat dateFormat = new SimpleDateFormat("EEE dd MMM.");
+        return dateFormat.format(calendar.getTime());
+    }
+
+    private void formatAsInProgress() {
+        date.setText("TODAY");
+        countdown.setText("Trip in Progress");
+        countdown.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.green));
+        date.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.green));
+        clockIcon.setVisibility(View.INVISIBLE);
     }
 }
