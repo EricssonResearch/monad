@@ -28,68 +28,14 @@ from datetime import timedelta
 
 # Constant
 BUS_LINE = 2
-
 # The individual size corresponds to the number of trips
-INDIVIDUAL_SIZE = 14 #reason why its 14 is because we currently have 2 buslines in mongo to work with
-INDIVIDUAL_SIZE_BOUNDS = [2, 10]
+INDIVIDUAL_SIZE =  14
+INDIVIDUAL_SIZE_BOUNDS = [30, 90]
 
 
 # Initialize the classes
 databaseClass = DB()
 fitnessClass = Fitness()
-
-
-def evaluateNewIndividualFormat(individual):
-
-    individual = sorted(individual, key=itemgetter(3))
-    individual = sorted(individual, key=itemgetter(0)) # order by busLine ID
-    print individual
-
-    # TODO: evaluate individual fitness based on waiting time
-    db = DB()
-    tripWaitingTime = timedelta(minutes=0)
-    for i, trip in enumerate(individual):
-        tripStart = trip[3]
-        if len(str(tripStart.hour))==1:
-            temp = "0"+str(tripStart.hour)+":"+str(tripStart.minute)
-        else:
-            temp = str(tripStart.hour)+":"+str(tripStart.minute)
-
-        # for the last trip, the end is just before the end of the day
-        try:
-            tripNext = individual[i+1][3]
-            if len(str(tripNext.hour))==1:
-                temp1 = "0"+str(tripNext.hour)+":"+str(tripNext.minute)
-            else:
-                temp1 = str(tripNext.hour)+":"+str(tripNext.minute)
-        except IndexError:
-            temp1 = '23:59'
-
-        #start = '2015-10-21 00:00:00' if i == 0 else '2015-10-21 ' + temp + ':00'
-        if i == 0:
-            start = '2015-10-21 00:00:00'   
-            end = '2015-10-21 ' + str(individual[i][3].hour) + ":" + str(individual[i][3].minute) + ':00'
-        else:
-            start = end
-            end = '2015-10-21 ' + temp1 + ':00'
-        #print start, end
-
-        stopsAndRequests = db.MaxReqNumTrip(start, end, 2) 
-        print stopsAndRequests
-
-        NoOfLeftOvers = 0
-        '''
-        for i, stop in enumerate(stopsAndRequests):
-            if stop[1] > trip[1] and i < len(individual)-1:
-                nextTripTime = individual[i+1][2]
-                # nextTripWait = fitnessClass.timeDiff(nextTripTime, individual[i][2])
-                nextTripWait = nextTripTime - individual[i][2]
-                NoOfLeftOvers = NoOfLeftOvers + (stop[1] - trip[1])   # must wait for the next bus trip
-                tripWaitingTime += nextTripWait*(stop[1] - trip[1])
-        tripWaitingTime = timedelta(minutes=0) # reset on each trip
-        '''
-
-    return 1,
 
 
 def evalIndividual(individual):
@@ -103,52 +49,73 @@ def evalIndividual(individual):
     Lower values are better.
     '''
     # First, the randomly-generated starting times are sorted in order to check sequentially the number of requests for that particular trip
-    individual = sorted(individual, key=itemgetter(2))
+    individual[:] = [x for x in individual if x[0] == 2]  # choosing only line 2 for now
+    individual = sorted(individual, key=itemgetter(3))
 
     # Second, we loop trough the number of genes in order to retrieve the number of requests for that particular trip
     # For the 1st trip, the starting time has to be selected
     request = []
     dif = []
     cnt = []
-    # initialTripTime = "00:00"
     initialTripTime = datetime.combine(fitnessClass.yesterday, 
                                        datetime.strptime("00:00", 
                                        fitnessClass.formatTime).time())
     db = DB()
     tripWaitingTime = timedelta(minutes=0) # waiting time due to insufficient capacity
-    NoOfLeftOvers = 0
+    noOfLeftOvers = 0
+    print individual
     for i, trip in enumerate(individual):
-        #tripTimeTable = db.generateFitnessTripTimeTable(individual[i][0], individual[i][2])
-        tripStartTime = trip[2]
-        # start = '2015-10-21 00:00:00' if i == 0 else '2015-10-21 ' + trip[2] + ':00'
-        if len(str(trip[2].hour))==1:
-            temp = "0"+str(trip[2].hour)+":"+str(trip[2].minute)
+        tripStartTime = trip[3]
+        if len(str(tripStartTime.hour)) == 1:
+            temp = "0" + str(tripStartTime.hour) + ":" + str(tripStartTime.minute)
         else:
-            temp = str(trip[2].hour)+":"+str(trip[2].minute)
+            temp = str(tripStartTime.hour) + ":" + str(tripStartTime.minute)
 
-        # for the last trip, the end is just before the end of the day
-        try:
-            if len(str(individual[i+1][2].hour))==1:
-                temp1 = "0"+str(individual[i+1][2].hour)+":"+str(individual[i+1][2].minute)
-            else:
-                temp1 = str(individual[i+1][2].hour)+":"+str(individual[i+1][2].minute)
-        except IndexError:
-            temp1 = '23:59'
+        if i == 0:
+            start, end = '2015-10-21 00:00:00', '2015-10-21 ' + temp + ':00' 
+        else:
+            start, end = end, '2015-10-21 ' + temp + ':00'
 
-        start = '2015-10-21 00:00:00' if i == 0 else '2015-10-21 ' + temp + ':00'
-        # end = '2015-10-21 ' + trip[2] + ':00'
-        end = '2015-10-21 ' + temp1 + ':00'
+        #stopsAndRequests = db.MaxReqNumTrip(start, end, 2)
+        stopsAndRequests = [['A', 200]]
+        tripCapacity = trip[1]
+        timeSlices = ((datetime.strptime('00:00:00','%H:%M:%S'),(datetime.strptime('02:59:59','%H:%M:%S'))),
+            (datetime.strptime('03:00:00','%H:%M:%S'), datetime.strptime('05:59:59','%H:%M:%S')),
+            (datetime.strptime('06:00:00','%H:%M:%S'), datetime.strptime('08:59:59','%H:%M:%S')),
+            (datetime.strptime('09:00:00','%H:%M:%S'), datetime.strptime('11:59:59','%H:%M:%S')),
+            (datetime.strptime('12:00:00','%H:%M:%S'), datetime.strptime('14:59:59','%H:%M:%S')),
+            (datetime.strptime('15:00:00','%H:%M:%S'), datetime.strptime('17:59:59','%H:%M:%S')),
+            (datetime.strptime('18:00:00','%H:%M:%S'), datetime.strptime('20:59:59','%H:%M:%S')),
+            (datetime.strptime('21:00:00','%H:%M:%S'), datetime.strptime('23:59:59','%H:%M:%S')))
+        # TODO: Evaluate individual fitness based on how many requests can be handled, increase waiting time for
+        # leftover passengers
+        for j, tslice in enumerate(timeSlices):
+            if tslice[0].time() <= tripStartTime.time() <= tslice[1].time():
+                earliestDeparture = tslice[0] + timedelta(minutes=trip[2])
+                try:
+                    nextDeparture = timeSlices[j+1][0] + timedelta(minutes=individual[i+1][2])
+                except IndexError, e:
+                    print e
+                print "earliest possible departure " + str(earliestDeparture.time())
+                print "next departure: " + str(nextDeparture.time())
 
-        stopsAndRequests = db.MaxReqNumTrip(start, end)
-
-        for i, stop in enumerate(stopsAndRequests):
-            if stop[1] > trip[1] and i < len(individual)-1:
-                nextTripTime = individual[i+1][2]
-                # nextTripWait = fitnessClass.timeDiff(nextTripTime, individual[i][2])
-                nextTripWait = nextTripTime - individual[i][2]
-                NoOfLeftOvers = NoOfLeftOvers + (stop[1] - trip[1])   # must wait for the next bus trip
+        for j, stop in enumerate(stopsAndRequests):
+            requestsAtStop = stop[1]
+            if requestsAtStop > tripCapacity and i < len(individual)-1:
+                #print "Trip time " + str(tripStartTime)
+                nextTripTime = individual[i+1][3]
+                nextTripWait = nextTripTime - tripStartTime
+                #print "next trip in " + str(nextTripWait.total_seconds()/60.0) + " minutes"
+                #print "next trip time: " + str(nextTripTime)
+                noOfLeftOvers = noOfLeftOvers + (requestsAtStop - tripCapacity) #must wait for the next bus trip
                 tripWaitingTime += nextTripWait*(stop[1] - trip[1])
-        tripWaitingTime = timedelta(minutes=0) # reset on each trip
+            else:
+                pass
+
+        #print "Number left over: " + str(noOfLeftOvers)
+        #print "total waiting time: " + str(tripWaitingTime.total_seconds()/60.0)
+
+    '''
     # Evaluate average time
     for i in range(len(individual)):
         tripTimeTable = db.generateFitnessTripTimeTable(individual[i][0], individual[i][2])
@@ -159,7 +126,6 @@ def evalIndividual(individual):
             if initialTrip > lastTrip:
                 initialTrip = lastTrip - timedelta(minutes=db.getFrequency(individual[i][0]))
             # Search on Fitness.request array for the particular requests
-
             request = fitnessClass.searchRequest(initialTrip, lastTrip, tripTimeTable[j][0])
             initialTripTime = tripTimeTable[j][1]
             if len(request) > 0:
@@ -172,9 +138,11 @@ def evalIndividual(individual):
                 dif.append(diff)
                 cnt.append(count)
 
-    totalWaitingTime = (sum(dif) + tripWaitingTime.total_seconds()/60.0)/(sum(cnt) + count)
-    waitingTime = sum(dif) + tripWaitingTime.total_seconds()/60.0
-    return fitnessClass.calculateCost(individual, waitingTime, 0),
+    totalWaitingTime = sum(dif) + tripWaitingTime.total_seconds()/60.0
+    averageWaitingTime = totalWaitingTime / (sum(cnt) + noOfLeftOvers)
+    return fitnessClass.calculateCost(individual, totalWaitingTime, 0),
+    '''
+    return 1,
 
 
 # Creating a minimizing fitness class to minimize a single objective that
@@ -189,17 +157,12 @@ toolbox = base.Toolbox()
 
 # Register the operations to be used in the toolbox
 toolbox.register("attribute", databaseClass.generateRandomStartingTimeForTrip)
-
-
-# toolbox.register("attribute", databaseClass.generateStartingTripTime, BUS_LINE)
-toolbox.register("individual", tools.initRepeat, creator.Individual, toolbox.attribute, INDIVIDUAL_SIZE)
-
-#toolbox.register("individual", inits.initRepeatBound, creator.Individual, toolbox.attribute, INDIVIDUAL_SIZE_BOUNDS)
+toolbox.register("individual", tools.initRepeat, creator.Individual,
+                 toolbox.attribute, INDIVIDUAL_SIZE)
+#toolbox.register("individual", inits.initRepeatBound, creator.Individual,
+#                  toolbox.attribute, INDIVIDUAL_SIZE_BOUNDS)
 toolbox.register("population", tools.initRepeat, list, toolbox.individual)
-
-toolbox.register("evaluate", evaluateNewIndividualFormat)
-
-#toolbox.register("evaluate", evalIndividual)
+toolbox.register("evaluate", evalIndividual)
 toolbox.register("mate", tools.cxOnePoint)
 toolbox.register("select", tools.selTournament, tournsize=3)
 toolbox.register("mutate", mutation.mutUniformTime)
