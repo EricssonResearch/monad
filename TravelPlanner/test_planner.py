@@ -45,20 +45,17 @@ TIME_1400H = datetime.datetime(YEAR, MONTH, DAY, 14, 00)
 class TestTravelPlanner(unittest.TestCase):
 
     client = MongoClient()
-    tp = TravelPlanner(client)
+    dbName = "monad1"
+    db = client[dbName]
+    tp = TravelPlanner(db)
 
     def test_init(self):
-        dbName = "monad1"
-        requestDBString = "Collection(Database(MongoClient('localhost', 27017), u'" + dbName + \
-                "'), u'TravelRequest')"
-        routeDBString = "Collection(Database(MongoClient('localhost', 27017), u'" + dbName + \
-                "'), u'Route')"
-        timetableDBString = "Collection(Database(MongoClient('localhost', 27017), u'" + dbName + \
-                "'), u'TimeTable')"
-        usertripDBString = "Collection(Database(MongoClient('localhost', 27017), u'" + dbName + \
-                "'), u'UserTrip')"
-        busTripDBString = "Collection(Database(MongoClient('localhost', 27017), u'" + dbName + \
-                "'), u'BusTrip')"
+        mongoString = "Collection(Database(MongoClient('localhost', 27017), u'"
+        requestDBString = mongoString + self.dbName + "'), u'TravelRequest')"
+        routeDBString = mongoString + self.dbName + "'), u'Route')"
+        timetableDBString = mongoString + self.dbName + "'), u'TimeTable')"
+        usertripDBString = mongoString + self.dbName + "'), u'UserTrip')"
+        busTripDBString = mongoString + self.dbName + "'), u'BusTrip')"
 
         self.assertEqual(self.tp.fittingRoutes, [])
         self.assertEqual(self.tp.startingWaypoint, [])

@@ -57,7 +57,7 @@ class Mode:
 class TravelPlanner:
 
     def __init__(self, client, debug = False):
-        self.db = client.monad1
+        self.db = client
         self.travelRequest = self.db.TravelRequest
         self.route = self.db.Route
         self.timeTable = self.db.TimeTable
