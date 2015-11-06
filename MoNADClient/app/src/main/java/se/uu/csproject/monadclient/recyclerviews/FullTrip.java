@@ -182,6 +182,7 @@ public class FullTrip implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(id);
+        dest.writeString(requestID);
         if (partialTrips == null) {
             dest.writeByte((byte) (0x00));
         } else {

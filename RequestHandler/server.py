@@ -52,7 +52,7 @@ def application(env, start_response):
 	data_env["QUERY_STRING"] = ""	
 	data = cgi.FieldStorage(fp = env["wsgi.input"], environ = data_env)		
 	
-	if data_env["PATH_INFO"] == "/request":
+	if (data_env["PATH_INFO"] == "/request"):
 		if ("userId" and "startTime" and "endTime" and "requestTime" and "stPosition" and "edPosition" 
 			and "priority" in data):
 			userId = int(escape(data.getvalue("userId")))
@@ -75,9 +75,9 @@ def application(env, start_response):
 			
 			try:
 				requestTime = datetime.strptime(requestTime, serverConfig.DATE_FORMAT)
-				if startTime == "null":
+				if (startTime == "null"):
 					endTime = datetime.strptime(endTime, serverConfig.DATE_FORMAT)
-				else:
+				elif (endTime == "null"):
 					startTime = datetime.strptime(startTime, serverConfig.DATE_FORMAT)
 			except ValueError as e:
 				start_response("500 INTERNAL ERROR", [("Content-Type", "text/plain")])
@@ -97,7 +97,7 @@ def application(env, start_response):
 				requestId = result.inserted_id
 				
 				travelPlanner = TravelPlanner(database)
-				if priority == "distance":
+				if (priority == "distance"):
 					userTripJson = travelPlanner.getBestRoutes(requestID = requestId, mode = Mode.tripTime)
 				else:
 					userTripJson = travelPlanner.getBestRoutes(requestID = requestId, mode = Mode.waitTime)								
@@ -118,8 +118,8 @@ def application(env, start_response):
 			logging.error("Request: Something went wrong with the data sent by the user's request.")
 			return [serverConfig.ERROR_MESSAGE]
 			
-	elif data_env["PATH_INFO"] == "/resetPassword":
-		if "email" in data:
+	elif (data_env["PATH_INFO"] == "/resetPassword"):
+		if ("email" in data):
 			email = data.getvalue("email")			
 			email_list = [email]			
 			code = randint(1000, 9999)
@@ -133,7 +133,7 @@ def application(env, start_response):
 			logging.error("Reset Password: Something went wrong with the data sent by the user's request.")
 			return [serverConfig.ERROR_MESSAGE]
 			
-	elif data_env["PATH_INFO"] == "/quickRequest":
+	elif (data_env["PATH_INFO"] == "/quickRequest"):
 		if ("userId" and "startTime" and "endTime" and "requestTime" and "startPositionLatitude"
 			and "startPositionLongitude" and "edPosition" and "priority" in data):
 			userId = int(escape(data.getvalue("userId")))
@@ -155,9 +155,9 @@ def application(env, start_response):
 		
 			try:
 				requestTime = datetime.strptime(requestTime, serverConfig.DATE_FORMAT)
-				if startTime == "null":
+				if (startTime == "null"):
 					endTime = datetime.strptime(endTime, serverConfig.DATE_FORMAT)
-				else:
+				elif (endTime == "null"):
 					startTime = datetime.strptime(startTime, serverConfig.DATE_FORMAT)
 			except ValueError as e:
 				start_response("500 INTERNAL ERROR", [("Content-Type", "text/plain")])
@@ -177,7 +177,7 @@ def application(env, start_response):
 				requestId = result.inserted_id
 				
 				travelPlanner = TravelPlanner(database)
-				if priority == "distance":
+				if (priority == "distance"):
 					userTripJson = travelPlanner.getBestRoutes(requestID = requestId, mode = Mode.tripTime)
 				else:
 					userTripJson = travelPlanner.getBestRoutes(requestID = requestId, mode = Mode.waitTime)											
@@ -196,8 +196,8 @@ def application(env, start_response):
 			logging.error("Quick request: Something went wrong with the data sent by the user's request.")
 			return [serverConfig.ERROR_MESSAGE]
 			
-	elif data_env["PATH_INFO"] == "/bookingRequest":
-		if "userTripId" in data:
+	elif (data_env["PATH_INFO"] == "/bookingRequest"):
+		if ("userTripId" in data):
 			userTripId = escape(data.getvalue("userTripId"))			
 				
 			try:
@@ -235,8 +235,8 @@ def application(env, start_response):
 			logging.error("Booking request: Something went wrong with the data sent by the user's request.")
 			return [serverConfig.ERROR_MESSAGE]
 			
-	elif data_env["PATH_INFO"] == "/bookingCancelRequest":
-		if "userTripId" in data:
+	elif (data_env["PATH_INFO"] == "/bookingCancelRequest"):
+		if ("userTripId" in data):
 			userTripId = escape(data.getvalue("userTripId"))
 			
 			try:

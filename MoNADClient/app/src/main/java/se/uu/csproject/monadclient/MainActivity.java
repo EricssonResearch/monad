@@ -40,10 +40,12 @@ import java.util.Locale;
 
 import se.uu.csproject.monadclient.recyclerviews.FullTrip;
 import se.uu.csproject.monadclient.recyclerviews.PartialTrip;
+import se.uu.csproject.monadclient.recyclerviews.RecommendedTrips;
 import se.uu.csproject.monadclient.recyclerviews.SearchRecyclerViewAdapter;
 
 public class MainActivity extends AppCompatActivity implements
-        GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
+        GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener,
+        AsyncResponse{
 
     private EditText destination;
     private GoogleApiClient mGoogleApiClient;
@@ -51,6 +53,7 @@ public class MainActivity extends AppCompatActivity implements
     private double currentLatitude;
     private double currentLongitude;
     private final int MY_PERMISSIONS_REQUEST = 123;
+    private Context context;
 
     //Google Cloud Services
     private static final String TAG = "MainActivity";
@@ -64,6 +67,7 @@ public class MainActivity extends AppCompatActivity implements
         destination = (EditText) findViewById(R.id.main_search_destination);
         setSupportActionBar(toolbar);
 
+        context = getApplicationContext();
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         List<FullTrip> searchResults = new ArrayList<>();
@@ -101,12 +105,11 @@ public class MainActivity extends AppCompatActivity implements
         priority = "distance";
 
         if(edPosition != null && !edPosition.trim().isEmpty()){
-            new SendQuickTravelRequest().execute(userId, startTime, endTime, requestTime, startPositionLatitude,
-                                                    startPositionLongitude, edPosition, priority);
-            Intent myIntent = new Intent(MainActivity.this, SearchActivity.class);
-            MainActivity.this.startActivity(myIntent);
-        }
-        else {
+            SendQuickTravelRequest asyncTask = new SendQuickTravelRequest();
+            asyncTask.delegate = this;
+            asyncTask.execute(userId, startTime, endTime, requestTime, startPositionLatitude,
+                    startPositionLongitude, edPosition, priority);
+        } else {
             Context context = getApplicationContext();
             CharSequence text = "Please enter a destination address.";
             int duration = Toast.LENGTH_SHORT;
@@ -114,6 +117,21 @@ public class MainActivity extends AppCompatActivity implements
             Toast toast = Toast.makeText(context, text, duration);
             toast.show();
         }
+    }
+
+    public void processFinish(ArrayList<FullTrip> searchResults){
+
+        if (searchResults.isEmpty()){
+            CharSequence text = "Could not find any trips matching your criteria.";
+            int duration = Toast.LENGTH_SHORT;
+            Toast toast = Toast.makeText(context, text, duration);
+            toast.show();
+        }
+
+        Intent myIntent = new Intent(MainActivity.this, SearchActivity.class);
+        RecommendedTrips recommendedTrips = new RecommendedTrips(searchResults);
+        myIntent.putExtra("searchResults", recommendedTrips);
+        MainActivity.this.startActivity(myIntent);
     }
 
     private void checkForPermission(){

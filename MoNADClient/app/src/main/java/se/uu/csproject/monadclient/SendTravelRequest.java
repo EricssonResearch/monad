@@ -16,17 +16,19 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.io.DataOutputStream;
 import java.util.ArrayList;
+import java.util.Collections;
 
+import se.uu.csproject.monadclient.recyclerviews.CustomComparator;
 import se.uu.csproject.monadclient.recyclerviews.FullTrip;
 
 
-public class SendTravelRequest extends AsyncTask<String, Void, String> {
+public class SendTravelRequest extends AsyncTask<String, Void, ArrayList<FullTrip>> {
     private static String SERVER = "http://130.238.15.114:2001";
+    public AsyncResponse delegate = null;
 
     /* Send the data to the server via POST and receive the response */
-    public static String postRequest(String request, String urlParameters) {
-        String response;
-        ArrayList<FullTrip> recommendedTrips;
+    public static ArrayList<FullTrip> postRequest(String request, String urlParameters) {
+        ArrayList<FullTrip> searchResults = new ArrayList<>();
 
         try {
             URL url = new URL(request);
@@ -60,39 +62,30 @@ public class SendTravelRequest extends AsyncTask<String, Void, String> {
                 sb.append(inputStr);
             }
             JSONObject trips = new JSONObject(sb.toString());
-            recommendedTrips = new StoreTrips().storeTheTrips(trips);
 
-            if (!recommendedTrips.isEmpty()){
-                response = "Recommended trips successfully retrieved from the server.";
-            } else {
-                response = "Something went wrong while storing the recommended trips.";
-            }
+            searchResults = new StoreTrips().storeTheTrips(trips);
 
             // Close the connection
             conn.disconnect();
 
         } catch (MalformedURLException e) {
-            return (e.toString());
+            Log.d("oops", e.toString());
 
         } catch (IOException e) {
-            return (e.toString());
+            Log.d("oops", e.toString());
 
         } catch (RuntimeException e) {
-            return (e.toString());
+            Log.d("oops", e.toString());
 
         } catch (JSONException e) {
-            if (e.toString().contains("Value null of type")){
-                return ("Could not find any trips matching your criteria.");
-            } else {
-                return (e.toString());
-            }
+            Log.d("oops", e.toString());
         }
 
-        return response;
+        return searchResults;
     }
 
     /* Get the data from the interface and wrap them in a request */
-    public static String wrapRequest(String userId, String startTime, String endTime,
+    public static ArrayList<FullTrip> wrapRequest(String userId, String startTime, String endTime,
                                    String requestTime, String stPosition, String edPosition, String priority) {
         String request = SERVER + "/request";
 
@@ -100,25 +93,25 @@ public class SendTravelRequest extends AsyncTask<String, Void, String> {
                 + "&endTime=" + endTime + "&requestTime=" + requestTime
                 + "&stPosition=" + stPosition + "&edPosition=" + edPosition
                 + "&priority=" + priority;
-        String response = postRequest(request, urlParameters);
+        ArrayList<FullTrip> searchResults = postRequest(request, urlParameters);
 
-        return response;
+        return searchResults;
     }
 
     /* This is the function that is called by the button listener */
     @Override
-    protected String doInBackground(String... params) {
-        String response;
+    protected ArrayList<FullTrip> doInBackground(String... params) {
+        ArrayList<FullTrip> searchResults;
 
-        response = wrapRequest(params[0], params[1], params[2], params[3], params[4], params[5], params[6]);
+        searchResults = wrapRequest(params[0], params[1], params[2], params[3], params[4], params[5], params[6]);
 
-        return response;
+        return searchResults;
     }
 
     /* Deal with the response returned by the server */
     @Override
-    protected void onPostExecute(String response) {
-        Log.d("oops", response);
+    protected void onPostExecute(ArrayList<FullTrip> searchResults) {
+        delegate.processFinish(searchResults);
     }
 }
 
