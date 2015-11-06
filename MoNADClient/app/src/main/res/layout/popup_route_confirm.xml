@@ -50,7 +50,7 @@
 
             <TextView
                 android:id="@+id/departname"
-                android:text="@string/label_tripsactivity_fromorigin"
+                android:text="@string/non_available"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 style="@style/whiteText"
@@ -74,7 +74,7 @@
 
             <TextView
                 android:id="@+id/departtime"
-                android:text="@string/label_tripsactivity_fromtime"
+                android:text="@string/non_available"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 style="@style/whiteText"
@@ -86,7 +86,7 @@
 
             <TextView
                 android:id="@+id/arrivename"
-                android:text="@string/label_tripsactivity_todestination"
+                android:text="@string/non_available"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 style="@style/whiteText"
@@ -112,7 +112,7 @@
 
             <TextView
                 android:id="@+id/arrivetime"
-                android:text="@string/label_tripsactivity_totime"
+                android:text="@string/non_available"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 style="@style/whiteText"

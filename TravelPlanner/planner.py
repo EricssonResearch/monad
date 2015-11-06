@@ -228,10 +228,10 @@ class TravelPlanner:
     def _findSecondTrip(self, route, startTrip):
         if (self.lineSchedules[route[DR_LINE2]] == None):
             ttCollection = self.timeTable.find_one({"line": route[DR_LINE2]})
-            trips = self.busTrip.find({"_id": {"$in": ttCollection["timetable"]}})
+            trips = list(self.busTrip.find({"_id": {"$in": ttCollection["timetable"]}}))
             self.lineSchedules[route[DR_LINE2]] = trips
         else:
-            trips = self.lineSchedules[route[DR_LINE2]].rewind()
+            trips = self.lineSchedules[route[DR_LINE2]]
         self.bestArrivalTime = datetime.datetime.max
         for trip in trips:
             self.dptSwitch = trip["trajectory"][route[DR_START2]]["time"]
@@ -243,10 +243,10 @@ class TravelPlanner:
     def _findFirstTrip(self, route, trip):
         if (self.lineSchedules[route[DR_LINE1]] == None):
             ttCollection = self.timeTable.find_one({"line": route[DR_LINE1]})
-            trips = self.busTrip.find({"_id": {"$in": ttCollection["timetable"]}})
+            trips = list(self.busTrip.find({"_id": {"$in": ttCollection["timetable"]}}))
             self.lineSchedules[route[DR_LINE1]] = trips
         else:
-            trips = self.lineSchedules[route[DR_LINE1]].rewind()
+            trips = self.lineSchedules[route[DR_LINE1]]
         self.bestDepartureTime = datetime.datetime.min
         for trip in trips:
             self.dptTime   = trip["trajectory"][route[DR_START1]]["time"]
@@ -260,10 +260,10 @@ class TravelPlanner:
         for route in self.fittingRoutes:
             if (self.lineSchedules[route["line"]] == None):
                 ttCollection = self.timeTable.find_one({"line": route["line"]})
-                trips = self.busTrip.find({"_id": {"$in": ttCollection["timetable"]}})
+                trips = list(self.busTrip.find({"_id": {"$in": ttCollection["timetable"]}}))
                 self.lineSchedules[route["line"]] = trips
             else:
-                trips = self.lineSchedules[route["line"]].rewind()
+                trips = self.lineSchedules[route["line"]]
 
             for trip in trips:
                 self.dptTime = trip["trajectory"][self.startingWaypoint[counter]]["time"]
@@ -288,10 +288,10 @@ class TravelPlanner:
             if (self.timeMode == Mode.startTime):
                 if (self.lineSchedules[route[DR_LINE1]] == None):
                     ttCollection = self.timeTable.find_one({"line": route[DR_LINE1]})
-                    trips = self.busTrip.find({"_id": {"$in": ttCollection["timetable"]}})
+                    trips = list(self.busTrip.find({"_id": {"$in": ttCollection["timetable"]}}))
                     self.lineSchedules[route[DR_LINE1]] = trips
                 else:
-                    trips = self.lineSchedules[route[DR_LINE1]].rewind()
+                    trips = self.lineSchedules[route[DR_LINE1]]
 
                 for trip in trips:
                     self.dptTime   = trip["trajectory"][route[DR_START1]]["time"]
@@ -303,10 +303,10 @@ class TravelPlanner:
             elif (self.timeMode == Mode.arrivalTime):
                 if (self.lineSchedules[route[DR_LINE2]] == None):
                     ttCollection = self.timeTable.find_one({"line": route[DR_LINE2]})
-                    trips = self.busTrip.find({"_id": {"$in": ttCollection["timetable"]}})
+                    trips = list(self.busTrip.find({"_id": {"$in": ttCollection["timetable"]}}))
                     self.lineSchedules[route[DR_LINE2]] = trips
                 else:
-                    trips = self.lineSchedules[route[DR_LINE2]].rewind()
+                    trips = self.lineSchedules[route[DR_LINE2]]
 
                 for trip in trips:
                     self.dptSwitch = trip["trajectory"][route[DR_START2]]["time"]

@@ -39,9 +39,10 @@ import java.util.Locale;
 
 import se.uu.csproject.monadclient.recyclerviews.FullTrip;
 import se.uu.csproject.monadclient.recyclerviews.PartialTrip;
+import se.uu.csproject.monadclient.recyclerviews.RecommendedTrips;
 import se.uu.csproject.monadclient.recyclerviews.SearchRecyclerViewAdapter;
 
-public class SearchActivity extends MenuedActivity {
+public class SearchActivity extends MenuedActivity implements AsyncResponse{
     private TextView textViewTripDate;
     DialogFragment dateFragment;
     private TextView textViewTripTime;
@@ -56,6 +57,7 @@ public class SearchActivity extends MenuedActivity {
     private EditText destinationEditText;
     private Button searchButton;
     public Calendar calendar;
+    private Context context;
     static final int DIALOG_ID = 0;
     //private DatePicker datePicker;
 
@@ -69,6 +71,7 @@ public class SearchActivity extends MenuedActivity {
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        context = getApplicationContext();
         arrivalTimeRadioButton = (RadioButton) findViewById(R.id.radiobutton_search_arrivaltime);
         depatureTimeRadioButton = (RadioButton) findViewById(R.id.radiobutton_search_departuretime);
         textViewTripDate = (TextView) findViewById(R.id.textview_search_tripdate);
@@ -102,13 +105,14 @@ public class SearchActivity extends MenuedActivity {
         tripTimeRadioGroup.check(depatureTimeRadioButton.getId());
         priorityRadioGroup.check(tripTimeButton.getId());
 
-        List<FullTrip> searchResults = new ArrayList<>();
-        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler_view_search);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getApplicationContext());
-        recyclerView.setLayoutManager(linearLayoutManager);
-        generateSearchResults(searchResults);
-        SearchRecyclerViewAdapter adapter = new SearchRecyclerViewAdapter(searchResults);
-        recyclerView.setAdapter(adapter);
+        /*RecommendedTrips searchResults = getIntent().getExtras().getParcelable("searchResults");
+        if (searchResults != null){
+            RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler_view_search);
+            LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getApplicationContext());
+            recyclerView.setLayoutManager(linearLayoutManager);
+            SearchRecyclerViewAdapter adapter = new SearchRecyclerViewAdapter(searchResults.getSearchResults());
+            recyclerView.setAdapter(adapter);
+        }*/
 
         // Hide the keyboard when launch this activity
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
@@ -287,23 +291,36 @@ public class SearchActivity extends MenuedActivity {
         }
 
         if(stPosition != null && !stPosition.trim().isEmpty() && edPosition != null && !edPosition.trim().isEmpty()){
-            new SendTravelRequest().execute(userId, startTime, endTime, requestTime, stPosition, edPosition, priority);
+            SendTravelRequest asyncTask = new SendTravelRequest();
+            asyncTask.delegate = this;
+            asyncTask.execute(userId, startTime, endTime, requestTime, stPosition, edPosition, priority);
         }
         else if (stPosition == null || stPosition.trim().isEmpty()) {
-            Context context = getApplicationContext();
             CharSequence text = "Please enter a departure address.";
             int duration = Toast.LENGTH_SHORT;
-
             Toast toast = Toast.makeText(context, text, duration);
             toast.show();
         }
         else if (edPosition == null || edPosition.trim().isEmpty()) {
-            Context context = getApplicationContext();
             CharSequence text = "Please enter a destination address.";
             int duration = Toast.LENGTH_SHORT;
-
             Toast toast = Toast.makeText(context, text, duration);
             toast.show();
+        }
+    }
+
+    public void processFinish(ArrayList<FullTrip> searchResults){
+        if (searchResults.isEmpty()){
+            CharSequence text = "Could not find any trips matching your criteria.";
+            int duration = Toast.LENGTH_SHORT;
+            Toast toast = Toast.makeText(context, text, duration);
+            toast.show();
+        } else {
+            RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler_view_search);
+            LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getApplicationContext());
+            recyclerView.setLayoutManager(linearLayoutManager);
+            SearchRecyclerViewAdapter adapter = new SearchRecyclerViewAdapter(searchResults);
+            recyclerView.setAdapter(adapter);
         }
     }
 

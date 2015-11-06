@@ -44,7 +44,7 @@ def mutUniformTime(individual):
     mutLocation = random.randint(0, len(individual)-1)
     # Generate a random time
     # TODO: Consider Olle's suggestion to change the time between a delta value
-    hour = databaseClass.generateTime(databaseClass.generateMinute(databaseClass.mergeRandomTime(databaseClass.getRandomHour(), databaseClass.getRandomMinute())))
+    hour = databaseClass.mergeRandomTime(databaseClass.getRandomHour(), databaseClass.getRandomMinute())
     # Generate a random capacity
     # TODO: Some code could be added so creating a similar capacity is avoided
     capacity = databaseClass.generateRandomCapacity()

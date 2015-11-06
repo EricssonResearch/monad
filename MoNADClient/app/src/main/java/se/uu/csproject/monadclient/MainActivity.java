@@ -42,6 +42,7 @@ import java.util.Locale;
 
 import se.uu.csproject.monadclient.recyclerviews.FullTrip;
 import se.uu.csproject.monadclient.recyclerviews.PartialTrip;
+import se.uu.csproject.monadclient.recyclerviews.RecommendedTrips;
 import se.uu.csproject.monadclient.recyclerviews.SearchRecyclerViewAdapter;
 
 public class MainActivity extends MenuedActivity implements
@@ -53,6 +54,7 @@ public class MainActivity extends MenuedActivity implements
     private double currentLatitude;
     private double currentLongitude;
     private final int MY_PERMISSIONS_REQUEST = 123;
+    private Context context;
 
     //Google Cloud Services
     private static final String TAG = "MainActivity";
@@ -66,6 +68,7 @@ public class MainActivity extends MenuedActivity implements
         destination = (EditText) findViewById(R.id.main_search_destination);
         setSupportActionBar(toolbar);
 
+        context = getApplicationContext();
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         List<FullTrip> searchResults = new ArrayList<>();
@@ -103,12 +106,11 @@ public class MainActivity extends MenuedActivity implements
         priority = "distance";
 
         if(edPosition != null && !edPosition.trim().isEmpty()){
-            new SendQuickTravelRequest().execute(userId, startTime, endTime, requestTime, startPositionLatitude,
-                                                    startPositionLongitude, edPosition, priority);
-            Intent myIntent = new Intent(MainActivity.this, SearchActivity.class);
-            MainActivity.this.startActivity(myIntent);
-        }
-        else {
+            SendQuickTravelRequest asyncTask = new SendQuickTravelRequest();
+            asyncTask.delegate = this;
+            asyncTask.execute(userId, startTime, endTime, requestTime, startPositionLatitude,
+                    startPositionLongitude, edPosition, priority);
+        } else {
             Context context = getApplicationContext();
             CharSequence text = "Please enter a destination address.";
             int duration = Toast.LENGTH_SHORT;
@@ -116,6 +118,21 @@ public class MainActivity extends MenuedActivity implements
             Toast toast = Toast.makeText(context, text, duration);
             toast.show();
         }
+    }
+
+    public void processFinish(ArrayList<FullTrip> searchResults){
+
+        if (searchResults.isEmpty()){
+            CharSequence text = "Could not find any trips matching your criteria.";
+            int duration = Toast.LENGTH_SHORT;
+            Toast toast = Toast.makeText(context, text, duration);
+            toast.show();
+        }
+
+        Intent myIntent = new Intent(MainActivity.this, SearchActivity.class);
+        RecommendedTrips recommendedTrips = new RecommendedTrips(searchResults);
+        myIntent.putExtra("searchResults", recommendedTrips);
+        MainActivity.this.startActivity(myIntent);
     }
 
     private void checkForPermission(){
@@ -188,51 +205,6 @@ public class MainActivity extends MenuedActivity implements
         imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
         return true;
     }
-
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//        // Handle action bar item clicks here. The action bar will
-//        // automatically handle clicks on the Home/Up button, so long
-//        // as you specify a parent activity in AndroidManifest.xml.
-//        int id = item.getItemId();
-//
-//        if(id == android.R.id.home){
-//            NavUtils.navigateUpFromSameTask(this);
-//        }
-//
-//        if (id == R.id.action_search) {
-//            return true;
-//        }
-//
-//        if (id == R.id.action_notifications) {
-//            startActivity(new Intent(this, NotificationsActivity.class));
-//        }
-//
-//        if (id == R.id.action_mytrips) {
-//            startActivity(new Intent(this, TripsActivity.class));
-//        }
-//
-//        if (id == R.id.action_profile) {
-//            startActivity(new Intent(this, ProfileActivity.class));
-//        }
-//
-//        //noinspection SimplifiableIfStatement
-//        if (id == R.id.action_settings) {
-//            startActivity(new Intent(this, SettingsActivity.class));
-//        }
-//
-//        if (id == R.id.action_aboutus) {
-//            //TODO (low priority): Create a toaster with text about the MoNAD project and team
-//            startActivity(new Intent(this, AboutUsActivity.class));
-//        }
-//
-//        if (id == R.id.action_signout) {
-//            startActivity(new Intent(this, LoginActivity.class));
-//        }
-//
-//        return super.onOptionsItemSelected(item);
-//    }
-
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
