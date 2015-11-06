@@ -42,11 +42,54 @@ fitnessClass = Fitness()
 def evaluateNewIndividualFormat(individual):
 
     individual = sorted(individual, key=itemgetter(3))
-    print("THIS IS AN INDIVIDUAL"+"\n")
-    print(individual)
+    individual = sorted(individual, key=itemgetter(0)) # order by busLine ID
+    print individual
+
+    # TODO: evaluate individual fitness based on waiting time
+    db = DB()
+    tripWaitingTime = timedelta(minutes=0)
+    for i, trip in enumerate(individual):
+        tripStart = trip[3]
+        if len(str(tripStart.hour))==1:
+            temp = "0"+str(tripStart.hour)+":"+str(tripStart.minute)
+        else:
+            temp = str(tripStart.hour)+":"+str(tripStart.minute)
+
+        # for the last trip, the end is just before the end of the day
+        try:
+            tripNext = individual[i+1][3]
+            if len(str(tripNext.hour))==1:
+                temp1 = "0"+str(tripNext.hour)+":"+str(tripNext.minute)
+            else:
+                temp1 = str(tripNext.hour)+":"+str(tripNext.minute)
+        except IndexError:
+            temp1 = '23:59'
+
+        #start = '2015-10-21 00:00:00' if i == 0 else '2015-10-21 ' + temp + ':00'
+        if i == 0:
+            start = '2015-10-21 00:00:00'   
+            end = '2015-10-21 ' + str(individual[i][3].hour) + ":" + str(individual[i][3].minute) + ':00'
+        else:
+            start = end
+            end = '2015-10-21 ' + temp1 + ':00'
+        #print start, end
+
+        stopsAndRequests = db.MaxReqNumTrip(start, end, 2) 
+        print stopsAndRequests
+
+        NoOfLeftOvers = 0
+        '''
+        for i, stop in enumerate(stopsAndRequests):
+            if stop[1] > trip[1] and i < len(individual)-1:
+                nextTripTime = individual[i+1][2]
+                # nextTripWait = fitnessClass.timeDiff(nextTripTime, individual[i][2])
+                nextTripWait = nextTripTime - individual[i][2]
+                NoOfLeftOvers = NoOfLeftOvers + (stop[1] - trip[1])   # must wait for the next bus trip
+                tripWaitingTime += nextTripWait*(stop[1] - trip[1])
+        tripWaitingTime = timedelta(minutes=0) # reset on each trip
+        '''
 
     return 1,
-
 
 
 def evalIndividual(individual):
