@@ -38,12 +38,14 @@ public class ForgotPasswordPopup extends AppCompatActivity {
                     SendResetPasswordRequest sendResetPasswordRequest = new SendResetPasswordRequest();
                     try {
                         String email = emailField.getText().toString();
+                        //TODO: check email address exists and is not a google account (only) in the database
                         String response = sendResetPasswordRequest.execute(email).get();
                         Toast.makeText(getApplicationContext(), "The code has been sent to the email you entered, please check your email and enter the code.", Toast.LENGTH_LONG).show();//response is only the code now, nothing else
                         Intent intent = new Intent(v.getContext(), ConfirmCodePopup.class);
                         intent.putExtra("EMAIL", email);
                         intent.putExtra("CODE", response.substring(1));
                         startActivity(intent);
+                        finish();
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     } catch (ExecutionException e) {
