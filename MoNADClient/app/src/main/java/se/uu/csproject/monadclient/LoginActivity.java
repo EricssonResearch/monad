@@ -28,6 +28,7 @@ import se.uu.csproject.monadclient.googlecloudmessaging.RegistrationIntentServic
 
 public class LoginActivity extends AppCompatActivity {
     private final int GOOGLE_LOGIN_REQUEST = 1;
+    private final int REGISTER_REQUEST = 2;
 
     private EditText usernameField;
     private EditText passwordField;
@@ -76,7 +77,7 @@ public class LoginActivity extends AppCompatActivity {
                     String response = task.execute(usernameField.getText().toString(), passwordField.getText().toString()).get();
                     Toast.makeText(getApplicationContext(), response,
                             Toast.LENGTH_LONG).show();
-                    // If the sreponse starts with the specific word, it means the users loged in successfully
+                    // If the response starts with the specific word, it means the users logged in successfully
                     if (response.startsWith("Success (1)")) {
                         LoginActivity.this.startActivity(new Intent(LoginActivity.this, MainActivity.class));
                         finish();
@@ -102,19 +103,18 @@ public class LoginActivity extends AppCompatActivity {
         registerTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                LoginActivity.this.startActivity(new Intent(v.getContext(), RegisterActivity.class));
+                LoginActivity.this.startActivityForResult((new Intent(LoginActivity.this, RegisterActivity.class)), REGISTER_REQUEST);
             }
         });
     }
 
-    /* if google login succeeds, then the login activity is destroyed
+    /* if google login/register succeeds, then the login activity is destroyed
      * a user cannot go back to login back if he/she is already logged in
      * the user can only sign out and then he/she will be shown the login layout again
      */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        //super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == GOOGLE_LOGIN_REQUEST && resultCode == RESULT_OK){
+        if((requestCode == GOOGLE_LOGIN_REQUEST || requestCode == REGISTER_REQUEST) && resultCode == RESULT_OK){
             finish();
         }
     }

@@ -88,6 +88,7 @@ public class RegisterActivity extends AppCompatActivity {
                     // If the user successfully registered, the app will jump to search activity.
                     if (response.startsWith("Success (1)")) {
                         RegisterActivity.this.startActivity(new Intent(RegisterActivity.this, MainActivity.class));
+                        setResult(RESULT_OK);
                         finish();
                     }
                 } catch (InterruptedException e) {
