@@ -24,7 +24,7 @@ import se.uu.csproject.monadclient.recyclerviews.PartialTrip;
 import se.uu.csproject.monadclient.recyclerviews.TripRecyclerViewAdapter;
 
 
-public class TripsActivity extends AppCompatActivity {
+public class TripsActivity extends MenuedActivity {
     Toolbar toolbar;
     ImageButton button;
 
@@ -48,70 +48,74 @@ public class TripsActivity extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
     }
 
-    public void cancelTrip(View view) {
-        startActivity(new Intent(this, TripCancelPopup.class));
-    }
-
-    /*public void viewTripDetails(View view) {
-        startActivity(new Intent(this, RouteActivity.class));
-    }*/
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-
-        if(ClientAuthentication.getPassword().equals("0")){
-            // Inflate the menu; this adds items to the action bar if it is present.
-            getMenuInflater().inflate(R.menu.menu_main_google, menu);
-            return true;
-        }
-        else {
-            getMenuInflater().inflate(R.menu.menu_main, menu);
-            return true;
-        }
-    }
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//
+//        if(ClientAuthentication.getPassword().equals("0")){
+//            // Inflate the menu; this adds items to the action bar if it is present.
+//            getMenuInflater().inflate(R.menu.menu_main_google, menu);
+//            return true;
+//        }
+//        else {
+//            getMenuInflater().inflate(R.menu.menu_main, menu);
+//            return true;
+//        }
+//    }
+//
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//        // Handle action bar item clicks here. The action bar will
+//        // automatically handle clicks on the Home/Up button, so long
+//        // as you specify a parent activity in AndroidManifest.xml.
+//        int id = item.getItemId();
+//
+//        if (id == android.R.id.home) {
+//            NavUtils.navigateUpFromSameTask(this);
+//        }
+//
+//        if (id == R.id.action_search) {
+//            startActivity(new Intent(this, MainActivity.class));
+//        }
+//
+//        if (id == R.id.action_notifications) {
+//            startActivity(new Intent(this, NotificationsActivity.class));
+//        }
+//
+//        if (id == R.id.action_mytrips) {
+//            return true;
+//        }
+//
+//        if (id == R.id.action_profile) {
+//            startActivity(new Intent(this, ProfileActivity.class));
+//        }
+//
+//        //noinspection SimplifiableIfStatement
+//        if (id == R.id.action_settings) {
+//            startActivity(new Intent(this, SettingsActivity.class));
+//        }
+//
+//        if (id == R.id.action_aboutus) {
+//            //TODO (low priority): Create a toaster with text about the MoNAD project and team
+//            startActivity(new Intent(this, AboutUsActivity.class));
+//        }
+//
+//        if (id == R.id.action_signout) {
+//            startActivity(new Intent(this, LoginActivity.class));
+//        }
+//
+//        return super.onOptionsItemSelected(item);
+//    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        if (id == android.R.id.home) {
-            NavUtils.navigateUpFromSameTask(this);
-        }
-
-        if (id == R.id.action_search) {
-            startActivity(new Intent(this, MainActivity.class));
-        }
-
-        if (id == R.id.action_notifications) {
-            startActivity(new Intent(this, NotificationsActivity.class));
-        }
-
-        if (id == R.id.action_mytrips) {
+        if(id == R.id.action_mytrips){
             return true;
         }
-
-        if (id == R.id.action_profile) {
-            startActivity(new Intent(this, ProfileActivity.class));
+        else {
+            return super.onOptionsItemSelected(item);
         }
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            startActivity(new Intent(this, SettingsActivity.class));
-        }
-
-        if (id == R.id.action_aboutus) {
-            //TODO (low priority): Create a toaster with text about the MoNAD project and team
-            startActivity(new Intent(this, AboutUsActivity.class));
-        }
-
-        if (id == R.id.action_signout) {
-            startActivity(new Intent(this, LoginActivity.class));
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 
     //TEMPORARY FUNCTION TODO: Remove this function once the database connection is set

@@ -1,7 +1,9 @@
 package se.uu.csproject.monadclient;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
@@ -42,7 +44,7 @@ import se.uu.csproject.monadclient.recyclerviews.FullTrip;
 import se.uu.csproject.monadclient.recyclerviews.PartialTrip;
 import se.uu.csproject.monadclient.recyclerviews.SearchRecyclerViewAdapter;
 
-public class MainActivity extends AppCompatActivity implements
+public class MainActivity extends MenuedActivity implements
         GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
 
     private EditText destination;
@@ -76,7 +78,7 @@ public class MainActivity extends AppCompatActivity implements
         buildGoogleApiClient();
         initializeLocationRequest();
 
-        if (Build.VERSION.SDK_INT >= 23){
+        if (Build.VERSION.SDK_INT >= 23) {
             checkForPermission();
         } else {
             mGoogleApiClient.connect();
@@ -166,19 +168,19 @@ public class MainActivity extends AppCompatActivity implements
                 .setFastestInterval(10 * 1000); // 10 seconds, in milliseconds
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-
-        if(ClientAuthentication.getPassword().equals("0")){
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main_google, menu);
-        return true;
-    }
-        else {
-            getMenuInflater().inflate(R.menu.menu_main, menu);
-            return true;
-        }
-    }
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//
+//        if(ClientAuthentication.getPassword().equals("0")){
+//        // Inflate the menu; this adds items to the action bar if it is present.
+//        getMenuInflater().inflate(R.menu.menu_main_google, menu);
+//        return true;
+//        }
+//        else {
+//            getMenuInflater().inflate(R.menu.menu_main, menu);
+//            return true;
+//        }
+//    }
 
     public boolean onTouchEvent(MotionEvent event) {
         InputMethodManager imm = (InputMethodManager)getSystemService(Context.
@@ -187,48 +189,61 @@ public class MainActivity extends AppCompatActivity implements
         return true;
     }
 
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//        // Handle action bar item clicks here. The action bar will
+//        // automatically handle clicks on the Home/Up button, so long
+//        // as you specify a parent activity in AndroidManifest.xml.
+//        int id = item.getItemId();
+//
+//        if(id == android.R.id.home){
+//            NavUtils.navigateUpFromSameTask(this);
+//        }
+//
+//        if (id == R.id.action_search) {
+//            return true;
+//        }
+//
+//        if (id == R.id.action_notifications) {
+//            startActivity(new Intent(this, NotificationsActivity.class));
+//        }
+//
+//        if (id == R.id.action_mytrips) {
+//            startActivity(new Intent(this, TripsActivity.class));
+//        }
+//
+//        if (id == R.id.action_profile) {
+//            startActivity(new Intent(this, ProfileActivity.class));
+//        }
+//
+//        //noinspection SimplifiableIfStatement
+//        if (id == R.id.action_settings) {
+//            startActivity(new Intent(this, SettingsActivity.class));
+//        }
+//
+//        if (id == R.id.action_aboutus) {
+//            //TODO (low priority): Create a toaster with text about the MoNAD project and team
+//            startActivity(new Intent(this, AboutUsActivity.class));
+//        }
+//
+//        if (id == R.id.action_signout) {
+//            startActivity(new Intent(this, LoginActivity.class));
+//        }
+//
+//        return super.onOptionsItemSelected(item);
+//    }
+
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        if(id == android.R.id.home){
-            NavUtils.navigateUpFromSameTask(this);
-        }
-
-        if (id == R.id.action_search) {
+        if(id == R.id.action_search){
             return true;
         }
-
-        if (id == R.id.action_notifications) {
-            startActivity(new Intent(this, NotificationsActivity.class));
+        else {
+            return super.onOptionsItemSelected(item);
         }
-
-        if (id == R.id.action_mytrips) {
-            startActivity(new Intent(this, TripsActivity.class));
-        }
-
-        if (id == R.id.action_profile) {
-            startActivity(new Intent(this, ProfileActivity.class));
-        }
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            startActivity(new Intent(this, SettingsActivity.class));
-        }
-
-        if (id == R.id.action_aboutus) {
-            //TODO (low priority): Create a toaster with text about the MoNAD project and team
-            startActivity(new Intent(this, AboutUsActivity.class));
-        }
-
-        if (id == R.id.action_signout) {
-            startActivity(new Intent(this, LoginActivity.class));
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 
     public void openTripDetail (View v) {
@@ -274,6 +289,14 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     protected void onResume() {
         super.onResume();
+
+        boolean finish = getIntent().getBooleanExtra("FINISH", false);
+        //Log.i("FINISH-NEWINTENT", finish + "");
+        if (finish) {
+            startActivity(new Intent(MainActivity.this, LoginActivity.class));
+            finish();
+        }
+
         if (!mGoogleApiClient.isConnected()) {
             if (Build.VERSION.SDK_INT >= 23){
                 checkForPermission();
@@ -290,6 +313,33 @@ public class MainActivity extends AppCompatActivity implements
             LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
             mGoogleApiClient.disconnect();
         }*/
+    }
+
+    //TODO (Huijie): prompt the user to choose before leaving the application
+    @Override
+    public void onBackPressed() {
+        /*
+        if(isTaskRoot()){
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            // Add the buttons
+            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {
+                    // User clicked OK button
+                    MainActivity.super.onBackPressed();
+                    Toast.makeText(getApplicationContext(), "You have exited MoNAD.", Toast.LENGTH_LONG).show();
+                }
+            });
+            builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {
+                    // User cancelled the dialog
+                    //do nothing
+                }
+            });
+            // Create the AlertDialog
+            AlertDialog dialog = builder.create();
+            dialog.show();
+        }
+        */
     }
 
     @Override
