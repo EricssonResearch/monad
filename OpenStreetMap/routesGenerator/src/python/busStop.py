@@ -13,18 +13,11 @@ CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
 
+from coordinate import Coordinate
 
-class Coordinate(object):
-    """
-    A geographic coordinate on a map represented by Latitude and Longitude.
 
-    Longitude and Latitude are floating point values in degrees.
-    """
+class BusStop(Coordinate):
 
-    def __init__(self, latitude=0.0, longitude=0.0):
-        self.latitude = float(latitude)
-        self.longitude = float(longitude)
-
-    @property
-    def coordinates(self):
-        return (self.longitude, self.latitude)
+    def __init__(self, busName, latitude, longitude):
+        Coordinate.__init__(self, latitude, longitude)
+        self.name = busName

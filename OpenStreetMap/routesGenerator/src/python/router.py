@@ -1,4 +1,4 @@
-#!/usr/bin/python
+# -*- coding: utf-8 -*-
 """
 Copyright 2015 Ericsson AB
 
@@ -24,6 +24,8 @@ from heapq import heappush, heappop
 
 from busStop import BusStop
 from coordinate import Coordinate
+from address import Address
+import coordinate
 
 # The size width of the produced image in pixels
 picSize = 3000
@@ -35,7 +37,7 @@ busRoadTypes = ('motorway', 'motorway_link', 'trunk', 'trunk_link', 'primary',
                 'tertiary_link', 'unclassified', 'residential', 'service')
 
 
-#class BusStop:
+# class BusStop:
 #    def __init__(self, nodeId, longitude, latitude):
 #        self.id = nodeId
 #        self.coordinates = (longitude, latitude)
@@ -55,16 +57,20 @@ class RouteHandler(handler.ContentHandler):
         self.nodes = {}
         # all bus stop nodes
         self.busStops = []
-        self.edges = {}
+
+        self.roadMapGraph = {}
+        self.roadIntersectionGraph = {}
         # Roads
         self.roads = {}
+
+        self.addresses = {}
 
         self.index = 0
 
         # Used as temp
         self.nd = []
         self.tag = {}
-        self.stop = 0
+        self.node = 0
 
         self.maxlat = 0.0
         self.maxlon = 0.0
@@ -89,9 +95,9 @@ class RouteHandler(handler.ContentHandler):
             lat = float(attributes.get('lat'))
             lon = float(attributes.get('lon'))
             self.nodes[nodeId] = Coordinate(latitude=lat, longitude=lon)
-            #self.busStops.append(BusStop(nodeId, lon, lat))
-            #self.index += 1
-            self.stop = nodeId
+            # self.busStops.append(BusStop(nodeId, lon, lat))
+            # self.index += 1
+            self.node = nodeId
         elif name == 'way':
             self.roadId = int(attributes.get('id'))
         elif name == 'nd':
@@ -116,6 +122,8 @@ class RouteHandler(handler.ContentHandler):
             motorcar = self.tag.get('motorcar', '')
             junction = self.tag.get('junction', '')
             roadName = self.tag.get('name', '')
+            street = self.tag.get('addr:street', '')
+            housenumber = self.tag.get('addr:housenumber', '')
 
             # If the way is a road and if the bus can drive on it
             if motorcar != 'no':
@@ -131,33 +139,66 @@ class RouteHandler(handler.ContentHandler):
 
                     self.roads[self.roadId] = [(roadName, junction)]
 
+            # Add the name of the road to the address list if it is a road
+            # with a name.
+            if highway != '' and highway != 'platform' and roadName != '':
+                for node in self.nd:
+                    self.addAddress(roadName, node)
+                    pass
+
+            # Not all house numbers are represented as a nodes. Some are tags
+            # on the house ways.
+            if street != '' and housenumber != '':
+                self.addAddress(street, self.nd[0], housenumber)
+                # TODO Add a better thing then nd[0]
+
         elif name == 'node':
             # Look for nodes that are bus stops
             highway = self.tag.get('highway', '')
             stopName = self.tag.get('name', '')
+            street = self.tag.get('addr:street', '')
+            housenumber = self.tag.get('addr:housenumber', '')
             if highway == 'bus_stop':
-                #self.busStops[self.index - 1].addBusStopName(stopName)
+                # self.busStops[self.index - 1].addBusStopName(stopName)
                 self.busStops.append(BusStop(stopName,
-                                             self.nodes[self.stop].longitude,
-                                             self.nodes[self.stop].latitude))
+                                             self.nodes[self.node].longitude,
+                                             self.nodes[self.node].latitude))
+            if street != '' and housenumber != '':
+                self.addAddress(street, self.node, housenumber)
+                pass
 
         # Clean up
         if name in ('node', 'way', 'relation'):
             self.nd = []
             self.tag = {}
-            self.stop = 0
+            self.node = 0
 
     def addEdge(self, fromNode, toNode, maxspeed, roadInt, wayID):
         """
         Adds an edge between fromNode to toNode in self.edges with
         attributes maxspeed, roadInt (type of road)
         """
-        if fromNode in self.edges:
-            self.edges[fromNode].append((toNode, maxspeed, roadInt, wayID))
+        if fromNode in self.roadMapGraph:
+            self.roadMapGraph[fromNode].append((toNode, maxspeed, roadInt,
+                                                wayID))
         else:
-            self.edges[fromNode] = [(toNode, maxspeed, roadInt, wayID)]
-        if toNode not in self.edges:
-            self.edges[toNode] = []
+            self.roadMapGraph[fromNode] = [(toNode, maxspeed, roadInt, wayID)]
+        if toNode not in self.roadMapGraph:
+            self.roadMapGraph[toNode] = []
+
+    def addAddress(self, street, node, number=None):
+        if street in self.addresses:
+            if number is None:
+                self.addresses[street].addCoordinate(self.nodes[node])
+            else:
+                self.addresses[street].addNumber(number, self.nodes[node])
+        else:
+            if number is None:
+                self.addresses[street] = Address(street)
+                self.addresses[street].addCoordinate(self.nodes[node])
+            else:
+                self.addresses[street] = Address(street)
+                self.addresses[street].addNumber(number, self.nodes[node])
 
 
 class AStar:
@@ -184,7 +225,7 @@ class AStar:
 
         if start == goal:
             cost[goal] = 0
-            return self.reconstruct_path(path,start, goal), cost
+            return self.reconstruct_path(path, start, goal), cost
 
         # A high value that a real path should not have.
         cost[goal] = 300000
@@ -203,12 +244,14 @@ class AStar:
                 # How fast you can go on a road matters on the type of the road
                 # It can be seen as a penalty for "smaller" roads.
                 speedDecrease = (1 - (float(roadInt) / 50))
-                fromNode = nodes[current]
-                toNode = nodes[nextNode]
-                roadLength = self.measure(fromNode.longitude,
-                                          fromNode.latitude,
-                                          toNode.longitude,
-                                          toNode.latitude)
+                fromCoordinate = nodes[current]
+                toCoordinate = nodes[nextNode]
+                # roadLength = self.measure(fromCoordinate.longitude,
+                #                          fromCoordinate.latitude,
+                #                          toCoordinate.longitude,
+                #                          toCoordinate.latitude)
+
+                roadLength = coordinate.measure(fromCoordinate, toCoordinate)
 
                 timeOnRoad = (roadLength /
                               (speedDecrease * (float(speed) * 1000 / 3600)))
@@ -228,27 +271,28 @@ class AStar:
         return self.reconstruct_path(path, start, goal), cost
 
     def heuristic(self, node, goal):
-        x1, y1 = node.coordinates
-        x2, y2 = goal.coordinates
-        return self.measure(x1, y1, x2, y2)
+        # x1, y1 = node.coordinates
+        # x2, y2 = goal.coordinates
+        # return self.measure(x1, y1, x2, y2)
+        return coordinate.measure(node, goal)
 
-    def measure(self, lon1, lat1, lon2, lat2):
-        """
-        Measure the distance between to points in lon and lat and returns the
-        distance in meters.
-        """
-        # Radius of the earth in meters
-        earthRadius = 6371000
-        dLat = (lat2 - lat1) * math.pi / 180
-        dLon = (lon2 - lon1) * math.pi / 180
-
-        a = (math.sin(dLat / 2) * math.sin(dLat / 2) +
-             math.cos(lat1 * math.pi / 180) * math.cos(lat2 * math.pi / 180) *
-             math.sin(dLon / 2) * math.sin(dLon / 2))
-
-        c = 2 * math.atan2(math.sqrt(a), math.sqrt(1 - a))
-        meters = earthRadius * c
-        return meters
+    #    def measure(self, lon1, lat1, lon2, lat2):
+    #        """
+    #        Measure the distance between to points in lon and lat and returns the
+    #        distance in meters.
+    #        """
+    #        # Radius of the earth in meters
+    #        earthRadius = 6371000
+    #        dLat = (lat2 - lat1) * math.pi / 180
+    #        dLon = (lon2 - lon1) * math.pi / 180
+    #
+    #        a = (math.sin(dLat / 2) * math.sin(dLat / 2) +
+    #             math.cos(lat1 * math.pi / 180) * math.cos(lat2 * math.pi / 180) *
+    #             math.sin(dLon / 2) * math.sin(dLon / 2))
+    #
+    #        c = 2 * math.atan2(math.sqrt(a), math.sqrt(1 - a))
+    #        meters = earthRadius * c
+    #        return meters
 
     def reconstruct_path(self, came_from, start, goal):
         current = goal
@@ -285,7 +329,7 @@ class Map:
         parser.parse(self.omsfile)
         self.nodes = self.handler.nodes
         self.busStopList = self.handler.busStops
-        self.edges = self.handler.edges
+        self.edges = self.handler.roadMapGraph
 
     def findBusStopName(self, lon, lat):
         for nd in self.busStopList:
@@ -299,7 +343,45 @@ class Map:
                 return nd.coordinates
         return "no such stop name"
 
-    #def getNodebyId(self, nodeId):
+    def findClosestBusStopFromCoordinates(self, lon, lat):
+
+        dist = self.astar.measure(self.busStopList[0].longitude,
+                                  self.busStopList[0].latitude,
+                                  lon,
+                                  lat)
+        theBus = self.busStopList[0]
+        for bus in self.busStopList:
+            if self.astar.measure(bus.longitude, bus.latitude, lon,
+                                  lat) < dist:
+                theBus = bus
+        return theBus
+
+    def findCoordinatesFromAdress(self, address, number=None):
+        """
+        Translates an address into coordinates.
+        """
+        # TODO Add fuzzy logic
+
+        if address in self.handler.addresses:
+            if number is None:
+                coordinateList = self.handler.addresses[address].coordinates
+                center = coordinate.center(coordinateList)
+                #addressCoord = coordinate.closestTo(center, coordinateList)
+                return center
+
+            else:
+                if number in self.handler.addresses[address].numbers:
+                    noCoord = self.handler.addresses[address].numbers[number]
+                    #coordList = self.handler.addresses[address].coordinates
+                    #addressCoord = coordinate.closestTo(noCoord, coordList)
+                    return noCoord
+                else:
+                    # TODO Find closest housenumber to number
+                    return self.findCoordinatesFromAdress(address)
+        else:
+            return None
+
+    # def getNodebyId(self, nodeId):
     #   return
     #    for nd in self.busStopList:
     #       #print nd.id
@@ -353,19 +435,17 @@ class Map:
         nodeList = []
         for n in range(1, len(path) - 2):
 
-            roadIDfrom = \
-            [item for item in self.edges[path[n - 1]] if item[0] == path[n]][
-                0][3]
-            roadIDto = \
-            [item for item in self.edges[path[n]] if item[0] == path[n + 1]][
-                0][3]
+            roadIDfrom = ([item for item in self.edges[path[n - 1]]
+                           if item[0] == path[n]][0][3])
+            roadIDto = ([item for item in self.edges[path[n]]
+                         if item[0] == path[n + 1]][0][3])
 
             if roadIDfrom != roadIDto:
                 nodeList.append(path[n])
         return nodeList
 
     def inEdgeList(self, sid):
-        return self.handler.edges.has_key(sid)
+        return self.handler.roadMapGraph.has_key(sid)
 
     def timeBetweenStops(self, stopA, stopB):
         path, cost = self.astar.findRoute(stopA, stopB)
@@ -504,46 +584,56 @@ if __name__ == '__main__':
     print "Loading data ..."
     myMap.parsData()
     print "Data loaded in: %f sec" % (time.time() - timer)
-    print "We have " + str(len(myMap.nodes)) + " nodes in total"
-    print "We have " + str(myMap.handler.index) + " bus stops in total"
+    # print "We have " + str(len(myMap.nodes)) + " nodes in total"
+    # print "We have " + str(myMap.handler.index) + " bus stops in total"
 
-    print "Finding path... "
-    # flogsta vardcentral
-    nTo = 2198905720
-    # polacksbacken
-    nFrom = 1125461154
+    # print "Finding path... "
+    ## flogsta vardcentral
+    # nTo = 2198905720
+    ## polacksbacken
+    # nFrom = 1125461154
 
-    print "Find a bus stop name: " + myMap.findBusStopName(17.6666581,
-                                                           59.8556742)
-    print "Find a bus stop position: " + str(myMap.findBusStopPosition("Danmarksgatan"))
+    ## print "Find a bus stop name: " + myMap.findBusStopName(17.6666581,
+    ##                                                       59.8556742)
+    ## print "Find a bus stop position: " + str(myMap.findBusStopPosition("Danmarksgatan"))
 
-    timer = time.time()
-    myPath = myMap.findRoute(nFrom, nTo)
-    print "Found path in: %f sec" % (time.time() - timer)
+    # timer = time.time()
+    # myPath = myMap.findRoute(nFrom, nTo)
+    # print "Found path in: %f sec" % (time.time() - timer)
 
-    wayP = myMap.getWayPointsFromPath(myPath)
+    # wayP = myMap.getWayPointsFromPath(myPath)
 
-    print "Finding path with four points"
-    # Flogsta vardcentral
-    nTo = 2198905720
-    # Kungsgatan
-    nThrough = 25734373
-    # Bruno Liljeforsgata
-    nThrough2 = 31996288
-    # Polacksbacken
-    nFrom = 1125461154
+    # print "Finding path with four points"
+    ## Flogsta vardcentral
+    # nTo = 2198905720
+    ## Kungsgatan
+    # nThrough = 25734373
+    ## Bruno Liljeforsgata
+    # nThrough2 = 31996288
+    ## Polacksbacken
+    # nFrom = 1125461154
 
-    timer = time.time()
-    my4Path, _ = myMap.findWayPointsFromList([nFrom, nThrough, nThrough2, nTo])
-    print "Found path in: %f sec" % (time.time() - timer)
+    # timer = time.time()
+    # my4Path, _ = myMap.findWayPointsFromList([nFrom, nThrough, nThrough2, nTo])
+    # print "Found path in: %f sec" % (time.time() - timer)
 
-    print "Draw image ..."
-    myMap.drawInit(3000)
-    myMap.drawNodes(myMap.nodes, (227, 254, 212, 255))
-    myMap.drawRoads(myMap.edges, myMap.nodes)
-    #    myMap.drawBusStops(myMap.handler.busStops, myMap.nodes)
-    myMap.drawPath(myPath, 'red')
-    myMap.drawNodeIds(wayP, 'blue')
-    myMap.drawPath(my4Path, 'green')
-    myMap.drawSave(sys.argv[1])
-    print "Image done,", sys.argv[1]
+    # print "Draw image ..."
+    # myMap.drawInit(3000)
+    # myMap.drawNodes(myMap.nodes, (227, 254, 212, 255))
+    # myMap.drawRoads(myMap.edges, myMap.nodes)
+    ##    myMap.drawBusStops(myMap.handler.busStops, myMap.nodes)
+    # myMap.drawPath(myPath, 'red')
+    ## myMap.drawNodeIds(wayP, 'blue')
+    ## myMap.drawPath(my4Path, 'green')
+    # myMap.drawSave(sys.argv[1])
+    # print "Image done,", sys.argv[1]
+
+    # print myMap.handler.addresses[u'Rackarbergsgatan']
+    # print myMap.handler.addresses[u'Studentvägen']
+    print myMap.findCoordinatesFromAdress(u'Studentvägen').coordinates
+    print myMap.findCoordinatesFromAdress(u'Luthagsesplanaden').coordinates
+    print myMap.findCoordinatesFromAdress(u'Flogstavägen').coordinates
+    # for ke in myMap.handler.addresses.keys():
+    #    print ke, myMap.handler.addresses[ke].nodes
+
+    # print coordinate.average(myMap.findCoordinatesFromAdress(u'Studentvägen'))

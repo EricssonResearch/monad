@@ -14,11 +14,19 @@ from erlport.erlterms import Atom
 from erlport.erlang import set_message_handler, cast
 from json import dumps
 
+from router import Map
+
+the_map = Map("../testmap.xml")
+
+
 def start():
     set_message_handler(message_handler)
+    the_map.parsData()
+
 
 def stop():
     print 'Stop'
+
 
 def message_handler(message):
     if isinstance(message, tuple):
@@ -27,10 +35,16 @@ def message_handler(message):
             address = message[1]
             pid = message[2]
             get_nearest_stop(address, pid)
+        elif message[0] == Atom('get_nearest_stop_from_coordinates'):
+            lon = message[1]
+            lat = message[2]
+            pid = message[3]
+            get_nearest_stop_from_coordinates(lon, lat, pid)
         else:
             print message[0]
     else:
         print 'No'
+
 
 def get_nearest_stop(address, pid):
     # Initially address is in binary list format thus, needs processing
@@ -42,4 +56,26 @@ def get_nearest_stop(address, pid):
     busStop['longitude'] = 200.00
     busStop['address'] = address_str
     response = Atom("ok"), dumps(busStop)
+    cast(pid, response)
+
+
+def get_nearest_stop_from_coordinates(lon, lat, pid):
+    #bus_stop_name = the_map.findBusStopName(float(lon), float(lat))
+    #bus_stop_name = the_map.testtest(lon, lat)
+    longitude = ''.join(chr(i) for i in lon)
+    latitude = ''.join(chr(i) for i in lat)
+    bus_stop = the_map.findClosestBusStopFromCoordinates(float(longitude),
+                                                              float(latitude))
+    busStop = {}
+    busStop['name'] = bus_stop.name
+    busStop['longitude'] = bus_stop.longitude
+    busStop['latitude'] = bus_stop.latitude
+    response = Atom("ok"), dumps(busStop)
+    cast(pid, response)
+
+
+def address_to_coordinates(address, street_no, pid):
+    address_str = ''.join(chr(i) for i in address)
+    street_no = ''.join(chr(i) for i in street_no)
+    response = ""
     cast(pid, response)

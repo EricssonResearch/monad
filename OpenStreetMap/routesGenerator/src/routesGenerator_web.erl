@@ -75,6 +75,8 @@ loop(Req, DocRoot) ->
                 case Path of
                     "get_nearest_stop" ->
                         get_nearest_stop(Req);
+                    "get_nearest_stop_from_coordinates" ->
+                        get_nearest_stop_from_coordinates(Req);
                     _ ->
                         Req:not_found()
                 end;
@@ -92,7 +94,7 @@ loop(Req, DocRoot) ->
 
 handle_error(Report, Req) ->
     error_logger:error_report(Report),
-    Req:respond({500, [{"Content-Type", "text/plain"}], "Failed Request\n"}).
+    Req:respond({500, [{"Content-Type", "text/plain"}], "Failed 1Request\n"}).
 
 get_nearest_stop(Req) ->
     PostData = Req:parse_post(),
@@ -107,6 +109,22 @@ get_nearest_stop(Req) ->
             Msg = ["Unexpected get_nearest_stop response",
                    {response, Other},
                    {trace, erlang:get_stacktrace()}],
+            handle_error(Msg, Req)
+    end.
+
+get_nearest_stop_from_coordinates(Req) ->
+    PostData = Req:parse_post(),
+    Longitude = proplists:get_value("lon", PostData, "Anonymous"),
+    Latitude = proplists:get_value("lat", PostData, "Anonymous"),
+    PythonInstance = whereis(python_instance),
+    PythonInstance ! {<<"get_nearest_stop_from_coordinates">>, Longitude, Latitude, self()},
+    receive
+        {ok, Response} ->
+            Req:respond({200, [{"Content-Type", "text/plain"}], Response});
+        Other ->
+            Msg = ["Unexpected get_nearest_stop_from_coordinates response",
+                    {response, Other},
+                    {trace, erlang:get_stacktrace()}],
             handle_error(Msg, Req)
     end.
 
