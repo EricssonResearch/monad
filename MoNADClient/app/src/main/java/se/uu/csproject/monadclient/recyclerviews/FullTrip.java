@@ -1,5 +1,6 @@
 package se.uu.csproject.monadclient.recyclerviews;
 
+import android.content.res.Resources;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.Log;
@@ -128,11 +129,11 @@ public class FullTrip implements Parcelable {
     }
 
     public String getBusLines(){
-        String busLines = "";
+        StringBuilder busLines = new StringBuilder("");
         for(int i = 0; i < partialTrips.size(); i++) {
-            busLines.concat(String.valueOf(partialTrips.get(i).getLine() + " "));
+            busLines.append(String.valueOf(partialTrips.get(i).getLine() + " "));
         }
-        return busLines;
+        return busLines.toString();
     }
 
     // determines if the trip is happening now (true if: startTime < current time < endTime)

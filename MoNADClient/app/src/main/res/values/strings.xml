@@ -149,13 +149,9 @@
     <string name="label_trip_button_confirm">Confirm</string>
     <string name="label_tripsactivity_from">From</string>
     <string name="label_tripsactivity_to">To</string>
-    <string name="label_tripsactivity_fromorigin" translatable="false">Polacksbacken</string>
-    <string name="label_tripsactivity_todestination" translatable="false">Flogsta</string>
-    <string name="label_tripsactivity_fromtime" translatable="false">12:36</string>
-    <string name="label_tripsactivity_totime" translatable="false">12:51</string>
     <string name="label_tripsactivity_day">TODAY</string>
-    <string name="label_tripsactivity_countdown" translatable="false">00:05:38</string>
-    <string name="label_tripsactivity_date" translatable="false">05/10/15</string>
+    <string name="label_tripsactivity_countdown" translatable="false">00:00:00</string>
+    <string name="label_tripsactivity_date" translatable="false">00/00/00</string>
 
     <!--Popup - Trip Cancellation -->
     <string name="label_tripcancel_buttonback">Back</string>

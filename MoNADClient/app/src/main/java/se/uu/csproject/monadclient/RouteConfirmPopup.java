@@ -16,7 +16,6 @@ import se.uu.csproject.monadclient.recyclerviews.FullTrip;
 
 public class RouteConfirmPopup extends AppCompatActivity {
 
-    private FullTrip trip;
     private TextView busIdView;
     private TextView startTimeView;
     private TextView endTimeView;
@@ -41,9 +40,9 @@ public class RouteConfirmPopup extends AppCompatActivity {
         endPositionView = (TextView) findViewById(R.id.arrivename);
 
         Bundle b = getIntent().getExtras();
-        trip = b.getParcelable("selectedTrip");
+        FullTrip trip = b.getParcelable("selectedTrip");
 
-        busIdView.append(trip.getBusLines());
+        busIdView.setText(getResources().getString(R.string.label_routesuccess_businfo) + " " + trip.getBusLines());
         startTimeView.setText(formatTime(trip.getStartTime()));
         endTimeView.setText(formatTime(trip.getEndTime()));
         startPositionView.setText(trip.getStartBusStop());
