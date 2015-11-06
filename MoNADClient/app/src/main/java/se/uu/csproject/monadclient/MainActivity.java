@@ -46,7 +46,7 @@ import se.uu.csproject.monadclient.recyclerviews.RecommendedTrips;
 import se.uu.csproject.monadclient.recyclerviews.SearchRecyclerViewAdapter;
 
 public class MainActivity extends MenuedActivity implements
-        GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
+        GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener, AsyncResponse {
 
     private EditText destination;
     private GoogleApiClient mGoogleApiClient;
