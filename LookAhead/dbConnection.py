@@ -172,7 +172,7 @@ class DB():
         @param: start - Initial date for the query
         @param: end - Final date for the query
         '''
-        req = self.db.TravelRequestLookAhead.find({"StartTime": {"$gte": start, "$lt": end}})
+        req = self.db.TravelRequestLookAhead.find({"startTime": {"$gte": start, "$lt": end}})
         return req
 
     def getTravelRequestSummary(self, start, end):
