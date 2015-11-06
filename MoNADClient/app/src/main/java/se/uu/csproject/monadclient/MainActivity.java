@@ -88,7 +88,7 @@ public class MainActivity extends AppCompatActivity implements
         String startPositionLatitude, startPositionLongitude, edPosition, userId, startTime, endTime;
         String requestTime, priority;
         Date now = new Date();
-        SimpleDateFormat df = new SimpleDateFormat("yyyy EEE dd MMM HH:mm", Locale.ENGLISH);
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
 
         // Provide some default values since this is a quick search
         startPositionLatitude = String.valueOf(currentLatitude);

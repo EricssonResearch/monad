@@ -13,6 +13,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.format.DateFormat;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -125,14 +126,14 @@ public class SearchActivity extends AppCompatActivity {
 
     public void updateDate() {
         final String DATE_FORMAT = "EEE dd MMM";
-        SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT, Locale.ENGLISH);
+        SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT);
         String selectedDate = dateFormat.format(calendar.getTime());
         textViewTripDate.setText(selectedDate);
     }
 
     public void updateTime() {
         final String TIME_FORMAT = "HH:mm";
-        SimpleDateFormat timeFormat = new SimpleDateFormat(TIME_FORMAT, Locale.ENGLISH);
+        SimpleDateFormat timeFormat = new SimpleDateFormat(TIME_FORMAT);
         String selectedTime = timeFormat.format(calendar.getTime());
         textViewTripTime.setText(selectedTime);
     }
@@ -249,12 +250,10 @@ public class SearchActivity extends AppCompatActivity {
 
     public void sendTravelRequest (View v) {
         String stPosition, edPosition, userId, startTime, endTime, requestTime, priority;
-        int selectedId, currentYear;
+        int selectedId;
 
         Date now = new Date();
-        Calendar rightNow = Calendar.getInstance();
-        currentYear = rightNow.get(Calendar.YEAR);
-        SimpleDateFormat df = new SimpleDateFormat("yyyy EEE dd MMM HH:mm", Locale.ENGLISH);
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
         startTime = "null";
         endTime = "null";
         priority = "";
@@ -267,13 +266,11 @@ public class SearchActivity extends AppCompatActivity {
 
         switch(selectedId){
             case R.id.radiobutton_search_departuretime:
-                startTime = Integer.toString(currentYear) + " " + textViewTripDate.getText().toString() + " "
-                        + textViewTripTime.getText().toString();
+                startTime = df.format(calendar.getTime());
                 break;
 
             case R.id.radiobutton_search_arrivaltime:
-                endTime = Integer.toString(currentYear) + " " + textViewTripDate.getText().toString() + " "
-                        + textViewTripTime.getText().toString();
+                endTime = df.format(calendar.getTime());
                 break;
         }
 

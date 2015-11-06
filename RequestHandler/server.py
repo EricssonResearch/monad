@@ -70,8 +70,8 @@ def application(env, start_response):
 			endPositionLongitude = 16.8683923
 			
 			# dummy bus stops, have to update to real ones when Jens implements the required module
-			startBusStop = ObjectId("5639d6ff73b2390f1ab17951")
-			endBusStop = ObjectId("5639d6ff73b2390f1ab17956")
+			startBusStop = ObjectId("563c836873b2391f3f2fa614")
+			endBusStop = ObjectId("563c836873b2391f3f2fa61f")
 			
 			try:
 				requestTime = datetime.strptime(requestTime, serverConfig.DATE_FORMAT)
@@ -96,7 +96,7 @@ def application(env, start_response):
 				result = collection.insert_one(document)
 				requestId = result.inserted_id
 				
-				travelPlanner = TravelPlanner(connection)
+				travelPlanner = TravelPlanner(database)
 				if priority == "distance":
 					userTripJson = travelPlanner.getBestRoutes(requestID = requestId, mode = Mode.tripTime)
 				else:
@@ -176,7 +176,7 @@ def application(env, start_response):
 				result = collection.insert_one(document)
 				requestId = result.inserted_id
 				
-				travelPlanner = TravelPlanner(connection)
+				travelPlanner = TravelPlanner(database)
 				if priority == "distance":
 					userTripJson = travelPlanner.getBestRoutes(requestID = requestId, mode = Mode.tripTime)
 				else:
