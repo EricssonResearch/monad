@@ -56,45 +56,32 @@ def evalIndividual(individual):
     request = []
     dif = []
     cnt = []
-    # initialTripTime = "00:00"
     initialTripTime = datetime.combine(fitnessClass.yesterday, 
                                        datetime.strptime("00:00", 
                                        fitnessClass.formatTime).time())
     db = DB()
     tripWaitingTime = timedelta(minutes=0) # waiting time due to insufficient capacity
-    NoOfLeftOvers = 0
+    noOfLeftOvers = 0
     for i, trip in enumerate(individual):
-        #tripTimeTable = db.generateFitnessTripTimeTable(individual[i][0], individual[i][2])
         tripStartTime = trip[2]
-        # start = '2015-10-21 00:00:00' if i == 0 else '2015-10-21 ' + trip[2] + ':00'
-        if len(str(trip[2].hour))==1:
-            temp = "0"+str(trip[2].hour)+":"+str(trip[2].minute)
+        if len(str(tripStartTime.hour)) == 1:
+            temp = "0" + str(tripStartTime.hour) + ":" + str(tripStartTime.minute)
         else:
-            temp = str(trip[2].hour)+":"+str(trip[2].minute)
+            temp = str(tripStartTime.hour) + ":" + str(tripStartTime.minute)
 
-        # for the last trip, the end is just before the end of the day
-        try:
-            if len(str(individual[i+1][2].hour))==1:
-                temp1 = "0"+str(individual[i+1][2].hour)+":"+str(individual[i+1][2].minute)
-            else:
-                temp1 = str(individual[i+1][2].hour)+":"+str(individual[i+1][2].minute)
-        except IndexError:
-            temp1 = '23:59'
-
-        start = '2015-10-21 00:00:00' if i == 0 else '2015-10-21 ' + temp + ':00'
-        # end = '2015-10-21 ' + trip[2] + ':00'
-        end = '2015-10-21 ' + temp1 + ':00'
+        if i == 0:
+            start, end = '2015-10-21 00:00:00', '2015-10-21 ' + temp + ':00' 
+        else:
+            start, end = end, '2015-10-21 ' + temp + ':00'
 
         stopsAndRequests = db.MaxReqNumTrip(start, end)
-
         for i, stop in enumerate(stopsAndRequests):
             if stop[1] > trip[1] and i < len(individual)-1:
                 nextTripTime = individual[i+1][2]
-                # nextTripWait = fitnessClass.timeDiff(nextTripTime, individual[i][2])
                 nextTripWait = nextTripTime - individual[i][2]
-                NoOfLeftOvers = NoOfLeftOvers + (stop[1] - trip[1])   # must wait for the next bus trip
+                noOfLeftOvers = noOfLeftOvers + (stop[1] - trip[1])   # must wait for the next bus trip
                 tripWaitingTime += nextTripWait*(stop[1] - trip[1])
-        tripWaitingTime = timedelta(minutes=0) # reset on each trip
+
     # Evaluate average time
     for i in range(len(individual)):
         tripTimeTable = db.generateFitnessTripTimeTable(individual[i][0], individual[i][2])
@@ -117,9 +104,9 @@ def evalIndividual(individual):
                 dif.append(diff)
                 cnt.append(count)
 
-    totalWaitingTime = (sum(dif) + tripWaitingTime.total_seconds()/60.0)/(sum(cnt) + count)
-    waitingTime = sum(dif) + tripWaitingTime.total_seconds()/60.0
-    return fitnessClass.calculateCost(individual, waitingTime, 0),
+    totalWaitingTime = sum(dif) + tripWaitingTime.total_seconds()/60.0
+    averageWaitingTime = totalWaitingTime / (sum(cnt) + noOfLeftOvers)
+    return fitnessClass.calculateCost(individual, totalWaitingTime, 0),
 
 
 # Creating a minimizing fitness class to minimize a single objective that
