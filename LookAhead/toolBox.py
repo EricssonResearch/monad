@@ -28,14 +28,25 @@ from datetime import timedelta
 
 # Constant
 BUS_LINE = 2
+
 # The individual size corresponds to the number of trips
-# INDIVIDUAL_SIZE =  10
+INDIVIDUAL_SIZE = 14 #reason why its 14 is because we currently have 2 buslines in mongo to work with
 INDIVIDUAL_SIZE_BOUNDS = [2, 10]
 
 
 # Initialize the classes
 databaseClass = DB()
 fitnessClass = Fitness()
+
+
+def evaluateNewIndividualFormat(individual):
+
+    individual = sorted(individual, key=itemgetter(3))
+    print("THIS IS AN INDIVIDUAL"+"\n")
+    print(individual)
+
+    return 1,
+
 
 
 def evalIndividual(individual):
@@ -95,6 +106,7 @@ def evalIndividual(individual):
             if initialTrip > lastTrip:
                 initialTrip = lastTrip - timedelta(minutes=db.getFrequency(individual[i][0]))
             # Search on Fitness.request array for the particular requests
+
             request = fitnessClass.searchRequest(initialTrip, lastTrip, tripTimeTable[j][0])
             initialTripTime = tripTimeTable[j][1]
             if len(request) > 0:
@@ -123,13 +135,18 @@ creator.create("Individual", list, fitness=creator.FitnessMin)
 toolbox = base.Toolbox()
 
 # Register the operations to be used in the toolbox
-toolbox.register("attribute", databaseClass.generateStartingTripTime, BUS_LINE)
-#toolbox.register("individual", tools.initRepeat, creator.Individual,
-#                 toolbox.attribute, INDIVIDUAL_SIZE)
-toolbox.register("individual", inits.initRepeatBound, creator.Individual,
-                  toolbox.attribute, INDIVIDUAL_SIZE_BOUNDS)
+toolbox.register("attribute", databaseClass.generateRandomStartingTimeForTrip)
+
+
+# toolbox.register("attribute", databaseClass.generateStartingTripTime, BUS_LINE)
+toolbox.register("individual", tools.initRepeat, creator.Individual, toolbox.attribute, INDIVIDUAL_SIZE)
+
+#toolbox.register("individual", inits.initRepeatBound, creator.Individual, toolbox.attribute, INDIVIDUAL_SIZE_BOUNDS)
 toolbox.register("population", tools.initRepeat, list, toolbox.individual)
-toolbox.register("evaluate", evalIndividual)
+
+toolbox.register("evaluate", evaluateNewIndividualFormat)
+
+#toolbox.register("evaluate", evalIndividual)
 toolbox.register("mate", tools.cxOnePoint)
 toolbox.register("select", tools.selTournament, tournsize=3)
 toolbox.register("mutate", mutation.mutUniformTime)

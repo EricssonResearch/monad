@@ -221,6 +221,82 @@ class DB():
         return self.mergeRandomTime(hours, minutes)
 
     # Trip
+    busLine = [2,2,2,2,2,2,2,102,102,102,102,102,102,102]
+    noOfslices = 0
+
+    def generateBusLine(self):
+
+        for x in DB.busLine:
+            DB.busLine.remove(x)
+
+            if len(DB.busLine)==0:
+                DB.busLine = [2,2,2,2,2,2,2,102,102,102,102,102,102,102]
+            return x
+
+
+    def generateRandomStartTimeSlice(self):
+
+       DB.noOfslices = DB.noOfslices+1
+
+       randomTime = datetime.time(0, 0, 0)
+
+       if DB.noOfslices  == 1:
+           hour = random.randint(3, 5)
+           minute = random.randint(0, 59)
+           seconds = random.randint(0, 59)
+           randomTime = datetime.time(hour, minute, seconds)
+
+
+       elif DB.noOfslices == 2:
+           hour = random.randint(6, 8)
+           minute = random.randint(0, 59)
+           seconds = random.randint(0, 59)
+           randomTime = datetime.time(hour, minute, seconds)
+
+       elif DB.noOfslices == 3:
+           hour = random.randint(9, 11)
+           minute = random.randint(0, 59)
+           seconds = random.randint(0, 59)
+           randomTime = datetime.time(hour, minute, seconds)
+
+       elif DB.noOfslices == 4:
+           hour = random.randint(12, 14)
+           minute = random.randint(0, 59)
+           seconds = random.randint(0, 59)
+           randomTime = datetime.time(hour, minute, seconds)
+
+       elif DB.noOfslices == 5:
+           hour = random.randint(15, 17)
+           minute = random.randint(0, 59)
+           seconds = random.randint(0, 59)
+           randomTime = datetime.time(hour, minute, seconds)
+
+       elif DB.noOfslices == 6:
+           hour = random.randint(18, 20)
+           minute = random.randint(0, 59)
+           seconds = random.randint(0, 59)
+           randomTime = datetime.time(hour, minute, seconds)
+
+       elif DB.noOfslices == 7:
+           hour = random.randint(21, 23)
+           minute = random.randint(0, 59)
+           seconds = random.randint(0, 59)
+           randomTime = datetime.time(hour, minute, seconds)
+           DB.noOfslices = 0
+
+       return randomTime
+
+
+    # This function is called for each gene, ie. this function creates a gene
+    def generateRandomStartingTimeForTrip(self):
+        today = DB.yesterday
+        randomFrequency = random.randrange(5, 30)
+        BUS_LINE = self.generateBusLine()
+        startTimeSlice = self.generateRandomStartTimeSlice()
+
+        return list([BUS_LINE, self.generateRandomCapacity(), randomFrequency,
+                     datetime.datetime.combine(today, startTimeSlice)])
+
     # Generate TT from seed random starting time. Called when generating the initial population
     def generateStartingTripTime(self, line):
 
