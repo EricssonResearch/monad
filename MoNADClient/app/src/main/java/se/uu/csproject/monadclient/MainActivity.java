@@ -1,26 +1,22 @@
 package se.uu.csproject.monadclient;
 
 import android.Manifest;
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Build;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.NavUtils;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -42,7 +38,6 @@ import java.util.Locale;
 
 import se.uu.csproject.monadclient.recyclerviews.FullTrip;
 import se.uu.csproject.monadclient.recyclerviews.PartialTrip;
-import se.uu.csproject.monadclient.recyclerviews.RecommendedTrips;
 import se.uu.csproject.monadclient.recyclerviews.SearchRecyclerViewAdapter;
 
 public class MainActivity extends MenuedActivity implements
@@ -81,11 +76,16 @@ public class MainActivity extends MenuedActivity implements
         buildGoogleApiClient();
         initializeLocationRequest();
 
-        if (Build.VERSION.SDK_INT >= 23) {
-            checkForPermission();
-        } else {
-            mGoogleApiClient.connect();
-        }
+        // Hide the keyboard when launching this activity
+        this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+    }
+
+    public double getCurrentLatitude(){
+        return currentLatitude;
+    }
+
+    public double getCurrentLongitude(){
+        return currentLongitude;
     }
 
     public void openMainSearch (View view) {
@@ -94,6 +94,15 @@ public class MainActivity extends MenuedActivity implements
         String requestTime, priority;
         Date now = new Date();
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
+
+        // TODO Stavros: Delete these comments after I've tested the quick search results
+        /*String startTime1;
+        Date now1;
+        Calendar cal = Calendar.getInstance();
+        cal.set(2015, 10, 06, 07, 00, 00);
+        now1 = cal.getTime();
+        startTime1 = df.format(now1);
+        Log.d("oops", startTime1);*/
 
         // Provide some default values since this is a quick search
         startPositionLatitude = String.valueOf(currentLatitude);
@@ -111,7 +120,6 @@ public class MainActivity extends MenuedActivity implements
             asyncTask.execute(userId, startTime, endTime, requestTime, startPositionLatitude,
                     startPositionLongitude, edPosition, priority);
         } else {
-            Context context = getApplicationContext();
             CharSequence text = "Please enter a destination address.";
             int duration = Toast.LENGTH_SHORT;
 
@@ -122,16 +130,16 @@ public class MainActivity extends MenuedActivity implements
 
     public void processFinish(ArrayList<FullTrip> searchResults){
 
+        Intent myIntent = new Intent(MainActivity.this, SearchActivity.class);
         if (searchResults.isEmpty()){
             CharSequence text = "Could not find any trips matching your criteria.";
             int duration = Toast.LENGTH_SHORT;
             Toast toast = Toast.makeText(context, text, duration);
             toast.show();
+        } else {
+            myIntent.putParcelableArrayListExtra("searchResults", searchResults);
         }
-
-        Intent myIntent = new Intent(MainActivity.this, SearchActivity.class);
-        RecommendedTrips recommendedTrips = new RecommendedTrips(searchResults);
-        myIntent.putExtra("searchResults", recommendedTrips);
+        myIntent.putExtra("destination", destination.getText().toString());
         MainActivity.this.startActivity(myIntent);
     }
 
@@ -152,7 +160,6 @@ public class MainActivity extends MenuedActivity implements
                     mGoogleApiClient.connect();
                 } else {
                     // Permission denied, boo! Disable the functionality that depends on this permission.
-                    Context context = getApplicationContext();
                     CharSequence text = "If you don't give location permission then the quick search " +
                                         "will not work correctly";
                     int duration = Toast.LENGTH_LONG;
@@ -319,14 +326,13 @@ public class MainActivity extends MenuedActivity implements
         Location location = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
 
         if (location == null) {
-            // This exception will be thrown on android 6 devices where the user hasn't given location permission
+            // This exception will be thrown on android < 6 devices where the user hasn't given location permission.
             try{
                 LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
-            }catch(java.lang.SecurityException e){
+            } catch(java.lang.SecurityException e){
                 Log.d("oops", e.toString());
             }
-        }
-        else {
+        } else {
             handleNewLocation(location);
         }
     }

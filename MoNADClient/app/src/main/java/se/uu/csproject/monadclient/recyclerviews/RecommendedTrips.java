@@ -41,9 +41,9 @@ public class RecommendedTrips implements Parcelable {
 
     public boolean isEmpty(){
         if (searchResults != null && !searchResults.isEmpty()){
-            return true;
-        } else {
             return false;
+        } else {
+            return true;
         }
     }
 

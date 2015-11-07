@@ -73,7 +73,6 @@ public class StoreTrips {
                 FullTrip fullTrip = new FullTrip(tripID, requestID, partialTripArrayList,
                         durationInMinutes, booked, feedback);
 
-
                 searchResults.add(fullTrip);
             }
 
