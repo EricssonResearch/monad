@@ -46,14 +46,11 @@ public class MainActivity extends MenuedActivity implements
     private EditText destination;
     private GoogleApiClient mGoogleApiClient;
     private LocationRequest mLocationRequest;
-    private final int MY_PERMISSIONS_REQUEST = 123;
+    private double currentLatitude, currentLongitude;
     private Context context;
-    private double currentLatitude;
-    private double currentLongitude;
 
-    //Google Cloud Services
-    private static final String TAG = "MainActivity";
     private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
+    private final int MY_PERMISSIONS_REQUEST = 123;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +65,7 @@ public class MainActivity extends MenuedActivity implements
         context = getApplicationContext();
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         List<FullTrip> searchResults = new ArrayList<>();
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler_view_main);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getApplicationContext());
@@ -75,6 +73,7 @@ public class MainActivity extends MenuedActivity implements
         generateSearchResults(searchResults);
         SearchRecyclerViewAdapter adapter = new SearchRecyclerViewAdapter(searchResults);
         recyclerView.setAdapter(adapter);
+
         buildGoogleApiClient();
         initializeLocationRequest();
 
@@ -116,7 +115,6 @@ public class MainActivity extends MenuedActivity implements
         } else {
             CharSequence text = "Please enter a destination address.";
             int duration = Toast.LENGTH_SHORT;
-
             Toast toast = Toast.makeText(context, text, duration);
             toast.show();
         }
@@ -134,8 +132,6 @@ public class MainActivity extends MenuedActivity implements
             myIntent.putParcelableArrayListExtra("searchResults", searchResults);
         }
 
-        myIntent.putExtra("latitude", currentLatitude);
-        myIntent.putExtra("longitude", currentLongitude);
         myIntent.putExtra("destination", destination.getText().toString());
         MainActivity.this.startActivity(myIntent);
     }
@@ -159,10 +155,9 @@ public class MainActivity extends MenuedActivity implements
                     mGoogleApiClient.connect();
                 } else {
                     // Permission denied, boo! Disable the functionality that depends on this permission.
-                    CharSequence text = "If you don't give location permission then the quick search " +
-                                        "will not work correctly";
+                    CharSequence text = "If you don't give location permission then we can't use " +
+                            "your current location to search for suitable bus trips.";
                     int duration = Toast.LENGTH_LONG;
-
                     Toast toast = Toast.makeText(context, text, duration);
                     toast.show();
                 }
@@ -275,22 +270,30 @@ public class MainActivity extends MenuedActivity implements
             finish();
         }
 
-        if (!mGoogleApiClient.isConnected()) {
-            if (Build.VERSION.SDK_INT >= 23){
-                checkForPermission();
-            } else {
-                mGoogleApiClient.connect();
+        if (checkPlayServices()){
+            if (!mGoogleApiClient.isConnected()) {
+                if (Build.VERSION.SDK_INT >= 23){
+                    checkForPermission();
+                } else {
+                    mGoogleApiClient.connect();
+                }
             }
+        } else {
+            CharSequence text = "If you don't have google play services enabled then we can't use " +
+                    "your current location to search for suitable bus trips.";
+            int duration = Toast.LENGTH_LONG;
+            Toast toast = Toast.makeText(context, text, duration);
+            toast.show();
         }
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        /*if (mGoogleApiClient.isConnected()) {
+        if (mGoogleApiClient.isConnected()) {
             LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
             mGoogleApiClient.disconnect();
-        }*/
+        }
     }
 
     //TODO (Huijie): prompt the user to choose before leaving the application
@@ -325,12 +328,7 @@ public class MainActivity extends MenuedActivity implements
         Location location = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
 
         if (location == null) {
-            // This exception will be thrown on android < 6 devices where the user hasn't given location permission.
-            try{
-                LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
-            } catch(java.lang.SecurityException e){
-                Log.d("oops", e.toString());
-            }
+            LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
         } else {
             handleNewLocation(location);
         }
@@ -351,22 +349,15 @@ public class MainActivity extends MenuedActivity implements
         handleNewLocation(location);
     }
 
-
     private boolean checkPlayServices() {
-
         GoogleApiAvailability apiAvailability = GoogleApiAvailability.getInstance();
         int resultCode = apiAvailability.isGooglePlayServicesAvailable(this);
         if (resultCode != ConnectionResult.SUCCESS) {
             if (apiAvailability.isUserResolvableError(resultCode)) {
-                apiAvailability.getErrorDialog(this, resultCode, PLAY_SERVICES_RESOLUTION_REQUEST)
-                        .show();
-            } else {
-                Log.i(TAG, "This device is not supported.");
-                finish();
+                apiAvailability.getErrorDialog(this, resultCode, PLAY_SERVICES_RESOLUTION_REQUEST).show();
             }
             return false;
         }
         return true;
     }
-
 }

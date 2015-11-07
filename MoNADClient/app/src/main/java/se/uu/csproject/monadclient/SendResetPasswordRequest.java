@@ -23,6 +23,7 @@ public class SendResetPasswordRequest extends AsyncTask<String, Void, String> {
     /* Send the data to the server via POST and receive the response */
     public static String postRequest(String request, String urlParameters) {
         String response = "";
+        HttpURLConnection conn = null;
 
         try {
             URL url = new URL(request);
@@ -30,7 +31,7 @@ public class SendResetPasswordRequest extends AsyncTask<String, Void, String> {
             int postDataLength = postData.length;
 
             // Setup connection to the server
-            HttpURLConnection conn = (HttpURLConnection)url.openConnection();
+            conn = (HttpURLConnection)url.openConnection();
             conn.setDoOutput(true);
             conn.setInstanceFollowRedirects(false);
             conn.setRequestMethod("POST");
@@ -54,9 +55,6 @@ public class SendResetPasswordRequest extends AsyncTask<String, Void, String> {
                 response = response + "\n" + line;
             }
 
-            // Close the connection
-            conn.disconnect();
-
         } catch (MalformedURLException e) {
             return (e.toString());
 
@@ -65,6 +63,11 @@ public class SendResetPasswordRequest extends AsyncTask<String, Void, String> {
 
         } catch (RuntimeException e) {
             return (e.toString());
+        }
+        finally {
+            if (conn != null) {
+                conn.disconnect();
+            }
         }
 
         return response;

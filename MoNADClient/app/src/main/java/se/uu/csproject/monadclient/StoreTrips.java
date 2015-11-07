@@ -80,11 +80,7 @@ public class StoreTrips {
             Log.d("oops", e.toString());
 
         } catch (JSONException e) {
-            if (e.toString().contains("Value null of type")){
-                Log.d("oops", "Could not find any trips matching your criteria.");
-            } else {
-                Log.d("oops", e.toString());
-            }
+            Log.d("oops", e.toString());
         }
 
         Collections.sort(searchResults, new CustomComparator());

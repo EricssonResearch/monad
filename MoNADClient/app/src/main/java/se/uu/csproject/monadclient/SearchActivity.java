@@ -1,12 +1,18 @@
 package se.uu.csproject.monadclient;
 
+import android.Manifest;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -23,6 +29,13 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationListener;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -32,20 +45,22 @@ import java.util.Locale;
 import se.uu.csproject.monadclient.recyclerviews.FullTrip;
 import se.uu.csproject.monadclient.recyclerviews.SearchRecyclerViewAdapter;
 
-public class SearchActivity extends MenuedActivity implements AsyncResponse{
-    private TextView textViewTripDate;
+public class SearchActivity extends MenuedActivity implements
+        GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener, AsyncResponse{
+    private TextView textViewTripDate, textViewTripTime;
     DialogFragment dateFragment;
-    private TextView textViewTripTime;
     DialogFragment timeFragment;
-    private RadioGroup tripTimeRadioGroup;
-    private RadioGroup priorityRadioGroup;
-    private EditText positionEditText;
-    private EditText destinationEditText;
-    public Calendar calendar;
+    private RadioGroup tripTimeRadioGroup, priorityRadioGroup;
+    private EditText positionEditText, destinationEditText;
+    private GoogleApiClient mGoogleApiClient;
+    private LocationRequest mLocationRequest;
+    private double currentLatitude, currentLongitude;
     private Context context;
-    private double currentLatitude;
-    private double currentLongitude;
+    public Calendar calendar;
     //private DatePicker datePicker;
+
+    private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
+    private final int MY_PERMISSIONS_REQUEST = 123;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,11 +100,6 @@ public class SearchActivity extends MenuedActivity implements AsyncResponse{
         currentLatitude = 0;
         currentLongitude = 0;
 
-        if (getIntent().hasExtra("latitude") && getIntent().hasExtra("longitude")){
-            currentLatitude = getIntent().getDoubleExtra("latitude", 0);
-            currentLongitude = getIntent().getDoubleExtra("longitude", 0);
-        }
-
         if (getIntent().hasExtra("destination")){
             destinationEditText.setText(getIntent().getStringExtra("destination"));
         }
@@ -104,8 +114,61 @@ public class SearchActivity extends MenuedActivity implements AsyncResponse{
             recyclerView.setAdapter(adapter);
         }
 
+        buildGoogleApiClient();
+        initializeLocationRequest();
+
         // Hide the keyboard when launching this activity
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+    }
+
+    private void checkForPermission(){
+        if (ContextCompat.checkSelfPermission(SearchActivity.this, Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED){
+            ActivityCompat.requestPermissions(SearchActivity.this,
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, MY_PERMISSIONS_REQUEST);
+        } else {
+            mGoogleApiClient.connect();
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case MY_PERMISSIONS_REQUEST: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    mGoogleApiClient.connect();
+                } else {
+                    // Permission denied, boo! Disable the functionality that depends on this permission.
+                    CharSequence text = "If you don't give location permission then we can't use " +
+                            "your current location to search for suitable bus trips.";
+                    int duration = Toast.LENGTH_LONG;
+                    Toast toast = Toast.makeText(context, text, duration);
+                    toast.show();
+                }
+                return;
+            }
+        }
+    }
+
+    private void handleNewLocation(Location location) {
+        currentLatitude = location.getLatitude();
+        currentLongitude = location.getLongitude();
+    }
+
+    protected synchronized void buildGoogleApiClient() {
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .addApi(LocationServices.API)
+                .build();
+    }
+
+    protected void initializeLocationRequest() {
+        mLocationRequest = LocationRequest.create()
+                .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
+                .setInterval(60 * 1000)        // 1 minute, in milliseconds
+                .setFastestInterval(10 * 1000); // 10 seconds, in milliseconds
     }
 
     public void showDatePickerDialog(View v) {
@@ -243,7 +306,15 @@ public class SearchActivity extends MenuedActivity implements AsyncResponse{
     }
 
     public void useCurrentPosition(View v){
-        positionEditText.setText("Current Position");
+        if (mGoogleApiClient.isConnected()){
+            positionEditText.setText("Current Position");
+        } else {
+            CharSequence text = "We are not able to get your current position. Please consider " +
+                    "giving us location permission and enabling your google play services.";
+            int duration = Toast.LENGTH_LONG;
+            Toast toast = Toast.makeText(context, text, duration);
+            toast.show();
+        }
     }
 
     // Function called when the user clicks on the main search button
@@ -254,8 +325,6 @@ public class SearchActivity extends MenuedActivity implements AsyncResponse{
 
         Date now = new Date();
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
-        startPositionLatitude = "0";
-        startPositionLongitude = "0";
         startTime = "null";
         endTime = "null";
         priority = "";
@@ -263,11 +332,8 @@ public class SearchActivity extends MenuedActivity implements AsyncResponse{
         userId = ClientAuthentication.getClientId();
         stPosition = positionEditText.getText().toString();
         edPosition = destinationEditText.getText().toString();
-
-        if (stPosition.equals("Current Position")){
-            startPositionLatitude = String.valueOf(currentLatitude);
-            startPositionLongitude = String.valueOf(currentLongitude);
-        }
+        startPositionLatitude = String.valueOf(currentLatitude);
+        startPositionLongitude = String.valueOf(currentLongitude);
 
         selectedId = tripTimeRadioGroup.getCheckedRadioButtonId();
 
@@ -325,5 +391,73 @@ public class SearchActivity extends MenuedActivity implements AsyncResponse{
             SearchRecyclerViewAdapter adapter = new SearchRecyclerViewAdapter(searchResults);
             recyclerView.setAdapter(adapter);
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        if (checkPlayServices()){
+            if (!mGoogleApiClient.isConnected()) {
+                if (Build.VERSION.SDK_INT >= 23){
+                    checkForPermission();
+                } else {
+                    mGoogleApiClient.connect();
+                }
+            }
+        } else {
+            CharSequence text = "If you don't have google play services enabled then we can't use " +
+                    "your current location to search for suitable bus trips.";
+            int duration = Toast.LENGTH_LONG;
+            Toast toast = Toast.makeText(context, text, duration);
+            toast.show();
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (mGoogleApiClient.isConnected()) {
+            LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
+            mGoogleApiClient.disconnect();
+        }
+    }
+
+    @Override
+    public void onConnected(Bundle bundle) {
+        Location location = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+
+        if (location == null) {
+            LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
+        } else {
+            handleNewLocation(location);
+        }
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+
+    }
+
+    @Override
+    public void onConnectionFailed(ConnectionResult connectionResult) {
+        Log.d("oops", "Connection failed with error code: " + Integer.toString(connectionResult.getErrorCode()));
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+        handleNewLocation(location);
+    }
+
+    private boolean checkPlayServices() {
+        GoogleApiAvailability apiAvailability = GoogleApiAvailability.getInstance();
+        int resultCode = apiAvailability.isGooglePlayServicesAvailable(this);
+        if (resultCode != ConnectionResult.SUCCESS) {
+            if (apiAvailability.isUserResolvableError(resultCode)) {
+                apiAvailability.getErrorDialog(this, resultCode, PLAY_SERVICES_RESOLUTION_REQUEST).show();
+            }
+            return false;
+        }
+        return true;
     }
 }
