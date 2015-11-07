@@ -73,20 +73,6 @@ public class SendResetPasswordRequest extends AsyncTask<String, Void, String> {
     /* Get the data from the interface and wrap them in a request */
     public static String wrapRequest(String email) {
         String request = SERVER + "/resetPassword";
-        /*SimpleDateFormat df = new SimpleDateFormat("yyyy, MM, dd, HH, mm, ss");
-
-        Date startTime = null;
-        Date endTime = null;
-        Date requestTime = null;
-
-        try {
-        startTime = df.parse(startTimeString);
-        endTime = df.parse(endTimeString);
-        requestTime = df.parse(requestTimeString);
-        } catch (ParseException e) {
-        Log.d("oops", e.toString());
-        return("Something went wrong with the date formatting");
-        }*/
 
         String urlParameters = "email=" + email;
         String response = postRequest(request, urlParameters);

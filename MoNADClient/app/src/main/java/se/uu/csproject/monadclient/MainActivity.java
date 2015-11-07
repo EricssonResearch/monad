@@ -46,10 +46,10 @@ public class MainActivity extends MenuedActivity implements
     private EditText destination;
     private GoogleApiClient mGoogleApiClient;
     private LocationRequest mLocationRequest;
-    private double currentLatitude;
-    private double currentLongitude;
     private final int MY_PERMISSIONS_REQUEST = 123;
     private Context context;
+    private double currentLatitude;
+    private double currentLongitude;
 
     //Google Cloud Services
     private static final String TAG = "MainActivity";
@@ -63,6 +63,8 @@ public class MainActivity extends MenuedActivity implements
         destination = (EditText) findViewById(R.id.main_search_destination);
         setSupportActionBar(toolbar);
 
+        currentLatitude = 0;
+        currentLongitude = 0;
         context = getApplicationContext();
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -78,14 +80,6 @@ public class MainActivity extends MenuedActivity implements
 
         // Hide the keyboard when launching this activity
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-    }
-
-    public double getCurrentLatitude(){
-        return currentLatitude;
-    }
-
-    public double getCurrentLongitude(){
-        return currentLongitude;
     }
 
     public void openMainSearch (View view) {
@@ -129,8 +123,8 @@ public class MainActivity extends MenuedActivity implements
     }
 
     public void processFinish(ArrayList<FullTrip> searchResults){
-
         Intent myIntent = new Intent(MainActivity.this, SearchActivity.class);
+
         if (searchResults.isEmpty()){
             CharSequence text = "Could not find any trips matching your criteria.";
             int duration = Toast.LENGTH_SHORT;
@@ -139,6 +133,9 @@ public class MainActivity extends MenuedActivity implements
         } else {
             myIntent.putParcelableArrayListExtra("searchResults", searchResults);
         }
+
+        myIntent.putExtra("latitude", currentLatitude);
+        myIntent.putExtra("longitude", currentLongitude);
         myIntent.putExtra("destination", destination.getText().toString());
         MainActivity.this.startActivity(myIntent);
     }
@@ -148,6 +145,8 @@ public class MainActivity extends MenuedActivity implements
                 != PackageManager.PERMISSION_GRANTED){
             ActivityCompat.requestPermissions(MainActivity.this,
                     new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, MY_PERMISSIONS_REQUEST);
+        } else {
+            mGoogleApiClient.connect();
         }
     }
 

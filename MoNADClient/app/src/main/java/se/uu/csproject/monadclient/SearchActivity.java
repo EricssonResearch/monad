@@ -43,6 +43,8 @@ public class SearchActivity extends MenuedActivity implements AsyncResponse{
     private EditText destinationEditText;
     public Calendar calendar;
     private Context context;
+    private double currentLatitude;
+    private double currentLongitude;
     //private DatePicker datePicker;
 
     @Override
@@ -79,6 +81,14 @@ public class SearchActivity extends MenuedActivity implements AsyncResponse{
         priorityRadioGroup = (RadioGroup) findViewById(R.id.radiogroup_search_priority);
         positionEditText = (EditText) findViewById(R.id.edittext_search_position);
         destinationEditText = (EditText) findViewById(R.id.edittext_search_destination);
+
+        currentLatitude = 0;
+        currentLongitude = 0;
+
+        if (getIntent().hasExtra("latitude") && getIntent().hasExtra("longitude")){
+            currentLatitude = getIntent().getDoubleExtra("latitude", 0);
+            currentLongitude = getIntent().getDoubleExtra("longitude", 0);
+        }
 
         if (getIntent().hasExtra("destination")){
             destinationEditText.setText(getIntent().getStringExtra("destination"));
@@ -232,12 +242,20 @@ public class SearchActivity extends MenuedActivity implements AsyncResponse{
         startActivity(new Intent(this, RouteActivity.class));
     }
 
+    public void useCurrentPosition(View v){
+        positionEditText.setText("Current Position");
+    }
+
+    // Function called when the user clicks on the main search button
     public void sendTravelRequest (View v) {
         String stPosition, edPosition, userId, startTime, endTime, requestTime, priority;
+        String startPositionLatitude, startPositionLongitude;
         int selectedId;
 
         Date now = new Date();
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
+        startPositionLatitude = "0";
+        startPositionLongitude = "0";
         startTime = "null";
         endTime = "null";
         priority = "";
@@ -245,6 +263,11 @@ public class SearchActivity extends MenuedActivity implements AsyncResponse{
         userId = ClientAuthentication.getClientId();
         stPosition = positionEditText.getText().toString();
         edPosition = destinationEditText.getText().toString();
+
+        if (stPosition.equals("Current Position")){
+            startPositionLatitude = String.valueOf(currentLatitude);
+            startPositionLongitude = String.valueOf(currentLongitude);
+        }
 
         selectedId = tripTimeRadioGroup.getCheckedRadioButtonId();
 
