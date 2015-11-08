@@ -29,13 +29,13 @@ public class StoreTrips {
         searchResults = new ArrayList<>();
 
         try{
-            for (int i = 1; i <= numberOfSearchResults; i++){
+            for (int i = 0; i < numberOfSearchResults; i++){
                 String tripID = "", requestID = "";
                 long duration = 0;
                 int feedback = -1;
                 boolean booked = false;
 
-                JSONArray fullTripJson = trips.getJSONArray(Integer.toString(i));
+                JSONArray fullTripJson = trips.getJSONArray(Integer.toString(i+1));
                 ArrayList<PartialTrip> partialTripArrayList = new ArrayList<>();
                 numberOfPartialTrips = fullTripJson.length();
 
