@@ -16,6 +16,7 @@ import java.io.DataOutputStream;
 
 public class SendBookingCancelRequest extends AsyncTask<String, Void, String>{
     private static String SERVER = "http://130.238.15.114:2001";
+    public AsyncResponseString delegate = null;
 
     /* Send the data to the server via POST and receive the response */
     public static String postRequest(String request, String urlParameters) {
@@ -93,6 +94,6 @@ public class SendBookingCancelRequest extends AsyncTask<String, Void, String>{
     /* Deal with the response returned by the server */
     @Override
     protected void onPostExecute(String response) {
-        Log.d("oops", response);
+        delegate.processFinish(response);
     }
 }

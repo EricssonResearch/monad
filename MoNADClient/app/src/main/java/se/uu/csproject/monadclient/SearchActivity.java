@@ -362,7 +362,8 @@ public class SearchActivity extends MenuedActivity implements
         if(stPosition != null && !stPosition.trim().isEmpty() && edPosition != null && !edPosition.trim().isEmpty()){
             SendTravelRequest asyncTask = new SendTravelRequest();
             asyncTask.delegate = this;
-            asyncTask.execute(userId, startTime, endTime, requestTime, stPosition, edPosition, priority);
+            asyncTask.execute(userId, startTime, endTime, requestTime, stPosition, edPosition, priority,
+                    startPositionLatitude, startPositionLongitude);
         }
         else if (stPosition == null || stPosition.trim().isEmpty()) {
             CharSequence text = "Please enter a departure address.";

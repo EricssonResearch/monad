@@ -89,13 +89,15 @@ public class SendTravelRequest extends AsyncTask<String, Void, ArrayList<FullTri
 
     /* Get the data from the interface and wrap them in a request */
     public static ArrayList<FullTrip> wrapRequest(String userId, String startTime, String endTime,
-                                   String requestTime, String stPosition, String edPosition, String priority) {
+                                   String requestTime, String stPosition, String edPosition, String priority,
+                                   String startPositionLatitude, String startPositionLongitude) {
         String request = SERVER + "/request";
 
         String urlParameters = "userId=" + userId + "&startTime=" + startTime
                 + "&endTime=" + endTime + "&requestTime=" + requestTime
                 + "&stPosition=" + stPosition + "&edPosition=" + edPosition
-                + "&priority=" + priority;
+                + "&priority=" + priority + "&startPositionLatitude=" + startPositionLatitude
+                + "&startPositionLongitude=" + startPositionLongitude;
         ArrayList<FullTrip> searchResults = postRequest(request, urlParameters);
 
         return searchResults;
@@ -106,7 +108,8 @@ public class SendTravelRequest extends AsyncTask<String, Void, ArrayList<FullTri
     protected ArrayList<FullTrip> doInBackground(String... params) {
         ArrayList<FullTrip> searchResults;
 
-        searchResults = wrapRequest(params[0], params[1], params[2], params[3], params[4], params[5], params[6]);
+        searchResults = wrapRequest(params[0], params[1], params[2], params[3], params[4], params[5], params[6],
+                params[7], params[8]);
 
         return searchResults;
     }
