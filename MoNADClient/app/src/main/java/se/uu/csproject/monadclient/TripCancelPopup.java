@@ -1,5 +1,6 @@
 package se.uu.csproject.monadclient;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.CountDownTimer;
 import android.support.v4.content.ContextCompat;
@@ -10,6 +11,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
@@ -21,14 +23,11 @@ import se.uu.csproject.monadclient.recyclerviews.Trip;
 
 import static java.lang.Math.floor;
 
-public class TripCancelPopup extends AppCompatActivity {
-    TextView startBusStop;
-    TextView endBusStop;
-    TextView startTime;
-    TextView endTime;
-    TextView date;
-    TextView countdown;
-    ImageView clockIcon;
+public class TripCancelPopup extends AppCompatActivity implements AsyncResponseString{
+    private TextView startBusStop, endBusStop, startTime, endTime, date, countdown;
+    private ImageView clockIcon;
+    private FullTrip trip;
+    private Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,9 +41,10 @@ public class TripCancelPopup extends AppCompatActivity {
         date = (TextView) findViewById(R.id.label_date);
         countdown = (TextView) findViewById(R.id.label_countdown);
         clockIcon = (ImageView) findViewById(R.id.icon_clock);
+        context = getApplicationContext();
 
         Bundle b = getIntent().getExtras();
-        final FullTrip trip = b.getParcelable("selectedTrip");
+        trip = b.getParcelable("selectedTrip");
         startBusStop.setText(trip.getStartBusStop());
         endBusStop.setText(trip.getEndBusStop());
         startTime.setText(formatTime(trip.getStartTime()));
@@ -134,10 +134,21 @@ public class TripCancelPopup extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
-    //TODO Stavros: remove trip from user's schedule if the confirm button is clicked
+
+    // Cancel the trip
     public void dropTrip(View view) {
-        //new SendBookingCancelRequest().execute(objectId);
-        //startActivity(new Intent(this, MainActivity.class));
+        String userTripId = trip.getId();
+        SendBookingCancelRequest asyncTask = new SendBookingCancelRequest();
+        asyncTask.delegate = this;
+        asyncTask.execute(userTripId);
+    }
+
+    // Deal with the response from the server after the user cancels the trip
+    public void processFinish(String response){
+        Toast toast = Toast.makeText(context, response, Toast.LENGTH_SHORT);
+        toast.show();
+        Intent intent = new Intent(TripCancelPopup.this, MainActivity.class);
+        startActivity(intent);
         finish();
     }
 

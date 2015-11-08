@@ -27,6 +27,7 @@ public class SendQuickTravelRequest extends AsyncTask<String, Void, ArrayList<Fu
     /* Send the data to the server via POST and receive the response */
     public static ArrayList<FullTrip> postRequest(String request, String urlParameters) {
         ArrayList<FullTrip> searchResults = new ArrayList<>();
+        HttpURLConnection conn = null;
 
         try {
             URL url = new URL(request);
@@ -34,7 +35,7 @@ public class SendQuickTravelRequest extends AsyncTask<String, Void, ArrayList<Fu
             int postDataLength = postData.length;
 
             // Setup connection to the server
-            HttpURLConnection conn = (HttpURLConnection)url.openConnection();
+            conn = (HttpURLConnection)url.openConnection();
             conn.setDoOutput(true);
             conn.setInstanceFollowRedirects(false);
             conn.setRequestMethod("POST");
@@ -63,9 +64,6 @@ public class SendQuickTravelRequest extends AsyncTask<String, Void, ArrayList<Fu
 
             searchResults = new StoreTrips().storeTheTrips(trips);
 
-            // Close the connection
-            conn.disconnect();
-
         } catch (MalformedURLException e) {
             Log.d("oops", e.toString());
 
@@ -77,6 +75,11 @@ public class SendQuickTravelRequest extends AsyncTask<String, Void, ArrayList<Fu
 
         } catch (JSONException e) {
             Log.d("oops", e.toString());
+        }
+        finally {
+            if (conn != null) {
+                conn.disconnect();
+            }
         }
 
         return searchResults;

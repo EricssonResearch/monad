@@ -1,5 +1,6 @@
 package se.uu.csproject.monadclient;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -7,6 +8,7 @@ import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -14,13 +16,11 @@ import java.util.Date;
 
 import se.uu.csproject.monadclient.recyclerviews.FullTrip;
 
-public class RouteConfirmPopup extends AppCompatActivity {
+public class RouteConfirmPopup extends AppCompatActivity implements AsyncResponseString{
 
-    private TextView busIdView;
-    private TextView startTimeView;
-    private TextView endTimeView;
-    private TextView startPositionView;
-    private TextView endPositionView;
+    private TextView busIdView, startTimeView, endTimeView, startPositionView, endPositionView;
+    private FullTrip trip;
+    private Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,9 +38,10 @@ public class RouteConfirmPopup extends AppCompatActivity {
         endTimeView = (TextView) findViewById(R.id.arrivetime);
         startPositionView = (TextView) findViewById(R.id.departname);
         endPositionView = (TextView) findViewById(R.id.arrivename);
+        context = getApplicationContext();
 
         Bundle b = getIntent().getExtras();
-        FullTrip trip = b.getParcelable("selectedTrip");
+        trip = b.getParcelable("selectedTrip");
 
         busIdView.setText(getResources().getString(R.string.label_routesuccess_businfo) + " " + trip.getBusLinesString());
         startTimeView.setText(formatTime(trip.getStartTime()));
@@ -59,30 +60,19 @@ public class RouteConfirmPopup extends AppCompatActivity {
         });
     }
 
+    // Book the trip
     public void confirmTrip(View view){
-        String busId, busIdText[], startTime, startTimeText, endTime, endTimeText, stPosition, edPosition, userId;
-        int currentYear, currentMonth, currentDay;
-        Calendar rightNow = Calendar.getInstance();
+        String userTripId = trip.getId();
+        SendBookingRequest asyncTask = new SendBookingRequest();
+        asyncTask.delegate = this;
+        asyncTask.execute(userTripId);
+    }
 
-        currentYear = rightNow.get(Calendar.YEAR);
-        currentMonth = rightNow.get(Calendar.MONTH);
-        // Genius design choice: months are numbered 0-11
-        currentMonth++;
-        currentDay = rightNow.get(Calendar.DAY_OF_MONTH);
-
-        busIdText = ( busIdView.getText().toString() ).split("\\s+");
-        busId = busIdText[1];
-        userId = ClientAuthentication.getClientId();
-        startTimeText = startTimeView.getText().toString();
-        startTime = currentYear + " " + currentMonth + " " + currentDay + " " + startTimeText;
-        endTimeText = endTimeView.getText().toString();
-        endTime = currentYear + " " + currentMonth + " " + currentDay + " " + endTimeText;
-        stPosition = startPositionView.getText().toString();
-        edPosition = endPositionView.getText().toString();
-
-        //new SendBookingRequest().execute(busId, userId, startTime, endTime, stPosition, edPosition);
+    // Deal with the response from the server after the user books the trip
+    public void processFinish(String response){
+        Toast toast = Toast.makeText(context, response, Toast.LENGTH_SHORT);
+        toast.show();
         Intent intent = new Intent(RouteConfirmPopup.this, TripsActivity.class);
-        //intent.putExtra("selectedTrip", trip);
         startActivity(intent);
         finish();
     }

@@ -5,22 +5,27 @@ import android.util.Log;
 
 import com.google.common.base.Charsets;
 
-import java.io.IOException;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.BufferedReader;
+import java.io.DataOutputStream;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.io.DataOutputStream;
+import java.util.ArrayList;
 
+import se.uu.csproject.monadclient.recyclerviews.FullTrip;
 
-public class SendBookingCancelRequest extends AsyncTask<String, Void, String>{
+public class SendUserBookingsRequest extends AsyncTask<String, Void, ArrayList<FullTrip>> {
     private static String SERVER = "http://130.238.15.114:2001";
-    public AsyncResponseString delegate = null;
+    public AsyncResponse delegate = null;
 
     /* Send the data to the server via POST and receive the response */
-    public static String postRequest(String request, String urlParameters) {
-        String response = "";
+    public static ArrayList<FullTrip> postRequest(String request, String urlParameters) {
+        ArrayList<FullTrip> bookings = new ArrayList<>();
         HttpURLConnection conn = null;
 
         try {
@@ -48,19 +53,27 @@ public class SendBookingCancelRequest extends AsyncTask<String, Void, String>{
                 throw new RuntimeException("Something went wrong - HTTP error code: " + responseCode);
             }
             BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream(), "utf-8"), 8);
-            String line;
-            while ((line = br.readLine()) != null) {
-                response = response + line + "\n";
+            StringBuilder sb = new StringBuilder();
+            String inputStr;
+
+            while ((inputStr = br.readLine()) != null){
+                sb.append(inputStr);
             }
+            JSONObject trips = new JSONObject(sb.toString());
+
+            bookings = new StoreTrips().storeTheTrips(trips);
 
         } catch (MalformedURLException e) {
-            return (e.toString());
+            Log.d("oops", e.toString());
 
         } catch (IOException e) {
-            return (e.toString());
+            Log.d("oops", e.toString());
 
         } catch (RuntimeException e) {
-            return (e.toString());
+            Log.d("oops", e.toString());
+
+        } catch (JSONException e) {
+            Log.d("oops", e.toString());
         }
         finally {
             if (conn != null) {
@@ -68,32 +81,32 @@ public class SendBookingCancelRequest extends AsyncTask<String, Void, String>{
             }
         }
 
-        return response;
+        return bookings;
     }
 
     /* Get the data from the interface and wrap them in a request */
-    public static String wrapRequest(String userTripId) {
-        String request = SERVER + "/bookingCancelRequest";
+    public static ArrayList<FullTrip> wrapRequest(String userId) {
+        String request = SERVER + "/getUserBookingsRequest";
 
-        String urlParameters = "userTripId=" + userTripId;
-        String response = postRequest(request, urlParameters);
+        String urlParameters = "userId=" + userId;
+        ArrayList<FullTrip> bookings = postRequest(request, urlParameters);
 
-        return response;
+        return bookings;
     }
 
     /* This is the function that is called by the button listener */
     @Override
-    protected String doInBackground(String... params) {
-        String response;
+    protected ArrayList<FullTrip> doInBackground(String... params) {
+        ArrayList<FullTrip> bookings;
 
-        response = wrapRequest(params[0]);
+        bookings = wrapRequest(params[0]);
 
-        return response;
+        return bookings;
     }
 
     /* Deal with the response returned by the server */
     @Override
-    protected void onPostExecute(String response) {
-        delegate.processFinish(response);
+    protected void onPostExecute(ArrayList<FullTrip> bookings) {
+        delegate.processFinish(bookings);
     }
 }

@@ -1,27 +1,22 @@
 package se.uu.csproject.monadclient;
 
 import android.Manifest;
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.NavUtils;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -40,11 +35,9 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
-import java.util.concurrent.ExecutionException;
 
 import se.uu.csproject.monadclient.recyclerviews.FullTrip;
 import se.uu.csproject.monadclient.recyclerviews.PartialTrip;
-import se.uu.csproject.monadclient.recyclerviews.RecommendedTrips;
 import se.uu.csproject.monadclient.recyclerviews.SearchRecyclerViewAdapter;
 
 public class MainActivity extends MenuedActivity implements
@@ -53,24 +46,11 @@ public class MainActivity extends MenuedActivity implements
     private EditText destination;
     private GoogleApiClient mGoogleApiClient;
     private LocationRequest mLocationRequest;
-    private double currentLatitude;
-    private double currentLongitude;
-    private final int MY_PERMISSIONS_REQUEST = 123;
+    private double currentLatitude, currentLongitude;
     private Context context;
 
-    //Google Cloud Services
-    private static final String TAG = "MainActivity";
     private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
-
-    private class GetRecommendationsTask extends AsyncTask<String, Void, String> {
-
-        @Override
-        protected String doInBackground(String... params) {
-            String response = ClientAuthentication.postGetRecommendationsRequest();
-            Log.i("Recommendations: ", response);
-            return response;
-        }
-    }
+    private final int MY_PERMISSIONS_REQUEST = 123;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,9 +60,12 @@ public class MainActivity extends MenuedActivity implements
         destination = (EditText) findViewById(R.id.main_search_destination);
         setSupportActionBar(toolbar);
 
+        currentLatitude = 0;
+        currentLongitude = 0;
         context = getApplicationContext();
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         List<FullTrip> searchResults = new ArrayList<>();
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler_view_main);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getApplicationContext());
@@ -90,23 +73,12 @@ public class MainActivity extends MenuedActivity implements
         generateSearchResults(searchResults);
         SearchRecyclerViewAdapter adapter = new SearchRecyclerViewAdapter(searchResults);
         recyclerView.setAdapter(adapter);
+
         buildGoogleApiClient();
         initializeLocationRequest();
 
-        if (Build.VERSION.SDK_INT >= 23) {
-            checkForPermission();
-        } else {
-            mGoogleApiClient.connect();
-        }
-
-//        GetRecommendationsTask recommendationsTask = new GetRecommendationsTask();
-//        try {
-//            recommendationsTask.execute().get();
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        } catch (ExecutionException e) {
-//            e.printStackTrace();
-//        }
+        // Hide the keyboard when launching this activity
+        this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
     }
 
     public void openMainSearch (View view) {
@@ -115,6 +87,15 @@ public class MainActivity extends MenuedActivity implements
         String requestTime, priority;
         Date now = new Date();
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
+
+        // TODO Stavros: Delete these comments after I've tested the quick search results
+        /*String startTime1;
+        Date now1;
+        Calendar cal = Calendar.getInstance();
+        cal.set(2015, 10, 06, 07, 00, 00);
+        now1 = cal.getTime();
+        startTime1 = df.format(now1);
+        Log.d("oops", startTime1);*/
 
         // Provide some default values since this is a quick search
         startPositionLatitude = String.valueOf(currentLatitude);
@@ -132,27 +113,26 @@ public class MainActivity extends MenuedActivity implements
             asyncTask.execute(userId, startTime, endTime, requestTime, startPositionLatitude,
                     startPositionLongitude, edPosition, priority);
         } else {
-            Context context = getApplicationContext();
             CharSequence text = "Please enter a destination address.";
             int duration = Toast.LENGTH_SHORT;
-
             Toast toast = Toast.makeText(context, text, duration);
             toast.show();
         }
     }
 
     public void processFinish(ArrayList<FullTrip> searchResults){
+        Intent myIntent = new Intent(MainActivity.this, SearchActivity.class);
 
         if (searchResults.isEmpty()){
             CharSequence text = "Could not find any trips matching your criteria.";
             int duration = Toast.LENGTH_SHORT;
             Toast toast = Toast.makeText(context, text, duration);
             toast.show();
+        } else {
+            myIntent.putParcelableArrayListExtra("searchResults", searchResults);
         }
 
-        Intent myIntent = new Intent(MainActivity.this, SearchActivity.class);
-        RecommendedTrips recommendedTrips = new RecommendedTrips(searchResults);
-        myIntent.putExtra("searchResults", recommendedTrips);
+        myIntent.putExtra("destination", destination.getText().toString());
         MainActivity.this.startActivity(myIntent);
     }
 
@@ -161,6 +141,8 @@ public class MainActivity extends MenuedActivity implements
                 != PackageManager.PERMISSION_GRANTED){
             ActivityCompat.requestPermissions(MainActivity.this,
                     new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, MY_PERMISSIONS_REQUEST);
+        } else {
+            mGoogleApiClient.connect();
         }
     }
 
@@ -173,11 +155,9 @@ public class MainActivity extends MenuedActivity implements
                     mGoogleApiClient.connect();
                 } else {
                     // Permission denied, boo! Disable the functionality that depends on this permission.
-                    Context context = getApplicationContext();
-                    CharSequence text = "If you don't give location permission then the quick search " +
-                                        "will not work correctly";
+                    CharSequence text = "If you don't give location permission then we can't use " +
+                            "your current location to search for suitable bus trips.";
                     int duration = Toast.LENGTH_LONG;
-
                     Toast toast = Toast.makeText(context, text, duration);
                     toast.show();
                 }
@@ -290,22 +270,30 @@ public class MainActivity extends MenuedActivity implements
             finish();
         }
 
-        if (!mGoogleApiClient.isConnected()) {
-            if (Build.VERSION.SDK_INT >= 23){
-                checkForPermission();
-            } else {
-                mGoogleApiClient.connect();
+        if (checkPlayServices()){
+            if (!mGoogleApiClient.isConnected()) {
+                if (Build.VERSION.SDK_INT >= 23){
+                    checkForPermission();
+                } else {
+                    mGoogleApiClient.connect();
+                }
             }
+        } else {
+            CharSequence text = "If you don't have google play services enabled then we can't use " +
+                    "your current location to search for suitable bus trips.";
+            int duration = Toast.LENGTH_LONG;
+            Toast toast = Toast.makeText(context, text, duration);
+            toast.show();
         }
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        /*if (mGoogleApiClient.isConnected()) {
+        if (mGoogleApiClient.isConnected()) {
             LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
             mGoogleApiClient.disconnect();
-        }*/
+        }
     }
 
     //TODO (Huijie): prompt the user to choose before leaving the application
@@ -340,14 +328,8 @@ public class MainActivity extends MenuedActivity implements
         Location location = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
 
         if (location == null) {
-            // This exception will be thrown on android 6 devices where the user hasn't given location permission
-            try{
-                LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
-            }catch(java.lang.SecurityException e){
-                Log.d("oops", e.toString());
-            }
-        }
-        else {
+            LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
+        } else {
             handleNewLocation(location);
         }
     }
@@ -367,22 +349,15 @@ public class MainActivity extends MenuedActivity implements
         handleNewLocation(location);
     }
 
-
     private boolean checkPlayServices() {
-
         GoogleApiAvailability apiAvailability = GoogleApiAvailability.getInstance();
         int resultCode = apiAvailability.isGooglePlayServicesAvailable(this);
         if (resultCode != ConnectionResult.SUCCESS) {
             if (apiAvailability.isUserResolvableError(resultCode)) {
-                apiAvailability.getErrorDialog(this, resultCode, PLAY_SERVICES_RESOLUTION_REQUEST)
-                        .show();
-            } else {
-                Log.i(TAG, "This device is not supported.");
-                finish();
+                apiAvailability.getErrorDialog(this, resultCode, PLAY_SERVICES_RESOLUTION_REQUEST).show();
             }
             return false;
         }
         return true;
     }
-
 }
