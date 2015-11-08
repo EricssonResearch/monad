@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.NavUtils;
@@ -39,6 +40,7 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.ExecutionException;
 
 import se.uu.csproject.monadclient.recyclerviews.FullTrip;
 import se.uu.csproject.monadclient.recyclerviews.PartialTrip;
@@ -59,6 +61,16 @@ public class MainActivity extends MenuedActivity implements
     //Google Cloud Services
     private static final String TAG = "MainActivity";
     private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
+
+    private class GetRecommendationsTask extends AsyncTask<String, Void, String> {
+
+        @Override
+        protected String doInBackground(String... params) {
+            String response = ClientAuthentication.postGetRecommendationsRequest();
+            Log.i("Recommendations: ", response);
+            return response;
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,6 +98,15 @@ public class MainActivity extends MenuedActivity implements
         } else {
             mGoogleApiClient.connect();
         }
+
+//        GetRecommendationsTask recommendationsTask = new GetRecommendationsTask();
+//        try {
+//            recommendationsTask.execute().get();
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        } catch (ExecutionException e) {
+//            e.printStackTrace();
+//        }
     }
 
     public void openMainSearch (View view) {

@@ -12,18 +12,17 @@
 
 start(Options) ->
     start_broadcaster(),
-    % start_python(),
+    start_python(),
     start_emysql(),
 
     {DocRoot, Options1} = get_option(docroot, Options),
     Loop = fun (Req) ->
                    ?MODULE:loop(Req, DocRoot)
            end,
-
     mochiweb_http:start([{name, ?MODULE}, {loop, Loop} | Options1]).
 
 stop() ->
-    % stop_python(),
+    stop_python(),
     stop_emysql(),
     stop_broadcaster(),
     mochiweb_http:stop(?MODULE).
@@ -51,22 +50,22 @@ stop_broadcaster() ->
            {process, Broadcaster}],
     io:format("~n~p~n", [Msg]).
 
-% start_python() ->
-%     {ok, PythonInstance} = python:start([{python_path, "src/python"}]),
-%     register(python_instance, PythonInstance),
-%     python:call(PythonInstance, rooter, start, []),
-%     Broadcaster = whereis(broadcaster),
-%     Msg = [{message, "PythonInstance: started"},
-%            {process, PythonInstance}],
-%     Broadcaster ! {broadcast, Msg}.
-%
-% stop_python() ->
-%     PythonInstance = whereis(python_instance),
-%     python:stop(PythonInstance),
-%     Broadcaster = whereis(broadcaster),
-%     Msg = [{message, "PythonInstance: stopped"},
-%            {process, PythonInstance}],
-%     Broadcaster ! {broadcast, Msg}.
+start_python() ->
+    {ok, PythonInstance} = python:start([{python_path, "src/python"}]),
+    register(python_instance, PythonInstance),
+    python:call(PythonInstance, recommendations_parser, start, [<<"">>]),
+    Broadcaster = whereis(broadcaster),
+    Msg = [{message, "PythonInstance: started"},
+           {process, PythonInstance}],
+    Broadcaster ! {broadcast, Msg}.
+
+stop_python() ->
+    PythonInstance = whereis(python_instance),
+    python:stop(PythonInstance),
+    Broadcaster = whereis(broadcaster),
+    Msg = [{message, "PythonInstance: stopped"},
+           {process, PythonInstance}],
+    Broadcaster ! {broadcast, Msg}.
 
 start_emysql() ->
     application:start(emysql),
@@ -91,8 +90,8 @@ stop_emysql() ->
            {process, self()}],
     Broadcaster ! {broadcast, Msg}.
 
-% test(PythonInstance, ClientId) ->
-%     {Numy, _} = string:to_integer(ClientId),
+% test(PythonInstance, ClientID) ->
+%     {Numy, _} = string:to_integer(ClientID),
 %     io:format("ToInt: ~p~n", [Numy]),
 %     Response = python:call(PythonInstance, recommendationsParser, parse, [Numy]),
 %     io:format("Test Response: ~p~n" , [Response]),
@@ -137,6 +136,10 @@ loop(Req, DocRoot) ->
             handle_error(Report, Req)
     end.
 
+handle_error(Report, Req) ->
+    error_logger:error_report(Report),
+    Req:respond({500, [{"Content-Type", "text/plain"}], "Failed Request\n"}).
+
 client_sign_up(Req) ->
     % Parse username, password, email, phone
     PostData = Req:parse_post(),
@@ -144,10 +147,12 @@ client_sign_up(Req) ->
     Password = proplists:get_value("password", PostData, "Anonymous"),
     Email = proplists:get_value("email", PostData, "Anonymous"),
     Phone = proplists:get_value("phone", PostData, "Anonymous"),
+    GoogleRegistrationToken = proplists:get_value("google_registration_token", PostData, "Anonymous"),
     try
         % Prepare and execute client_sign_up statement
-        emysql:prepare(client_sign_up_statement, <<"SELECT client_sign_up(?, SHA1(?), ?, ?)">>),
-        Result = emysql:execute(mysql_pool, client_sign_up_statement, [Username, Password, Email, Phone]),
+        emysql:prepare(client_sign_up_statement, <<"SELECT client_sign_up(?, SHA1(?), ?, ?, ?)">>),
+        Result = emysql:execute(mysql_pool, client_sign_up_statement,
+                                [Username, Password, Email, Phone, GoogleRegistrationToken]),
         case Result of
             {_, _, _, [[Response]], _} ->
                 Msg = [{type, client_sign_up},
@@ -155,6 +160,7 @@ client_sign_up(Req) ->
                        {password, Password},
                        {email, Email},
                        {phone, Phone},
+                       {googleRegistrationToken, GoogleRegistrationToken},
                        {response, Response},
                        {process, self()}],
                 % io:format("~n~p~n", [Msg]),
@@ -180,15 +186,18 @@ client_sign_in(Req) ->
     PostData = Req:parse_post(),
     Username = proplists:get_value("username", PostData, "Anonymous"),
     Password = proplists:get_value("password", PostData, "Anonymous"),
+    GoogleRegistrationToken = proplists:get_value("google_registration_token", PostData, "Anonymous"),
     try
         % Prepare and execute client_sign_in statement
-        emysql:prepare(client_sign_in_statement, <<"SELECT client_sign_in(?, SHA1(?))">>),
-        Result = emysql:execute(mysql_pool, client_sign_in_statement, [Username, Password]),
+        emysql:prepare(client_sign_in_statement, <<"SELECT client_sign_in(?, SHA1(?), ?)">>),
+        Result = emysql:execute(mysql_pool, client_sign_in_statement,
+                                [Username, Password, GoogleRegistrationToken]),
         case Result of
             {_, _, _, [[Response]], _} ->
                 Msg = [{type, client_sign_in},
                        {username, Username},
                        {password, Password},
+                       {googleRegistrationToken, GoogleRegistrationToken},
                        {response, Response},
                        {process, self()}],
                 % io:format("~n~p~n", [Msg]),
@@ -244,7 +253,7 @@ google_sign_in(Req) ->
 client_profile_update(Req) ->
     % Parse client_id, username, email, phone
     PostData = Req:parse_post(),
-    ClientId = proplists:get_value("client_id", PostData, "Anonymous"),
+    ClientID = proplists:get_value("client_id", PostData, "Anonymous"),
     Username = proplists:get_value("username", PostData, "Anonymous"),
     Email = proplists:get_value("email", PostData, "Anonymous"),
     Phone = proplists:get_value("phone", PostData, "Anonymous"),
@@ -252,7 +261,7 @@ client_profile_update(Req) ->
         % Prepare and execute client_sign_up statement
         emysql:prepare(client_profile_update_statement, <<"SELECT client_profile_update(?, ?, ?, ?)">>),
         Result = emysql:execute(mysql_pool, client_profile_update_statement,
-                                [ClientId, Username, Email, Phone]),
+                                [ClientID, Username, Email, Phone]),
         case Result of
             {_, _, _, [[Response]], _} ->
                 Msg = [{type, client_profile_update},
@@ -282,7 +291,7 @@ client_profile_update(Req) ->
 client_settings_update(Req) ->
     % Parse client_id, language, store_location, notifications_alert, recommendations_alert, theme
     PostData = Req:parse_post(),
-    ClientId = proplists:get_value("client_id", PostData, "Anonymous"),
+    ClientID = proplists:get_value("client_id", PostData, "Anonymous"),
     Language = proplists:get_value("language", PostData, "Anonymous"),
     StoreLocation = proplists:get_value("store_location", PostData, "Anonymous"),
     NotificationsAlert = proplists:get_value("notifications_alert", PostData, "Anonymous"),
@@ -292,11 +301,11 @@ client_settings_update(Req) ->
         % Prepare and execute client_sign_up statement
         emysql:prepare(client_settings_update_statement, <<"SELECT client_settings_update(?, ?, ?, ?, ?, ?)">>),
         Result = emysql:execute(mysql_pool, client_settings_update_statement,
-                                [ClientId, Language, StoreLocation, NotificationsAlert, RecommendationsAlert, Theme]),
+                                [ClientID, Language, StoreLocation, NotificationsAlert, RecommendationsAlert, Theme]),
         case Result of
             {_, _, _, [[Response]], _} ->
                 Msg = [{type, client_settings_update},
-                       {clientId, ClientId},
+                       {clientID, ClientID},
                        {language, Language},
                        {storeLocation, StoreLocation},
                        {notificationsAlert, NotificationsAlert},
@@ -325,19 +334,19 @@ client_settings_update(Req) ->
 client_existing_password_update(Req) ->
     % Parse client_id, old_password, new_password
     PostData = Req:parse_post(),
-    ClientId = proplists:get_value("client_id", PostData, "Anonymous"),
+    ClientID = proplists:get_value("client_id", PostData, "Anonymous"),
     OldPassword = proplists:get_value("old_password", PostData, "Anonymous"),
     NewPassword = proplists:get_value("new_password", PostData, "Anonymous"),
     try
         % Prepare and execute client_existing_password_update statement
         emysql:prepare(client_existing_password_update_statement,
-                       <<"SELECT client_existing_password_update(?, ?, ?)">>),
+                       <<"SELECT client_existing_password_update(?, SHA1(?), SHA1(?))">>),
         Result = emysql:execute(mysql_pool, client_existing_password_update_statement,
-                                [ClientId, OldPassword, NewPassword]),
+                                [ClientID, OldPassword, NewPassword]),
         case Result of
             {_, _, _, [[Response]], _} ->
                 Msg = [{type, client_existing_password_update},
-                       {clientId, ClientId},
+                       {clientID, ClientID},
                        {oldPassword, OldPassword},
                        {newPassword, NewPassword},
                        {response, Response},
@@ -368,7 +377,7 @@ client_forgotten_password_reset(Req) ->
     try
         % Prepare and execute client_existing_password_update statement
         emysql:prepare(client_forgotten_password_reset_statement,
-                       <<"SELECT client_forgotten_password_reset(?, ?)">>),
+                       <<"SELECT client_forgotten_password_reset(?, SHA1(?))">>),
         Result = emysql:execute(mysql_pool, client_forgotten_password_reset_statement,
                                 [Email, NewPassword]),
         case Result of
@@ -397,26 +406,23 @@ client_forgotten_password_reset(Req) ->
     end.
 
 get_recommendations(Req) ->
-    Req:respond({200, [{"Content-Type", "text/plain"}], "TODO"}).
-    % PostData = Req:parse_post(),
-    % ClientId = proplists:get_value("client_id", PostData, "Anonymous"),
-    % io:format("Temp: ~p~n", [ClientId]),
-    % try
-    %     PythonInstance = whereis(python_instance),
-    %     Response = test(PythonInstance, ClientId),
-	% io:format("Test: ~p~n", [Response]),
-    %     Req:respond({200, [{"Content-Type", "text/plain"}], Response})
-    % catch
-    %     Type:What ->
-    %             Report = ["Failed Request: get_recommendations",
-    %                       {type, Type}, {what, What},
-    %                       {trace, erlang:get_stacktrace()}],
-    %             handle_error(Report, Req)
-    % end.
-
-handle_error(Report, Req) ->
-    error_logger:error_report(Report),
-    Req:respond({500, [{"Content-Type", "text/plain"}], "Failed Request\n"}).
+    PostData = Req:parse_post(),
+    ClientID_str = proplists:get_value("client_id", PostData, "Anonymous"),
+    {ClientID, _} = string:to_integer(ClientID_str),
+    io:format("ClientID: ~p~n", [ClientID]),
+    try
+        PythonInstance = whereis(python_instance),
+        Response = python:call(PythonInstance, recommendations_parser, parse_recommendations, [ClientID]),
+        % Response = test(PythonInstance, ClientID),
+        io:format("Response: ~p~n", [Response]),
+        Req:respond({200, [{"Content-Type", "text/plain"}], Response})
+    catch
+        Type:What ->
+                Report = ["Failed Request: get_recommendations",
+                          {type, Type}, {what, What},
+                          {trace, erlang:get_stacktrace()}],
+                handle_error(Report, Req)
+    end.
 
 %% Internal API
 

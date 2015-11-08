@@ -37,7 +37,7 @@ public class Security {
     }
 
     public static boolean isSmallCase(int ascii) {
-        if (ascii > 96 && ascii < 121) {
+        if (ascii > 96 && ascii < 123) {
             return true;
         }
         return false;
