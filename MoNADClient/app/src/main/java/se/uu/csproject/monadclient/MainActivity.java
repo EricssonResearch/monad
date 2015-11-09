@@ -208,9 +208,8 @@ public class MainActivity extends MenuedActivity implements
         }
     }
 
-    public void openTripDetail (View v) {
-        //opens Route activity layout
-        startActivity(new Intent(this, RouteActivity.class));
+    public void goToAdvancedSearch(View v) {
+        startActivity(new Intent(this, SearchActivity.class));
     }
 
     //TEMPORARY FUNCTION TODO: Remove this function once the database connection is set
