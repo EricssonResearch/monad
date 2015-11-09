@@ -11,6 +11,19 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
+
+    <!--//permissions for google cloud messaging-->
+
+
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
+    <uses-permission android:name= "se.uu.csproject.monadclient.permission.C2D_MESSAGE"/>
+
+
+
+
+
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -52,13 +65,6 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity" />
-        </activity>
-        <activity
-            android:name=".RouteSuccessActivity"
-            android:label="@string/title_activity_route_success" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".TripsActivity" />
         </activity>
         <activity
             android:name=".ProfileActivity"
@@ -121,17 +127,50 @@
             android:label="@string/title_activity_reset_password" >
         </activity>
         <activity
-            android:name=".ProfileEditPopup"
-            android:label="@string/title_activity_profile_edit_popup"
-            android:parentActivityName=".ProfileActivity" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="se.uu.csproject.monadclient.ProfileActivity" />
-        </activity>
-        <activity
             android:name=".GoogleLogIn"
             android:label="@string/title_activity_google_log_in">
         </activity>
+
+        <receiver
+            android:name="com.google.android.gms.gcm.GcmReceiver"
+            android:exported="true"
+            android:permission="com.google.android.c2dm.permission.SEND" >
+            <intent-filter>
+                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+                <category android:name="se.uu.csproject.monadclient" />
+            </intent-filter>
+        </receiver >
+
+
+
+        <service
+            android:name="se.uu.csproject.monadclient.googlecloudmessaging.MyGcmListenerService"
+            android:exported="false" >
+            <intent-filter>
+                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+            </intent-filter>
+        </service>
+
+        <service
+            android:name="se.uu.csproject.monadclient.googlecloudmessaging.MyInstanceIDListenerService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.android.gms.iid.InstanceID"/>
+            </intent-filter>
+        </service>
+
+
+        <service android:name="se.uu.csproject.monadclient.googlecloudmessaging.MyInstanceIDService" android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.android.gms.iid.InstanceID"/>
+            </intent-filter>
+        </service>
+
+        <service
+            android:name="se.uu.csproject.monadclient.googlecloudmessaging.RegistrationIntentService"
+            android:exported="false">
+        </service>
+
     </application>
 
 </manifest>

@@ -1,62 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<!--<TextView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:text="themeFRAGMENT"
-    android:gravity="center"
-    android:id="@+id/themetxt" />-->
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RadioGroup
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/radiogroup_fragmentsettingstheme_theme"
+    android:padding="@dimen/big_padding"
     android:orientation="vertical"
-    tools:context="se.uu.csproject.monadclient.SettingsActivity">
-
-    <LinearLayout
+    android:gravity="center_vertical"
+    tools:context="se.uu.csproject.monadclient.SettingsActivity"
+    android:layout_gravity="center"
+    >
+    <RadioButton
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:id="@+id/settingstheme_linearlayout"
-        android:gravity="center_vertical"
-        >
-
-
-        <RadioGroup
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/radiogroup_fragmentsettingstheme_theme"
-            android:padding="@dimen/big_padding"
-            android:orientation="vertical"
-            android:gravity="center_vertical">
-            <RadioButton
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:checked="true"
-                android:id="@+id/radiobutton_fragmentsettingstheme_default"
-                android:padding="@dimen/big_padding"
-                android:text="@string/label_fragmentsettingstheme_default"
-                android:textSize="@dimen/medium_text"
-                android:layout_weight="1"/>
-            <RadioButton
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:checked="false"
-                android:id="@+id/radiobutton_fragmentsettingstheme_light"
-                android:padding="@dimen/big_padding"
-                android:text="@string/label_fragmentsettingstheme_light"
-                android:textSize="@dimen/medium_text"
-                android:layout_weight="1"/>
-            <RadioButton
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:checked="false"
-                android:id="@+id/radiobutton_fragmentsettingstheme_dark"
-                android:padding="@dimen/big_padding"
-                android:text="@string/label_fragmentsettingstheme_dark"
-                android:textSize="@dimen/medium_text"
-                android:layout_weight="1"/>
-        </RadioGroup>
-    </LinearLayout>
-
-</RelativeLayout>
+        android:layout_height="wrap_content"
+        android:checked="true"
+        android:id="@+id/radiobutton_fragmentsettingstheme_default"
+        android:padding="@dimen/big_padding"
+        android:text="@string/label_fragmentsettingstheme_default"
+        android:textSize="@dimen/medium_text"
+        android:layout_weight="1"/>
+    <RadioButton
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:checked="false"
+        android:id="@+id/radiobutton_fragmentsettingstheme_light"
+        android:padding="@dimen/big_padding"
+        android:text="@string/label_fragmentsettingstheme_light"
+        android:textSize="@dimen/medium_text"
+        android:layout_weight="1"/>
+    <RadioButton
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:checked="false"
+        android:id="@+id/radiobutton_fragmentsettingstheme_dark"
+        android:padding="@dimen/big_padding"
+        android:text="@string/label_fragmentsettingstheme_dark"
+        android:textSize="@dimen/medium_text"
+        android:layout_weight="1"/>
+</RadioGroup>

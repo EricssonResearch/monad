@@ -15,15 +15,19 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.io.DataOutputStream;
+import java.util.ArrayList;
+
+import se.uu.csproject.monadclient.recyclerviews.FullTrip;
 
 
-public class SendQuickTravelRequest extends AsyncTask<String, Void, String>{
-    private static String SERVER = "http://130.238.15.114";
+public class SendQuickTravelRequest extends AsyncTask<String, Void, ArrayList<FullTrip>>{
+    private static String SERVER = "http://130.238.15.114:2001";
+    public AsyncResponse delegate = null;
 
     /* Send the data to the server via POST and receive the response */
-    public static String postRequest(String request, String urlParameters) {
-        String response;
-        int numberOfRecommendedTrips;
+    public static ArrayList<FullTrip> postRequest(String request, String urlParameters) {
+        ArrayList<FullTrip> searchResults = new ArrayList<>();
+        HttpURLConnection conn = null;
 
         try {
             URL url = new URL(request);
@@ -31,7 +35,7 @@ public class SendQuickTravelRequest extends AsyncTask<String, Void, String>{
             int postDataLength = postData.length;
 
             // Setup connection to the server
-            HttpURLConnection conn = (HttpURLConnection)url.openConnection();
+            conn = (HttpURLConnection)url.openConnection();
             conn.setDoOutput(true);
             conn.setInstanceFollowRedirects(false);
             conn.setRequestMethod("POST");
@@ -58,31 +62,31 @@ public class SendQuickTravelRequest extends AsyncTask<String, Void, String>{
             }
             JSONObject trips = new JSONObject(sb.toString());
 
-            numberOfRecommendedTrips = trips.length();
-            Log.d("oops", "Number of trips: " +  numberOfRecommendedTrips);
-            response = "Woohoo it works!";
-
-            // Close the connection
-            conn.disconnect();
+            searchResults = new StoreTrips().storeTheTrips(trips);
 
         } catch (MalformedURLException e) {
-            return (e.toString());
+            Log.d("oops", e.toString());
 
         } catch (IOException e) {
-            return (e.toString());
+            Log.d("oops", e.toString());
 
         } catch (RuntimeException e) {
-            return (e.toString());
+            Log.d("oops", e.toString());
 
         } catch (JSONException e) {
-            return (e.toString());
+            Log.d("oops", e.toString());
+        }
+        finally {
+            if (conn != null) {
+                conn.disconnect();
+            }
         }
 
-        return response;
+        return searchResults;
     }
 
     /* Get the data from the interface and wrap them in a request */
-    public static String wrapRequest(String userId, String startTime, String endTime, String requestTime,
+    public static ArrayList<FullTrip> wrapRequest(String userId, String startTime, String endTime, String requestTime,
                                      String startPositionLatitude, String startPositionLongitude,
                                      String edPosition, String priority) {
         String request = SERVER + "/quickRequest";
@@ -92,24 +96,24 @@ public class SendQuickTravelRequest extends AsyncTask<String, Void, String>{
                 + "&startPositionLatitude=" + startPositionLatitude
                 + "&startPositionLongitude=" + startPositionLongitude + "&edPosition=" + edPosition
                 + "&priority=" + priority;
-        String response = postRequest(request, urlParameters);
+        ArrayList<FullTrip> searchResults = postRequest(request, urlParameters);
 
-        return response;
+        return searchResults;
     }
 
     /* This is the function that is called by the button listener */
     @Override
-    protected String doInBackground(String... params) {
-        String response;
+    protected ArrayList<FullTrip> doInBackground(String... params) {
+        ArrayList<FullTrip> searchResults;
 
-        response = wrapRequest(params[0], params[1], params[2], params[3], params[4], params[5], params[6], params[7]);
+        searchResults = wrapRequest(params[0], params[1], params[2], params[3], params[4], params[5], params[6], params[7]);
 
-        return response;
+        return searchResults;
     }
 
     /* Deal with the response returned by the server */
     @Override
-    protected void onPostExecute(String response) {
-        Log.d("oops", response);
+    protected void onPostExecute(ArrayList<FullTrip> searchResults) {
+        delegate.processFinish(searchResults);
     }
 }

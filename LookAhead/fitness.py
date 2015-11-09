@@ -14,7 +14,6 @@ See the License for the specific language governing permissions and limitations 
 
 """
 from dbConnection import DB
-from operator import itemgetter
 from datetime import datetime
 from datetime import timedelta
 from datetime import date
@@ -33,7 +32,9 @@ class Fitness():
     routes = []
     request = []
     requestIndex = []
-    yesterday = date.today() - timedelta(13)
+    # yesterday = date.today() - timedelta(13)
+    yesterday = datetime(2015, 10, 21)
+
 
 
 # A decorator is a function that can accept another function as
@@ -84,8 +85,8 @@ class Fitness():
             if request[i]["_id"]["RequestTime"].minute != minute or i == 0:
                 Fitness.requestIndex.append([request[i]["_id"]["RequestTime"].hour, request[i]["_id"]["RequestTime"].minute, i])
                 minute = request[i]["_id"]["RequestTime"].minute
-               # minute = request[i]["minute"]
-        print(Fitness.requestIndex)
+
+
     def searchRequestIndex(self, index, initialHour, initialMinute, finalHour, finalMinute):
         ''' Search the index to get the position on the request array for a specific time frame
         
@@ -103,10 +104,15 @@ class Fitness():
         # TODO: Watch out with MIDNIGHT trips !!!!
         if len(result) == 0:
             result.append(len(Fitness.request))
-        for i in range(i, len(index)):
-            if index[i][0] >= finalHour and index[i][1] >= finalMinute:
-                result.append(index[i][2])
-                break
+
+        try:
+            for i in range(i, len(index)):
+                if index[i][0] >= finalHour and index[i][1] >= finalMinute:
+                    result.append(index[i][2])
+                    break
+        except UnboundLocalError:
+            print "Length of index is " + str(len(index))
+
         # TODO: Watch out with MIDNIGHT trips !!!!
         if len(result) == 1:
             result.append(len(Fitness.request))
@@ -131,7 +137,7 @@ class Fitness():
         ''' Calculate cost for an individual in the population. 
 
         @param  individual: individual in the population; 
-                averageWaitingTime: average waiting time for that individual
+                totalWaitingTime: total waiting time for that individual
                 penaltyOverCapacity: a positive integer to represent a large cost to individual if capacity cannot handle all request of that trip
         @return cost: positive integer for this individual, if input param is out of range, cost will be -1
 

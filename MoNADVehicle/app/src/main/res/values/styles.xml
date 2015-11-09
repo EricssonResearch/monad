@@ -2,7 +2,7 @@
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="AppTheme.Base">
-    <!-- Customize your theme here. -->
+        <!-- Customize your theme here. -->
     </style>
 
     <style name="AppTheme.Base" parent="Theme.AppCompat.Light.NoActionBar">
@@ -14,15 +14,18 @@
     <style name="darkTheme" parent="ThemeOverlay.AppCompat.Dark">
     </style>
 
-    <style name="darkTheme.bigBoldText">
+    <style name="bigBoldText" parent="TextAppearance.AppCompat">
         <item name="android:textStyle">bold</item>
         <item name="android:textSize">@dimen/big_bold_text_size</item>
         <item name="android:gravity">center</item>
     </style>
 
-    <style name="darkTheme.mediumText">
+    <style name="mediumText" parent="TextAppearance.AppCompat">
         <item name="android:textSize">@dimen/medium_text_size</item>
         <item name="android:gravity">center_horizontal</item>
+    </style>
+
+    <style name="blackText" parent="TextAppearance.AppCompat.Light.SearchResult.Subtitle">
     </style>
 
     <style name="emergencyTheme" parent="ThemeOverlay.AppCompat.Dark">

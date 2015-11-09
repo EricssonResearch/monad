@@ -15,11 +15,13 @@ import java.io.DataOutputStream;
 
 
 public class SendBookingCancelRequest extends AsyncTask<String, Void, String>{
-    private static String SERVER = "http://130.238.15.114";
+    private static String SERVER = "http://130.238.15.114:2001";
+    public AsyncResponseString delegate = null;
 
     /* Send the data to the server via POST and receive the response */
     public static String postRequest(String request, String urlParameters) {
         String response = "";
+        HttpURLConnection conn = null;
 
         try {
             URL url = new URL(request);
@@ -27,7 +29,7 @@ public class SendBookingCancelRequest extends AsyncTask<String, Void, String>{
             int postDataLength = postData.length;
 
             // Setup connection to the server
-            HttpURLConnection conn = (HttpURLConnection)url.openConnection();
+            conn = (HttpURLConnection)url.openConnection();
             conn.setDoOutput(true);
             conn.setInstanceFollowRedirects(false);
             conn.setRequestMethod("POST");
@@ -51,9 +53,6 @@ public class SendBookingCancelRequest extends AsyncTask<String, Void, String>{
                 response = response + line + "\n";
             }
 
-            // Close the connection
-            conn.disconnect();
-
         } catch (MalformedURLException e) {
             return (e.toString());
 
@@ -62,6 +61,11 @@ public class SendBookingCancelRequest extends AsyncTask<String, Void, String>{
 
         } catch (RuntimeException e) {
             return (e.toString());
+        }
+        finally {
+            if (conn != null) {
+                conn.disconnect();
+            }
         }
 
         return response;
@@ -90,6 +94,6 @@ public class SendBookingCancelRequest extends AsyncTask<String, Void, String>{
     /* Deal with the response returned by the server */
     @Override
     protected void onPostExecute(String response) {
-        Log.d("oops", response);
+        delegate.processFinish(response);
     }
 }

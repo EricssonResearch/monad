@@ -24,9 +24,8 @@
             android:layout_width="@dimen/icon_medium"
             android:layout_height="@dimen/icon_medium"
             android:layout_gravity="center_vertical"
-            android:contentDescription="@string/label_notification_cancelcontentdescription"
+            android:contentDescription="@string/img_description"
             />
-
 
         <TextView
             android:id="@+id/text"
@@ -55,20 +54,18 @@
             android:layout_height="@dimen/cancel_size"
             android:src="@mipmap/ic_launcher"
             android:layout_gravity="center_vertical"
-            android:contentDescription="@string/label_notification_cancelcontentdescription"
+            android:contentDescription="@string/img_description"
             android:id="@+id/image1"
             />
 
-          <ImageView
+        <ImageView
             android:layout_width="@dimen/cancel_size"
             android:layout_height="@dimen/cancel_size"
             android:src="@drawable/ic_clear_black_24dp"
+            android:contentDescription="@string/img_description"
             android:layout_gravity="center_vertical"
-              android:id="@+id/image2"
-              android:layout_marginBottom="13dp"
-
-
-
+            android:id="@+id/image2"
+            android:layout_marginBottom="13dp"
             />
 
     </LinearLayout>

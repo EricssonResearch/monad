@@ -18,11 +18,12 @@ import java.util.Date;
 
 
 public class SendResetPasswordRequest extends AsyncTask<String, Void, String> {
-    private static String SERVER = "http://130.238.15.114";
+    private static String SERVER = "http://130.238.15.114:2001";
 
     /* Send the data to the server via POST and receive the response */
     public static String postRequest(String request, String urlParameters) {
         String response = "";
+        HttpURLConnection conn = null;
 
         try {
             URL url = new URL(request);
@@ -30,7 +31,7 @@ public class SendResetPasswordRequest extends AsyncTask<String, Void, String> {
             int postDataLength = postData.length;
 
             // Setup connection to the server
-            HttpURLConnection conn = (HttpURLConnection)url.openConnection();
+            conn = (HttpURLConnection)url.openConnection();
             conn.setDoOutput(true);
             conn.setInstanceFollowRedirects(false);
             conn.setRequestMethod("POST");
@@ -45,7 +46,7 @@ public class SendResetPasswordRequest extends AsyncTask<String, Void, String> {
 
             // Get the response from the server
             int responseCode = conn.getResponseCode();
-            if (responseCode != 200 && responseCode != 500 && responseCode != 403) {
+            if (responseCode != 200) {
                 throw new RuntimeException("Something went wrong - HTTP error code: " + responseCode);
             }
             BufferedReader br = new BufferedReader(new InputStreamReader((conn.getInputStream())));
@@ -54,17 +55,19 @@ public class SendResetPasswordRequest extends AsyncTask<String, Void, String> {
                 response = response + "\n" + line;
             }
 
-            // Close the connection
-            conn.disconnect();
-
         } catch (MalformedURLException e) {
-            return ("MalformedURLException: " + e.toString());
+            return (e.toString());
 
         } catch (IOException e) {
-            return ("IOException: " + e.toString());
+            return (e.toString());
 
         } catch (RuntimeException e) {
             return (e.toString());
+        }
+        finally {
+            if (conn != null) {
+                conn.disconnect();
+            }
         }
 
         return response;
@@ -73,20 +76,6 @@ public class SendResetPasswordRequest extends AsyncTask<String, Void, String> {
     /* Get the data from the interface and wrap them in a request */
     public static String wrapRequest(String email) {
         String request = SERVER + "/resetPassword";
-        /*SimpleDateFormat df = new SimpleDateFormat("yyyy, MM, dd, HH, mm, ss");
-
-        Date startTime = null;
-        Date endTime = null;
-        Date requestTime = null;
-
-        try {
-        startTime = df.parse(startTimeString);
-        endTime = df.parse(endTimeString);
-        requestTime = df.parse(requestTimeString);
-        } catch (ParseException e) {
-        Log.d("oops", e.toString());
-        return("Something went wrong with the date formatting");
-        }*/
 
         String urlParameters = "email=" + email;
         String response = postRequest(request, urlParameters);

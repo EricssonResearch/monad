@@ -7,6 +7,8 @@ import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -18,8 +20,9 @@ import se.uu.csproject.monadclient.recyclerviews.NotificationRecyclerViewAdapter
 import se.uu.csproject.monadclient.recyclerviews.Notify;
 
 //// TODO (low priority): receive data from notification module (maybe not in this activity - TBD), display them in notification bar as well as in the recyclerview
-public class NotificationsActivity extends AppCompatActivity {
+public class NotificationsActivity extends MenuedActivity {
 
+    private Toolbar toolbar;
     public static List<Notify> notifications;
     public static int NOTIFICATION_ID = 100;
     public static String NOTIFICATION_ID_STR = "_id";
@@ -31,6 +34,12 @@ public class NotificationsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_notifications);
+
+        toolbar = (Toolbar) findViewById(R.id.actionToolBar);
+        setSupportActionBar(toolbar);
+
+        getSupportActionBar().setHomeButtonEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         RecyclerView rv =(RecyclerView)findViewById(R.id.rv);
 
@@ -46,14 +55,20 @@ public class NotificationsActivity extends AppCompatActivity {
 
         NotificationManager mNotificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         mNotificationManager.cancel(getIntent().getIntExtra(NOTIFICATION_ID_STR, -1));
-
-
-
-
-
-
     }
 
+    public boolean onCreateOptionsMenu(Menu menu) {
+
+        if(ClientAuthentication.getPassword().equals("0")){
+            // Inflate the menu; this adds items to the action bar if it is present.
+            getMenuInflater().inflate(R.menu.menu_main_google, menu);
+            return true;
+        }
+        else {
+            getMenuInflater().inflate(R.menu.menu_main, menu);
+            return true;
+        }
+    }
 
     private void initializeData(){
                 notifications = new ArrayList<>();
@@ -64,49 +79,61 @@ public class NotificationsActivity extends AppCompatActivity {
                 notifications.add(new Notify("Bus 801: Coming in 5 min", "15:11", R.drawable.ic_feedback_black_24dp));
                 notifications.add(new Notify("Bus 801: Departing now", "15:06", R.drawable.ic_alarm_black_24dp));
             }
+
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//        // Handle action bar item clicks here. The action bar will
+//        // automatically handle clicks on the Home/Up button, so long
+//        // as you specify a parent activity in AndroidManifest.xml.
+//        int id = item.getItemId();
+//
+//        if(id == android.R.id.home){
+//            NavUtils.navigateUpFromSameTask(this);
+//        }
+//
+//        if (id == R.id.action_search) {
+//            return true;
+//        }
+//
+//        if (id == R.id.action_notifications) {
+//            startActivity(new Intent(this, NotificationsActivity.class));
+//        }
+//
+//        if (id == R.id.action_mytrips) {
+//            startActivity(new Intent(this, TripsActivity.class));
+//        }
+//
+//        if (id == R.id.action_profile) {
+//            startActivity(new Intent(this, ProfileActivity.class));
+//        }
+//
+//        //noinspection SimplifiableIfStatement
+//        if (id == R.id.action_settings) {
+//            startActivity(new Intent(this, SettingsActivity.class));
+//        }
+//
+//        if (id == R.id.action_aboutus) {
+//            //TODO (low priority): Create a toaster with text about the MoNAD project and team
+//            startActivity(new Intent(this, AboutUsActivity.class));
+//        }
+//
+//        if (id == R.id.action_signout) {
+//            startActivity(new Intent(this, LoginActivity.class));
+//        }
+//
+//        return super.onOptionsItemSelected(item);
+//    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        if(id == android.R.id.home){
-            NavUtils.navigateUpFromSameTask(this);
-        }
-
-        if (id == R.id.action_search) {
+        if(id == R.id.action_notifications){
             return true;
         }
-
-        if (id == R.id.action_notifications) {
-            startActivity(new Intent(this, NotificationsActivity.class));
+        else {
+            return super.onOptionsItemSelected(item);
         }
-
-        if (id == R.id.action_mytrips) {
-            startActivity(new Intent(this, TripsActivity.class));
-        }
-
-        if (id == R.id.action_profile) {
-            startActivity(new Intent(this, ProfileActivity.class));
-        }
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            startActivity(new Intent(this, SettingsActivity.class));
-        }
-
-        if (id == R.id.action_aboutus) {
-            //TODO (low priority): Create a toaster with text about the MoNAD project and team
-            startActivity(new Intent(this, AboutUsActivity.class));
-        }
-
-        if (id == R.id.action_signout) {
-            startActivity(new Intent(this, LoginActivity.class));
-        }
-
-        return super.onOptionsItemSelected(item);
     }
-
 
 }
 

@@ -2,11 +2,23 @@ package se.uu.csproject.monadclient;
 
 //import com.google.common.base.Charsets;
 
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.Iterator;
+
+import se.uu.csproject.monadclient.recyclerviews.FullTrip;
+import se.uu.csproject.monadclient.recyclerviews.PartialTrip;
+
 /**
  *
  */
 public class ClientAuthentication extends Authentication {
-    private static String[] profile = new String[10];
+    private static String[] profile = new String[11];
     /*
      * 0: clientId ("1", "2", ...)
      * 1: username
@@ -18,11 +30,13 @@ public class ClientAuthentication extends Authentication {
      * 7: notificationsAlert ("0" or "1")
      * 8 recommendationsAlert ("0" or "1")
      * 9: theme ("0", "1", ...)
+     * 10: googleRegistrationToken
      */
 
     public static void setClientId(String clientId) {
         profile[0] = clientId;
     }
+
     public static String getClientId() {
         return profile[0];
     }
@@ -30,6 +44,7 @@ public class ClientAuthentication extends Authentication {
     public static void setUsername(String username) {
         profile[1] = username;
     }
+
     public static String getUsername() {
         return profile[1];
     }
@@ -37,6 +52,7 @@ public class ClientAuthentication extends Authentication {
     public static void setPassword(String password) {
         profile[2] = password;
     }
+
     public static String getPassword() {
         return profile[2];
     }
@@ -44,6 +60,7 @@ public class ClientAuthentication extends Authentication {
     public static void setEmail(String email) {
         profile[3] = email;
     }
+
     public static String getEmail() {
         return profile[3];
     }
@@ -51,6 +68,7 @@ public class ClientAuthentication extends Authentication {
     public static void setPhone(String phone) {
         profile[4] = phone;
     }
+
     public static String getPhone() {
         return profile[4];
     }
@@ -58,6 +76,7 @@ public class ClientAuthentication extends Authentication {
     public static void setLanguage(String language) {
         profile[5] = language;
     }
+
     public static String getLanguage() {
         return profile[5];
     }
@@ -65,15 +84,16 @@ public class ClientAuthentication extends Authentication {
     public static void setStoreLocation(String storeLocation) {
         profile[6] = storeLocation;
     }
+
     public static String getStoreLocation() {
         return profile[6];
     }
+
     public static void updateStoreLocation() {
 
         if (profile[6].equalsIgnoreCase("1")) {
             profile[6] = "0";
-        }
-        else {
+        } else {
             profile[6] = "1";
         }
     }
@@ -81,15 +101,16 @@ public class ClientAuthentication extends Authentication {
     public static void setNotificationsAlert(String notificationsAlert) {
         profile[7] = notificationsAlert;
     }
+
     public static String getNotificationsAlert() {
         return profile[7];
     }
+
     public static void updateNotificationsAlert() {
 
         if (profile[7].equalsIgnoreCase("1")) {
             profile[7] = "0";
-        }
-        else {
+        } else {
             profile[7] = "1";
         }
     }
@@ -97,22 +118,32 @@ public class ClientAuthentication extends Authentication {
     public static void setRecommendationsAlert(String recommendationsAlert) {
         profile[8] = recommendationsAlert;
     }
+
     public static String getRecommendationsAlert() {
         return profile[8];
     }
+
     public static void updateRecommendationsAlert() {
 
         if (profile[8].equalsIgnoreCase("1")) {
             profile[8] = "0";
-        }
-        else {
+        } else {
             profile[8] = "1";
         }
+    }
+
+    public static void setGoogleRegistrationToken(String googleRegistrationTokenToken) {
+        profile[9] = googleRegistrationTokenToken;
+    }
+
+    public static String getGoogleRegistrationToken() {
+        return profile[9];
     }
 
     public static void setTheme(String theme) {
         profile[9] = theme;
     }
+
     //theme mappings: 0: light; 1: default; 2: dark
     public static String getTheme() {
         return profile[9];
@@ -120,15 +151,15 @@ public class ClientAuthentication extends Authentication {
 
     public static String profileToString() {
         String strProfile = "\nclientId: " + getClientId()
-                          + "\nusername: " + getUsername()
-                          + "\npassword: " + getPassword()
-                          + "\nemail: " + getEmail()
-                          + "\nphone: " + getPhone()
-                          + "\nlanguage: " + getLanguage()
-                          + "\nstoreLocation: " + getStoreLocation()
-                          + "\nnotificationsAlert: " + getNotificationsAlert()
-                          + "\nrecommendationsAlert: " + getRecommendationsAlert()
-                          + "\ntheme: " + getTheme();
+                + "\nusername: " + getUsername()
+                + "\npassword: " + getPassword()
+                + "\nemail: " + getEmail()
+                + "\nphone: " + getPhone()
+                + "\nlanguage: " + getLanguage()
+                + "\nstoreLocation: " + getStoreLocation()
+                + "\nnotificationsAlert: " + getNotificationsAlert()
+                + "\nrecommendationsAlert: " + getRecommendationsAlert()
+                + "\ntheme: " + getTheme();
         return strProfile;
     }
 
@@ -200,7 +231,8 @@ public class ClientAuthentication extends Authentication {
 
         String request = AUTHENTICATION_HOST + AUTHENTICATION_PORT + "/client_sign_up";
         String urlParameters = "username=" + username + "&password=" + password
-                             + "&email=" + email + "&phone=" + phone;
+                + "&email=" + email + "&phone=" + phone
+                + "&google_registration_token=" + getGoogleRegistrationToken();
 
         /* Send the request to the Authentication Module */
         String response = postRequest(request, urlParameters);
@@ -240,8 +272,7 @@ public class ClientAuthentication extends Authentication {
             /* updateProfileAfterSignUp(clientId, username, password, email, phone) */
             updateProfileAfterSignUp(clientId, username, "1", email, phone);
             responseMessage = "Success (1) - User Id: " + getClientId();
-        }
-        else {
+        } else {
             responseMessage = "ERROR - " + response;
         }
         return responseMessage;
@@ -257,7 +288,8 @@ public class ClientAuthentication extends Authentication {
         password = Security.encryptPassword(password);
 
         String request = AUTHENTICATION_HOST + AUTHENTICATION_PORT + "/client_sign_in";
-        String urlParameters = "username=" + username + "&password=" + password;
+        String urlParameters = "username=" + username + "&password=" + password
+                + "&google_registration_token=" + getGoogleRegistrationToken();
 
         /* Send the request to the Authentication Module */
         String response = postRequest(request, urlParameters);
@@ -302,8 +334,7 @@ public class ClientAuthentication extends Authentication {
 
                 if (c != '|') {
                     temp = temp + c;
-                }
-                else {
+                } else {
                     responseData[index] = temp;
                     index++;
                     temp = "";
@@ -316,8 +347,8 @@ public class ClientAuthentication extends Authentication {
              *                 recommendationsAlert, theme
              */
             updateProfile(responseData[0], username, "1", responseData[1], responseData[2],
-                          responseData[3], responseData[4], responseData[5],
-                          responseData[6], responseData[7]);
+                    responseData[3], responseData[4], responseData[5],
+                    responseData[6], responseData[7]);
 
             responseMessage = "Success (1) - " + response + profileToString();
         }
@@ -334,7 +365,7 @@ public class ClientAuthentication extends Authentication {
 
     public static String postGoogleSignInRequest(String email) {
         String request = AUTHENTICATION_HOST + AUTHENTICATION_PORT + "/google_sign_in";
-        String urlParameters = "email=" + email;
+        String urlParameters = "email=" + email + "&google_registration_token=" + getGoogleRegistrationToken();
 
         /* Send the request to the Authentication Module */
         String response = postRequest(request, urlParameters);
@@ -382,8 +413,7 @@ public class ClientAuthentication extends Authentication {
 
                 if (c != '|') {
                     temp = temp + c;
-                }
-                else {
+                } else {
                     responseData[index] = temp;
                     index++;
                     temp = "";
@@ -396,8 +426,8 @@ public class ClientAuthentication extends Authentication {
              *                 recommendationsAlert, theme
              */
             updateProfile(responseData[0], responseData[1], responseData[2], email, responseData[3],
-                          responseData[4], responseData[5], responseData[6],
-                          responseData[7], responseData[8]);
+                    responseData[4], responseData[5], responseData[6],
+                    responseData[7], responseData[8]);
 
             responseMessage = "Success (1) - " + response + profileToString();
         }
@@ -411,8 +441,7 @@ public class ClientAuthentication extends Authentication {
             /* updateProfileAfterSignUp(clientId, username, password, email, phone) */
             updateProfileAfterSignUp(clientId, "", "0", email, "");
             responseMessage = "Success (1) - User Id: " + getClientId();
-        }
-        else {
+        } else {
             responseMessage = "ERROR - " + response;
         }
         return responseMessage;
@@ -435,7 +464,7 @@ public class ClientAuthentication extends Authentication {
 
         String request = AUTHENTICATION_HOST + AUTHENTICATION_PORT + "/client_profile_update";
         String urlParameters = "client_id=" + clientId + "&username=" + username
-                             + "&email=" + email + "&phone=" + phone;
+                + "&email=" + email + "&phone=" + phone;
 
         /* Send the request to the Authentication Module */
         String response = postRequest(request, urlParameters);
@@ -484,11 +513,11 @@ public class ClientAuthentication extends Authentication {
 
         String request = AUTHENTICATION_HOST + AUTHENTICATION_PORT + "/client_settings_update";
         String urlParameters = "client_id=" + clientId
-                             + "&language=" + language
-                             + "&store_location=" + storeLocation
-                             + "&notifications_alert=" + notificationsAlert
-                             + "&recommendations_alert=" + recommendationsAlert
-                             + "&theme=" + theme;
+                + "&language=" + language
+                + "&store_location=" + storeLocation
+                + "&notifications_alert=" + notificationsAlert
+                + "&recommendations_alert=" + recommendationsAlert
+                + "&theme=" + theme;
 
         /* Send the request to the Authentication Module */
         String response = postRequest(request, urlParameters);
@@ -502,7 +531,7 @@ public class ClientAuthentication extends Authentication {
 
         /* Process Authentication Module's response */
         return processSettingsUpdateResponse(language, storeLocation, notificationsAlert,
-                                             recommendationsAlert, theme, response);
+                recommendationsAlert, theme, response);
     }
 
     public static String processSettingsUpdateResponse(String language, String storeLocation,
@@ -530,8 +559,8 @@ public class ClientAuthentication extends Authentication {
 
         String request = AUTHENTICATION_HOST + AUTHENTICATION_PORT + "/client_existing_password_update";
         String urlParameters = "client_id=" + clientId
-                             + "&old_password=" + oldPassword
-                             + "&new_password=" + newPassword;
+                + "&old_password=" + oldPassword
+                + "&new_password=" + newPassword;
 
         /* Send the request to the Authentication Module */
         String response = postRequest(request, urlParameters);
@@ -597,5 +626,83 @@ public class ClientAuthentication extends Authentication {
             responseMessage = "ERROR - " + response;
         }
         return responseMessage;
+    }
+
+    public static String postGetRecommendationsRequest() {
+        String request = AUTHENTICATION_HOST + AUTHENTICATION_PORT + "/get_recommendations";
+        // String urlParameters = "client_id=" + getClientId();
+        String urlParameters = "client_id=" + getClientId();
+        /* Send the request to the Authentication Module */
+        String response = postRequest(request, urlParameters);
+
+        /*
+         * By default, Erlang adds the newline '\n' character at the beginning of response.
+         * For this reason substring() function is used
+         */
+        response = response.substring(1);
+        return processGetRecommendationsResponse(response);
+    }
+
+    public static String processGetRecommendationsResponse(String response) {
+        JSONParser parser = new JSONParser();
+
+        try {
+            JSONArray recommendations = (JSONArray) parser.parse(response);
+            Iterator<JSONObject> recommendationsIterator = recommendations.iterator();
+
+            while (recommendationsIterator.hasNext()) {
+                JSONObject recommendation = recommendationsIterator.next();
+
+                JSONObject recommendationObjectID = (JSONObject) recommendation.get("_id");
+                String recommendationID = (String) recommendationObjectID.get("$oid");
+
+                String userID = recommendation.get("userID").toString();
+
+                JSONArray userTripsList = (JSONArray) recommendation.get("userTrip");
+                Iterator<JSONObject> userTripsIterator = userTripsList.iterator();
+
+                ArrayList<PartialTrip> partialTrips = new ArrayList<>();
+
+                while (userTripsIterator.hasNext()) {
+                    JSONObject trip = userTripsIterator.next();
+
+                    JSONObject tripObjectID = (JSONObject) trip.get("_id");
+                    String tripID = (String) tripObjectID.get("$oid");
+
+                    /* TODO: CASTING TO INTEGER THROWS EXCEPTION */
+                    int line = (int) trip.get("line");
+                    int busID = (int) trip.get("busID");
+
+                    String startBusStop = (String) trip.get("startBusStop");
+                    JSONObject startTimeObject = (JSONObject) trip.get("startTime");
+                    Date startTime = new Date((long) startTimeObject.get("$date"));
+
+                    String endBusStop = (String) trip.get("endBusStop");
+                    JSONObject endTimeObject = (JSONObject) trip.get("endTime");
+                    Date endTime = new Date((long) endTimeObject.get("$date"));
+
+                    ArrayList<String> trajectory = new ArrayList<>();
+                    JSONArray trajectoryObject = (JSONArray) trip.get("trajectory");
+                    Iterator<JSONObject> trajectoryObjectIterator = trajectoryObject.iterator();
+
+                    while (trajectoryObjectIterator.hasNext()) {
+                        String busStopName = trajectoryObjectIterator.next().toString();
+                        trajectory.add(busStopName);
+                    }
+
+                    PartialTrip partialTrip = new PartialTrip(tripID, line, busID, startBusStop, startTime,
+                                                              endBusStop, endTime, trajectory);
+
+                    partialTrips.add(partialTrip);
+                }
+                FullTrip fullTrip = new FullTrip(partialTrips);
+
+            }
+        }
+        catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        return response;
     }
 }
