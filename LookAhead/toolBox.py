@@ -64,8 +64,19 @@ def evalIndividual(individual):
     tripWaitingTime = timedelta(minutes=0) # waiting time due to insufficient capacity
     noOfLeftOvers = 0
     print individual
+    timeSlices = ((datetime.strptime('2015-10-21 00:00:00','%Y-%m-%d %H:%M:%S'),(datetime.strptime('2015-10-21 02:59:59','%Y-%m-%d %H:%M:%S'))),
+        (datetime.strptime('2015-10-21 03:00:00','%Y-%m-%d %H:%M:%S'), datetime.strptime('2015-10-21 05:59:59','%Y-%m-%d %H:%M:%S')),
+        (datetime.strptime('2015-10-21 06:00:00','%Y-%m-%d %H:%M:%S'), datetime.strptime('2015-10-21 08:59:59','%Y-%m-%d %H:%M:%S')),
+        (datetime.strptime('2015-10-21 09:00:00','%Y-%m-%d %H:%M:%S'), datetime.strptime('2015-10-21 11:59:59','%Y-%m-%d %H:%M:%S')),
+        (datetime.strptime('2015-10-21 12:00:00','%Y-%m-%d %H:%M:%S'), datetime.strptime('2015-10-21 14:59:59','%Y-%m-%d %H:%M:%S')),
+        (datetime.strptime('2015-10-21 15:00:00','%Y-%m-%d %H:%M:%S'), datetime.strptime('2015-10-21 17:59:59','%Y-%m-%d %H:%M:%S')),
+        (datetime.strptime('2015-10-21 18:00:00','%Y-%m-%d %H:%M:%S'), datetime.strptime('2015-10-21 20:59:59','%Y-%m-%d %H:%M:%S')),
+        (datetime.strptime('2015-10-21 21:00:00','%Y-%m-%d %H:%M:%S'), datetime.strptime('2015-10-21 23:59:59','%Y-%m-%d %H:%M:%S')))
+    departures = []
+
     for i, trip in enumerate(individual):
         tripStartTime = trip[3]
+        '''
         if len(str(tripStartTime.hour)) == 1:
             temp = "0" + str(tripStartTime.hour) + ":" + str(tripStartTime.minute)
         else:
@@ -75,30 +86,26 @@ def evalIndividual(individual):
             start, end = '2015-10-21 00:00:00', '2015-10-21 ' + temp + ':00' 
         else:
             start, end = end, '2015-10-21 ' + temp + ':00'
-
-        #stopsAndRequests = db.MaxReqNumTrip(start, end, 2)
-        stopsAndRequests = [['A', 200]]
-        tripCapacity = trip[1]
-        timeSlices = ((datetime.strptime('00:00:00','%H:%M:%S'),(datetime.strptime('02:59:59','%H:%M:%S'))),
-            (datetime.strptime('03:00:00','%H:%M:%S'), datetime.strptime('05:59:59','%H:%M:%S')),
-            (datetime.strptime('06:00:00','%H:%M:%S'), datetime.strptime('08:59:59','%H:%M:%S')),
-            (datetime.strptime('09:00:00','%H:%M:%S'), datetime.strptime('11:59:59','%H:%M:%S')),
-            (datetime.strptime('12:00:00','%H:%M:%S'), datetime.strptime('14:59:59','%H:%M:%S')),
-            (datetime.strptime('15:00:00','%H:%M:%S'), datetime.strptime('17:59:59','%H:%M:%S')),
-            (datetime.strptime('18:00:00','%H:%M:%S'), datetime.strptime('20:59:59','%H:%M:%S')),
-            (datetime.strptime('21:00:00','%H:%M:%S'), datetime.strptime('23:59:59','%H:%M:%S')))
+            '''
         # TODO: Evaluate individual fitness based on how many requests can be handled, increase waiting time for
         # leftover passengers
-        for j, tslice in enumerate(timeSlices):
-            if tslice[0].time() <= tripStartTime.time() <= tslice[1].time():
-                earliestDeparture = tslice[0] + timedelta(minutes=trip[2])
-                try:
-                    nextDeparture = timeSlices[j+1][0] + timedelta(minutes=individual[i+1][2])
-                except IndexError, e:
-                    print e
-                print "earliest possible departure " + str(earliestDeparture.time())
-                print "next departure: " + str(nextDeparture.time())
+        tslice = [(x[0], x[1]) for x in timeSlices if x[0].time() <= tripStartTime.time() <= x[1].time()]
+        earliestDeparture = tslice[0][0] + timedelta(minutes=trip[2])
+        print tslice
+        while (earliestDeparture.time() <= tslice[0][1].time()):
+            departures.append(earliestDeparture.time())
+            earliestDeparture += timedelta(minutes=trip[2])
+        #print "earliest possible departure " + str(earliestDeparture.time())
+        #print "next departure: " + str(nextDeparture.time())
+        print "Departures..."
+        print departures
 
+        #tripCapacity = trip[1]
+        #earliestDeparture = '2015-10-21 ' + str(earliestDeparture.time())
+        #end = '2015-10-21 ' + departures[len(departures)-1].strftime('%H:%M:%S')
+        #print "End..." + str(end)
+        '''
+        stopsAndRequests = db.MaxReqNumTrip(earliestDeparture, end, 2)
         for j, stop in enumerate(stopsAndRequests):
             requestsAtStop = stop[1]
             if requestsAtStop > tripCapacity and i < len(individual)-1:
@@ -112,8 +119,9 @@ def evalIndividual(individual):
             else:
                 pass
 
-        #print "Number left over: " + str(noOfLeftOvers)
-        #print "total waiting time: " + str(tripWaitingTime.total_seconds()/60.0)
+        print "Number left over: " + str(noOfLeftOvers)
+        print "total waiting time: " + str(tripWaitingTime.total_seconds()/60.0)
+        '''
 
     '''
     # Evaluate average time
