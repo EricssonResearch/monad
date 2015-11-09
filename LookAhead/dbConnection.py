@@ -97,6 +97,7 @@ class DB():
 
         return req        
         """
+
         #dataFile = open("/home/ziring/result.txt", "w")
         queryResults = []
         # A query is made to group request made to a busstop and counting the number of similar requests made
@@ -105,7 +106,7 @@ class DB():
                    {"$group": {"_id": {"RequestTime": "$startTime", "BusStop": "$startBusStop"}, "total": {"$sum": 1}}},
                    {"$sort": {"_id.RequestTime": 1}}]
 
-        groupQuery = self.db.TravelRequestLookAhead.aggregate(pipline)
+        groupQuery = self.db.TravelRequestLookAheadMR.aggregate(pipline)
         for x in groupQuery:
             queryResults.append(x)
             #dataFile.write(str(x)+'\n'+'\n')
@@ -119,6 +120,7 @@ class DB():
     #        print doc
 
     # Routes
+
     def populateRoute(self, route):
         # route5 = {"line": 5, "durationTime":39, routeStop2}
         # routeStop5 = ["Stenhagenskolan","Herrhagens Byväg","Kiselvägen","Stenhagens Centrum","Stenröset","Stenhällen","Gatstenen","Hedensbergsvägen","Flogsta centrum","Rickomberga","Studentstaden","Ekonomikum","Götgatan","Skolgatan","Stadshuset","Centralstationen","Samariterhemmet","Strandbodgatan","Kungsängsesplanaden","Vimpelgatan","Lilla Ultuna","Kuggebro","Vilan","Nämndemansvägen","Lapplandsresan","Ölandsresan","Daneport","Västgötaresan","Gotlandsresan","Smålandsvägen"]
@@ -296,12 +298,71 @@ class DB():
         yesterdayStart = datetime.datetime(yesterday.year, yesterday.month, yesterday.day,0,0,0)
         todayStart = datetime.datetime(datetime.date.today().year,datetime.date.today().month,datetime.date.today().day,0,0,0)
         reqs = []
-        requests = self.db.TravelRequestLookAhead.find({"$and": [{"startTime": {"$gte": start}}, {"startTime": {"$lt":
+        requests = self.db.TravelRequestLookAheadMR.find({"$and": [{"startTime": {"$gte": start}}, {"startTime": {"$lt":
             end}}]}, {"startTime": 1, "startBusStop": 1, "endBusStop": 1, "_id": 0})  # New collection for LookAhead
         for req in requests:
             reqs.append([req.get('startTime', None), req.get('startBusStop', None), req.get('endBusStop', None)])
             #reqs.append(req.get('startTime', None))
-        return reqs   
+
+
+        return reqs
+    def getBusStopline(self,id):
+
+        line = self.db.Route.find({"trajectory.busStop": ObjectId(id)})
+        return line[0]['line']
+
+    def processReqest(self, start, end):
+        '''
+
+        :param start:lower time bound
+        :param end: upper time bound
+        :return:requests between start and end time ,its generate decompose each multiple line request
+        into 2 requests one for each line
+        '''
+
+        reqs = []
+        nreqs = []
+        reqs = self.getRequestsFromDB(start, end)
+        samelinereq = 0
+        diflinereq = 0
+        for req in reqs:
+            id = self.getBusStopId(req[1])
+            sourceline = self.getBusStopline(id)
+            id = self.getBusStopId(req[2])
+            destline = self.getBusStopline(id)
+            if sourceline == destline:
+                nreqs.append(req)
+                samelinereq += 1
+            else:
+                sbusstops = self.getRouteStop(sourceline)
+                dbusstops = self.getRouteStop(destline)
+
+                set1 = set(x['busStop'] for x in sbusstops)
+                set2 = set(x['busStop'] for x in dbusstops)
+                commonbusstopid = set1.intersection(set2)
+                commonbusstop = self.getBusStopName(commonbusstopid.pop())
+
+                nreqs.append([req[0], req[1], commonbusstop])
+                #print " breakdown request into" % req[0], req[1], commonbusstop
+                triptimetable = self.generateFitnessTripTimeTable(sourceline, req[0])
+                for x in triptimetable:
+                    if x[0] == commonbusstop:
+                        tripdate = x[1]
+                nreqs.append([tripdate, commonbusstop, req[2]])
+                diflinereq += 1
+
+        return nreqs
+
+
+
+
+
+
+
+
+
+
+
 
     # Bus Stop Location
     def getBusStopLatitude(self, busStop):
@@ -326,6 +387,7 @@ class DB():
         #get the trip time table
         # trip_time_table = self.generateFitnessTripTimeTable(lineNum,trip_sTime[11:16])
         trip_time_table = self.generateFitnessTripTimeTable(lineNum,a)
+        print trip_time_table
         for i in trip_time_table:
             BusStplist.append([i[0],0])
             dirlist.append(i[0])
