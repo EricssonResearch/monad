@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -63,6 +64,7 @@ public class RouteConfirmPopup extends AppCompatActivity implements AsyncRespons
     // Book the trip
     public void confirmTrip(View view){
         String userTripId = trip.getId();
+        Log.d("oops", "trip id: " + userTripId);
         SendBookingRequest asyncTask = new SendBookingRequest();
         asyncTask.delegate = this;
         asyncTask.execute(userTripId);

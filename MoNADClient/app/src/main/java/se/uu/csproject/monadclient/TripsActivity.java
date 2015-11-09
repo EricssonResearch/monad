@@ -44,15 +44,15 @@ public class TripsActivity extends MenuedActivity implements AsyncResponse{
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        //getBookings();
+        getBookings();
 
-        List<FullTrip> trips = new ArrayList<>();
+        /*List<FullTrip> trips = new ArrayList<>();
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler_view_active);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getApplicationContext());
         recyclerView.setLayoutManager(linearLayoutManager);
         generateTrips(trips);
         TripRecyclerViewAdapter adapter = new TripRecyclerViewAdapter(trips);
-        recyclerView.setAdapter(adapter);
+        recyclerView.setAdapter(adapter);*/
     }
 
     private void getBookings(){
@@ -69,10 +69,10 @@ public class TripsActivity extends MenuedActivity implements AsyncResponse{
             Toast toast = Toast.makeText(context, text, duration);
             toast.show();
         } else {
-            RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler_view_search);
+            RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler_view_active);
             LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getApplicationContext());
             recyclerView.setLayoutManager(linearLayoutManager);
-            SearchRecyclerViewAdapter adapter = new SearchRecyclerViewAdapter(bookings);
+            TripRecyclerViewAdapter adapter = new TripRecyclerViewAdapter(bookings);
             recyclerView.setAdapter(adapter);
         }
     }
