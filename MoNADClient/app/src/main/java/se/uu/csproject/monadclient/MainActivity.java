@@ -37,10 +37,12 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.ExecutionException;
 
 import se.uu.csproject.monadclient.recyclerviews.FullTrip;
 import se.uu.csproject.monadclient.recyclerviews.PartialTrip;
 import se.uu.csproject.monadclient.recyclerviews.SearchRecyclerViewAdapter;
+import se.uu.csproject.monadclient.tabs.GetRecommendationsTask;
 
 public class MainActivity extends MenuedActivity implements
         GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener, AsyncResponse {
@@ -72,6 +74,30 @@ public class MainActivity extends MenuedActivity implements
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler_view_main);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getApplicationContext());
         recyclerView.setLayoutManager(linearLayoutManager);
+
+        /* TODO: GetRecommendations */
+
+//        System.out.println(ClientAuthentication.profileToString());
+
+//        GetRecommendationsTask recommendationsTask = new GetRecommendationsTask();
+//        try {
+//            String response = recommendationsTask.execute().get();
+//
+//            Toast.makeText(getApplicationContext(), response, Toast.LENGTH_LONG).show();
+//
+//            // If the response starts with the specific word, it means the users logged in successfully
+//            if (response.startsWith("Success (1)")) {
+//                System.out.println("________________OK________________");
+//            }
+//            else {
+//                System.out.println("________________NOT OK________________");
+//            }
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        } catch (ExecutionException e) {
+//            e.printStackTrace();
+//        }
+
         generateSearchResults(searchResults);
         SearchRecyclerViewAdapter adapter = new SearchRecyclerViewAdapter(searchResults);
         recyclerView.setAdapter(adapter);
