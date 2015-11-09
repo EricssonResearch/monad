@@ -70,7 +70,7 @@ public class FullTrip implements Parcelable {
         } else {
             partialTrips = null;
         }
-        duration = in.readInt();
+        duration = in.readLong();
         reserved = in.readByte() != 0x00;
         feedback = in.readInt();
     }
@@ -206,6 +206,8 @@ public class FullTrip implements Parcelable {
     public void printValues(){
         Log.d("oops", "ID: " + getId());
         Log.d("oops", "Request ID: " + getTravelRequestID());
+        Log.d("oops", "Recommendation ID: " + getRecommendationID());
+        Log.d("oops", "Reserved: " + isReserved());
         Log.d("oops", "Duration: " + getDuration());
         Log.d("oops", "Feedback: " + getFeedback());
     }

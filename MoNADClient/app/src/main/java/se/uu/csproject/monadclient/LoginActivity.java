@@ -48,9 +48,8 @@ public class LoginActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         if (checkPlayServices()) {
-            Intent intent = new Intent(this,RegistrationIntentService.class);
+            Intent intent = new Intent(this, RegistrationIntentService.class);
             startService(intent);
-
         }
 
         usernameField = (EditText) findViewById(R.id.field_username);
@@ -75,20 +74,29 @@ public class LoginActivity extends AppCompatActivity {
                 try {
                     // Get the username and password, send them with the request
                     String response = task.execute(usernameField.getText().toString(), passwordField.getText().toString()).get();
-                    Toast.makeText(getApplicationContext(), response,
-                            Toast.LENGTH_LONG).show();
+
+                    Toast.makeText(getApplicationContext(), response, Toast.LENGTH_LONG).show();
+
                     // If the response starts with the specific word, it means the users logged in successfully
                     if (response.startsWith("Success (1)")) {
                         LoginActivity.this.startActivity(new Intent(LoginActivity.this, MainActivity.class));
                         finish();
                     }
-                    else if (response.startsWith("Wrong Credentials (0)")) {
+                    else if (response.equals("Wrong Credentials (0)")) {
                         wrongCredentialsTextView.setVisibility(View.VISIBLE);
+                    }
+                    else {
+                        LoginActivity.this.startActivity(new Intent(LoginActivity.this, LoginActivity.class));
+                        finish();
                     }
                 } catch (InterruptedException e) {
                     e.printStackTrace();
+                    LoginActivity.this.startActivity(new Intent(LoginActivity.this, LoginActivity.class));
+                    finish();
                 } catch (ExecutionException e) {
                     e.printStackTrace();
+                    LoginActivity.this.startActivity(new Intent(LoginActivity.this, LoginActivity.class));
+                    finish();
                 }
             }
         });
@@ -174,7 +182,6 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private boolean checkPlayServices() {
-
         GoogleApiAvailability apiAvailability = GoogleApiAvailability.getInstance();
         int resultCode = apiAvailability.isGooglePlayServicesAvailable(this);
         if (resultCode != ConnectionResult.SUCCESS) {
