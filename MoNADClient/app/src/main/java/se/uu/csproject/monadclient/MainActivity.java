@@ -88,15 +88,6 @@ public class MainActivity extends MenuedActivity implements
         Date now = new Date();
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
 
-        // TODO Stavros: Delete these comments after I've tested the quick search results
-        /*String startTime1;
-        Date now1;
-        Calendar cal = Calendar.getInstance();
-        cal.set(2015, 10, 06, 07, 00, 00);
-        now1 = cal.getTime();
-        startTime1 = df.format(now1);
-        Log.d("oops", startTime1);*/
-
         // Provide some default values since this is a quick search
         startPositionLatitude = String.valueOf(currentLatitude);
         startPositionLongitude = String.valueOf(currentLongitude);
@@ -121,17 +112,13 @@ public class MainActivity extends MenuedActivity implements
     }
 
     public void processFinish(ArrayList<FullTrip> searchResults){
-        Intent myIntent = new Intent(MainActivity.this, SearchActivity.class);
-
         if (searchResults.isEmpty()){
             CharSequence text = "Could not find any trips matching your criteria.";
             int duration = Toast.LENGTH_SHORT;
             Toast toast = Toast.makeText(context, text, duration);
             toast.show();
-        } else {
-            myIntent.putParcelableArrayListExtra("searchResults", searchResults);
         }
-
+        Intent myIntent = new Intent(MainActivity.this, SearchActivity.class);
         myIntent.putExtra("destination", destination.getText().toString());
         MainActivity.this.startActivity(myIntent);
     }

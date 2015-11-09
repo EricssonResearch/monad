@@ -15,6 +15,7 @@ import java.util.concurrent.TimeUnit;
 import se.uu.csproject.monadclient.recyclerviews.CustomComparator;
 import se.uu.csproject.monadclient.recyclerviews.FullTrip;
 import se.uu.csproject.monadclient.recyclerviews.PartialTrip;
+import se.uu.csproject.monadclient.recyclerviews.Storage;
 
 public class StoreTrips {
 
@@ -84,6 +85,7 @@ public class StoreTrips {
         }
 
         Collections.sort(searchResults, new CustomComparator());
+        Storage.setSearchResults(searchResults);
         return searchResults;
     }
 }
