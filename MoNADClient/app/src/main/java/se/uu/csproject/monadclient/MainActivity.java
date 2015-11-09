@@ -1,7 +1,9 @@
 package se.uu.csproject.monadclient;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
@@ -266,6 +268,7 @@ public class MainActivity extends MenuedActivity implements
         boolean finish = getIntent().getBooleanExtra("FINISH", false);
         //Log.i("FINISH-NEWINTENT", finish + "");
         if (finish) {
+            //ClientAuthentication
             startActivity(new Intent(MainActivity.this, LoginActivity.class));
             finish();
         }
@@ -296,14 +299,15 @@ public class MainActivity extends MenuedActivity implements
         }
     }
 
-    //TODO (Huijie): prompt the user to choose before leaving the application
+    /* Prompt the user to confirm if he/she wants to exit MoNAD or not if this is the root task in the back stack */
     @Override
     public void onBackPressed() {
-        /*
         if(isTaskRoot()){
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("Confirm");
+            builder.setMessage("Do you want to exit MoNAD?");
             // Add the buttons
-            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int id) {
                     // User clicked OK button
                     MainActivity.super.onBackPressed();
@@ -320,7 +324,6 @@ public class MainActivity extends MenuedActivity implements
             AlertDialog dialog = builder.create();
             dialog.show();
         }
-        */
     }
 
     @Override
