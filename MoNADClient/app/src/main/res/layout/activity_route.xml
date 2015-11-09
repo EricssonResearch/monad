@@ -1,161 +1,45 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<RelativeLayout
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    tools:context="se.uu.csproject.monadclient.RouteActivity">
+    android:layout_height="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <include
-        android:id="@+id/actionToolBar"
-        layout="@layout/app_bar" />
-
-    <RelativeLayout
-        android:layout_width="match_parent"
+    <ScrollView
         android:layout_height="match_parent"
-        android:padding="@dimen/layout_padding"
-        android:id="@+id/trip"
-        android:layout_below="@+id/actionToolBar">
+        android:layout_width="match_parent"
+        xmlns:android="http://schemas.android.com/apk/res/android">
 
-        <LinearLayout
-            android:id="@+id/Row1"
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:tools="http://schemas.android.com/tools"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="@dimen/layout_padding"
-            android:orientation="horizontal"
-            >
-            <ImageView
-                android:layout_width="@dimen/icon_small"
-                android:layout_height="@dimen/icon_small"
-                android:src="@drawable/ic_directions_walk_black_18dp"
-                android:contentDescription="@string/img_description"
-                android:layout_marginRight="@dimen/activity_horizontal_margin"
-                android:layout_marginEnd="@dimen/activity_horizontal_margin"
-                />
-            <TextView
-                android:id="@+id/label_walkstart"
-                android:text="@string/label_trips_info"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:textStyle="bold"
-                style="@style/importantText"/>
-            <TextView
-                android:text="@string/label_trips_time"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:textStyle="bold"
-                style="@style/importantText"
-                android:layout_marginLeft="@dimen/activity_horizontal_margin"
-                android:layout_marginStart="@dimen/activity_horizontal_margin"/>
+            tools:context="se.uu.csproject.monadclient.tripDetails"
+            android:orientation="vertical">
 
-        </LinearLayout>
+            <include
+                android:id="@+id/actionToolBar"
+                layout="@layout/app_bar" />
 
-        <LinearLayout
-            android:id="@+id/layout_busstoplist"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="@dimen/layout_padding"
-            android:orientation="vertical"
-            android:onClick="expandBusStopList"
-            android:layout_below="@+id/Row1"
-            >
             <LinearLayout
+                android:id="@+id/layout1"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-                <ImageView
-                    android:layout_width="@dimen/icon_small"
-                    android:layout_height="28dp"
-                    android:src="@drawable/ic_directions_bus_black_18dp"
-                    android:contentDescription="@string/img_description"
-                    android:layout_marginRight="@dimen/activity_horizontal_margin"
-                    android:layout_marginEnd="@dimen/activity_horizontal_margin"
-                    />
-                <TextView
-                    android:id="@+id/label_busstopstart"
-                    android:text="@string/label_trips_info2"
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:textStyle="bold"
-                    style="@style/importantText"/>
-                <TextView
-                    android:id="@+id/label_timestart"
-                    android:text="@string/label_trips_time"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    style="@style/importantText"
-                    android:textStyle="bold"
-                    android:layout_marginLeft="@dimen/activity_horizontal_margin"
-                    android:layout_marginStart="@dimen/activity_horizontal_margin"
-                    />
+                android:layout_height="match_parent"
+                android:orientation="vertical" >
+
             </LinearLayout>
-
         </LinearLayout>
+    </ScrollView>
 
-        <android.support.v7.widget.RecyclerView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/recycler"
-            android:padding="@dimen/layout_padding"
-            android:layout_below="@+id/layout_busstoplist"
-            android:visibility="gone"
-            />
-        <LinearLayout
-            android:id="@+id/Row3"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="@dimen/layout_padding"
-            android:layout_below="@+id/recycler"
-            >
-            <ImageView
-                android:layout_width="@dimen/icon_small"
-                android:layout_height="@dimen/icon_small"
-                android:src="@drawable/ic_directions_walk_black_18dp"
-                android:contentDescription="@string/img_description"
-                android:layout_marginRight="@dimen/activity_horizontal_margin"
-                android:layout_marginEnd="@dimen/activity_horizontal_margin"
-                />
-            <TextView
-                android:id="@+id/label_walkend"
-                android:text="@string/label_trips_info3"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:textStyle="bold"
-                style="@style/importantText"/>
-            <TextView
-                android:id="@+id/label_timeend"
-                android:text="@string/label_trips_time2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:textStyle="bold"
-                style="@style/importantText"
-                android:layout_marginLeft="@dimen/activity_horizontal_margin"
-                android:layout_marginStart="@dimen/activity_horizontal_margin"/>
-
-        </LinearLayout>
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/label_trips_join"
-            style="@style/whiteText"
-            android:textSize="@dimen/medium_text"
-            android:background="@color/primaryColor"
-            android:id="@+id/button_jointrip"
-            android:layout_gravity="center_horizontal"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
-            />
-    </RelativeLayout>
-
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/label_trips_join"
+        style="@style/whiteText"
+        android:textSize="@dimen/medium_text"
+        android:background="@color/primaryColor"
+        android:id="@+id/button_jointrip"
+        android:layout_gravity="center_horizontal"
+        android:padding="@dimen/small_padding"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true" />
 
 </RelativeLayout>
-
-
