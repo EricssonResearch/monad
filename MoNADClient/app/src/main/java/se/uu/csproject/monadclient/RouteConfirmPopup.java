@@ -64,7 +64,6 @@ public class RouteConfirmPopup extends AppCompatActivity implements AsyncRespons
     // Book the trip
     public void confirmTrip(View view){
         String userTripId = trip.getId();
-        Log.d("oops", "trip id: " + userTripId);
         SendBookingRequest asyncTask = new SendBookingRequest();
         asyncTask.delegate = this;
         asyncTask.execute(userTripId);

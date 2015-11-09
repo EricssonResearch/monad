@@ -20,16 +20,6 @@ public class PartialTrip implements Parcelable {
     private Date endTime;
     private ArrayList<String> trajectory;   /* List of bus stop names */
 
-    /* TODO: Do we need this constructor ?? */
-    public PartialTrip(int line, String startBusStop, Date startTime, String endBusStop,
-                       Date endTime, ArrayList<String> trajectory) {
-        this.line = line;
-        this.startBusStop = startBusStop;
-        this.startTime = startTime;
-        this.endBusStop = endBusStop;
-        this.endTime = endTime;
-        this.trajectory = trajectory;
-    }
 
     public PartialTrip(String id, int line, int busID, String startBusStop, Date startTime, String endBusStop,
                        Date endTime, ArrayList<String> trajectory) {
