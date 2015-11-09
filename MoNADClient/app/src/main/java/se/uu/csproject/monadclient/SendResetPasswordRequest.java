@@ -19,6 +19,7 @@ import java.util.Date;
 
 public class SendResetPasswordRequest extends AsyncTask<String, Void, String> {
     private static String SERVER = "http://130.238.15.114:2001";
+    private static String ERROR_RESPONSE = "Something went wrong, please try again.";
 
     /* Send the data to the server via POST and receive the response */
     public static String postRequest(String request, String urlParameters) {
@@ -56,13 +57,16 @@ public class SendResetPasswordRequest extends AsyncTask<String, Void, String> {
             }
 
         } catch (MalformedURLException e) {
-            return (e.toString());
+            Log.d("oops", e.toString());
+            response = ERROR_RESPONSE;
 
         } catch (IOException e) {
-            return (e.toString());
+            Log.d("oops", e.toString());
+            response = ERROR_RESPONSE;
 
         } catch (RuntimeException e) {
-            return (e.toString());
+            Log.d("oops", e.toString());
+            response = ERROR_RESPONSE;
         }
         finally {
             if (conn != null) {
