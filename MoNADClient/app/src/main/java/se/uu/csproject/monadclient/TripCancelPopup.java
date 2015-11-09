@@ -147,7 +147,7 @@ public class TripCancelPopup extends AppCompatActivity implements AsyncResponseS
     public void processFinish(String response){
         Toast toast = Toast.makeText(context, response, Toast.LENGTH_SHORT);
         toast.show();
-        Intent intent = new Intent(TripCancelPopup.this, MainActivity.class);
+        Intent intent = new Intent(TripCancelPopup.this, TripsActivity.class);
         startActivity(intent);
         finish();
     }
