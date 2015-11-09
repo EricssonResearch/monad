@@ -84,26 +84,25 @@ def evalIndividual(individual):
 
     # Evaluate average time
     for i in range(len(individual)):
-        tripTimeTable = db.generateFitnessTripTimeTable(individual[i][0], individual[i][2])
-        for j in range(len(tripTimeTable)):
+        phenotype = db.generatePhenotype(individual[i][0], individual[i][2])
+        for j in range(len(phenotype)):
             # TODO: Fix trips that finish at the next day
             initialTrip = initialTripTime
-            lastTrip = tripTimeTable[j][1]
+            lastTrip = phenotype[j][1]
             if initialTrip > lastTrip:
                 initialTrip = lastTrip - timedelta(minutes=db.getFrequency(individual[i][0]))
             # Search on Fitness.request array for the particular requests
-            request = fitnessClass.searchRequest(initialTrip, lastTrip, tripTimeTable[j][0])
-            initialTripTime = tripTimeTable[j][1]
+            request = fitnessClass.searchRequest(initialTrip, lastTrip, phenotype[j][0])
+            initialTripTime = phenotype[j][1]
             if len(request) > 0:
                 diff = 0
                 count = 0
                 for k in range(len(request)):
-                    z = tripTimeTable[j][1] - request[k]["_id"]["RequestTime"]
+                    z = phenotype[j][1] - request[k]["_id"]["RequestTime"]
                     diff = diff + (z.days * databaseClass.minutesDay) + (z.seconds / databaseClass.minutesHour)
                     count = count + int(request[k]["total"])
                 dif.append(diff)
                 cnt.append(count)
-
     totalWaitingTime = sum(dif) + tripWaitingTime.total_seconds()/60.0
     averageWaitingTime = totalWaitingTime / (sum(cnt) + noOfLeftOvers)
     return fitnessClass.calculateCost(individual, totalWaitingTime, 0),
@@ -120,7 +119,7 @@ creator.create("Individual", list, fitness=creator.FitnessMin)
 toolbox = base.Toolbox()
 
 # Register the operations to be used in the toolbox
-toolbox.register("attribute", databaseClass.generateStartingTripTime, BUS_LINE)
+toolbox.register("attribute", databaseClass.generateGenotype, BUS_LINE)
 #toolbox.register("individual", tools.initRepeat, creator.Individual,
 #                 toolbox.attribute, INDIVIDUAL_SIZE)
 toolbox.register("individual", inits.initRepeatBound, creator.Individual,

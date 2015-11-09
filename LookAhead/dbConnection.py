@@ -243,8 +243,7 @@ class DB():
         # t =datetime.datetime.strptime(trip_sTime,'%Y-%m-%d %H:%M:%S').time()
         # e =datetime.datetime.strptime(tripEnd,'%Y-%m-%d %H:%M:%S').time()
         # get the trip time table
-        # trip_time_table = self.generateFitnessTripTimeTable(lineNum,trip_sTime[11:16])
-        trip_time_table = self.generateFitnessTripTimeTable(lineNum, a)
+        trip_time_table = self.generatePhenotype(lineNum, a)
         for i in trip_time_table:
             BusStplist.append([i[0], 0])
             dirlist.append(i[0])
@@ -352,7 +351,7 @@ class DB():
     # ---------------------------------------------------------------------------------------------------------------------------------------
     # GA Helpers
     # ---------------------------------------------------------------------------------------------------------------------------------------
-    def generateStartingTripTime(self, line):
+    def generateGenotype(self, line):
         ''' Called when generating the initial population, it generates
         each gene.
 
@@ -363,7 +362,7 @@ class DB():
         hour = self.mergeRandomTime(self.getRandomHour(), self.getRandomMinute())
         return list([line, self.generateRandomCapacity(), datetime.datetime.combine(today, datetime.datetime.strptime(hour, self.formatTime).time())])
 
-    def generateFitnessTripTimeTable(self, line, startingTime):
+    def generatePhenotype(self, line, startingTime):
         ''' This is the function that changes the genotype into a phenotype.
         It generates the time table for a particular individual.
 
