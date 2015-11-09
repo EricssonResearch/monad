@@ -37,10 +37,12 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.ExecutionException;
 
 import se.uu.csproject.monadclient.recyclerviews.FullTrip;
 import se.uu.csproject.monadclient.recyclerviews.PartialTrip;
 import se.uu.csproject.monadclient.recyclerviews.SearchRecyclerViewAdapter;
+import se.uu.csproject.monadclient.tabs.GetRecommendationsTask;
 
 public class MainActivity extends MenuedActivity implements
         GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener, AsyncResponse {
@@ -72,6 +74,30 @@ public class MainActivity extends MenuedActivity implements
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler_view_main);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getApplicationContext());
         recyclerView.setLayoutManager(linearLayoutManager);
+
+        /* TODO: GetRecommendations */
+
+//        System.out.println(ClientAuthentication.profileToString());
+
+//        GetRecommendationsTask recommendationsTask = new GetRecommendationsTask();
+//        try {
+//            String response = recommendationsTask.execute().get();
+//
+//            Toast.makeText(getApplicationContext(), response, Toast.LENGTH_LONG).show();
+//
+//            // If the response starts with the specific word, it means the users logged in successfully
+//            if (response.startsWith("Success (1)")) {
+//                System.out.println("________________OK________________");
+//            }
+//            else {
+//                System.out.println("________________NOT OK________________");
+//            }
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        } catch (ExecutionException e) {
+//            e.printStackTrace();
+//        }
+
         generateSearchResults(searchResults);
         SearchRecyclerViewAdapter adapter = new SearchRecyclerViewAdapter(searchResults);
         recyclerView.setAdapter(adapter);
@@ -175,20 +201,6 @@ public class MainActivity extends MenuedActivity implements
                 .setFastestInterval(10 * 1000); // 10 seconds, in milliseconds
     }
 
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//
-//        if(ClientAuthentication.getPassword().equals("0")){
-//        // Inflate the menu; this adds items to the action bar if it is present.
-//        getMenuInflater().inflate(R.menu.menu_main_google, menu);
-//        return true;
-//        }
-//        else {
-//            getMenuInflater().inflate(R.menu.menu_main, menu);
-//            return true;
-//        }
-//    }
-
     public boolean onTouchEvent(MotionEvent event) {
         InputMethodManager imm = (InputMethodManager)getSystemService(Context.
                 INPUT_METHOD_SERVICE);
@@ -208,9 +220,8 @@ public class MainActivity extends MenuedActivity implements
         }
     }
 
-    public void openTripDetail (View v) {
-        //opens Route activity layout
-        startActivity(new Intent(this, RouteActivity.class));
+    public void goToAdvancedSearch(View v) {
+        startActivity(new Intent(this, SearchActivity.class));
     }
 
     //TEMPORARY FUNCTION TODO: Remove this function once the database connection is set
@@ -238,13 +249,13 @@ public class MainActivity extends MenuedActivity implements
         trajectory.add("Akademiska Sjukhuset");
         trajectory.add("Ekeby Bruk");
         trajectory.add("Ekeby");
-        partialTrips.add(new PartialTrip(1, "Polacksbacken",startdate1,"Flogsta", enddate1, trajectory));
+        partialTrips.add(new PartialTrip("1", 2, 3, "Polacksbacken",startdate1,"Flogsta", enddate1, trajectory));
         trips.add(new FullTrip("1", "2", partialTrips, 10, true, 0));
-        partialTrips.clear(); partialTrips.add(new PartialTrip(2, "Gamla Uppsala",startdate2,"Gottsunda", enddate2, trajectory));
+        partialTrips.clear(); partialTrips.add(new PartialTrip("1", 2, 3, "Gamla Uppsala", startdate2, "Gottsunda", enddate2, trajectory));
         trips.add(new FullTrip("2", "3", partialTrips, 15, true, 0));
-        partialTrips.clear(); partialTrips.add(new PartialTrip(3, "Granby",startdate3,"Tunna Backar", enddate3, trajectory));
+        partialTrips.clear(); partialTrips.add(new PartialTrip("1",2,3, "Granby",startdate3,"Tunna Backar", enddate3, trajectory));
         trips.add(new FullTrip("3", "4", partialTrips, 15, true, 0));
-        partialTrips.clear(); partialTrips.add(new PartialTrip(4, "Kungsgatan", startdate4, "Observatoriet", enddate4, trajectory));
+        partialTrips.clear(); partialTrips.add(new PartialTrip("1",2,3, "Kungsgatan", startdate4, "Observatoriet", enddate4, trajectory));
         trips.add(new FullTrip("4", "5", partialTrips, 30, true, 0));
     }
 

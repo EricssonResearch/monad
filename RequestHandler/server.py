@@ -54,24 +54,28 @@ def application(env, start_response):
 	
 	if (data_env["PATH_INFO"] == "/request"):
 		if ("userId" and "startTime" and "endTime" and "requestTime" and "stPosition" and "edPosition" 
-			and "priority" in data):
+			and "priority" and "startPositionLatitude" and "startPositionLongitude" in data):
 			userId = int(escape(data.getvalue("userId")))
 			startTime = escape(data.getvalue("startTime"))
 			endTime = escape(data.getvalue("endTime"))
 			requestTime = escape(data.getvalue("requestTime"))
 			stPosition = escape(data.getvalue("stPosition"))
 			edPosition = escape(data.getvalue("edPosition"))
-			priority = escape(data.getvalue("priority"))	
+			priority = escape(data.getvalue("priority"))
+			startPositionLatitude = float(escape(data.getvalue("startPositionLatitude")))
+			startPositionLongitude = float(escape(data.getvalue("startPositionLongitude")))	
 			
 			# dummy coordinates, have to update to real ones when Ilyass implements the required module
-			startPositionLatitude = 59.8572316
-			startPositionLongitude = 17.6479787
+			if (stPosition != "Current Position"):
+				startPositionLatitude = 59.8572316
+				startPositionLongitude = 17.6479787			
+			
 			endPositionLatitude = 58.8167503
 			endPositionLongitude = 16.8683923
 			
 			# dummy bus stops, have to update to real ones when Jens implements the required module
-			startBusStop = ObjectId("563c836873b2391f3f2fa614")
-			endBusStop = ObjectId("563c836873b2391f3f2fa61f")
+			startBusStop = ObjectId("5640a09273b239624322ed1f")
+			endBusStop = ObjectId("5640a09273b239624322ed25")
 			
 			try:
 				requestTime = datetime.strptime(requestTime, serverConfig.DATE_FORMAT)
@@ -84,9 +88,8 @@ def application(env, start_response):
 				logging.error("Something went wrong with the date format: {0}".format(e))
 				return [serverConfig.ERROR_MESSAGE]			
 			
-			try:
-				connection = serverConfig.MONGO_CLIENT		
-				database = connection.monad1
+			try:						
+				database = serverConfig.MONGO_DATABASE
 				collection = database.TravelRequest		
 				document = {"userID": userId, "startTime": startTime, "endTime": endTime,
 							"requestTime": requestTime, "startPositionLatitude": startPositionLatitude,
@@ -100,8 +103,7 @@ def application(env, start_response):
 				if (priority == "distance"):
 					userTripJson = travelPlanner.getBestRoutes(requestID = requestId, mode = Mode.tripTime)
 				else:
-					userTripJson = travelPlanner.getBestRoutes(requestID = requestId, mode = Mode.waitTime)								
-				#logging.info(json.dumps(userTripJson, indent=4))
+					userTripJson = travelPlanner.getBestRoutes(requestID = requestId, mode = Mode.waitTime)
 				
 			except pymongo.errors.PyMongoError as e:
 				start_response("500 INTERNAL ERROR", [("Content-Type", "text/plain")])	
@@ -111,7 +113,7 @@ def application(env, start_response):
 				start_response("200 OK", [("Content-Type", "application/json")])							
 				return [json.dumps(userTripJson)]
 			finally:					
-				connection.close()
+				serverConfig.MONGO_CLIENT.close()
 												
 		else:
 			start_response("500 INTERNAL ERROR", [("Content-Type", "text/plain")])	
@@ -150,8 +152,8 @@ def application(env, start_response):
 			endPositionLongitude = 16.8683923
 			
 			# dummy bus stops, have to update to real ones when Jens implements the required module
-			startBusStop = ObjectId("5639d6ff73b2390f1ab17951")
-			endBusStop = ObjectId("5639d6ff73b2390f1ab17956")	
+			startBusStop = ObjectId("5640a09273b239624322ed1f")
+			endBusStop = ObjectId("5640a09273b239624322ed25")	
 		
 			try:
 				requestTime = datetime.strptime(requestTime, serverConfig.DATE_FORMAT)
@@ -164,9 +166,8 @@ def application(env, start_response):
 				logging.error("Something went wrong with the date format: {0}".format(e))
 				return [serverConfig.ERROR_MESSAGE]			
 			
-			try:
-				connection = serverConfig.MONGO_CLIENT		
-				database = connection.monad1
+			try:						
+				database = serverConfig.MONGO_DATABASE
 				collection = database.TravelRequest		
 				document = {"userID": userId, "startTime": startTime, "endTime": endTime,
 							"requestTime": requestTime, "startPositionLatitude": startPositionLatitude,
@@ -190,7 +191,7 @@ def application(env, start_response):
 				start_response("200 OK", [("Content-Type", "application/json")])							
 				return [json.dumps(userTripJson)]
 			finally:					
-				connection.close()										
+				serverConfig.MONGO_CLIENT.close()										
 		else:
 			start_response("500 INTERNAL ERROR", [("Content-Type", "text/plain")])	
 			logging.error("Quick request: Something went wrong with the data sent by the user's request.")
@@ -200,26 +201,33 @@ def application(env, start_response):
 		if ("userTripId" in data):
 			userTripId = escape(data.getvalue("userTripId"))			
 				
-			try:
-				connection = serverConfig.MONGO_CLIENT		
-				database = connection.monad				
+			try:						
+				database = serverConfig.MONGO_DATABASE				
 				collection = database.UserTrip
 				objectID = ObjectId(userTripId)				
 				
 				document = collection.find_one({"_id": objectID})
-				requestId = document["requestId"]
+				requestId = document["requestID"]
+				userId = document["userID"]
 				collection.update({"_id": objectID}, {"$set": {"booked": True}}, upsert = False)
+				partialTrips = []
+				partialTrips.append(objectID)
 				
 				# We have to set the "booked" value to True for every part of the user's trip 
 				# (if the trip is split into many parts)								
 				document = collection.find_one({"$and": [{"_id": objectID}, {"next": {'$exists': True}}]})				
 				while (document != None):
 					objectID = document["next"]
+					partialTrips.append(objectID)
 					collection.update({"_id": objectID}, {"$set": {"booked": True}}, upsert = False)
 					document = collection.find_one({"$and": [{"_id": objectID}, {"next": {'$exists': True}}]})	
 					
 				collection = database.TravelRequest
-				collection.update({"_id": requestId}, {"$set": {"reservedTrip": ObjectId(userTripId)}}, upsert = False)		
+				collection.update({"_id": requestId}, {"$set": {"reservedTrip": ObjectId(userTripId)}}, upsert = False)
+
+				collection = database.BookedTrip
+				document = {"userID": userId, "partialTrips": partialTrips}
+				collection.insert_one(document)
 				
 			except pymongo.errors.PyMongoError as e:
 				start_response("500 INTERNAL ERROR", [("Content-Type", "text/plain")])	
@@ -229,7 +237,7 @@ def application(env, start_response):
 				start_response("200 OK", [("Content-Type", "text/plain")])				
 				return ["Confirmation successful, enjoy your trip!"]
 			finally:					
-				connection.close()
+				serverConfig.MONGO_CLIENT.close()
 		else:
 			start_response("500 INTERNAL ERROR", [("Content-Type", "text/plain")])	
 			logging.error("Booking request: Something went wrong with the data sent by the user's request.")
@@ -239,16 +247,25 @@ def application(env, start_response):
 		if ("userTripId" in data):
 			userTripId = escape(data.getvalue("userTripId"))
 			
-			try:
-				connection = serverConfig.MONGO_CLIENT		
-				database = connection.monad				
+			try:						
+				database = serverConfig.MONGO_DATABASE				
 				collection = database.UserTrip
-				objectID = ObjectId(userTripId)				
+				objectID = ObjectId(userTripId)
 				
 				document = collection.find_one({"_id": objectID})
-				requestId = document["requestId"]
+				requestId = document["requestID"]
+				userId = document["userID"]
 				collection.update({"_id": objectID}, {"$set": {"booked": False}}, upsert = False)
 				
+				collection = database.BookedTrip
+				bookedTrips = collection.find({"userID": userId})
+				for bookedTrip in bookedTrips:
+					partialTrips = bookedTrip["partialTrips"]
+					if (partialTrips[0] == objectID):
+						collection.delete_one({"_id": bookedTrip["_id"]})
+						break
+						
+				collection = database.UserTrip				
 				# We have to set the "booked" value to False for every part of the user's cancelled trip 
 				# (if the trip is split into many parts)								
 				document = collection.find_one({"$and": [{"_id": objectID}, {"next": {'$exists': True}}]})				
@@ -268,12 +285,69 @@ def application(env, start_response):
 				start_response("200 OK", [("Content-Type", "text/plain")])				
 				return ["The trip has been successfully cancelled."]
 			finally:					
-				connection.close()
+				serverConfig.MONGO_CLIENT.close()
 		else:
 			start_response("500 INTERNAL ERROR", [("Content-Type", "text/plain")])	
 			logging.error("Booking cancel request: Something went wrong with the data sent by the user's request.")
 			return [serverConfig.ERROR_MESSAGE]
+	
+	elif (data_env["PATH_INFO"] == "/getUserBookingsRequest"):
+		if ("userId" in data):
+			userId = int(escape(data.getvalue("userId")))
 		
+			try:						
+				database = serverConfig.MONGO_DATABASE				
+				collection = database.BookedTrip
+				
+				userTripJson = {}
+				i = 0
+				bookedTrips = collection.find({"userID": userId})
+				collection = database.UserTrip
+				for bookedTrip in bookedTrips:
+					partialTripIDs = bookedTrip["partialTrips"]
+					partialTrips = []
+					
+					for partialTripID in partialTripIDs:
+						partialTripCursor = collection.find_one({"_id": partialTripID})
+						trajectory = []
+						for stop in partialTripCursor["trajectory"]:
+							trajectory.append(stop)
+						partialTrip = {
+							"_id": str(partialTripCursor["_id"]),
+							"userID" : partialTripCursor["userID"],
+							"line": partialTripCursor["line"],
+							"busID": partialTripCursor["busID"],
+							"startBusStop": partialTripCursor["startBusStop"],
+							"endBusStop": partialTripCursor["endBusStop"],
+							"startTime": str(partialTripCursor["startTime"]),
+							"endTime": str(partialTripCursor["endTime"]),
+							"requestTime": str(partialTripCursor["requestTime"]),
+							"trajectory": trajectory,
+							"feedback": partialTripCursor["feedback"],
+							"requestID": str(partialTripCursor["requestID"]),
+							"booked": partialTripCursor["booked"]
+						}
+						if ("next" in partialTripCursor):
+							partialTrip["next"] = str(partialTripCursor["next"])
+						partialTrips.append(partialTrip)
+					
+					i += 1
+					userTripJson[i] = partialTrips
+		
+			except pymongo.errors.PyMongoError as e:
+				start_response("500 INTERNAL ERROR", [("Content-Type", "text/plain")])	
+				logging.error("Something went wrong: {0}".format(e))
+				return [serverConfig.ERROR_MESSAGE]		
+			else:
+				start_response("200 OK", [("Content-Type", "application/json")])							
+				return [json.dumps(userTripJson)]
+			finally:					
+				serverConfig.MONGO_CLIENT.close()
+		else:
+			start_response("500 INTERNAL ERROR", [("Content-Type", "text/plain")])	
+			logging.error("Get user bookings request: Something went wrong with the data sent by the user's request.")
+			return [serverConfig.ERROR_MESSAGE]
+			
 	else:
 		start_response("403 FORBIDDEN", [("Content-Type", "text/plain")])
 		logging.warning("Someone is trying to access the server outside the app.")		

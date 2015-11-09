@@ -44,15 +44,7 @@ public class TripsActivity extends MenuedActivity implements AsyncResponse{
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        //getBookings();
-
-        List<FullTrip> trips = new ArrayList<>();
-        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler_view_active);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getApplicationContext());
-        recyclerView.setLayoutManager(linearLayoutManager);
-        generateTrips(trips);
-        TripRecyclerViewAdapter adapter = new TripRecyclerViewAdapter(trips);
-        recyclerView.setAdapter(adapter);
+        getBookings();
     }
 
     private void getBookings(){
@@ -69,71 +61,13 @@ public class TripsActivity extends MenuedActivity implements AsyncResponse{
             Toast toast = Toast.makeText(context, text, duration);
             toast.show();
         } else {
-            RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler_view_search);
+            RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler_view_active);
             LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getApplicationContext());
             recyclerView.setLayoutManager(linearLayoutManager);
-            SearchRecyclerViewAdapter adapter = new SearchRecyclerViewAdapter(bookings);
+            TripRecyclerViewAdapter adapter = new TripRecyclerViewAdapter(bookings);
             recyclerView.setAdapter(adapter);
         }
     }
-
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//
-//        if(ClientAuthentication.getPassword().equals("0")){
-//            // Inflate the menu; this adds items to the action bar if it is present.
-//            getMenuInflater().inflate(R.menu.menu_main_google, menu);
-//            return true;
-//        }
-//        else {
-//            getMenuInflater().inflate(R.menu.menu_main, menu);
-//            return true;
-//        }
-//    }
-//
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//        // Handle action bar item clicks here. The action bar will
-//        // automatically handle clicks on the Home/Up button, so long
-//        // as you specify a parent activity in AndroidManifest.xml.
-//        int id = item.getItemId();
-//
-//        if (id == android.R.id.home) {
-//            NavUtils.navigateUpFromSameTask(this);
-//        }
-//
-//        if (id == R.id.action_search) {
-//            startActivity(new Intent(this, MainActivity.class));
-//        }
-//
-//        if (id == R.id.action_notifications) {
-//            startActivity(new Intent(this, NotificationsActivity.class));
-//        }
-//
-//        if (id == R.id.action_mytrips) {
-//            return true;
-//        }
-//
-//        if (id == R.id.action_profile) {
-//            startActivity(new Intent(this, ProfileActivity.class));
-//        }
-//
-//        //noinspection SimplifiableIfStatement
-//        if (id == R.id.action_settings) {
-//            startActivity(new Intent(this, SettingsActivity.class));
-//        }
-//
-//        if (id == R.id.action_aboutus) {
-//            //TODO (low priority): Create a toaster with text about the MoNAD project and team
-//            startActivity(new Intent(this, AboutUsActivity.class));
-//        }
-//
-//        if (id == R.id.action_signout) {
-//            startActivity(new Intent(this, LoginActivity.class));
-//        }
-//
-//        return super.onOptionsItemSelected(item);
-//    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -145,44 +79,5 @@ public class TripsActivity extends MenuedActivity implements AsyncResponse{
         else {
             return super.onOptionsItemSelected(item);
         }
-    }
-
-    //TEMPORARY FUNCTION TODO: Remove this function once the database connection is set
-    private void generateTrips(List<FullTrip> trips){
-        Calendar calendar = new GregorianCalendar(2015, 10, 26, 10, 40, 0);
-        Date startdate1 = calendar.getTime();
-        calendar = new GregorianCalendar(2015, 10, 26, 10, 50, 0);
-        Date enddate1 = calendar.getTime();
-        calendar = new GregorianCalendar(2015, 10, 26, 10, 45, 0);
-        Date startdate2 = calendar.getTime();
-        calendar = new GregorianCalendar(2015, 10, 26, 11, 0, 0);
-        Date enddate2 = calendar.getTime();
-        calendar = new GregorianCalendar(2015, 10, 27, 9, 50, 0);
-        Date startdate3 = calendar.getTime();
-        calendar = new GregorianCalendar(2015, 10, 27, 10, 5, 0);
-        Date enddate3 = calendar.getTime();
-        calendar = new GregorianCalendar(2015, 10, 22, 11, 30, 0);
-        Date startdate4 = calendar.getTime();
-        calendar = new GregorianCalendar(2015, 10, 22, 12, 0, 0);
-        Date enddate4 = calendar.getTime();
-
-        ArrayList<PartialTrip> partialTrips = new ArrayList<>();
-        ArrayList<String> trajectory = new ArrayList<>();
-        trajectory.add("BMC");
-        trajectory.add("Akademiska Sjukhuset");
-        trajectory.add("Ekeby Bruk");
-        trajectory.add("Ekeby");
-        PartialTrip partialTrip = new PartialTrip(1, "Polacksbacken",startdate1,"Flogsta", enddate1, trajectory);
-        partialTrips.add(partialTrip);
-        trips.add(new FullTrip("1", "2", partialTrips, 10, true, 0));
-        partialTrip = new PartialTrip(2, "Gamla Uppsala",startdate2,"Gottsunda", enddate2, trajectory);
-        partialTrips.clear(); partialTrips.add(partialTrip);
-        trips.add(new FullTrip("2", "3", partialTrips, 15, true, 0));
-        partialTrip = new PartialTrip(3, "Granby",startdate3,"Tunna Backar", enddate3, trajectory);
-        partialTrips.clear(); partialTrips.add(partialTrip);
-        trips.add(new FullTrip("3", "4", partialTrips, 15, true, 0));
-        partialTrip = new PartialTrip(4, "Kungsgatan", startdate4, "Observatoriet", enddate4, trajectory);
-        partialTrips.clear(); partialTrips.add(partialTrip);
-        trips.add(new FullTrip("4", "5", partialTrips, 30, true, 0));
     }
 }

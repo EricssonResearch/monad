@@ -134,14 +134,6 @@ public class ClientAuthentication extends Authentication {
         }
     }
 
-    public static void setGoogleRegistrationToken(String googleRegistrationTokenToken) {
-        profile[9] = googleRegistrationTokenToken;
-    }
-
-    public static String getGoogleRegistrationToken() {
-        return profile[9];
-    }
-
     public static void setTheme(String theme) {
         profile[9] = theme;
     }
@@ -149,6 +141,14 @@ public class ClientAuthentication extends Authentication {
     //theme mappings: 0: light; 1: default; 2: dark
     public static String getTheme() {
         return profile[9];
+    }
+
+    public static void setGoogleRegistrationToken(String googleRegistrationTokenToken) {
+        profile[10] = googleRegistrationTokenToken;
+    }
+
+    public static String getGoogleRegistrationToken() {
+        return profile[10];
     }
 
     public static String profileToString() {
@@ -161,7 +161,8 @@ public class ClientAuthentication extends Authentication {
                 + "\nstoreLocation: " + getStoreLocation()
                 + "\nnotificationsAlert: " + getNotificationsAlert()
                 + "\nrecommendationsAlert: " + getRecommendationsAlert()
-                + "\ntheme: " + getTheme();
+                + "\ntheme: " + getTheme()
+                + "\ngoogleRegistrationToken: " + getGoogleRegistrationToken();
         return strProfile;
     }
 
@@ -171,6 +172,7 @@ public class ClientAuthentication extends Authentication {
         setPassword("0");
         setEmail("");
         setPhone("");
+        setGoogleRegistrationToken("");
         defaultSettings();
     }
 
@@ -242,6 +244,11 @@ public class ClientAuthentication extends Authentication {
         /* Send the request to the Authentication Module */
         String response = postRequest(request, urlParameters);
 
+        /* Handle response in case of exception */
+        if (response.equals("-1")) {
+            return exceptionMessage();
+        }
+
         /*
          * By default, Erlang adds the newline '\n' character at the beginning of response.
          * For this reason substring() function is used
@@ -298,6 +305,11 @@ public class ClientAuthentication extends Authentication {
 
         /* Send the request to the Authentication Module */
         String response = postRequest(request, urlParameters);
+
+        /* Handle response in case of exception */
+        if (response.equals("-1")) {
+            return exceptionMessage();
+        }
 
         /*
          * By default, Erlang adds the newline '\n' character at the beginning of response.
@@ -374,6 +386,11 @@ public class ClientAuthentication extends Authentication {
 
         /* Send the request to the Authentication Module */
         String response = postRequest(request, urlParameters);
+
+        /* Handle response in case of exception */
+        if (response.equals("-1")) {
+            return exceptionMessage();
+        }
 
         /*
          * By default, Erlang adds the newline '\n' character at the beginning of response.
@@ -474,6 +491,11 @@ public class ClientAuthentication extends Authentication {
         /* Send the request to the Authentication Module */
         String response = postRequest(request, urlParameters);
 
+        /* Handle response in case of exception */
+        if (response.equals("-1")) {
+            return exceptionMessage();
+        }
+
         /*
          * By default, Erlang adds the newline '\n' character at the beginning of response.
          * For this reason substring() function is used
@@ -527,6 +549,11 @@ public class ClientAuthentication extends Authentication {
         /* Send the request to the Authentication Module */
         String response = postRequest(request, urlParameters);
 
+        /* Handle response in case of exception */
+        if (response.equals("-1")) {
+            return exceptionMessage();
+        }
+
         /*
          * By default, Erlang adds the newline '\n' character at the beginning of response.
          * For this reason substring() function is used
@@ -573,6 +600,11 @@ public class ClientAuthentication extends Authentication {
         /* Send the request to the Authentication Module */
         String response = postRequest(request, urlParameters);
 
+        /* Handle response in case of exception */
+        if (response.equals("-1")) {
+            return exceptionMessage();
+        }
+
         /*
          * By default, Erlang adds the newline '\n' character at the beginning of response.
          * For this reason substring() function is used
@@ -612,6 +644,11 @@ public class ClientAuthentication extends Authentication {
         /* Send the request to the Authentication Module */
         String response = postRequest(request, urlParameters);
 
+        /* Handle response in case of exception */
+        if (response.equals("-1")) {
+            return exceptionMessage();
+        }
+
         /*
          * By default, Erlang adds the newline '\n' character at the beginning of response.
          * For this reason substring() function is used
@@ -642,8 +679,14 @@ public class ClientAuthentication extends Authentication {
         String request = AUTHENTICATION_HOST + AUTHENTICATION_PORT + "/get_recommendations";
         // String urlParameters = "client_id=" + getClientId();
         String urlParameters = "client_id=" + getClientId();
+
         /* Send the request to the Authentication Module */
         String response = postRequest(request, urlParameters);
+
+        /* Handle response in case of exception */
+        if (response.equals("-1")) {
+            return exceptionMessage();
+        }
 
         /*
          * By default, Erlang adds the newline '\n' character at the beginning of response.
@@ -680,8 +723,12 @@ public class ClientAuthentication extends Authentication {
                     String tripID = (String) tripObjectID.get("$oid");
 
                     /* TODO: CASTING TO INTEGER THROWS EXCEPTION */
+
+                    System.out.println("--------------OK1-----------");
                     int line = (int) trip.get("line");
+                    System.out.println("--------------OK2-----------");
                     int busID = (int) trip.get("busID");
+                    System.out.println("--------------OK3-----------");
 
                     String startBusStop = (String) trip.get("startBusStop");
                     JSONObject startTimeObject = (JSONObject) trip.get("startTime");
@@ -713,6 +760,11 @@ public class ClientAuthentication extends Authentication {
             e.printStackTrace();
         }
 
+        response = "Success (1)";
         return response;
+    }
+
+    public static String exceptionMessage() {
+        return "ERROR - An Exception was thrown";
     }
 }

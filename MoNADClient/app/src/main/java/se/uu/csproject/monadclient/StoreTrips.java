@@ -56,7 +56,8 @@ public class StoreTrips {
                         }
                     }
 
-                    PartialTrip partialTrip = new PartialTrip(partialTripJson.getInt("line"),
+                    PartialTrip partialTrip = new PartialTrip(partialTripJson.getString("_id"),
+                            partialTripJson.getInt("line"), partialTripJson.getInt("busID"),
                             partialTripJson.getString("startBusStop"), startTime,
                             partialTripJson.getString("endBusStop"), endTime, trajectory);
 

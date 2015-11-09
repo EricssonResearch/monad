@@ -41,7 +41,8 @@ public abstract class Authentication {
             dos.write(postData);
 
             if (connection.getResponseCode() != 200) {
-                throw new RuntimeException("Failed : HTTP error code : " + connection.getResponseCode());
+                return "-1";
+                /* throw new RuntimeException("Failed : HTTP error code : " + connection.getResponseCode()); */
             }
             br = new BufferedReader(new InputStreamReader(connection.getInputStream()));
             String line = "";
