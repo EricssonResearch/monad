@@ -65,10 +65,10 @@ public class MenuedActivity extends AppCompatActivity {
         }
 
         if (id == R.id.action_signout) {
-            //startActivity(new Intent(this, LoginActivity.class));
             Intent intent = new Intent(this, MainActivity.class);
             intent.putExtra("FINISH", true);
-            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP); // To clean up all activities
+            //To clean up all activities
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent);
             finish();
         }

@@ -253,9 +253,9 @@ public class MainActivity extends MenuedActivity implements
         super.onResume();
 
         boolean finish = getIntent().getBooleanExtra("FINISH", false);
-        //Log.i("FINISH-NEWINTENT", finish + "");
         if (finish) {
-            //ClientAuthentication
+            //clear user profile
+            ClientAuthentication.initProfile();
             startActivity(new Intent(MainActivity.this, LoginActivity.class));
             finish();
         }
@@ -294,17 +294,17 @@ public class MainActivity extends MenuedActivity implements
             builder.setTitle("Confirm");
             builder.setMessage("Do you want to exit MoNAD?");
             // Add the buttons
+            builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {
+                    // User cancelled the dialog
+                    //do nothing
+                }
+            });
             builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int id) {
                     // User clicked OK button
                     MainActivity.super.onBackPressed();
                     Toast.makeText(getApplicationContext(), "You have exited MoNAD.", Toast.LENGTH_LONG).show();
-                }
-            });
-            builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int id) {
-                    // User cancelled the dialog
-                    //do nothing
                 }
             });
             // Create the AlertDialog
