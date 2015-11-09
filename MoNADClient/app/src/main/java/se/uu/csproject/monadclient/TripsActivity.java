@@ -43,7 +43,11 @@ public class TripsActivity extends MenuedActivity implements AsyncResponse{
 
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
         getBookings();
     }
 
