@@ -63,6 +63,7 @@ class TravelPlanner:
         self.timeTable = self.db.TimeTable
         self.userTrip = self.db.UserTrip
         self.busTrip = self.db.BusTrip
+        self.busStop = self.db.BusStop
 
         self.fittingRoutes = []
         self.startingWaypoint = []
@@ -313,28 +314,34 @@ class TravelPlanner:
                     self.arrTime   = trip["trajectory"][route[DR_END2]]["time"]
                     if (self.arrTime < self.endTime):
                         self._findFirstTrip(route, trip)
-                        self._insertTrip((route, trip, self.bestFirstTrip))
+                        self._insertTrip((route, self.bestFirstTrip, trip))
 
+
+    def _getBusStops(self):
+        busStopDict = {}
+        stops = self.busStop.find()
+        for stop in stops:
+            busStopDict[stop["_id"]] = stop["name"]
+        return busStopDict
 
     def _updateDatabase(self):
         entryList = []
         self.userTripDict = {}
+        busStops = self._getBusStops()
         i = 0
         for (trip, timeDiff, departureTime, arrivalTime) in self.tripTuples:
             if (self._isDoubleRoute(trip)):
-                if (self.timeMode == Mode.startTime):
-                    (route, startTrip, endTrip) = trip
-                elif (self.timeMode == Mode.arrivalTime):
-                    (route, endTrip, startTrip) = trip
+                (route, startTrip, endTrip) = trip
                 startID = ObjectId()
                 endID = ObjectId()
-                switchBusStop = startTrip["trajectory"][route[DR_END1]]["busStop"]
+                switchBusStopID = startTrip["trajectory"][route[DR_END1]]["busStop"]
+                switchBusStop = busStops[switchBusStopID]
                 entryStart = {
                         "_id": startID,
                         "userID" : self.userID,
                         "line": route[DR_LINE1],
                         "busID": startTrip["busID"],
-                        "startBusStop": self.startBusStop,
+                        "startBusStop": busStops[self.startBusStop],
                         "endBusStop": switchBusStop,
                         "startTime": departureTime,
                         "endTime": startTrip["trajectory"][route[DR_END1]]["time"],
@@ -352,8 +359,8 @@ class TravelPlanner:
                     if (not started):
                         continue
                     started = True
-                    trajectory.append(stop["busStop"])
-                    if (stop["busStop"] == switchBusStop):
+                    trajectory.append(busStops[stop["busStop"]])
+                    if (stop["busStop"] == switchBusStopID):
                         break
                 entryStart["trajectory"] = trajectory
 
@@ -362,8 +369,8 @@ class TravelPlanner:
                         "userID" : self.userID,
                         "line": route[DR_LINE2],
                         "busID": endTrip["busID"],
-                        "startBusStop": endTrip["trajectory"][route[DR_START2]]["busStop"],
-                        "endBusStop": self.endBusStop,
+                        "startBusStop": switchBusStop,
+                        "endBusStop": busStops[self.endBusStop],
                         "startTime": endTrip["trajectory"][route[DR_START2]]["time"],
                         "endTime": arrivalTime,
                         "requestTime": self.requestTime,
@@ -374,12 +381,12 @@ class TravelPlanner:
                 started = False
                 trajectory = []
                 for stop in endTrip["trajectory"]:
-                    if (stop["busStop"] == switchBusStop):
+                    if (stop["busStop"] == switchBusStopID):
                         started = True
                     if (not started):
                         continue
                     started = True
-                    trajectory.append(stop["busStop"])
+                    trajectory.append(busStops[stop["busStop"]])
                     if (stop["busStop"] == self.endBusStop):
                         break
                 entryEnd["trajectory"] = trajectory
@@ -392,8 +399,8 @@ class TravelPlanner:
                         "userID": self.userID,
                         "line": trip["line"],
                         "busID": trip["busID"],
-                        "startBusStop": self.startBusStop,
-                        "endBusStop": self.endBusStop,
+                        "startBusStop": busStops[self.startBusStop],
+                        "endBusStop": busStops[self.endBusStop],
                         "startTime": departureTime,
                         "endTime": arrivalTime,
                         "requestTime": self.requestTime,
@@ -408,7 +415,7 @@ class TravelPlanner:
                         started = True
                     if (not started):
                         continue
-                    trajectory.append(stop["busStop"])
+                    trajectory.append(busStops[stop["busStop"]])
                     if (stop["busStop"] == self.endBusStop):
                         started = False
                         break
@@ -430,21 +437,18 @@ class TravelPlanner:
                         "userID" : entry["userID"],
                         "line": entry["line"],
                         "busID": entry["busID"],
-                        "startBusStop": str(entry["startBusStop"]),
-                        "endBusStop": str(entry["endBusStop"]),
+                        "startBusStop": entry["startBusStop"],
+                        "endBusStop": entry["endBusStop"],
                         "startTime": str(entry["startTime"]),
                         "endTime": str(entry["endTime"]),
                         "requestTime": str(entry["requestTime"]),
                         "feedback": -1,
                         "requestID": str(entry["requestID"]),
-                        "booked": False
+                        "booked": False,
+                        "trajectory": entry["trajectory"]
                 }
                 if ("next" in entry):
                     newEntry["next"] = str(entry["next"])
-                trajectory = []
-                for stop in entry["trajectory"]:
-                    trajectory.append(str(stop))
-                newEntry["trajectory"] = trajectory
                 entries.append(newEntry)
             self.jsonObject[ut] = entries
 
