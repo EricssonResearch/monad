@@ -62,6 +62,8 @@ public class FullTrip implements Parcelable {
     /* TODO: Should be changed, since id and duration variables will be removed */
     protected FullTrip(Parcel in) {
         id = in.readString();
+        travelRequestID = in.readString();
+        recommendationID = in.readString();
         if (in.readByte() == 0x01) {
             partialTrips = new ArrayList<>();
             in.readList(partialTrips, PartialTrip.class.getClassLoader());
@@ -217,6 +219,7 @@ public class FullTrip implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(id);
         dest.writeString(travelRequestID);
+        dest.writeString(recommendationID);
         if (partialTrips == null) {
             dest.writeByte((byte) (0x00));
         } else {

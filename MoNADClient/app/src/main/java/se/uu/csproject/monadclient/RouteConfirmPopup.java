@@ -43,7 +43,7 @@ public class RouteConfirmPopup extends AppCompatActivity implements AsyncRespons
         Bundle b = getIntent().getExtras();
         trip = b.getParcelable("selectedTrip");
 
-        busIdView.setText(getResources().getString(R.string.label_routesuccess_businfo) + " " + trip.getBusLinesString());
+        busIdView.setText(getResources().getString(R.string.label_trip_businfo) + " " + trip.getBusLinesString());
         startTimeView.setText(formatTime(trip.getStartTime()));
         endTimeView.setText(formatTime(trip.getEndTime()));
         startPositionView.setText(trip.getStartBusStop());

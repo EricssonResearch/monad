@@ -10,7 +10,6 @@
     <string name="title_activity_register">Register</string>
     <string name="title_activity_reset_password">Reset Password</string>
     <string name="title_activity_route">Route Information</string>
-    <string name="title_activity_route_success">Success!</string>
     <string name="title_activity_settings">Settings</string>
     <string name="title_activity_search">Search</string>
     <string name="title_activity_trips">My Trips</string>
@@ -96,7 +95,7 @@
     <string name="label_routesuccess_depart">Depart:</string>
     <string name="label_routesuccess_arrive">Arrive:  </string>
     <string name="label_routesuccess_instruction">Walk to Polacksbacken</string>
-    <string name="label_routesuccess_businfo">Bus </string>
+
     <string name="label_routesuccess_countdowntext">Countdown to Departure</string>
 
     <!--Activity - Search-->
@@ -147,6 +146,7 @@
     <string name="label_trip_depart">Depart:</string>
     <string name="label_trip_arrive">Arrive:</string>
     <string name="label_trip_button_confirm">Confirm</string>
+    <string name="label_trip_businfo">Bus </string>
     <string name="label_tripsactivity_from">From</string>
     <string name="label_tripsactivity_to">To</string>
     <string name="label_tripsactivity_day">TODAY</string>

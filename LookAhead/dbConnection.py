@@ -243,8 +243,7 @@ class DB():
         # t =datetime.datetime.strptime(trip_sTime,'%Y-%m-%d %H:%M:%S').time()
         # e =datetime.datetime.strptime(tripEnd,'%Y-%m-%d %H:%M:%S').time()
         # get the trip time table
-        # trip_time_table = self.generateFitnessTripTimeTable(lineNum,trip_sTime[11:16])
-        trip_time_table = self.generateFitnessTripTimeTable(lineNum, a)
+        trip_time_table = self.generatePhenotype(lineNum, a)
         for i in trip_time_table:
             BusStplist.append([i[0], 0])
             dirlist.append(i[0])
@@ -265,6 +264,72 @@ class DB():
             sum += i[1]
             i[1] = sum
         return BusStplist
+
+    def calculateReqNumTrip(self, capacity, trip_stTime, trip_endTime, requestLeftIn, lineNum = 2):
+        ''' Calculate average waiting time for request for specific trip(defined by starting trip time and end trip time)
+        @param capacity of specific trip, trip start time and end time should be given
+        @param requestLeftIn, request list haven't been taken by last trip due to capacity
+        @param line number 
+        return average waiting time, request list which can't be taken because of capacity
+        '''
+        BusStplist = []
+        dirlist =[]
+        RequestTaken = []
+        requestLeftOut = []
+        pplInBus = 0
+        totalrequestnum = 0
+        totalWaitingTime = timedelta(minutes=0)
+        if isinstance(trip_stTime, str):
+            a = datetime.datetime.strptime(trip_stTime, '%Y-%m-%d %H:%M:%S')
+        else:
+            a = trip_stTime
+
+        trip_time_table = self.generateFitnessTripTimeTable(lineNum, a)
+
+        for i in trip_time_table:
+            BusStplist.append([i[0], i[1], 0,0,0])
+            dirlist.append(i[0])
+        sorted(BusStplist, key=itemgetter(1))   
+
+
+        if isinstance(trip_stTime, str):
+            startTime = datetime.datetime.strptime(trip_stTime,'%Y-%m-%d %H:%M:%S')
+        else:
+            startTime = trip_stTime
+        if isinstance(trip_endTime, str):
+            endTime =datetime.datetime.strptime(trip_endTime,'%Y-%m-%d %H:%M:%S')
+        else:
+            endTime = trip_endTime
+        
+        endTime = max(BusStplist[len(BusStplist)-1][1], endTime)
+        Requests = self.getRequestsFromDB(startTime, endTime)
+
+        Requests = list(requestLeftIn + Requests)
+
+        list(itertools.chain.from_iterable(Requests))
+        sorted(Requests, key=itemgetter(1)) 
+
+        ppltakebus = 0
+        for i in BusStplist:  
+            for req in Requests:
+                if (req[1], req[2]) in itertools.combinations(dirlist, 2): #:
+                    if req[1] == i[0]:
+                        if (i[1] - req[0] > timedelta(minutes=0)) and i[4] < capacity:
+                            i[2] = i[2] + 1
+                            totalrequestnum = totalrequestnum + 1
+                            pplInBus = pplInBus + 1
+                            i[4] = pplInBus
+                            totalWaitingTime = totalWaitingTime + i[1] - req[0]
+                        else:
+                            requestLeftOut.append(req)
+                    if req[2] == i[0] and req not in requestLeftOut:
+                        i[3] = i[3] + 1
+                        pplInBus = pplInBus - 1
+                        i[4] = pplInBus
+
+        avgWaitingTime = (totalWaitingTime.total_seconds()/60.0)/totalrequestnum
+
+        return BusStplist, requestLeftOut, totalWaitingTime.total_seconds()/60.0, avgWaitingTime
 
     # ---------------------------------------------------------------------------------------------------------------------------------------
     # Routes
@@ -352,7 +417,7 @@ class DB():
     # ---------------------------------------------------------------------------------------------------------------------------------------
     # GA Helpers
     # ---------------------------------------------------------------------------------------------------------------------------------------
-    def generateStartingTripTime(self, line):
+    def generateGenotype(self, line):
         ''' Called when generating the initial population, it generates
         each gene.
 
@@ -363,7 +428,7 @@ class DB():
         hour = self.mergeRandomTime(self.getRandomHour(), self.getRandomMinute())
         return list([line, self.generateRandomCapacity(), datetime.datetime.combine(today, datetime.datetime.strptime(hour, self.formatTime).time())])
 
-    def generateFitnessTripTimeTable(self, line, startingTime):
+    def generatePhenotype(self, line, startingTime):
         ''' This is the function that changes the genotype into a phenotype.
         It generates the time table for a particular individual.
 
@@ -476,33 +541,58 @@ class DB():
     # Bus Trip
     # ---------------------------------------------------------------------------------------------------------------------------------------
     def insertBusTrip(self, individual):
-        ''' Insert trip details to BusTrip by best individual
-
+        '''
+        Insert trip details to BusTrip by best individual
         @param: individual, best individual selected by GA
         '''
+
         tripObjectList = []
+        requestLeftIn = []
         for i in range(len(individual)):
             objID = ObjectId()
             tripObjectList.append(objID)
             line = individual[i][0]
             capacity = individual[i][1]
             startTime = individual[i][2]
+   
             trajectory = self.getRoute("trajectory")
+            if i == 0:
+                startTimeLastTrip = datetime.datetime(startTime.date().year, startTime.date().month, startTime.date().day, 0, 0, 0)
+            else:
+                startTimeLastTrip = startTime = individual[i-1][2]
+            if i < len(individual):
+                print i
+                print len(individual)
+                endTime = individual[i][2]                
+            else:
+                print "i > len: " + str(i)
+                print len(individual)
+                endTime = datetime.datetime(startTime.date().year, startTime.date().month, startTime.date().day, 23, 59, 59)
+
+            passengerNumList, requestLeftIn, twt, awt = self.calculateReqNumTrip(capacity, startTimeLastTrip, endTime, requestLeftIn)
+            sorted(passengerNumList, key=itemgetter(1))
+            #print passengerNumList
+
             for j in range(len(trajectory)):
                 interval = int(trajectory[j]["interval"])
                 if j == 0:
                     trajectory[j]["time"] = startTime + datetime.timedelta(minutes=interval)
-                else:
+                else: 
                     trajectory[j]["time"] = trajectory[j-1]["time"] + datetime.timedelta(minutes=interval)
+                trajectory[j]["totalPassengers"] = passengerNumList[j][4]
+                trajectory[j]["boardingPassengers"] = passengerNumList[j][2]
+                trajectory[j]["departingPassengers"] = passengerNumList[j][3]
+               
                 del trajectory[j]["interval"]
+
             trip = {
                 "_id": objID,
                 "capacity": capacity,
                 "line": line,
                 "startTime": startTime,
                 "endTime": trajectory[len(trajectory)-1]["time"],
-                "trajectory": trajectory
+                "trajectory": trajectory 
             }
-            # print trip
+            #print trip
             self.db.BusTrip.insert_one(trip)
         self.insertTimeTable1(line, startTime, tripObjectList)

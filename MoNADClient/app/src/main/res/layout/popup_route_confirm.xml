@@ -149,7 +149,7 @@
 
                 <TextView
                     android:id="@+id/businfo"
-                    android:text="@string/label_routesuccess_businfo"
+                    android:text="@string/label_trip_businfo"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/gray"

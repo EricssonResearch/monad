@@ -44,6 +44,7 @@ import java.util.Locale;
 
 import se.uu.csproject.monadclient.recyclerviews.FullTrip;
 import se.uu.csproject.monadclient.recyclerviews.SearchRecyclerViewAdapter;
+import se.uu.csproject.monadclient.recyclerviews.Storage;
 
 public class SearchActivity extends MenuedActivity implements
         GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener, AsyncResponse{
@@ -57,6 +58,7 @@ public class SearchActivity extends MenuedActivity implements
     private double currentLatitude, currentLongitude;
     private Context context;
     public Calendar calendar;
+    private ArrayList<FullTrip> searchResults;
     //private DatePicker datePicker;
 
     private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
@@ -104,9 +106,9 @@ public class SearchActivity extends MenuedActivity implements
             destinationEditText.setText(getIntent().getStringExtra("destination"));
         }
 
+        searchResults = Storage.getSearchResults();
         // If there are search results suited for the user's quick search, display them
-        if (getIntent().hasExtra("searchResults")){
-            ArrayList<FullTrip> searchResults = getIntent().getParcelableArrayListExtra("searchResults");
+        if (!searchResults.isEmpty()){
             RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler_view_search);
             LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getApplicationContext());
             recyclerView.setLayoutManager(linearLayoutManager);
