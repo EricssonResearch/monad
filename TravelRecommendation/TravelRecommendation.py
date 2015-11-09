@@ -343,77 +343,76 @@ def emptyPastRecommendations():
 
 if __name__ == "__main__":
 
-userIds = []
-users = []
-routes = []
-userIds = []
+    userIds = []
+    users = []
+    routes = []
+    userIds = []
 
-conf = SparkConf().setAppName("final_version").setMaster("spark://130.238.15.246:7077")
-sc = SparkContext(conf = conf)
+    conf = SparkConf().setAppName("final_version").setMaster("spark://130.238.15.246:7077")
+    sc = SparkContext(conf = conf)
 
-#time_t = getTodayTimeTable()
-populateTimeTable()
-myRoutes = sc.parallelize(routes).cache()
-coucou = myRoutes
+    #time_t = getTodayTimeTable()
+    populateTimeTable()
+    myRoutes = sc.parallelize(routes).cache()
+    coucou = myRoutes
 
-myRoutes = myRoutes.map(lambda (x,y): (x, iterator(y)))
+    myRoutes = myRoutes.map(lambda (x,y): (x, iterator(y)))
 
-req = retrieveRequests()
-populateRequests(req)
-initialRdd = sc.parallelize(users).cache()
-userIdsRdd = (initialRdd.map(lambda (x,y): (x,1))
-                        .reduceByKey(lambda a, b: a + b)
-                        .collect())
+    req = retrieveRequests()
+    populateRequests(req)
+    initialRdd = sc.parallelize(users).cache()
+    userIdsRdd = (initialRdd.map(lambda (x,y): (x,1))
+                            .reduceByKey(lambda a, b: a + b)
+                            .collect())
 
-for user in userIdsRdd:
-    print user
+    for user in userIdsRdd:
+        print user
 
-for user in userIdsRdd:
-    userIds.append(user[0])
+    for user in userIdsRdd:
+        userIds.append(user[0])
 
 
-emptyPastRecommendations()
+    emptyPastRecommendations()
 
     for userId in userIds:
-recommendations = []
-transition = []
-finalRecommendation = []
-selected_centroids = []
-routesDistances = []
-to_return = []
-myRdd = initialRdd.filter(lambda (x,y): x == userId).map(lambda (x,y): y)
-myRdd = (myRdd.map(lambda x: (x[0], x[1], x[2], x[3],
-                             toCoordinates(toSeconds(x[4])),
-                             toCoordinates(toSeconds(x[5]))))
-              .map(lambda (x1, x2, x3, x4, (x5, x6), (x7, x8)):
-                            (latNormalizer(x1), lonNormalizer(x2),
-                             latNormalizer(x3), lonNormalizer(x4),
-                             timeNormalizer(x5), timeNormalizer(x6),
-                             timeNormalizer(x7), timeNormalizer(x8))))
-selected_centroids = kmeans(3, myRdd)[1].centers
-routesDistances = myRoutes.map(lambda x: (x[0], calculateDistanceDeparture(x[1])['distances_departure'],
-                                          calculateDistanceArrival(x[1],
-                                          calculateDistanceDeparture(x[1])['position_departure'])['distances_arrival'],
-                                          calculateDistanceDeparture(x[1])['position_departure'],
-                                          calculateDistanceArrival(x[1], calculateDistanceDeparture(x[1])['position_departure'])['position_arrival']))
-#coucou = routesDistances
-for i in range(len(selected_centroids)):
-    sortRoute = (routesDistances.map(lambda (v, w, x, y, z): (v, w[i] + x[i], y[i], z[i]))
-                                 .sortBy(lambda x:x[1]))
-    finalRecommendation.append(sortRoute.take(NUMBER_OF_RECOMMENDATIONS))
-for sug in finalRecommendation:
-    for i in range(len(sug)):
-        for j in range(len(sug[i])):
-            recommendations.append(sug[i][j])
+        recommendations = []
+        transition = []
+        finalRecommendation = []
+        selected_centroids = []
+        routesDistances = []
+        to_return = []
+        myRdd = initialRdd.filter(lambda (x,y): x == userId).map(lambda (x,y): y)
+        myRdd = (myRdd.map(lambda x: (x[0], x[1], x[2], x[3],
+                                     toCoordinates(toSeconds(x[4])),
+                                     toCoordinates(toSeconds(x[5]))))
+                      .map(lambda (x1, x2, x3, x4, (x5, x6), (x7, x8)):
+                                    (latNormalizer(x1), lonNormalizer(x2),
+                                     latNormalizer(x3), lonNormalizer(x4),
+                                     timeNormalizer(x5), timeNormalizer(x6),
+                                     timeNormalizer(x7), timeNormalizer(x8))))
+        selected_centroids = kmeans(3, myRdd)[1].centers
+        routesDistances = myRoutes.map(lambda x: (x[0], calculateDistanceDeparture(x[1])['distances_departure'],
+                                                  calculateDistanceArrival(x[1],
+                                                  calculateDistanceDeparture(x[1])['position_departure'])['distances_arrival'],
+                                                  calculateDistanceDeparture(x[1])['position_departure'],
+                                                  calculateDistanceArrival(x[1], calculateDistanceDeparture(x[1])['position_departure'])['position_arrival']))
+        #coucou = routesDistances
+        for i in range(len(selected_centroids)):
+            sortRoute = (routesDistances.map(lambda (v, w, x, y, z): (v, w[i] + x[i], y[i], z[i]))
+                                         .sortBy(lambda x:x[1]))
+            finalRecommendation.append(sortRoute.take(NUMBER_OF_RECOMMENDATIONS))
+        for sug in finalRecommendation:
+            for i in range(len(sug)):
+                for j in range(len(sug[i])):
+                    recommendations.append(sug[i][j])
 
-# UNTIL HERE IT WORKS
+        # UNTIL HERE IT WORKS
 
-#recommendations = removeDuplicates(recommendations)
-recommendationsToReturn(recommendations)
-recs = recommendationsToDB(userId, to_return)
-usertrip_ids = insertUserTripToDB(userId, recs)
-insertTravelRecommendationToDB(userId, usertrip_ids)
-
+        #recommendations = removeDuplicates(recommendations)
+        recommendationsToReturn(recommendations)
+        recs = recommendationsToDB(userId, to_return)
+        usertrip_ids = insertUserTripToDB(userId, recs)
+        insertTravelRecommendationToDB(userId, usertrip_ids)
 
 END = datetime.datetime.now()
 
