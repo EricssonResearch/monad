@@ -164,4 +164,6 @@
     <string name="img_description">Icon Missing</string>
     <string name="non_available">n/a</string>
     <string name="hello_world">Hello world!</string>
+    <string name="GoogleProjectID">81265551950</string>
+
 </resources>
