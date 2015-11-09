@@ -23,7 +23,7 @@ public class StoreTrips {
     private SimpleDateFormat format;
     private ArrayList<FullTrip> searchResults;
 
-    public ArrayList<FullTrip> storeTheTrips(JSONObject trips){
+    public ArrayList<FullTrip> storeTheTrips(JSONObject trips, boolean storeData){
         // Store the recommended (full) trips from the server
         numberOfSearchResults = trips.length();
         format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -86,7 +86,11 @@ public class StoreTrips {
         }
 
         Collections.sort(searchResults, new CustomComparator());
-        Storage.setSearchResults(searchResults);
+
+        if (storeData){
+            Storage.setSearchResults(searchResults);
+        }
+
         return searchResults;
     }
 }

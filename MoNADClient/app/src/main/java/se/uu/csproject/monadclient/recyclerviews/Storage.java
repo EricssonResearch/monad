@@ -18,6 +18,10 @@ public class Storage{
         return searchResults;
     }
 
+    public static void clearAll(){
+        searchResults.clear();
+    }
+
     public static void sort(){
         Collections.sort(searchResults, new CustomComparator());
     }

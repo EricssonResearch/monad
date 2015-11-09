@@ -42,6 +42,7 @@ import java.util.concurrent.ExecutionException;
 import se.uu.csproject.monadclient.recyclerviews.FullTrip;
 import se.uu.csproject.monadclient.recyclerviews.PartialTrip;
 import se.uu.csproject.monadclient.recyclerviews.SearchRecyclerViewAdapter;
+import se.uu.csproject.monadclient.recyclerviews.Storage;
 import se.uu.csproject.monadclient.tabs.GetRecommendationsTask;
 
 public class MainActivity extends MenuedActivity implements
@@ -145,6 +146,7 @@ public class MainActivity extends MenuedActivity implements
             int duration = Toast.LENGTH_SHORT;
             Toast toast = Toast.makeText(context, text, duration);
             toast.show();
+            Storage.clearAll();
         }
         Intent myIntent = new Intent(MainActivity.this, SearchActivity.class);
         myIntent.putExtra("destination", destination.getText().toString());
@@ -221,6 +223,7 @@ public class MainActivity extends MenuedActivity implements
     }
 
     public void goToAdvancedSearch(View v) {
+        Storage.clearAll();
         startActivity(new Intent(this, SearchActivity.class));
     }
 

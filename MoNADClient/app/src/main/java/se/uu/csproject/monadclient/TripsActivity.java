@@ -24,6 +24,7 @@ import java.util.List;
 import se.uu.csproject.monadclient.recyclerviews.FullTrip;
 import se.uu.csproject.monadclient.recyclerviews.PartialTrip;
 import se.uu.csproject.monadclient.recyclerviews.SearchRecyclerViewAdapter;
+import se.uu.csproject.monadclient.recyclerviews.Storage;
 import se.uu.csproject.monadclient.recyclerviews.TripRecyclerViewAdapter;
 
 
@@ -49,6 +50,11 @@ public class TripsActivity extends MenuedActivity implements AsyncResponse{
     protected void onResume() {
         super.onResume();
         getBookings();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
     }
 
     private void getBookings(){

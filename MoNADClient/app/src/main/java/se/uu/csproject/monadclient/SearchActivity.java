@@ -59,6 +59,9 @@ public class SearchActivity extends MenuedActivity implements
     private Context context;
     public Calendar calendar;
     private ArrayList<FullTrip> searchResults;
+    private SearchRecyclerViewAdapter adapter;
+    private LinearLayoutManager linearLayoutManager;
+    private RecyclerView recyclerView;
     //private DatePicker datePicker;
 
     private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
@@ -99,22 +102,12 @@ public class SearchActivity extends MenuedActivity implements
         positionEditText = (EditText) findViewById(R.id.edittext_search_position);
         destinationEditText = (EditText) findViewById(R.id.edittext_search_destination);
 
+        recyclerView = (RecyclerView) findViewById(R.id.recycler_view_search);
+        linearLayoutManager = new LinearLayoutManager(getApplicationContext());
+        recyclerView.setLayoutManager(linearLayoutManager);
+
         currentLatitude = 0;
         currentLongitude = 0;
-
-        if (getIntent().hasExtra("destination")){
-            destinationEditText.setText(getIntent().getStringExtra("destination"));
-        }
-
-        searchResults = Storage.getSearchResults();
-        // If there are search results suited for the user's quick search, display them
-        if (!searchResults.isEmpty()){
-            RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler_view_search);
-            LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getApplicationContext());
-            recyclerView.setLayoutManager(linearLayoutManager);
-            SearchRecyclerViewAdapter adapter = new SearchRecyclerViewAdapter(searchResults);
-            recyclerView.setAdapter(adapter);
-        }
 
         buildGoogleApiClient();
         initializeLocationRequest();
@@ -304,6 +297,7 @@ public class SearchActivity extends MenuedActivity implements
         }
 
         if(stPosition != null && !stPosition.trim().isEmpty() && edPosition != null && !edPosition.trim().isEmpty()){
+            Storage.clearAll();
             SendTravelRequest asyncTask = new SendTravelRequest();
             asyncTask.delegate = this;
             asyncTask.execute(userId, startTime, endTime, requestTime, stPosition, edPosition, priority,
@@ -329,13 +323,9 @@ public class SearchActivity extends MenuedActivity implements
             int duration = Toast.LENGTH_SHORT;
             Toast toast = Toast.makeText(context, text, duration);
             toast.show();
-        } else {
-            RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler_view_search);
-            LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getApplicationContext());
-            recyclerView.setLayoutManager(linearLayoutManager);
-            SearchRecyclerViewAdapter adapter = new SearchRecyclerViewAdapter(searchResults);
-            recyclerView.setAdapter(adapter);
         }
+        adapter = new SearchRecyclerViewAdapter(searchResults);
+        recyclerView.setAdapter(adapter);
     }
 
     @Override
@@ -357,6 +347,14 @@ public class SearchActivity extends MenuedActivity implements
             Toast toast = Toast.makeText(context, text, duration);
             toast.show();
         }
+
+        if (getIntent().hasExtra("destination")){
+            destinationEditText.setText(getIntent().getStringExtra("destination"));
+        }
+
+        searchResults = Storage.getSearchResults();
+        adapter = new SearchRecyclerViewAdapter(searchResults);
+        recyclerView.setAdapter(adapter);
     }
 
     @Override
