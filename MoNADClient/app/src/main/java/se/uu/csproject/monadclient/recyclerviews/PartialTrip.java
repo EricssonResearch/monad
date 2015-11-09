@@ -45,12 +45,12 @@ public class PartialTrip implements Parcelable {
 
     /* TODO: Do we need entries for id and busID ?? */
     protected PartialTrip(Parcel in) {
+        id = in.readString();
         line = in.readInt();
-
+        busID = in.readInt();
         startBusStop = in.readString();
         long tmpStartTime = in.readLong();
         startTime = tmpStartTime != -1 ? new Date(tmpStartTime) : null;
-
         endBusStop = in.readString();
         long tmpEndTime = in.readLong();
         endTime = tmpEndTime != -1 ? new Date(tmpEndTime) : null;
@@ -85,7 +85,9 @@ public class PartialTrip implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(id);
         dest.writeInt(line);
+        dest.writeInt(busID);
         dest.writeString(startBusStop);
         dest.writeLong(startTime != null ? startTime.getTime() : -1L);
         dest.writeString(endBusStop);

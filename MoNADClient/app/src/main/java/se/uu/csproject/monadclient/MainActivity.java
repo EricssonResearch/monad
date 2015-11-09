@@ -237,13 +237,13 @@ public class MainActivity extends MenuedActivity implements
         trajectory.add("Ekeby Bruk");
         trajectory.add("Ekeby");
         partialTrips.add(new PartialTrip(1, "Polacksbacken",startdate1,"Flogsta", enddate1, trajectory));
-        trips.add(new FullTrip("1", "2", partialTrips, 10, false, 0));
+        trips.add(new FullTrip("1", "2", partialTrips, 10, true, 0));
         partialTrips.clear(); partialTrips.add(new PartialTrip(2, "Gamla Uppsala",startdate2,"Gottsunda", enddate2, trajectory));
-        trips.add(new FullTrip("2", "3", partialTrips, 15, false, 0));
+        trips.add(new FullTrip("2", "3", partialTrips, 15, true, 0));
         partialTrips.clear(); partialTrips.add(new PartialTrip(3, "Granby",startdate3,"Tunna Backar", enddate3, trajectory));
-        trips.add(new FullTrip("3", "4", partialTrips, 15, false, 0));
+        trips.add(new FullTrip("3", "4", partialTrips, 15, true, 0));
         partialTrips.clear(); partialTrips.add(new PartialTrip(4, "Kungsgatan", startdate4, "Observatoriet", enddate4, trajectory));
-        trips.add(new FullTrip("4", "5", partialTrips, 30, false, 0));
+        trips.add(new FullTrip("4", "5", partialTrips, 30, true, 0));
     }
 
     @Override

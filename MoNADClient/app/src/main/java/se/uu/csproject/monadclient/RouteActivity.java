@@ -41,7 +41,6 @@ public class RouteActivity extends AppCompatActivity {
 
         LinearLayoutManager llm = new LinearLayoutManager(this);
         recycler.setLayoutManager(llm);
-        //recycler.setHasFixedSize(true);
 
         List<Notify> busStops = new ArrayList<>();
         initializeData(busStops);
@@ -54,15 +53,18 @@ public class RouteActivity extends AppCompatActivity {
         TextView timeEnd = (TextView) findViewById(R.id.label_timeend);
         TextView walkEnd = (TextView) findViewById(R.id.label_walkend);
 
-        Bundle b = getIntent().getExtras();
-        final FullTrip trip = b.getParcelable("selectedTrip");
+        final FullTrip trip = getIntent().getExtras().getParcelable("selectedTrip");
         walkStart.setText("Walk to bus stop " + trip.getStartBusStop());
         timeStart.setText(formatTime(trip.getStartTime()));
         walkEnd.setText("Leave the bus at stop " + trip.getEndBusStop());
         timeEnd.setText(formatTime(trip.getEndTime()));
+System.out.println(trip.isReserved());
+        Button joinTripButton = (Button)findViewById(R.id.button_jointrip);
+        if (trip.isReserved()) {
+            joinTripButton.setVisibility(View.GONE);
+        }
 
-        Button btn_join_trips = (Button)findViewById(R.id.btn_join_trips);
-        btn_join_trips.setOnClickListener(new View.OnClickListener() {
+        joinTripButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View vw) {
                 Intent myIntent = new Intent(RouteActivity.this, RouteConfirmPopup.class);
                 myIntent.putExtra("selectedTrip", trip);

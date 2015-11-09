@@ -148,7 +148,7 @@
             style="@style/whiteText"
             android:textSize="@dimen/medium_text"
             android:background="@color/primaryColor"
-            android:id="@+id/btn_join_trips"
+            android:id="@+id/button_jointrip"
             android:layout_gravity="center_horizontal"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
