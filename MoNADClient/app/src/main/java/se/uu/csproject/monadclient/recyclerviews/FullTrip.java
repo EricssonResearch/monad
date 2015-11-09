@@ -76,7 +76,7 @@ public class FullTrip implements Parcelable {
     }
 
     public String getId() {
-        return partialTrips.get(0).getID();
+        return id;
     }
 
     public String getTravelRequestID(){

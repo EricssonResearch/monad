@@ -45,14 +45,6 @@ public class TripsActivity extends MenuedActivity implements AsyncResponse{
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         getBookings();
-
-        /*List<FullTrip> trips = new ArrayList<>();
-        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler_view_active);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getApplicationContext());
-        recyclerView.setLayoutManager(linearLayoutManager);
-        generateTrips(trips);
-        TripRecyclerViewAdapter adapter = new TripRecyclerViewAdapter(trips);
-        recyclerView.setAdapter(adapter);*/
     }
 
     private void getBookings(){
