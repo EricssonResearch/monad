@@ -175,20 +175,6 @@ public class MainActivity extends MenuedActivity implements
                 .setFastestInterval(10 * 1000); // 10 seconds, in milliseconds
     }
 
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//
-//        if(ClientAuthentication.getPassword().equals("0")){
-//        // Inflate the menu; this adds items to the action bar if it is present.
-//        getMenuInflater().inflate(R.menu.menu_main_google, menu);
-//        return true;
-//        }
-//        else {
-//            getMenuInflater().inflate(R.menu.menu_main, menu);
-//            return true;
-//        }
-//    }
-
     public boolean onTouchEvent(MotionEvent event) {
         InputMethodManager imm = (InputMethodManager)getSystemService(Context.
                 INPUT_METHOD_SERVICE);
