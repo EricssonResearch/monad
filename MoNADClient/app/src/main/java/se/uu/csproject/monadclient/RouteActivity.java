@@ -50,6 +50,11 @@ public class RouteActivity extends AppCompatActivity {
         Bundle b = getIntent().getExtras();
         final FullTrip trip = b.getParcelable("selectedTrip");
         ArrayList <PartialTrip> partialTrips = trip.getPartialTrips();
+        Button joinTripButton = (Button)findViewById(R.id.button_jointrip);
+        if (trip.isReserved()) {
+            joinTripButton.setVisibility(View.GONE);
+        }
+
         LayoutInflater vi = (LayoutInflater) getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         ViewGroup insertPoint = (ViewGroup) findViewById(R.id.layout1);
 
@@ -62,7 +67,7 @@ public class RouteActivity extends AppCompatActivity {
             View v = vi.inflate(R.layout.route_details, null);
 
             TextView stopTime = (TextView) v.findViewById(R.id.label_first_time);
-            stopTime.setText(formatTime((Date) time));
+            stopTime.setText(formatTime(time));
             TextView stopName = (TextView) v.findViewById(R.id.label_first_stop);
             stopName.setText(name);
             insertPoint.addView(v);
@@ -86,12 +91,6 @@ public class RouteActivity extends AppCompatActivity {
                 insertPoint.addView(busStopView);
             }
 
-        }
-
-        System.out.println(trip.isReserved());
-        Button joinTripButton = (Button)findViewById(R.id.button_jointrip);
-        if (trip.isReserved()) {
-            joinTripButton.setVisibility(View.GONE);
         }
 
         joinTripButton.setOnClickListener(new View.OnClickListener() {
