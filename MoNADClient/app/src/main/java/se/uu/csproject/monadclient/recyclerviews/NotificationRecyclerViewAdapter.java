@@ -53,7 +53,14 @@ public class NotificationRecyclerViewAdapter extends RecyclerView.Adapter<Notifi
         notificationViewHolder.hideNotificationButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                notificationViewHolder.itemView.setVisibility(View.GONE);
+//                notificationViewHolder.itemView.setVisibility(View.GONE);
+//                int index = notify.indexOf(i);
+
+                Storage.removeNotification(i);
+                notify = Storage.getNotifications();
+//                notifyItemRemoved(index);
+                notifyDataSetChanged();
+
             }
         });
 

@@ -69,6 +69,10 @@ public class MainActivity extends MenuedActivity implements
         setSupportActionBar(toolbar);
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+=======
+
+        //initialize notifications, temporary
+        Storage.initializeNotificationData();
         List<FullTrip> searchResults = new ArrayList<>();
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler_view_main);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getApplicationContext());

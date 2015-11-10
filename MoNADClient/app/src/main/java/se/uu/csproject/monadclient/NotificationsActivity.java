@@ -8,26 +8,21 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageView;
 
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.List;
 
 import se.uu.csproject.monadclient.recyclerviews.NotificationRecyclerViewAdapter;
 import se.uu.csproject.monadclient.recyclerviews.Notify;
+import se.uu.csproject.monadclient.recyclerviews.Storage;
 
 //// TODO (low priority): receive data from notification module (maybe not in this activity - TBD), display them in notification bar as well as in the recyclerview
 public class NotificationsActivity extends MenuedActivity {
 
     private Toolbar toolbar;
-    public static List<Notify> notifications;
+    public static ArrayList<Notify> notifications;
     public static int NOTIFICATION_ID = 100;
     public static String NOTIFICATION_ID_STR = "_id";
     View view;
-    ImageView imageView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,18 +37,17 @@ public class NotificationsActivity extends MenuedActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_home_white_24dp);
 
-
         RecyclerView rv =(RecyclerView)findViewById(R.id.rv);
 
         LinearLayoutManager llm = new LinearLayoutManager(this);
         rv.setLayoutManager(llm);
         rv.setHasFixedSize(true);
 
-        initializeData();
+        notifications = Storage.getNotifications();
+
         NotificationRecyclerViewAdapter adapter;
         adapter = new NotificationRecyclerViewAdapter(getApplicationContext(), notifications);
         rv.setAdapter(adapter);
-
 
         NotificationManager mNotificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         mNotificationManager.cancel(getIntent().getIntExtra(NOTIFICATION_ID_STR, -1));
@@ -72,27 +66,7 @@ public class NotificationsActivity extends MenuedActivity {
         }
     }
 
-    private void initializeData(){
-                notifications = new ArrayList<>();
-                Calendar calendar = new GregorianCalendar(2015, 10, 26, 10, 40, 0);
-                Date time1 = calendar.getTime();
-                calendar = new GregorianCalendar(2015, 10, 26, 10, 50, 0);
-                Date time2 = calendar.getTime();
-                calendar = new GregorianCalendar(2015, 10, 26, 10, 45, 0);
-                Date time3 = calendar.getTime();
-                calendar = new GregorianCalendar(2015, 10, 26, 11, 0, 0);
-                Date time4 = calendar.getTime();
-                calendar = new GregorianCalendar(2015, 10, 27, 9, 50, 0);
-                Date time5 = calendar.getTime();
-                calendar = new GregorianCalendar(2015, 10, 27, 10, 5, 0);
-                Date time6 = calendar.getTime();
-                notifications.add(new Notify("Bus 805: 5 min delay", time1, R.drawable.ic_assistant_photo_black_24dp));
-                notifications.add(new Notify("Bus 805: Coming in 5 min", time2, R.drawable.ic_feedback_black_24dp));
-                notifications.add(new Notify("Bus 805: Departing now", time3, R.drawable.ic_alarm_black_24dp));
-                notifications.add(new Notify("Bus 801: 5 min delay", time4, R.drawable.ic_assistant_photo_black_24dp));
-                notifications.add(new Notify("Bus 801: Coming in 5 min", time5, R.drawable.ic_feedback_black_24dp));
-                notifications.add(new Notify("Bus 801: Departing now", time6, R.drawable.ic_alarm_black_24dp));
-            }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -107,8 +81,3 @@ public class NotificationsActivity extends MenuedActivity {
     }
 
 }
-
-
-
-
-
