@@ -18,7 +18,7 @@ import os.path
 
 import router
 
-FILE = "../../../testmap.xml"
+FILE = "testmap.xml"
 
 
 def main():
