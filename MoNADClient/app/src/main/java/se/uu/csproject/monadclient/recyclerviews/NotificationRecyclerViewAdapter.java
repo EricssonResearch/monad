@@ -73,25 +73,19 @@ public class NotificationRecyclerViewAdapter extends RecyclerView.Adapter<Notifi
         ImageView hideNotificationButton;
 
 
-
-
         NotificationViewHolder(Context context, View itemView) {
-
             super(itemView);
             mContext = context;
             cv = (CardView) itemView.findViewById(R.id.cv);
-            notificationName = (TextView) itemView.findViewById(R.id.text);
-            notificationTime = (TextView) itemView.findViewById(R.id.time);
-            notificationPhoto = (ImageView) itemView.findViewById(R.id.icon);
+            notificationName = (TextView) itemView.findViewById(R.id.label_text);
+            notificationTime = (TextView) itemView.findViewById(R.id.label_time);
+            notificationPhoto = (ImageView) itemView.findViewById(R.id.label_icon);
             notificationImage = (ImageView) itemView.findViewById(R.id.image1);
             hideNotificationButton = (ImageView) itemView.findViewById(R.id.image2);
             notificationImage.setOnClickListener(this);
             hideNotificationButton.setOnClickListener(this);
             itemView.setOnClickListener(this);
             itemView.setTag(itemView);
-
-
-
         }
 
 

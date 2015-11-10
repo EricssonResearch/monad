@@ -126,6 +126,7 @@
                 android:textColor="@color/black"
                 android:gravity="center_horizontal"
                 android:clickable="true"
+                android:onClick="showDatePickerDialog"
                 />
 
             <TextView
@@ -139,6 +140,7 @@
                 android:textColor="@color/black"
                 android:gravity="center_horizontal"
                 android:clickable="true"
+                android:onClick="showTimePickerDialog"
                 />
 
         </LinearLayout>

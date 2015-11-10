@@ -7,38 +7,31 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.List;
 
+import se.uu.csproject.monadclient.ClientAuthentication;
 import se.uu.csproject.monadclient.R;
 
 public class LanguageRecyclerViewAdapter
         extends RecyclerView.Adapter<LanguageRecyclerViewAdapter.LanguageViewHolder> {
 
     private List<Language> languages;
-    private int selectedLanguagePosition=100;
 
-    public class LanguageViewHolder extends RecyclerView.ViewHolder
-            implements View.OnClickListener{
+    public class LanguageViewHolder extends RecyclerView.ViewHolder {
 
         CardView languageCard;
         ImageView languageFlag;
         TextView languageName;
+        View selectedOverlay;
 
         LanguageViewHolder(View itemView) {
             super(itemView);
             languageCard = (CardView) itemView.findViewById(R.id.card_language);
             languageFlag = (ImageView) itemView.findViewById(R.id.icon_flag);
             languageName = (TextView) itemView.findViewById(R.id.label_language);
-
-            itemView.setOnClickListener(this);
-        }
-
-        @Override
-        public void onClick(View v) {
-            languageCard.setCardBackgroundColor(R.color.accentColor);
-            languageName.append(String.valueOf(getAdapterPosition()));
-            selectedLanguagePosition = getAdapterPosition();
+            selectedOverlay = (View) itemView.findViewById(R.id.selected_overlay);
         }
     }
 
@@ -55,14 +48,20 @@ public class LanguageRecyclerViewAdapter
     public LanguageViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
         View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.list_item_language,
                 viewGroup, false);
-        LanguageViewHolder languageViewHolder = new LanguageViewHolder(view);
-        return languageViewHolder;
+       return new LanguageViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(LanguageViewHolder languageViewHolder, int i) {
+    public void onBindViewHolder(final LanguageViewHolder languageViewHolder, final int i) {
         languageViewHolder.languageName.setText(languages.get(i).name);
         languageViewHolder.languageFlag.setImageResource(languages.get(i).flagId);
+        languageViewHolder.languageCard.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View vw) {
+                languageViewHolder.selectedOverlay.setVisibility(View.VISIBLE);
+                ClientAuthentication.setLanguage(languages.get(i).index);
+                Toast.makeText(languageViewHolder.languageCard.getContext(), "Language changed to " + ClientAuthentication.getLanguage(), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     @Override

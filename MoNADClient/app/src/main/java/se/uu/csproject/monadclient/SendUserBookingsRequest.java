@@ -61,7 +61,7 @@ public class SendUserBookingsRequest extends AsyncTask<String, Void, ArrayList<F
             }
             JSONObject trips = new JSONObject(sb.toString());
 
-            bookings = new StoreTrips().storeTheTrips(trips);
+            bookings = new StoreTrips().storeTheTrips(trips, false);
 
         } catch (MalformedURLException e) {
             Log.d("oops", e.toString());

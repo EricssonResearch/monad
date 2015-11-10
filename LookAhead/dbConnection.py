@@ -198,6 +198,22 @@ class DB():
         return req
 
     def grpReqByBusstopAndTime(self, start, end):
+
+        """
+        def getTravelRequestSummary2(self, start, end, busStop):
+        keyf = "function(doc) { return { startBusStop: doc.startBusStop, hour: doc.startTime.getHours(), minute: doc.startTime.getMinutes()};}"
+        condition = {"startTime": {"$gte": start, "$lt": end}, "startBusStop": {"$eq": busStop}}
+        initial = {"count": 0}
+        reduce = "function(curr, result) { result.count++; }"
+        # req = self.db.TravelRequest.group(keyf, condition, initial, reduce)
+        req = self.db.TravelRequestLookAhead.group(keyf, condition, initial, reduce)
+        req = sorted(req, key=itemgetter("hour","minute"))
+
+        return req        
+        """
+
+        #dataFile = open("/home/ziring/result.txt", "w")
+
         ''' Performs a summarized query grouping the requests by bus stop,
         hour and minute.
         Returns the whole bag of documents found with the 3 group columns,
@@ -209,11 +225,17 @@ class DB():
         @param: start - Initial datetime for the query
         @param: end - Final datetime for the query
         '''
+
         queryResults = []
         pipline = [{"$match": {"startTime": {"$gte": start, "$lt": end}}},
                    {"$group": {"_id": {"RequestTime": "$startTime", "BusStop": "$startBusStop"}, "total": {"$sum": 1}}},
                    {"$sort": {"_id.RequestTime": 1}}]
+
+
+
+
         groupQuery = self.db.TravelRequestLookAhead.aggregate(pipline)
+
         for x in groupQuery:
             queryResults.append(x)
         return queryResults
@@ -333,7 +355,7 @@ class DB():
 
     # ---------------------------------------------------------------------------------------------------------------------------------------
     # Routes
-    # ---------------------------------------------------------------------------------------------------------------------------------------
+
     def populateRoute(self, route):
         ''' This function should be written again since the DB layout
          has changed.
@@ -496,6 +518,77 @@ class DB():
         @param: startTime, the date of timetable will be used for
         @param: tripObjectList, list of trip object id of specific line
         '''
+
+        yesterday = datetime.date.today() - datetime.timedelta(days=1)
+        yesterdayStart = datetime.datetime(yesterday.year, yesterday.month, yesterday.day,0,0,0)
+        todayStart = datetime.datetime(datetime.date.today().year,datetime.date.today().month,datetime.date.today().day,0,0,0)
+        reqs = []
+        requests = self.db.TravelRequestLookAheadMR.find({"$and": [{"startTime": {"$gte": start}}, {"startTime": {"$lt":
+            end}}]}, {"startTime": 1, "startBusStop": 1, "endBusStop": 1, "_id": 0})  # New collection for LookAhead
+        for req in requests:
+            reqs.append([req.get('startTime', None), req.get('startBusStop', None), req.get('endBusStop', None)])
+            #reqs.append(req.get('startTime', None))
+
+
+        return reqs
+    def getBusStopline(self,id):
+
+        line = self.db.Route.find({"trajectory.busStop": ObjectId(id)})
+        return line[0]['line']
+
+    def processReqest(self, start, end):
+        '''
+
+        :param start:lower time bound
+        :param end: upper time bound
+        :return:requests between start and end time ,its generate decompose each multiple line request
+        into 2 requests one for each line
+        '''
+
+        reqs = []
+        nreqs = []
+        reqs = self.getRequestsFromDB(start, end)
+        samelinereq = 0
+        diflinereq = 0
+        for req in reqs:
+            id = self.getBusStopId(req[1])
+            sourceline = self.getBusStopline(id)
+            id = self.getBusStopId(req[2])
+            destline = self.getBusStopline(id)
+            if sourceline == destline:
+                nreqs.append(req)
+                samelinereq += 1
+            else:
+                sbusstops = self.getRouteStop(sourceline)
+                dbusstops = self.getRouteStop(destline)
+
+                set1 = set(x['busStop'] for x in sbusstops)
+                set2 = set(x['busStop'] for x in dbusstops)
+                commonbusstopid = set1.intersection(set2)
+                commonbusstop = self.getBusStopName(commonbusstopid.pop())
+
+                nreqs.append([req[0], req[1], commonbusstop])
+                #print " breakdown request into" % req[0], req[1], commonbusstop
+                triptimetable = self.generateFitnessTripTimeTable(sourceline, req[0])
+                for x in triptimetable:
+                    if x[0] == commonbusstop:
+                        tripdate = x[1]
+                nreqs.append([tripdate, commonbusstop, req[2]])
+                diflinereq += 1
+
+        return nreqs
+
+
+
+
+
+
+
+
+
+
+
+
         objID = ObjectId()
         timeTable = {
             "_id": objID,
@@ -505,6 +598,7 @@ class DB():
         }
         # print timeTable
         self.db.TimeTable.insert_one(timeTable)
+
 
     # ---------------------------------------------------------------------------------------------------------------------------------------
     # Bus Stop Location
@@ -537,9 +631,39 @@ class DB():
         '''
         return self.parseData(self.db.BusStop.find({"_id": id}), "name")
 
-    # ---------------------------------------------------------------------------------------------------------------------------------------
-    # Bus Trip
-    # ---------------------------------------------------------------------------------------------------------------------------------------
+
+    def MaxReqNumTrip(self,trip_sTime,tripEnd, lineNum = 2):
+        BusStplist = []
+        dirlist =[]
+        a = datetime.datetime.strptime(trip_sTime, '%Y-%m-%d %H:%M:%S')
+        # t =datetime.datetime.strptime(trip_sTime,'%Y-%m-%d %H:%M:%S').time()
+        # e =datetime.datetime.strptime(tripEnd,'%Y-%m-%d %H:%M:%S').time()
+        #get the trip time table
+        # trip_time_table = self.generateFitnessTripTimeTable(lineNum,trip_sTime[11:16])
+        trip_time_table = self.generatePhenotype(lineNum,a)
+
+        for i in trip_time_table:
+            BusStplist.append([i[0],0])
+            dirlist.append(i[0])
+        t = datetime.datetime.strptime(trip_sTime,'%Y-%m-%d %H:%M:%S')
+        e =datetime.datetime.strptime(tripEnd,'%Y-%m-%d %H:%M:%S')
+        #get all requests where starting time is more than trip starting time
+        Requests = self.getRequestsFromDB(t, e)
+        #get only the requests with start location in bus stops and end location in bus stps
+        for req in Requests:
+            for i in BusStplist:
+                if (req[1], req[2]) in itertools.combinations(dirlist, 2):
+                    if req[1] == i[0]:
+                        i[1] += 1
+                    if req[2] == i[0]:
+                        i[1] += -1
+        sum = 0;
+        for i in BusStplist:
+            sum += i[1]
+            i[1] = sum
+        return BusStplist
+
+
     def insertBusTrip(self, individual):
         '''
         Insert trip details to BusTrip by best individual

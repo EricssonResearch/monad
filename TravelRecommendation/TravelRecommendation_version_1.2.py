@@ -11,7 +11,6 @@ CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
 
-
 import numpy
 import math
 import datetime
@@ -22,8 +21,6 @@ from pyspark.mllib.clustering import KMeans, KMeansModel
 from numpy import array
 from math import sqrt
 from geopy.distance import vincenty
-
-START = datetime.datetime.now()
 
 NUM_OF_IT = 8
 MIN_LATITUDE = 59.78
@@ -36,12 +33,10 @@ CIRCLE_CONVERTER = math.pi / 43200
 NUMBER_OF_RECOMMENDATIONS = 1
 client = MongoClient()
 db = client.monad
-#client2 = MongoClient('130.238.15.114')
-client2 = MongoClient()
+client2 = MongoClient('130.238.15.114')
 db2 = client2.monad1
 start = datetime.datetime.now()
 dontGoBehind = 0
-
 
 def timeApproximation(lat1, lon1, lat2, lon2):
     point1 = (lat1, lon1)
@@ -54,26 +49,27 @@ def retrieveRequests():
     return TravelRequest
 
 def populateRequests(TravelRequest):
-    results = db2.TravelRequest.find()
+    results = TravelRequest.find()
     for res in results:
         dist = timeApproximation(res['startPositionLatitude'],
                                  res['startPositionLongitude'],
                                  res['endPositionLatitude'],
                                  res['endPositionLongitude'])
         if res['startTime'] == "null":
-            users.append((res['userID'],(res['startPositionLatitude'], res['startPositionLongitude'],
-            res['endPositionLatitude'], res['endPositionLongitude'],
+            users.append((res['userID'],(res['startPositionLatitude'],
+            res['startPositionLongitude'], res['endPositionLatitude'],
+            res['endPositionLongitude'],
             (res['endTime'] - datetime.timedelta(minutes = dist)).time(),
             (res['endTime']).time())))
         elif res['endTime'] == "null":
-            users.append((res['userID'],(res['startPositionLatitude'], res['startPositionLongitude'],
-            res['endPositionLatitude'], res['endPositionLongitude'],
-            (res['startTime']).time(),
+            users.append((res['userID'],(res['startPositionLatitude'],
+            res['startPositionLongitude'], res['endPositionLatitude'],
+            res['endPositionLongitude'], (res['startTime']).time(),
             (res['startTime'] + datetime.timedelta(minutes = dist)).time())))
         else:
-            users.append((res['userID'],(res['startPositionLatitude'], res['startPositionLongitude'],
-            res['endPositionLatitude'], res['endPositionLongitude'],
-            (res['startTime']).time(),
+            users.append((res['userID'],(res['startPositionLatitude'],
+            res['startPositionLongitude'], res['endPositionLatitude'],
+            res['endPositionLongitude'], (res['startTime']).time(),
             (res['endTime']).time())))
 
 def getTodayTimeTable():
@@ -91,14 +87,17 @@ def populateTimeTable():
             for res2 in db2.BusTrip.find({'_id': res1}):
                 for res3 in res2['trajectory']:
                     for res4 in db2.BusStop.find({'_id':res3['busStop']}):
-                        waypoints.append((res3['time'],res4['latitude'],res4['longitude']))
+                        waypoints.append((res3['time'],res4['latitude'],
+                                          res4['longitude']))
                 routes.append((res1, waypoints))
                 waypoints = []
 
 def iterator(waypoints):
   Waypoints = []
   for res in waypoints:
-    Waypoints.append((latNormalizer(res[1]), lonNormalizer(res[2]), timeNormalizer(toCoordinates(toSeconds(res[0]))[0]), timeNormalizer(toCoordinates(toSeconds(res[0]))[1])))
+    Waypoints.append((latNormalizer(res[1]), lonNormalizer(res[2]),
+                      timeNormalizer(toCoordinates(toSeconds(res[0]))[0]),
+                      timeNormalizer(toCoordinates(toSeconds(res[0]))[1])))
   #print Waypoints
   return Waypoints
 
@@ -142,6 +141,7 @@ def kmeans(iterations, theRdd):
 
 # Function that runs iteratively the kmeans algorithm to find the best number
 # of clusters to group the user's request
+
 def optimalk(theRdd):
     results = []
     for i in range(NUM_OF_IT):
@@ -153,6 +153,7 @@ def optimalk(theRdd):
     for i in range(NUM_OF_IT-2):
         optimal1.append(optimal[i] - optimal[i+1])
     return (optimal1.index(max(optimal1)) + 2)
+
 
 # The function that calculate the distance from the given tuple to all the
 # cluster centroids and returns the minimum disstance
@@ -193,149 +194,90 @@ def calculateDistance(tup1):
 #-------------------------------------------------------------------
 def calculateDistanceDeparture(tup1):
     distances_departure = []
-    position_departure = []
+    position = -1
+    min_value = 1000000000
+    min_position = 0
     for i in selected_centroids:
-        position = -1
-        min_value = 1000000000
-        min_position = 0
-        centroid_departure = (i[0], i[1],i[4], i[5])
-        centroid_departure = numpy.array(centroid_departure)
-        temp_dist = []
-        for l in range(len(tup1)-1):
-            current_stop = numpy.array(tup1[l])
-            distance = numpy.linalg.norm(current_stop - centroid_departure)
-            #temp_dist.append(a)
-            position = position + 1
-            if (distance < min_value):
-                min_value = distance
-                min_position = position
-                #result = min(temp_dist)
-                #dontGoBehind = min_position #Need to create a 'dontGoBehind' Global variable
-        result = min_value
-        distances_departure.append(result)
-        position_departure.append(min_position)
-    return {"distances_departure":distances_departure,"position_departure":position_departure}
+      centroid_departure = (i[0], i[1],i[4], i[5])
+      centroid_departure = numpy.array(centroid_departure)
+      temp_dist = []
+      for l in range(len(tup1)-2):
+        current_stop = numpy.array(tup1[l])
+        distance = numpy.linalg.norm(current_stop - centroid_departure)
+        #temp_dist.append(a)
+        position = position + 1
+        if (distance < min_value):
+            min_value = distance
+            min_position = position
+      #result = min(temp_dist)
+      dontGoBehind = min_position #Need to create a 'dontGoBehind' Global variable
+      result = min_value
+      distances_departure.append(result)
+    return distances_departure
 
-
-def calculateDistanceArrival(tup1,position_departure):
-    distances_arrival = []
-    position_arrival = []
-    counter=-1
-    for i in selected_centroids:
-        min_value = 1000
-        min_position = 0
+def calculateDistanceArrival(tup1):
+  distances_arrival = []
+  for i in selected_centroids:
         centroid_arrival = (i[2], i[3], i[6], i[7])
         centroid_arrival = numpy.array(centroid_arrival)
         temp_dist = []
-        counter = counter + 1
-        position = position_departure[counter]
-        for l in range(position_departure[counter]+1, len(tup1)):
-            current_stop = numpy.array(tup1[l])
-            distance = numpy.linalg.norm(current_stop - centroid_arrival)
-            position = position + 1
-            if (distance < min_value):
-                min_value = distance
-                min_position = position
-        result = min_value
+        for l in range(dontGoBehind+1, len(tup1)):
+          current_stop = numpy.array(tup1[l])
+          temp_dist.append(numpy.linalg.norm(current_stop - centroid_arrival))
+        result = min(temp_dist)
         distances_arrival.append(result)
-        position_arrival.append(min_position)
-    return {"distances_arrival":distances_arrival,"position_arrival":position_arrival}
+  return distances_arrival
 
 #------------------------------------------------------------------
 
 def removeDuplicates(alist):
-    return list(set(map(lambda (w, x, y, z): (w, y, z), alist)))
+    return list(set(map(lambda (x, y): x, alist)))
 
-# Return user trip information
 def recommendationsToReturn(alist):
     result = getTodayTimeTable()
-    trajectory = []
-    to_return1 = []
     for res in result:
         for res1 in res['timetable']:
             if res1 in alist:
-                start_index = alist.index(res1)+2
-                end_index = alist.index(res1)+3
                 for res2 in db2.BusTrip.find({'_id': res1}):
-                    for i in range(alist.index(res1)+2, alist.index(res1)+4):
-                        trajectory.append(res2['trajectory'][i]['busStop'])
-                        #trajectory.append(res3['busStop'])
-                    for res4 in db2.BusStop.find({'_id': res2['trajectory'][start_index]['busStop']}):
-                        for res5 in db2.BusStop.find({'_id': res2['trajectory'][end_index]['busStop']}):
-                            to_return1.append((res2['line'], res2['busID'], res4['name'], res5['name'], res2['trajectory'][start_index]['time'],
-                                              res2['trajectory'][end_index]['time'],'null', 'null', 'null', 'null', 'false'))
-                    to_return.append((to_return1, trajectory))
+                    #for res3 in res2['trajectory']:
+                        for res4 in db2.BusStop.find({'_id': res2['trajectory'][0]['busStop']}):
+                            for res5 in db2.BusStop.find({'_id': res2['trajectory'][len(res2['trajectory'])-1]['busStop']}):
+                                to_return.append((res1, res4['name'], res5['name'], res2['trajectory'][0]['time'],
+                                                  res2['trajectory'][len(res2['trajectory'])-1]['time'], res2['busID']))
 
-
-# Added user as argument
-def recommendationsToDB(user, alist):
+def recommendationsToDB(alist):
     rec_list = []
     for item in alist:
-      #route_id not needed anymore in user trip
-      #route_id = item[0]
-      line = item[0][0][0]
-      bus_id = item[0][0][1]
-      start_place = item[0][0][2]
-      end_place = item[0][0][3]
-      start_time = item[0][0][4]
-      end_time = item[0][0][5]
-      request_time = item[0][0][6]
-      feedback = item[0][0][7]
-      request_id = item[0][0][8]
-      next_trip = item[0][0][9]
-      booked = item[0][0][10]
-      trajectory = item[1]
+      route_id = item[0]
+      start_place = item[1]
+      end_place = item[2]
+      start_time = item[3]
+      end_time = item[4]
+      vehicle_no = item[5]
       new_record = {
-          #"routeID" : route_id,               NOT NEEDED ANYMORE IN USER TRIP.
-          "userID" : user,
-          "line" : line,
-          "busID" : bus_id,
+          "routeID" : route_id,
           "startPlace" : start_place,
           "endPlace" : end_place,
           "startTime" : start_time,
           "endTime" : end_time,
-          "requestTime" : request_time,
-          "feedback" : -1,
-          "trajectory" : trajectory,
-          "requestID" : request_id,
-          #"next" : next_trip,
-          "booked" : False
+          "vehicleNo" : vehicle_no
       }
       rec_list.append(new_record)
     return rec_list
 
-# Insertion in User Trip Collection
-def insertUserTripToDB(user, recs):
-    #db.TravelRecommendation.delete_many({"userId": user})
-    #db2.TravelRecommendation.delete_many({"userId": user})
-    '''o = ObjectId()
-    #oo = str(o),                NOT NEEDED ANYMORE IN TRAVEL RECOMMENDATION.
-    new_record = {
-        "_id" : o,
-        #"recId" : oo,               NOT NEEDED ANYMORE IN TRAVEL RECOMMENDATION.
-        "userID" : user,
-        "line": recs
-    }'''
-    usertrip_ids = []
-    for i in range(len(recs)):
-        object_id = db.UserTrip.insert(recs[i])
-        usertrip_ids.append(object_id)
-    return usertrip_ids
-    #db2.TravelRecommendation.insert(new_record)
-
-# Insertion in Travel Recommendation Collection
-def insertTravelRecommendationToDB(user, usertrip_ids):
+def insertToDB(user, recs):
     db.TravelRecommendation.delete_many({"userId": user})
     #db2.TravelRecommendation.delete_many({"userId": user})
-    #o = ObjectId()
-    #oo = str(o),                NOT NEEDED ANYMORE IN TRAVEL RECOMMENDATION.
-    for i in range(len(usertrip_ids)):
-        new_record = {
-            "userID" : user,
-            "userTrip": usertrip_ids[i]
-        }
-        db.TravelRecommendation.insert(new_record)
-
+    o = ObjectId()
+    oo = str(o)
+    new_record = {
+        "_id" : o,
+        "recId" : oo,
+        "userId" : user,
+        "recommendations": recs
+    }
+    db.TravelRecommendation.insert(new_record)
+    #db2.TravelRecommendation.insert(new_record)
 
 def emptyPastRecommendations():
     db.TravelRecommendation.drop()
@@ -348,7 +290,7 @@ if __name__ == "__main__":
     routes = []
     userIds = []
 
-    conf = SparkConf().setAppName("final_version").setMaster("spark://130.238.15.246:7077")
+    conf = SparkConf().setAppName("K = 6").setMaster("spark://130.238.15.246:7077")
     sc = SparkContext(conf = conf)
 
     #time_t = getTodayTimeTable()
@@ -361,22 +303,18 @@ if __name__ == "__main__":
     req = retrieveRequests()
     populateRequests(req)
     initialRdd = sc.parallelize(users).cache()
+
     userIdsRdd = (initialRdd.map(lambda (x,y): (x,1))
                             .reduceByKey(lambda a, b: a + b)
                             .collect())
-
-    for user in userIdsRdd:
-        print user
-
+    '''
     for user in userIdsRdd:
         userIds.append(user[0])
-
 
     emptyPastRecommendations()
 
     for userId in userIds:
         recommendations = []
-        transition = []
         finalRecommendation = []
         selected_centroids = []
         routesDistances = []
@@ -390,30 +328,22 @@ if __name__ == "__main__":
                                      latNormalizer(x3), lonNormalizer(x4),
                                      timeNormalizer(x5), timeNormalizer(x6),
                                      timeNormalizer(x7), timeNormalizer(x8))))
-        selected_centroids = kmeans(3, myRdd)[1].centers
-        routesDistances = myRoutes.map(lambda x: (x[0], calculateDistanceDeparture(x[1])['distances_departure'],
-                                                  calculateDistanceArrival(x[1],
-                                                  calculateDistanceDeparture(x[1])['position_departure'])['distances_arrival'],
-                                                  calculateDistanceDeparture(x[1])['position_departure'],
-                                                  calculateDistanceArrival(x[1], calculateDistanceDeparture(x[1])['position_departure'])['position_arrival']))
-        #coucou = routesDistances
+        #selected_centroids = kmeans(optimalk(myRdd), myRdd)[1].centers
+        selected_centroids = kmeans(6, myRdd)[1].centers
+        routesDistances = myRoutes.map(lambda x: (x[0],
+                                        calculateDistanceDeparture(x[1]),
+                                        calculateDistanceArrival(x[1])))
         for i in range(len(selected_centroids)):
-            sortRoute = (routesDistances.map(lambda (v, w, x, y, z): (v, w[i] + x[i], y[i], z[i]))
-                                         .sortBy(lambda x:x[1]))
+            sortRoute = (routesDistances.map(lambda (x, y, z): (x, y[i] + z[i]))
+                                        .map(lambda (x,y): (y,x)).sortByKey()
+                                        .map(lambda (x,y): (y,x)))
             finalRecommendation.append(sortRoute.take(NUMBER_OF_RECOMMENDATIONS))
         for sug in finalRecommendation:
             for i in range(len(sug)):
-                for j in range(len(sug[i])):
-                    recommendations.append(sug[i][j])
+                recommendations.append(sug[i])
 
-        # UNTIL HERE IT WORKS
-
-        #recommendations = removeDuplicates(recommendations)
+        recommendations = removeDuplicates(recommendations)
         recommendationsToReturn(recommendations)
-        recs = recommendationsToDB(userId, to_return)
-        usertrip_ids = insertUserTripToDB(userId, recs)
-        insertTravelRecommendationToDB(userId, usertrip_ids)
-
-END = datetime.datetime.now()
-
-print (END-START)
+        recs = recommendationsToDB(to_return)
+        insertToDB(userId, recs)
+    '''

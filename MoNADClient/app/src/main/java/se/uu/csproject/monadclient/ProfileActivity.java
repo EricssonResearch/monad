@@ -138,12 +138,6 @@ public class ProfileActivity extends MenuedActivity {
         String emailEntered = emailField.getText().toString();
         String phoneEntered = phoneField.getText().toString();
 
-        if(!phoneEntered.matches("\\d+")) {
-            Toast.makeText(getApplicationContext(), "Please enter a valid phone number!",
-                    Toast.LENGTH_LONG).show();
-            return;
-        }
-
         UpdateProfileTask task = new UpdateProfileTask();
 
         String response = null;
@@ -161,35 +155,5 @@ public class ProfileActivity extends MenuedActivity {
             emailField.setText(ClientAuthentication.getEmail());
             phoneField.setText(ClientAuthentication.getPhone());
         }
-        /*UpdateProfileTask task = new UpdateProfileTask();
-        try {
-            String clientid = ClientAuthentication.getClientId();
-            String username = ClientAuthentication.getUsername();
-            String email = ClientAuthentication.getEmail();
-            String phone = ClientAuthentication.getPhone();
-
-            edittext_editprofile_textfield = (EditText)findViewById(R.id.edittext_editprofile_editfield);
-            String input = edittext_editprofile_textfield.getText().toString();
-
-            if(name.equals("username")){
-                username = input;
-            }
-            else if(name.equals("phone")){
-                phone = input;
-            }
-            else if(name.equals("email")){
-                email = input;
-            }
-            String response = task.execute(clientid, username, email, phone).get();
-            Toast.makeText(getApplicationContext(), response, Toast.LENGTH_LONG).show();
-            // If the reponse starts with the specific word, it means the user updated the profile successfully
-            if (response.startsWith("Success (1)")) {
-                startActivity(new Intent(ProfileEditPopup.this, ProfileActivity.class));
-            }
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        }*/
     }
 }

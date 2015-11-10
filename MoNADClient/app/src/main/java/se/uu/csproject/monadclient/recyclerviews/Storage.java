@@ -16,8 +16,12 @@ public class Storage{
         return searchResults;
     }
 
-    public static void sortSearchResults(){
+    public static void sortSearchResults() {
         Collections.sort(searchResults, new FullTripsStartTimeComparator());
+    }
+
+    public static void clearAll(){
+        searchResults.clear();
     }
 
     public static boolean isEmptySearchResults(){

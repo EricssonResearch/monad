@@ -84,20 +84,7 @@
     <string name="label_resetpassword_changepassword">Change Password</string>
 
     <!--Activity - Route -->
-    <string name="label_trips_info">Walk 100m to Polacksbacken Bus stop</string>
-    <string name="label_trips_info2">Board Bus No 801</string>
-    <string name="label_trips_info3">Walk 100m to Ultuna Bus stop</string>
-    <string name="label_trips_time">00:00</string>
-    <string name="label_trips_time2">12:05</string>
     <string name="label_trips_join">Join Trip</string>
-
-    <!--Activity - Route Success -->
-    <string name="label_routesuccess_success">Your booking was successful.</string>
-    <string name="label_routesuccess_depart">Depart:</string>
-    <string name="label_routesuccess_arrive">Arrive:  </string>
-    <string name="label_routesuccess_instruction">Walk to Polacksbacken</string>
-
-    <string name="label_routesuccess_countdowntext">Countdown to Departure</string>
 
     <!--Activity - Search-->
     <string name="label_search_from">From</string>
@@ -110,7 +97,6 @@
     <string name="label_search_shortesttriptime">Shortest trip time</string>
     <string name="label_search_shortesttripdistance">Shortest trip distance</string>
     <string name="label_search_results">Results</string>
-    <string name="label_search_buttonsearch">Search</string>
     <string name="label_search_moreresults">More Results</string>
     <string name="label_searchresult_timeinfo">n/a - n/a (n/a min)</string>
     <string name="label_searchresult_routeinfo">n/a to n/a</string>
@@ -151,7 +137,7 @@
     <string name="label_trip_businfo">Bus </string>
     <string name="label_tripsactivity_from">From</string>
     <string name="label_tripsactivity_to">To</string>
-    <string name="label_tripsactivity_day">TODAY</string>
+    <string name="label_tripsactivity_time" translatable="false">00:00</string>
     <string name="label_tripsactivity_countdown" translatable="false">00:00:00</string>
     <string name="label_tripsactivity_date" translatable="false">00/00/00</string>
 
@@ -164,4 +150,5 @@
     <string name="img_description">Icon Missing</string>
     <string name="non_available">n/a</string>
     <string name="hello_world">Hello world!</string>
+    <string name="GoogleProjectID">81265551950</string>
 </resources>

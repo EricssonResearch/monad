@@ -49,72 +49,51 @@ import se.uu.csproject.monadclient.recyclerviews.Storage;
 public class SearchActivity extends MenuedActivity implements
         GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener, AsyncResponse{
     private TextView textViewTripDate, textViewTripTime;
-    DialogFragment dateFragment;
-    DialogFragment timeFragment;
+    DialogFragment dateFragment, timeFragment;
     private RadioGroup tripTimeRadioGroup, priorityRadioGroup;
     private EditText positionEditText, destinationEditText;
     private GoogleApiClient mGoogleApiClient;
     private LocationRequest mLocationRequest;
     private double currentLatitude, currentLongitude;
     private Context context;
-    public Calendar calendar;
     private ArrayList<FullTrip> searchResults;
-    //private DatePicker datePicker;
+    private SearchRecyclerViewAdapter adapter;
+    private LinearLayoutManager linearLayoutManager;
+    private RecyclerView recyclerView;
+    private Toolbar toolbar;
 
     private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
     private final int MY_PERMISSIONS_REQUEST = 123;
+
+    public Calendar calendar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.actionToolBar);
+        toolbar = (Toolbar) findViewById(R.id.actionToolBar);
         setSupportActionBar(toolbar);
-
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         context = getApplicationContext();
         textViewTripDate = (TextView) findViewById(R.id.textview_search_tripdate);
+        textViewTripTime = (TextView) findViewById(R.id.textview_search_triptime);
         calendar = Calendar.getInstance();
         updateDate();
-        textViewTripTime= (TextView) findViewById(R.id.textview_search_triptime);
         updateTime();
-
-        textViewTripDate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showDatePickerDialog(v);
-            }
-        });
-        textViewTripTime.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showTimePickerDialog(v);
-            }
-        });
 
         tripTimeRadioGroup = (RadioGroup) findViewById(R.id.radiogroup_search_triptime);
         priorityRadioGroup = (RadioGroup) findViewById(R.id.radiogroup_search_priority);
         positionEditText = (EditText) findViewById(R.id.edittext_search_position);
         destinationEditText = (EditText) findViewById(R.id.edittext_search_destination);
 
+        recyclerView = (RecyclerView) findViewById(R.id.recycler_view_search);
+        linearLayoutManager = new LinearLayoutManager(getApplicationContext());
+        recyclerView.setLayoutManager(linearLayoutManager);
+
         currentLatitude = 0;
         currentLongitude = 0;
-
-        if (getIntent().hasExtra("destination")){
-            destinationEditText.setText(getIntent().getStringExtra("destination"));
-        }
-
-        searchResults = Storage.getSearchResults();
-        // If there are search results suited for the user's quick search, display them
-        if (!searchResults.isEmpty()){
-            RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler_view_search);
-            LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getApplicationContext());
-            recyclerView.setLayoutManager(linearLayoutManager);
-            SearchRecyclerViewAdapter adapter = new SearchRecyclerViewAdapter(searchResults);
-            recyclerView.setAdapter(adapter);
-        }
 
         buildGoogleApiClient();
         initializeLocationRequest();
@@ -123,6 +102,7 @@ public class SearchActivity extends MenuedActivity implements
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
     }
 
+    // Checks if the user has given location permission and asks for it if he hasn't
     private void checkForPermission(){
         if (ContextCompat.checkSelfPermission(SearchActivity.this, Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED){
@@ -133,19 +113,19 @@ public class SearchActivity extends MenuedActivity implements
         }
     }
 
+    // Checks the result of the permission asked of the user
     @Override
     public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
         switch (requestCode) {
             case MY_PERMISSIONS_REQUEST: {
-                // If request is cancelled, the result arrays are empty.
+                // Permission granted!
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     mGoogleApiClient.connect();
                 } else {
-                    // Permission denied, boo! Disable the functionality that depends on this permission.
+                    // Permission denied, boo! Pester him until he changes his mind
                     CharSequence text = "If you don't give location permission then we can't use " +
                             "your current location to search for suitable bus trips.";
-                    int duration = Toast.LENGTH_LONG;
-                    Toast toast = Toast.makeText(context, text, duration);
+                    Toast toast = Toast.makeText(context, text, Toast.LENGTH_LONG);
                     toast.show();
                 }
                 return;
@@ -245,30 +225,26 @@ public class SearchActivity extends MenuedActivity implements
         return true;
     }
 
-    public void openTripDetail(View v) {
-        startActivity(new Intent(this, RouteActivity.class));
-    }
-
+    // Called when the user clicks on the pinpoint icon next to the departure address field
     public void useCurrentPosition(View v){
         if (mGoogleApiClient.isConnected()){
             positionEditText.setText("Current Position");
         } else {
             CharSequence text = "We are not able to get your current position. Please consider " +
-                    "giving us location permission and enabling your google play services.";
-            int duration = Toast.LENGTH_LONG;
-            Toast toast = Toast.makeText(context, text, duration);
+                    "enabling your google play services and/or giving us location permission.";
+            Toast toast = Toast.makeText(context, text, Toast.LENGTH_LONG);
             toast.show();
         }
     }
 
-    // Function called when the user clicks on the main search button
+    // Called when the user clicks on the main search button
     public void sendTravelRequest (View v) {
         String stPosition, edPosition, userId, startTime, endTime, requestTime, priority;
         String startPositionLatitude, startPositionLongitude;
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
+        Date now = new Date();
         int selectedId;
 
-        Date now = new Date();
-        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
         startTime = "null";
         endTime = "null";
         priority = "";
@@ -280,7 +256,6 @@ public class SearchActivity extends MenuedActivity implements
         startPositionLongitude = String.valueOf(currentLongitude);
 
         selectedId = tripTimeRadioGroup.getCheckedRadioButtonId();
-
         switch(selectedId){
             case R.id.radiobutton_search_departuretime:
                 startTime = df.format(calendar.getTime());
@@ -292,7 +267,6 @@ public class SearchActivity extends MenuedActivity implements
         }
 
         selectedId = priorityRadioGroup.getCheckedRadioButtonId();
-
         switch(selectedId){
             case R.id.radiobutton_search_prioritytripdistance:
                 priority = "distance";
@@ -304,6 +278,7 @@ public class SearchActivity extends MenuedActivity implements
         }
 
         if(stPosition != null && !stPosition.trim().isEmpty() && edPosition != null && !edPosition.trim().isEmpty()){
+            Storage.clearAll();
             SendTravelRequest asyncTask = new SendTravelRequest();
             asyncTask.delegate = this;
             asyncTask.execute(userId, startTime, endTime, requestTime, stPosition, edPosition, priority,
@@ -311,31 +286,25 @@ public class SearchActivity extends MenuedActivity implements
         }
         else if (stPosition == null || stPosition.trim().isEmpty()) {
             CharSequence text = "Please enter a departure address.";
-            int duration = Toast.LENGTH_SHORT;
-            Toast toast = Toast.makeText(context, text, duration);
+            Toast toast = Toast.makeText(context, text, Toast.LENGTH_SHORT);
             toast.show();
         }
         else if (edPosition == null || edPosition.trim().isEmpty()) {
             CharSequence text = "Please enter a destination address.";
-            int duration = Toast.LENGTH_SHORT;
-            Toast toast = Toast.makeText(context, text, duration);
+            Toast toast = Toast.makeText(context, text, Toast.LENGTH_SHORT);
             toast.show();
         }
     }
 
+    // Deals with the response by the server
     public void processFinish(ArrayList<FullTrip> searchResults){
         if (searchResults.isEmpty()){
             CharSequence text = "Could not find any trips matching your criteria.";
-            int duration = Toast.LENGTH_SHORT;
-            Toast toast = Toast.makeText(context, text, duration);
+            Toast toast = Toast.makeText(context, text, Toast.LENGTH_SHORT);
             toast.show();
-        } else {
-            RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler_view_search);
-            LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getApplicationContext());
-            recyclerView.setLayoutManager(linearLayoutManager);
-            SearchRecyclerViewAdapter adapter = new SearchRecyclerViewAdapter(searchResults);
-            recyclerView.setAdapter(adapter);
         }
+        adapter = new SearchRecyclerViewAdapter(searchResults);
+        recyclerView.setAdapter(adapter);
     }
 
     @Override
@@ -351,12 +320,19 @@ public class SearchActivity extends MenuedActivity implements
                 }
             }
         } else {
-            CharSequence text = "If you don't have google play services enabled then we can't use " +
+            CharSequence text = "If you don't have google play services enabled, we can't use " +
                     "your current location to search for suitable bus trips.";
-            int duration = Toast.LENGTH_LONG;
-            Toast toast = Toast.makeText(context, text, duration);
+            Toast toast = Toast.makeText(context, text, Toast.LENGTH_LONG);
             toast.show();
         }
+
+        if (getIntent().hasExtra("destination")){
+            destinationEditText.setText(getIntent().getStringExtra("destination"));
+        }
+
+        searchResults = Storage.getSearchResults();
+        adapter = new SearchRecyclerViewAdapter(searchResults);
+        recyclerView.setAdapter(adapter);
     }
 
     @Override
@@ -394,6 +370,7 @@ public class SearchActivity extends MenuedActivity implements
         handleNewLocation(location);
     }
 
+    // Checks if the user has google play services enabled
     private boolean checkPlayServices() {
         GoogleApiAvailability apiAvailability = GoogleApiAvailability.getInstance();
         int resultCode = apiAvailability.isGooglePlayServicesAvailable(this);

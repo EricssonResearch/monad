@@ -2,6 +2,8 @@ package se.uu.csproject.monadclient;
 
 //import com.google.common.base.Charsets;
 
+import android.widget.SectionIndexer;
+
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -220,6 +222,9 @@ public class ClientAuthentication extends Authentication {
         /* Validate username */
         if (!Security.validateUsername(username)) {
             return Security.invalidUsernameMessage();
+        }
+        if(!Security.validatePassword(password)){
+            return Security.invalidPasswordMessage();
         }
         /* Validate email */
         if (!Security.validateEmail(email)) {
@@ -580,6 +585,9 @@ public class ClientAuthentication extends Authentication {
     }
 
     public static String postExistingPasswordUpdateRequest(String clientId, String oldPassword, String newPassword) {
+        if(!Security.validatePassword(newPassword)){
+            return Security.invalidPasswordMessage();
+        }
 
         /* Encrypt passwords */
         oldPassword = Security.encryptPassword(oldPassword);
@@ -625,7 +633,9 @@ public class ClientAuthentication extends Authentication {
     }
 
     public static String postForgottenPasswordResetRequest(String email, String newPassword) {
-
+        if(Security.validatePassword(newPassword)){
+            return Security.invalidPasswordMessage();
+        }
         /* Encrypt password */
         newPassword = Security.encryptPassword(newPassword);
 
