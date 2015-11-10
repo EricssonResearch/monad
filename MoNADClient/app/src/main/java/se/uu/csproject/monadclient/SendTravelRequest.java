@@ -16,9 +16,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.io.DataOutputStream;
 import java.util.ArrayList;
-import java.util.Collections;
 
-import se.uu.csproject.monadclient.recyclerviews.CustomComparator;
 import se.uu.csproject.monadclient.recyclerviews.FullTrip;
 
 

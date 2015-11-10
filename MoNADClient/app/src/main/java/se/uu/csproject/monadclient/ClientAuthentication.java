@@ -13,6 +13,7 @@ import java.util.Iterator;
 
 import se.uu.csproject.monadclient.recyclerviews.FullTrip;
 import se.uu.csproject.monadclient.recyclerviews.PartialTrip;
+import se.uu.csproject.monadclient.recyclerviews.Storage;
 
 /**
  *
@@ -743,7 +744,7 @@ public class ClientAuthentication extends Authentication {
                     partialTrips.add(partialTrip);
                 }
                 FullTrip fullTrip = new FullTrip(partialTrips);
-
+                Storage.addRecommendation(fullTrip);
             }
         }
         catch (ParseException e) {

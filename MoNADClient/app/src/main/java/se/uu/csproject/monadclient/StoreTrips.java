@@ -12,7 +12,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
-import se.uu.csproject.monadclient.recyclerviews.CustomComparator;
+import se.uu.csproject.monadclient.recyclerviews.FullTripsStartTimeComparator;
 import se.uu.csproject.monadclient.recyclerviews.FullTrip;
 import se.uu.csproject.monadclient.recyclerviews.PartialTrip;
 import se.uu.csproject.monadclient.recyclerviews.Storage;
@@ -85,7 +85,7 @@ public class StoreTrips {
             Log.d("oops", e.toString());
         }
 
-        Collections.sort(searchResults, new CustomComparator());
+        Collections.sort(searchResults, new FullTripsStartTimeComparator());
         Storage.setSearchResults(searchResults);
         return searchResults;
     }
