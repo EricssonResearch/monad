@@ -30,21 +30,26 @@ from datetime import timedelta
 BUS_LINE = 2
 DB.noOfslices = 0
 
+
 # The individual size corresponds to the number of trips
 INDIVIDUAL_SIZE = 14 #reason why its 14 is because we currently have 2 buslines in mongo to work with
 INDIVIDUAL_SIZE_BOUNDS = [2, 10]
-
+startTimeArray = []
+startTimeForABusStop = []
+theTimes = []
 
 # Initialize the classes
 databaseClass = DB()
 fitnessClass = Fitness()
-startTimeArray = []
-def generateStartTimeBasedOnFreq(busLine,frequency, startTime):
 
 
+def generateStartTimeBasedOnFreq(frequency, startTime):
+    print("----INFORMATION FROM GENE----")
     print(frequency)
     print(startTime)
-    print(busLine)
+    #print(busLine)
+    print("\n")
+    print("this is length")
 
     # we make sure the starting time is in between the upper and lower bound of our time slices
     for x in DB.timeSliceArray:
@@ -53,46 +58,70 @@ def generateStartTimeBasedOnFreq(busLine,frequency, startTime):
 
         # if the startTime is in a specific time slice
         if start <= startTime <= end:
-            NextstartTime = startTime + datetime.timedelta(minutes=frequency)
+            theTimes.append(startTime.time())
             NextstartTime2 = startTime - datetime.timedelta(minutes=frequency)
-            startTimeArray.append(startTime.time())
+            NextstartTime = startTime + datetime.timedelta(minutes=frequency)
+
+            if NextstartTime2 >= start:
+                theTimes.append(NextstartTime2.time())
+
             if NextstartTime <= end:
-                startTimeArray.append(NextstartTime.time())
-            elif NextstartTime2 >= start:
-                startTimeArray.append(NextstartTime2.time())
+                theTimes.append(NextstartTime.time())
 
+
+            """
             while NextstartTime <= end:
-
                 NextstartTime = NextstartTime + datetime.timedelta(minutes=frequency)
                 if NextstartTime <= end:
-                    startTimeArray.append(NextstartTime.time())
-                print("while loop running ",NextstartTime)
+                    theTimes.append(NextstartTime.time())
+                   # print("while loop running ",NextstartTime)
 
             while NextstartTime2 >= start:
-
                 NextstartTime2 = NextstartTime2 - datetime.timedelta(minutes=frequency)
-
                 if NextstartTime2 >= start:
-                    startTimeArray.append(NextstartTime2.time())
-                print("while loop2 running ", NextstartTime2)
+                    theTimes.append(NextstartTime2.time())
+                    #print("while loop2 running ", NextstartTime2)
+            """
+
+
+
+
+
     #####print(sorted(startTimeArray))
-    print(startTimeArray)
-    print("\n")
+    #print("------FINAL ARRAY ------")
+    #print(startTimeArray)
+    #print("\n")
 
 
 
 def evaluateNewIndividualFormat(individual):
     individual = sorted(individual, key=itemgetter(3))
+    individual = sorted(individual, key=itemgetter(0))
 
     print("THIS IS AN INDIVIDUAL")
     print(individual)
     print("\n")
+
     #this will be called for each gene in the individual
-
     for i in range(len(individual)):
-        generate = generateStartTimeBasedOnFreq(individual[i][0],individual[i][2], individual[i][3])
+
+        if i % (len(databaseClass.timeSliceArray)) == 0:
+
+            if len(theTimes) !=0:
+                print("THIS IS TH TIMES ARRAY")
+                print(theTimes)
+                startTimeForABusStop.append(theTimes)
+                theTimes[:] = []
+                print("THIS IS THE LENGTH")
+                print(len(theTimes))
+
+            startTimeForABusStop.append(individual[i][0])
+            #print("divisible by 7")
 
 
+        generate = generateStartTimeBasedOnFreq(individual[i][2], individual[i][3])
+    print("FINAL")
+    print(startTimeForABusStop)
 
     return 1,
 """"
