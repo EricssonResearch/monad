@@ -53,7 +53,7 @@
 //    public void onBindViewHolder(BusstopsViewHolder busstopsViewHolder, int i) {
 //        busstopsViewHolder.busstopName.setText(notify.get(i).text);
 ////        busstopsViewHolder.busstopTime.setText(notify.get(i).time);
-//        busstopsViewHolder.busstopPhoto.setImageResource(notify.get(i).iconId);
+//        busstopsViewHolder.busstopPhoto.setImageResource(notify.get(i).iconID);
 //    }
 //
 //    @Override

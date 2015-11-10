@@ -4,28 +4,75 @@ import java.util.Date;
 
 import se.uu.csproject.monadclient.R;
 
-public class Notify{
+public class Notify {
+    String id;      /* Corresponds to the Notification _id value in the database  */
     String text;
     Date time;
-    int iconId;
+    int iconID;
 
-    public  Notify(String text, Date time, int iconId) {
+    /* Used for generating notifications, which do not exist in the database */
+    public Notify(String text, Date time, int iconID) {
+        this.id = "-1";
         this.text = text;
         this.time = time;
-        if (iconId == 1){
-            this.iconId = R.drawable.ic_assistant_photo_black_24dp;
+        this.iconID = parseIconID(iconID);
+    }
+
+    /* Used for generating notifications, which are parsed from the database */
+    public Notify(String id, String text, Date time, int iconID) {
+        this.id = id;
+        this.text = text;
+        this.time = time;
+        this.iconID = parseIconID(iconID);
+    }
+
+    public int parseIconID(int iconID) {
+        int returnedIconID;
+
+        if (iconID == 1) {
+            returnedIconID = R.drawable.ic_assistant_photo_black_24dp;
         }
-        else if (iconId == 2){
-            this.iconId = R.drawable.ic_feedback_black_24dp;
+        else if (iconID == 2) {
+            returnedIconID = R.drawable.ic_feedback_black_24dp;
         }
-        else if (iconId == 3){
-            this.iconId = R.drawable.ic_alarm_black_24dp;
+        else if (iconID == 3) {
+            returnedIconID = R.drawable.ic_alarm_black_24dp;
         }
-        else
-            this.iconId = R.drawable.ic_assistant_photo_black_24dp;
+        else {
+            returnedIconID = R.drawable.ic_assistant_photo_black_24dp;
+        }
+        return returnedIconID;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getText() {
+        return text;
+    }
+
+    public void setText(String text) {
+        this.text = text;
     }
 
     public Date getTime() {
         return time;
+    }
+
+    public void setTime(Date time) {
+        this.time = time;
+    }
+
+    public int getIconID() {
+        return iconID;
+    }
+
+    public void setIconID(int iconID) {
+        this.iconID = iconID;
     }
 }

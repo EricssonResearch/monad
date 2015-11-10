@@ -69,7 +69,6 @@ public class MainActivity extends MenuedActivity implements
         setSupportActionBar(toolbar);
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-=======
 
         //initialize notifications, temporary
         Storage.initializeNotificationData();

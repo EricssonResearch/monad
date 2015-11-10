@@ -14,6 +14,7 @@ import java.util.Date;
 import java.util.Iterator;
 
 import se.uu.csproject.monadclient.recyclerviews.FullTrip;
+import se.uu.csproject.monadclient.recyclerviews.Notify;
 import se.uu.csproject.monadclient.recyclerviews.PartialTrip;
 import se.uu.csproject.monadclient.recyclerviews.Storage;
 
@@ -778,6 +779,59 @@ public class ClientAuthentication extends Authentication {
         return response;
     }
 
+    public static String postGetNotificationsRequest() {
+        String request = AUTHENTICATION_HOST + AUTHENTICATION_PORT + "/get_notifications";
+        String urlParameters = "client_id=" + getClientId();
+
+        /* Send the request to the Authentication Module */
+        String response = postRequest(request, urlParameters);
+
+        /* Handle response in case of exception */
+        if (response.equals("-1")) {
+            return exceptionMessage();
+        }
+
+        /*
+         * By default, Erlang adds the newline '\n' character at the beginning of response.
+         * For this reason substring() function is used
+         */
+        response = response.substring(1);
+        return processGetNotificationsResponse(response);
+    }
+
+    public static String processGetNotificationsResponse(String response) {
+        JSONParser parser = new JSONParser();
+
+        try {
+            JSONArray notifications = (JSONArray) parser.parse(response);
+            Iterator<JSONObject> notificationsIterator = notifications.iterator();
+
+            while (notificationsIterator.hasNext()) {
+                JSONObject notification = notificationsIterator.next();
+
+                JSONObject notificationObjectID = (JSONObject) notification.get("_id");
+                String notificationID = (String) notificationObjectID.get("$oid");
+
+                String notificationText = (String) notificationObjectID.get("text");
+
+                JSONObject timeObject = (JSONObject) notification.get("time");
+                Date notificationTime = new Date((long) timeObject.get("$date"));
+
+                Integer notificationIconID = (Integer) notification.get("icon_id");
+
+                Notify notify = new Notify(notificationID, notificationText, notificationTime, notificationIconID);
+                Storage.addNotification(notify);
+            }
+        }
+        catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        response = "Success (1)";
+        return response;
+    }
+
+    /* TODO: Will be changed */
     public static String postGetNearestBusStopRequest() {
         String request = ROUTES_GENERATOR_HOST + ROUTES_GENERATOR_PORT + "/get_nearest_stop_from_coordinates";
         // String urlParameters = "client_id=" + getClientId();
