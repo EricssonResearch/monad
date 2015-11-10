@@ -60,7 +60,7 @@
     <string name="label_trip_businfo">Bus</string>
     <string name="label_trip_arrive">Arrivée:</string>
     <string name="label_searchresult_routeinfo">indisp. à indisp.</string>
-    <string name="label_searchresult_timeinfo" translatable="false">indisp. - indisp. </string>
+    <string name="label_searchresult_timeinfo">indisp. - indisp. </string>
     <string name="label_search_shortesttriptime">Durée la plus courte</string>
     <string name="label_search_earliesttrip">Départ le plus proche</string>
     <string name="label_search_results">Résultats</string>
