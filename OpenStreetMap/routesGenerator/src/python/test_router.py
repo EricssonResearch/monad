@@ -18,7 +18,7 @@ import os.path
 
 import router
 
-FILE = "testmap.xml"
+FILE = "../../../testmap.xml"
 
 
 def main():
@@ -44,10 +44,13 @@ class RouterTester(unittest.TestCase):
 
     @unittest.skipUnless(os.path.isfile(FILE), "fileNotFound")
     def testPathFinder(self):
-        self.assertGreater(len(self._map.findRoute(-439079, -439083)), 0)
+        path, _ = self._map.findRoute(-439079, -439083)
+        self.assertGreater(len(path), 0)
 
         # The path from one node to itself should be itself.
-        self.assertEqual(self._map.findRoute(-439079, -439079), [-439079])
+        path, cost = self._map.findRoute(-439079, -439079)
+        self.assertEqual(path, [-439079])
+        self.assertEqual(cost, 0)
 
     @unittest.skipUnless(os.path.isfile(FILE), "fileNotFound")
     def test(self):

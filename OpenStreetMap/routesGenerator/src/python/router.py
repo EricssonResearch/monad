@@ -13,8 +13,6 @@ under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
 CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
-import re
-
 import sys
 import math
 import time
@@ -622,70 +620,63 @@ if __name__ == '__main__':
     print "file: " + myMap.omsfile
 
     timer = time.time()
-    print "Loading data ..."
+    print "\nLoading data ..."
     myMap.parsData()
-    print "Data loaded in: %f sec" % (time.time() - timer)
-    # print "We have " + str(len(myMap.nodes)) + " nodes in total"
-    # print "We have " + str(myMap.handler.index) + " bus stops in total"
+    print "Data loaded in: %f sec\n" % (time.time() - timer)
 
-    # print "Finding path... "
-    ## flogsta vardcentral
-    # nTo = 2198905720
-    ## polacksbacken
-    # nFrom = 1125461154
+    print "We have " + str(len(myMap.nodes)) + " nodes in total"
+    print "We have " + str(len(myMap.busStopList)) + " bus stops in total\n"
 
-    ## print "Find a bus stop name: " + myMap.findBusStopName(17.6666581,
-    ##                                                       59.8556742)
-    ## print "Find a bus stop position: " + str(myMap.findBusStopPosition("Danmarksgatan"))
+    print "Find a bus stop name: ", myMap.findBusStopName(17.6666581,
+                                                          59.8556742)
+    print "Find a bus stop position: ", str(
+        myMap.findBusStopPosition("Danmarksgatan"))
 
-    # timer = time.time()
-    # myPath = myMap.findRoute(nFrom, nTo)
-    # print "Found path in: %f sec" % (time.time() - timer)
+    print "Node id for (17.6130204, 59.8545318):", (
+        myMap.getNodeIdFromCoordinates((17.6130204, 59.8545318)))
 
-    # wayP = myMap.getWayPointsFromPath(myPath)
+    print "\nFinding path... "
+    # flogsta vardcentral
+    nTo = 2198905720
+    # polacksbacken
+    nFrom = 1125461154
 
-    # print "Finding path with four points"
-    ## Flogsta vardcentral
-    # nTo = 2198905720
-    ## Kungsgatan
-    # nThrough = 25734373
-    ## Bruno Liljeforsgata
-    # nThrough2 = 31996288
-    ## Polacksbacken
-    # nFrom = 1125461154
+    timer = time.time()
+    myPath, cost = myMap.findRoute(nFrom, nTo)
+    print "Found path in: %f sec, cost: %f sec\n" % (
+        (time.time() - timer), cost)
 
-    # timer = time.time()
-    # my4Path, _ = myMap.findWayPointsFromList([nFrom, nThrough, nThrough2, nTo])
-    # print "Found path in: %f sec" % (time.time() - timer)
+    print "Finding path from coordinate list... "
+    timer = time.time()
+    path2, cost2 = myMap.findRouteFromCoordinateList([(17.6130204, 59.8545318),
+                                                     (17.5817552, 59.8507556),
+                                                     (17.6476356, 59.8402173)])
+    print "Found path in: %f sec, cost: %s sec\n" % (
+        (time.time() - timer), str(cost2))
 
-    # print "Draw image ..."
-    # myMap.drawInit(3000)
-    # myMap.drawNodes(myMap.nodes, (227, 254, 212, 255))
-    # myMap.drawRoads(myMap.edges, myMap.nodes)
+    wayP = myMap.getWayPointsFromPath(myPath)
+
+    print "Finding path with four points..."
+    # Flogsta vardcentral
+    nTo = 2198905720
+    # Kungsgatan
+    nThrough = 25734373
+    # Bruno Liljeforsgata
+    nThrough2 = 31996288
+    # Polacksbacken
+    nFrom = 1125461154
+
+    timer = time.time()
+    my4Path, _ = myMap.findWayPointsFromList([nFrom, nThrough, nThrough2, nTo])
+    print "Found path in: %f sec\n" % (time.time() - timer)
+
+    print "Draw image ..."
+    myMap.drawInit(3000)
+    myMap.drawNodes(myMap.nodes, (227, 254, 212, 255))
+    myMap.drawRoads(myMap.edges, myMap.nodes)
     ##    myMap.drawBusStops(myMap.handler.busStops, myMap.nodes)
-    # myMap.drawPath(myPath, 'red')
+    myMap.drawPath(myPath, 'red')
     ## myMap.drawNodeIds(wayP, 'blue')
     ## myMap.drawPath(my4Path, 'green')
-    # myMap.drawSave(sys.argv[1])
-    # print "Image done,", sys.argv[1]
-
-    # print myMap.handler.addresses[u'Rackarbergsgatan']
-    # print myMap.handler.addresses[u'Studentvägen']
-    # print myMap.findCoordinatesFromAdress(u'Studentvägen').coordinates
-    # print myMap.findCoordinatesFromAdress(u'Luthagsesplanaden').coordinates
-    # print myMap.findCoordinatesFromAdress(u'Flogstavägen').coordinates
-    # for ke in myMap.handler.addresses.keys():
-    #    print ke, myMap.handler.addresses[ke].nodes
-
-    # print coordinate.average(myMap.findCoordinatesFromAdress(u'Studentvägen'))
-    timer = time.time()
-    print myMap.getNodeIdFromCoordinates((17.6130204, 59.8545318))
-    print "Found Id in: %f sec" % (time.time() - timer)
-
-    timer = time.time()
-    path = myMap.findRouteFromCoordinateList([(17.6130204, 59.8545318),
-                                              (17.5817552, 59.8507556),
-                                              (17.6476356, 59.8402173)])
-
-    print path
-    print str(path)
+    myMap.drawSave(sys.argv[1])
+    print "Image done,", sys.argv[1]

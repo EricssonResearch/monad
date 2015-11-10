@@ -137,7 +137,6 @@ def get_coordinates_from_string(string, pid):
     coordinates = None
     searchObject = re.search('\d+[a-zA-Z]*', string_str)
     if searchObject is not None:
-        # print searchObject.group()
         address = re.sub('\d+[a-zA-Z]*', "", string_str).strip()
         num = searchObject.group()
         coordinates_obj = the_map.findCoordinatesFromAdress(address, num)

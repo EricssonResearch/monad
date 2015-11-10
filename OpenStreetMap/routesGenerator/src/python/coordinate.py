@@ -51,27 +51,28 @@ def measure(coordinate1, coordinate2):
 
     c = 2 * math.atan2(math.sqrt(a), math.sqrt(1 - a))
     meters = earthRadius * c
+
     return meters
 
 
 def average(coordinateList):
     tuplelist = [coordinate.coordinates for coordinate in coordinateList]
     avg = [sum(y) / len(y) for y in zip(*tuplelist)]
+
     return Coordinate(avg[0], avg[1])  # tuple(avg)
 
 
 def center(coordinateList):
     tuplelist = [coordinate.coordinates for coordinate in coordinateList]
-    # print tuplelist
     _max = reduce(lambda x, y: (max(x[0], y[0]), max(x[1], y[1])), tuplelist)
     _min = reduce(lambda x, y: (min(x[0], y[0]), min(x[1], y[1])), tuplelist)
-    # print "minmax", _max, _min
     longitude = _max[0] - ((_max[0] - _min[0]) / 2)
     latitude = _max[1] - ((_max[1] - _min[1]) / 2)
-    # print longitude, latitude
+
     return Coordinate(longitude=longitude, latitude=latitude)
 
 
-def closestTo(coordinate, coodinateList):
-    f = lambda x, y: x if measure(x, coordinate) < measure(y, coordinate) else y
+def closestTo(coord, coodinateList):
+    f = lambda x, y: x if measure(x, coord) < measure(y, coord) else y
+
     return reduce(f, coodinateList)
