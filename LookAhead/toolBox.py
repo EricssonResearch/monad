@@ -37,15 +37,10 @@ INDIVIDUAL_SIZE_BOUNDS = [30, 90]
 # Initialize the classes
 databaseClass = DB()
 fitnessClass = Fitness()
-startTimeArray = []
 def generateStartTimeBasedOnFreq(busLine,frequency, startTime):
-
-
-    print(frequency)
-    print(startTime)
-    print(busLine)
-
     # we make sure the starting time is in between the upper and lower bound of our time slices
+    startTimeArray = []
+    lineTimes = {}
     for x in DB.timeSliceArray:
         start = datetime.datetime.combine(Fitness.yesterday, datetime.time(x[0], 0, 0))
         end = datetime.datetime.combine(Fitness.yesterday, datetime.time(x[1], 59, 59))
@@ -57,7 +52,7 @@ def generateStartTimeBasedOnFreq(busLine,frequency, startTime):
             startTimeArray.append(startTime.time())
             if NextstartTime <= end:
                 startTimeArray.append(NextstartTime.time())
-            elif NextstartTime2 >= start:
+            if NextstartTime2 >= start:
                 startTimeArray.append(NextstartTime2.time())
 
             while NextstartTime <= end:
@@ -65,7 +60,6 @@ def generateStartTimeBasedOnFreq(busLine,frequency, startTime):
                 NextstartTime = NextstartTime + datetime.timedelta(minutes=frequency)
                 if NextstartTime <= end:
                     startTimeArray.append(NextstartTime.time())
-                print("while loop running ",NextstartTime)
 
             while NextstartTime2 >= start:
 
@@ -73,27 +67,41 @@ def generateStartTimeBasedOnFreq(busLine,frequency, startTime):
 
                 if NextstartTime2 >= start:
                     startTimeArray.append(NextstartTime2.time())
-                print("while loop2 running ", NextstartTime2)
-    #####print(sorted(startTimeArray))
-    print(startTimeArray)
-    print("\n")
 
+    return startTimeArray
 
 
 def evaluateNewIndividualFormat(individual):
     individual = sorted(individual, key=itemgetter(3))
 
-    print("THIS IS AN INDIVIDUAL")
-    print(individual)
-    print("\n")
+    #print("THIS IS AN INDIVIDUAL")
+    #print(individual)
+    #print("\n")
     #this will be called for each gene in the individual
 
-    for i in range(len(individual)):
-        generate = generateStartTimeBasedOnFreq(individual[i][0],individual[i][2], individual[i][3])
+    busLines = [x[0] for x in individual]
+    busLines[:] = set(busLines)
+    times = {}
+    for line in busLines:
+        ind = [x for x in individual if x[0] == line]
+        for i, val in enumerate(ind):
+            generate = generateStartTimeBasedOnFreq(line,val[2], val[3])
+            if line not in times:
+                times[line] = generate
+            else:
+                times[line] = times[line] + generate
+                #print "Result starting times....."
+
+    print sorted(times[2])
+    print sorted(times[102])
+
+# TODO: count the number of trips
+
 
 
 
     return 1,
+
 """"
     for i in range(len(individual)):
         tripTimeTable = databaseClass.generateFitnessTripTimeTable(individual[i][0], individual[i][2])
@@ -130,23 +138,12 @@ def evalIndividual(individual):
     request = []
     dif = []
     cnt = []
-    initialTripTime = datetime.combine(fitnessClass.yesterday, 
-                                       datetime.strptime("00:00", 
+    initialTripTime = datetime.datetime.combine(fitnessClass.yesterday, 
+                                       datetime.datetime.strptime("00:00", 
                                        fitnessClass.formatTime).time())
     db = DB()
     tripWaitingTime = timedelta(minutes=0) # waiting time due to insufficient capacity
     noOfLeftOvers = 0
-    print individual
-    timeSlices = ((datetime.strptime('2015-10-21 00:00:00','%Y-%m-%d %H:%M:%S'),(datetime.strptime('2015-10-21 02:59:59','%Y-%m-%d %H:%M:%S'))),
-        (datetime.strptime('2015-10-21 03:00:00','%Y-%m-%d %H:%M:%S'), datetime.strptime('2015-10-21 05:59:59','%Y-%m-%d %H:%M:%S')),
-        (datetime.strptime('2015-10-21 06:00:00','%Y-%m-%d %H:%M:%S'), datetime.strptime('2015-10-21 08:59:59','%Y-%m-%d %H:%M:%S')),
-        (datetime.strptime('2015-10-21 09:00:00','%Y-%m-%d %H:%M:%S'), datetime.strptime('2015-10-21 11:59:59','%Y-%m-%d %H:%M:%S')),
-        (datetime.strptime('2015-10-21 12:00:00','%Y-%m-%d %H:%M:%S'), datetime.strptime('2015-10-21 14:59:59','%Y-%m-%d %H:%M:%S')),
-        (datetime.strptime('2015-10-21 15:00:00','%Y-%m-%d %H:%M:%S'), datetime.strptime('2015-10-21 17:59:59','%Y-%m-%d %H:%M:%S')),
-        (datetime.strptime('2015-10-21 18:00:00','%Y-%m-%d %H:%M:%S'), datetime.strptime('2015-10-21 20:59:59','%Y-%m-%d %H:%M:%S')),
-        (datetime.strptime('2015-10-21 21:00:00','%Y-%m-%d %H:%M:%S'), datetime.strptime('2015-10-21 23:59:59','%Y-%m-%d %H:%M:%S')))
-    departures = []
-
     for i, trip in enumerate(individual):
         tripStartTime = trip[3]
         '''
@@ -164,14 +161,11 @@ def evalIndividual(individual):
         # leftover passengers
         tslice = [(x[0], x[1]) for x in timeSlices if x[0].time() <= tripStartTime.time() <= x[1].time()]
         earliestDeparture = tslice[0][0] + timedelta(minutes=trip[2])
-        print tslice
         while (earliestDeparture.time() <= tslice[0][1].time()):
             departures.append(earliestDeparture.time())
             earliestDeparture += timedelta(minutes=trip[2])
         #print "earliest possible departure " + str(earliestDeparture.time())
         #print "next departure: " + str(nextDeparture.time())
-        print "Departures..."
-        print departures
 
         #tripCapacity = trip[1]
         #earliestDeparture = '2015-10-21 ' + str(earliestDeparture.time())
@@ -243,7 +237,7 @@ toolbox.register("individual", tools.initRepeat, creator.Individual,
 #toolbox.register("individual", inits.initRepeatBound, creator.Individual,
 #                  toolbox.attribute, INDIVIDUAL_SIZE_BOUNDS)
 toolbox.register("population", tools.initRepeat, list, toolbox.individual)
-toolbox.register("evaluate", evalIndividual)
+toolbox.register("evaluate", evaluateNewIndividualFormat)
 toolbox.register("mate", tools.cxOnePoint)
 toolbox.register("select", tools.selTournament, tournsize=3)
 toolbox.register("mutate", mutation.mutUniformTime)

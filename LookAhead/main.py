@@ -24,7 +24,7 @@ from operator import itemgetter
 MUTATION_PROB = 0.5
 CROSS_OVER_PROB = 0.5
 NO_OF_GENERATION = 0
-POPULATION_SIZE = 2
+POPULATION_SIZE = 1
 
 
 def main():
