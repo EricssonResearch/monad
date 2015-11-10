@@ -34,9 +34,6 @@ import se.uu.csproject.monadclient.recyclerviews.Language;
 
 public class SettingsActivity extends MenuedActivity {
 
-    static String currentRecommendOption;
-    static String currentNotifyOption;
-
     SettingsPagerAdapter settingsPagerAdapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,8 +56,7 @@ public class SettingsActivity extends MenuedActivity {
     protected void onStop() {
         super.onStop();
 
-        if((!ClientAuthentication.getRecommendationsAlert().equals(currentRecommendOption))
-                || (!ClientAuthentication.getNotificationsAlert().equals(currentNotifyOption))){
+        if(ClientAuthentication.getIfSettingsChanged()){
             UpdateSettingsTask task = new UpdateSettingsTask();
 
             String response = null;
@@ -69,8 +65,8 @@ public class SettingsActivity extends MenuedActivity {
                         ClientAuthentication.getClientId(),
                         ClientAuthentication.getLanguage(),
                         ClientAuthentication.getStoreLocation(),
-                        currentNotifyOption,
-                        currentRecommendOption,
+                        ClientAuthentication.getNotificationsAlert(),
+                        ClientAuthentication.getRecommendationsAlert(),
                         ClientAuthentication.getTheme()).get();
             } catch (InterruptedException e) {
                 e.printStackTrace();
@@ -79,19 +75,15 @@ public class SettingsActivity extends MenuedActivity {
             }
 
             if(response.startsWith("Success (1)")){
-                // The space after ON should be kept for UI formatting purposes
-                //recommendationsSwitch.setText("ON ");
-                ClientAuthentication.setNotificationsAlert(currentNotifyOption);
-                ClientAuthentication.setRecommendationsAlert(currentRecommendOption);
                 Toast.makeText(this, response, Toast.LENGTH_LONG).show();
+                ClientAuthentication.setIfSettingsChanged(false);
             }
             else{
-                //TODO
                 //might need to reset alert and recommendation to original user settings since update in the database fails
 
                 //also, this situation: SettingsActivity1 -> ... -> SettingsActivity2, and some settings are changed in SettingsActivity2,
                 //then the setting update should be shown in SettingsActivity1 once resumed.
-                //however, this is not done yet since it's a bit tricky dealing with fragment
+                //however, this is not done yet (and low priority) since it's a bit tricky dealing with fragment
                 Toast.makeText(this, response, Toast.LENGTH_LONG).show();
             }
         }
@@ -186,31 +178,28 @@ public class SettingsActivity extends MenuedActivity {
                 switchalert = (Switch)layout.findViewById(R.id.switch_fragmentsettingsalert_alerts);
                 if(ClientAuthentication.getRecommendationsAlert().equals("1")) {
                     switchrecommendation.setChecked(true);
-                    currentRecommendOption = "1";
                 }
                 else{
                     switchrecommendation.setChecked(false);
-                    currentRecommendOption = "0";
                 }
 
                 if(ClientAuthentication.getNotificationsAlert().equals("1")) {
                     switchalert.setChecked(true);
-                    currentNotifyOption = "1";
                 }
                 else{
                     switchalert.setChecked(false);
-                    currentNotifyOption = "0";
                 }
 
                 switchrecommendation.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                     @Override
                     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                         if(switchrecommendation.isChecked()) {
-                            currentRecommendOption = "1";
+                            ClientAuthentication.setRecommendationsAlert("1");
                         }
                         else {
-                            currentRecommendOption = "0";
+                            ClientAuthentication.setRecommendationsAlert("0");
                         }
+                        ClientAuthentication.setIfSettingsChanged(true);
                     }
                 });
 
@@ -218,11 +207,12 @@ public class SettingsActivity extends MenuedActivity {
                     @Override
                     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                         if(switchalert.isChecked()) {
-                            currentNotifyOption = "1";
+                            ClientAuthentication.setNotificationsAlert("1");
                         }
                         else{
-                            currentNotifyOption = "0";
+                            ClientAuthentication.setNotificationsAlert("0");
                         }
+                        ClientAuthentication.setIfSettingsChanged(true);
                     }
                 });
             }
@@ -234,23 +224,47 @@ public class SettingsActivity extends MenuedActivity {
                 final RadioButton radiobutton_darktheme;
 
                 //different themes
-                //radiogroup_themes  = (RadioGroup)layout.findViewById(R.id.radiogroup_fragmentsettingstheme_theme);
+                radiogroup_themes  = (RadioGroup)layout.findViewById(R.id.radiogroup_fragmentsettingstheme_theme);
                 radiobutton_defaulttheme = (RadioButton)layout.findViewById(R.id.radiobutton_fragmentsettingstheme_default);
                 radiobutton_lighttheme = (RadioButton)layout.findViewById(R.id.radiobutton_fragmentsettingstheme_light);
                 radiobutton_darktheme = (RadioButton)layout.findViewById(R.id.radiobutton_fragmentsettingstheme_dark);
 
-                //TODO: add RadioGroup to enable onCheckedChangedListener to update theme change in user settings
-                if(radiobutton_lighttheme.isChecked()){
-                    //change the theme to light
+                switch (ClientAuthentication.getTheme()){
+                    case "0":
+                        radiobutton_lighttheme.setChecked(true);
+                        break;
+                    case "1":
+                        radiobutton_defaulttheme.setChecked(true);
+                        break;
+                    case "2":
+                        radiobutton_darktheme.setChecked(true);
+                        break;
                 }
+                
+                radiogroup_themes.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
 
-                if(radiobutton_defaulttheme.isChecked()){
-                    //change the theme to default
-                }
-
-                if(radiobutton_darktheme.isChecked()){
-                    //change the theme to dark
-                }
+                    @Override
+                    public void onCheckedChanged(RadioGroup group, int checkedId) {
+                        switch (checkedId) {
+                            case R.id.radiobutton_fragmentsettingstheme_light:
+                                Toast.makeText(getActivity().getApplicationContext(), "theme changed to light", Toast.LENGTH_LONG).show();
+                                ClientAuthentication.setTheme("0");
+                                //change the theme to light
+                                break;
+                            case R.id.radiobutton_fragmentsettingstheme_default:
+                                Toast.makeText(getActivity().getApplicationContext(), "theme changed to default", Toast.LENGTH_LONG).show();
+                                ClientAuthentication.setTheme("1");
+                                //change the theme to default
+                                break;
+                            case R.id.radiobutton_fragmentsettingstheme_dark:
+                                Toast.makeText(getActivity().getApplicationContext(), "theme changed to dark", Toast.LENGTH_LONG).show();
+                                ClientAuthentication.setTheme("2");
+                                //change the theme to dark
+                                break;
+                        }
+                        ClientAuthentication.setIfSettingsChanged(true);
+                    }
+                });
             }
             else{
                 layout = inflater.inflate(R.layout.fragment_settings_theme,container,false);
