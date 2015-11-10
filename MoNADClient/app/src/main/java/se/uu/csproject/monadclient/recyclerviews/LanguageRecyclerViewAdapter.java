@@ -18,6 +18,7 @@ public class LanguageRecyclerViewAdapter
         extends RecyclerView.Adapter<LanguageRecyclerViewAdapter.LanguageViewHolder> {
 
     private List<Language> languages;
+    private View selectedCardView;
 
     public class LanguageViewHolder extends RecyclerView.ViewHolder {
 
@@ -31,7 +32,7 @@ public class LanguageRecyclerViewAdapter
             languageCard = (CardView) itemView.findViewById(R.id.card_language);
             languageFlag = (ImageView) itemView.findViewById(R.id.icon_flag);
             languageName = (TextView) itemView.findViewById(R.id.label_language);
-            selectedOverlay = (View) itemView.findViewById(R.id.selected_overlay);
+            selectedOverlay = itemView.findViewById(R.id.selected_overlay);
         }
     }
 
@@ -55,9 +56,15 @@ public class LanguageRecyclerViewAdapter
     public void onBindViewHolder(final LanguageViewHolder languageViewHolder, final int i) {
         languageViewHolder.languageName.setText(languages.get(i).name);
         languageViewHolder.languageFlag.setImageResource(languages.get(i).flagId);
+        if(ClientAuthentication.getLanguage().equals(languages.get(i).index)){
+            languageViewHolder.selectedOverlay.setVisibility(View.VISIBLE);
+            selectedCardView = languageViewHolder.selectedOverlay;
+        }
         languageViewHolder.languageCard.setOnClickListener(new View.OnClickListener() {
             public void onClick(View vw) {
+                selectedCardView.setVisibility(View.INVISIBLE);
                 languageViewHolder.selectedOverlay.setVisibility(View.VISIBLE);
+                selectedCardView = languageViewHolder.selectedOverlay;
                 ClientAuthentication.setLanguage(languages.get(i).index);
                 Toast.makeText(languageViewHolder.languageCard.getContext(), "Language changed to " + ClientAuthentication.getLanguage(), Toast.LENGTH_SHORT).show();
             }

@@ -20,7 +20,7 @@
     <string name="title_activity_google_log_in">Google log in</string>
 
     <!--Toolbar/Actionbar menu items-->
-    <string name="action_search">Search</string>
+    <string name="action_search">Home</string>
     <string name="action_notifications">Notifications</string>
     <string name="action_mytrips">My Trips</string>
     <string name="action_profile">Profile</string>
