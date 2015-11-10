@@ -633,9 +633,10 @@ public class ClientAuthentication extends Authentication {
     }
 
     public static String postForgottenPasswordResetRequest(String email, String newPassword) {
-        if(Security.validatePassword(newPassword)){
+        if(!Security.validatePassword(newPassword)){
             return Security.invalidPasswordMessage();
         }
+
         /* Encrypt password */
         newPassword = Security.encryptPassword(newPassword);
 
