@@ -1,12 +1,8 @@
 package se.uu.csproject.monadclient;
 
 import android.content.Intent;
-import android.media.Image;
-import android.support.v4.app.NavUtils;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -36,6 +32,8 @@ public class ProfileActivity extends MenuedActivity {
 
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_home_white_24dp);
+
 
         //set the profile fields from the profile stored in ClientAuthentication
         usernameField = (EditText)findViewById(R.id.textView_profile_user);
