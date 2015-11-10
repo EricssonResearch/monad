@@ -1,5 +1,6 @@
 package se.uu.csproject.monadclient.recyclerviews;
 
+import java.util.Calendar;
 import java.util.Date;
 
 import se.uu.csproject.monadclient.R;
@@ -27,5 +28,14 @@ public class Notify{
 
     public Date getTime() {
         return time;
+    }
+
+    public boolean isToday() {
+        Calendar today = Calendar.getInstance();
+        Calendar date = Calendar.getInstance();
+        date.setTime(time);
+        return today.get(Calendar.DAY_OF_MONTH) == date.get(Calendar.DAY_OF_MONTH)
+                && today.get(Calendar.MONTH) == date.get(Calendar.MONTH)
+                && today.get(Calendar.YEAR) == date.get(Calendar.YEAR);
     }
 }
