@@ -92,8 +92,8 @@ if __name__ == '__main__':
     #pool.map(get_nearest_stop, [i for i in range(0, 1000)])
     print "----- test1 -----"
     get_nearest_stop_from_coordinates()
-    print "----- test2 -----"
-    get_nearest_stop(1)
+    #print "----- test2 -----"
+    #get_nearest_stop(1)
     print "----- test3 -----"
     get_route()
     print "----- test4 -----"

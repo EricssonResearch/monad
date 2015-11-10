@@ -115,13 +115,14 @@ def get_coordinates_from_address(address, street_no, pid):
 def get_route_from_coordinates(coordinates_str_list, pid):
     coordinate_str = ''.join(chr(i) for i in coordinates_str_list)
     coordinates_list = ast.literal_eval(coordinate_str)
-    route = the_map.findRouteFromCoordinateList(coordinates_list)
+    route, cost = the_map.findRouteFromCoordinateList(coordinates_list)
     path = {}
     path['_id'] = 1212
     path['points'] = coordinate_str
     path['route'] = str(route)
     path['start'] = str(route[0])
     path['end'] = str(route[-1])
+    path['cost'] = str(cost)
 
     response = Atom("ok"), dumps(path)
     cast(pid, response)

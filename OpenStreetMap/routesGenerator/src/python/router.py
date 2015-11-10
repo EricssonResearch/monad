@@ -267,12 +267,19 @@ class AStar:
         return self.reconstruct_path(path, start, goal), cost
 
     def heuristic(self, node, goal):
-        # x1, y1 = node.coordinates
-        # x2, y2 = goal.coordinates
-        # return self.measure(x1, y1, x2, y2)
+        """
+        The heuristic used by A*. It measures the length between node and goal
+        in meters.
+        :param node a Coordinate object
+        :param goal a Coordinate object
+        :return the distance in meters
+        """
         return coordinate.measure(node, goal)
 
     def reconstruct_path(self, came_from, start, goal):
+        """
+
+        """
         current = goal
         path = [current]
         while current != start:
@@ -342,6 +349,13 @@ class Map:
         return None
 
     def findClosestBusStopFromCoordinates(self, lon, lat):
+        """
+        Finds the closest bus stop to the position of (lon, lat).
+
+        :param lon: longitude
+        :param lat: latitude
+        :return: BusStop object
+        """
         stop = self.busStopList[0]
         position = Coordinate(latitude=lat, longitude=lon)
         dist = coordinate.measure(stop, position)
@@ -386,30 +400,48 @@ class Map:
 
         :param startNode: id of the starting node
         :param endNode: id of the ending node
-        :return: a path between the start and ending point
+        :return: a path between the start and ending point and the to take that
+                path
         """
         path, cost = self.astar.findPath(self.nodes, self.edges, startNode,
                                          endNode)
-        return path
+        return path, cost[endNode]
 
     def findRouteFromCoordinateList(self, coordinateList):
+        """
+        Finds the paths path between points in a list of coordinates. The path
+        through an increasing order of indexes. Index 0 is the starting point
+        and N-1 is the end point where N is the length of the list.
+
+        Coordinates are represented as a tuple with (longitude, latitude)
+
+        :param coordinateList: [coordinates]
+        :return:
+        """
+        # Get the node IDs of the coordinates.
         nodeIDList = self.getNodeIdFromCoordinatesList(coordinateList)
         path = []
+        cost = [0]
+        # If at least one coordinates does not have an ID
         if None in nodeIDList:
-            return [None]
+            return [None], None
+        # If there is only one element there is no path
         if len(nodeIDList) == 1:
             path.append(nodeIDList[0])
         elif len(nodeIDList) > 1:
             path.append(nodeIDList[0])
             for n in range(0, len(nodeIDList) - 1):
-                nPath = self.findRoute(nodeIDList[n], nodeIDList[n + 1])
-                [path.append(x) for x in nPath[1:]]
+                _path, _cost = self.findRoute(nodeIDList[n], nodeIDList[n + 1])
+                [path.append(x) for x in _path[1:]]
+                cost.append(_cost)
 
         coordinatePath = []
+
+        # Translate back the node IDs to coordinates
         for id in path:
             coordinatePath.append(self.nodes[id].coordinates)
 
-        return coordinatePath
+        return coordinatePath, cost
 
     def findWayPoints(self, startNode, endNode):
         """
@@ -431,7 +463,7 @@ class Map:
         if len(nodeList) > 1:
             path.append(nodeList[0])
             for n in range(0, len(nodeList) - 1):
-                nPath = self.findRoute(nodeList[n], nodeList[n + 1])
+                nPath, _ = self.findRoute(nodeList[n], nodeList[n + 1])
                 [path.append(x) for x in nPath[1:]]
             waypoints = self.getWayPointsFromPath(path)
 
