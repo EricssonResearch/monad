@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 # Copyright 2015 Ericsson AB
 #
 # Licensed under the Apache License, Version 2.0 (the "License"); you may not 
@@ -150,6 +151,8 @@ class TravelPlanner:
                 if (startLine["trajectory"][i]["busStop"] == self.startBusStop):
                     maybe = True
                     startNumber = i
+                elif (startLine["trajectory"][i]["busStop"] == self.endBusStop):
+                    break
                 elif (maybe): 
                     self.possibleRoutes = self._searchOtherRoutes(startLine["line"], 
                             startLine["trajectory"][i]["busStop"])
