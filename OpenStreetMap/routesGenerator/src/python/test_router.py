@@ -15,6 +15,7 @@ specific language governing permissions and limitations under the License.
 
 import unittest
 import os.path
+import sys
 
 import router
 
@@ -57,4 +58,5 @@ class RouterTester(unittest.TestCase):
         pass
 
 if __name__ == '__main__':
+    print os.path.dirname(os.path.realpath(__file__))
     main()
