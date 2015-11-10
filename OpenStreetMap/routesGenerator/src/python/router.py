@@ -676,7 +676,7 @@ if __name__ == '__main__':
     myMap.drawRoads(myMap.edges, myMap.nodes)
     ##    myMap.drawBusStops(myMap.handler.busStops, myMap.nodes)
     myMap.drawPath(myPath, 'red')
-    ## myMap.drawNodeIds(wayP, 'blue')
-    ## myMap.drawPath(my4Path, 'green')
+    myMap.drawNodeIds(wayP, 'blue')
+    myMap.drawPath(my4Path, 'green')
     myMap.drawSave(sys.argv[1])
     print "Image done,", sys.argv[1]
