@@ -18,6 +18,6 @@ from coordinate import Coordinate
 
 class BusStop(Coordinate):
 
-    def __init__(self, busName, latitude, longitude):
+    def __init__(self, name, latitude, longitude):
         Coordinate.__init__(self, latitude, longitude)
-        self.name = busName
+        self.name = name

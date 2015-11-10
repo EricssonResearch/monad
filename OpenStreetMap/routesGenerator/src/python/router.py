@@ -13,6 +13,7 @@ under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
 CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
+import re
 
 import sys
 import math
@@ -37,24 +38,16 @@ busRoadTypes = ('motorway', 'motorway_link', 'trunk', 'trunk_link', 'primary',
                 'tertiary_link', 'unclassified', 'residential', 'service')
 
 
-# class BusStop:
-#    def __init__(self, nodeId, longitude, latitude):
-#        self.id = nodeId
-#        self.coordinates = (longitude, latitude)
-#        self.busStopName = ""
-#
-#    def addBusStopName(self, name):
-#        self.busStopName = name
-
-
 class RouteHandler(handler.ContentHandler):
     """
 
     """
 
     def __init__(self):
-        # all nodes in the map
+        # all nodes in the map with Id as key
         self.nodes = {}
+        # all nodes with coord as key id as value
+        self.nodeID = {}
         # all bus stop nodes
         self.busStops = []
 
@@ -95,6 +88,7 @@ class RouteHandler(handler.ContentHandler):
             lat = float(attributes.get('lat'))
             lon = float(attributes.get('lon'))
             self.nodes[nodeId] = Coordinate(latitude=lat, longitude=lon)
+            self.nodeID[(lon, lat)] = nodeId
             # self.busStops.append(BusStop(nodeId, lon, lat))
             # self.index += 1
             self.node = nodeId
@@ -161,8 +155,10 @@ class RouteHandler(handler.ContentHandler):
             if highway == 'bus_stop':
                 # self.busStops[self.index - 1].addBusStopName(stopName)
                 self.busStops.append(BusStop(stopName,
-                                             self.nodes[self.node].longitude,
-                                             self.nodes[self.node].latitude))
+                                             longitude=self.nodes[
+                                                 self.node].longitude,
+                                             latitude=self.nodes[
+                                                 self.node].latitude))
             if street != '' and housenumber != '':
                 self.addAddress(street, self.node, housenumber)
                 pass
@@ -276,24 +272,6 @@ class AStar:
         # return self.measure(x1, y1, x2, y2)
         return coordinate.measure(node, goal)
 
-    #    def measure(self, lon1, lat1, lon2, lat2):
-    #        """
-    #        Measure the distance between to points in lon and lat and returns the
-    #        distance in meters.
-    #        """
-    #        # Radius of the earth in meters
-    #        earthRadius = 6371000
-    #        dLat = (lat2 - lat1) * math.pi / 180
-    #        dLon = (lon2 - lon1) * math.pi / 180
-    #
-    #        a = (math.sin(dLat / 2) * math.sin(dLat / 2) +
-    #             math.cos(lat1 * math.pi / 180) * math.cos(lat2 * math.pi / 180) *
-    #             math.sin(dLon / 2) * math.sin(dLon / 2))
-    #
-    #        c = 2 * math.atan2(math.sqrt(a), math.sqrt(1 - a))
-    #        meters = earthRadius * c
-    #        return meters
-
     def reconstruct_path(self, came_from, start, goal):
         current = goal
         path = [current]
@@ -331,63 +309,75 @@ class Map:
         self.busStopList = self.handler.busStops
         self.edges = self.handler.roadMapGraph
 
+    def getNodeIdFromCoordinates(self, coordinates):
+        """
+        :param coordinates: (longitude, latitude)
+        :return: nodeID
+        """
+        if coordinates in self.handler.nodeID:
+            return self.handler.nodeID[coordinates]
+        return None
+
+    def getNodeIdFromCoordinatesList(self, coordinatesList):
+        """
+        :param coordinates: [(longitude, latitude)]
+        :return: nodeID
+        """
+        nodeIdList = []
+        for coordinates in coordinatesList:
+            nodeIdList.append(self.getNodeIdFromCoordinates(coordinates))
+        return nodeIdList
+
     def findBusStopName(self, lon, lat):
         for nd in self.busStopList:
             if nd.longitude == lon and nd.latitude == lat:
-                return nd.busStopName
-        return "no stop found"
+                return nd.name
+        return None
 
     def findBusStopPosition(self, name):
+        name = name.decode('utf-8')
         for nd in self.busStopList:
-            if nd.busStopName == name:
+            if nd.name == name:
                 return nd.coordinates
-        return "no such stop name"
+        return None
 
     def findClosestBusStopFromCoordinates(self, lon, lat):
+        stop = self.busStopList[0]
+        position = Coordinate(latitude=lat, longitude=lon)
+        dist = coordinate.measure(stop, position)
 
-        dist = self.astar.measure(self.busStopList[0].longitude,
-                                  self.busStopList[0].latitude,
-                                  lon,
-                                  lat)
-        theBus = self.busStopList[0]
-        for bus in self.busStopList:
-            if self.astar.measure(bus.longitude, bus.latitude, lon,
-                                  lat) < dist:
-                theBus = bus
-        return theBus
+        for _stop in self.busStopList:
+            _dist = coordinate.measure(_stop, position)
+            if _dist < dist:
+                stop = _stop
+                dist = _dist
+
+        return stop
 
     def findCoordinatesFromAdress(self, address, number=None):
         """
         Translates an address into coordinates.
         """
         # TODO Add fuzzy logic
-
+        address = address.decode('utf-8')
         if address in self.handler.addresses:
             if number is None:
                 coordinateList = self.handler.addresses[address].coordinates
                 center = coordinate.center(coordinateList)
-                #addressCoord = coordinate.closestTo(center, coordinateList)
+                # addressCoord = coordinate.closestTo(center, coordinateList)
                 return center
 
             else:
                 if number in self.handler.addresses[address].numbers:
                     noCoord = self.handler.addresses[address].numbers[number]
-                    #coordList = self.handler.addresses[address].coordinates
-                    #addressCoord = coordinate.closestTo(noCoord, coordList)
+                    # coordList = self.handler.addresses[address].coordinates
+                    # addressCoord = coordinate.closestTo(noCoord, coordList)
                     return noCoord
                 else:
                     # TODO Find closest housenumber to number
                     return self.findCoordinatesFromAdress(address)
         else:
             return None
-
-    # def getNodebyId(self, nodeId):
-    #   return
-    #    for nd in self.busStopList:
-    #       #print nd.id
-    #        if nd.id == nodeId:
-    #            return nd
-    #    return -1
 
     def findRoute(self, startNode, endNode):
         """
@@ -401,6 +391,25 @@ class Map:
         path, cost = self.astar.findPath(self.nodes, self.edges, startNode,
                                          endNode)
         return path
+
+    def findRouteFromCoordinateList(self, coordinateList):
+        nodeIDList = self.getNodeIdFromCoordinatesList(coordinateList)
+        path = []
+        if None in nodeIDList:
+            return [None]
+        if len(nodeIDList) == 1:
+            path.append(nodeIDList[0])
+        elif len(nodeIDList) > 1:
+            path.append(nodeIDList[0])
+            for n in range(0, len(nodeIDList) - 1):
+                nPath = self.findRoute(nodeIDList[n], nodeIDList[n + 1])
+                [path.append(x) for x in nPath[1:]]
+
+        coordinatePath = []
+        for id in path:
+            coordinatePath.append(self.nodes[id].coordinates)
+
+        return coordinatePath
 
     def findWayPoints(self, startNode, endNode):
         """
@@ -630,10 +639,21 @@ if __name__ == '__main__':
 
     # print myMap.handler.addresses[u'Rackarbergsgatan']
     # print myMap.handler.addresses[u'Studentvägen']
-    print myMap.findCoordinatesFromAdress(u'Studentvägen').coordinates
-    print myMap.findCoordinatesFromAdress(u'Luthagsesplanaden').coordinates
-    print myMap.findCoordinatesFromAdress(u'Flogstavägen').coordinates
+    # print myMap.findCoordinatesFromAdress(u'Studentvägen').coordinates
+    # print myMap.findCoordinatesFromAdress(u'Luthagsesplanaden').coordinates
+    # print myMap.findCoordinatesFromAdress(u'Flogstavägen').coordinates
     # for ke in myMap.handler.addresses.keys():
     #    print ke, myMap.handler.addresses[ke].nodes
 
     # print coordinate.average(myMap.findCoordinatesFromAdress(u'Studentvägen'))
+    timer = time.time()
+    print myMap.getNodeIdFromCoordinates((17.6130204, 59.8545318))
+    print "Found Id in: %f sec" % (time.time() - timer)
+
+    timer = time.time()
+    path = myMap.findRouteFromCoordinateList([(17.6130204, 59.8545318),
+                                              (17.5817552, 59.8507556),
+                                              (17.6476356, 59.8402173)])
+
+    print path
+    print str(path)
