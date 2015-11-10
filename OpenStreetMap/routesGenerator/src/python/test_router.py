@@ -22,25 +22,28 @@ import router
 FILE = "testmap.xml"
 
 
-def main():
-    unittest.main()
-
+#def main():
+#
+#    unittest.main()
 
 class RouterTester(unittest.TestCase):
     """
     Class for testing the router.py
     """
 
-    @classmethod
-    def setUpClass(cls):
-        if os.path.isfile(FILE):
-            cls._map = router.Map(FILE)
-            cls._map.parsData()
-        else:
-            assert False, ("File not found: ", FILE)
+    #@classmethod
+    #def setUpClass(cls):
+    #    if os.path.isfile(FILE):
+    #        cls._map = router.Map(FILE)
+    #        cls._map.parsData()
+    #    else:
+    #        assert False, ("File not found: ", FILE)
 
     # set up the test
     def setUp(self):
+        assert os.path.isfile(FILE)
+        self._map = router.Map(FILE)
+        self._map.parsData()
         pass
 
     @unittest.skipUnless(os.path.isfile(FILE), "fileNotFound")
@@ -59,4 +62,5 @@ class RouterTester(unittest.TestCase):
 
 if __name__ == '__main__':
     print os.path.dirname(os.path.realpath(__file__))
-    main()
+    #main()
+    unittest.main()
