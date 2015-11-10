@@ -17,7 +17,7 @@
     <string name="title_activity_forgot_password_popup">Enter Your Email</string>
     <string name="title_activity_route_confirm_popup">Confirm?</string>
     <string name="title_activity_trip_cancel_popup">Cancel?</string>
-    <string name="title_activity_google_log_in">Google log in</string>
+    <string name="title_activity_google_log_in">Google Log In</string>
 
     <!--Toolbar/Actionbar menu items-->
     <string name="action_search">Home</string>
@@ -36,7 +36,7 @@
     <string name="label_aboutus_product" translatable="false">Ericsson</string>
     <string name="label_aboutus_description">Description</string>
     <string name="label_aboutus_texttitle">About Us</string>
-    <string name="label_aboutus_descriptiontext">MoNAD is a project which is under development by Uppsala University CS Master students. It is an app ......</string>
+    <string name="label_aboutus_descriptiontext">MoNAD is a project under development by Uppsala University\'s Computer Science Master students.</string>
 
 
     <!--Activity - Login-->
@@ -94,8 +94,8 @@
     <string name="label_search_depature">Depature</string>
     <string name="label_search_arrival">Arrival</string>
     <string name="label_search_priority">Priority</string>
-    <string name="label_search_shortesttriptime">Shortest trip time</string>
-    <string name="label_search_shortesttripdistance">Shortest trip distance</string>
+    <string name="label_search_shortesttriptime">Shortest trip </string>
+    <string name="label_search_earliesttrip">Earliest trip</string>
     <string name="label_search_results">Results</string>
     <string name="label_search_moreresults">More Results</string>
     <string name="label_searchresult_timeinfo">n/a - n/a (n/a min)</string>
@@ -111,7 +111,7 @@
     <!--Settings - Alert settings -->
     <string name="label_fragmentsettingsalert_recommendation">Recommendations</string>
     <string name="label_fragmentsettingsalert_alert">Reminders about trips</string>
-    <string name="label_fragmentsettingsalert_recommendationsswitch">ON </string>
+    <string name="label_fragmentsettingsalert_recommendationsswitch" translatable="false">ON </string>
 
     <!-- Settings - Theme settings -->
     <string name="label_fragmentsettingstheme_light">Light</string>
@@ -150,5 +150,5 @@
     <string name="img_description">Icon Missing</string>
     <string name="non_available">n/a</string>
     <string name="hello_world">Hello world!</string>
-    <string name="GoogleProjectID">81265551950</string>
+    <string name="GoogleProjectID" translatable="false">81265551950</string>
 </resources>
