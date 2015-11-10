@@ -32,17 +32,38 @@ public class NotificationRecyclerViewAdapter extends RecyclerView.Adapter<Notifi
         mContext = context;
     }
 
+
+    @Override
+    public int getItemViewType(int position) {
+        if(notify.get(position).isToday()) {
+            return 0;
+        }
+        else {
+            return 1;
+        }
+    }
+
     @Override
     public void onAttachedToRecyclerView(RecyclerView recyclerView) {
         super.onAttachedToRecyclerView(recyclerView);
     }
 
     @Override
-    public NotificationViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.list_item_notification, viewGroup, false);
+    public NotificationViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
+        View view;
+        if(viewType ==1){
+            view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.list_item_notification_old, viewGroup, false);
+
+        }
+        else {
+            view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.list_item_notification, viewGroup, false);
+
+        }
+
         return new NotificationViewHolder(mContext, view);
 
     }
+
 
     @Override
     public void onBindViewHolder(final NotificationViewHolder notificationViewHolder, final int i) {
