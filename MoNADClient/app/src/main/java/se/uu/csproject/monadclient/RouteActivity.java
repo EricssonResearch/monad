@@ -23,9 +23,9 @@ import java.util.Date;
 import java.util.List;
 
 import se.uu.csproject.monadclient.recyclerviews.FullTrip;
-import se.uu.csproject.monadclient.recyclerviews.Notify;
+//import se.uu.csproject.monadclient.recyclerviews.Notify;
 import se.uu.csproject.monadclient.recyclerviews.PartialTrip;
-import se.uu.csproject.monadclient.recyclerviews.RouteRecyclerViewAdapter;
+//import se.uu.csproject.monadclient.recyclerviews.RouteRecyclerViewAdapter;
 
 public class RouteActivity extends AppCompatActivity {
 
@@ -41,6 +41,8 @@ public class RouteActivity extends AppCompatActivity {
 
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_home_white_24dp);
+
 
         String name;
         Date exit;
@@ -135,18 +137,4 @@ public class RouteActivity extends AppCompatActivity {
         return timeFormat.format(calendar.getTime());
     }
 
-    private void initializeData(List<Notify> busStops){
-        busStops.add(new Notify("Bus 805: 5 min delay", "15:59", R.drawable.ic_directions_bus_black_18dp));
-        busStops.add(new Notify("Bus 805: Coming in 5 min", "15:43", R.drawable.ic_directions_bus_black_18dp));
-        busStops.add(new Notify("Bus 805: Departing now", "15:38", R.drawable.ic_directions_bus_black_18dp));
-        busStops.add(new Notify("Bus 801: 5 min delay", "15:15", R.drawable.ic_directions_bus_black_18dp));
-        busStops.add(new Notify("Bus 801: Coming in 5 min", "15:11", R.drawable.ic_directions_bus_black_18dp));
-        busStops.add(new Notify("Bus 801: Departing now", "15:06", R.drawable.ic_directions_bus_black_18dp));
-        busStops.add(new Notify("Bus 805: 5 min delay", "15:59", R.drawable.ic_directions_bus_black_18dp));
-        busStops.add(new Notify("Bus 805: Coming in 5 min", "15:43", R.drawable.ic_directions_bus_black_18dp));
-        busStops.add(new Notify("Bus 805: Departing now", "15:38", R.drawable.ic_directions_bus_black_18dp));
-        busStops.add(new Notify("Bus 801: 5 min delay", "15:15", R.drawable.ic_directions_bus_black_18dp));
-        busStops.add(new Notify("Bus 801: Coming in 5 min", "15:11", R.drawable.ic_directions_bus_black_18dp));
-        busStops.add(new Notify("Bus 801: Departing now", "15:06", R.drawable.ic_directions_bus_black_18dp));
-    }
 }

@@ -35,6 +35,8 @@ public class TripsActivity extends MenuedActivity implements AsyncResponse{
         setSupportActionBar(toolbar);
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_home_white_24dp);
+
     }
 
     @Override

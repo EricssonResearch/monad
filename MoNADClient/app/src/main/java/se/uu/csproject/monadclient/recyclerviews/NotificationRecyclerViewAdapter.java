@@ -13,6 +13,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import se.uu.csproject.monadclient.NotificationsActivity;
@@ -43,8 +46,8 @@ public class NotificationRecyclerViewAdapter extends RecyclerView.Adapter<Notifi
 
     @Override
     public void onBindViewHolder(final NotificationViewHolder notificationViewHolder, final int i) {
-        notificationViewHolder.notificationName.setText(notify.get(i).name);
-        notificationViewHolder.notificationTime.setText(notify.get(i).time);
+        notificationViewHolder.notificationName.setText(notify.get(i).text);
+        notificationViewHolder.notificationTime.setText(formatTime((Date) notify.get(i).time));
         notificationViewHolder.notificationPhoto.setImageResource(notify.get(i).iconId);
 
         notificationViewHolder.hideNotificationButton.setOnClickListener(new View.OnClickListener() {
@@ -113,6 +116,16 @@ public class NotificationRecyclerViewAdapter extends RecyclerView.Adapter<Notifi
 
 
         }
+    }
+
+    private String formatTime(Date date){
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
+        String time = timeFormat.format(calendar.getTime());
+
+        return time;
     }
 
 // Start of a loop that processes data and then notifies the user

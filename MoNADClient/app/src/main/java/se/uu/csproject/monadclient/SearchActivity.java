@@ -6,7 +6,6 @@ import android.app.Dialog;
 import android.app.DialogFragment;
 import android.app.TimePickerDialog;
 import android.content.Context;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Build;
@@ -75,6 +74,8 @@ public class SearchActivity extends MenuedActivity implements
         setSupportActionBar(toolbar);
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_home_white_24dp);
+
 
         context = getApplicationContext();
         textViewTripDate = (TextView) findViewById(R.id.textview_search_tripdate);
