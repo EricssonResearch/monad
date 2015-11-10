@@ -180,8 +180,6 @@ public class SettingsActivity extends MenuedActivity {
                 layout = inflater.inflate(R.layout.fragment_settings_alerts,container,false);
                 final Switch switchrecommendation;
                 final Switch switchalert;
-                final TextView recommendationsSwitch = (TextView) layout.findViewById(R.id.label_recommendationsswitch);
-                final TextView remindersSwitch= (TextView) layout.findViewById(R.id.label_remindersswitch);
 
                 // switch button for alerts and recommendations
                 switchrecommendation = (Switch)layout.findViewById(R.id.switch_fragmentsettingsalert_recommendations);
@@ -192,7 +190,6 @@ public class SettingsActivity extends MenuedActivity {
                 }
                 else{
                     switchrecommendation.setChecked(false);
-                    recommendationsSwitch.setText("OFF");
                     currentRecommendOption = "0";
                 }
 
@@ -202,7 +199,6 @@ public class SettingsActivity extends MenuedActivity {
                 }
                 else{
                     switchalert.setChecked(false);
-                    remindersSwitch.setText("OFF");
                     currentNotifyOption = "0";
                 }
 
@@ -211,11 +207,9 @@ public class SettingsActivity extends MenuedActivity {
                     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                         if(switchrecommendation.isChecked()) {
                             currentRecommendOption = "1";
-                            recommendationsSwitch.setText("ON ");
                         }
                         else {
                             currentRecommendOption = "0";
-                            recommendationsSwitch.setText("OFF");
                         }
                     }
                 });
@@ -225,11 +219,9 @@ public class SettingsActivity extends MenuedActivity {
                     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                         if(switchalert.isChecked()) {
                             currentNotifyOption = "1";
-                            remindersSwitch.setText("ON ");
                         }
                         else{
                             currentNotifyOption = "0";
-                            remindersSwitch.setText("OFF");
                         }
                     }
                 });
