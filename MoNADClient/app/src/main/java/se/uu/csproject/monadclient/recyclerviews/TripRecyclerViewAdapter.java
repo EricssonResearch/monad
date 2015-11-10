@@ -1,8 +1,6 @@
 package se.uu.csproject.monadclient.recyclerviews;
 
 import android.content.Intent;
-import android.graphics.Color;
-import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
@@ -138,7 +136,7 @@ public class TripRecyclerViewAdapter
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(tripViewHolder.itemView.getContext(), RouteActivity.class);
-                    intent.putExtra("fulltrip", trips.get(i));
+                    intent.putExtra("selectedTrip", trips.get(i));
                     tripViewHolder.itemView.getContext().startActivity(intent);
                 }
            });
@@ -147,7 +145,7 @@ public class TripRecyclerViewAdapter
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(tripViewHolder.itemView.getContext(), TripCancelPopup.class);
-                    intent.putExtra("fulltrip", trips.get(i));
+                    intent.putExtra("selectedTrip", trips.get(i));
                     tripViewHolder.itemView.getContext().startActivity(intent);
                 }
             });

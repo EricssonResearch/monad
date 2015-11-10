@@ -50,18 +50,15 @@ public class ResetPasswordActivity extends AppCompatActivity {
             submitButton.setText(getString(R.string.label_profile_savechanges));
         }
 
-        //TODO: check if password check is done in clientAuthentication and if yes, delete the check in the following part
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String passwordValue = passwordField.getText().toString();
                 String confirmPasswordValue = confirmPasswordField.getText().toString();
 
-                if(passwordValue.length() < 6){
-                    Toast.makeText(getApplicationContext(), "The password should contain at least 6 characters!", Toast.LENGTH_LONG).show();
-                }
-                else if(!passwordValue.equals(confirmPasswordValue)){
+                if(!passwordValue.equals(confirmPasswordValue)){
                     Toast.makeText(getApplicationContext(), "Two passwords do not match!", Toast.LENGTH_LONG).show();
+                    return;
                 }
 
                 if(resetMode){
@@ -83,8 +80,9 @@ public class ResetPasswordActivity extends AppCompatActivity {
                         e.printStackTrace();
                     }
                     Toast.makeText(getApplicationContext(), response, Toast.LENGTH_LONG).show();
-                    ResetPasswordActivity.this.startActivity(new Intent(ResetPasswordActivity.this, LoginActivity.class));
-                    finish();
+                    if(response.startsWith("Success (1)")) {
+                        finish();
+                    }
                 }
                 else {
                     String oldPassword = oldPasswordField.getText().toString();

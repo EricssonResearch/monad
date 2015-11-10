@@ -28,6 +28,7 @@ import se.uu.csproject.monadclient.googlecloudmessaging.RegistrationIntentServic
 
 public class LoginActivity extends AppCompatActivity {
     private final int GOOGLE_LOGIN_REQUEST = 1;
+    private final int REGISTER_REQUEST = 2;
 
     private EditText usernameField;
     private EditText passwordField;
@@ -47,9 +48,8 @@ public class LoginActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         if (checkPlayServices()) {
-            Intent intent = new Intent(this,RegistrationIntentService.class);
+            Intent intent = new Intent(this, RegistrationIntentService.class);
             startService(intent);
-
         }
 
         usernameField = (EditText) findViewById(R.id.field_username);
@@ -74,20 +74,29 @@ public class LoginActivity extends AppCompatActivity {
                 try {
                     // Get the username and password, send them with the request
                     String response = task.execute(usernameField.getText().toString(), passwordField.getText().toString()).get();
-                    Toast.makeText(getApplicationContext(), response,
-                            Toast.LENGTH_LONG).show();
-                    // If the sreponse starts with the specific word, it means the users loged in successfully
+
+                    Toast.makeText(getApplicationContext(), response, Toast.LENGTH_LONG).show();
+
+                    // If the response starts with the specific word, it means the users logged in successfully
                     if (response.startsWith("Success (1)")) {
                         LoginActivity.this.startActivity(new Intent(LoginActivity.this, MainActivity.class));
                         finish();
                     }
-                    else if (response.startsWith("Wrong Credentials (0)")) {
+                    else if (response.equals("Wrong Credentials (0)")) {
                         wrongCredentialsTextView.setVisibility(View.VISIBLE);
+                    }
+                    else {
+                        LoginActivity.this.startActivity(new Intent(LoginActivity.this, LoginActivity.class));
+                        finish();
                     }
                 } catch (InterruptedException e) {
                     e.printStackTrace();
+                    LoginActivity.this.startActivity(new Intent(LoginActivity.this, LoginActivity.class));
+                    finish();
                 } catch (ExecutionException e) {
                     e.printStackTrace();
+                    LoginActivity.this.startActivity(new Intent(LoginActivity.this, LoginActivity.class));
+                    finish();
                 }
             }
         });
@@ -102,19 +111,18 @@ public class LoginActivity extends AppCompatActivity {
         registerTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                LoginActivity.this.startActivity(new Intent(v.getContext(), RegisterActivity.class));
+                LoginActivity.this.startActivityForResult((new Intent(LoginActivity.this, RegisterActivity.class)), REGISTER_REQUEST);
             }
         });
     }
 
-    /* if google login succeeds, then the login activity is destroyed
+    /* if google login/register succeeds, then the login activity is destroyed
      * a user cannot go back to login back if he/she is already logged in
      * the user can only sign out and then he/she will be shown the login layout again
      */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        //super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == GOOGLE_LOGIN_REQUEST && resultCode == RESULT_OK){
+        if((requestCode == GOOGLE_LOGIN_REQUEST || requestCode == REGISTER_REQUEST) && resultCode == RESULT_OK){
             finish();
         }
     }
@@ -133,6 +141,7 @@ public class LoginActivity extends AppCompatActivity {
         return true;
     }
 
+    //TODO: Remove onOptionsItemSelected(item) below when test is done
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
@@ -174,7 +183,6 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private boolean checkPlayServices() {
-
         GoogleApiAvailability apiAvailability = GoogleApiAvailability.getInstance();
         int resultCode = apiAvailability.isGooglePlayServicesAvailable(this);
         if (resultCode != ConnectionResult.SUCCESS) {

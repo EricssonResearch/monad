@@ -40,13 +40,14 @@
                 android:textColorHint="@drawable/hint_hide_selector"
                 />
 
-            <ImageView
+            <ImageButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="0"
                 android:background="@color/primaryColor"
                 android:contentDescription="@string/img_description"
-                android:src="@drawable/ic_location_on_white_48dp"/>
+                android:src="@drawable/ic_location_on_white_48dp"
+                android:onClick="useCurrentPosition"/>
 
         </LinearLayout>
 
@@ -79,7 +80,9 @@
                 android:layout_weight="0"
                 android:background="@color/primaryColor"
                 android:contentDescription="@string/img_description"
-                android:src="@drawable/ic_location_on_white_48dp"/>
+                android:src="@drawable/ic_search_white_48dp"
+                android:onClick="sendTravelRequest"
+                />
 
         </LinearLayout>
 
@@ -88,7 +91,8 @@
             android:layout_height="wrap_content"
             android:id="@+id/radiogroup_search_triptime"
             android:orientation="horizontal"
-            android:padding="@dimen/small_padding">
+            android:padding="@dimen/small_padding"
+            android:checkedButton="@+id/radiobutton_search_departuretime">
 
             <RadioButton
                 android:layout_width="wrap_content"
@@ -122,6 +126,7 @@
                 android:textColor="@color/black"
                 android:gravity="center_horizontal"
                 android:clickable="true"
+                android:onClick="showDatePickerDialog"
                 />
 
             <TextView
@@ -135,6 +140,7 @@
                 android:textColor="@color/black"
                 android:gravity="center_horizontal"
                 android:clickable="true"
+                android:onClick="showTimePickerDialog"
                 />
 
         </LinearLayout>
@@ -151,7 +157,8 @@
             android:layout_height="wrap_content"
             android:id="@+id/radiogroup_search_priority"
             android:orientation="horizontal"
-            android:padding="@dimen/small_padding">
+            android:padding="@dimen/small_padding"
+            android:checkedButton="@+id/radiobutton_search_prioritytripdistance">
 
             <RadioButton
                 android:layout_width="wrap_content"
@@ -177,6 +184,7 @@
             android:textAllCaps="true"
             android:textStyle="bold"
             android:layout_marginLeft="@dimen/medium_padding"
+            android:layout_marginStart="@dimen/medium_padding"
             android:textColor="@color/primaryColor"/>
 
         <View
@@ -205,12 +213,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/button_search_search"
-            android:text="@string/label_search_buttonsearch"
+            android:text="@string/label_search_moreresults"
             android:textColor="@color/white"
             android:background="@color/primaryColor"
             android:layout_gravity="bottom"
             android:layout_marginTop="@dimen/small_padding"
-            android:onClick="sendTravelRequest"
             />
     </LinearLayout>
 
