@@ -4,24 +4,17 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.PopupWindow;
-import android.widget.TextView;
-import android.view.ViewGroup.LayoutParams;
 import android.widget.Toast;
 
 import java.util.concurrent.ExecutionException;
 
 public class ForgotPasswordPopup extends AppCompatActivity {
     private EditText emailField;
-    private Button submitButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,7 +22,7 @@ public class ForgotPasswordPopup extends AppCompatActivity {
         setContentView(R.layout.popup_forgot_password);
 
         emailField = (EditText) findViewById(R.id.field_email);
-        submitButton = (Button) findViewById(R.id.button_submit);
+        Button submitButton = (Button) findViewById(R.id.button_submit);
 
         DisplayMetrics dm = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(dm);
@@ -45,12 +38,14 @@ public class ForgotPasswordPopup extends AppCompatActivity {
                     SendResetPasswordRequest sendResetPasswordRequest = new SendResetPasswordRequest();
                     try {
                         String email = emailField.getText().toString();
+                        //TODO: check email address exists and is not a google account (only) in the database
                         String response = sendResetPasswordRequest.execute(email).get();
                         Toast.makeText(getApplicationContext(), "The code has been sent to the email you entered, please check your email and enter the code.", Toast.LENGTH_LONG).show();//response is only the code now, nothing else
                         Intent intent = new Intent(v.getContext(), ConfirmCodePopup.class);
                         intent.putExtra("EMAIL", email);
                         intent.putExtra("CODE", response.substring(1));
                         startActivity(intent);
+                        finish();
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     } catch (ExecutionException e) {
@@ -59,13 +54,6 @@ public class ForgotPasswordPopup extends AppCompatActivity {
                 }
             }
         });
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_login, menu);
-        return true;
     }
 
     @Override

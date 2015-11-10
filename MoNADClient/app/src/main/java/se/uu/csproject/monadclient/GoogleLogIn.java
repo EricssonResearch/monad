@@ -115,12 +115,24 @@ public class GoogleLogIn extends Activity implements
         try {
             String response = googleSignUpTask.execute(email).get();
             Toast.makeText(getApplicationContext(), response, Toast.LENGTH_LONG).show();
-            if(response.startsWith("Success (1)"))
-            GoogleLogIn.this.startActivity(new Intent(GoogleLogIn.this, MainActivity.class));
+
+            if (response.startsWith("Success (1)")) {
+                GoogleLogIn.this.startActivity(new Intent(GoogleLogIn.this, MainActivity.class));
+                setResult(RESULT_OK);
+                finish();
+            }
+            else {
+                GoogleLogIn.this.startActivity(new Intent(GoogleLogIn.this, LoginActivity.class));
+                finish();
+            }
         } catch (InterruptedException e) {
             e.printStackTrace();
+            GoogleLogIn.this.startActivity(new Intent(GoogleLogIn.this, LoginActivity.class));
+            finish();
         } catch (ExecutionException e) {
             e.printStackTrace();
+            GoogleLogIn.this.startActivity(new Intent(GoogleLogIn.this, LoginActivity.class));
+            finish();
         }
     }
 

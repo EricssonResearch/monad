@@ -1,8 +1,6 @@
 package se.uu.csproject.monadclient.recyclerviews;
 
 import android.content.Intent;
-import android.graphics.Color;
-import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
@@ -29,7 +27,7 @@ import static java.lang.Math.floor;
 public class TripRecyclerViewAdapter
         extends RecyclerView.Adapter<TripRecyclerViewAdapter.TripViewHolder>{
 
-    List<Trip> trips;
+    List<FullTrip> trips;
 
     public class TripViewHolder extends RecyclerView.ViewHolder {
 
@@ -69,7 +67,7 @@ public class TripRecyclerViewAdapter
         }
     }
 
-    public TripRecyclerViewAdapter(List<Trip> trips){
+    public TripRecyclerViewAdapter(List<FullTrip> trips){
         this.trips = trips;
     }
 
@@ -138,14 +136,7 @@ public class TripRecyclerViewAdapter
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(tripViewHolder.itemView.getContext(), RouteActivity.class);
-                    Bundle bundle = new Bundle();
-                    bundle.putInt("tripId", trips.get(i).getTripId());
-                    bundle.putString("startBusStop", trips.get(i).getStartBusStop());
-                    bundle.putString("endBusStop", trips.get(i).getEndBusStop());
-                    bundle.putSerializable("startTime", trips.get(i).getStartTime());
-                    bundle.putSerializable("endTime", trips.get(i).getEndTime());
-                    bundle.putInt("duration", trips.get(i).getDurationMinutes());
-                    intent.putExtras(bundle);
+                    intent.putExtra("selectedTrip", trips.get(i));
                     tripViewHolder.itemView.getContext().startActivity(intent);
                 }
            });
@@ -154,23 +145,14 @@ public class TripRecyclerViewAdapter
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(tripViewHolder.itemView.getContext(), TripCancelPopup.class);
-                    Bundle bundle = new Bundle();
-                    bundle.putInt("tripId", trips.get(i).getTripId());
-                    bundle.putString("startBusStop", trips.get(i).getStartBusStop());
-                    bundle.putString("endBusStop", trips.get(i).getEndBusStop());
-                    bundle.putSerializable("startTime", trips.get(i).getStartTime());
-                    bundle.putSerializable("endTime", trips.get(i).getEndTime());
-                    bundle.putInt("MILLISECONDS", MILLISECONDS);
-                    bundle.putInt("duration", trips.get(i).getDurationMinutes());
-                    bundle.putInt("feedback", trips.get(i).getUserFeedback());
-                    intent.putExtras(bundle);
+                    intent.putExtra("selectedTrip", trips.get(i));
                     tripViewHolder.itemView.getContext().startActivity(intent);
                 }
             });
         }
         // if the trip already happened
         else {
-            tripViewHolder.feedback.setRating(trips.get(i).getUserFeedback());
+            tripViewHolder.feedback.setRating(trips.get(i).getFeedback());
         }
     }
 

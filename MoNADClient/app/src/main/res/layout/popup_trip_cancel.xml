@@ -4,10 +4,6 @@
     android:layout_height="match_parent"
     tools:context="se.uu.csproject.monadclient.RouteActivity">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
         <RelativeLayout
             android:id="@+id/cancelpopupheader"
             android:layout_width="match_parent"
@@ -37,13 +33,8 @@
             android:layout_below="@id/cancelpopupheader"
             android:layout_gravity="center"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="@dimen/medium_padding"
-                >
+            android:layout_height="wrap_content"
+            android:padding="@dimen/medium_padding">
 
                 <!--text: to from -->
                 <TextView
@@ -59,7 +50,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     style="@style/importantText"
-                    android:text="@string/label_tripsactivity_fromorigin"
+                    android:text="@string/non_available"
                     android:textAppearance="?android:attr/textAppearanceSmall"
                     android:paddingTop="@dimen/small_padding"
                     android:paddingLeft="@dimen/layout_padding"
@@ -73,7 +64,7 @@
                     android:layout_height="wrap_content"
                     android:cropToPadding="false"
                     android:src="@drawable/ic_directions_bus_black_24dp"
-                    android:contentDescription="@string/label_tripsactivity_buscontentdescription"
+                    android:contentDescription="@string/img_description"
                     android:layout_centerHorizontal="true"
                     android:layout_alignTop="@id/label_startbusstop"
                     android:padding="@dimen/small_padding"
@@ -95,7 +86,7 @@
                     android:layout_height="wrap_content"
                     style="@style/importantText"
                     android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:text="@string/label_tripsactivity_todestination"
+                    android:text="@string/non_available"
                     android:paddingTop="@dimen/small_padding"
                     android:paddingLeft="@dimen/layout_padding"
                     android:layout_below="@id/info_text_to1"
@@ -109,7 +100,7 @@
                     android:layout_height="wrap_content"
                     style="@style/importantText"
                     android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:text="@string/label_tripsactivity_fromtime"
+                    android:text="@string/non_available"
                     android:paddingTop="@dimen/small_padding"
                     android:paddingLeft="@dimen/layout_padding"
                     android:layout_below="@id/label_startbusstop"
@@ -121,7 +112,7 @@
                     android:layout_height="wrap_content"
                     style="@style/importantText"
                     android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:text="@string/label_tripsactivity_totime"
+                    android:text="@string/non_available"
                     android:paddingTop="@dimen/small_padding"
                     android:paddingLeft="@dimen/layout_padding"
                     android:layout_below="@id/label_endbusstop"
@@ -136,7 +127,7 @@
                     android:layout_height="wrap_content"
                     android:cropToPadding="false"
                     android:src="@drawable/ic_alarm_black_24dp"
-                    android:contentDescription="@string/label_tripsactivity_clockcontentdescription"
+                    android:contentDescription="@string/img_description"
                     android:padding="@dimen/small_padding"
                     android:layout_centerHorizontal="true"
                     android:layout_below="@id/bus1"
@@ -148,7 +139,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:text="@string/label_tripsactivity_day"
+                    android:text="@string/label_tripsactivity_date"
                     android:padding="@dimen/small_padding"
                     android:layout_centerHorizontal="true"
                     android:layout_below="@id/icon_clock"
@@ -164,8 +155,6 @@
                     android:layout_centerHorizontal="true"
                     style="@style/importantText"
                     android:layout_below="@id/label_date"/>
-
-            </RelativeLayout>
 
         </RelativeLayout>
 
@@ -199,8 +188,5 @@
                 />
 
         </LinearLayout>
-
-    </RelativeLayout>
-
 
 </RelativeLayout>

@@ -12,6 +12,8 @@ under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
 CONDITIONS OF ANY KIND, either express or implied. See the License for the 
 specific language governing permissions and limitations under the License.
 """
+import mutation
+import inits
 from deap import base
 from deap import creator
 from deap import tools
@@ -21,19 +23,20 @@ from fitness import Fitness
 from operator import itemgetter
 from datetime import datetime
 from datetime import timedelta
-import mutation
-import inits
+
+
 
 # Constant
 BUS_LINE = 2
 # The individual size corresponds to the number of trips
-INDIVIDUAL_SIZE = 90
-INDIVIDUAL_SIZE_BOUNDS = [90,90]
+# INDIVIDUAL_SIZE =  10
+INDIVIDUAL_SIZE_BOUNDS = [30, 90]
 
 
 # Initialize the classes
 databaseClass = DB()
 fitnessClass = Fitness()
+
 
 def evalIndividual(individual):
     ''' Evaluate an individual in the population. Based on how close the
@@ -47,60 +50,62 @@ def evalIndividual(individual):
     '''
     # First, the randomly-generated starting times are sorted in order to check sequentially the number of requests for that particular trip
     individual = sorted(individual, key=itemgetter(2))
+
     # Second, we loop trough the number of genes in order to retrieve the number of requests for that particular trip
     # For the 1st trip, the starting time has to be selected
     request = []
     dif = []
     cnt = []
-    initialTripTime = "00:00"
+    initialTripTime = datetime.combine(fitnessClass.yesterday, 
+                                       datetime.strptime("00:00", 
+                                       fitnessClass.formatTime).time())
     db = DB()
     tripWaitingTime = timedelta(minutes=0) # waiting time due to insufficient capacity
+    noOfLeftOvers = 0
     for i, trip in enumerate(individual):
-        tripTimeTable = db.generateFitnessTripTimeTable(individual[i][0], individual[i][2])
         tripStartTime = trip[2]
-        start = '2015-10-21 00:00:00' if i == 0 else '2015-10-21 ' + trip[2] + ':00'
-        end = '2015-10-21 ' + trip[2] + ':00'
+        if len(str(tripStartTime.hour)) == 1:
+            temp = "0" + str(tripStartTime.hour) + ":" + str(tripStartTime.minute)
+        else:
+            temp = str(tripStartTime.hour) + ":" + str(tripStartTime.minute)
+
+        if i == 0:
+            start, end = '2015-10-21 00:00:00', '2015-10-21 ' + temp + ':00' 
+        else:
+            start, end = end, '2015-10-21 ' + temp + ':00'
+
         stopsAndRequests = db.MaxReqNumTrip(start, end)
-        count = 0
         for i, stop in enumerate(stopsAndRequests):
             if stop[1] > trip[1] and i < len(individual)-1:
                 nextTripTime = individual[i+1][2]
-                nextTripWait = fitnessClass.timeDiff(nextTripTime, individual[i][2])
-                count += (stop[1] - trip[1])   # must wait for the next bus trip
+                nextTripWait = nextTripTime - individual[i][2]
+                noOfLeftOvers = noOfLeftOvers + (stop[1] - trip[1])   # must wait for the next bus trip
                 tripWaitingTime += nextTripWait*(stop[1] - trip[1])
-                #print "Next trip is in..." + str(nextTripWait) + " minutes"
-                #print nextTripTime
-            else:
-                pass
-                #print "Requested capacity " + str(stopsAndRequests[i][1])
-                #print "Bus capacity " + str(trip[1])
 
-        tripWaitingTime = timedelta(minutes=0) # reset on each trip
-
+    # Evaluate average time
     for i in range(len(individual)):
-        tripTimeTable = db.generateFitnessTripTimeTable(individual[i][0], individual[i][2])
-        for j in range(len(tripTimeTable)):
+        phenotype = db.generatePhenotype(individual[i][0], individual[i][2])
+        for j in range(len(phenotype)):
             # TODO: Fix trips that finish at the next day
-            # TODO: it might be that some dates have no INDEX since there are no requests. A function has to be added to prevent them to get the LAST POSITION
-            initialTrip = datetime.combine(fitnessClass.yesterday, datetime.strptime(initialTripTime, fitnessClass.formatTime).time())
-            lastTrip = datetime.combine(fitnessClass.yesterday, datetime.strptime(tripTimeTable[j][1], fitnessClass.formatTime).time())
+            initialTrip = initialTripTime
+            lastTrip = phenotype[j][1]
             if initialTrip > lastTrip:
                 initialTrip = lastTrip - timedelta(minutes=db.getFrequency(individual[i][0]))
             # Search on Fitness.request array for the particular requests
-            request = fitnessClass.searchRequest(initialTrip, lastTrip, tripTimeTable[j][0])
-            initialTripTime = tripTimeTable[j][1]
+            request = fitnessClass.searchRequest(initialTrip, lastTrip, phenotype[j][0])
+            initialTripTime = phenotype[j][1]
             if len(request) > 0:
                 diff = 0
                 count = 0
                 for k in range(len(request)):
-                     diff = diff + fitnessClass.getMinutes(fitnessClass.timeDiff(tripTimeTable[j][1], str(int(request[k]["_id"]["RequestTime"].hour)) + ":" + str(int(request[k]["_id"]["RequestTime"].minute))))*int(request[k]["total"])
-                    #diff = diff + fitnessClass.getMinutes(fitnessClass.timeDiff(tripTimeTable[j][1], str(int(request[k]["hour"])) + ":" + str(int(request[k]["minute"]))))*int(request[k]["count"])
-                     count = count + int(request[k]["total"])
-                    #count = count + int(request[k]["count"])
+                    z = phenotype[j][1] - request[k]["_id"]["RequestTime"]
+                    diff = diff + (z.days * databaseClass.minutesDay) + (z.seconds / databaseClass.minutesHour)
+                    count = count + int(request[k]["total"])
                 dif.append(diff)
                 cnt.append(count)
-    return (sum(dif) + tripWaitingTime.total_seconds()/60.0)/(sum(cnt) + count),
-
+    totalWaitingTime = sum(dif) + tripWaitingTime.total_seconds()/60.0
+    averageWaitingTime = totalWaitingTime / (sum(cnt) + noOfLeftOvers)
+    return fitnessClass.calculateCost(individual, totalWaitingTime, 0),
 
 
 # Creating a minimizing fitness class to minimize a single objective that
@@ -114,7 +119,7 @@ creator.create("Individual", list, fitness=creator.FitnessMin)
 toolbox = base.Toolbox()
 
 # Register the operations to be used in the toolbox
-toolbox.register("attribute", databaseClass.generateStartingTripTime, BUS_LINE)
+toolbox.register("attribute", databaseClass.generateGenotype, BUS_LINE)
 #toolbox.register("individual", tools.initRepeat, creator.Individual,
 #                 toolbox.attribute, INDIVIDUAL_SIZE)
 toolbox.register("individual", inits.initRepeatBound, creator.Individual,

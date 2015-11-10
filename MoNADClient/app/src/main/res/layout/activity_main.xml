@@ -23,7 +23,7 @@
             android:focusable="true">
 
             <EditText
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:id="@+id/main_search_destination"
                 android:layout_weight="1"
@@ -39,10 +39,25 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/imagebutton_main_searchbutton"
                 android:background="@color/primaryColor"
-                android:src="@drawable/ic_location_on_white_48dp"
-                android:contentDescription="@string/label_main_imagebuttondescription"
+                android:src="@drawable/ic_search_white_36dp"
+                android:padding="@dimen/medium_padding"
+                android:contentDescription="@string/img_description"
                 android:onClick="openMainSearch" />
         </LinearLayout>
+
+        <TextView
+            android:id="@+id/link_advancedsearch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/small_margin"
+            android:text="@string/label_main_advancedsearch"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:gravity="start"
+            android:autoLink="all"
+            android:clickable="true"
+            android:linksClickable="true"
+            android:onClick="goToAdvancedSearch"
+            />
 
         <TextView
             android:layout_width="match_parent"
@@ -52,7 +67,9 @@
             android:textAllCaps="true"
             android:textStyle="bold"
             android:textColor="@color/primaryColor"
+            android:textAppearance="?android:attr/textAppearanceMedium"
             android:layout_marginLeft="@dimen/medium_padding"
+            android:layout_marginStart="@dimen/medium_padding"
             />
 
         <View

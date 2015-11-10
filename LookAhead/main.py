@@ -12,24 +12,22 @@ under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
 CONDITIONS OF ANY KIND, either express or implied. See the License for the 
 specific language governing permissions and limitations under the License.
 """
-import itertools
-from operator import itemgetter
-from deap import tools, algorithms
 import numpy
-from dbConnection import DB
 import toolBox
+from deap import tools
+from deap import algorithms
+from dbConnection import DB
+from operator import itemgetter
 
-from fitness import Fitness
 
 # Variables
 MUTATION_PROB = 0.5
-CROSS_OVER_PROB = 0.5
-NO_OF_GENERATION = 1
-POPULATION_SIZE = 10
+CROSS_OVER_PROB = 0.0
+NO_OF_GENERATION = 0
+POPULATION_SIZE = 2 
 
 
 def main():
-    fitnessClass =Fitness()
     # Generate the population
     pop = toolBox.toolbox.population(n=POPULATION_SIZE)
 
@@ -69,7 +67,11 @@ def main():
 
     # The Best Individual found
     best_ind = tools.selBest(pop, 1)[0]
-    print("Best individual is %s, %s" % (best_ind, best_ind.fitness.values))
+    #print "InsertBusTrip and TimeTable......"
+    #databaseClass = DB()
+    #databaseClass.insertBusTrip(best_ind)
+    print("Best individual is %s, %s" % (sorted(best_ind, key=itemgetter(2)), best_ind.fitness.values))
+    print "Length of best individual: " + str(len(best_ind))
     #generateTimeTable(best_ind)
 
 

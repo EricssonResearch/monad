@@ -46,17 +46,6 @@
                     android:textColor="@color/black"
                     android:layout_weight="1"/>
 
-                <TextView
-                    android:id="@+id/label_recommendationsswitch"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAllCaps="true"
-                    android:text="@string/label_fragmentsettingsalert_recommendationsswitch"
-                    android:textSize="@dimen/medium_text"
-                    android:padding="@dimen/medium_padding"
-                    android:textColor="?attr/colorPrimary"
-                    />
-
                 <Switch
                     android:id="@+id/switch_fragmentsettingsalert_recommendations"
                     android:layout_width="wrap_content"
@@ -82,17 +71,6 @@
                     android:padding="@dimen/medium_padding"
                     android:textColor="@color/black"
                     android:layout_weight="1"
-                    />
-
-                <TextView
-                    android:id="@+id/label_remindersswitch"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAllCaps="true"
-                    android:text="@string/label_fragmentsettingsalert_recommendationsswitch"
-                    android:textSize="@dimen/medium_text"
-                    android:padding="@dimen/medium_padding"
-                    android:textColor="?attr/colorPrimary"
                     />
 
                 <Switch

@@ -1,12 +1,10 @@
 package se.uu.csproject.monadclient;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.app.NavUtils;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
@@ -16,7 +14,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,73 +32,81 @@ import se.uu.csproject.monadclient.recyclerviews.LanguageRecyclerViewAdapter;
 import se.uu.csproject.monadclient.tabs.SlidingTabLayout;
 import se.uu.csproject.monadclient.recyclerviews.Language;
 
-public class SettingsActivity extends AppCompatActivity {
+public class SettingsActivity extends MenuedActivity {
 
+    static String currentRecommendOption;
+    static String currentNotifyOption;
+
+    SettingsPagerAdapter settingsPagerAdapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
         Toolbar toolbar = (Toolbar) findViewById(R.id.actionToolBar);
         setSupportActionBar(toolbar);
-    //    getSupportActionBar().setHomeButtonEnabled(true);
-    //    getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         SlidingTabLayout tabs = (SlidingTabLayout) findViewById(R.id.tabs);
         ViewPager pager = (ViewPager) findViewById(R.id.pager);
-        pager.setAdapter(new SettingsPagerAdapter(getSupportFragmentManager(), SettingsActivity.this));
+        settingsPagerAdapter = new SettingsPagerAdapter(getSupportFragmentManager(), SettingsActivity.this);
+        pager.setAdapter(settingsPagerAdapter);
         tabs.setDistributeEvenly(true);
         tabs.setSelectedIndicatorColors(ContextCompat.getColor(this.getApplicationContext(), R.color.white));
         tabs.setViewPager(pager);
     }
 
+
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
+    protected void onStop() {
+        super.onStop();
+
+        if((!ClientAuthentication.getRecommendationsAlert().equals(currentRecommendOption))
+                || (!ClientAuthentication.getNotificationsAlert().equals(currentNotifyOption))){
+            UpdateSettingsTask task = new UpdateSettingsTask();
+
+            String response = null;
+            try {
+                response = task.execute(
+                        ClientAuthentication.getClientId(),
+                        ClientAuthentication.getLanguage(),
+                        ClientAuthentication.getStoreLocation(),
+                        currentNotifyOption,
+                        currentRecommendOption,
+                        ClientAuthentication.getTheme()).get();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            }
+
+            if(response.startsWith("Success (1)")){
+                // The space after ON should be kept for UI formatting purposes
+                //recommendationsSwitch.setText("ON ");
+                ClientAuthentication.setNotificationsAlert(currentNotifyOption);
+                ClientAuthentication.setRecommendationsAlert(currentRecommendOption);
+                Toast.makeText(this, response, Toast.LENGTH_LONG).show();
+            }
+            else{
+                //TODO
+                //might need to reset alert and recommendation to original user settings since update in the database fails
+
+                //also, this situation: SettingsActivity1 -> ... -> SettingsActivity2, and some settings are changed in SettingsActivity2,
+                //then the setting update should be shown in SettingsActivity1 once resumed.
+                //however, this is not done yet since it's a bit tricky dealing with fragment
+                Toast.makeText(this, response, Toast.LENGTH_LONG).show();
+            }
+        }
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        if(id == android.R.id.home){
-            NavUtils.navigateUpFromSameTask(this);
-        }
-
-        if (id == R.id.action_search) {
-            startActivity(new Intent(this, MainActivity.class));
-        }
-
-        if (id == R.id.action_notifications) {
-            startActivity(new Intent(this, NotificationsActivity.class));
-        }
-
-        if (id == R.id.action_mytrips) {
-            startActivity(new Intent(this, TripsActivity.class));
-        }
-
-        if (id == R.id.action_profile) {
-            startActivity(new Intent(this, ProfileActivity.class));
-        }
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if(id == R.id.action_settings){
             return true;
         }
-
-        if (id == R.id.action_aboutus) {
-            startActivity(new Intent(this, AboutUsActivity.class));
+        else {
+            return super.onOptionsItemSelected(item);
         }
-
-        if (id == R.id.action_signout) {
-            startActivity(new Intent(this, LoginActivity.class));
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 
     public class SettingsPagerAdapter extends FragmentPagerAdapter{
@@ -149,6 +154,11 @@ public class SettingsActivity extends AppCompatActivity {
             page = getArguments().getInt(TAB_POSITION);
         }
 
+        @Override
+        public void onResume() {
+            super.onResume();
+        }
+
         //TODO 2 Ilyass: finalize language settings
         //TODO: update language settings in database
         @Override
@@ -170,91 +180,36 @@ public class SettingsActivity extends AppCompatActivity {
                 layout = inflater.inflate(R.layout.fragment_settings_alerts,container,false);
                 final Switch switchrecommendation;
                 final Switch switchalert;
-                final TextView recommendationsSwitch = (TextView) layout.findViewById(R.id.label_recommendationsswitch);
-                final TextView remindersSwitch= (TextView) layout.findViewById(R.id.label_remindersswitch);
 
                 // switch button for alerts and recommendations
                 switchrecommendation = (Switch)layout.findViewById(R.id.switch_fragmentsettingsalert_recommendations);
                 switchalert = (Switch)layout.findViewById(R.id.switch_fragmentsettingsalert_alerts);
                 if(ClientAuthentication.getRecommendationsAlert().equals("1")) {
                     switchrecommendation.setChecked(true);
+                    currentRecommendOption = "1";
                 }
                 else{
                     switchrecommendation.setChecked(false);
-                    recommendationsSwitch.setText("OFF");
+                    currentRecommendOption = "0";
                 }
 
                 if(ClientAuthentication.getNotificationsAlert().equals("1")) {
                     switchalert.setChecked(true);
+                    currentNotifyOption = "1";
                 }
                 else{
                     switchalert.setChecked(false);
-                    remindersSwitch.setText("OFF");
+                    currentNotifyOption = "0";
                 }
 
                 switchrecommendation.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                     @Override
                     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                         if(switchrecommendation.isChecked()) {
-                            UpdateSettingsTask task = new UpdateSettingsTask();
-
-                            String response = null;
-                            try {
-                                response = task.execute(
-                                        ClientAuthentication.getClientId(),
-                                        ClientAuthentication.getLanguage(),
-                                        ClientAuthentication.getStoreLocation(),
-                                        ClientAuthentication.getNotificationsAlert(),
-                                        "1",
-                                        ClientAuthentication.getTheme()).get();
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
-                            } catch (ExecutionException e) {
-                                e.printStackTrace();
-                            }
-                            if(response.startsWith("Success (1)")){
-                                // The space after ON should be kept for UI formatting purposes
-                                recommendationsSwitch.setText("ON ");
-                            }
-                            Toast.makeText(getActivity().getApplicationContext(), response, Toast.LENGTH_LONG).show();
-
-//                            ClientAuthentication.postSettingsUpdateRequest(
-//                                    ClientAuthentication.getClientId(),
-//                                    ClientAuthentication.getLanguage(),
-//                                    ClientAuthentication.getStoreLocation(),
-//                                    ClientAuthentication.getNotificationsAlert(),
-//                                    "1",
-//                                    ClientAuthentication.getTheme());
+                            currentRecommendOption = "1";
                         }
                         else {
-                            UpdateSettingsTask task = new UpdateSettingsTask();
-
-                            String response = null;
-                            try {
-                                response = task.execute(
-                                        ClientAuthentication.getClientId(),
-                                        ClientAuthentication.getLanguage(),
-                                        ClientAuthentication.getStoreLocation(),
-                                        ClientAuthentication.getNotificationsAlert(),
-                                        "0",
-                                        ClientAuthentication.getTheme()).get();
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
-                            } catch (ExecutionException e) {
-                                e.printStackTrace();
-                            }
-                            if(response.startsWith("Success (1)")){
-                                // The space after ON should be kept for UI formatting purposes
-                                recommendationsSwitch.setText("OFF");
-                            }
-                            Toast.makeText(getActivity().getApplicationContext(), response, Toast.LENGTH_LONG).show();
-//                            ClientAuthentication.postSettingsUpdateRequest(
-//                                    ClientAuthentication.getClientId(),
-//                                    ClientAuthentication.getLanguage(),
-//                                    ClientAuthentication.getStoreLocation(),
-//                                    ClientAuthentication.getNotificationsAlert(),
-//                                    "0",
-//                                    ClientAuthentication.getTheme());
+                            currentRecommendOption = "0";
                         }
                     }
                 });
@@ -262,68 +217,11 @@ public class SettingsActivity extends AppCompatActivity {
                 switchalert.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                     @Override
                     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                        if(switchalert.isChecked()){
-                            // The space after ON should be kept for UI formatting purposes
-                            UpdateSettingsTask task = new UpdateSettingsTask();
-
-                            String response = null;
-                            try {
-                                response = task.execute(
-                                        ClientAuthentication.getClientId(),
-                                        ClientAuthentication.getLanguage(),
-                                        ClientAuthentication.getStoreLocation(),
-                                        "1",
-                                        ClientAuthentication.getRecommendationsAlert(),
-                                        ClientAuthentication.getTheme()).get();
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
-                            } catch (ExecutionException e) {
-                                e.printStackTrace();
-                            }
-                            if(response.startsWith("Success (1)")){
-                                // The space after ON should be kept for UI formatting purposes
-                                remindersSwitch.setText("ON ");
-                            }
-                            Toast.makeText(getActivity().getApplicationContext(), response, Toast.LENGTH_LONG).show();
-//                            remindersSwitch.setText("ON ");
-//                            ClientAuthentication.postSettingsUpdateRequest(
-//                                    ClientAuthentication.getClientId(),
-//                                    ClientAuthentication.getLanguage(),
-//                                    ClientAuthentication.getStoreLocation(),
-//                                    "1",
-//                                    ClientAuthentication.getRecommendationsAlert(),
-//                                    ClientAuthentication.getTheme());
+                        if(switchalert.isChecked()) {
+                            currentNotifyOption = "1";
                         }
-                        else {
-                            UpdateSettingsTask task = new UpdateSettingsTask();
-
-                            String response = null;
-                            try {
-                                response = task.execute(
-                                        ClientAuthentication.getClientId(),
-                                        ClientAuthentication.getLanguage(),
-                                        ClientAuthentication.getStoreLocation(),
-                                        "0",
-                                        ClientAuthentication.getRecommendationsAlert(),
-                                        ClientAuthentication.getTheme()).get();
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
-                            } catch (ExecutionException e) {
-                                e.printStackTrace();
-                            }
-                            if(response.startsWith("Success (1)")){
-                                // The space after ON should be kept for UI formatting purposes
-                                remindersSwitch.setText("OFF");
-                            }
-                            Toast.makeText(getActivity().getApplicationContext(), response, Toast.LENGTH_LONG).show();
-//                            remindersSwitch.setText("OFF");
-//                            ClientAuthentication.postSettingsUpdateRequest(
-//                                    ClientAuthentication.getClientId(),
-//                                    ClientAuthentication.getLanguage(),
-//                                    ClientAuthentication.getStoreLocation(),
-//                                    "0",
-//                                    ClientAuthentication.getRecommendationsAlert(),
-//                                    ClientAuthentication.getTheme());
+                        else{
+                            currentNotifyOption = "0";
                         }
                     }
                 });

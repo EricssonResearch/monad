@@ -1,13 +1,17 @@
 package se.uu.csproject.monadclient;
 
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -18,9 +22,10 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import se.uu.csproject.monadclient.recyclerviews.FullTrip;
 import se.uu.csproject.monadclient.recyclerviews.Notify;
+import se.uu.csproject.monadclient.recyclerviews.PartialTrip;
 import se.uu.csproject.monadclient.recyclerviews.RouteRecyclerViewAdapter;
-
 
 public class RouteActivity extends AppCompatActivity {
 
@@ -37,27 +42,61 @@ public class RouteActivity extends AppCompatActivity {
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        recycler =(RecyclerView)findViewById(R.id.recycler);
+        String name;
+        Date exit;
+        Date time;
+        String busStop;
 
-        LinearLayoutManager llm = new LinearLayoutManager(this);
-        recycler.setLayoutManager(llm);
-        //recycler.setHasFixedSize(true);
-
-        List<Notify> busStops = new ArrayList<>();
-        initializeData(busStops);
-        RouteRecyclerViewAdapter adapter = new RouteRecyclerViewAdapter(busStops);
-        recycler.setAdapter(adapter);
-        LinearLayout busStopListLayout = (LinearLayout) findViewById(R.id.layout_busstoplist);
-
-        TextView timeStart = (TextView) findViewById(R.id.label_timestart);
-        TextView walkStart = (TextView) findViewById(R.id.label_walkstart);
         Bundle b = getIntent().getExtras();
-        walkStart.setText("Walk to bus stop " + b.getString("startBusStop"));
-        timeStart.setText(formatTime((Date) b.getSerializable("startTime")));
-        Button btn_join_trips = (Button)findViewById(R.id.btn_join_trips);
-        btn_join_trips.setOnClickListener(new View.OnClickListener() {
+        final FullTrip trip = b.getParcelable("selectedTrip");
+        ArrayList <PartialTrip> partialTrips = trip.getPartialTrips();
+        Button joinTripButton = (Button)findViewById(R.id.button_jointrip);
+        if (trip.isReserved()) {
+            joinTripButton.setVisibility(View.GONE);
+        }
+
+        LayoutInflater vi = (LayoutInflater) getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        ViewGroup insertPoint = (ViewGroup) findViewById(R.id.layout1);
+
+        for(int i = 0 ; i < partialTrips.size(); i++) {
+            name = partialTrips.get(i).getStartBusStop();
+            time = partialTrips.get(i).getStartTime();
+            exit = partialTrips.get(i).getEndTime();
+            ArrayList<String> busStops = partialTrips.get(i).getTrajectory();
+
+            View v = vi.inflate(R.layout.route_details, null);
+
+            TextView stopTime = (TextView) v.findViewById(R.id.label_first_time);
+            stopTime.setText(formatTime(time));
+            TextView stopName = (TextView) v.findViewById(R.id.label_first_stop);
+            stopName.setText(name);
+            insertPoint.addView(v);
+
+            for(int j = 0 ; j < busStops.size(); j++) {
+                busStop = busStops.get(j);
+                View busStopView = vi.inflate(R.layout.bus_stop, null);
+                TextView textBusStop = (TextView) busStopView.findViewById(R.id.bus_stop);
+                textBusStop.setText(busStop);
+                TextView exitTime = (TextView) busStopView.findViewById(R.id.exit_time);
+
+                if (j == busStops.size() - 1) {
+                    textBusStop.setTextColor(Color.RED);
+                    exitTime.setText(formatTime((Date) exit));
+
+
+                } else {
+                    textBusStop.setTextColor(Color.BLACK);
+                    exitTime.setVisibility(View.INVISIBLE);
+                }
+                insertPoint.addView(busStopView);
+            }
+
+        }
+
+        joinTripButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View vw) {
                 Intent myIntent = new Intent(RouteActivity.this, RouteConfirmPopup.class);
+                myIntent.putExtra("selectedTrip", trip);
                 RouteActivity.this.startActivity(myIntent);
             }
         });
@@ -97,6 +136,12 @@ public class RouteActivity extends AppCompatActivity {
     }
 
     private void initializeData(List<Notify> busStops){
+        busStops.add(new Notify("Bus 805: 5 min delay", "15:59", R.drawable.ic_directions_bus_black_18dp));
+        busStops.add(new Notify("Bus 805: Coming in 5 min", "15:43", R.drawable.ic_directions_bus_black_18dp));
+        busStops.add(new Notify("Bus 805: Departing now", "15:38", R.drawable.ic_directions_bus_black_18dp));
+        busStops.add(new Notify("Bus 801: 5 min delay", "15:15", R.drawable.ic_directions_bus_black_18dp));
+        busStops.add(new Notify("Bus 801: Coming in 5 min", "15:11", R.drawable.ic_directions_bus_black_18dp));
+        busStops.add(new Notify("Bus 801: Departing now", "15:06", R.drawable.ic_directions_bus_black_18dp));
         busStops.add(new Notify("Bus 805: 5 min delay", "15:59", R.drawable.ic_directions_bus_black_18dp));
         busStops.add(new Notify("Bus 805: Coming in 5 min", "15:43", R.drawable.ic_directions_bus_black_18dp));
         busStops.add(new Notify("Bus 805: Departing now", "15:38", R.drawable.ic_directions_bus_black_18dp));
