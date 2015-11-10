@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import bson
 import datetime
 import pymongo
@@ -8,7 +9,6 @@ from planner import TravelPlanner, Mode
 from bson.objectid import ObjectId
 from pymongo import MongoClient
 from subprocess import call
-#from profilehooks import profile, coverage
 
 class tester:
 
@@ -74,4 +74,14 @@ class tester:
         print trip
         print time
         print line
+
+    def printJson(self, jsonObject):
+        best = jsonObject[1]
+        print "Route from " + best[0]["startBusStop"] + " to " + best[-1]["endBusStop"]
+        for key in jsonObject.keys():
+            print '\nTrip', key
+            for trip in jsonObject[key]:
+                print "From", trip["startBusStop"], "to", trip["endBusStop"]
+                print "Start", str(trip["startTime"]), "until", str(trip["endTime"])
+                print "Used line", str(trip["line"])
 

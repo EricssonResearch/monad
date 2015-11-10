@@ -66,6 +66,7 @@ public class LanguageRecyclerViewAdapter
                 languageViewHolder.selectedOverlay.setVisibility(View.VISIBLE);
                 selectedCardView = languageViewHolder.selectedOverlay;
                 ClientAuthentication.setLanguage(languages.get(i).index);
+                ClientAuthentication.setIfSettingsChanged(true);
                 Toast.makeText(languageViewHolder.languageCard.getContext(), "Language changed to " + ClientAuthentication.getLanguage(), Toast.LENGTH_SHORT).show();
             }
         });

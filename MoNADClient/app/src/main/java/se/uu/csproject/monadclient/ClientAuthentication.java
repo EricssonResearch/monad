@@ -22,6 +22,10 @@ import se.uu.csproject.monadclient.recyclerviews.Storage;
  */
 public class ClientAuthentication extends Authentication {
     private static String[] profile = new String[11];
+
+    //only for local use, has nothing to do with database
+    private static boolean ifSettingsChanged = false;
+
     /*
      * 0: clientId ("1", "2", ...)
      * 1: username
@@ -142,6 +146,14 @@ public class ClientAuthentication extends Authentication {
     //theme mappings: 0: light; 1: default; 2: dark
     public static String getTheme() {
         return profile[9];
+    }
+
+    public static boolean getIfSettingsChanged(){
+        return ifSettingsChanged;
+    }
+
+    public static void setIfSettingsChanged(boolean settingsChanged){
+        ifSettingsChanged = settingsChanged;
     }
 
     public static void setGoogleRegistrationToken(String googleRegistrationTokenToken) {
@@ -633,9 +645,10 @@ public class ClientAuthentication extends Authentication {
     }
 
     public static String postForgottenPasswordResetRequest(String email, String newPassword) {
-        if(Security.validatePassword(newPassword)){
+        if(!Security.validatePassword(newPassword)){
             return Security.invalidPasswordMessage();
         }
+
         /* Encrypt password */
         newPassword = Security.encryptPassword(newPassword);
 

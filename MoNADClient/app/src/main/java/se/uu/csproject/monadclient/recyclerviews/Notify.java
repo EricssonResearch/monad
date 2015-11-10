@@ -1,12 +1,14 @@
 package se.uu.csproject.monadclient.recyclerviews;
 
+import java.util.Date;
+
 public class Notify{
-    String name;
-    String time;
+    String text;
+    Date time;
     int iconId;
 
-    public  Notify(String name, String time, int iconId) {
-        this.name = name;
+    public  Notify(String text, Date time, int iconId) {
+        this.text = text;
         this.time = time;
         this.iconId = iconId;
     }

@@ -48,8 +48,8 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<SearchRecycl
     @Override
     public SearchViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
         View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.list_item_searchresult, viewGroup, false);
-        SearchViewHolder languageViewHolder = new SearchViewHolder(view);
-        return languageViewHolder;
+        SearchViewHolder searchViewHolder = new SearchViewHolder(view);
+        return searchViewHolder;
     }
 
     @Override
