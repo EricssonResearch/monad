@@ -110,13 +110,8 @@ public class ResetPasswordActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         if(!resetMode){
             getMenuInflater().inflate(R.menu.menu_main, menu);
-            return true;
         }
-        else {
-            // Inflate the menu; this adds items to the action bar if it is present.
-            getMenuInflater().inflate(R.menu.menu_login, menu);
-            return true;
-        }
+        return true;
     }
 
     @Override
