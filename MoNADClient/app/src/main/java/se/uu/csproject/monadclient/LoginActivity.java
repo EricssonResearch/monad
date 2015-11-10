@@ -134,47 +134,6 @@ public class LoginActivity extends AppCompatActivity {
         return true;
     }
 
-    //TODO: Remove onOptionsItemSelected(item) below when test is done
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-
-        if(id == android.R.id.home){
-            NavUtils.navigateUpFromSameTask(this);
-        }
-
-        if (id == R.id.action_search) {
-            startActivity(new Intent(this, MainActivity.class));
-        }
-
-        if (id == R.id.action_notifications) {
-            startActivity(new Intent(this, NotificationsActivity.class));
-        }
-
-        if (id == R.id.action_mytrips) {
-            startActivity(new Intent(this, TripsActivity.class));
-        }
-
-        if (id == R.id.action_profile) {
-            startActivity(new Intent(this, ProfileActivity.class));
-        }
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            startActivity(new Intent(this, SettingsActivity.class));
-        }
-
-        if (id == R.id.action_aboutus) {
-            startActivity(new Intent(this, AboutUsActivity.class));
-        }
-
-        if (id == R.id.action_signout) {
-            startActivity(new Intent(this, LoginActivity.class));
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
     private boolean checkPlayServices() {
         GoogleApiAvailability apiAvailability = GoogleApiAvailability.getInstance();
         int resultCode = apiAvailability.isGooglePlayServicesAvailable(this);

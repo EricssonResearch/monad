@@ -60,7 +60,6 @@ public class MenuedActivity extends AppCompatActivity {
         }
 
         if (id == R.id.action_aboutus) {
-            //TODO (low priority): Create a toaster with text about the MoNAD project and team
             startActivity(new Intent(this, AboutUsActivity.class));
         }
 

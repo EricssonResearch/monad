@@ -21,7 +21,6 @@ public class TripsActivity extends MenuedActivity implements AsyncResponse{
     private LinearLayoutManager linearLayoutManager;
     private TripRecyclerViewAdapter adapter;
 
-    //TODO Ilyass: (high priority) Make specific trips selectable
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
