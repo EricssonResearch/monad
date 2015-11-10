@@ -92,8 +92,38 @@ def evaluateNewIndividualFormat(individual):
                 times[line] = times[line] + generate
                 #print "Result starting times....."
 
-    print sorted(times[2])
-    print sorted(times[102])
+    #print sorted(times[2])
+    #print sorted(times[102])
+
+    for i, trip in enumerate(times):
+        count = 0
+        for tr in sorted(times[trip]):
+            if datetime.time(0,0,0) <= tr <= datetime.time(6, 0, 0):
+                count+=1
+                print count
+            elif datetime.time(6,0,0) <= tr <= datetime.time(9, 0, 0):
+                count+=1
+                print count
+            elif datetime.time(9,0,0) <= tr <= datetime.time(12, 0, 0):
+                count+=1
+                print count
+            elif datetime.time(12,0,0) <= tr <= datetime.time(15, 0, 0):
+                count+=1
+                print count
+            elif datetime.time(15,0,0) <= tr <= datetime.time(18, 0, 0):
+                count+=1
+                print count
+            elif datetime.time(18,0,0) <= tr <= datetime.time(21, 0, 0):
+                count+=1
+                print count
+            elif datetime.time(21,0,0) <= tr <= datetime.time(23, 59, 59):
+                count+=1
+                print count
+        print "No of trips " + str(len(times[trip]))
+        print""
+
+        print "Departure times, line " + str(trip)
+        print sorted(times[trip])
 
 # TODO: count the number of trips
 
