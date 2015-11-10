@@ -14,6 +14,9 @@ import android.view.View;
 import android.widget.ImageView;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import se.uu.csproject.monadclient.recyclerviews.NotificationRecyclerViewAdapter;
@@ -72,12 +75,24 @@ public class NotificationsActivity extends MenuedActivity {
 
     private void initializeData(){
                 notifications = new ArrayList<>();
-                notifications.add(new Notify("Bus 805: 5 min delay", "15:59", R.drawable.ic_assistant_photo_black_24dp));
-                notifications.add(new Notify("Bus 805: Coming in 5 min", "15:43", R.drawable.ic_feedback_black_24dp));
-                notifications.add(new Notify("Bus 805: Departing now", "15:38", R.drawable.ic_alarm_black_24dp));
-                notifications.add(new Notify("Bus 801: 5 min delay", "15:15", R.drawable.ic_assistant_photo_black_24dp));
-                notifications.add(new Notify("Bus 801: Coming in 5 min", "15:11", R.drawable.ic_feedback_black_24dp));
-                notifications.add(new Notify("Bus 801: Departing now", "15:06", R.drawable.ic_alarm_black_24dp));
+                Calendar calendar = new GregorianCalendar(2015, 10, 26, 10, 40, 0);
+                Date time1 = calendar.getTime();
+                calendar = new GregorianCalendar(2015, 10, 26, 10, 50, 0);
+                Date time2 = calendar.getTime();
+                calendar = new GregorianCalendar(2015, 10, 26, 10, 45, 0);
+                Date time3 = calendar.getTime();
+                calendar = new GregorianCalendar(2015, 10, 26, 11, 0, 0);
+                Date time4 = calendar.getTime();
+                calendar = new GregorianCalendar(2015, 10, 27, 9, 50, 0);
+                Date time5 = calendar.getTime();
+                calendar = new GregorianCalendar(2015, 10, 27, 10, 5, 0);
+                Date time6 = calendar.getTime();
+                notifications.add(new Notify("Bus 805: 5 min delay", time1, R.drawable.ic_assistant_photo_black_24dp));
+                notifications.add(new Notify("Bus 805: Coming in 5 min", time2, R.drawable.ic_feedback_black_24dp));
+                notifications.add(new Notify("Bus 805: Departing now", time3, R.drawable.ic_alarm_black_24dp));
+                notifications.add(new Notify("Bus 801: 5 min delay", time4, R.drawable.ic_assistant_photo_black_24dp));
+                notifications.add(new Notify("Bus 801: Coming in 5 min", time5, R.drawable.ic_feedback_black_24dp));
+                notifications.add(new Notify("Bus 801: Departing now", time6, R.drawable.ic_alarm_black_24dp));
             }
 
 //    public boolean onOptionsItemSelected(MenuItem item) {
