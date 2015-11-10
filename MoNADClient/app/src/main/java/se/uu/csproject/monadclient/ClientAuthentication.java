@@ -765,6 +765,31 @@ public class ClientAuthentication extends Authentication {
         return response;
     }
 
+    public static String postGetNearestBusStopRequest() {
+        String request = ROUTES_GENERATOR_HOST + ROUTES_GENERATOR_PORT + "/get_nearest_stop_from_coordinates";
+        // String urlParameters = "client_id=" + getClientId();
+        String urlParameters = "lon=17.6093985&lat=59.8578199";
+
+        /* Send the request to the Authentication Module */
+        String response = postRequest(request, urlParameters);
+
+        System.out.println("--------RRRR_--------------: " + response);
+        return "ok";
+
+//
+//        /* Handle response in case of exception */
+//        if (response.equals("-1")) {
+//            return exceptionMessage();
+//        }
+//
+//        /*
+//         * By default, Erlang adds the newline '\n' character at the beginning of response.
+//         * For this reason substring() function is used
+//         */
+//        response = response.substring(1);
+//        return processGetRecommendationsResponse(response);
+    }
+
     public static String exceptionMessage() {
         return "ERROR - An Exception was thrown";
     }

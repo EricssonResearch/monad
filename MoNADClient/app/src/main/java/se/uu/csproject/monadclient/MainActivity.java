@@ -37,6 +37,7 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.ExecutionException;
 
 import se.uu.csproject.monadclient.recyclerviews.FullTrip;
 import se.uu.csproject.monadclient.recyclerviews.PartialTrip;
@@ -65,18 +66,19 @@ public class MainActivity extends MenuedActivity implements
         context = getApplicationContext();
         currentLatitude = 0;
         currentLongitude = 0;
-
         setSupportActionBar(toolbar);
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
         List<FullTrip> searchResults = new ArrayList<>();
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler_view_main);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getApplicationContext());
         recyclerView.setLayoutManager(linearLayoutManager);
 
-        /* TODO: GetRecommendations */
+        /* TODO: Routes Generation (Please ignore that) */
+//        RoutesGenerationTask rt = new RoutesGenerationTask();
+//        rt.execute();
 
+        /* TODO: GetRecommendations */
 //        System.out.println(ClientAuthentication.profileToString());
 
 //        GetRecommendationsTask recommendationsTask = new GetRecommendationsTask();

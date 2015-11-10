@@ -16,6 +16,9 @@ public abstract class Authentication {
     public static final String AUTHENTICATION_HOST = "http://130.238.15.114:";
     public static final String AUTHENTICATION_PORT = "9999";
 
+    public static final String ROUTES_GENERATOR_HOST = "http://130.238.15.241:";
+    public static final String ROUTES_GENERATOR_PORT = "9998";
+
     public static String postRequest(String request, String urlParameters) {
         String response = "";
         URL url = null;
