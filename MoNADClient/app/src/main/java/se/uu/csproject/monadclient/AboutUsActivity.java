@@ -21,6 +21,8 @@ public class AboutUsActivity extends MenuedActivity {
 
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_home_white_24dp);
+
     }
 
 //    @Override

@@ -1,10 +1,7 @@
 package se.uu.csproject.monadclient;
 
 import android.app.NotificationManager;
-import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.NavUtils;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -43,6 +40,8 @@ public class NotificationsActivity extends MenuedActivity {
 
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_home_white_24dp);
+
 
         RecyclerView rv =(RecyclerView)findViewById(R.id.rv);
 
