@@ -15,6 +15,7 @@ See the License for the specific language governing permissions and limitations 
 """
 from dbConnection import DB
 from datetime import datetime
+import datetime
 from datetime import timedelta
 from datetime import date
 
@@ -33,8 +34,8 @@ class Fitness():
     request = []
     requestIndex = []
     # yesterday = date.today() - timedelta(13)
-    yesterday = datetime(2015, 10, 21)
-
+    yesterday = datetime.date(2015, 10, 21)
+    x = 0
 
 
 # A decorator is a function that can accept another function as
@@ -50,6 +51,7 @@ class Fitness():
                 wrapper.has_run = True
                 return afunction(*args)
             else:
+
                 pass
         wrapper.has_run = False
         return wrapper
@@ -58,11 +60,27 @@ class Fitness():
     def runOnce(self):
         db = DB()
         # Setting the start time boundary of request that we want
-        startTime = datetime.combine(Fitness.yesterday, datetime.strptime(Fitness.firstMinute, Fitness.formatTime).time())
+        startTime = datetime.datetime.combine(Fitness.yesterday, datetime.datetime.strptime(Fitness.firstMinute, Fitness.formatTime).time())
         # Setting the end time boundary of request that we want
-        endTime = datetime.combine(Fitness.yesterday, datetime.strptime(Fitness.lastMinute, Fitness.formatTime).time())
+        endTime = datetime.datetime.combine(Fitness.yesterday, datetime.datetime.strptime(Fitness.lastMinute, Fitness.formatTime).time())
         Fitness.request = db.grpReqByBusstopAndTime(startTime, endTime)
         self.createRequestIndex(Fitness.request)
+
+ #<--------------------------------Functions for new encoding including multiple line---------------------------------->
+
+        for x in db.timeSliceArray:
+            start = datetime.datetime.combine(Fitness.yesterday,datetime.time(x[0], 0, 0))
+            end = datetime.datetime.combine(Fitness.yesterday, datetime.time(x[1], 59, 59))
+            requestBetweenTimeSlices = db.getTravelRequestBetween(start, end)
+
+            for count in enumerate(requestBetweenTimeSlices, start=1):
+                countingNoOfRequest = (count[0])
+
+            finalNoReqBetweenTimeSlice = countingNoOfRequest
+
+ #<--------------------------------END END END END END----------------------------------------------------------------->
+
+
 
     def timeDiff(self, time1, time2):
         ''' Evaluates the difference between two times.

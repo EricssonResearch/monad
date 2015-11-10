@@ -21,13 +21,14 @@ from scoop import futures
 from dbConnection import DB
 from fitness import Fitness
 from operator import itemgetter
-from datetime import datetime
+import datetime
 from datetime import timedelta
 
 
 
 # Constant
 BUS_LINE = 2
+DB.noOfslices = 0
 
 # The individual size corresponds to the number of trips
 INDIVIDUAL_SIZE = 14 #reason why its 14 is because we currently have 2 buslines in mongo to work with
@@ -37,15 +38,77 @@ INDIVIDUAL_SIZE_BOUNDS = [2, 10]
 # Initialize the classes
 databaseClass = DB()
 fitnessClass = Fitness()
+startTimeArray = []
+def generateStartTimeBasedOnFreq(busLine,frequency, startTime):
+
+
+    print(frequency)
+    print(startTime)
+    print(busLine)
+
+    # we make sure the starting time is in between the upper and lower bound of our time slices
+    for x in DB.timeSliceArray:
+        start = datetime.datetime.combine(Fitness.yesterday, datetime.time(x[0], 0, 0))
+        end = datetime.datetime.combine(Fitness.yesterday, datetime.time(x[1], 59, 59))
+
+        # if the startTime is in a specific time slice
+        if start <= startTime <= end:
+            NextstartTime = startTime + datetime.timedelta(minutes=frequency)
+            NextstartTime2 = startTime - datetime.timedelta(minutes=frequency)
+            startTimeArray.append(startTime.time())
+            if NextstartTime <= end:
+                startTimeArray.append(NextstartTime.time())
+            elif NextstartTime2 >= start:
+                startTimeArray.append(NextstartTime2.time())
+
+            while NextstartTime <= end:
+
+                NextstartTime = NextstartTime + datetime.timedelta(minutes=frequency)
+                if NextstartTime <= end:
+                    startTimeArray.append(NextstartTime.time())
+                print("while loop running ",NextstartTime)
+
+            while NextstartTime2 >= start:
+
+                NextstartTime2 = NextstartTime2 - datetime.timedelta(minutes=frequency)
+
+                if NextstartTime2 >= start:
+                    startTimeArray.append(NextstartTime2.time())
+                print("while loop2 running ", NextstartTime2)
+    #####print(sorted(startTimeArray))
+    print(startTimeArray)
+    print("\n")
+
 
 
 def evaluateNewIndividualFormat(individual):
-
     individual = sorted(individual, key=itemgetter(3))
-    print("THIS IS AN INDIVIDUAL"+"\n")
+
+    print("THIS IS AN INDIVIDUAL")
     print(individual)
+    print("\n")
+    #this will be called for each gene in the individual
+
+    for i in range(len(individual)):
+        generate = generateStartTimeBasedOnFreq(individual[i][0],individual[i][2], individual[i][3])
+
+
 
     return 1,
+""""
+    for i in range(len(individual)):
+        tripTimeTable = databaseClass.generateFitnessTripTimeTable(individual[i][0], individual[i][2])
+        for j in range(len(tripTimeTable)):
+            # TODO: Fix trips that finish at the next day
+            initialTrip = initialTripTime
+            lastTrip = tripTimeTable[j][1]
+            if initialTrip > lastTrip:
+                initialTrip = lastTrip - timedelta(minutes=db.getFrequency(individual[i][0]))
+            # Search on Fitness.request array for the particular requests
+
+            request = fitnessClass.searchRequest(initialTrip, lastTrip, tripTimeTable[j][0])
+            initialTripTime = tripTimeTable[j][1]
+"""
 
 
 
