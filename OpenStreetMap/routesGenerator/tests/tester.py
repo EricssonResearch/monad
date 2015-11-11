@@ -24,6 +24,7 @@ ROUTES_GENERATOR_PORT = '9998'
 headers = {'Content-type': 'application/x-www-form-urlencoded'}
 print_lock = multiprocessing.Lock()
 
+
 def get_nearest_stop(address):
     url = ROUTES_GENERATOR_HOST + ROUTES_GENERATOR_PORT + '/get_nearest_stop'
     data = {"address" : address}
@@ -37,6 +38,7 @@ def get_nearest_stop(address):
           '\nResponse: ', response.text, '\n'
     print_lock.release()
 
+
 def get_nearest_stop_from_coordinates():
     url = ROUTES_GENERATOR_HOST + ROUTES_GENERATOR_PORT + '/get_nearest_stop_from_coordinates'
     #data = {'lon': 17.6666581, 'lat': 59.8556742}
@@ -49,6 +51,7 @@ def get_nearest_stop_from_coordinates():
           '\nResponse status: ', response.status_code, \
           '\nResponse: ', response.text, '\n'
     print_lock.release()
+
 
 def get_route():
     url = ROUTES_GENERATOR_HOST + ROUTES_GENERATOR_PORT + '/get_route_from_coordinates'
@@ -75,6 +78,7 @@ def get_coordinates(address, street_no=u'None'):
           '\nResponse status: ', response.status_code, \
           '\nResponse: ', response.text, '\n'
     print_lock.release()
+
 
 def get_coordinates_string(string):
     url = ROUTES_GENERATOR_HOST + ROUTES_GENERATOR_PORT + '/get_coordinates_from_string'
