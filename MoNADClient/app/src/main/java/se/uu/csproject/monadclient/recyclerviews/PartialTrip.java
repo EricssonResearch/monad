@@ -9,7 +9,7 @@ import java.util.GregorianCalendar;
  *
  */
 public class PartialTrip {
-    //    private String id;
+    //private String id;
     private int line;
     private String startBusStop; // this is the bus stop name
     private Date startTime;
@@ -19,6 +19,7 @@ public class PartialTrip {
 
     public PartialTrip(int line, String startBusStop, Date startTime, String endBusStop,
                        Date endTime, ArrayList<String> trajectory) {
+        //this.id = id;
         this.line = line;
         this.startBusStop = startBusStop;
         this.startTime = startTime;
@@ -26,6 +27,14 @@ public class PartialTrip {
         this.endTime = endTime;
         this.trajectory = trajectory;
     }
+
+    /*public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }*/
 
     public int getLine() {
         return line;

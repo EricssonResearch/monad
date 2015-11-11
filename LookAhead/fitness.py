@@ -122,10 +122,15 @@ class Fitness():
         # TODO: Watch out with MIDNIGHT trips !!!!
         if len(result) == 0:
             result.append(len(Fitness.request))
-        for i in range(i, len(index)):
-            if index[i][0] >= finalHour and index[i][1] >= finalMinute:
-                result.append(index[i][2])
-                break
+
+        try:
+            for i in range(i, len(index)):
+                if index[i][0] >= finalHour and index[i][1] >= finalMinute:
+                    result.append(index[i][2])
+                    break
+        except UnboundLocalError:
+            print "Length of index is " + str(len(index))
+
         # TODO: Watch out with MIDNIGHT trips !!!!
         if len(result) == 1:
             result.append(len(Fitness.request))

@@ -47,12 +47,12 @@ public class NotificationRecyclerViewAdapter extends RecyclerView.Adapter<Notifi
         notificationViewHolder.notificationTime.setText(notify.get(i).time);
         notificationViewHolder.notificationPhoto.setImageResource(notify.get(i).iconId);
 
-       notificationViewHolder.hideNotificationButton.setOnClickListener(new View.OnClickListener() {
-           @Override
-           public void onClick(View v) {
-               notificationViewHolder.itemView.setVisibility(View.GONE);
-           }
-       });
+        notificationViewHolder.hideNotificationButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                notificationViewHolder.itemView.setVisibility(View.GONE);
+            }
+        });
 
     }
 
@@ -104,7 +104,7 @@ public class NotificationRecyclerViewAdapter extends RecyclerView.Adapter<Notifi
                 NotificationCompat.Builder mBuilder;
                 mBuilder = new NotificationCompat.Builder(mContext);
                 mBuilder.setSmallIcon(R.mipmap.ic_launcher);
-                mBuilder.setContentTitle(mContext.getString(R.string.action_notification));
+                mBuilder.setContentTitle(mContext.getString(R.string.label_notification_notification));
                 mBuilder.setContentText(notificationName.getText());
                 mBuilder.setAutoCancel(true);
                 mBuilder.setContentText("You've received new messages.")
@@ -118,21 +118,16 @@ public class NotificationRecyclerViewAdapter extends RecyclerView.Adapter<Notifi
 
 
 
-            }
         }
-
-
-
-
-
+    }
 
 // Start of a loop that processes data and then notifies the user
 
 
-                // Because the ID remains unchanged, the existing notification is
-                // updated.
+    // Because the ID remains unchanged, the existing notification is
+    // updated.
 
-        }
+}
 
 
 

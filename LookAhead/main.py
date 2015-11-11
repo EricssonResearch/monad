@@ -17,6 +17,7 @@ import toolBox
 from deap import tools
 from deap import algorithms
 from dbConnection import DB
+from operator import itemgetter
 
 
 # Variables
@@ -24,8 +25,6 @@ MUTATION_PROB = 0.5
 CROSS_OVER_PROB = 0.5
 NO_OF_GENERATION = 0
 POPULATION_SIZE = 1
-
-
 
 def main():
     # Generate the population
@@ -70,7 +69,8 @@ def main():
     #print "InsertBusTrip and TimeTable......"
     #databaseClass = DB()
     #databaseClass.insertBusTrip(best_ind)
-    print("Best individual is %s, %s" % (best_ind, best_ind.fitness.values))
+    print("Best individual is %s, %s" % (sorted(best_ind, key=itemgetter(2)), best_ind.fitness.values))
+    print ("Length of best individual: " + str(len(best_ind)))
     #generateTimeTable(best_ind)
 
 
