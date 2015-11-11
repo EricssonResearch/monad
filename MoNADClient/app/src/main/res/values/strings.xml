@@ -56,6 +56,7 @@
 
     <!--Activity - Notifications-->
     <string name="label_notification_notification">Notification</string>
+    <string name="label_notification_reschedule">Reschedule Trip</string>
 
     <!--Activity - Profile-->
     <string name="label_profile_contactinfo">Contact Information</string>
@@ -151,4 +152,5 @@
     <string name="non_available">n/a</string>
     <string name="hello_world">Hello world!</string>
     <string name="GoogleProjectID" translatable="false">81265551950</string>
+    <string name="java_to">to</string>
 </resources>
