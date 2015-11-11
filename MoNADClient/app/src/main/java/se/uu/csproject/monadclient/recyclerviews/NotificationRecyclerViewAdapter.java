@@ -13,6 +13,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import se.uu.csproject.monadclient.NotificationsActivity;
@@ -29,28 +32,56 @@ public class NotificationRecyclerViewAdapter extends RecyclerView.Adapter<Notifi
         mContext = context;
     }
 
+
+    @Override
+    public int getItemViewType(int position) {
+        if(notify.get(position).isToday()) {
+            return 0;
+        }
+        else {
+            return 1;
+        }
+    }
+
     @Override
     public void onAttachedToRecyclerView(RecyclerView recyclerView) {
         super.onAttachedToRecyclerView(recyclerView);
     }
 
     @Override
-    public NotificationViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.list_item_notification, viewGroup, false);
+    public NotificationViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
+        View view;
+        if(viewType ==1){
+            view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.list_item_notification_old, viewGroup, false);
+
+        }
+        else {
+            view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.list_item_notification, viewGroup, false);
+
+        }
+
         return new NotificationViewHolder(mContext, view);
 
     }
 
+
     @Override
     public void onBindViewHolder(final NotificationViewHolder notificationViewHolder, final int i) {
-        notificationViewHolder.notificationName.setText(notify.get(i).name);
-        notificationViewHolder.notificationTime.setText(notify.get(i).time);
-        notificationViewHolder.notificationPhoto.setImageResource(notify.get(i).iconId);
+        notificationViewHolder.notificationName.setText(notify.get(i).text);
+        notificationViewHolder.notificationTime.setText(formatTime((Date) notify.get(i).time));
+        notificationViewHolder.notificationPhoto.setImageResource(notify.get(i).iconID);
 
         notificationViewHolder.hideNotificationButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                notificationViewHolder.itemView.setVisibility(View.GONE);
+//                notificationViewHolder.itemView.setVisibility(View.GONE);
+//                int index = notify.indexOf(i);
+
+                Storage.removeNotification(i);
+                notify = Storage.getNotifications();
+//                notifyItemRemoved(index);
+                notifyDataSetChanged();
+
             }
         });
 
@@ -73,25 +104,19 @@ public class NotificationRecyclerViewAdapter extends RecyclerView.Adapter<Notifi
         ImageView hideNotificationButton;
 
 
-
-
         NotificationViewHolder(Context context, View itemView) {
-
             super(itemView);
             mContext = context;
             cv = (CardView) itemView.findViewById(R.id.cv);
-            notificationName = (TextView) itemView.findViewById(R.id.text);
-            notificationTime = (TextView) itemView.findViewById(R.id.time);
-            notificationPhoto = (ImageView) itemView.findViewById(R.id.icon);
+            notificationName = (TextView) itemView.findViewById(R.id.label_text);
+            notificationTime = (TextView) itemView.findViewById(R.id.label_time);
+            notificationPhoto = (ImageView) itemView.findViewById(R.id.label_icon);
             notificationImage = (ImageView) itemView.findViewById(R.id.image1);
             hideNotificationButton = (ImageView) itemView.findViewById(R.id.image2);
             notificationImage.setOnClickListener(this);
             hideNotificationButton.setOnClickListener(this);
             itemView.setOnClickListener(this);
             itemView.setTag(itemView);
-
-
-
         }
 
 
@@ -119,6 +144,16 @@ public class NotificationRecyclerViewAdapter extends RecyclerView.Adapter<Notifi
 
 
         }
+    }
+
+    private String formatTime(Date date){
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
+        String time = timeFormat.format(calendar.getTime());
+
+        return time;
     }
 
 // Start of a loop that processes data and then notifies the user

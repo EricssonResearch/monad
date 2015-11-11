@@ -67,13 +67,6 @@
                 android:value=".MainActivity" />
         </activity>
         <activity
-            android:name=".RouteSuccessActivity"
-            android:label="@string/title_activity_route_success" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".TripsActivity" />
-        </activity>
-        <activity
             android:name=".ProfileActivity"
             android:label="@string/title_activity_profile" >
             <meta-data

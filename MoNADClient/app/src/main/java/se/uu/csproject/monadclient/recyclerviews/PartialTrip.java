@@ -20,16 +20,6 @@ public class PartialTrip implements Parcelable {
     private Date endTime;
     private ArrayList<String> trajectory;   /* List of bus stop names */
 
-    /* TODO: Do we need this constructor ?? */
-    public PartialTrip(int line, String startBusStop, Date startTime, String endBusStop,
-                       Date endTime, ArrayList<String> trajectory) {
-        this.line = line;
-        this.startBusStop = startBusStop;
-        this.startTime = startTime;
-        this.endBusStop = endBusStop;
-        this.endTime = endTime;
-        this.trajectory = trajectory;
-    }
 
     public PartialTrip(String id, int line, int busID, String startBusStop, Date startTime, String endBusStop,
                        Date endTime, ArrayList<String> trajectory) {
@@ -45,12 +35,12 @@ public class PartialTrip implements Parcelable {
 
     /* TODO: Do we need entries for id and busID ?? */
     protected PartialTrip(Parcel in) {
+        id = in.readString();
         line = in.readInt();
-
+        busID = in.readInt();
         startBusStop = in.readString();
         long tmpStartTime = in.readLong();
         startTime = tmpStartTime != -1 ? new Date(tmpStartTime) : null;
-
         endBusStop = in.readString();
         long tmpEndTime = in.readLong();
         endTime = tmpEndTime != -1 ? new Date(tmpEndTime) : null;
@@ -85,7 +75,9 @@ public class PartialTrip implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(id);
         dest.writeInt(line);
+        dest.writeInt(busID);
         dest.writeString(startBusStop);
         dest.writeLong(startTime != null ? startTime.getTime() : -1L);
         dest.writeString(endBusStop);

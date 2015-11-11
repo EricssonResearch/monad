@@ -48,8 +48,8 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<SearchRecycl
     @Override
     public SearchViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
         View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.list_item_searchresult, viewGroup, false);
-        SearchViewHolder languageViewHolder = new SearchViewHolder(view);
-        return languageViewHolder;
+        SearchViewHolder searchViewHolder = new SearchViewHolder(view);
+        return searchViewHolder;
     }
 
     @Override
@@ -57,7 +57,6 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<SearchRecycl
         String routeInfo = searchResults.get(i).getStartBusStop() + " to " + searchResults.get(i).getEndBusStop();
         searchViewHolder.timeInfo.setText(formatTripTime(searchResults.get(i)));
         searchViewHolder.routeInfo.setText(routeInfo);
-        //TODO: check if getTimeToDeparture() is less than 30 minutes
         if(!searchResults.get(i).isHistory() && searchResults.get(i).getTimeToDeparture() < 1800000){
             searchViewHolder.hurryAlertIcon.setVisibility(View.VISIBLE);
         }

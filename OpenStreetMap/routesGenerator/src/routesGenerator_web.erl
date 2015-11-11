@@ -1,3 +1,4 @@
+%% -*- coding: utf-8 -*-
 %% @author Mochi Media <dev@mochimedia.com>
 %% @copyright 2010 Mochi Media <dev@mochimedia.com>
 
@@ -72,9 +73,18 @@ loop(Req, DocRoot) ->
             Method when Method =:= 'GET'; Method =:= 'HEAD' ->
                 Req:serve_file(Path, DocRoot);
             'POST' ->
+                %io:format("~p~n", ["hej"]),
                 case Path of
                     "get_nearest_stop" ->
                         get_nearest_stop(Req);
+                    "get_nearest_stop_from_coordinates" ->
+                        get_nearest_stop_from_coordinates(Req);
+                    "get_route_from_coordinates" ->
+                        get_route_from_coordinates(Req);
+                    "get_coordinates_from_address" ->
+                        get_coordinates_from_address(Req);
+                    "get_coordinates_from_string" ->
+                        get_coordinates_from_string(Req);
                     _ ->
                         Req:not_found()
                 end;
@@ -92,7 +102,7 @@ loop(Req, DocRoot) ->
 
 handle_error(Report, Req) ->
     error_logger:error_report(Report),
-    Req:respond({500, [{"Content-Type", "text/plain"}], "Failed Request\n"}).
+    Req:respond({500, [{"Content-Type", "text/plain"}], "Failed 1Request\n"}).
 
 get_nearest_stop(Req) ->
     PostData = Req:parse_post(),
@@ -101,12 +111,74 @@ get_nearest_stop(Req) ->
     PythonInstance ! {<<"get_nearest_stop">>, Address, self()},
     receive
         {ok, Response} ->
-            io:format("~nResponse: ~p~n", [Response]),
+            %io:format("~nResponse: ~p~n", [Response]),
             Req:respond({200, [{"Content-Type", "text/plain"}], Response});
         Other ->
             Msg = ["Unexpected get_nearest_stop response",
                    {response, Other},
                    {trace, erlang:get_stacktrace()}],
+            handle_error(Msg, Req)
+    end.
+
+get_nearest_stop_from_coordinates(Req) ->
+    PostData = Req:parse_post(),
+    Longitude = proplists:get_value("lon", PostData, "Anonymous"),
+    Latitude = proplists:get_value("lat", PostData, "Anonymous"),
+    PythonInstance = whereis(python_instance),
+    PythonInstance ! {<<"get_nearest_stop_from_coordinates">>, Longitude, Latitude, self()},
+    receive
+        {ok, Response} ->
+            Req:respond({200, [{"Content-Type", "text/plain"}], Response});
+        Other ->
+            Msg = ["Unexpected get_nearest_stop_from_coordinates response",
+                    {response, Other},
+                    {trace, erlang:get_stacktrace()}],
+            handle_error(Msg, Req)
+    end.
+
+get_route_from_coordinates(Req) ->
+    PostData = Req:parse_post(),
+    Coordinates = proplists:get_value("list", PostData, "Anonymous"),
+    PythonInstance = whereis(python_instance),
+    PythonInstance ! {<<"get_route_from_coordinates">>, Coordinates, self()},
+    receive
+        {ok, Response} ->
+            Req:respond({200, [{"Content-Type", "text/plain"}], Response});
+        Other ->
+            Msg = ["Unexpected get_route_from_coordinates response",
+                    {response, Other},
+                    {trace, erlang:get_stacktrace()}],
+            handle_error(Msg, Req)
+    end.
+
+get_coordinates_from_address(Req) ->
+    PostData = Req:parse_post(),
+    Address = proplists:get_value("address", PostData, "Anonymous"),
+    Street_no = proplists:get_value("street_no", PostData, "Anonymous"),
+    PythonInstance = whereis(python_instance),
+    PythonInstance ! {<<"get_coordinates_from_address">>, Address, Street_no, self()},
+    receive
+        {ok, Response} ->
+            Req:respond({200, [{"Content-Type", "text/plain"}], Response});
+        Other ->
+            Msg = ["Unexpected get_coordinates_from_address response",
+                    {response, Other},
+                    {trace, erlang:get_stacktrace()}],
+            handle_error(Msg, Req)
+    end.
+
+get_coordinates_from_string(Req) ->
+    PostData = Req:parse_post(),
+    String = proplists:get_value("string", PostData, "Anonymous"),
+    PythonInstance = whereis(python_instance),
+    PythonInstance ! {<<"get_coordinates_from_string">>, String, self()},
+    receive
+        {ok, Response} ->
+            Req:respond({200, [{"Content-Type", "text/plain"}], Response});
+        Other ->
+            Msg = ["Unexpected get_coordinates_from_string response",
+                    {response, Other},
+                    {trace, erlang:get_stacktrace()}],
             handle_error(Msg, Req)
     end.
 

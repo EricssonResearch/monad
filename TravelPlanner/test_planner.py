@@ -56,6 +56,7 @@ class TestTravelPlanner(unittest.TestCase):
         timetableDBString = mongoString + self.dbName + "'), u'TimeTable')"
         usertripDBString = mongoString + self.dbName + "'), u'UserTrip')"
         busTripDBString = mongoString + self.dbName + "'), u'BusTrip')"
+        busStopDBString = mongoString + self.dbName + "'), u'BusStop')"
 
         self.assertEqual(self.tp.fittingRoutes, [])
         self.assertEqual(self.tp.startingWaypoint, [])
@@ -72,6 +73,7 @@ class TestTravelPlanner(unittest.TestCase):
         self.assertEqual(str(self.tp.timeTable), timetableDBString)
         self.assertEqual(str(self.tp.userTrip), usertripDBString)
         self.assertEqual(str(self.tp.busTrip), busTripDBString)
+        self.assertEqual(str(self.tp.busStop), busStopDBString)
 
     def test_isDoubleRoute(self):
         self.assertTrue(self.tp._isDoubleRoute(("trip A", "trip B")))
@@ -243,6 +245,7 @@ class TestTravelPlanner(unittest.TestCase):
         pass
 
     def test_convertToJason(self):
+        stops = ["Stora Torget", "Centralstationen"]
         objectID = ObjectId()
         objectIDstr = str(objectID)
         time = TIME_1300H
@@ -253,8 +256,8 @@ class TestTravelPlanner(unittest.TestCase):
                     "userID" : 4711,
                     "line": 2,
                     "busID": 56,
-                    "startBusStop": objectID,
-                    "endBusStop": objectID,
+                    "startBusStop": stops[0],
+                    "endBusStop": stops[1],
                     "startTime": time,
                     "endTime": time,
                     "requestTime": time,
@@ -262,40 +265,41 @@ class TestTravelPlanner(unittest.TestCase):
                     "requestID": objectID,
                     "next": objectID,
                     "booked": False,
-                    "trajectory": [objectID, objectID]
+                    "trajectory": [stops[0], stops[1]]
                 },
                 {
                     "_id": objectID,
                     "userID" : 4711,
                     "line": 14,
                     "busID": 57,
-                    "startBusStop": objectID,
-                    "endBusStop": objectID,
+                    "startBusStop": stops[0],
+                    "endBusStop": stops[1],
                     "startTime": time,
                     "endTime": time,
                     "requestTime": time,
                     "feedback": -1,
                     "requestID": objectID,
                     "booked": False,
-                    "trajectory": [objectID, objectID]
+                    "trajectory": [stops[0], stops[1]]
                 }
             ]
         }
         self.tp._convertToJson()
         jsonObject = self.tp.jsonObject
         self.assertEqual(objectIDstr, jsonObject[1][0]["_id"])
-        self.assertEqual(objectIDstr, jsonObject[1][0]["startBusStop"])
-        self.assertEqual(objectIDstr, jsonObject[1][0]["endBusStop"])
         self.assertEqual(objectIDstr, jsonObject[1][0]["requestID"])
         self.assertEqual(objectIDstr, jsonObject[1][0]["next"])
-        self.assertEqual(objectIDstr, jsonObject[1][0]["trajectory"][0])
-        self.assertEqual(objectIDstr, jsonObject[1][0]["trajectory"][1])
         self.assertEqual(objectIDstr, jsonObject[1][1]["_id"])
-        self.assertEqual(objectIDstr, jsonObject[1][1]["startBusStop"])
-        self.assertEqual(objectIDstr, jsonObject[1][1]["endBusStop"])
         self.assertEqual(objectIDstr, jsonObject[1][1]["requestID"])
-        self.assertEqual(objectIDstr, jsonObject[1][1]["trajectory"][0])
-        self.assertEqual(objectIDstr, jsonObject[1][1]["trajectory"][1])
+
+        self.assertEqual(stops[0], jsonObject[1][0]["startBusStop"])
+        self.assertEqual(stops[1], jsonObject[1][0]["endBusStop"])
+        self.assertEqual(stops[0], jsonObject[1][0]["trajectory"][0])
+        self.assertEqual(stops[1], jsonObject[1][0]["trajectory"][1])
+        self.assertEqual(stops[0], jsonObject[1][1]["startBusStop"])
+        self.assertEqual(stops[1], jsonObject[1][1]["endBusStop"])
+        self.assertEqual(stops[0], jsonObject[1][1]["trajectory"][0])
+        self.assertEqual(stops[1], jsonObject[1][1]["trajectory"][1])
 
         self.assertEqual(timeStr, jsonObject[1][0]["startTime"])
         self.assertEqual(timeStr, jsonObject[1][0]["endTime"])

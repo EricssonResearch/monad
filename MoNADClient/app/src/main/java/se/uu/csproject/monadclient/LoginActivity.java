@@ -48,9 +48,8 @@ public class LoginActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         if (checkPlayServices()) {
-            Intent intent = new Intent(this,RegistrationIntentService.class);
+            Intent intent = new Intent(this, RegistrationIntentService.class);
             startService(intent);
-
         }
 
         usernameField = (EditText) findViewById(R.id.field_username);
@@ -75,20 +74,29 @@ public class LoginActivity extends AppCompatActivity {
                 try {
                     // Get the username and password, send them with the request
                     String response = task.execute(usernameField.getText().toString(), passwordField.getText().toString()).get();
-                    Toast.makeText(getApplicationContext(), response,
-                            Toast.LENGTH_LONG).show();
+
+                    Toast.makeText(getApplicationContext(), response, Toast.LENGTH_LONG).show();
+
                     // If the response starts with the specific word, it means the users logged in successfully
                     if (response.startsWith("Success (1)")) {
                         LoginActivity.this.startActivity(new Intent(LoginActivity.this, MainActivity.class));
                         finish();
                     }
-                    else if (response.startsWith("Wrong Credentials (0)")) {
+                    else if (response.equals("Wrong Credentials (0)")) {
                         wrongCredentialsTextView.setVisibility(View.VISIBLE);
+                    }
+                    else {
+                        LoginActivity.this.startActivity(new Intent(LoginActivity.this, LoginActivity.class));
+                        finish();
                     }
                 } catch (InterruptedException e) {
                     e.printStackTrace();
+                    LoginActivity.this.startActivity(new Intent(LoginActivity.this, LoginActivity.class));
+                    finish();
                 } catch (ExecutionException e) {
                     e.printStackTrace();
+                    LoginActivity.this.startActivity(new Intent(LoginActivity.this, LoginActivity.class));
+                    finish();
                 }
             }
         });
@@ -119,13 +127,6 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_login, menu);
-        return true;
-    }
-
     // hides the phone keyboard when an element is touched besides the keyboard and text fields
     public boolean onTouchEvent(MotionEvent event) {
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -133,48 +134,7 @@ public class LoginActivity extends AppCompatActivity {
         return true;
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-
-        if(id == android.R.id.home){
-            NavUtils.navigateUpFromSameTask(this);
-        }
-
-        if (id == R.id.action_search) {
-            startActivity(new Intent(this, MainActivity.class));
-        }
-
-        if (id == R.id.action_notifications) {
-            startActivity(new Intent(this, NotificationsActivity.class));
-        }
-
-        if (id == R.id.action_mytrips) {
-            startActivity(new Intent(this, TripsActivity.class));
-        }
-
-        if (id == R.id.action_profile) {
-            startActivity(new Intent(this, ProfileActivity.class));
-        }
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            startActivity(new Intent(this, SettingsActivity.class));
-        }
-
-        if (id == R.id.action_aboutus) {
-            startActivity(new Intent(this, AboutUsActivity.class));
-        }
-
-        if (id == R.id.action_signout) {
-            startActivity(new Intent(this, LoginActivity.class));
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
     private boolean checkPlayServices() {
-
         GoogleApiAvailability apiAvailability = GoogleApiAvailability.getInstance();
         int resultCode = apiAvailability.isGooglePlayServicesAvailable(this);
         if (resultCode != ConnectionResult.SUCCESS) {
