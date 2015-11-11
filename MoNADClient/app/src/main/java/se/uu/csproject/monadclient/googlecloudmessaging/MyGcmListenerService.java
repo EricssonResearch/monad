@@ -24,10 +24,6 @@ public class  MyGcmListenerService extends GcmListenerService {
 
     /**
      * Called when message is received.
-     *
-     * @param from SenderID of the sender.
-     * @param data Data bundle containing message data as key/value pairs.
-     *             For Set of keys use data.keySet().
      */
     // [START receive_message]
     @Override
@@ -36,33 +32,28 @@ public class  MyGcmListenerService extends GcmListenerService {
         Log.d(TAG, "From: " + from);
         Log.d(TAG, "Message: " + message);
 
-        if (from.startsWith("/topics/")) {
-            // message received from some topic.
-        } else {
-            // normal downstream message.
-        }
+//        if (from.startsWith("/topics/")) {
+//            // message received from some topic.
+//        } else {
+//            // normal downstream message.
+//        }
 
-        // [START_EXCLUDE]
+        // [Further improvements]
         /**
          * Production applications would usually process the message here.
-         * Eg: - Syncing with server.
+         *     - Syncing with server.
          *     - Store message in local database.
          *     - Update UI.
          */
 
         /**
-         * In some cases it may be useful to show a notification indicating to the user
-         * that a message was received.
+           Showing that a notification has been received
          */
         sendNotification(message);
-        // [END_EXCLUDE]
-    }
-    // [END receive_message]
 
+    }
     /**
      * Create and show a simple notification containing the received GCM message.
-     *
-     * @param message GCM message received.
      */
     private void sendNotification(String message) {
         Intent intent = new Intent(this, MainActivity.class);
@@ -73,7 +64,7 @@ public class  MyGcmListenerService extends GcmListenerService {
         Uri defaultSoundUri= RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
                 .setSmallIcon(R.drawable.common_signin_btn_icon_normal_light)
-                .setContentTitle("GCM Message")
+                .setContentTitle("MoNAD Message")
                 .setContentText(message)
                 .setAutoCancel(true)
                 .setSound(defaultSoundUri)
