@@ -129,7 +129,7 @@ class Fitness():
                     result.append(index[i][2])
                     break
         except UnboundLocalError:
-            print "Length of index is " + str(len(index))
+            print ("Length of index is " + str(len(index)))
 
         # TODO: Watch out with MIDNIGHT trips !!!!
         if len(result) == 1:
