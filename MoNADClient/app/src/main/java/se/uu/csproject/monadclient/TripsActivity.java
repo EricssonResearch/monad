@@ -11,6 +11,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 import se.uu.csproject.monadclient.recyclerviews.FullTrip;
+import se.uu.csproject.monadclient.recyclerviews.Storage;
 import se.uu.csproject.monadclient.recyclerviews.TripRecyclerViewAdapter;
 
 
@@ -20,6 +21,7 @@ public class TripsActivity extends MenuedActivity implements AsyncResponse{
     private RecyclerView recyclerView;
     private LinearLayoutManager linearLayoutManager;
     private TripRecyclerViewAdapter adapter;
+    private ArrayList<FullTrip> bookings;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,13 +37,18 @@ public class TripsActivity extends MenuedActivity implements AsyncResponse{
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_home_white_24dp);
-
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        getBookings();
+        bookings = Storage.getBookings();
+        if (bookings.isEmpty()){
+            getBookings();
+        } else {
+            adapter = new TripRecyclerViewAdapter(bookings);
+            recyclerView.setAdapter(adapter);
+        }
     }
 
     @Override

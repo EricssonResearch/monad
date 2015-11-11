@@ -23,7 +23,7 @@ public class StoreTrips {
     private SimpleDateFormat format;
     private ArrayList<FullTrip> searchResults;
 
-    // Get the trips returned by the server and store them if needed
+    // Get the trips returned by the server and store them
     public ArrayList<FullTrip> storeTheTrips(JSONObject trips, int searchResultsOrBookings){
         numberOfSearchResults = trips.length();
         format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -85,7 +85,7 @@ public class StoreTrips {
             Log.d("oops", e.toString());
         }
 
-        // Sort the trips in ascending order based on their start time
+        // Sort the trips based on their start time and whether they're new or old
         Collections.sort(searchResults, new FullTripsStartTimeComparator());
 
         if (searchResultsOrBookings == 0){
