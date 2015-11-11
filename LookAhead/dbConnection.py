@@ -30,13 +30,13 @@ class DB():
     # ---------------------------------------------------------------------------------------------------------------------------------------
     server = "130.238.15.114"
     port = 27017
-    database = "monad"
+    database = "monad1"
     timeSeparator = ":"
     minutesDay = 1440
     hoursDay = 24
     minutesHour = 60
     formatTime = '%H:%M'
-    yesterday = datetime.datetime(2015, 10, 21)
+    yesterday = datetime.datetime(2015, 11, 11)
 
     # ---------------------------------------------------------------------------------------------------------------------------------------
     # Constructor
@@ -197,6 +197,20 @@ class DB():
         req = sorted(req, key=itemgetter("hour", "minute"))
         return req
 
+    def getReqCountByEndBusStop(self, start, end):
+        ''' Performs a summarized query grouping the requests by ending bus stop,
+        end time and the line.
+        Returns a bag of found documents. These ones have 3 group columns,
+        as well as a count column.
+
+        @param: start - Initial datetime for the query
+        @param: end - Final datetime for the query
+        '''
+        pipeline = [{"$match": {"requestTime": {"$gte": start, "$lt": end}}},
+                   {"$group": {"_id": {"endTime": "$endTime", "busStop": "$endBusStop", "line": "$line"}, "total": {"$sum": 1}}},
+                   {"$sort": {"_id.endTime": 1}}]
+        return list(req for req in self.db.UserTrip.aggregate(pipeline))
+
     def grpReqByBusstopAndTime(self, start, end):
 
         """
@@ -227,15 +241,16 @@ class DB():
         '''
 
         queryResults = []
+        '''
         pipline = [{"$match": {"startTime": {"$gte": start, "$lt": end}}},
                    {"$group": {"_id": {"RequestTime": "$startTime", "BusStop": "$startBusStop"}, "total": {"$sum": 1}}},
                    {"$sort": {"_id.RequestTime": 1}}]
-
-
-
-
-        groupQuery = self.db.TravelRequestLookAhead.aggregate(pipline)
-
+        '''
+        pipeline = [{"$match": {"requestTime": {"$gte": start, "$lt": end}}},
+                   {"$group": {"_id": {"RequestTime": "$startTime", "BusStop": "$startBusStop", "line": "$line"}, "total": {"$sum": 1}}},
+                   {"$sort": {"_id.RequestTime": 1}}]
+        # groupQuery = self.db.TravelRequestLookAhead.aggregate(pipline)
+        groupQuery = self.db.UserTrip.aggregate(pipeline)
         for x in groupQuery:
             queryResults.append(x)
         return queryResults
@@ -258,22 +273,19 @@ class DB():
             reqs.append([req.get('startTime', None), req.get('startBusStop', None), req.get('endBusStop', None)])
         return reqs
 
-    def MaxReqNumTrip(self, trip_sTime, tripEnd, lineNum=2):
+    #def MaxReqNumTrip(self, trip_sTime, tripEnd, lineNum=2):
+    def MaxReqNumTrip(self, start, end, line):
         BusStplist = []
         dirlist = []
-        a = datetime.datetime.strptime(trip_sTime, '%Y-%m-%d %H:%M:%S')
-        # t =datetime.datetime.strptime(trip_sTime,'%Y-%m-%d %H:%M:%S').time()
-        # e =datetime.datetime.strptime(tripEnd,'%Y-%m-%d %H:%M:%S').time()
         # get the trip time table
-        trip_time_table = self.generatePhenotype(lineNum, a)
-        for i in trip_time_table:
+        phenotype = self.generatePhenotype(line, start)
+        for i in phenotype:
             BusStplist.append([i[0], 0])
             dirlist.append(i[0])
-        t = datetime.datetime.strptime(trip_sTime, '%Y-%m-%d %H:%M:%S')
-        e = datetime.datetime.strptime(tripEnd, '%Y-%m-%d %H:%M:%S')
-        # get all requests where starting time is more than trip starting time
-        Requests = self.getRequestsFromDB(t, e)
-        # get only the requests with start location in bus stops and end location in bus stps
+        # Get all requests where starting time is more than trip starting time
+        Requests = self.getRequestsFromDB(start, end)
+        # Get only the requests with start location in bus stops and end
+        # location in bus stps
         for req in Requests:
             for i in BusStplist:
                 if (req[1], req[2]) in itertools.combinations(dirlist, 2):
@@ -502,11 +514,8 @@ class DB():
             bus = []
             busId = self.getRandomMinute()
             bus.append(busId)
-            # print document[i][2]
             for j in range(len(document[i][2])/2):
                 ind = j * 2
-                if len(document[i][2][ind+1]) < 5:
-                    print (document[i][2][ind+1])
                 trip.append({"busStop": document[i][2][ind], "time": datetime.datetime.strptime(document[i][2][ind+1], DB.formatTime), "capacity": document[i][1], "latitude": self.getBusStopLatitude(document[i][2][ind]), "longitude": self.getBusStopLongitude(document[i][2][ind])})
             timeTable.append({"busId": bus, "busStops": trip})
         self.db.timeTable.insert_one({"line": document[0][0], "date": datetime.datetime.now(), "timetable": timeTable})
