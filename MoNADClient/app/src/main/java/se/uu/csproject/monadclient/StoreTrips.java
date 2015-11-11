@@ -44,7 +44,6 @@ public class StoreTrips {
                 for (int y = 0; y < numberOfPartialTrips; y++){
                     JSONObject partialTripJson = fullTripJson.getJSONObject(y);
                     JSONArray trajectoryArray = partialTripJson.getJSONArray("trajectory");
-                    JSONArray busIDArray = partialTripJson.getJSONArray("busID");
                     ArrayList<String> trajectory = new ArrayList<>();
 
                     Date startTime = format.parse(partialTripJson.getString("startTime"));
@@ -57,10 +56,8 @@ public class StoreTrips {
                         }
                     }
 
-                    int busID = busIDArray.getInt(0);
-
                     PartialTrip partialTrip = new PartialTrip(partialTripJson.getString("_id"),
-                            partialTripJson.getInt("line"), busID,
+                            partialTripJson.getInt("line"), partialTripJson.getInt("busID"),
                             partialTripJson.getString("startBusStop"), startTime,
                             partialTripJson.getString("endBusStop"), endTime, trajectory);
 
