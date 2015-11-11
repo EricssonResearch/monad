@@ -736,28 +736,29 @@ public class ClientAuthentication extends Authentication {
                     JSONObject tripObjectID = (JSONObject) trip.get("_id");
                     String tripID = (String) tripObjectID.get("$oid");
 
-                    /* TODO: CASTING TO INTEGER THROWS EXCEPTION */
+                    long tempLine = (long) trip.get("line");
+                    int line = new BigDecimal(tempLine).intValueExact();
 
-                    System.out.println("--------------OK1-----------");
-                    int line = (int) trip.get("line");
-                    System.out.println("--------------OK2-----------");
-                    int busID = (int) trip.get("busID");
-                    System.out.println("--------------OK3-----------");
+                    long tempBusID = (long) trip.get("busID");
+                    int busID = new BigDecimal(tempBusID).intValueExact();
 
-                    String startBusStop = (String) trip.get("startBusStop");
+                    String startBusStop = (String) trip.get("startPlace");
+                    System.out.println("----------------Start:" + startBusStop);
                     JSONObject startTimeObject = (JSONObject) trip.get("startTime");
                     Date startTime = new Date((long) startTimeObject.get("$date"));
 
-                    String endBusStop = (String) trip.get("endBusStop");
+                    String endBusStop = (String) trip.get("endPlace");
+                    System.out.println("----------------End:" + endBusStop);
                     JSONObject endTimeObject = (JSONObject) trip.get("endTime");
                     Date endTime = new Date((long) endTimeObject.get("$date"));
 
                     ArrayList<String> trajectory = new ArrayList<>();
-                    JSONArray trajectoryObject = (JSONArray) trip.get("trajectory");
-                    Iterator<JSONObject> trajectoryObjectIterator = trajectoryObject.iterator();
+                    JSONArray trajectoryArray = (JSONArray) trip.get("trajectory");
+                    Iterator<JSONArray> trajectoryObjectIterator = trajectoryArray.iterator();
 
+                    /* TODO: Parse specific time for each partial trip */
                     while (trajectoryObjectIterator.hasNext()) {
-                        String busStopName = trajectoryObjectIterator.next().toString();
+                        String busStopName = (String) trajectoryObjectIterator.next().get(0);
                         trajectory.add(busStopName);
                     }
 
@@ -772,10 +773,9 @@ public class ClientAuthentication extends Authentication {
         }
         catch (ParseException e) {
             e.printStackTrace();
+            return "0";
         }
-
-        response = "Success (1)";
-        return response;
+        return "1";
     }
 
     public static String postGetNotificationsRequest() {

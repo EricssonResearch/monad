@@ -1,16 +1,13 @@
 package se.uu.csproject.monadclient.recyclerviews;
 
-import android.os.AsyncTask;
-import android.util.Log;
-import android.widget.Toast;
-
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.List;
 
-import se.uu.csproject.monadclient.RemoveNotificationTask;
+import se.uu.csproject.monadclient.NotificationsInteraction;
 
 public class Storage{
     private static ArrayList<FullTrip> searchResults = new ArrayList<>();
@@ -112,20 +109,7 @@ public class Storage{
     }
 
     public static void removeNotification(int i) {
-        RemoveNotificationTask task = new RemoveNotificationTask();
-        try {
-            String response = task.execute(notifications.get(i).getID()).get();
-
-            if (response.equals("1")) {
-                Log.d("Storage: ", "Notification was successfully removed from the database");
-            }
-            else {
-                Log.d("Storage: ", "Notification was not removed from the database");
-            }
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-        }
+        new NotificationsInteraction("Storage").removeNotification(i);
         notifications.remove(i);
     }
 
@@ -173,5 +157,45 @@ public class Storage{
 
         setNotifications(notifications);
     }
-}
 
+    public static void initializeRecommendationsData() {
+        Calendar calendar = new GregorianCalendar(2015, 10, 26, 10, 40, 0);
+        Date startdate1 = calendar.getTime();
+        calendar = new GregorianCalendar(2015, 10, 26, 10, 50, 0);
+        Date enddate1 = calendar.getTime();
+        calendar = new GregorianCalendar(2015, 10, 26, 10, 45, 0);
+        Date startdate2 = calendar.getTime();
+        calendar = new GregorianCalendar(2015, 10, 26, 11, 0, 0);
+        Date enddate2 = calendar.getTime();
+        calendar = new GregorianCalendar(2015, 10, 27, 9, 50, 0);
+        Date startdate3 = calendar.getTime();
+        calendar = new GregorianCalendar(2015, 10, 27, 10, 5, 0);
+        Date enddate3 = calendar.getTime();
+        calendar = new GregorianCalendar(2015, 10, 22, 11, 30, 0);
+        Date startdate4 = calendar.getTime();
+        calendar = new GregorianCalendar(2015, 10, 22, 12, 0, 0);
+        Date enddate4 = calendar.getTime();
+
+        ArrayList<PartialTrip> partialTrips = new ArrayList<>();
+        ArrayList<String> trajectory = new ArrayList<>();
+        trajectory.add("BMC");
+        trajectory.add("Akademiska Sjukhuset");
+        trajectory.add("Ekeby Bruk");
+        trajectory.add("Ekeby");
+
+        partialTrips.add(new PartialTrip("1", 2, 3, "Polacksbacken",startdate1,"Flogsta", enddate1, trajectory));
+        recommendations.add(new FullTrip("1", "2", partialTrips, 10, true, 0));
+
+        partialTrips.clear();
+        partialTrips.add(new PartialTrip("1", 2, 3, "Gamla Uppsala", startdate2, "Gottsunda", enddate2, trajectory));
+        recommendations.add(new FullTrip("2", "3", partialTrips, 15, true, 0));
+
+        partialTrips.clear();
+        partialTrips.add(new PartialTrip("1",2,3, "Granby",startdate3,"Tunna Backar", enddate3, trajectory));
+        recommendations.add(new FullTrip("3", "4", partialTrips, 15, true, 0));
+
+        partialTrips.clear();
+        partialTrips.add(new PartialTrip("1",2,3, "Kungsgatan", startdate4, "Observatoriet", enddate4, trajectory));
+        recommendations.add(new FullTrip("4", "5", partialTrips, 30, true, 0));
+    }
+}

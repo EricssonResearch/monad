@@ -13,7 +13,7 @@ import java.io.IOException;
  */
 public abstract class Authentication {
     /* "http://localhost:" "http://130.238.15.114:" */
-    public static final String AUTHENTICATION_HOST = "http://130.238.15.114:";
+    public static final String AUTHENTICATION_HOST = "http://130.238.15.204:";
     public static final String AUTHENTICATION_PORT = "9999";
 
     public static final String ROUTES_GENERATOR_HOST = "http://130.238.15.241:";
