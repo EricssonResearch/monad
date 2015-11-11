@@ -518,7 +518,7 @@ class DB():
         @param: startTime, the date of timetable will be used for
         @param: tripObjectList, list of trip object id of specific line
         '''
-
+        print("DANIEL AINT LOTAL")
         yesterday = datetime.date.today() - datetime.timedelta(days=1)
         yesterdayStart = datetime.datetime(yesterday.year, yesterday.month, yesterday.day,0,0,0)
         todayStart = datetime.datetime(datetime.date.today().year,datetime.date.today().month,datetime.date.today().day,0,0,0)

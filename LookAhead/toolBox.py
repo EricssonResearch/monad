@@ -72,6 +72,7 @@ def evalIndividual(individual):
         if i == 0:
             start, end = '2015-10-21 00:00:00', '2015-10-21 ' + temp + ':00' 
         else:
+
             start, end = end, '2015-10-21 ' + temp + ':00'
 
         stopsAndRequests = db.MaxReqNumTrip(start, end)
