@@ -136,7 +136,6 @@ class RouteHandler(handler.ContentHandler):
             if highway != '' and highway != 'platform' and roadName != '':
                 for node in self.nd:
                     self.addAddress(roadName, node)
-                    pass
 
             # Not all house numbers are represented as a nodes. Some are tags
             # on the house ways.
@@ -181,18 +180,19 @@ class RouteHandler(handler.ContentHandler):
             self.roadMapGraph[toNode] = []
 
     def addAddress(self, street, node, number=None):
-        if street in self.addresses:
+        key = street.lower()
+        if key in self.addresses:
             if number is None:
-                self.addresses[street].addCoordinate(self.nodes[node])
+                self.addresses[key].addCoordinate(self.nodes[node])
             else:
-                self.addresses[street].addNumber(number, self.nodes[node])
+                self.addresses[key].addNumber(number, self.nodes[node])
         else:
             if number is None:
-                self.addresses[street] = Address(street)
-                self.addresses[street].addCoordinate(self.nodes[node])
+                self.addresses[key] = Address(street)
+                self.addresses[key].addCoordinate(self.nodes[node])
             else:
-                self.addresses[street] = Address(street)
-                self.addresses[street].addNumber(number, self.nodes[node])
+                self.addresses[key] = Address(street)
+                self.addresses[key].addNumber(number, self.nodes[node])
 
 
 class AStar:
@@ -340,9 +340,9 @@ class Map:
         return None
 
     def findBusStopPosition(self, name):
-        name = name.decode('utf-8')
+        name = name.decode('utf-8').lower()
         for nd in self.busStopList:
-            if nd.name == name:
+            if nd.name.lower() == name:
                 return nd.coordinates
         return None
 
@@ -371,7 +371,7 @@ class Map:
         Translates an address into coordinates.
         """
         # TODO Add fuzzy logic
-        address = address.decode('utf-8')
+        address = address.decode('utf-8').lower()
         if address in self.handler.addresses:
             if number is None:
                 coordinateList = self.handler.addresses[address].coordinates

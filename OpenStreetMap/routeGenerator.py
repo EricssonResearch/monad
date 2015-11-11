@@ -104,7 +104,8 @@ def get_route(coordinates_list):
 
 
 if __name__ == '__main__':
-    print string_to_coordinates("Sernanders väg")
+    print string_to_coordinates("sErnanders vÄG")
+    print string_to_coordinates("SernandeRs VäG 10")
     print get_route([(17.6130204, 59.8545318),
                      (17.5817552, 59.8507556),
                      (17.6476356, 59.8402173)])
