@@ -1,5 +1,7 @@
 package se.uu.csproject.monadclient.recyclerviews;
 
+import android.util.Log;
+
 import java.util.Calendar;
 import java.util.Date;
 
@@ -45,11 +47,28 @@ public class Notify {
         return returnedIconID;
     }
 
-    public String getId() {
+    public boolean isToday() {
+        Calendar today = Calendar.getInstance();
+        Calendar date = Calendar.getInstance();
+        date.setTime(time);
+        return today.get(Calendar.DAY_OF_MONTH) == date.get(Calendar.DAY_OF_MONTH)
+                && today.get(Calendar.MONTH) == date.get(Calendar.MONTH)
+                && today.get(Calendar.YEAR) == date.get(Calendar.YEAR);
+    }
+
+    public void printValues() {
+        Log.d("Notification", "-- Printing Values --");
+        Log.d("Notification", "ID: " + this.getID());
+        Log.d("Notification", "Text: " + this.getText());
+        Log.d("Notification", "Time: " + getTime());
+        Log.d("Notification", "IconID: " + getIconID());
+    }
+
+    public String getID() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setID(String id) {
         this.id = id;
     }
 
@@ -77,12 +96,4 @@ public class Notify {
         this.iconID = iconID;
     }
 
-    public boolean isToday() {
-        Calendar today = Calendar.getInstance();
-        Calendar date = Calendar.getInstance();
-        date.setTime(time);
-        return today.get(Calendar.DAY_OF_MONTH) == date.get(Calendar.DAY_OF_MONTH)
-                && today.get(Calendar.MONTH) == date.get(Calendar.MONTH)
-                && today.get(Calendar.YEAR) == date.get(Calendar.YEAR);
-    }
 }

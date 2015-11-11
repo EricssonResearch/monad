@@ -35,7 +35,7 @@ public class RegistrationIntentService extends IntentService {
             // Initially this call goes out to the network to retrieve the token, subsequent calls
             // are local.
             // [START get_token]
-            //String iid = InstanceID.getInstance(this).getId();
+            //String iid = InstanceID.getInstance(this).getID();
             //Log.i(TAG, "MY Instance ID: " + iid);
             InstanceID instanceID = InstanceID.getInstance(getApplicationContext());
 

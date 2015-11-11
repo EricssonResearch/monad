@@ -70,8 +70,6 @@ public class MainActivity extends MenuedActivity implements
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        //initialize notifications, temporary
-        Storage.initializeNotificationData();
         List<FullTrip> searchResults = new ArrayList<>();
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler_view_main);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getApplicationContext());
@@ -82,9 +80,27 @@ public class MainActivity extends MenuedActivity implements
 //        rt.execute();
 
         /* TODO: GetRecommendations */
-//        System.out.println(ClientAuthentication.profileToString());
+        /* TODO: GetNotifications */
+        GetNotificationsTask notificationsTask = new GetNotificationsTask();
+        try {
+            String response = notificationsTask.execute().get();
+            System.out.println("Response: " + response);
 
-//        GetRecommendationsTask recommendationsTask = new GetRecommendationsTask();
+            if (response.equals("1")) {
+                Log.d("MainActivity", "Notifications have been successfully loaded by the database");
+            }
+            else {
+                //initialize notifications, temporary
+                Storage.initializeNotificationData();
+                Log.d("MainActivity", "Fake notifications have been generated");
+            }
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            Storage.initializeNotificationData();
+            Log.d("MainActivity", "Exception while loading notifications - Fake notifications have been generated");
+        }
+
 //        try {
 //            String response = recommendationsTask.execute().get();
 //
