@@ -36,10 +36,10 @@ public class NotificationRecyclerViewAdapter extends RecyclerView.Adapter<Notifi
     @Override
     public int getItemViewType(int position) {
         if(notify.get(position).isToday()) {
-            return 0;
+            return 1;
         }
         else {
-            return 1;
+            return 0;
         }
     }
 
@@ -52,11 +52,11 @@ public class NotificationRecyclerViewAdapter extends RecyclerView.Adapter<Notifi
     public NotificationViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
         View view;
         if(viewType ==1){
-            view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.list_item_notification_old, viewGroup, false);
+            view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.list_item_notification, viewGroup, false);
 
         }
         else {
-            view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.list_item_notification, viewGroup, false);
+            view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.list_item_notification_old, viewGroup, false);
 
         }
 
@@ -68,7 +68,7 @@ public class NotificationRecyclerViewAdapter extends RecyclerView.Adapter<Notifi
     @Override
     public void onBindViewHolder(final NotificationViewHolder notificationViewHolder, final int i) {
         notificationViewHolder.notificationName.setText(notify.get(i).text);
-        notificationViewHolder.notificationTime.setText(formatTime((Date) notify.get(i).time));
+        notificationViewHolder.notificationTime.setText(formatTime((Date) notify.get(i).time, notify.get(i).isToday()));
         notificationViewHolder.notificationPhoto.setImageResource(notify.get(i).iconID);
 
         notificationViewHolder.hideNotificationButton.setOnClickListener(new View.OnClickListener() {
@@ -146,14 +146,47 @@ public class NotificationRecyclerViewAdapter extends RecyclerView.Adapter<Notifi
         }
     }
 
-    private String formatTime(Date date){
+    private String formatTime(Date date, boolean today){
 
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
-        SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
-        String time = timeFormat.format(calendar.getTime());
+        String time;
+
+        if(today) {
+
+            long timeDifference = Calendar.getInstance().getTimeInMillis() - calendar.getTimeInMillis();
+            time = formatTodayTime(timeDifference);
+//            timeFormat = new SimpleDateFormat("HH:mm");
+
+        }
+        else {
+            SimpleDateFormat timeFormat = new SimpleDateFormat("MM/dd");
+            time = timeFormat.format(calendar.getTime());
+        }
+
 
         return time;
+    }
+
+    private String formatTodayTime(long millisecondsTime){
+        millisecondsTime %= (1000*60*60*24);
+        int hours = (int) millisecondsTime / (1000 * 60 * 60);
+        millisecondsTime %= (1000*60*60);
+        int minutes = (int) millisecondsTime / (1000*60);
+        millisecondsTime %= (1000*60);
+        int seconds = (int) millisecondsTime / 1000;
+        if(minutes == 0){
+            return seconds + " sec ago";
+        }
+        else if(hours==0){
+            return minutes + " min ago";
+        }
+        else if(hours==1){
+            return hours + " hr, " + minutes + "ago";
+        }
+        else{
+            return hours + " hrs ago";
+        }
     }
 
 // Start of a loop that processes data and then notifies the user
