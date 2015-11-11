@@ -65,7 +65,7 @@ def coordinates_to_nearest_stop(longitude, latitude):
     data = {'lat': latitude, 'lon': longitude}
     response = requests.post(url, data=data, headers=headers)
 
-    return response.text
+    return response.json()
 
 
 def get_route(coordinates_list):
