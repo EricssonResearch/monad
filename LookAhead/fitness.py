@@ -32,8 +32,10 @@ class Fitness():
     routes = []
     request = []
     requestIndex = []
+    requestOut = []
+    requestIndexOut = []
     # yesterday = date.today() - timedelta(13)
-    yesterday = datetime(2015, 10, 21)
+    yesterday = datetime(2015, 11, 11)
 
 
 
@@ -61,8 +63,12 @@ class Fitness():
         startTime = datetime.combine(Fitness.yesterday, datetime.strptime(Fitness.firstMinute, Fitness.formatTime).time())
         # Setting the end time boundary of request that we want
         endTime = datetime.combine(Fitness.yesterday, datetime.strptime(Fitness.lastMinute, Fitness.formatTime).time())
+        # Create index for the people going on the bus
         Fitness.request = db.grpReqByBusstopAndTime(startTime, endTime)
         self.createRequestIndex(Fitness.request)
+        # Create index for the people going down the bus
+        Fitness.requestOut = db.getReqCountByEndBusStop(startTime, endTime)
+        self.createRequestIndexOut(Fitness.requestOut)
 
     def timeDiff(self, time1, time2):
         ''' Evaluates the difference between two times.
@@ -80,14 +86,32 @@ class Fitness():
         
         @param: request (array): Structure that stores the requests grouped by bus stop, hour and minute. It also includes a COUNT column
         '''
-        minute = 0
-        for i in range(len(request)):
-            if request[i]["_id"]["RequestTime"].minute != minute or i == 0:
-                Fitness.requestIndex.append([request[i]["_id"]["RequestTime"].hour, request[i]["_id"]["RequestTime"].minute, i])
-                minute = request[i]["_id"]["RequestTime"].minute
+        # requestTime = 0
+        Fitness.requestIndex.append([request[0]["_id"]["RequestTime"], 0])
+        requestTime = request[0]["_id"]["RequestTime"]
+        for i in range(1, len(request)):
+            if request[i]["_id"]["RequestTime"] != requestTime:
+                # Fitness.requestIndex.append([request[i]["_id"]["RequestTime"].day, request[i]["_id"]["RequestTime"].hour, request[i]["_id"]["RequestTime"].minute, i])
+                Fitness.requestIndex.append([request[i]["_id"]["RequestTime"], i])
+                requestTime = request[i]["_id"]["RequestTime"]
 
+    def searchRequest(self, initialTime, finalTime, busStop, line):
+        ''' Search on the request array based on an inital time, a final time and a particular bus stop
 
-    def searchRequestIndex(self, index, initialHour, initialMinute, finalHour, finalMinute):
+        @param: initialTime (datetime): Initial time to perform the request's search
+        @param: finalTime (datetime): Final time to perform the request's search
+        @param: busStop (string): Bus stop name used on the request's search
+        '''
+        result = []
+        index = self.searchRequestIndex(Fitness.requestIndex, initialTime, finalTime)
+        if index != False:
+            request = Fitness.request[index[0]:index[1]]
+            for i in range(len(request)):
+                if request[i]["_id"]["BusStop"] == busStop and request[i]["_id"]["line"] == line:
+                    result.append(request[i])
+        return result
+
+    def searchRequestIndex(self, index, initialDate, finalDate):
         ''' Search the index to get the position on the request array for a specific time frame
         
         @param: index (array): Structure that stores hour, minute and the request's array position for this time
@@ -97,41 +121,124 @@ class Fitness():
         @param: finalMinute (int): Final minute to perform the search over the index
         '''
         result = []
+        position = 0
+        # Look for the first index on the search
         for i in range(len(index)):
-            if index[i][0] >= initialHour and index[i][1] >= initialMinute:
-                result.append(index[i][2])
+            if index[i][0] >= initialDate and index[i][0] < finalDate:
+                result.append(index[i][1])
+                indexDate = index[i][0]
+                position = i
+                break
+            if index[i][0] >= finalDate:
+                result.append(False)
+                break
+        if len(result) == 0:
+            result.append(False)
+        # Evaluate if the first index was found
+        if result[0] != False:
+            # If found, look for the second index, however the index has to go backwards
+            for j in reversed(range(position, len(index))):
+                if index[j][0] > indexDate and index[j][0] <= finalDate:
+                    result.append(index[j][1])
+                    break
+                if index[i][0] <= indexDate:
+                    result.append(False)
+                    break
+        # Check if both values were generated, if not return an array with false values
+        if result[0] == False or result[1] == False:
+            return False
+        else:
+            return result
+        '''
+            if index[i][0] >= initialDate and index[i][1] >= initialDate.hour and index[i][2] >= initialDate.minute:
+                result.append(index[i][1])
                 break
         # TODO: Watch out with MIDNIGHT trips !!!!
         if len(result) == 0:
-            result.append(len(Fitness.request))
+            result.append(len(Fitness.request)-1)
 
         try:
             for i in range(i, len(index)):
-                if index[i][0] >= finalHour and index[i][1] >= finalMinute:
-                    result.append(index[i][2])
+                if index[i][0] >= finalDate.day and index[i][1] >= finalDate.hour and index[i][2] >= finalDate.minute:
+                    result.append(index[i][3])
                     break
         except UnboundLocalError:
             print "Length of index is " + str(len(index))
 
         # TODO: Watch out with MIDNIGHT trips !!!!
         if len(result) == 1:
-            result.append(len(Fitness.request))
+            result.append(len(Fitness.request)-1)
+        return result
+        '''
+
+    def createRequestIndexOut(self, request):
+        ''' Creates a structure that stores the hour, the minute and the position on the request array for this particular time
+
+        @param: request (array): Structure that stores the requests grouped by bus stop, hour and minute. It also includes a COUNT column
+        '''
+        minute = 0
+        for i in range(len(request)):
+            if request[i]["_id"]["endTime"].minute != minute or i == 0:
+                Fitness.requestIndexOut.append([request[i]["_id"]["endTime"].day, request[i]["_id"]["endTime"].hour, request[i]["_id"]["endTime"].minute, i])
+                minute = request[i]["_id"]["endTime"].minute
+
+    def searchRequestIndexOut(self, index, initialDate, finalDate):
+        ''' Search the index to get the position on the request array for a specific time frame
+
+        @param: index (array): Structure that stores hour, minute and the request's array position for this time
+        @param: initialDate (datetime): Initial datetime to perform the search over the index
+        @param: finalDate (finalDate): Final datetime to perform the search over the index
+        '''
+        result = []
+        for i in range(len(index)):
+            if index[i][0] >= initialDate.day and index[i][1] >= initialDate.hour and index[i][2] >= initialDate.minute:
+                result.append(index[i][3])
+                break
+        # TODO: Watch out with MIDNIGHT trips !!!!
+        if len(result) == 0:
+            result.append(len(Fitness.requestOut))
+
+        try:
+            for i in range(i, len(index)):
+                if index[i][0] >= finalDate.day and index[i][1] >= finalDate.hour and index[i][2] >= finalDate.minute:
+                    result.append(index[i][3])
+                    break
+        except UnboundLocalError:
+            print "Length of index is " + str(len(index))
+
+        # TODO: Watch out with MIDNIGHT trips !!!!
+        if len(result) == 1:
+            result.append(len(Fitness.requestOut))
         return result
 
-    def searchRequest(self, initialTime, finalTime, busStop):
+    def searchRequestOut(self, initialTime, finalTime, busStop, line):
         ''' Search on the request array based on an inital time, a final time and a particular bus stop
-        
+
         @param: initialTime (datetime): Initial time to perform the request's search
         @param: finalTime (datetime): Final time to perform the request's search
         @param: busStop (string): Bus stop name used on the request's search
         '''
         result = []
-        index = self.searchRequestIndex(Fitness.requestIndex, initialTime.hour, initialTime.minute, finalTime.hour, finalTime.minute)
-        request = Fitness.request[index[0]:index[1]]
+        index = self.searchRequestIndexOut(Fitness.requestIndexOut, initialTime, finalTime)
+        request = Fitness.requestOut[index[0]:index[1]]
         for i in range(len(request)):
-            if request[i]["_id"]["BusStop"] == busStop:
+            if request[i]["_id"]["busStop"] == busStop and request[i]["_id"]["line"] == line:
                 result.append(request[i])
         return result
+
+    def getMinutesNextTrip(self, phenotype, currentTime, busStop):
+        ''' Find the next earlier time a bus will be on a particular bus stop
+
+        @return: The difference of minutes between the current time and the time for the next trip
+        '''
+        for gene in phenotype:
+            if gene[0] == busStop:
+                futureTime = gene[1]
+                break
+        return self.getMinutesFromTimedelta(futureTime - currentTime)
+
+    def getMinutesFromTimedelta(td):
+        return (td.seconds//60) % 60
 
     def calculateCost(self, individual, totalWaitingTime, penaltyOverCapacity):
         ''' Calculate cost for an individual in the population. 
