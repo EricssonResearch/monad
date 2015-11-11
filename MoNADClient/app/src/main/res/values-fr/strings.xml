@@ -97,4 +97,5 @@
     <string name="label_fragmentsettingstheme_dark">Sombre</string>
     <string name="label_fragmentsettingstheme_default">Par Défault</string>
     <string name="label_fragmentsettingstheme_light">Clair</string>
+    <string name="java_to">à</string>
 </resources>

@@ -54,7 +54,7 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<SearchRecycl
 
     @Override
     public void onBindViewHolder(final SearchViewHolder searchViewHolder, final int i) {
-        String routeInfo = searchResults.get(i).getStartBusStop() + " to " + searchResults.get(i).getEndBusStop();
+        String routeInfo = searchResults.get(i).getStartBusStop() + " " + searchViewHolder.itemView.getResources().getString(R.string.java_to) + " " + searchResults.get(i).getEndBusStop();
         searchViewHolder.timeInfo.setText(formatTripTime(searchResults.get(i)));
         searchViewHolder.routeInfo.setText(routeInfo);
         if(!searchResults.get(i).isHistory() && searchResults.get(i).getTimeToDeparture() < 1800000){
