@@ -2,6 +2,7 @@ DROP DATABASE IF EXISTS vehicles;
 CREATE DATABASE vehicles;
 USE vehicles;
 
+DROP TABLE IF EXISTS vehicle_profile;
 CREATE TABLE vehicle_profile (
     vehicle_id INT NOT NULL AUTO_INCREMENT,
     driver_id VARCHAR(255),
@@ -11,6 +12,7 @@ CREATE TABLE vehicle_profile (
 );
 
 DELIMITER $$
+DROP FUNCTION IF EXISTS vehicle_sign_up;
 CREATE FUNCTION vehicle_sign_up (
     in_driver_id VARCHAR(255),
     in_pass CHAR(40),
@@ -38,6 +40,7 @@ BEGIN
     END IF;
 END $$
 
+DROP FUNCTION IF EXISTS vehicle_sign_in;
 CREATE FUNCTION vehicle_sign_in (
     in_driver_id VARCHAR(255),
     in_pass CHAR(40),
@@ -70,8 +73,8 @@ END $$
 
 DELIMITER ;
 
---------------------------------------------------- DEBUGGING CODE ----------------------------------------------------
+-- ------------------------------------------------- DEBUGGING CODE ---------------------------------------------------
 
 SELECT vehicle_sign_up('d1', 'p1', '5');
 
------------------------------------------------------------------------------------------------------------------------
+-- --------------------------------------------------------------------------------------------------------------------

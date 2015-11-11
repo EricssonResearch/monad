@@ -48,6 +48,6 @@
         android:layout_alignParentEnd="true"
         android:padding="@dimen/layout_padding"
         android:contentDescription="@string/img_description"
-        android:onClick="openTripDetail"/>
+        />
 
 </RelativeLayout>

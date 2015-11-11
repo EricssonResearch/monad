@@ -124,7 +124,7 @@
 
                 <TextView
                     android:id="@+id/forgotpassword_text_view"
-                    android:layout_width="fill_parent"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/label_login_forgottenpassword"
                     android:gravity="center"

@@ -15,8 +15,9 @@ public abstract class Authentication {
     /* "http://localhost:" "http://130.238.15.114:" */
     public static final String AUTHENTICATION_HOST = "http://130.238.15.114:";
     public static final String AUTHENTICATION_PORT = "9999";
-//    public static final String ROUTES_ADMIN_HOST = "http://localhost:";
-//    public static final String ROUTES_ADMIN_PORT = "8888";
+
+    public static final String ROUTES_GENERATOR_HOST = "http://130.238.15.241:";
+    public static final String ROUTES_GENERATOR_PORT = "9998";
 
     public static String postRequest(String request, String urlParameters) {
         String response = "";
@@ -43,7 +44,8 @@ public abstract class Authentication {
             dos.write(postData);
 
             if (connection.getResponseCode() != 200) {
-                throw new RuntimeException("Failed : HTTP error code : " + connection.getResponseCode());
+                return "-1";
+                /* throw new RuntimeException("Failed : HTTP error code : " + connection.getResponseCode()); */
             }
             br = new BufferedReader(new InputStreamReader(connection.getInputStream()));
             String line = "";
