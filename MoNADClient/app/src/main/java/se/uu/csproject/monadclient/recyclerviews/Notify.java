@@ -8,6 +8,7 @@ import java.util.Date;
 import se.uu.csproject.monadclient.R;
 
 public class Notify {
+    String tripID;
     String id;      /* Corresponds to the Notification _id value in the database  */
     String text;
     Date time;
@@ -15,6 +16,7 @@ public class Notify {
 
     /* Used for generating notifications, which do not exist in the database */
     public Notify(String text, Date time, int iconID) {
+        this.tripID = "-1";
         this.id = "-1";
         this.text = text;
         this.time = time;
@@ -23,6 +25,15 @@ public class Notify {
 
     /* Used for generating notifications, which are parsed from the database */
     public Notify(String id, String text, Date time, int iconID) {
+        this.tripID = "-1";
+        this.id = id;
+        this.text = text;
+        this.time = time;
+        this.iconID = parseIconID(iconID);
+    }
+    /* Used for generating notifications, with the new tripID attribute.... */
+    public Notify(String tripID, String id, String text, Date time, int iconID) {
+        this.tripID = tripID;
         this.id = id;
         this.text = text;
         this.time = time;
@@ -46,6 +57,7 @@ public class Notify {
         }
         return returnedIconID;
     }
+    public String getTripID() { return tripID; }
 
     public boolean isToday() {
         Calendar today = Calendar.getInstance();
