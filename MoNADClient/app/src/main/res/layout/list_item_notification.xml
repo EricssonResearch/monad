@@ -7,6 +7,7 @@
     card_view:cardCornerRadius="@dimen/cardview_default_radius"
     card_view:cardUseCompatPadding="true"
     card_view:cardElevation="@dimen/cardview_default_elevation"
+    card_view:cardBackgroundColor="@color/white"
     >
 
     <LinearLayout
@@ -15,7 +16,6 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/first_notification"
         android:orientation="horizontal"
-        android:background="@color/white"
         android:padding="@dimen/medium_padding"
         >
 
@@ -31,7 +31,7 @@
             android:id="@+id/label_text"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="4"
+            android:layout_weight="3"
             android:textSize="@dimen/medium_text"
             android:padding="@dimen/medium_padding"
             style="@style/importantText"
@@ -50,13 +50,11 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:textSize="@dimen/medium_text"
+            android:textSize="@dimen/small_text"
+            android:gravity="end"
             android:layout_gravity="bottom"
             android:textColor="@color/primaryColorDark"
-
             />
-
-
 
         <ImageView
             android:layout_width="wrap_content"

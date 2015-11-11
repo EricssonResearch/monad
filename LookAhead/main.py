@@ -71,7 +71,7 @@ def main():
     #databaseClass = DB()
     #databaseClass.insertBusTrip(best_ind)
     print("Best individual is %s, %s" % (sorted(best_ind, key=itemgetter(2)), best_ind.fitness.values))
-    print "Length of best individual: " + str(len(best_ind))
+    print ("Length of best individual: " + str(len(best_ind)))
     #generateTimeTable(best_ind)
 
 

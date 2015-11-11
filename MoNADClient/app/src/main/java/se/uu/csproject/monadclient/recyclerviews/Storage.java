@@ -85,6 +85,7 @@ public class Storage{
 
     public static void sortNotifications() {
         Collections.sort(notifications, new NotificationsTimeComparator());
+        Collections.reverse(notifications);
     }
 
     public static boolean isEmptyNotifications() {
@@ -169,6 +170,7 @@ public class Storage{
         notifications.add(new Notify("Bus 801: 5 min delay", time4, 1));
         notifications.add(new Notify("Bus 801: Coming in 5 min", time5, 2));
         notifications.add(new Notify("Bus 801: Departing now", time6, 3));
+
         setNotifications(notifications);
     }
 }
