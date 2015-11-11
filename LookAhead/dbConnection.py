@@ -299,7 +299,7 @@ class DB():
             i[1] = sum
         return BusStplist
 
-    #TODO: THIS FUNCTION HAS ERRORS BUT ITS NOT CALLED
+    # TODO: THIS FUNCTION HAS ERRORS BUT ITS NOT CALLED
     def calculateReqNumTrip(self, capacity, trip_stTime, trip_endTime, requestLeftIn, lineNum = 2):
         ''' Calculate average waiting time for request for specific trip(defined by starting trip time and end trip time)
         @param capacity of specific trip, trip start time and end time should be given
