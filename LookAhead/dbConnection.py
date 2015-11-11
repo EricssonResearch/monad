@@ -321,7 +321,7 @@ class DB():
         else:
             a = trip_stTime
 
-        trip_time_table = self.generateFitnessTripTimeTable(lineNum, a)
+        trip_time_table = self.generatePhenotype(lineNum, a)
 
         for i in trip_time_table:
             BusStplist.append([i[0], i[1], 0,0,0])
@@ -583,7 +583,7 @@ class DB():
 
                 nreqs.append([req[0], req[1], commonbusstop])
                 #print " breakdown request into" % req[0], req[1], commonbusstop
-                triptimetable = self.generateFitnessTripTimeTable(sourceline, req[0])
+                triptimetable = self.generatePhenotype(sourceline, req[0])
                 for x in triptimetable:
                     if x[0] == commonbusstop:
                         tripdate = x[1]
@@ -643,7 +643,7 @@ class DB():
         # t =datetime.datetime.strptime(trip_sTime,'%Y-%m-%d %H:%M:%S').time()
         # e =datetime.datetime.strptime(tripEnd,'%Y-%m-%d %H:%M:%S').time()
         #get the trip time table
-        # trip_time_table = self.generateFitnessTripTimeTable(lineNum,trip_sTime[11:16])
+        # trip_time_table = self.generatePhenotypelineNum,trip_sTime[11:16])
         trip_time_table = self.generatePhenotype(lineNum,a)
 
         for i in trip_time_table:
