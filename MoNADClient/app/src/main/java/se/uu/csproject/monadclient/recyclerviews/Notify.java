@@ -1,11 +1,14 @@
 package se.uu.csproject.monadclient.recyclerviews;
 
+import android.util.Log;
+
 import java.util.Calendar;
 import java.util.Date;
 
 import se.uu.csproject.monadclient.R;
 
 public class Notify {
+    String tripID;
     String id;      /* Corresponds to the Notification _id value in the database  */
     String text;
     Date time;
@@ -13,6 +16,7 @@ public class Notify {
 
     /* Used for generating notifications, which do not exist in the database */
     public Notify(String text, Date time, int iconID) {
+        this.tripID = "-1";
         this.id = "-1";
         this.text = text;
         this.time = time;
@@ -21,6 +25,15 @@ public class Notify {
 
     /* Used for generating notifications, which are parsed from the database */
     public Notify(String id, String text, Date time, int iconID) {
+        this.tripID = "-1";
+        this.id = id;
+        this.text = text;
+        this.time = time;
+        this.iconID = parseIconID(iconID);
+    }
+    /* Used for generating notifications, with the new tripID attribute.... */
+    public Notify(String tripID, String id, String text, Date time, int iconID) {
+        this.tripID = tripID;
         this.id = id;
         this.text = text;
         this.time = time;
@@ -44,12 +57,30 @@ public class Notify {
         }
         return returnedIconID;
     }
+    public String getTripID() { return tripID; }
 
-    public String getId() {
+    public boolean isToday() {
+        Calendar today = Calendar.getInstance();
+        Calendar date = Calendar.getInstance();
+        date.setTime(time);
+        return today.get(Calendar.DAY_OF_MONTH) == date.get(Calendar.DAY_OF_MONTH)
+                && today.get(Calendar.MONTH) == date.get(Calendar.MONTH)
+                && today.get(Calendar.YEAR) == date.get(Calendar.YEAR);
+    }
+
+    public void printValues() {
+        Log.d("Notification", "-- Printing Values --");
+        Log.d("Notification", "ID: " + this.getID());
+        Log.d("Notification", "Text: " + this.getText());
+        Log.d("Notification", "Time: " + getTime());
+        Log.d("Notification", "IconID: " + getIconID());
+    }
+
+    public String getID() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setID(String id) {
         this.id = id;
     }
 
@@ -77,12 +108,4 @@ public class Notify {
         this.iconID = iconID;
     }
 
-    public boolean isToday() {
-        Calendar today = Calendar.getInstance();
-        Calendar date = Calendar.getInstance();
-        date.setTime(time);
-        return today.get(Calendar.DAY_OF_MONTH) == date.get(Calendar.DAY_OF_MONTH)
-                && today.get(Calendar.MONTH) == date.get(Calendar.MONTH)
-                && today.get(Calendar.YEAR) == date.get(Calendar.YEAR);
-    }
 }

@@ -1,4 +1,4 @@
-package se.uu.csproject.monadclient.tabs;
+package se.uu.csproject.monadclient;
 
 import android.os.AsyncTask;
 import android.util.Log;

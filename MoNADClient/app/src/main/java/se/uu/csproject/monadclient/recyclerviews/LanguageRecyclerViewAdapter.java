@@ -1,5 +1,7 @@
 package se.uu.csproject.monadclient.recyclerviews;
 
+import android.content.Context;
+import android.content.res.Configuration;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -10,15 +12,19 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.List;
+import java.util.Locale;
 
 import se.uu.csproject.monadclient.ClientAuthentication;
+import se.uu.csproject.monadclient.MainActivity;
 import se.uu.csproject.monadclient.R;
+import se.uu.csproject.monadclient.SettingsActivity;
 
 public class LanguageRecyclerViewAdapter
         extends RecyclerView.Adapter<LanguageRecyclerViewAdapter.LanguageViewHolder> {
 
     private List<Language> languages;
     private View selectedCardView;
+    private Context parentContext;
 
     public class LanguageViewHolder extends RecyclerView.ViewHolder {
 
@@ -36,8 +42,9 @@ public class LanguageRecyclerViewAdapter
         }
     }
 
-    public LanguageRecyclerViewAdapter(List<Language> languages){
+    public LanguageRecyclerViewAdapter(Context context, List<Language> languages){
         this.languages = languages;
+        this.parentContext = context;
     }
 
     @Override
@@ -49,7 +56,7 @@ public class LanguageRecyclerViewAdapter
     public LanguageViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
         View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.list_item_language,
                 viewGroup, false);
-       return new LanguageViewHolder(view);
+        return new LanguageViewHolder(view);
     }
 
     @Override
@@ -68,6 +75,15 @@ public class LanguageRecyclerViewAdapter
                 ClientAuthentication.setLanguage(languages.get(i).index);
                 ClientAuthentication.setIfSettingsChanged(true);
                 Toast.makeText(languageViewHolder.languageCard.getContext(), "Language changed to " + ClientAuthentication.getLanguage(), Toast.LENGTH_SHORT).show();
+
+                Locale locale = new Locale(languages.get(i).index);
+                Locale.setDefault(locale);
+                Configuration config = new Configuration();
+                config.locale = locale;
+                languageViewHolder.itemView.getContext().getResources().updateConfiguration(config,
+                        languageViewHolder.itemView.getContext().getResources().getDisplayMetrics());
+                //parentContext.startActivity(((SettingsActivity) parentContext).getIntent());
+                //((SettingsActivity) parentContext).finish();
             }
         });
     }

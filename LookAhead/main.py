@@ -68,8 +68,8 @@ def main():
     # The Best Individual found
     best_ind = tools.selBest(pop, 1)[0]
     #print "InsertBusTrip and TimeTable......"
-    #databaseClass = DB()
-    #databaseClass.insertBusTrip(best_ind)
+    databaseClass = DB()
+    databaseClass.insertBusTrip(best_ind)
     print("Best individual is %s, %s" % (sorted(best_ind, key=itemgetter(2)), best_ind.fitness.values))
     print ("Length of best individual: " + str(len(best_ind)))
     #generateTimeTable(best_ind)

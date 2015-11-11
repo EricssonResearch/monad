@@ -1,10 +1,16 @@
 package se.uu.csproject.monadclient.recyclerviews;
 
+import android.os.AsyncTask;
+import android.util.Log;
+import android.widget.Toast;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.GregorianCalendar;
+
+import se.uu.csproject.monadclient.RemoveNotificationTask;
 
 public class Storage{
     private static ArrayList<FullTrip> searchResults = new ArrayList<>();
@@ -83,6 +89,7 @@ public class Storage{
     }
 
     public static boolean isEmptyNotifications() {
+
         if (notifications != null && !notifications.isEmpty()) {
             return false;
         }
@@ -93,6 +100,10 @@ public class Storage{
 
     public static void addNotification(Notify notification) {
         notifications.add(notification);
+    }
+
+    public static void addNotificationAndSort(Notify notification) {
+        notifications.add(notification);
         sortNotifications();
     }
 
@@ -100,11 +111,46 @@ public class Storage{
         notifications.clear();
     }
 
-    public static void removeNotification(int i){
+    public static void removeNotification(int i) {
+        RemoveNotificationTask task = new RemoveNotificationTask();
+        try {
+            String response = task.execute(notifications.get(i).getID()).get();
+
+            if (response.equals("1")) {
+                Log.d("Storage: ", "Notification was successfully removed from the database");
+            }
+            else {
+                Log.d("Storage: ", "Notification was not removed from the database");
+            }
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
         notifications.remove(i);
     }
 
-    public static void initializeNotificationData(){
+    public static void printNotifications() {
+
+        if (!isEmptyNotifications()) {
+
+            for (int i = 0; i < notifications.size(); i++) {
+                notifications.get(i).printValues();
+            }
+        }
+    }
+
+    public static void printSortedNotifications() {
+
+        if (!isEmptyNotifications()) {
+            sortNotifications();
+
+            for (int i = 0; i < notifications.size(); i++) {
+                notifications.get(i).printValues();
+            }
+        }
+    }
+
+    public static void initializeNotificationData() {
         ArrayList<Notify> notifications = new ArrayList<>();
         Calendar calendar = new GregorianCalendar(2015, 10, 26, 10, 40, 0);
         Date time1 = calendar.getTime();
@@ -127,6 +173,5 @@ public class Storage{
 
         setNotifications(notifications);
     }
-
 }
 

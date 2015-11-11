@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
 import android.location.Location;
 import android.os.Build;
 import android.support.v4.app.ActivityCompat;
@@ -60,6 +61,12 @@ public class MainActivity extends MenuedActivity implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Locale locale = new Locale(ClientAuthentication.getLanguage());
+        Locale.setDefault(locale);
+        Configuration config = new Configuration();
+        config.locale = locale;
+        getBaseContext().getResources().updateConfiguration(config,
+                getBaseContext().getResources().getDisplayMetrics());
         setContentView(R.layout.activity_main);
         toolbar = (Toolbar) findViewById(R.id.actionToolBar);
         destination = (EditText) findViewById(R.id.main_search_destination);
@@ -67,14 +74,10 @@ public class MainActivity extends MenuedActivity implements
         currentLatitude = 0;
         currentLongitude = 0;
         setSupportActionBar(toolbar);
-        getSupportActionBar().setHomeButtonEnabled(true);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        //initialize notifications, temporary
-        Storage.initializeNotificationData();
         List<FullTrip> searchResults = new ArrayList<>();
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler_view_main);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getApplicationContext());
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getBaseContext());
         recyclerView.setLayoutManager(linearLayoutManager);
 
         /* TODO: Routes Generation (Please ignore that) */
@@ -82,9 +85,27 @@ public class MainActivity extends MenuedActivity implements
 //        rt.execute();
 
         /* TODO: GetRecommendations */
-//        System.out.println(ClientAuthentication.profileToString());
+        /* TODO: GetNotifications */
+        GetNotificationsTask notificationsTask = new GetNotificationsTask();
+        try {
+            String response = notificationsTask.execute().get();
+            System.out.println("Response: " + response);
 
-//        GetRecommendationsTask recommendationsTask = new GetRecommendationsTask();
+            if (response.equals("1")) {
+                Log.d("MainActivity", "Notifications have been successfully loaded by the database");
+            }
+            else {
+                //initialize notifications, temporary
+                Storage.initializeNotificationData();
+                Log.d("MainActivity", "Fake notifications have been generated");
+            }
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            Storage.initializeNotificationData();
+            Log.d("MainActivity", "Exception while loading notifications - Fake notifications have been generated");
+        }
+
 //        try {
 //            String response = recommendationsTask.execute().get();
 //
@@ -311,17 +332,17 @@ public class MainActivity extends MenuedActivity implements
             builder.setTitle("Confirm");
             builder.setMessage("Do you want to exit MoNAD?");
             // Add the buttons
-            builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int id) {
-                    // User cancelled the dialog
-                    //do nothing
-                }
-            });
             builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int id) {
                     // User clicked OK button
                     MainActivity.super.onBackPressed();
                     Toast.makeText(getApplicationContext(), "You have exited MoNAD.", Toast.LENGTH_LONG).show();
+                }
+            });
+            builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {
+                    // User cancelled the dialog
+                    //do nothing
                 }
             });
             // Create the AlertDialog

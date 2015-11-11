@@ -2,10 +2,10 @@ package se.uu.csproject.monadclient;
 
 import android.content.Context;
 import android.os.AsyncTask;
-import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -26,9 +26,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
-import se.uu.csproject.monadclient.recyclerviews.Language;
 import se.uu.csproject.monadclient.recyclerviews.LanguageRecyclerViewAdapter;
 import se.uu.csproject.monadclient.tabs.SlidingTabLayout;
+import se.uu.csproject.monadclient.recyclerviews.Language;
 
 public class SettingsActivity extends MenuedActivity {
 
@@ -43,7 +43,6 @@ public class SettingsActivity extends MenuedActivity {
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_home_white_24dp);
-
 
         SlidingTabLayout tabs = (SlidingTabLayout) findViewById(R.id.tabs);
         ViewPager pager = (ViewPager) findViewById(R.id.pager);
@@ -117,7 +116,7 @@ public class SettingsActivity extends MenuedActivity {
 
         @Override
         public Fragment getItem(int position) {
-            return SettingsFragment.getInstance(position + 1);
+            return SettingsFragment.getInstance(this.context, position + 1);
         }
 
         @Override
@@ -134,8 +133,10 @@ public class SettingsActivity extends MenuedActivity {
     public static class SettingsFragment extends Fragment{
         public static final String TAB_POSITION = "tab_position";
         private int page;
+        private static Context context;
 
-        public static SettingsFragment getInstance(int position){
+        public static SettingsFragment getInstance(Context c, int position){
+            context = c;
             SettingsFragment settingsFragment = new SettingsFragment();
             Bundle args = new Bundle();
             args.putInt(TAB_POSITION, position);
@@ -154,8 +155,6 @@ public class SettingsActivity extends MenuedActivity {
             super.onResume();
         }
 
-        //TODO 2 Ilyass: finalize language settings
-        //TODO: update language settings in database
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
             View layout;
@@ -167,7 +166,7 @@ public class SettingsActivity extends MenuedActivity {
                 LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
                 recyclerView.setLayoutManager(linearLayoutManager);
                 initializeLanguages(languages);
-                LanguageRecyclerViewAdapter adapter = new LanguageRecyclerViewAdapter(languages);
+                LanguageRecyclerViewAdapter adapter = new LanguageRecyclerViewAdapter(context, languages);
                 recyclerView.setAdapter(adapter);
                 recyclerView.setItemAnimator(new DefaultItemAnimator());
             }
@@ -243,7 +242,7 @@ public class SettingsActivity extends MenuedActivity {
                         radiobutton_darktheme.setChecked(true);
                         break;
                 }
-                
+
                 radiogroup_themes.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
 
                     @Override
@@ -279,11 +278,12 @@ public class SettingsActivity extends MenuedActivity {
 
         private void initializeLanguages(List<Language> languages){
             languages.add(new Language("English", "en", R.drawable.lang_en));
-            languages.add(new Language("Svenska", "sv", R.drawable.lang_sv));
-            languages.add(new Language("Dansk", "dk", R.drawable.lang_dk));
-            languages.add(new Language("Deutsch", "de", R.drawable.lang_de));
-            languages.add(new Language("Norsk", "nr", R.drawable.lang_nr));
-            languages.add(new Language("Suomi", "fi", R.drawable.lang_fi));
+            languages.add(new Language("Français", "fr", R.drawable.lang_fr));
+//            languages.add(new Language("Svenska", "sv", R.drawable.lang_sv));
+//            languages.add(new Language("Dansk", "dk", R.drawable.lang_dk));
+//            languages.add(new Language("Deutsch", "de", R.drawable.lang_de));
+//            languages.add(new Language("Norsk", "nr", R.drawable.lang_nr));
+//            languages.add(new Language("Suomi", "fi", R.drawable.lang_fi));
         }
     }
 
@@ -291,8 +291,7 @@ public class SettingsActivity extends MenuedActivity {
 
         @Override
         protected String doInBackground(String... params) {
-            String response = ClientAuthentication.postSettingsUpdateRequest(params[0], params[1], params[2], params[3], params[4], params[5]);;
-            return response;
+            return ClientAuthentication.postSettingsUpdateRequest(params[0], params[1], params[2], params[3], params[4], params[5]);
         }
     }
 

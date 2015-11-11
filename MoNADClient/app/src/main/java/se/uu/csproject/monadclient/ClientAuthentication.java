@@ -2,13 +2,12 @@ package se.uu.csproject.monadclient;
 
 //import com.google.common.base.Charsets;
 
-import android.widget.SectionIndexer;
-
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
@@ -812,23 +811,56 @@ public class ClientAuthentication extends Authentication {
                 JSONObject notificationObjectID = (JSONObject) notification.get("_id");
                 String notificationID = (String) notificationObjectID.get("$oid");
 
-                String notificationText = (String) notificationObjectID.get("text");
+                String notificationText = (String) notification.get("text");
 
                 JSONObject timeObject = (JSONObject) notification.get("time");
                 Date notificationTime = new Date((long) timeObject.get("$date"));
 
-                Integer notificationIconID = (Integer) notification.get("icon_id");
+                long temp = (long) notification.get("icon_id");
+
+                int notificationIconID = new BigDecimal(temp).intValueExact();
 
                 Notify notify = new Notify(notificationID, notificationText, notificationTime, notificationIconID);
                 Storage.addNotification(notify);
             }
+            Storage.sortNotifications();
+            Storage.printNotifications();
         }
-        catch (ParseException e) {
+        catch (Exception e) {
             e.printStackTrace();
+            return "0";
+        }
+        return "1";
+    }
+
+    public static String postRemoveNotificationRequest(String notificationID) {
+        String request = AUTHENTICATION_HOST + AUTHENTICATION_PORT + "/remove_notification";
+        String urlParameters = "notification_id=" + notificationID;
+
+        /* Send the request to the Authentication Module */
+        String response = postRequest(request, urlParameters);
+
+        /* Handle response in case of exception */
+        if (response.equals("-1")) {
+            return exceptionMessage();
         }
 
-        response = "Success (1)";
-        return response;
+        /*
+         * By default, Erlang adds the newline '\n' character at the beginning of response.
+         * For this reason substring() function is used
+         */
+        response = response.substring(1);
+        return processRemoveNotificationResponse(response);
+    }
+
+    public static String processRemoveNotificationResponse(String response) {
+
+        if (response.equals("1")) {
+            return "1";
+        }
+        else {
+            return "0";
+        }
     }
 
     /* TODO: Will be changed */
