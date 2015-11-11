@@ -153,6 +153,7 @@ public class TripRecyclerViewAdapter
         // if the trip already happened
         else {
             tripViewHolder.feedback.setRating(trips.get(i).getFeedback());
+            tripViewHolder.date.setText(formatDate(trips.get(i).getStartTime()));
         }
     }
 
@@ -203,4 +204,5 @@ public class TripRecyclerViewAdapter
         SimpleDateFormat dateFormat = new SimpleDateFormat("EEE dd MMM.");
         return dateFormat.format(calendar.getTime());
     }
+
 }
