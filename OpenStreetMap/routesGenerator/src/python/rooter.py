@@ -19,7 +19,7 @@ import re
 
 from router import Map
 
-# the_map = Map("../testmap.xml")
+#the_map = Map("testmap.xml")
 the_map = Map("../UppsalaTest.osm")
 
 
@@ -116,6 +116,8 @@ def get_route_from_coordinates(coordinates_str_list, pid):
     coordinate_str = ''.join(chr(i) for i in coordinates_str_list)
     coordinates_list = ast.literal_eval(coordinate_str)
     route, cost = the_map.findRouteFromCoordinateList(coordinates_list)
+    if not route:
+        route = [None]
     path = {}
     path['_id'] = 1212
     path['points'] = coordinate_str
@@ -155,7 +157,12 @@ def get_coordinates_from_string(string, pid):
 
     data['address'] = addr
     data['bus_stop'] = busStop
-    data['coordinates'] = coordinates
+    if coordinates is not None:
+        data['longitude'] = coordinates[0]
+        data['latitude'] = coordinates[1]
+    else:
+        data['longitude'] = None
+        data['latitude'] = None
 
     response = Atom("ok"), dumps(data)
     cast(pid, response)
