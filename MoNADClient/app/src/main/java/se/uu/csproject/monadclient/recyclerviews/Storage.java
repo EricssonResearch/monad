@@ -14,6 +14,7 @@ import se.uu.csproject.monadclient.RemoveNotificationTask;
 
 public class Storage{
     private static ArrayList<FullTrip> searchResults = new ArrayList<>();
+    private static ArrayList<FullTrip> bookings = new ArrayList<>();
     private static ArrayList<FullTrip> recommendations = new ArrayList();
     private static ArrayList<Notify> notifications = new ArrayList<>();
 
@@ -41,6 +42,16 @@ public class Storage{
             return true;
         }
     }
+
+    /** Methods for bookings */
+    public static void setBookings(ArrayList<FullTrip> bookings1){
+        bookings = bookings1;
+    }
+
+    public static ArrayList<FullTrip> getBookings(){
+        return bookings;
+    }
+
 
     /** Methods for recommendations */
     public static ArrayList<FullTrip> getRecommendations() {
