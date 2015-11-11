@@ -47,6 +47,17 @@ def string_to_coordinates(string):
 
 
 def coordinates_to_nearest_stop(longitude, latitude):
+    """
+    Finds the nearest bus stop according to the coordinates supplied.
+
+    :param longitude: float
+    :param latitude: float
+    :return: a dictionary: {_id: integer
+                            name: String, name of the bus stop
+                            latitude: float
+                            longitude: float
+                            }
+    """
     url = (ROUTES_GENERATOR_HOST +
            ROUTES_GENERATOR_PORT +
            '/get_nearest_stop_from_coordinates')
@@ -58,6 +69,23 @@ def coordinates_to_nearest_stop(longitude, latitude):
 
 
 def get_route(coordinates_list):
+    """
+    Finds the route from a list of destinations. The first element is the
+    starting point and the last element is the ending point. Other coordinates
+    in the list are intermediate point to visit in increasing order.
+
+    :param coordinates_list: list of coordinates [(longitude, latitude)]
+    :return: dict, {_id: integer
+                    points: coordinates_list
+                    route: list of coordinates, [(longitude, latitude)] the
+                        route.
+                    start: coordinates_list[0]
+                    end: coordinates_list[-1]
+                    cost: [float], the cost in sec to get between two points on
+                        the route. cost[0] = cost for route between points[0]
+                        and points[1].
+                    }
+    """
     url = (ROUTES_GENERATOR_HOST +
            ROUTES_GENERATOR_PORT +
            '/get_route_from_coordinates')
@@ -80,5 +108,6 @@ if __name__ == '__main__':
     print get_route([(17.6130204, 59.8545318),
                      (17.5817552, 59.8507556),
                      (17.6476356, 59.8402173)])
+    print get_route([])
     print coordinates_to_nearest_stop(latitude=59.8710848,
                                       longitude=17.6546528)
