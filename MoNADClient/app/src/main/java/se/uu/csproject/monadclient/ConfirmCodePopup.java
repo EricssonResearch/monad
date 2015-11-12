@@ -52,7 +52,7 @@ public class ConfirmCodePopup extends AppCompatActivity {
                     finish();
                 }
                 else{
-                    Toast.makeText(getApplicationContext(), "The code you entered is not right, please check your email and enter the right code.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), getString(R.string.java_confirmcode_error), Toast.LENGTH_LONG).show();
                 }
             }
         });

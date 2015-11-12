@@ -193,7 +193,7 @@ public class NotificationRecyclerViewAdapter extends RecyclerView.Adapter<Notifi
                 mBuilder.setContentTitle(mContext.getString(R.string.label_notification_notification));
                 mBuilder.setContentText(notificationText.getText());
                 mBuilder.setAutoCancel(true);
-                mBuilder.setContentText("You've received new messages.")
+                mBuilder.setContentText(this.itemView.getResources().getString(R.string.java_notificationsrva_newmessages))
                         .setNumber(++numMessages);
 
                 NotificationManager mNotificationManager = (NotificationManager)

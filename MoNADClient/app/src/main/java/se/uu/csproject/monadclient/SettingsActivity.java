@@ -249,17 +249,17 @@ public class SettingsActivity extends MenuedActivity {
                     public void onCheckedChanged(RadioGroup group, int checkedId) {
                         switch (checkedId) {
                             case R.id.radiobutton_fragmentsettingstheme_light:
-                                Toast.makeText(getActivity().getApplicationContext(), "theme changed to light", Toast.LENGTH_LONG).show();
+                                Toast.makeText(getActivity().getApplicationContext(), getString(R.string.java_settings_themechanged_light), Toast.LENGTH_LONG).show();
                                 ClientAuthentication.setTheme("0");
                                 //change the theme to light
                                 break;
                             case R.id.radiobutton_fragmentsettingstheme_default:
-                                Toast.makeText(getActivity().getApplicationContext(), "theme changed to default", Toast.LENGTH_LONG).show();
+                                Toast.makeText(getActivity().getApplicationContext(), getString(R.string.java_settings_themechanged_default), Toast.LENGTH_LONG).show();
                                 ClientAuthentication.setTheme("1");
                                 //change the theme to default
                                 break;
                             case R.id.radiobutton_fragmentsettingstheme_dark:
-                                Toast.makeText(getActivity().getApplicationContext(), "theme changed to dark", Toast.LENGTH_LONG).show();
+                                Toast.makeText(getActivity().getApplicationContext(), getString(R.string.java_settings_themechanged_dark), Toast.LENGTH_LONG).show();
                                 ClientAuthentication.setTheme("2");
                                 //change the theme to dark
                                 break;
