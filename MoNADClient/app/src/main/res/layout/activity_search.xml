@@ -145,12 +145,20 @@
 
         </LinearLayout>
 
-        <TextView
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:orientation="horizontal">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
             android:id="@+id/textview_search_priority"
             android:text="@string/label_search_priority"
-            android:padding="@dimen/small_padding"/>
+            android:padding="@dimen/small_padding"
+            android:layout_marginRight="@dimen/medium_padding"
+            android:layout_marginEnd="@dimen/medium_padding"
+            />
 
         <RadioGroup
             android:layout_width="match_parent"
@@ -175,6 +183,7 @@
                 android:text="@string/label_search_shortesttriptime"/>
 
         </RadioGroup>
+    </LinearLayout>
 
         <TextView
             android:layout_width="wrap_content"

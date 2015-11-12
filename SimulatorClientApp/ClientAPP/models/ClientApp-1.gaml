@@ -29,7 +29,7 @@ global skills: [SQLSKILL] {
 	list<string> init_position <- list<string>(csv_file("../includes/position_name.csv"));
 	
 	//Matrix which keeps regular user info
-	matrix<string> regular_user2 <- matrix<string>(csv_file("../includes/Regular_user_info2.csv",""));
+	matrix<string> regular_user2 <- matrix<string>(csv_file("../includes/Regular_user_info.csv","&"));
 	int mx_index;
 	list spname_ls2 <- ['Kungshögarna','Regins väg','Valhalls väg','Huges väg','Topeliusgatan','Värnlundsgatan','Ferlinsgatan','Heidenstamstorg','Kantorsgatan','Djäknegatan',
 							 'Portalgatan','Höganäsgatan','Väderkvarnsgatan','Vaksala torg','Stadshuset','Skolgatan','Götgatan','Ekonomikum','Studentstaden','Rickomberga','Oslogatan',
@@ -211,39 +211,11 @@ species client skills: [SQLSKILL] {
 	int passenger_cal_flag <- 0;	
 	
 	//regular_request
-	int org_st_year;
-	int org_st_month;
-	int org_st_day;
-	int org_st_hour;
-	int org_st_min;
-	int org_end_year;
-	int org_end_month;
-	int org_end_day;
-	int org_end_hour;
-	int org_end_min;
-	int new_st_year;
-	int new_st_month;
-	int new_st_day;
-	int new_st_hour;
-	int new_st_min;
-	int new_end_year;
-	int new_end_month;
-	int new_end_day;
-	int new_end_hour;
-	int new_end_min;	
-	int	org_req_year;
-	int	org_req_month;
-	int	org_req_day;
-	int	org_req_hour;
-	int	org_req_min;	
-	int	new_req_year;
-	int	new_req_month;
-	int	new_req_day;
-	int	new_req_hour;
-	int	new_req_min;	
 	string startPositionLatitude;
 	string startPositionLongitude;
 	string user_name_str;	
+	string org_st_time;
+	string org_req_time;
 	
 	//list spname_ls2 <- ['Kungshögarna','Regins väg','Valhalls väg','Huges väg','Topeliusgatan','Värnlundsgatan','Ferlinsgatan','Heidenstamstorg','Kantorsgatan','Djäknegatan',
 	//						 'Portalgatan','Höganäsgatan','Väderkvarnsgatan','Vaksala torg','Stadshuset','Skolgatan','Götgatan','Ekonomikum','Studentstaden','Rickomberga','Oslogatan',
@@ -311,8 +283,6 @@ species client skills: [SQLSKILL] {
 		} else if int(st_second) < 10{
 			st_second <- '0' + string(int(st_second));
 		}	
-			
-
 	
 		if st_end_rnd > 0{
 			start_time <- string(1970 + int(st_year) - 1)  + "-" + st_month + "-" + st_day + " " + st_hour + ":" + st_minute + ":" + st_second;	
@@ -337,154 +307,28 @@ species client skills: [SQLSKILL] {
 	//regular_request
 	action regular_request{
 		loop i from: 0 to: (regular_user2.rows - 1) {
-<<<<<<< HEAD
 			if regular_user2[1,i] = nil or regular_user2[2,i] = nil {
-				//test push
 				break;
 			}
-=======
->>>>>>> 24756ecd0a4ed5e1067eed658c9768a1b96579a1
 			if regular_user2[1,i] != 'null' {
-				org_st_year <- int(copy_between(regular_user2[1,i], 0,4));
-				org_st_month <- int(copy_between(regular_user2[1,i], 5,7));
-				org_st_day <- int(copy_between(regular_user2[1,i], 8,10));
-				org_st_hour <- int(copy_between(regular_user2[1,i], 11,13));
-				org_st_min <- int(copy_between(regular_user2[1,i], 14,16));
-				if org_st_day = 28 and org_st_month = 2 and mod(org_st_year,4) != 0{
-					new_st_day <- 1;
-					new_st_month <- 3;
-					new_st_year <- org_st_year;
-					new_st_hour <- org_st_hour;
-					new_st_hour <- org_st_min;
-				}else if org_st_day = 29 and org_st_month = 2{
-					new_st_day <- 1;
-					new_st_month <- 3;	
-					new_st_year <- org_st_year;
-					new_st_hour <- org_st_hour;
-					new_st_hour <- org_st_min;									
-				}
-				else if org_st_day = 30 and org_st_month in [4,6,9,11]{
-					new_st_day <- 1;
-					new_st_month <- org_st_month + 1;
-					new_st_year <- org_st_year;
-					new_st_hour <- org_st_hour;
-					new_st_hour <- org_st_min;					
-				}else if org_st_day = 31 and org_st_month in [1,3,5,7,8,9,12]{
-					if org_st_month = 12{
-						new_st_day <- 1;
-						new_st_month <- 1;
-						new_st_year <- org_st_year + 1;
-						new_st_hour <- org_st_hour;
-						new_st_hour <- org_st_min;						
-					} else {
-						new_st_day <- 1;
-						new_st_month <- org_st_month + 1;	
-						new_st_year <- org_st_year;
-						new_st_hour <- org_st_hour;
-						new_st_hour <- org_st_min;	
-					}
+				org_st_time <- copy_between(regular_user2[1,i], 11,19);
+			} else if regular_user2[2,i] != 'null' {
+				org_st_time <- copy_between(regular_user2[2,i], 11,19);
+			}
 
-				}else{
-					new_st_day <- org_st_day + 1;
-					new_st_month <- org_st_month;	
-					new_st_year <- org_st_year;
-					new_st_hour <- org_st_hour;
-					new_st_hour <- org_st_min;						
-				}		
-			} 
-			if regular_user2[2,i] != 'null' {
-				org_st_year <- int(copy_between(regular_user2[2,i], 0,4));
-				org_st_month <- int(copy_between(regular_user2[2,i], 5,7));
-				org_st_day <- int(copy_between(regular_user2[2,i], 8,10));
-				org_st_hour <- int(copy_between(regular_user2[2,i], 11,13));
-				org_st_min <- int(copy_between(regular_user2[2,i], 14,16));	
-				if org_st_day = 28 and org_st_month = 2 and mod(org_st_year,4) != 0{
-					new_st_day <- 1;
-					new_st_month <- 3;
-					new_st_year <- org_st_year;
-					new_st_hour <- org_st_hour;
-					new_st_hour <- org_st_min;
-				}else if org_st_day = 29 and org_st_month = 2{
-					new_st_day <- 1;
-					new_st_month <- 3;	
-					new_st_year <- org_st_year;
-					new_st_hour <- org_st_hour;
-					new_st_hour <- org_st_min;									
-				}
-				else if org_st_day = 30 and org_st_month in [4,6,9,11]{
-					new_st_day <- 1;
-					new_st_month <- org_st_month + 1;
-					new_st_year <- org_st_year;
-					new_st_hour <- org_st_hour;
-					new_st_hour <- org_st_min;					
-				}else if org_st_day = 31 and org_st_month in [1,3,5,7,8,9,12]{
-					if org_st_month = 12{
-						new_st_day <- 1;
-						new_st_month <- 1;
-						new_st_year <- org_st_year + 1;
-						new_st_hour <- org_st_hour;
-						new_st_hour <- org_st_min;						
-					} else {
-						new_st_day <- 1;
-						new_st_month <- org_st_month + 1;	
-						new_st_year <- org_st_year;
-						new_st_hour <- org_st_hour;
-						new_st_hour <- org_st_min;	
-					}
-
-				}else{
-					new_st_day <- org_st_day + 1;
-					new_st_month <- org_st_month;	
-					new_st_year <- org_st_year;
-					new_st_hour <- org_st_hour;
-					new_st_hour <- org_st_min;						
-				}	
-			}
-			org_req_year <- int(copy_between(regular_user2[3,i], 0,4));
-			org_req_month <- int(copy_between(regular_user2[3,i], 5,7));
-			org_req_day <- int(copy_between(regular_user2[3,i], 8,10));
-			org_req_hour <- int(copy_between(regular_user2[3,i], 11,13));
-			org_req_min <- int(copy_between(regular_user2[3,i], 14,16));
-			new_req_hour <- org_req_month;
-			new_req_min <- org_req_min;	
-			if org_req_day = 28 and org_st_month = 2 and mod(org_st_year,4) != 0{
-				new_req_day <- 1;
-				new_req_month <- 3;
-				new_req_year <- org_req_year;
+			org_req_time <- copy_between(regular_user2[3,i], 11,19);
 			
-			}else if org_req_day = 29 and org_req_month = 2{
-				new_req_day <- 1;
-				new_req_month <- 3;	
-				new_req_year <- org_req_year;
-			}
-			else if org_req_day = 30 and org_req_month in [4,6,9,11]{
-				new_req_day <- 1;
-				new_req_month <- org_req_month + 1;
-				new_req_year <- org_req_year;	
-			}else if org_req_day = 31 and org_req_month in [1,3,5,7,8,9,12]{
-				if org_req_month = 12{
-					new_req_day <- 1;
-					new_req_month <- 1;
-					new_req_year <- org_req_year + 1;					
-				}
-				new_req_day <- 1;
-				new_req_month <- org_req_month + 1;
-				new_req_year <- org_req_year;	
-			}else{
-				new_req_day <- org_req_day + 1;
-				new_req_year <- org_req_year;	
-				new_req_month <- org_req_month;
-			}
-			
-			user_name_str <- regular_user2[0,i];
 			if regular_user2[1,i] != 'null' {
-				start_time <- string(new_st_year) + '-' + string(new_st_month) + '-' + string(new_st_day) + ' ' + string(new_st_hour) + ':' + string(new_st_min);
+				start_time <- string(1970 + int(st_year) - 1)  + "-" + st_month + "-" + st_day + ' ' + org_st_time;
 				end_time <- regular_user2[2,i];		
 			} else {
-				end_time <- string(new_st_year) + '-' + string(new_st_month) + '-' + string(new_st_day) + ' ' + string(new_st_hour) + ':' + string(new_st_min);
+				end_time <- string(1970 + int(st_year) - 1)  + "-" + st_month + "-" + st_day + ' ' + org_st_time;
 				start_time <- regular_user2[1,i];					
 			}
-			request_time <- string(new_req_year) + '-' + string(new_req_month) + '-' + string(new_req_day) + ' ' + string(new_req_hour) + ':' + string(new_req_min);
+
+			user_name_str <- regular_user2[0,i];
+			request_time <- string(1970 + int(year) - 1)  + "-" + month + "-" + day + ' ' + org_req_time;
+			
 			start_position <- regular_user2[4,i];
 			end_position <- regular_user2[5,i];
 			priority <- regular_user2[6,i];
@@ -565,11 +409,13 @@ species client skills: [SQLSKILL] {
 		request_time <- string(1970 + int(year) - 1)  + "-" + month + "-" + day + " " + hour + ":" + minute+ ":" + second;
 			write request_time;
 
-			
+		//prepare start_time and end_time for both random and regular request
+		do normal_request;
+							
 		//if the request come from a reqular user
 		//regular_request
 		if regular_user_flag = 0 {
-			//do regular_request;
+			do regular_request;
 			regular_user_flag <- 1;
 		}else{ //here we need to calculate the startTime and eduration_hour_startndTime based on request time(NORMAL)
 			
@@ -609,7 +455,7 @@ species client skills: [SQLSKILL] {
 				start_position <- string(spname_ls[2][rnd(hot_st_lgt-1)][0]);
             	end_position <- string(spname_ed_ls[2][rnd(hot_ed_lgt-1)][0]); 
             	
-				do normal_request;
+
 				if passenger_cal_flag = 1 {
 					loop i from: 0 to: length(bus_stop_list) - 1{
     	           	 	if (start_position = bus_stop_list[i][0]){
@@ -695,7 +541,9 @@ species client skills: [SQLSKILL] {
 
 			request_time <- string(1970 + int(year) - 1)  + "-" + month + "-" + day + " " + hour + ":" + minute + ":" + second;
 		
-			
+			//prepare start_time and end_time for both random and regular request
+			do normal_request;
+				
 			//if the request come from a reqular user
 			//regular_request
 			if regular_user_flag = 0 {
@@ -735,7 +583,7 @@ species client skills: [SQLSKILL] {
 					start_position <- string(spname_ls[2][rnd(hot_st_lgt-1)][0]);
               	  	end_position <- string(spname_ed_ls[2][rnd(hot_ed_lgt-1)][0]); 
               	  	write start_position;
-					do normal_request;
+					
 					if passenger_cal_flag = 1 {
 						loop i from: 0 to: length(bus_stop_list) - 1{
     	    	       	 	if (start_position = bus_stop_list[i][0]){

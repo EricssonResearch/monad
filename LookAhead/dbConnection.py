@@ -37,6 +37,7 @@ class DB():
     minutesHour = 60
     formatTime = '%H:%M'
     yesterday = datetime.datetime(2015, 11, 11)
+    
 
     # ---------------------------------------------------------------------------------------------------------------------------------------
     # Constructor
@@ -299,7 +300,7 @@ class DB():
             i[1] = sum
         return BusStplist
 
-    #TODO: THIS FUNCTION HAS ERRORS BUT ITS NOT CALLED
+    # TODO: THIS FUNCTION HAS ERRORS BUT ITS NOT CALLED
     def calculateReqNumTrip(self, capacity, trip_stTime, trip_endTime, requestLeftIn, lineNum = 2):
         ''' Calculate average waiting time for request for specific trip(defined by starting trip time and end trip time)
         @param capacity of specific trip, trip start time and end time should be given
@@ -563,7 +564,7 @@ class DB():
             "timetable": tripObjectList
         }    
         #print timeTable
-        self.db.TimeTable.insert_one(timeTable) 
+        self.db.TimeTable1.insert_one(timeTable) 
 
 
     def getBusStopline(self,id):
@@ -698,6 +699,7 @@ class DB():
 
         tripObjectList = []
         requestLeftIn = []
+        BUSID = 1
         for i in range(len(individual)):
             line = individual[i][0]
             if i > 0:
@@ -708,6 +710,8 @@ class DB():
             tripObjectList.append(objID)
             capacity = individual[i][1]
             startTime = individual[i][2] + timedelta(1)
+            
+            busID = BUSID #Need to assign busID for every Trip
    
             trajectory = self.getRoute(line, "trajectory")
             if i == 0:
@@ -740,11 +744,12 @@ class DB():
                 "capacity": capacity,
                 "line": line,
                 "startTime": startTime,
+                "busID": busID,
                 "endTime": trajectory[len(trajectory)-1]["time"],
                 "trajectory": trajectory 
             }
             #print trip
-            self.db.BusTrip.insert_one(trip)
+            self.db.BusTrip1.insert_one(trip)
             if i == len(individual) - 1:
                 self.insertTimeTable2(line, startTime, tripObjectList)
         #self.insertTimeTable1(line, startTime, tripObjectList)

@@ -157,7 +157,8 @@ public class TripCancelPopup extends AppCompatActivity implements AsyncResponseS
 
     // Deals with the response by the server after requesting the updated user's bookings
     public void processFinish(ArrayList<FullTrip> bookings){
-        Intent intent = new Intent(TripCancelPopup.this, TripsActivity.class);
+        Storage.setBookings(bookings);
+        Intent intent = new Intent(this, TripsActivity.class);
         startActivity(intent);
         finish();
     }
