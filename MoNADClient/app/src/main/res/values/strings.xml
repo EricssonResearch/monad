@@ -98,6 +98,7 @@
     <string name="label_search_shortesttriptime">Shortest trip </string>
     <string name="label_search_earliesttrip">Earliest trip</string>
     <string name="label_search_results">Results</string>
+    <string name="label_search_search">Search</string>
     <string name="label_search_moreresults">More Results</string>
     <string name="label_searchresult_timeinfo">n/a - n/a (n/a min)</string>
     <string name="label_searchresult_routeinfo">n/a to n/a</string>
