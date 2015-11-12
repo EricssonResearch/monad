@@ -344,6 +344,7 @@ species client skills: [SQLSKILL] {
 		write regular_user2[3,0];
 		loop i from: 0 to: (regular_user2.rows - 1) {
 			if regular_user2[1,i] = nil or regular_user2[2,i] = nil {
+				//test push
 				break;
 			}
 			if regular_user2[1,i] != 'null' {
@@ -720,7 +721,7 @@ experiment ClientApp type: gui {
 	parameter "Minutes end From now " var: duration_hour_end  min: 1 max: 72 category: "Time-screen" ;
  	parameter "Shapefile for the roads:" var: shape_file_roads category: "GIS" ;
  	parameter "Shapefile for the bounds:" var: shape_file_bounds category: "GIS";
-
+	
 
 	output {
 		display main_display {
