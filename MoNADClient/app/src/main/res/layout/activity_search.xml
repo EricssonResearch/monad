@@ -74,15 +74,15 @@
                 android:textSize="@dimen/header_textlarge"
                 android:textColorHint="@drawable/hint_hide_selector"/>
 
-            <ImageView
+            <!--ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="0"
                 android:background="@color/primaryColor"
                 android:contentDescription="@string/img_description"
                 android:src="@drawable/ic_search_white_48dp"
-                android:onClick="sendTravelRequest"
-                />
+
+                /-->
 
         </LinearLayout>
 
@@ -213,11 +213,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/button_search_search"
-            android:text="@string/label_search_moreresults"
+            android:text="@string/label_search_search"
             android:textColor="@color/white"
             android:background="@color/primaryColor"
+            android:drawableRight="@drawable/ic_search_white_48dp"
+            android:drawableEnd="@drawable/ic_search_white_48dp"
             android:layout_gravity="bottom"
             android:layout_marginTop="@dimen/small_padding"
+            android:onClick="sendTravelRequest"
             />
     </LinearLayout>
 

@@ -37,7 +37,7 @@
         android:layout_height="wrap_content"
         android:textSize="@dimen/medium_text"
         android:padding="@dimen/medium_padding"
-        style="@style/importantText"
+        style="@style/blackText"
         android:layout_gravity="center_vertical"
         />
     <TextView

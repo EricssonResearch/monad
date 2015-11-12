@@ -59,6 +59,7 @@ public class MainActivity extends MenuedActivity implements
     private double currentLatitude, currentLongitude;
     private Context context;
     private Toolbar toolbar;
+    private AlertDialog.Builder builder;
 
     private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
     private final int MY_PERMISSIONS_REQUEST = 123;
@@ -73,6 +74,8 @@ public class MainActivity extends MenuedActivity implements
         getBaseContext().getResources().updateConfiguration(config,
                 getBaseContext().getResources().getDisplayMetrics());
         setContentView(R.layout.activity_main);
+        initAlertDialog();
+
         toolbar = (Toolbar) findViewById(R.id.actionToolBar);
         destination = (AutoCompleteTextView) findViewById(R.id.main_search_destination);
         context = getApplicationContext();
@@ -319,31 +322,34 @@ public class MainActivity extends MenuedActivity implements
         }
     }
 
+    private void initAlertDialog(){
+        builder = new AlertDialog.Builder(this);
+        builder.setTitle("Confirm");
+        builder.setMessage("Do you want to exit MoNAD?");
+        // Add the buttons
+        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                // User clicked Yes button
+                MainActivity.super.onBackPressed();
+                Toast.makeText(getApplicationContext(), "You have exited MoNAD.", Toast.LENGTH_LONG).show();
+            }
+        });
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                // User cancelled the dialog
+                //do nothing
+            }
+        });
+    }
+
     /* Prompt the user to confirm if he/she wants to exit MoNAD or not if this is the root task in the back stack */
+    /* Don't need to check if it's the root task. This is because after mainActivity finish,
+     * all the activities below it in the back stack are destroyed right away (e.g. in the case of google login) */
     @Override
     public void onBackPressed() {
-        if(isTaskRoot()){
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle(getString(R.string.java_confirm));
-            builder.setMessage(getString(R.string.java_main_exitmonad));
-            // Add the buttons
-            builder.setPositiveButton(getString(R.string.java_yes), new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int id) {
-                    // User clicked OK button
-                    MainActivity.super.onBackPressed();
-                    Toast.makeText(getApplicationContext(), getString(R.string.java_main_leftmonad), Toast.LENGTH_LONG).show();
-                }
-            });
-            builder.setNegativeButton(getString(R.string.java_cancel), new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int id) {
-                    // User cancelled the dialog
-                    //do nothing
-                }
-            });
-            // Create the AlertDialog
-            AlertDialog dialog = builder.create();
-            dialog.show();
-        }
+        // Create the AlertDialog
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 
     @Override

@@ -143,7 +143,8 @@ class FitnessTests(unittest.TestCase):
 
     def testEvalIndividualCapacitySufficient(self):
         ''' test on individual that offers more than enough capacity to handle all requests
-        
+        '''
+        '''
         pop = toolBox.toolbox.population(n=2)
         fit = Fitness()
         ind1 = pop[0]
@@ -151,7 +152,10 @@ class FitnessTests(unittest.TestCase):
         
         for i, item in enumerate(ind1):
             ind1[i][1] = 120
-        '''
+        ''''
+        #self.assertGreater(fit.evalIndividualCapacity(ind2), fit.evalIndividualCapacity(ind1))
+        #TODO - FIX self assertGreater than function to work with test
+        pass
         #self.assertGreater(fit.evalIndividualCapacity(ind2), fit.evalIndividualCapacity(ind1))
         #TODO - FIX self assertGreater than function to work with test
         pass
