@@ -147,6 +147,7 @@ public class TripCancelPopup extends AppCompatActivity implements AsyncResponseS
         Toast toast = Toast.makeText(context, response, Toast.LENGTH_SHORT);
         toast.show();
         startActivity(new Intent(this, TripsActivity.class));
+        finish();
     }
 
     public void backButtonClick(View view) {
