@@ -22,7 +22,7 @@
             android:gravity="center_horizontal"
             android:focusable="true">
 
-            <EditText
+            <AutoCompleteTextView
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:id="@+id/main_search_destination"

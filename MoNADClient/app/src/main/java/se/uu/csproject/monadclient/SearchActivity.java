@@ -21,6 +21,8 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.RadioGroup;
@@ -35,6 +37,9 @@ import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -50,7 +55,7 @@ public class SearchActivity extends MenuedActivity implements
     private TextView textViewTripDate, textViewTripTime;
     DialogFragment dateFragment, timeFragment;
     private RadioGroup tripTimeRadioGroup, priorityRadioGroup;
-    private EditText positionEditText, destinationEditText;
+    private AutoCompleteTextView positionEditText, destinationEditText;
     private GoogleApiClient mGoogleApiClient;
     private LocationRequest mLocationRequest;
     private double currentLatitude, currentLongitude;
@@ -86,8 +91,8 @@ public class SearchActivity extends MenuedActivity implements
 
         tripTimeRadioGroup = (RadioGroup) findViewById(R.id.radiogroup_search_triptime);
         priorityRadioGroup = (RadioGroup) findViewById(R.id.radiogroup_search_priority);
-        positionEditText = (EditText) findViewById(R.id.edittext_search_position);
-        destinationEditText = (EditText) findViewById(R.id.edittext_search_destination);
+        positionEditText = (AutoCompleteTextView) findViewById(R.id.edittext_search_position);
+        destinationEditText = (AutoCompleteTextView) findViewById(R.id.edittext_search_destination);
 
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view_search);
         linearLayoutManager = new LinearLayoutManager(getApplicationContext());
@@ -98,9 +103,37 @@ public class SearchActivity extends MenuedActivity implements
 
         buildGoogleApiClient();
         initializeLocationRequest();
+        String[] addresses = getAddressesFromFileAsset();
+
+        if (addresses != null){
+            ArrayAdapter<String> adapterString =
+                    new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, addresses);
+            positionEditText.setAdapter(adapterString);
+            destinationEditText.setAdapter(adapterString);
+        }
 
         // Hide the keyboard when launching this activity
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+    }
+
+    public String[] getAddressesFromFileAsset(){
+        String[] addresses = null;
+        ArrayList<String> addressesList = new ArrayList<>();
+        String line;
+
+        try{
+            BufferedReader reader = new BufferedReader( new InputStreamReader(getAssets().open("addresses.txt")));
+            while ((line = reader.readLine()) != null) {
+                addressesList.add(line);
+            }
+            addresses = new String[addressesList.size()];
+            addresses = addressesList.toArray(addresses);
+        }
+        catch (IOException e) {
+            Log.d("oops", e.toString());
+        }
+
+        return addresses;
     }
 
     // Checks if the user has given location permission and asks for it if he hasn't

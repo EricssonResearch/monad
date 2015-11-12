@@ -21,6 +21,8 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -31,6 +33,9 @@ import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -48,7 +53,7 @@ import se.uu.csproject.monadclient.recyclerviews.Storage;
 public class MainActivity extends MenuedActivity implements
         GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener, AsyncResponse {
 
-    private EditText destination;
+    private AutoCompleteTextView destination;
     private GoogleApiClient mGoogleApiClient;
     private LocationRequest mLocationRequest;
     private double currentLatitude, currentLongitude;
@@ -69,13 +74,12 @@ public class MainActivity extends MenuedActivity implements
                 getBaseContext().getResources().getDisplayMetrics());
         setContentView(R.layout.activity_main);
         toolbar = (Toolbar) findViewById(R.id.actionToolBar);
-        destination = (EditText) findViewById(R.id.main_search_destination);
+        destination = (AutoCompleteTextView) findViewById(R.id.main_search_destination);
         context = getApplicationContext();
         currentLatitude = 0;
         currentLongitude = 0;
         setSupportActionBar(toolbar);
 
-        List<FullTrip> searchResults = new ArrayList<>();
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler_view_main);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getBaseContext());
         recyclerView.setLayoutManager(linearLayoutManager);
@@ -96,9 +100,36 @@ public class MainActivity extends MenuedActivity implements
 
         buildGoogleApiClient();
         initializeLocationRequest();
+        String[] addresses = getAddressesFromFileAsset();
+
+        if (addresses != null){
+            ArrayAdapter<String> adapterString =
+                    new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, addresses);
+            destination.setAdapter(adapterString);
+        }
 
         // Hide the keyboard when launching this activity
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+    }
+
+    public String[] getAddressesFromFileAsset(){
+        String[] addresses = null;
+        ArrayList<String> addressesList = new ArrayList<>();
+        String line;
+
+        try{
+            BufferedReader reader = new BufferedReader( new InputStreamReader(getAssets().open("addresses.txt")));
+            while ((line = reader.readLine()) != null) {
+                addressesList.add(line);
+            }
+            addresses = new String[addressesList.size()];
+            addresses = addressesList.toArray(addresses);
+        }
+        catch (IOException e) {
+            Log.d("oops", e.toString());
+        }
+
+        return addresses;
     }
 
     // Called when the user clicks on the quick search button
