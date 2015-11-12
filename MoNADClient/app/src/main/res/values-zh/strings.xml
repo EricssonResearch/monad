@@ -1,39 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">MoNAD - Ready Set GO!</string>
-    <string name="action_aboutus">关于</string>
-    <string name="action_mytrips">我的行程</string>
-    <string name="action_notifications">通知</string>
-    <string name="action_profile">个人资料</string>
-    <string name="action_search">搜索</string>
-    <string name="action_settings">设置</string>
-    <string name="action_signout">退出当前账号</string>
-    <string name="hello_world">Hello world!</string>
-    <string name="label_login_anonymous">匿名登录</string>
-    <string name="label_login_login">登录</string>
-    <string name="label_login_newuser">新用户?创建新账户</string>
-    <string name="label_login_password">密码</string>
-    <string name="label_login_username">用户名</string>
+
     <string name="title_activity_main">搜索</string>
     <string name="title_activity_notifications">通知</string>
     <string name="title_activity_profile">个人资料</string>
     <string name="title_activity_settings">设置</string>
     <string name="title_activity_trips">我的行程</string>
-    <string name="img_description">找不到图片</string>
-    <string name="label_aboutus_description">描述</string>
-    <string name="label_aboutus_descriptiontext">MoNAD是由乌普萨拉大学计算机科学硕士项目的学生开发的一个项目。</string>
-    <string name="label_aboutus_productowner">软件所有者</string>
-    <string name="label_aboutus_project">乌普萨拉大学学生项目 CS 2015 (MoNAD)</string>
-    <string name="label_aboutus_projectName">项目名称</string>
-    <string name="label_aboutus_texttitle">关于我们</string>
-    <string name="label_confirmcode_code">验证码</string>
-    <string name="label_confirmcode_codesent">验证码已发送!</string>
-    <string name="label_confirmcode_submit">提交</string>
-    <string name="label_forgotpassword_email">电子邮箱</string>
-    <string name="label_forgotpassword_enteremail">请输入您的电子邮箱</string>
-    <string name="label_login_forgottenpassword">忘记密码?</string>
-    <string name="label_login_wrongcredentials">登录失败。请再试一次</string>
-    <string name="label_main_recommendations">推荐</string>
     <string name="title_activity_route_confirm_popup">确认?</string>
     <string name="title_activity_trip_cancel_popup">取消?</string>
     <string name="title_activity_search">Google登录</string>
@@ -43,24 +16,63 @@
     <string name="title_activity_forgot_password_popup">请输入您的邮箱</string>
     <string name="title_activity_confirm_code_popup">验证码</string>
     <string name="title_activity_about_us">关于我们</string>
-    <string name="label_tripsactivity_from">从</string>
-    <string name="label_fragmentsettingsalert_alert">行程提示</string>
-    <string name="label_fragmentsettingsalert_recommendation">建议</string>
-    <string name="label_main_advancedsearch">高级搜索</string>
     <string name="title_activity_google_log_in">Google登录</string>
-    <string name="non_available">n/a</string>
-    <string name="label_tripsactivity_to">到</string>
+
+    <string name="action_aboutus">关于</string>
+    <string name="action_mytrips">我的行程</string>
+    <string name="action_notifications">通知</string>
+    <string name="action_profile">个人资料</string>
+    <string name="action_search">搜索</string>
+    <string name="action_settings">设置</string>
+    <string name="action_signout">退出当前账号</string>
+
+    <string name="label_aboutus_description">描述</string>
+    <string name="label_aboutus_descriptiontext">MoNAD是由乌普萨拉大学计算机科学硕士项目的学生开发的一个项目。</string>
+    <string name="label_aboutus_productowner">软件所有者</string>
+    <string name="label_aboutus_project">乌普萨拉大学学生项目 CS 2015 (MoNAD)</string>
+    <string name="label_aboutus_projectName">项目名称</string>
+    <string name="label_aboutus_texttitle">关于我们</string>
+
+    <string name="label_login_anonymous">匿名登录</string>
+    <string name="label_login_login">普通登录</string>
+    <string name="label_login_newuser">新用户?创建新账户</string>
+    <string name="label_login_password">密码</string>
+    <string name="label_login_username">用户名</string>
+    <string name="label_login_forgottenpassword">忘记密码?</string>
+    <string name="label_login_wrongcredentials">登录失败。请再试一次</string>
+
+    <string name="label_main_searchtext">您想要去哪?</string>
+    <string name="label_main_advancedsearch">高级搜索</string>
+    <string name="label_main_recommendations">推荐</string>
+
+    <string name="label_notification_reschedule">重新安排行程</string>
+    <string name="label_notification_notification">通知</string>
+
+    <string name="label_profile_username">用户名:</string>
+    <string name="label_profile_savechanges">保存更改</string>
+    <string name="label_profile_phone">手机号码:</string>
+    <string name="label_profile_info">个人资料:</string>
+    <string name="label_profile_email">电子邮箱:</string>
+    <string name="label_profile_contactinfo">联系信息:</string>
+    <string name="label_profile_changepassword">更改密码</string>
+
+    <string name="label_register_verifypassword">确认密码</string>
+    <string name="label_register_username">用户名</string>
+    <string name="label_register_register">注册</string>
+    <string name="label_register_password">密码</string>
+    <string name="label_register_newaccount">新账户</string>
+    <string name="label_register_mobilenumber">手机号码</string>
+    <string name="label_register_email">电子邮箱</string>
+
+    <string name="label_resetpassword_resetpassword">重置密码</string>
+    <string name="label_resetpassword_resetbutton">重置</string>
+    <string name="label_resetpassword_enternewpassword">请输入您的新密码</string>
+    <string name="label_resetpassword_entercurrentpassword">请输入您当前的密码</string>
+    <string name="label_resetpassword_confirmnewpassword">请确认您的新密码</string>
+    <string name="label_resetpassword_changepassword">修改密码</string>
+
     <string name="label_trips_join">搭乘</string>
-    <string name="label_tripcancel_cancellation">确定要取消吗</string>
-    <string name="label_tripcancel_buttoncancel">取消行程</string>
-    <string name="label_tripcancel_buttonback">返回</string>
-    <string name="label_trip_depart">出发:</string>
-    <string name="label_trip_confirmation">确认行程</string>
-    <string name="label_trip_button_confirm">确认</string>
-    <string name="label_trip_businfo">公交车</string>
-    <string name="label_trip_arrive">到达:</string>
-    <string name="label_searchresult_routeinfo">n/a到n/a</string>
-    <string name="label_searchresult_timeinfo">n/a - n/a (n/a分钟)</string>
+
     <string name="label_search_shortesttriptime">最短路程</string>
     <string name="label_search_earliesttrip">最早出发</string>
     <string name="label_search_results">结果</string>
@@ -72,29 +84,63 @@
     <string name="label_search_destination">目的地</string>
     <string name="label_search_depature">出发</string>
     <string name="label_search_arrival">到达</string>
-    <string name="label_resetpassword_resetpassword">重置密码</string>
-    <string name="label_resetpassword_resetbutton">重置</string>
-    <string name="label_resetpassword_enternewpassword">请输入您的新密码</string>
-    <string name="label_resetpassword_entercurrentpassword">请输入您当前的密码</string>
-    <string name="label_resetpassword_confirmnewpassword">请确认您的新密码</string>
-    <string name="label_resetpassword_changepassword">修改密码</string>
-    <string name="label_register_verifypassword">确认密码</string>
-    <string name="label_register_username">用户名</string>
-    <string name="label_register_register">注册</string>
-    <string name="label_register_password">密码</string>
-    <string name="label_register_newaccount">新账户</string>
-    <string name="label_register_mobilenumber">手机号码</string>
-    <string name="label_register_email">电子邮箱</string>
-    <string name="label_profile_username">用户名:</string>
-    <string name="label_profile_savechanges">保存更改</string>
-    <string name="label_profile_phone">手机号码:</string>
-    <string name="label_profile_info">个人资料:</string>
-    <string name="label_profile_email">电子邮箱:</string>
-    <string name="label_profile_contactinfo">联系信息:</string>
-    <string name="label_profile_changepassword">更改密码</string>
-    <string name="label_notification_notification">通知</string>
-    <string name="label_main_searchtext">您想要去哪?</string>
+    <string name="label_searchresult_routeinfo">n/a到n/a</string>
+    <string name="label_searchresult_timeinfo">n/a - n/a (n/a分钟)</string>
+
+    <string name="label_fragmentsettingsalert_alert">行程提示</string>
+    <string name="label_fragmentsettingsalert_recommendation">推荐</string>
+
     <string name="label_fragmentsettingstheme_dark">深色</string>
     <string name="label_fragmentsettingstheme_default">默认</string>
     <string name="label_fragmentsettingstheme_light">浅色</string>
+
+    <string name="label_confirmcode_code">验证码</string>
+    <string name="label_confirmcode_codesent">验证码已发送!</string>
+    <string name="label_confirmcode_submit">提交</string>
+
+    <string name="label_forgotpassword_email">电子邮箱</string>
+    <string name="label_forgotpassword_enteremail">请输入您的电子邮箱</string>
+
+    <string name="label_tripsactivity_from">从</string>
+    <string name="label_tripsactivity_to">到</string>
+    <string name="label_trip_depart">出发:</string>
+    <string name="label_trip_confirmation">确认行程</string>
+    <string name="label_trip_button_confirm">确认</string>
+    <string name="label_trip_businfo">公交车</string>
+    <string name="label_trip_arrive">到达:</string>
+
+    <string name="label_tripcancel_cancellation">确定要取消吗</string>
+    <string name="label_tripcancel_buttoncancel">取消行程</string>
+    <string name="label_tripcancel_buttonback">返回</string>
+
+    <!--MISCELLANEOUS-->
+    <string name="img_description">找不到图片</string>
+    <string name="non_available">n/a</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="GoogleProjectID" translatable="false">81265551950</string>
+    <string name="java_to">to</string>
+    <string name="java_yes">Yes</string>
+    <string name="java_cancel">Cancel</string>
+    <string name="java_confirm">Confirm</string>
+    <string name="java_today">TODAY</string>
+    <string name="java_tripinprogress">Trip in Progress</string>
+    <string name="java_passwordsnomatch">Passwords do not match!</string>
+    <string name="java_locationpermissionwarning">If you refuse to share your current location then we cannot use it to search for suitable bus trips</string>
+    <string name="java_googleplaywarning">If you do not enable Google Play Services then we cannot use your current location to search for suitable bus trips</string>
+    <string name="java_confirmcode_error">Invalid code, please try again</string>
+    <string name="java_forgotpassword_codesent">The code has been sent to your email address, please check your email and enter the code</string>
+    <string name="java_main_noresults">Could not find any trips for this destination. Please try the advanced search</string>
+    <string name="java_main_exitmonad">Do you want to exit MoNAD?</string>
+    <string name="java_main_leftmonad">You have left MoNAD</string>
+    <string name="java_search_locationfailed">Failed to get your current position. Please enable Google Play Services and/or give us location permission</string>
+    <string name="java_search_currentposition">Current Position</string>
+    <string name="java_search_enterdeparture">Please enter a departure address</string>
+    <string name="java_search_enterdestination">Please enter a destination address</string>
+    <string name="java_search_emptysearch">Could not find any trips matching your criteria</string>
+    <string name="java_settings_themechanged_light">Theme changed to light</string>
+    <string name="java_settings_themechanged_default">Theme changed to default</string>
+    <string name="java_settings_themechanged_dark">Theme changed to dark</string>
+    <string name="java_trips_notripsbooked">No trips have been booked</string>
+    <string name="java_languagerva_languagechanged">Language changed to</string>
+    <string name="java_notificationsrva_newmessages">You have received new messages</string>
 </resources>
