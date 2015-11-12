@@ -24,13 +24,8 @@
         <item name="android:textAllCaps">true</item>
     </style>
 
-    <!-- Theme for all EditText -->
-    <style name="inputText">
-        <item name="android:textColor">@color/black</item>
-    </style>
-
-    <!-- Theme for all black TextViews -->
-    <style name="importantText">
+    <!-- Theme for all EditText and black TextViews -->
+    <style name="blackText">
         <item name="android:textColor">@color/black</item>
     </style>
 

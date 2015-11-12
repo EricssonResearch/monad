@@ -183,8 +183,8 @@ public class TripRecyclerViewAdapter
     }
 
     private void formatAsInProgress(TripViewHolder tripViewHolder) {
-        tripViewHolder.date.setText("TODAY");
-        tripViewHolder.countdownTime.setText("Trip in Progress");
+        tripViewHolder.date.setText(tripViewHolder.itemView.getResources().getString(R.string.java_today));
+        tripViewHolder.countdownTime.setText(tripViewHolder.itemView.getResources().getString(R.string.java_tripinprogress));
         tripViewHolder.countdownTime.setTextColor(ContextCompat.getColor(tripViewHolder.itemView.getContext(), R.color.green));
         tripViewHolder.date.setTextColor(ContextCompat.getColor(tripViewHolder.itemView.getContext(), R.color.green));
         tripViewHolder.clockIcon.setVisibility(View.INVISIBLE);

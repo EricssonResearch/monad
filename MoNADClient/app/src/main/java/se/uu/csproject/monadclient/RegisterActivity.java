@@ -51,7 +51,7 @@ public class RegisterActivity extends AppCompatActivity {
 
                 //check if the two passwords match or not
                 if(!passwordEntered.equals(passwordVerifyEntered)) {
-                    Toast.makeText(getApplicationContext(), "Passwords do not match!",
+                    Toast.makeText(getApplicationContext(), getString(R.string.java_passwordsnomatch),
                             Toast.LENGTH_LONG).show();
                     return;
                 }

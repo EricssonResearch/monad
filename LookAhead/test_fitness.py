@@ -143,12 +143,11 @@ class FitnessTests(unittest.TestCase):
 
     def testEvalIndividualCapacitySufficient(self):
         ''' test on individual that offers more than enough capacity to handle all requests
-        
+               
         pop = toolBox.toolbox.population(n=2)
         fit = Fitness()
         ind1 = pop[0]
         ind2 = pop[1]
-        
         for i, item in enumerate(ind1):
             ind1[i][1] = 120
         '''
