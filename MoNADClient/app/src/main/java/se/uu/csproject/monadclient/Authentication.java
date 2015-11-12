@@ -57,8 +57,9 @@ public abstract class Authentication {
             dos.close();
             connection.disconnect();
         }
-        catch (IOException e) {
+        catch (Exception e) {
             e.printStackTrace();
+            return "-1";
         }
         finally {
             if (connection != null) {

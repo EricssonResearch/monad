@@ -8,18 +8,22 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
+import se.uu.csproject.monadclient.recyclerviews.FullTrip;
 import se.uu.csproject.monadclient.recyclerviews.NotificationRecyclerViewAdapter;
 import se.uu.csproject.monadclient.recyclerviews.Notify;
 import se.uu.csproject.monadclient.recyclerviews.Storage;
+import se.uu.csproject.monadclient.recyclerviews.TripRecyclerViewAdapter;
 
 //// TODO (low priority): receive data from notification module (maybe not in this activity - TBD), display them in notification bar as well as in the recyclerview
-public class NotificationsActivity extends MenuedActivity {
+public class NotificationsActivity extends MenuedActivity implements AsyncResponse {
 
     private Toolbar toolbar;
     public static ArrayList<Notify> notifications;
+    private ArrayList<FullTrip> bookings;
     public static int NOTIFICATION_ID = 100;
     public static String NOTIFICATION_ID_STR = "_id";
     View view;
@@ -53,6 +57,19 @@ public class NotificationsActivity extends MenuedActivity {
         mNotificationManager.cancel(getIntent().getIntExtra(NOTIFICATION_ID_STR, -1));
     }
 
+    // Gets the user's bookings from the server
+    private void getBookings(){
+        String userId = ClientAuthentication.getClientId();
+        SendUserBookingsRequest asyncTask = new SendUserBookingsRequest();
+        asyncTask.delegate = this;
+        asyncTask.execute(userId);
+    }
+
+    // Deals with the response by the server
+    public void processFinish(ArrayList<FullTrip> bookings){
+        this.bookings = bookings;
+    }
+
     public boolean onCreateOptionsMenu(Menu menu) {
 
         if(ClientAuthentication.getPassword().equals("0")){
@@ -66,7 +83,14 @@ public class NotificationsActivity extends MenuedActivity {
         }
     }
 
-
+    @Override
+    protected void onResume() {
+        super.onResume();
+        bookings = Storage.getBookings();
+        if (bookings.isEmpty()){
+            getBookings();
+        }
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

@@ -62,7 +62,7 @@ public class SendQuickTravelRequest extends AsyncTask<String, Void, ArrayList<Fu
             }
             JSONObject trips = new JSONObject(sb.toString());
 
-            searchResults = new StoreTrips().storeTheTrips(trips, true);
+            searchResults = new StoreTrips().storeTheTrips(trips, 0);
 
         } catch (MalformedURLException e) {
             Log.d("oops", e.toString());

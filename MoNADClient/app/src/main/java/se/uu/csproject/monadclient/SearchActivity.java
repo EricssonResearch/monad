@@ -21,6 +21,8 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.RadioGroup;
@@ -35,6 +37,9 @@ import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -50,7 +55,7 @@ public class SearchActivity extends MenuedActivity implements
     private TextView textViewTripDate, textViewTripTime;
     DialogFragment dateFragment, timeFragment;
     private RadioGroup tripTimeRadioGroup, priorityRadioGroup;
-    private EditText positionEditText, destinationEditText;
+    private AutoCompleteTextView positionEditText, destinationEditText;
     private GoogleApiClient mGoogleApiClient;
     private LocationRequest mLocationRequest;
     private double currentLatitude, currentLongitude;
@@ -86,8 +91,8 @@ public class SearchActivity extends MenuedActivity implements
 
         tripTimeRadioGroup = (RadioGroup) findViewById(R.id.radiogroup_search_triptime);
         priorityRadioGroup = (RadioGroup) findViewById(R.id.radiogroup_search_priority);
-        positionEditText = (EditText) findViewById(R.id.edittext_search_position);
-        destinationEditText = (EditText) findViewById(R.id.edittext_search_destination);
+        positionEditText = (AutoCompleteTextView) findViewById(R.id.edittext_search_position);
+        destinationEditText = (AutoCompleteTextView) findViewById(R.id.edittext_search_destination);
 
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view_search);
         linearLayoutManager = new LinearLayoutManager(getApplicationContext());
@@ -98,9 +103,37 @@ public class SearchActivity extends MenuedActivity implements
 
         buildGoogleApiClient();
         initializeLocationRequest();
+        String[] addresses = getAddressesFromFileAsset();
+
+        if (addresses != null){
+            ArrayAdapter<String> adapterString =
+                    new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, addresses);
+            positionEditText.setAdapter(adapterString);
+            destinationEditText.setAdapter(adapterString);
+        }
 
         // Hide the keyboard when launching this activity
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+    }
+
+    public String[] getAddressesFromFileAsset(){
+        String[] addresses = null;
+        ArrayList<String> addressesList = new ArrayList<>();
+        String line;
+
+        try{
+            BufferedReader reader = new BufferedReader( new InputStreamReader(getAssets().open("addresses.txt")));
+            while ((line = reader.readLine()) != null) {
+                addressesList.add(line);
+            }
+            addresses = new String[addressesList.size()];
+            addresses = addressesList.toArray(addresses);
+        }
+        catch (IOException e) {
+            Log.d("oops", e.toString());
+        }
+
+        return addresses;
     }
 
     // Checks if the user has given location permission and asks for it if he hasn't
@@ -124,8 +157,7 @@ public class SearchActivity extends MenuedActivity implements
                     mGoogleApiClient.connect();
                 } else {
                     // Permission denied, boo! Pester him until he changes his mind
-                    CharSequence text = "If you don't give location permission then we can't use " +
-                            "your current location to search for suitable bus trips.";
+                    CharSequence text = getString(R.string.java_locationpermissionwarning);
                     Toast toast = Toast.makeText(context, text, Toast.LENGTH_LONG);
                     toast.show();
                 }
@@ -229,10 +261,9 @@ public class SearchActivity extends MenuedActivity implements
     // Called when the user clicks on the pinpoint icon next to the departure address field
     public void useCurrentPosition(View v){
         if (mGoogleApiClient.isConnected()){
-            positionEditText.setText("Current Position");
+            positionEditText.setText(getString(R.string.java_search_currentposition));
         } else {
-            CharSequence text = "We are not able to get your current position. Please consider " +
-                    "enabling your google play services and/or giving us location permission.";
+            CharSequence text = getString(R.string.java_search_locationfailed);
             Toast toast = Toast.makeText(context, text, Toast.LENGTH_LONG);
             toast.show();
         }
@@ -286,12 +317,12 @@ public class SearchActivity extends MenuedActivity implements
                     startPositionLatitude, startPositionLongitude);
         }
         else if (stPosition == null || stPosition.trim().isEmpty()) {
-            CharSequence text = "Please enter a departure address.";
+            CharSequence text = getString(R.string.java_search_enterdeparture);
             Toast toast = Toast.makeText(context, text, Toast.LENGTH_SHORT);
             toast.show();
         }
         else if (edPosition == null || edPosition.trim().isEmpty()) {
-            CharSequence text = "Please enter a destination address.";
+            CharSequence text = getString(R.string.java_search_enterdestination);
             Toast toast = Toast.makeText(context, text, Toast.LENGTH_SHORT);
             toast.show();
         }
@@ -300,7 +331,7 @@ public class SearchActivity extends MenuedActivity implements
     // Deals with the response by the server
     public void processFinish(ArrayList<FullTrip> searchResults){
         if (searchResults.isEmpty()){
-            CharSequence text = "Could not find any trips matching your criteria.";
+            CharSequence text = getString(R.string.java_search_emptysearch);
             Toast toast = Toast.makeText(context, text, Toast.LENGTH_SHORT);
             toast.show();
         }
@@ -321,8 +352,7 @@ public class SearchActivity extends MenuedActivity implements
                 }
             }
         } else {
-            CharSequence text = "If you don't have google play services enabled, we can't use " +
-                    "your current location to search for suitable bus trips.";
+            CharSequence text = getString(R.string.java_googleplaywarning);
             Toast toast = Toast.makeText(context, text, Toast.LENGTH_LONG);
             toast.show();
         }

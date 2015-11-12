@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
 import android.location.Location;
 import android.os.Build;
 import android.support.v4.app.ActivityCompat;
@@ -20,6 +21,8 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -30,6 +33,9 @@ import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -47,7 +53,7 @@ import se.uu.csproject.monadclient.recyclerviews.Storage;
 public class MainActivity extends MenuedActivity implements
         GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener, AsyncResponse {
 
-    private EditText destination;
+    private AutoCompleteTextView destination;
     private GoogleApiClient mGoogleApiClient;
     private LocationRequest mLocationRequest;
     private double currentLatitude, currentLongitude;
@@ -61,23 +67,24 @@ public class MainActivity extends MenuedActivity implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Locale locale = new Locale(ClientAuthentication.getLanguage());
+        Locale.setDefault(locale);
+        Configuration config = new Configuration();
+        config.locale = locale;
+        getBaseContext().getResources().updateConfiguration(config,
+                getBaseContext().getResources().getDisplayMetrics());
         setContentView(R.layout.activity_main);
         initAlertDialog();
 
         toolbar = (Toolbar) findViewById(R.id.actionToolBar);
-        destination = (EditText) findViewById(R.id.main_search_destination);
+        destination = (AutoCompleteTextView) findViewById(R.id.main_search_destination);
         context = getApplicationContext();
         currentLatitude = 0;
         currentLongitude = 0;
         setSupportActionBar(toolbar);
-        //getSupportActionBar().setHomeButtonEnabled(true);
-        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        //initialize notifications, temporary
-        Storage.initializeNotificationData();
-        List<FullTrip> searchResults = new ArrayList<>();
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler_view_main);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getApplicationContext());
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getBaseContext());
         recyclerView.setLayoutManager(linearLayoutManager);
 
         /* TODO: Routes Generation (Please ignore that) */
@@ -85,36 +92,47 @@ public class MainActivity extends MenuedActivity implements
 //        rt.execute();
 
         /* TODO: GetRecommendations */
-//        System.out.println(ClientAuthentication.profileToString());
+        new RecommendationsInteraction("MainActivity").getRecommendations();
 
-//        GetRecommendationsTask recommendationsTask = new GetRecommendationsTask();
-//        try {
-//            String response = recommendationsTask.execute().get();
-//
-//            Toast.makeText(getApplicationContext(), response, Toast.LENGTH_LONG).show();
-//
-//            // If the response starts with the specific word, it means the users logged in successfully
-//            if (response.startsWith("Success (1)")) {
-//                System.out.println("________________OK________________");
-//            }
-//            else {
-//                System.out.println("________________NOT OK________________");
-//            }
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        } catch (ExecutionException e) {
-//            e.printStackTrace();
-//        }
+        /* TODO: GetNotifications */
+        new NotificationsInteraction("MainActivity").getNotifications();
 
-        generateSearchResults(searchResults);
-        SearchRecyclerViewAdapter adapter = new SearchRecyclerViewAdapter(searchResults);
+//        generateSearchResults(searchResults);
+        SearchRecyclerViewAdapter adapter = new SearchRecyclerViewAdapter(Storage.getRecommendations());
         recyclerView.setAdapter(adapter);
 
         buildGoogleApiClient();
         initializeLocationRequest();
+        String[] addresses = getAddressesFromFileAsset();
+
+        if (addresses != null){
+            ArrayAdapter<String> adapterString =
+                    new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, addresses);
+            destination.setAdapter(adapterString);
+        }
 
         // Hide the keyboard when launching this activity
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+    }
+
+    public String[] getAddressesFromFileAsset(){
+        String[] addresses = null;
+        ArrayList<String> addressesList = new ArrayList<>();
+        String line;
+
+        try{
+            BufferedReader reader = new BufferedReader( new InputStreamReader(getAssets().open("addresses.txt")));
+            while ((line = reader.readLine()) != null) {
+                addressesList.add(line);
+            }
+            addresses = new String[addressesList.size()];
+            addresses = addressesList.toArray(addresses);
+        }
+        catch (IOException e) {
+            Log.d("oops", e.toString());
+        }
+
+        return addresses;
     }
 
     // Called when the user clicks on the quick search button
@@ -139,7 +157,7 @@ public class MainActivity extends MenuedActivity implements
             asyncTask.execute(userId, startTime, endTime, requestTime, startPositionLatitude,
                     startPositionLongitude, edPosition, priority);
         } else {
-            CharSequence text = "Please enter a destination address.";
+            CharSequence text = getString(R.string.java_search_enterdestination);
             Toast toast = Toast.makeText(context, text, Toast.LENGTH_SHORT);
             toast.show();
         }
@@ -148,7 +166,7 @@ public class MainActivity extends MenuedActivity implements
     // Deals with the response by the server
     public void processFinish(ArrayList<FullTrip> searchResults){
         if (searchResults.isEmpty()){
-            CharSequence text = "Could not find any trips matching your criteria, try using the advanced search.";
+            CharSequence text = getString(R.string.java_main_noresults);
             Toast toast = Toast.makeText(context, text, Toast.LENGTH_SHORT);
             toast.show();
             Storage.clearAll();
@@ -179,8 +197,7 @@ public class MainActivity extends MenuedActivity implements
                     mGoogleApiClient.connect();
                 } else {
                     // Permission denied, boo! Disable the functionality that depends on this permission.
-                    CharSequence text = "If you don't give location permission then we can't use " +
-                            "your current location to search for suitable bus trips.";
+                    CharSequence text = getString(R.string.java_locationpermissionwarning);
                     int duration = Toast.LENGTH_LONG;
                     Toast toast = Toast.makeText(context, text, duration);
                     toast.show();
@@ -290,8 +307,7 @@ public class MainActivity extends MenuedActivity implements
                 }
             }
         } else {
-            CharSequence text = "If you don't have google play services enabled then we can't use " +
-                    "your current location to search for suitable bus trips.";
+            CharSequence text = getString(R.string.java_googleplaywarning);
             Toast toast = Toast.makeText(context, text, Toast.LENGTH_LONG);
             toast.show();
         }

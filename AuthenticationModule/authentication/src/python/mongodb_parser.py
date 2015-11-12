@@ -8,14 +8,16 @@ def start(host):
     global recommendations_collection
     global user_trips_collection
     global bus_stop_collection
+    global notifications_collection
     mongo_client = MongoClient(host, 27017)
     db = mongo_client.monad1
     recommendations_collection = db.TravelRecommendation
     user_trips_collection = db.UserTrip
     bus_stops_collection = db.BusStop
+    notifications_collection = db.Notifications
 
 def parse_recommendations(user_id):
-    print user_id
+    # print user_id
     initially_formatted_recommendations = list(recommendations_collection.find({'userID' : user_id}))
     final_recommendations = list()
 
@@ -36,3 +38,12 @@ def parse_user_trip(user_trips_list, user_trip):
     else:
         user_trips_list.append(user_trip)
         return user_trips_list
+
+def parse_notifications(client_id):
+    notifications_list = list(notifications_collection.find({'client_id' : client_id}))
+    return dumps(notifications_list)
+
+def remove_notification(notification_id_binary):
+    notification_id = ''.join([chr(c) for c in notification_id_binary])
+    notifications_collection.remove({'_id' : ObjectId(notification_id)})
+    return '1'

@@ -53,7 +53,7 @@ stop_broadcaster() ->
 start_python() ->
     {ok, PythonInstance} = python:start([{python_path, "src/python"}]),
     register(python_instance, PythonInstance),
-    python:call(PythonInstance, recommendations_parser, start, [<<"">>]),
+    python:call(PythonInstance, mongodb_parser, start, [<<"">>]),
     Broadcaster = whereis(broadcaster),
     Msg = [{message, "PythonInstance: started"},
            {process, PythonInstance}],
@@ -90,13 +90,6 @@ stop_emysql() ->
            {process, self()}],
     Broadcaster ! {broadcast, Msg}.
 
-% test(PythonInstance, ClientID) ->
-%     {Numy, _} = string:to_integer(ClientID),
-%     io:format("ToInt: ~p~n", [Numy]),
-%     Response = python:call(PythonInstance, recommendationsParser, parse, [Numy]),
-%     io:format("Test Response: ~p~n" , [Response]),
-%     Response.
-
 loop(Req, DocRoot) ->
     "/" ++ Path = Req:get(path),
     try
@@ -121,6 +114,10 @@ loop(Req, DocRoot) ->
                         client_forgotten_password_reset(Req);
                     "get_recommendations" ->
                         get_recommendations(Req);
+                    "get_notifications" ->
+                        get_notifications(Req);
+                    "remove_notification" ->
+                        remove_notification(Req);
                     _ ->
                         Req:not_found()
                 end;
@@ -409,16 +406,72 @@ get_recommendations(Req) ->
     PostData = Req:parse_post(),
     ClientID_str = proplists:get_value("client_id", PostData, "Anonymous"),
     {ClientID, _} = string:to_integer(ClientID_str),
-    io:format("ClientID: ~p~n", [ClientID]),
+    % io:format("ClientID: ~p~n", [ClientID]),
     try
         PythonInstance = whereis(python_instance),
-        Response = python:call(PythonInstance, recommendations_parser, parse_recommendations, [ClientID]),
-        % Response = test(PythonInstance, ClientID),
-        io:format("Response: ~p~n", [Response]),
+        Response = python:call(PythonInstance, mongodb_parser, parse_recommendations, [ClientID]),
+        % io:format("Response: ~p~n", [Response]),
+        Msg = [{type, get_recommendations},
+               {clientID, ClientID},
+               {response, Response},
+               {process, self()}],
+        Broadcaster = whereis(broadcaster),
+        Broadcaster ! {broadcast, Msg},
         Req:respond({200, [{"Content-Type", "text/plain"}], Response})
     catch
         Type:What ->
                 Report = ["Failed Request: get_recommendations",
+                          {type, Type}, {what, What},
+                          {trace, erlang:get_stacktrace()}],
+                handle_error(Report, Req)
+    end.
+
+get_notifications(Req) ->
+    PostData = Req:parse_post(),
+    ClientID_str = proplists:get_value("client_id", PostData, "Anonymous"),
+    {ClientID, _} = string:to_integer(ClientID_str),
+    % io:format("ClientID: ~p~n", [ClientID]),
+    try
+        PythonInstance = whereis(python_instance),
+        Response = python:call(PythonInstance, mongodb_parser, parse_notifications, [ClientID]),
+        % io:format("Response: ~p~n", [Response]),
+        Msg = [{type, get_notifications},
+               {clientID, ClientID},
+               {response, Response},
+               {process, self()}],
+        Broadcaster = whereis(broadcaster),
+        Broadcaster ! {broadcast, Msg},
+        Req:respond({200, [{"Content-Type", "text/plain"}], Response})
+    catch
+        Type:What ->
+                Report = ["Failed Request: get_notifications",
+                          {type, Type}, {what, What},
+                          {trace, erlang:get_stacktrace()}],
+                handle_error(Report, Req)
+    end.
+
+remove_notification(Req) ->
+    PostData = Req:parse_post(),
+    % ClientID_str = proplists:get_value("client_id", PostData, "Anonymous"),
+    % {ClientID, _} = string:to_integer(ClientID_str),
+    % % io:format("ClientID: ~p~n", [ClientID]),
+    NotificationID = proplists:get_value("notification_id", PostData, "Anonymous"),
+    try
+        PythonInstance = whereis(python_instance),
+        Response = python:call(PythonInstance, mongodb_parser, remove_notification, [NotificationID]),
+        % Response = python:call(PythonInstance, mongodb_parser, remove_notification, [io:format("~p", [NotificationID])]),
+        % io:format("Response: ~p~n", [Response]),
+        Msg = [{type, get_notifications},
+            %    {clientID, ClientID},
+               {notificationID, NotificationID},
+               {response, Response},
+               {process, self()}],
+        Broadcaster = whereis(broadcaster),
+        Broadcaster ! {broadcast, Msg},
+        Req:respond({200, [{"Content-Type", "text/plain"}], Response})
+    catch
+        Type:What ->
+                Report = ["Failed Request: remove_notification",
                           {type, Type}, {what, What},
                           {trace, erlang:get_stacktrace()}],
                 handle_error(Report, Req)

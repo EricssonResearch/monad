@@ -14,18 +14,23 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import se.uu.csproject.monadclient.NotificationsActivity;
 import se.uu.csproject.monadclient.R;
+import se.uu.csproject.monadclient.RouteActivity;
+import se.uu.csproject.monadclient.SearchActivity;
 
 public class NotificationRecyclerViewAdapter extends RecyclerView.Adapter<NotificationRecyclerViewAdapter.NotificationViewHolder> {
 
 
     List<Notify> notify;
     private Context mContext;
+
 
     public NotificationRecyclerViewAdapter(Context context, List<Notify> notify) {
         this.notify = notify;
@@ -36,7 +41,13 @@ public class NotificationRecyclerViewAdapter extends RecyclerView.Adapter<Notifi
     @Override
     public int getItemViewType(int position) {
         if(notify.get(position).isToday()) {
-            return 1;
+
+            if(notify.get(position).iconID == 3){
+                return 2;
+            }
+            else {
+                return 1;
+            }
         }
         else {
             return 0;
@@ -51,7 +62,11 @@ public class NotificationRecyclerViewAdapter extends RecyclerView.Adapter<Notifi
     @Override
     public NotificationViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
         View view;
-        if(viewType ==1){
+        if(viewType == 2){
+            view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.list_item_notification_reschedule, viewGroup, false);
+
+        }
+        else if(viewType == 1){
             view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.list_item_notification, viewGroup, false);
 
         }
@@ -67,9 +82,40 @@ public class NotificationRecyclerViewAdapter extends RecyclerView.Adapter<Notifi
 
     @Override
     public void onBindViewHolder(final NotificationViewHolder notificationViewHolder, final int i) {
-        notificationViewHolder.notificationName.setText(notify.get(i).text);
         notificationViewHolder.notificationTime.setText(formatTime((Date) notify.get(i).time, notify.get(i).isToday()));
+
         notificationViewHolder.notificationPhoto.setImageResource(notify.get(i).iconID);
+        notificationViewHolder.notificationPhoto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//                  int index = notify.indexOf(i);
+//                  notify = Storage.getNotifications();
+//                  notifyItemRemoved(index);
+
+//            TODO:  Get trip based on tripID
+                FullTrip fullTrip = getTrip();
+                Intent intent = new Intent(notificationViewHolder.itemView.getContext(), RouteActivity.class);
+                intent.putExtra("selectedTrip", fullTrip);
+                notificationViewHolder.itemView.getContext().startActivity(intent);
+            }
+
+        });
+
+        notificationViewHolder.notificationText.setText(notify.get(i).text);
+        notificationViewHolder.notificationText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//                  int index = notify.indexOf(i);
+//                  notify = Storage.getNotifications();
+//                  notifyItemRemoved(index);
+
+//                 TODO:  Get trip based on tripID
+                FullTrip fullTrip = getTrip();
+                Intent intent = new Intent(notificationViewHolder.itemView.getContext(), RouteActivity.class);
+                intent.putExtra("selectedTrip", fullTrip);
+                notificationViewHolder.itemView.getContext().startActivity(intent);
+            }
+        });
 
         notificationViewHolder.hideNotificationButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -81,9 +127,22 @@ public class NotificationRecyclerViewAdapter extends RecyclerView.Adapter<Notifi
                 notify = Storage.getNotifications();
 //                notifyItemRemoved(index);
                 notifyDataSetChanged();
-
             }
         });
+
+        if (getItemViewType(i) == 2){
+            notificationViewHolder.rescheduleText.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+//                 TODO:  Get trip based on tripID
+                    FullTrip fullTrip = getTrip();
+                    Intent intent = new Intent(notificationViewHolder.itemView.getContext(), SearchActivity.class);
+                    intent.putExtra("selectedTrip", fullTrip);
+                    notificationViewHolder.itemView.getContext().startActivity(intent);
+                }
+            });
+        }
 
     }
 
@@ -96,7 +155,8 @@ public class NotificationRecyclerViewAdapter extends RecyclerView.Adapter<Notifi
     public static class NotificationViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         Context mContext;
         CardView cv;
-        TextView notificationName;
+        TextView notificationText;
+        TextView rescheduleText; //only for reschedule notifications
         TextView notificationTime;
         ImageView notificationPhoto;
         ImageView notificationImage;
@@ -108,7 +168,8 @@ public class NotificationRecyclerViewAdapter extends RecyclerView.Adapter<Notifi
             super(itemView);
             mContext = context;
             cv = (CardView) itemView.findViewById(R.id.cv);
-            notificationName = (TextView) itemView.findViewById(R.id.label_text);
+            notificationText = (TextView) itemView.findViewById(R.id.label_text);
+            rescheduleText = (TextView) itemView.findViewById(R.id.label_reschedule);
             notificationTime = (TextView) itemView.findViewById(R.id.label_time);
             notificationPhoto = (ImageView) itemView.findViewById(R.id.label_icon);
             notificationImage = (ImageView) itemView.findViewById(R.id.image1);
@@ -130,9 +191,9 @@ public class NotificationRecyclerViewAdapter extends RecyclerView.Adapter<Notifi
                 mBuilder = new NotificationCompat.Builder(mContext);
                 mBuilder.setSmallIcon(R.mipmap.ic_launcher);
                 mBuilder.setContentTitle(mContext.getString(R.string.label_notification_notification));
-                mBuilder.setContentText(notificationName.getText());
+                mBuilder.setContentText(notificationText.getText());
                 mBuilder.setAutoCancel(true);
-                mBuilder.setContentText("You've received new messages.")
+                mBuilder.setContentText(this.itemView.getResources().getString(R.string.java_notificationsrva_newmessages))
                         .setNumber(++numMessages);
 
                 NotificationManager mNotificationManager = (NotificationManager)
@@ -194,6 +255,26 @@ public class NotificationRecyclerViewAdapter extends RecyclerView.Adapter<Notifi
 
     // Because the ID remains unchanged, the existing notification is
     // updated.
+
+    //TEMPORARY FUNCTION TODO: Remove this function once the bookings list is set
+    private FullTrip getTrip(){
+        Calendar calendar = new GregorianCalendar(2015, 10, 26, 10, 40, 0);
+        Date startdate1 = calendar.getTime();
+        calendar = new GregorianCalendar(2015, 10, 26, 10, 50, 0);
+        Date enddate1 = calendar.getTime();
+
+        ArrayList<PartialTrip> partialTrips = new ArrayList<>();
+        ArrayList<String> trajectory = new ArrayList<>();
+
+        trajectory.add("BMC");
+        trajectory.add("Akademiska Sjukhuset");
+        trajectory.add("Ekeby Bruk");
+        trajectory.add("Ekeby");
+        partialTrips.add(new PartialTrip("1", 2, 3, "Polacksbacken",startdate1,"Flogsta", enddate1, trajectory));
+        FullTrip trip = new FullTrip("1", "2", partialTrips, 10, true, 0);
+
+        return trip;
+    }
 
 }
 
