@@ -21,6 +21,7 @@ import Image, ImageDraw
 from xml.sax import make_parser, handler
 from heapq import heappush, heappop
 
+from aStar import AStar
 from busStop import BusStop
 from coordinate import Coordinate
 from address import Address
@@ -195,98 +196,6 @@ class RouteHandler(handler.ContentHandler):
                 self.addresses[key].addNumber(number, self.nodes[node])
 
 
-class AStar:
-    def __init__(self):
-        pass
-
-    def getNodeById(self, nodes, nodeId):
-        for nd in nodes:
-            if nd.id == nodeId:
-                return nd
-        return -1
-
-    def findPath(self, nodes, edges, start, goal):
-        """
-        Finds a path between start and goal using a*. The search is done in the
-        graph self.edges.
-        """
-        openSet = []
-        heappush(openSet, (0, start))
-        path = {}
-        cost = {}
-        path[start] = 0
-        cost[start] = 0
-
-        if start == goal:
-            cost[goal] = 0
-            return self.reconstruct_path(path, start, goal), cost
-
-        # A high value that a real path should not have.
-        cost[goal] = 300000
-
-        # As long as there are paths to be explored
-        while not (len(openSet) == 0):
-            current = heappop(openSet)[1]
-
-            # We found the goal, stop searching, we are done.
-            if current == goal:
-                break
-
-            # For all nodes connected to the one we are looking at for the
-            # moment.
-            for nextNode, speed, roadInt, _ in edges[current]:
-                # How fast you can go on a road matters on the type of the road
-                # It can be seen as a penalty for "smaller" roads.
-                speedDecrease = (1 - (float(roadInt) / 50))
-                fromCoordinate = nodes[current]
-                toCoordinate = nodes[nextNode]
-                # roadLength = self.measure(fromCoordinate.longitude,
-                #                          fromCoordinate.latitude,
-                #                          toCoordinate.longitude,
-                #                          toCoordinate.latitude)
-
-                roadLength = coordinate.measure(fromCoordinate, toCoordinate)
-
-                timeOnRoad = (roadLength /
-                              (speedDecrease * (float(speed) * 1000 / 3600)))
-
-                newCost = cost[current] + timeOnRoad
-
-                if nextNode not in cost or newCost < cost[nextNode]:
-                    cost[nextNode] = newCost
-
-                    weight = (newCost + (roadInt ** 1) +
-                              (self.heuristic(nodes[nextNode], nodes[goal]) /
-                               (float(standardSpeed) * 1000 / 3600)))
-
-                    heappush(openSet, (weight, nextNode))
-                    path[nextNode] = current
-
-        return self.reconstruct_path(path, start, goal), cost
-
-    def heuristic(self, node, goal):
-        """
-        The heuristic used by A*. It measures the length between node and goal
-        in meters.
-        :param node a Coordinate object
-        :param goal a Coordinate object
-        :return the distance in meters
-        """
-        return coordinate.measure(node, goal)
-
-    def reconstruct_path(self, came_from, start, goal):
-        """
-
-        """
-        current = goal
-        path = [current]
-        while current != start:
-            current = came_from[current]
-            path.append(current)
-        path.reverse()
-        return path
-
-
 class Map:
     """
     The main class for the routing.
@@ -295,7 +204,7 @@ class Map:
 
     def __init__(self, omsfilepath):
         self.omsfile = omsfilepath
-        self.astar = AStar()
+        self.astar = AStar(standardSpeed)
         self.handler = RouteHandler()
         self.nodes = {}
         self.busStopList = []
@@ -680,3 +589,13 @@ if __name__ == '__main__':
     myMap.drawPath(my4Path, 'green')
     myMap.drawSave(sys.argv[1])
     print "Image done,", sys.argv[1]
+
+    #print myMap.busStopList
+    #for bus in myMap.busStopList:
+    #    print bus.name.encode('utf-8')
+    #    #pass
+
+    #for addr in myMap.handler.addresses:
+    #    for num in myMap.handler.addresses[addr].numbers:
+    #        print addr.encode('utf-8'), num
+
