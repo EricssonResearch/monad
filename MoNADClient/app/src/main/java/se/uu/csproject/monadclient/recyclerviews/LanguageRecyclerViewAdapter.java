@@ -24,7 +24,7 @@ public class LanguageRecyclerViewAdapter
 
     private List<Language> languages;
     private View selectedCardView;
-    private Context parentContext;
+    //private Context parentContext;
 
     public class LanguageViewHolder extends RecyclerView.ViewHolder {
 
@@ -44,7 +44,7 @@ public class LanguageRecyclerViewAdapter
 
     public LanguageRecyclerViewAdapter(Context context, List<Language> languages){
         this.languages = languages;
-        this.parentContext = context;
+        //this.parentContext = context;
     }
 
     @Override
@@ -74,7 +74,7 @@ public class LanguageRecyclerViewAdapter
                 selectedCardView = languageViewHolder.selectedOverlay;
                 ClientAuthentication.setLanguage(languages.get(i).index);
                 ClientAuthentication.setIfSettingsChanged(true);
-                Toast.makeText(languageViewHolder.languageCard.getContext(), "Language changed to " + ClientAuthentication.getLanguage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(languageViewHolder.languageCard.getContext(), languageViewHolder.itemView.getResources().getString(R.string.java_languagerva_languagechanged) + " " + ClientAuthentication.getLanguage(), Toast.LENGTH_SHORT).show();
 
                 Locale locale = new Locale(languages.get(i).index);
                 Locale.setDefault(locale);

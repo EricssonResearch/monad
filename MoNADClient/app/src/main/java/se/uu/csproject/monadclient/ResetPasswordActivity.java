@@ -55,7 +55,7 @@ public class ResetPasswordActivity extends MenuedActivity {
                 String confirmPasswordValue = confirmPasswordField.getText().toString();
 
                 if(!passwordValue.equals(confirmPasswordValue)){
-                    Toast.makeText(getApplicationContext(), "Two passwords do not match!", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), getString(R.string.java_passwordsnomatch), Toast.LENGTH_LONG).show();
                     return;
                 }
 

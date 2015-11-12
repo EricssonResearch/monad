@@ -153,4 +153,28 @@
     <string name="hello_world">Hello world!</string>
     <string name="GoogleProjectID" translatable="false">81265551950</string>
     <string name="java_to">to</string>
+    <string name="java_yes">Yes</string>
+    <string name="java_cancel">Cancel</string>
+    <string name="java_confirm">Confirm</string>
+    <string name="java_today">TODAY</string>
+    <string name="java_tripinprogress">Trip in Progress</string>
+    <string name="java_passwordsnomatch">Passwords do not match!</string>
+    <string name="java_locationpermissionwarning">If you refuse to share your current location then we cannot use it to search for suitable bus trips</string>
+    <string name="java_googleplaywarning">If you do not enable Google Play Services then we cannot use your current location to search for suitable bus trips</string>
+    <string name="java_confirmcode_error">Invalid code, please try again</string>
+    <string name="java_forgotpassword_codesent">The code has been sent to your email address, please check your email and enter the code</string>
+    <string name="java_main_noresults">Could not find any trips for this destination. Please try the advanced search</string>
+    <string name="java_main_exitmonad">Do you want to exit MoNAD?</string>
+    <string name="java_main_leftmonad">You have left MoNAD</string>
+    <string name="java_search_locationfailed">Failed to get your current position. Please enable Google Play Services and/or give us location permission</string>
+    <string name="java_search_currentposition">Current Position</string>
+    <string name="java_search_enterdeparture">Please enter a departure address</string>
+    <string name="java_search_enterdestination">Please enter a destination address</string>
+    <string name="java_search_emptysearch">Could not find any trips matching your criteria</string>
+    <string name="java_settings_themechanged_light">Theme changed to light</string>
+    <string name="java_settings_themechanged_default">Theme changed to default</string>
+    <string name="java_settings_themechanged_dark">Theme changed to dark</string>
+    <string name="java_trips_notripsbooked">No trips have been booked</string>
+    <string name="java_languagerva_languagechanged">Language changed to</string>
+    <string name="java_notificationsrva_newmessages">You have received new messages</string>
 </resources>

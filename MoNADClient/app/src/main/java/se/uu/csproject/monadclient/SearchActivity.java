@@ -124,8 +124,7 @@ public class SearchActivity extends MenuedActivity implements
                     mGoogleApiClient.connect();
                 } else {
                     // Permission denied, boo! Pester him until he changes his mind
-                    CharSequence text = "If you don't give location permission then we can't use " +
-                            "your current location to search for suitable bus trips.";
+                    CharSequence text = getString(R.string.java_locationpermissionwarning);
                     Toast toast = Toast.makeText(context, text, Toast.LENGTH_LONG);
                     toast.show();
                 }
@@ -229,10 +228,9 @@ public class SearchActivity extends MenuedActivity implements
     // Called when the user clicks on the pinpoint icon next to the departure address field
     public void useCurrentPosition(View v){
         if (mGoogleApiClient.isConnected()){
-            positionEditText.setText("Current Position");
+            positionEditText.setText(getString(R.string.java_search_currentposition));
         } else {
-            CharSequence text = "We are not able to get your current position. Please consider " +
-                    "enabling your google play services and/or giving us location permission.";
+            CharSequence text = getString(R.string.java_search_locationfailed);
             Toast toast = Toast.makeText(context, text, Toast.LENGTH_LONG);
             toast.show();
         }
@@ -286,12 +284,12 @@ public class SearchActivity extends MenuedActivity implements
                     startPositionLatitude, startPositionLongitude);
         }
         else if (stPosition == null || stPosition.trim().isEmpty()) {
-            CharSequence text = "Please enter a departure address.";
+            CharSequence text = getString(R.string.java_search_enterdeparture);
             Toast toast = Toast.makeText(context, text, Toast.LENGTH_SHORT);
             toast.show();
         }
         else if (edPosition == null || edPosition.trim().isEmpty()) {
-            CharSequence text = "Please enter a destination address.";
+            CharSequence text = getString(R.string.java_search_enterdestination);
             Toast toast = Toast.makeText(context, text, Toast.LENGTH_SHORT);
             toast.show();
         }
@@ -300,7 +298,7 @@ public class SearchActivity extends MenuedActivity implements
     // Deals with the response by the server
     public void processFinish(ArrayList<FullTrip> searchResults){
         if (searchResults.isEmpty()){
-            CharSequence text = "Could not find any trips matching your criteria.";
+            CharSequence text = getString(R.string.java_search_emptysearch);
             Toast toast = Toast.makeText(context, text, Toast.LENGTH_SHORT);
             toast.show();
         }
@@ -321,8 +319,7 @@ public class SearchActivity extends MenuedActivity implements
                 }
             }
         } else {
-            CharSequence text = "If you don't have google play services enabled, we can't use " +
-                    "your current location to search for suitable bus trips.";
+            CharSequence text = getString(R.string.java_googleplaywarning);
             Toast toast = Toast.makeText(context, text, Toast.LENGTH_LONG);
             toast.show();
         }
