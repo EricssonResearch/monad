@@ -3,16 +3,20 @@ package se.uu.csproject.monadclient;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -66,27 +70,43 @@ public class RouteActivity extends AppCompatActivity {
             exit = partialTrips.get(i).getEndTime();
             ArrayList<String> busStops = partialTrips.get(i).getTrajectory();
 
-            View v = vi.inflate(R.layout.route_details, null);
-
-            TextView stopTime = (TextView) v.findViewById(R.id.label_first_time);
-            stopTime.setText(formatTime(time));
-            TextView stopName = (TextView) v.findViewById(R.id.label_first_stop);
-            stopName.setText(name);
-            insertPoint.addView(v);
+//            View v = vi.inflate(R.layout.route_details, null);
+//
+//            TextView stopTime = (TextView) v.findViewById(R.id.label_first_time);
+//            stopTime.setText(formatTime(time));
+//            TextView stopName = (TextView) v.findViewById(R.id.label_first_stop);
+//            stopName.setText(name);
+//            insertPoint.addView(v);
 
             for(int j = 0 ; j < busStops.size(); j++) {
                 busStop = busStops.get(j);
                 View busStopView = vi.inflate(R.layout.bus_stop, null);
                 TextView textBusStop = (TextView) busStopView.findViewById(R.id.bus_stop);
+                ImageView busStopImage = (ImageView) busStopView.findViewById(R.id.bus_stop_image);
                 textBusStop.setText(busStop);
                 TextView exitTime = (TextView) busStopView.findViewById(R.id.exit_time);
 
-                if (j == busStops.size() - 1) {
-                    textBusStop.setTextColor(Color.RED);
+
+                if (j == 0) {
+                    textBusStop.setTextColor(Color.BLACK);
+                    exitTime.setText(formatTime((Date) time));
+                    textBusStop.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
+                    textBusStop.setTypeface(null, Typeface.BOLD);
+                    busStopImage.setVisibility(View.VISIBLE);
+                    busStopImage.setImageResource(R.drawable.ic_directions_bus_black_24dp);
+                    busStopView.setPadding(16, 8, 16, 4);
+                }
+                else if (j == busStops.size() - 1) {
+                    textBusStop.setTextColor(Color.BLACK);
                     exitTime.setText(formatTime((Date) exit));
+                    textBusStop.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
+                    textBusStop.setTypeface(null, Typeface.BOLD);
+                    busStopImage.setVisibility(View.VISIBLE);
+                    busStopImage.setImageResource(R.drawable.ic_directions_bus_black_24dp);
+                    busStopView.setPadding(16,8,16,4);
 
-
-                } else {
+                }
+                else {
                     textBusStop.setTextColor(Color.BLACK);
                     exitTime.setVisibility(View.INVISIBLE);
                 }

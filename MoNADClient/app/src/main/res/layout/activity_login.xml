@@ -77,7 +77,7 @@
                     android:id="@+id/field_username"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    style="@style/inputText"
+                    style="@style/blackText"
                     android:inputType="textNoSuggestions"
                     android:layout_marginBottom="@dimen/edittext_vertical_margin"
                     android:layout_weight="1"
@@ -95,7 +95,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="textPassword"
-                    style="@style/inputText"
+                    style="@style/blackText"
                     android:layout_marginBottom="@dimen/edittext_vertical_margin"
                     android:layout_weight="1"
                     />

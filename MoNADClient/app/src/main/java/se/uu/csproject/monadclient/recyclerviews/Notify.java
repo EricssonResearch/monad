@@ -13,6 +13,7 @@ public class Notify {
     String text;
     Date time;
     int iconID;
+    boolean reschedule; // notification includes reschedule option
 
     /* Used for generating notifications, which do not exist in the database */
     public Notify(String text, Date time, int iconID) {
@@ -20,6 +21,7 @@ public class Notify {
         this.id = "-1";
         this.text = text;
         this.time = time;
+        this.reschedule = false;
         this.iconID = parseIconID(iconID);
     }
 
@@ -29,6 +31,7 @@ public class Notify {
         this.id = id;
         this.text = text;
         this.time = time;
+        this.reschedule = false;
         this.iconID = parseIconID(iconID);
     }
     /* Used for generating notifications, with the new tripID attribute.... */
@@ -37,6 +40,7 @@ public class Notify {
         this.id = id;
         this.text = text;
         this.time = time;
+        this.reschedule = false;
         this.iconID = parseIconID(iconID);
     }
 
@@ -49,14 +53,16 @@ public class Notify {
         else if (iconID == 2) {
             returnedIconID = R.drawable.ic_feedback_black_24dp;
         }
-        else if (iconID == 3) {
+        else if (iconID == 3 && isToday()) {
             returnedIconID = R.drawable.ic_alarm_black_24dp;
+            this.reschedule = true;
         }
         else {
-            returnedIconID = R.drawable.ic_assistant_photo_black_24dp;
+            returnedIconID = R.drawable.ic_alarm_black_24dp;
         }
         return returnedIconID;
     }
+
     public String getTripID() { return tripID; }
 
     public boolean isToday() {

@@ -86,10 +86,7 @@ public class NotificationsActivity extends MenuedActivity implements AsyncRespon
     @Override
     protected void onResume() {
         super.onResume();
-        bookings = Storage.getBookings();
-        if (bookings.isEmpty()){
-            getBookings();
-        }
+        getBookings();
     }
 
     @Override
