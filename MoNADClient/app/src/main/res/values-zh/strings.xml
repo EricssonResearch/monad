@@ -117,7 +117,6 @@
     <string name="img_description">找不到图片</string>
     <string name="non_available">n/a</string>
     <string name="hello_world">Hello world!</string>
-    <string name="GoogleProjectID" translatable="false">81265551950</string>
     <string name="java_to">to</string>
     <string name="java_yes">Yes</string>
     <string name="java_cancel">Cancel</string>
