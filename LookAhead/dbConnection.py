@@ -702,7 +702,7 @@ class DB():
             line = individual[i][0]
             if i > 0:
                 if line != individual[i-1][0]:
-                    self.insertTimeTable2(line, startTime, tripObjectList)
+                    self.insertTimeTable2(individual[i-1][0], startTime, tripObjectList)
                     tripObjectList[:] = []
             objID = ObjectId()
             tripObjectList.append(objID)

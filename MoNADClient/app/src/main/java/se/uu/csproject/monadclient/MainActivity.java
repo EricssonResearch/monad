@@ -85,47 +85,13 @@ public class MainActivity extends MenuedActivity implements
 //        rt.execute();
 
         /* TODO: GetRecommendations */
+        new RecommendationsInteraction("MainActivity").getRecommendations();
+
         /* TODO: GetNotifications */
-        GetNotificationsTask notificationsTask = new GetNotificationsTask();
-        try {
-            String response = notificationsTask.execute().get();
-            System.out.println("Response: " + response);
+        new NotificationsInteraction("MainActivity").getNotifications();
 
-            if (response.equals("1")) {
-                Log.d("MainActivity", "Notifications have been successfully loaded by the database");
-            }
-            else {
-                //initialize notifications, temporary
-                Storage.initializeNotificationData();
-                Log.d("MainActivity", "Fake notifications have been generated");
-            }
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-            Storage.initializeNotificationData();
-            Log.d("MainActivity", "Exception while loading notifications - Fake notifications have been generated");
-        }
-
-//        try {
-//            String response = recommendationsTask.execute().get();
-//
-//            Toast.makeText(getApplicationContext(), response, Toast.LENGTH_LONG).show();
-//
-//            // If the response starts with the specific word, it means the users logged in successfully
-//            if (response.startsWith("Success (1)")) {
-//                System.out.println("________________OK________________");
-//            }
-//            else {
-//                System.out.println("________________NOT OK________________");
-//            }
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        } catch (ExecutionException e) {
-//            e.printStackTrace();
-//        }
-
-        generateSearchResults(searchResults);
-        SearchRecyclerViewAdapter adapter = new SearchRecyclerViewAdapter(searchResults);
+//        generateSearchResults(searchResults);
+        SearchRecyclerViewAdapter adapter = new SearchRecyclerViewAdapter(Storage.getRecommendations());
         recyclerView.setAdapter(adapter);
 
         buildGoogleApiClient();

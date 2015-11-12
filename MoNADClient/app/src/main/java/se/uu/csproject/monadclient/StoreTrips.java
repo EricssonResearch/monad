@@ -23,8 +23,8 @@ public class StoreTrips {
     private SimpleDateFormat format;
     private ArrayList<FullTrip> searchResults;
 
-    // Get the trips returned by the server and store them if needed
-    public ArrayList<FullTrip> storeTheTrips(JSONObject trips, boolean storeData){
+    // Get the trips returned by the server and store them
+    public ArrayList<FullTrip> storeTheTrips(JSONObject trips, int searchResultsOrBookings){
         numberOfSearchResults = trips.length();
         format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         searchResults = new ArrayList<>();
@@ -85,14 +85,13 @@ public class StoreTrips {
             Log.d("oops", e.toString());
         }
 
-        Collections.sort(searchResults, new FullTripsStartTimeComparator());
-        Storage.setSearchResults(searchResults);
-
-        // Sort the trips in ascending order based on their start time
+        // Sort the trips based on their start time and whether they're new or old
         Collections.sort(searchResults, new FullTripsStartTimeComparator());
 
-        if (storeData){
+        if (searchResultsOrBookings == 0){
             Storage.setSearchResults(searchResults);
+        } else if (searchResultsOrBookings == 1){
+            Storage.setBookings(searchResults);
         }
 
         return searchResults;

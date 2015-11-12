@@ -1,0 +1,5 @@
+userId=335871&2015-11-11 06:54:45&null&2015-11-10 10:42:53&stPosition=Oslogatan&edPosition=Stadshuset&priority=distance&startPositionLatitude=17.65194&startPositionLongitude=59.86534
+userId=112517&2015-11-11 15:54:55&null&2015-11-10 10:42:53&stPosition=Flogsta vårdcentral&edPosition=Flogsta vårdcentral&priority=distance&startPositionLatitude=17.64742&startPositionLongitude=59.86082
+userId=474712&null&2015-11-11 17:08:04&2015-11-10 10:42:53&stPosition=Rickomberga&edPosition=Götgatan&priority=distance&startPositionLatitude=17.64939&startPositionLongitude=59.86279
+userId=15651&2015-11-11 17:50:03&null&2015-11-10 10:42:53&stPosition=Sernanders väg&edPosition=Rickomberga&priority=distance&startPositionLatitude=17.65146&startPositionLongitude=59.86486
+userId=105318&2015-11-11 08:01:37&null&2015-11-10 10:42:53&stPosition=Ekebyhus&edPosition=Flogsta vårdcentral&priority=distance&startPositionLatitude=17.65464&startPositionLongitude=59.86804
