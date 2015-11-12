@@ -12,12 +12,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
 import se.uu.csproject.monadclient.recyclerviews.FullTrip;
+import se.uu.csproject.monadclient.recyclerviews.Storage;
 
-public class RouteConfirmPopup extends AppCompatActivity implements AsyncResponseString{
+public class RouteConfirmPopup extends AppCompatActivity implements AsyncResponseString, AsyncResponse{
 
     private TextView busIdView, startTimeView, endTimeView, startPositionView, endPositionView;
     private FullTrip trip;
@@ -73,7 +75,17 @@ public class RouteConfirmPopup extends AppCompatActivity implements AsyncRespons
     public void processFinish(String response){
         Toast toast = Toast.makeText(context, response, Toast.LENGTH_SHORT);
         toast.show();
-        Intent intent = new Intent(RouteConfirmPopup.this, TripsActivity.class);
+
+        String userId = ClientAuthentication.getClientId();
+        SendUserBookingsRequest asyncTask = new SendUserBookingsRequest();
+        asyncTask.delegate = this;
+        asyncTask.execute(userId);
+    }
+
+    // Deals with the response by the server after requesting the updated user's bookings
+    public void processFinish(ArrayList<FullTrip> bookings){
+        Storage.setBookings(bookings);
+        Intent intent = new Intent(this, TripsActivity.class);
         startActivity(intent);
         finish();
     }

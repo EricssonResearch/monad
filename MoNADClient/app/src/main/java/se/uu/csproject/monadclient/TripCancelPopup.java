@@ -15,14 +15,16 @@ import android.widget.Toast;
 
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
 import se.uu.csproject.monadclient.recyclerviews.FullTrip;
+import se.uu.csproject.monadclient.recyclerviews.Storage;
 
 import static java.lang.Math.floor;
 
-public class TripCancelPopup extends AppCompatActivity implements AsyncResponseString{
+public class TripCancelPopup extends AppCompatActivity implements AsyncResponseString, AsyncResponse{
     private TextView startBusStop, endBusStop, startTime, endTime, date, countdown;
     private ImageView clockIcon;
     private FullTrip trip;
@@ -146,7 +148,18 @@ public class TripCancelPopup extends AppCompatActivity implements AsyncResponseS
     public void processFinish(String response){
         Toast toast = Toast.makeText(context, response, Toast.LENGTH_SHORT);
         toast.show();
-        startActivity(new Intent(this, TripsActivity.class));
+
+        String userId = ClientAuthentication.getClientId();
+        SendUserBookingsRequest asyncTask = new SendUserBookingsRequest();
+        asyncTask.delegate = this;
+        asyncTask.execute(userId);
+    }
+
+    // Deals with the response by the server after requesting the updated user's bookings
+    public void processFinish(ArrayList<FullTrip> bookings){
+        Storage.setBookings(bookings);
+        Intent intent = new Intent(this, TripsActivity.class);
+        startActivity(intent);
         finish();
     }
 
