@@ -17,12 +17,19 @@ global skills: [SQLSKILL] {
 	int duration_hour_start <- 1;
 	int duration_hour_end <- 72;
 	int regular_user_flag <- 0;	
-
+	
+	//counters for the data classify by time range
+	int counter_before_morning_rush <- 0;
+	int counter_morning_rush <- 0;
+	int counter_bet_rushs <- 0;
+	int counter_afternoon_rush <- 0;
+	int counter_after_afternoon_rush <- 0;
+	//counters for the data classify by time range
 	//file my_file <- csv_file("../includes/position_name.csv");
 	list<string> init_position <- list<string>(csv_file("../includes/position_name.csv"));
 	
 	//Matrix which keeps regular user info
-	matrix<string> regular_user2 <- matrix<string>(csv_file("../includes/Regular_user_info.csv","&"));
+	matrix<string> regular_user2 <- matrix<string>(csv_file("../includes/Regular_user_info2.csv",""));
 	int mx_index;
 	list spname_ls2 <- ['Kungshögarna','Regins väg','Valhalls väg','Huges väg','Topeliusgatan','Värnlundsgatan','Ferlinsgatan','Heidenstamstorg','Kantorsgatan','Djäknegatan',
 							 'Portalgatan','Höganäsgatan','Väderkvarnsgatan','Vaksala torg','Stadshuset','Skolgatan','Götgatan','Ekonomikum','Studentstaden','Rickomberga','Oslogatan',
@@ -65,7 +72,6 @@ global skills: [SQLSKILL] {
 			if type="Industrial" {
 				color <- #blue ;
 				
-	
 			}
 		} 
 		
@@ -98,7 +104,6 @@ species road  {
 species building {
 	string type; 
 	rgb color <- #gray  ;
-	
 	aspect base {
 		draw shape color: color ;
 	}
@@ -131,19 +136,18 @@ species client skills: [SQLSKILL] {
 	
 	int user_name <- rnd(500000) update: rnd(500000);
 	float current_time <- machine_time update: machine_time;
-	string cur_time_str <- (current_time/1000) as_date "%Y y %M m %D d %h h %m m %s seconds" update: (current_time/1000) as_date "%Y y %M m %D d %h h %m m %s seconds"; 
+	string cur_time_str <- ((current_time/1000) + float(13050000)) as_date "%Y y %M m %D d %h h %m m %s seconds" update: ((current_time/1000) + float(13050000)) as_date "%Y y %M m %D d %h h %m m %s seconds"; 
 	int cts_length <- length(cur_time_str) update: length(cur_time_str);
 	float st_time_duration <- current_time + (duration_hour_start*3600000);
 	float end_time_duration <- current_time + (duration_hour_end*3600000);
 	float va_titude <- (rnd(9999))/10000000 update: (rnd(9999))/10000000;
-	
 	
 	float longitude <- 59.858 + va_titude;
 	float latitude <- 17.644 + va_titude;
 	
 		
 	float st_time;
-	int st_end_rnd <- rnd(1) update: rnd(1);
+	int st_end_rnd <- rnd(4) update: rnd(4);
 	string start_time_str;
 	int priority_rnd <- rnd(1) update: rnd(1);
 	string priority;
@@ -240,12 +244,6 @@ species client skills: [SQLSKILL] {
 	string startPositionLatitude;
 	string startPositionLongitude;
 	string user_name_str;	
-	string org_st_time;
-	string org_req_time;	
-	string new_st_month_str;
-	string new_st_day_str;
-	string new_req_month_str;
-	string new_req_day_str;
 	
 	//list spname_ls2 <- ['Kungshögarna','Regins väg','Valhalls väg','Huges väg','Topeliusgatan','Värnlundsgatan','Ferlinsgatan','Heidenstamstorg','Kantorsgatan','Djäknegatan',
 	//						 'Portalgatan','Höganäsgatan','Väderkvarnsgatan','Vaksala torg','Stadshuset','Skolgatan','Götgatan','Ekonomikum','Studentstaden','Rickomberga','Oslogatan',
@@ -272,8 +270,8 @@ species client skills: [SQLSKILL] {
 		}
 		
 			
-		st_time <- gauss (rush_time, 5000000);
-		start_time_str <- (st_time/1000) as_date "%Y y %M m %D d %h h %m m %s seconds";
+		st_time <- gauss (rush_time, 7000000);
+		start_time_str <- ((st_time/1000) +  13050000) as_date "%Y y %M m %D d %h h %m m %s seconds";
 						
 		if st_time > st_time_duration and st_time < end_time_duration {
 			passenger_cal_flag <- 1;	
@@ -316,12 +314,13 @@ species client skills: [SQLSKILL] {
 			
 
 	
-		if st_end_rnd = 0{
+		if st_end_rnd > 0{
 			start_time <- string(1970 + int(st_year) - 1)  + "-" + st_month + "-" + st_day + " " + st_hour + ":" + st_minute + ":" + st_second;	
 			end_time <- "null";
 		} else{
 			start_time <- "null";
 			end_time <- string(1970 + int(st_year) - 1)  + "-" + st_month + "-" + st_day + " " + st_hour + ":" + st_minute + ":" + st_second;
+			
 		}
 	}
 	
@@ -337,66 +336,117 @@ species client skills: [SQLSKILL] {
 	
 	//regular_request
 	action regular_request{
-		write regular_user2.rows;
-		write regular_user2[0,0];
-		write regular_user2[1,0];
-		write regular_user2[2,0];
-		write regular_user2[3,0];
 		loop i from: 0 to: (regular_user2.rows - 1) {
+<<<<<<< HEAD
 			if regular_user2[1,i] = nil or regular_user2[2,i] = nil {
 				//test push
 				break;
 			}
+=======
+>>>>>>> 24756ecd0a4ed5e1067eed658c9768a1b96579a1
 			if regular_user2[1,i] != 'null' {
-				write 'start: ';
-				write regular_user2[1,i];
 				org_st_year <- int(copy_between(regular_user2[1,i], 0,4));
 				org_st_month <- int(copy_between(regular_user2[1,i], 5,7));
 				org_st_day <- int(copy_between(regular_user2[1,i], 8,10));
-				org_st_time <- copy_between(regular_user2[1,i], 11,20);
-			} else if regular_user2[2,i] != 'null' {
-				write 'end: ';
-				write regular_user2[1,i];
-				org_st_year <- int(copy_between(regular_user2[2,i], 0,4));
-				org_st_month <- int(copy_between(regular_user2[2,i], 5,7));
-				org_st_day <- int(copy_between(regular_user2[2,i], 8,10));
-				org_st_time <- copy_between(regular_user2[2,i], 11,20);
-			} else {
-				write 'Regular Request original data is null or error!';
-				break;
-			}
-			if org_st_day = 28 and org_st_month = 2 and mod(org_st_year,4) != 0{
-				new_st_day <- 1;
-				new_st_month <- 3;
-				new_st_year <- org_st_year;
-			}else if org_st_day = 29 and org_st_month = 2{
-				new_st_day <- 1;
-				new_st_month <- 3;	
-				new_st_year <- org_st_year;
-			}else if org_st_day = 30 and org_st_month in [4,6,9,11]{
-				new_st_day <- 1;
-				new_st_month <- org_st_month + 1;
-				new_st_year <- org_st_year;
-			}else if org_st_day = 31 and org_st_month in [1,3,5,7,8,9,12]{
-				if org_st_month = 12{
+				org_st_hour <- int(copy_between(regular_user2[1,i], 11,13));
+				org_st_min <- int(copy_between(regular_user2[1,i], 14,16));
+				if org_st_day = 28 and org_st_month = 2 and mod(org_st_year,4) != 0{
 					new_st_day <- 1;
-					new_st_month <- 1;
-					new_st_year <- org_st_year + 1;
-				} else {
-					new_st_day <- 1;
-					new_st_month <- org_st_month + 1;	
+					new_st_month <- 3;
 					new_st_year <- org_st_year;
+					new_st_hour <- org_st_hour;
+					new_st_hour <- org_st_min;
+				}else if org_st_day = 29 and org_st_month = 2{
+					new_st_day <- 1;
+					new_st_month <- 3;	
+					new_st_year <- org_st_year;
+					new_st_hour <- org_st_hour;
+					new_st_hour <- org_st_min;									
 				}
-			} else {
+				else if org_st_day = 30 and org_st_month in [4,6,9,11]{
+					new_st_day <- 1;
+					new_st_month <- org_st_month + 1;
+					new_st_year <- org_st_year;
+					new_st_hour <- org_st_hour;
+					new_st_hour <- org_st_min;					
+				}else if org_st_day = 31 and org_st_month in [1,3,5,7,8,9,12]{
+					if org_st_month = 12{
+						new_st_day <- 1;
+						new_st_month <- 1;
+						new_st_year <- org_st_year + 1;
+						new_st_hour <- org_st_hour;
+						new_st_hour <- org_st_min;						
+					} else {
+						new_st_day <- 1;
+						new_st_month <- org_st_month + 1;	
+						new_st_year <- org_st_year;
+						new_st_hour <- org_st_hour;
+						new_st_hour <- org_st_min;	
+					}
+
+				}else{
 					new_st_day <- org_st_day + 1;
 					new_st_month <- org_st_month;	
 					new_st_year <- org_st_year;
-			}	
-		
+					new_st_hour <- org_st_hour;
+					new_st_hour <- org_st_min;						
+				}		
+			} 
+			if regular_user2[2,i] != 'null' {
+				org_st_year <- int(copy_between(regular_user2[2,i], 0,4));
+				org_st_month <- int(copy_between(regular_user2[2,i], 5,7));
+				org_st_day <- int(copy_between(regular_user2[2,i], 8,10));
+				org_st_hour <- int(copy_between(regular_user2[2,i], 11,13));
+				org_st_min <- int(copy_between(regular_user2[2,i], 14,16));	
+				if org_st_day = 28 and org_st_month = 2 and mod(org_st_year,4) != 0{
+					new_st_day <- 1;
+					new_st_month <- 3;
+					new_st_year <- org_st_year;
+					new_st_hour <- org_st_hour;
+					new_st_hour <- org_st_min;
+				}else if org_st_day = 29 and org_st_month = 2{
+					new_st_day <- 1;
+					new_st_month <- 3;	
+					new_st_year <- org_st_year;
+					new_st_hour <- org_st_hour;
+					new_st_hour <- org_st_min;									
+				}
+				else if org_st_day = 30 and org_st_month in [4,6,9,11]{
+					new_st_day <- 1;
+					new_st_month <- org_st_month + 1;
+					new_st_year <- org_st_year;
+					new_st_hour <- org_st_hour;
+					new_st_hour <- org_st_min;					
+				}else if org_st_day = 31 and org_st_month in [1,3,5,7,8,9,12]{
+					if org_st_month = 12{
+						new_st_day <- 1;
+						new_st_month <- 1;
+						new_st_year <- org_st_year + 1;
+						new_st_hour <- org_st_hour;
+						new_st_hour <- org_st_min;						
+					} else {
+						new_st_day <- 1;
+						new_st_month <- org_st_month + 1;	
+						new_st_year <- org_st_year;
+						new_st_hour <- org_st_hour;
+						new_st_hour <- org_st_min;	
+					}
+
+				}else{
+					new_st_day <- org_st_day + 1;
+					new_st_month <- org_st_month;	
+					new_st_year <- org_st_year;
+					new_st_hour <- org_st_hour;
+					new_st_hour <- org_st_min;						
+				}	
+			}
 			org_req_year <- int(copy_between(regular_user2[3,i], 0,4));
 			org_req_month <- int(copy_between(regular_user2[3,i], 5,7));
 			org_req_day <- int(copy_between(regular_user2[3,i], 8,10));
-			org_req_time <- copy_between(regular_user2[3,i], 11,20);
+			org_req_hour <- int(copy_between(regular_user2[3,i], 11,13));
+			org_req_min <- int(copy_between(regular_user2[3,i], 14,16));
+			new_req_hour <- org_req_month;
+			new_req_min <- org_req_min;	
 			if org_req_day = 28 and org_st_month = 2 and mod(org_st_year,4) != 0{
 				new_req_day <- 1;
 				new_req_month <- 3;
@@ -426,48 +476,43 @@ species client skills: [SQLSKILL] {
 				new_req_month <- org_req_month;
 			}
 			
-			if new_st_month < 10 {
-				new_st_month_str <- '0' + string(new_st_month);
-			} else {
-				new_st_month_str <- string(new_st_month);
-			}
-			
-			if new_st_day < 10 {
-				new_st_day_str <- '0' + string(new_st_day);
-			} else {
-				new_st_day_str <- string(new_st_day);
-			}
-			
-			if new_req_month < 10 {
-				new_req_month_str <- '0' + string(new_req_month);
-			} else {
-				new_req_month_str <- string(new_req_month);
-			}
-			
-			if new_req_day < 10 {
-				new_req_day_str <- '0' + string(new_req_day);
-			} else {
-				new_req_day_str <- string(new_req_day);
-			}
-			
 			user_name_str <- regular_user2[0,i];
 			if regular_user2[1,i] != 'null' {
-				start_time <- string(new_st_year) + '-' + new_st_month_str + '-' + new_st_day_str + ' ' + org_st_time;
+				start_time <- string(new_st_year) + '-' + string(new_st_month) + '-' + string(new_st_day) + ' ' + string(new_st_hour) + ':' + string(new_st_min);
 				end_time <- regular_user2[2,i];		
 			} else {
-				end_time <- string(new_st_year) + '-' + new_st_month_str + '-' + new_st_day_str + ' ' + org_st_time;
+				end_time <- string(new_st_year) + '-' + string(new_st_month) + '-' + string(new_st_day) + ' ' + string(new_st_hour) + ':' + string(new_st_min);
 				start_time <- regular_user2[1,i];					
 			}
-			request_time <- string(new_req_year) + '-' + new_req_month_str + '-' + new_req_day_str + ' ' + org_req_time;
-			
+			request_time <- string(new_req_year) + '-' + string(new_req_month) + '-' + string(new_req_day) + ' ' + string(new_req_hour) + ':' + string(new_req_min);
 			start_position <- regular_user2[4,i];
 			end_position <- regular_user2[5,i];
 			priority <- regular_user2[6,i];
 			startPositionLatitude <- regular_user2[7,i];
 			startPositionLongitude <- regular_user2[8,i];
 			
-			save [user_name_str + "&" + start_time + "&" + end_time + "&" + request_time  + start_position + end_position + priority + startPositionLatitude + startPositionLongitude] 
+			save [user_name_str + "&" + start_time + "&" + end_time + "&" + request_time  + start_position + end_position + priority 
+					+ startPositionLatitude + startPositionLongitude
+			] 
 		    				to: "ClientRequest" type:csv;
+		    				
+		    if int(st_hour) < 6  {
+		    	counter_before_morning_rush <- counter_before_morning_rush+ 1;
+		    }
+		    if int(st_hour) > 5 and int(st_hour) < 10 {
+		    	counter_morning_rush <- counter_morning_rush + 1;
+		    }
+		    if int(st_hour) > 9 and int(st_hour) < 15 {
+		    	counter_bet_rushs <- counter_bet_rushs + 1;
+		    }
+		    if int(st_hour) > 14 and int(st_hour) < 19 {
+		    	counter_afternoon_rush <- counter_afternoon_rush + 1;
+		    }
+		    if int(st_hour) > 18 {
+		    	counter_after_afternoon_rush <- counter_after_afternoon_rush + 1;
+		    }
+		     
+		    counter_reg_req <- counter_reg_req + 1;
 		}
 	}
 		
@@ -524,7 +569,7 @@ species client skills: [SQLSKILL] {
 		//if the request come from a reqular user
 		//regular_request
 		if regular_user_flag = 0 {
-			do regular_request;
+			//do regular_request;
 			regular_user_flag <- 1;
 		}else{ //here we need to calculate the startTime and eduration_hour_startndTime based on request time(NORMAL)
 			
@@ -581,6 +626,23 @@ species client skills: [SQLSKILL] {
 				save ["userId=" + user_name + "&" + start_time + "&" + end_time + "&" + request_time  + "&stPosition=" + start_position + 
 				"&edPosition=" + end_position + "&priority=" + priority +"&startPositionLatitude="+latitude +"&startPositionLongitude="+longitude]
 		    			to: "ClientRequest" type:csv;}
+		   		
+		   		if int(st_hour) < 6  {
+		    	counter_before_morning_rush <- counter_before_morning_rush+ 1;
+		   	    }
+		    	if int(st_hour) > 5 and int(st_hour) < 10 {
+		    	counter_morning_rush <- counter_morning_rush + 1;
+		    	}
+		   		if int(st_hour) > 9 and int(st_hour) < 15 {
+		    	counter_bet_rushs <- counter_bet_rushs + 1;
+		    	}
+		    	if int(st_hour) > 14 and int(st_hour) < 19 {
+		    	counter_afternoon_rush <- counter_afternoon_rush + 1;
+		    	}
+		    	if int(st_hour) > 18 {
+		    	counter_after_afternoon_rush <- counter_after_afternoon_rush + 1;
+		    	}
+		   		
 		    	weekday_nor_req_count <- weekday_nor_req_count + 1;
 		    			   	 
 	}}
@@ -592,7 +654,7 @@ species client skills: [SQLSKILL] {
 			nb_client_init <- 8;
 			do priority;
 		
-			mor_rush <- (9.5 * 60 * 60 * 1000);
+			mor_rush <- (10.5 * 60 * 60 * 1000);
 			aft_rush <- (15.5 * 60 * 60 * 1000);
 			
 			//Form request time (BOTH)
@@ -642,8 +704,8 @@ species client skills: [SQLSKILL] {
 
 			}else{
 				
-				mor_rush <- (7.5 * 60 * 60 * 1000);
-			 	aft_rush <- (16.5 * 60 * 60 * 1000);
+				mor_rush <- (10.5 * 60 * 60 * 1000);
+				aft_rush <- (15.5 * 60 * 60 * 1000);
 				
 				//Normal Distribution to define hot bus_stops for start position		 
 				float hot_stop_weight_st <- gauss(3,1);
@@ -690,8 +752,26 @@ species client skills: [SQLSKILL] {
 			
 					save ["userId=" + user_name + "&" + start_time + "&" + end_time + "&" + request_time  + "&stPosition=" + 
 						start_position + "&edPosition=" + end_position + "&priority=" + priority+"&startPositionLatitude="+latitude +"&startPositionLongitude="+longitude
-					] 
+					]
+					 
 		    				to: "ClientRequest" type:csv;}
+		    				
+		    		if int(st_hour) < 6  {
+		    			counter_before_morning_rush <- counter_before_morning_rush+ 1;
+		   			}
+		    		if int(st_hour) > 5 and int(st_hour) < 10 {
+		    			counter_morning_rush <- counter_morning_rush + 1;
+		    		}
+		    		if int(st_hour) > 9 and int(st_hour) < 15 {
+		    			counter_bet_rushs <- counter_bet_rushs + 1;
+		    		}
+		    		if int(st_hour) > 14 and int(st_hour) < 19 {
+		    			counter_afternoon_rush <- counter_afternoon_rush + 1;
+		   			}
+		    		if int(st_hour) > 18 {
+		    			counter_after_afternoon_rush <- counter_after_afternoon_rush + 1;
+		    		}
+		    				
 					weekend_nor_req_count <- weekend_nor_req_count + 1;
 		}}
 
@@ -744,8 +824,8 @@ experiment ClientApp type: gui {
 //		}
 //         	}
 //      	}
-	  display ChartHistoList refresh_every: 1{
-			chart "DataListBar" type:histogram style:"3d"
+	  display DataDistributionByBusstop refresh_every: 1{
+			chart "DataDistributionByBusstop" type:histogram style:"3d"
 			{
 				//loop index_cor from: 0 to: length (spname_ls2) - 1 {
 					//datalist [spname_ls2] value:[bus_stop_list[index_cor][1]] color:[°red];
@@ -758,6 +838,15 @@ experiment ClientApp type: gui {
 					bus_stop_list[12][1],bus_stop_list[18][1],bus_stop_list[5][1],bus_stop_list[13][1],
 					bus_stop_list[14][1],bus_stop_list[25][1],bus_stop_list[9][1] ,bus_stop_list[10][1],
 					bus_stop_list[26][1],bus_stop_list[28][1]] color:[rgb("red")];				
+			}
+	  }
+	  
+	  display DataDistributionByTime refresh_every: 1{
+			chart "DataDistributionByTime" type:histogram style:"3d"
+			{
+				datalist ["Befor 6am","Morning rush","9am - 15pm","Afternoon rush","18pm-24pm"] value:[counter_before_morning_rush,counter_morning_rush,counter_bet_rushs,
+						counter_afternoon_rush,counter_after_afternoon_rush
+				] color:[°red,°green];			
 			}
 	  }
    }
