@@ -707,7 +707,7 @@ class DB():
             objID = ObjectId()
             tripObjectList.append(objID)
             capacity = individual[i][1]
-            startTime = individual[i][2]
+            startTime = individual[i][2] + timedelta(1)
    
             trajectory = self.getRoute(line, "trajectory")
             if i == 0:

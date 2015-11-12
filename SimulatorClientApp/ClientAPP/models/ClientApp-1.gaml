@@ -17,7 +17,14 @@ global skills: [SQLSKILL] {
 	int duration_hour_start <- 1;
 	int duration_hour_end <- 72;
 	int regular_user_flag <- 0;	
-
+	
+	//counters for the data classify by time range
+	int counter_before_morning_rush <- 0;
+	int counter_morning_rush <- 0;
+	int counter_bet_rushs <- 0;
+	int counter_afternoon_rush <- 0;
+	int counter_after_afternoon_rush <- 0;
+	//counters for the data classify by time range
 	//file my_file <- csv_file("../includes/position_name.csv");
 	list<string> init_position <- list<string>(csv_file("../includes/position_name.csv"));
 	
@@ -65,7 +72,6 @@ global skills: [SQLSKILL] {
 			if type="Industrial" {
 				color <- #blue ;
 				
-	
 			}
 		} 
 		
@@ -98,7 +104,6 @@ species road  {
 species building {
 	string type; 
 	rgb color <- #gray  ;
-	
 	aspect base {
 		draw shape color: color ;
 	}
@@ -131,19 +136,18 @@ species client skills: [SQLSKILL] {
 	
 	int user_name <- rnd(500000) update: rnd(500000);
 	float current_time <- machine_time update: machine_time;
-	string cur_time_str <- (current_time/1000) as_date "%Y y %M m %D d %h h %m m %s seconds" update: (current_time/1000) as_date "%Y y %M m %D d %h h %m m %s seconds"; 
+	string cur_time_str <- ((current_time/1000) + float(13050000)) as_date "%Y y %M m %D d %h h %m m %s seconds" update: ((current_time/1000) + float(13050000)) as_date "%Y y %M m %D d %h h %m m %s seconds"; 
 	int cts_length <- length(cur_time_str) update: length(cur_time_str);
 	float st_time_duration <- current_time + (duration_hour_start*3600000);
 	float end_time_duration <- current_time + (duration_hour_end*3600000);
 	float va_titude <- (rnd(9999))/10000000 update: (rnd(9999))/10000000;
-	
 	
 	float longitude <- 59.858 + va_titude;
 	float latitude <- 17.644 + va_titude;
 	
 		
 	float st_time;
-	int st_end_rnd <- rnd(1) update: rnd(1);
+	int st_end_rnd <- rnd(4) update: rnd(4);
 	string start_time_str;
 	int priority_rnd <- rnd(1) update: rnd(1);
 	string priority;
@@ -266,8 +270,8 @@ species client skills: [SQLSKILL] {
 		}
 		
 			
-		st_time <- gauss (rush_time, 5000000);
-		start_time_str <- (st_time/1000) as_date "%Y y %M m %D d %h h %m m %s seconds";
+		st_time <- gauss (rush_time, 7000000);
+		start_time_str <- ((st_time/1000) +  13050000) as_date "%Y y %M m %D d %h h %m m %s seconds";
 						
 		if st_time > st_time_duration and st_time < end_time_duration {
 			passenger_cal_flag <- 1;	
@@ -310,12 +314,13 @@ species client skills: [SQLSKILL] {
 			
 
 	
-		if st_end_rnd = 0{
+		if st_end_rnd > 0{
 			start_time <- string(1970 + int(st_year) - 1)  + "-" + st_month + "-" + st_day + " " + st_hour + ":" + st_minute + ":" + st_second;	
 			end_time <- "null";
 		} else{
 			start_time <- "null";
 			end_time <- string(1970 + int(st_year) - 1)  + "-" + st_month + "-" + st_day + " " + st_hour + ":" + st_minute + ":" + st_second;
+			
 		}
 	}
 	
@@ -332,6 +337,13 @@ species client skills: [SQLSKILL] {
 	//regular_request
 	action regular_request{
 		loop i from: 0 to: (regular_user2.rows - 1) {
+<<<<<<< HEAD
+			if regular_user2[1,i] = nil or regular_user2[2,i] = nil {
+				//test push
+				break;
+			}
+=======
+>>>>>>> 24756ecd0a4ed5e1067eed658c9768a1b96579a1
 			if regular_user2[1,i] != 'null' {
 				org_st_year <- int(copy_between(regular_user2[1,i], 0,4));
 				org_st_month <- int(copy_between(regular_user2[1,i], 5,7));
@@ -483,6 +495,23 @@ species client skills: [SQLSKILL] {
 					+ startPositionLatitude + startPositionLongitude
 			] 
 		    				to: "ClientRequest" type:csv;
+		    				
+		    if int(st_hour) < 6  {
+		    	counter_before_morning_rush <- counter_before_morning_rush+ 1;
+		    }
+		    if int(st_hour) > 5 and int(st_hour) < 10 {
+		    	counter_morning_rush <- counter_morning_rush + 1;
+		    }
+		    if int(st_hour) > 9 and int(st_hour) < 15 {
+		    	counter_bet_rushs <- counter_bet_rushs + 1;
+		    }
+		    if int(st_hour) > 14 and int(st_hour) < 19 {
+		    	counter_afternoon_rush <- counter_afternoon_rush + 1;
+		    }
+		    if int(st_hour) > 18 {
+		    	counter_after_afternoon_rush <- counter_after_afternoon_rush + 1;
+		    }
+		     
 		    counter_reg_req <- counter_reg_req + 1;
 		}
 	}
@@ -540,7 +569,7 @@ species client skills: [SQLSKILL] {
 		//if the request come from a reqular user
 		//regular_request
 		if regular_user_flag = 0 {
-			do regular_request;
+			//do regular_request;
 			regular_user_flag <- 1;
 		}else{ //here we need to calculate the startTime and eduration_hour_startndTime based on request time(NORMAL)
 			
@@ -597,6 +626,23 @@ species client skills: [SQLSKILL] {
 				save ["userId=" + user_name + "&" + start_time + "&" + end_time + "&" + request_time  + "&stPosition=" + start_position + 
 				"&edPosition=" + end_position + "&priority=" + priority +"&startPositionLatitude="+latitude +"&startPositionLongitude="+longitude]
 		    			to: "ClientRequest" type:csv;}
+		   		
+		   		if int(st_hour) < 6  {
+		    	counter_before_morning_rush <- counter_before_morning_rush+ 1;
+		   	    }
+		    	if int(st_hour) > 5 and int(st_hour) < 10 {
+		    	counter_morning_rush <- counter_morning_rush + 1;
+		    	}
+		   		if int(st_hour) > 9 and int(st_hour) < 15 {
+		    	counter_bet_rushs <- counter_bet_rushs + 1;
+		    	}
+		    	if int(st_hour) > 14 and int(st_hour) < 19 {
+		    	counter_afternoon_rush <- counter_afternoon_rush + 1;
+		    	}
+		    	if int(st_hour) > 18 {
+		    	counter_after_afternoon_rush <- counter_after_afternoon_rush + 1;
+		    	}
+		   		
 		    	weekday_nor_req_count <- weekday_nor_req_count + 1;
 		    			   	 
 	}}
@@ -608,7 +654,7 @@ species client skills: [SQLSKILL] {
 			nb_client_init <- 8;
 			do priority;
 		
-			mor_rush <- (9.5 * 60 * 60 * 1000);
+			mor_rush <- (10.5 * 60 * 60 * 1000);
 			aft_rush <- (15.5 * 60 * 60 * 1000);
 			
 			//Form request time (BOTH)
@@ -658,8 +704,8 @@ species client skills: [SQLSKILL] {
 
 			}else{
 				
-				mor_rush <- (7.5 * 60 * 60 * 1000);
-			 	aft_rush <- (16.5 * 60 * 60 * 1000);
+				mor_rush <- (10.5 * 60 * 60 * 1000);
+				aft_rush <- (15.5 * 60 * 60 * 1000);
 				
 				//Normal Distribution to define hot bus_stops for start position		 
 				float hot_stop_weight_st <- gauss(3,1);
@@ -706,8 +752,26 @@ species client skills: [SQLSKILL] {
 			
 					save ["userId=" + user_name + "&" + start_time + "&" + end_time + "&" + request_time  + "&stPosition=" + 
 						start_position + "&edPosition=" + end_position + "&priority=" + priority+"&startPositionLatitude="+latitude +"&startPositionLongitude="+longitude
-					] 
+					]
+					 
 		    				to: "ClientRequest" type:csv;}
+		    				
+		    		if int(st_hour) < 6  {
+		    			counter_before_morning_rush <- counter_before_morning_rush+ 1;
+		   			}
+		    		if int(st_hour) > 5 and int(st_hour) < 10 {
+		    			counter_morning_rush <- counter_morning_rush + 1;
+		    		}
+		    		if int(st_hour) > 9 and int(st_hour) < 15 {
+		    			counter_bet_rushs <- counter_bet_rushs + 1;
+		    		}
+		    		if int(st_hour) > 14 and int(st_hour) < 19 {
+		    			counter_afternoon_rush <- counter_afternoon_rush + 1;
+		   			}
+		    		if int(st_hour) > 18 {
+		    			counter_after_afternoon_rush <- counter_after_afternoon_rush + 1;
+		    		}
+		    				
 					weekend_nor_req_count <- weekend_nor_req_count + 1;
 		}}
 
@@ -737,7 +801,7 @@ experiment ClientApp type: gui {
 	parameter "Minutes end From now " var: duration_hour_end  min: 1 max: 72 category: "Time-screen" ;
  	parameter "Shapefile for the roads:" var: shape_file_roads category: "GIS" ;
  	parameter "Shapefile for the bounds:" var: shape_file_bounds category: "GIS";
-
+	
 
 	output {
 		display main_display {
@@ -760,8 +824,8 @@ experiment ClientApp type: gui {
 //		}
 //         	}
 //      	}
-	  display ChartHistoList refresh_every: 1{
-			chart "DataListBar" type:histogram style:"3d"
+	  display DataDistributionByBusstop refresh_every: 1{
+			chart "DataDistributionByBusstop" type:histogram style:"3d"
 			{
 				//loop index_cor from: 0 to: length (spname_ls2) - 1 {
 					//datalist [spname_ls2] value:[bus_stop_list[index_cor][1]] color:[°red];
@@ -774,6 +838,15 @@ experiment ClientApp type: gui {
 					bus_stop_list[12][1],bus_stop_list[18][1],bus_stop_list[5][1],bus_stop_list[13][1],
 					bus_stop_list[14][1],bus_stop_list[25][1],bus_stop_list[9][1] ,bus_stop_list[10][1],
 					bus_stop_list[26][1],bus_stop_list[28][1]] color:[rgb("red")];				
+			}
+	  }
+	  
+	  display DataDistributionByTime refresh_every: 1{
+			chart "DataDistributionByTime" type:histogram style:"3d"
+			{
+				datalist ["Befor 6am","Morning rush","9am - 15pm","Afternoon rush","18pm-24pm"] value:[counter_before_morning_rush,counter_morning_rush,counter_bet_rushs,
+						counter_afternoon_rush,counter_after_afternoon_rush
+				] color:[°red,°green];			
 			}
 	  }
    }
