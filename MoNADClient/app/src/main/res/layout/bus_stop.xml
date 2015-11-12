@@ -5,6 +5,7 @@
     android:paddingLeft="@dimen/layout_padding">
 
     <ImageView
+        android:id="@+id/bus_stop_image"
         android:layout_width="@dimen/icon_small"
         android:layout_height="@dimen/icon_small"
         android:src="@drawable/ic_directions_bus_black_24dp"
@@ -28,7 +29,8 @@
         android:layout_width="wrap_content"
         android:id="@+id/exit_time"
         android:paddingRight="@dimen/activity_horizontal_margin"
-        android:textColor="@color/warnColor"
+        android:textColor="@color/black"
+        android:textStyle="bold"
         android:text="12:00"
         android:gravity="end"/>
 
