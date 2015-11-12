@@ -161,7 +161,9 @@
     <string name="java_tripinprogress">Trip in Progress</string>
     <string name="java_passwordsnomatch">Passwords do not match!</string>
     <string name="java_locationpermissionwarning">If you refuse to share your current location then we cannot use it to search for suitable bus trips</string>
+    <string name="java_accountpermissionwarning">If you refuse to give us access to your google account info then you cannot log in with it</string>
     <string name="java_googleplaywarning">If you do not enable Google Play Services then we cannot use your current location to search for suitable bus trips</string>
+    <string name="java_googleplayloginwarning">If you do not enable Google Play Services then you cannot log in with your google account</string>
     <string name="java_confirmcode_error">Invalid code, please try again</string>
     <string name="java_forgotpassword_codesent">The code has been sent to your email address, please check your email and enter the code</string>
     <string name="java_main_noresults">Could not find any trips for this destination. Please try the advanced search</string>
