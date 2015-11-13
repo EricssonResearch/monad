@@ -32,6 +32,7 @@ public class  MyGcmListenerService extends GcmListenerService {
         String message = data.getString("message");
         Log.d(TAG, "From: " + from);
         Log.d(TAG, "Message: " + message);
+        String title=data.getString("title");
 
 //        if (from.startsWith("/topics/")) {
 //            // message received from some topic.
@@ -50,13 +51,13 @@ public class  MyGcmListenerService extends GcmListenerService {
         /**
            Showing that a notification has been received
          */
-        sendNotification(message);
+        sendNotification(message, title);
 
     }
     /**
      * Create and show a simple notification containing the received GCM message.
      */
-    private void sendNotification(String message) {
+    private void sendNotification(String message, String Title) {
         Intent intent = new Intent(this,LoginActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 , intent,
@@ -65,7 +66,7 @@ public class  MyGcmListenerService extends GcmListenerService {
         Uri defaultSoundUri= RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
                 .setSmallIcon(R.drawable.ic_directions_bus_black_24dp)
-                .setContentTitle("MoNAD Message")
+                .setContentTitle(Title)
                 .setContentText(message)
                 .setAutoCancel(true)
                 .setSound(defaultSoundUri)
