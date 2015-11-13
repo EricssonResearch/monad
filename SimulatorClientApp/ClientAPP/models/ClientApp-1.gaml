@@ -337,13 +337,9 @@ species client skills: [SQLSKILL] {
 	//regular_request
 	action regular_request{
 		loop i from: 0 to: (regular_user2.rows - 1) {
-<<<<<<< HEAD
 			if regular_user2[1,i] = nil or regular_user2[2,i] = nil {
-				//test push
 				break;
 			}
-=======
->>>>>>> 24756ecd0a4ed5e1067eed658c9768a1b96579a1
 			if regular_user2[1,i] != 'null' {
 				org_st_year <- int(copy_between(regular_user2[1,i], 0,4));
 				org_st_month <- int(copy_between(regular_user2[1,i], 5,7));
