@@ -75,7 +75,7 @@ public class LoginActivity extends AppCompatActivity {
                     // Get the username and password, send them with the request
                     String response = task.execute(usernameField.getText().toString(), passwordField.getText().toString()).get();
 
-                    Toast.makeText(getApplicationContext(), response, Toast.LENGTH_LONG).show();
+                    //Toast.makeText(getApplicationContext(), response, Toast.LENGTH_LONG).show();
 
                     // If the response starts with the specific word, it means the users logged in successfully
                     if (response.startsWith("Success (1)")) {

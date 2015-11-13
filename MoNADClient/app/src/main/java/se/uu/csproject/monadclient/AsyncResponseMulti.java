@@ -1,7 +1,11 @@
 package se.uu.csproject.monadclient;
 
-/**
- * Created by stavros on 2015-11-13.
- */
+
+import java.util.ArrayList;
+
+import se.uu.csproject.monadclient.recyclerviews.FullTrip;
+
 public interface AsyncResponseMulti {
+
+    void processFinishMulti(ArrayList<FullTrip> results);
 }
