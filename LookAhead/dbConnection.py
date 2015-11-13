@@ -37,7 +37,7 @@ class DB():
     minutesHour = 60
     formatTime = '%H:%M'
     yesterday = datetime.datetime(2015, 11, 11)
-    BUSID = 1
+    
 
     # ---------------------------------------------------------------------------------------------------------------------------------------
     # Constructor
@@ -564,7 +564,7 @@ class DB():
             "timetable": tripObjectList
         }    
         #print timeTable
-        self.db.TimeTable.insert_one(timeTable) 
+        self.db.TimeTable1.insert_one(timeTable) 
 
 
     def getBusStopline(self,id):
@@ -699,6 +699,7 @@ class DB():
 
         tripObjectList = []
         requestLeftIn = []
+        BUSID = 1
         for i in range(len(individual)):
             line = individual[i][0]
             if i > 0:
@@ -748,7 +749,7 @@ class DB():
                 "trajectory": trajectory 
             }
             #print trip
-            self.db.BusTrip.insert_one(trip)
+            self.db.BusTrip1.insert_one(trip)
             if i == len(individual) - 1:
                 self.insertTimeTable2(line, startTime, tripObjectList)
         #self.insertTimeTable1(line, startTime, tripObjectList)
