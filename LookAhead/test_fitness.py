@@ -154,6 +154,9 @@ class FitnessTests(unittest.TestCase):
         #self.assertGreater(fit.evalIndividualCapacity(ind2), fit.evalIndividualCapacity(ind1))
         #TODO - FIX self assertGreater than function to work with test
         pass
+        #self.assertGreater(fit.evalIndividualCapacity(ind2), fit.evalIndividualCapacity(ind1))
+        #TODO - FIX self assertGreater than function to work with test
+        pass
 
     def testgetNumberOfRequests(self):
         #fit = Fitness()

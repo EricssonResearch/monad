@@ -4,7 +4,7 @@ model ClientApp
 /* Model of Client App */
 global skills: [SQLSKILL] {
 	file station_img <- image_file("../includes/station.jpg");
-	file bus_img <- image_file("../includes/bus.png");
+	file bus_img <- image_file("../includes/bus1.png");
 	
 	
 	//Four counters
@@ -40,10 +40,6 @@ global skills: [SQLSKILL] {
 	string up_to_date_stTime;
 	string up_to_date_edTime;
 	
-    map<string, int> busstop_req_map <- (['Kungshögarna'::0,'Regins väg'::0,'Valhalls väg'::0,'Huges väg'::0,'Regins väg'::0,'Regins väg'::0,'Regins väg'::0,'Regins väg'::0
-    									,'Regins väg'::0,'Regins väg'::0,'Regins väg'::0,'Regins väg'::0,'Regins väg'::0,'Regins väg'::0,'Regins väg'::0,'Regins väg'::0
-    									,'Regins väg'::0,'Regins väg'::0,'Regins väg'::0,'Regins väg'::0,'Regins väg'::0
-    ]);
     
 	int nr_of_position <- length(init_position);
 	
@@ -79,9 +75,7 @@ global skills: [SQLSKILL] {
 			bus_stop_list[i] <- [spname_ls2[i], 0, 0];
  		}	
  		
- 		loop index_stop from: 0 to: length(bus_stop_list) - 1 { 
-			busstop_req_map[spname_ls2[index_stop]] <- 0;
- 		}
+ 		
  				
 		// Test server
 		if (self testConnection (params: PARAMS) = true){
@@ -125,7 +119,7 @@ species bus skills: [moving]{
 	}
 	
 	 aspect bus_move {
-               draw  file(bus_img) at:location size: 30 ;
+               draw  file(bus_img) at:location size: 50 ;
         }
 	
 	
@@ -210,12 +204,45 @@ species client skills: [SQLSKILL] {
 	
 	int passenger_cal_flag <- 0;	
 	
-	//regular_request
+	int org_st_year;
+	int org_st_month;
+	int org_st_day;
+	int org_st_hour;
+	int org_st_min;
+	int org_end_year;
+	int org_end_month;
+	int org_end_day;
+	int org_end_hour;
+	int org_end_min;
+	int new_st_year;
+	int new_st_month;
+	int new_st_day;
+	int new_st_hour;
+	int new_st_min;
+	int new_end_year;
+	int new_end_month;
+	int new_end_day;
+	int new_end_hour;
+	int new_end_min;	
+	int	org_req_year;
+	int	org_req_month;
+	int	org_req_day;
+	int	org_req_hour;
+	int	org_req_min;	
+	int	new_req_year;
+	int	new_req_month;
+	int	new_req_day;
+	int	new_req_hour;
+	int	new_req_min;	
 	string startPositionLatitude;
 	string startPositionLongitude;
 	string user_name_str;	
 	string org_st_time;
-	string org_req_time;
+	string org_req_time;	
+	string new_st_month_str;
+	string new_st_day_str;
+	string new_req_month_str;
+	string new_req_day_str;
 	
 	//list spname_ls2 <- ['Kungshögarna','Regins väg','Valhalls väg','Huges väg','Topeliusgatan','Värnlundsgatan','Ferlinsgatan','Heidenstamstorg','Kantorsgatan','Djäknegatan',
 	//						 'Portalgatan','Höganäsgatan','Väderkvarnsgatan','Vaksala torg','Stadshuset','Skolgatan','Götgatan','Ekonomikum','Studentstaden','Rickomberga','Oslogatan',
@@ -233,7 +260,7 @@ species client skills: [SQLSKILL] {
 		tom_start_time <- current_time - today_cur_sec * 1000 + a_day_in_ms;
 		//write current_time;
 		//write tom_start_time;
-		write va_titude;
+		//write va_titude;
 		//condition
 		if mor_aft_rnd = 0 {
 			rush_time <- tom_start_time + mor_rush;
@@ -283,6 +310,8 @@ species client skills: [SQLSKILL] {
 		} else if int(st_second) < 10{
 			st_second <- '0' + string(int(st_second));
 		}	
+			
+
 	
 		if st_end_rnd > 0{
 			start_time <- string(1970 + int(st_year) - 1)  + "-" + st_month + "-" + st_day + " " + st_hour + ":" + st_minute + ":" + st_second;	
@@ -365,8 +394,8 @@ species client skills: [SQLSKILL] {
 	reflex update_att when: weekDay = 1 { 
 		
 		do priority;
-		write va_titude;
-		write regular_user2[0,1];
+//		write va_titude;
+//		write regular_user2[0,1];
 		mor_rush <- (7.5 * 60 * 60 * 1000);
 		aft_rush <- (16.5 * 60 * 60 * 1000);
 				
@@ -407,11 +436,11 @@ species client skills: [SQLSKILL] {
 		}	
 
 		request_time <- string(1970 + int(year) - 1)  + "-" + month + "-" + day + " " + hour + ":" + minute+ ":" + second;
-			write request_time;
+		//	write request_time;
 
 		//prepare start_time and end_time for both random and regular request
 		do normal_request;
-							
+			
 		//if the request come from a reqular user
 		//regular_request
 		if regular_user_flag = 0 {
@@ -543,7 +572,7 @@ species client skills: [SQLSKILL] {
 		
 			//prepare start_time and end_time for both random and regular request
 			do normal_request;
-				
+					
 			//if the request come from a reqular user
 			//regular_request
 			if regular_user_flag = 0 {
@@ -582,8 +611,7 @@ species client skills: [SQLSKILL] {
 					//choose a random hot bus_stop from list
 					start_position <- string(spname_ls[2][rnd(hot_st_lgt-1)][0]);
               	  	end_position <- string(spname_ed_ls[2][rnd(hot_ed_lgt-1)][0]); 
-              	  	write start_position;
-					
+              	  //	write start_position;
 					if passenger_cal_flag = 1 {
 						loop i from: 0 to: length(bus_stop_list) - 1{
     	    	       	 	if (start_position = bus_stop_list[i][0]){
@@ -596,7 +624,7 @@ species client skills: [SQLSKILL] {
     	    	       	 	}
         	    	   	}	
 	               	}
-    	           	write bus_stop_list;
+    	         //  	write bus_stop_list;
 			
 					save ["userId=" + user_name + "&" + start_time + "&" + end_time + "&" + request_time  + "&stPosition=" + 
 						start_position + "&edPosition=" + end_position + "&priority=" + priority+"&startPositionLatitude="+latitude +"&startPositionLongitude="+longitude
@@ -649,7 +677,7 @@ experiment ClientApp type: gui {
 	parameter "Minutes end From now " var: duration_hour_end  min: 1 max: 72 category: "Time-screen" ;
  	parameter "Shapefile for the roads:" var: shape_file_roads category: "GIS" ;
  	parameter "Shapefile for the bounds:" var: shape_file_bounds category: "GIS";
-	
+
 
 	output {
 		display main_display {

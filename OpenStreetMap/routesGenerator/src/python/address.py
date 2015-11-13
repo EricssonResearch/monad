@@ -19,12 +19,12 @@ import re
 class Address(object):
     """
     An address object is used to store street address. A address has a street
-    name and possibly numbers, usually marking a house or entrance.
+    name, coordinates of street, and possibly numbers (usually marking a
+    house or entrance).
 
     A building can be associated to several numbers, e.g 10A, 10B, and 10C. If
-    the different coordinates are known, all numbers can be added to a single
-    address object, marking the building.
-
+    the exact location of the entrance is unknown, all numbers can have a
+    coordinate of the building.
     """
 
     def __init__(self, name):
