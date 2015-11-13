@@ -67,7 +67,10 @@ public class NotificationsActivity extends MenuedActivity implements AsyncRespon
 
     // Deals with the response by the server
     public void processFinish(ArrayList<FullTrip> bookings){
-        this.bookings = bookings;
+        if (!bookings.isEmpty()){
+            this.bookings = bookings;
+            Storage.setBookings(bookings);
+        }
     }
 
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -86,7 +89,10 @@ public class NotificationsActivity extends MenuedActivity implements AsyncRespon
     @Override
     protected void onResume() {
         super.onResume();
-        getBookings();
+        bookings = Storage.getBookings();
+        if (bookings.isEmpty()){
+            getBookings();
+        }
     }
 
     @Override
