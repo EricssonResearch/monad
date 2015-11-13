@@ -334,7 +334,6 @@ species client skills: [SQLSKILL] {
 	}
 	
 	//regular_request
-	//regular_request
 	action regular_request{
 		loop i from: 0 to: (regular_user2.rows - 1) {
 			if regular_user2[1,i] = nil or regular_user2[2,i] = nil {
@@ -439,6 +438,8 @@ species client skills: [SQLSKILL] {
 		request_time <- string(1970 + int(year) - 1)  + "-" + month + "-" + day + " " + hour + ":" + minute+ ":" + second;
 		//	write request_time;
 
+		//prepare start_time and end_time for both random and regular request
+		do normal_request;
 			
 		//if the request come from a reqular user
 		//regular_request
@@ -483,7 +484,7 @@ species client skills: [SQLSKILL] {
 				start_position <- string(spname_ls[2][rnd(hot_st_lgt-1)][0]);
             	end_position <- string(spname_ed_ls[2][rnd(hot_ed_lgt-1)][0]); 
             	
-				do normal_request;
+
 				if passenger_cal_flag = 1 {
 					loop i from: 0 to: length(bus_stop_list) - 1{
     	           	 	if (start_position = bus_stop_list[i][0]){
@@ -569,7 +570,9 @@ species client skills: [SQLSKILL] {
 
 			request_time <- string(1970 + int(year) - 1)  + "-" + month + "-" + day + " " + hour + ":" + minute + ":" + second;
 		
-			
+			//prepare start_time and end_time for both random and regular request
+			do normal_request;
+					
 			//if the request come from a reqular user
 			//regular_request
 			if regular_user_flag = 0 {
@@ -609,7 +612,6 @@ species client skills: [SQLSKILL] {
 					start_position <- string(spname_ls[2][rnd(hot_st_lgt-1)][0]);
               	  	end_position <- string(spname_ed_ls[2][rnd(hot_ed_lgt-1)][0]); 
               	  //	write start_position;
-					do normal_request;
 					if passenger_cal_flag = 1 {
 						loop i from: 0 to: length(bus_stop_list) - 1{
     	    	       	 	if (start_position = bus_stop_list[i][0]){
