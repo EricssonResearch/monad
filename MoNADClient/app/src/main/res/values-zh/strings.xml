@@ -9,7 +9,7 @@
     <string name="title_activity_trips">我的行程</string>
     <string name="title_activity_route_confirm_popup">确认?</string>
     <string name="title_activity_trip_cancel_popup">取消?</string>
-    <string name="title_activity_search">Google登录</string>
+    <string name="title_activity_search">高级搜索</string>
     <string name="title_activity_route">路线信息</string>
     <string name="title_activity_reset_password">重置密码</string>
     <string name="title_activity_register">注册</string>
@@ -86,6 +86,12 @@
     <string name="label_search_arrival">到达</string>
     <string name="label_searchresult_routeinfo">n/a到n/a</string>
     <string name="label_searchresult_timeinfo">n/a - n/a (n/a分钟)</string>
+
+    <string-array name="settings_tab_titles">
+        <item>语言</item>
+        <item>提示</item>
+        <item>主题</item>
+    </string-array>
 
     <string name="label_fragmentsettingsalert_alert">行程提示</string>
     <string name="label_fragmentsettingsalert_recommendation">推荐</string>
