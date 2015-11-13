@@ -41,18 +41,6 @@ public class NotificationsActivity extends MenuedActivity implements AsyncRespon
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_home_white_24dp);
 
-        RecyclerView rv =(RecyclerView)findViewById(R.id.rv);
-
-        LinearLayoutManager llm = new LinearLayoutManager(this);
-        rv.setLayoutManager(llm);
-        rv.setHasFixedSize(true);
-
-        notifications = Storage.getNotifications();
-
-        NotificationRecyclerViewAdapter adapter;
-        adapter = new NotificationRecyclerViewAdapter(getApplicationContext(), notifications);
-        rv.setAdapter(adapter);
-
         NotificationManager mNotificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         mNotificationManager.cancel(getIntent().getIntExtra(NOTIFICATION_ID_STR, -1));
     }
@@ -71,6 +59,7 @@ public class NotificationsActivity extends MenuedActivity implements AsyncRespon
             this.bookings = bookings;
             Storage.setBookings(bookings);
         }
+        displayNotifications();
     }
 
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -92,6 +81,8 @@ public class NotificationsActivity extends MenuedActivity implements AsyncRespon
         bookings = Storage.getBookings();
         if (bookings.isEmpty()){
             getBookings();
+        } else {
+            displayNotifications();
         }
     }
 
@@ -106,5 +97,17 @@ public class NotificationsActivity extends MenuedActivity implements AsyncRespon
             return super.onOptionsItemSelected(item);
         }
     }
+    public void displayNotifications() {
+        RecyclerView rv = (RecyclerView) findViewById(R.id.rv);
 
+        LinearLayoutManager llm = new LinearLayoutManager(this);
+        rv.setLayoutManager(llm);
+        rv.setHasFixedSize(true);
+
+        notifications = Storage.getNotifications();
+
+        NotificationRecyclerViewAdapter adapter;
+        adapter = new NotificationRecyclerViewAdapter(getApplicationContext(), notifications, bookings);
+        rv.setAdapter(adapter);
+    }
 }

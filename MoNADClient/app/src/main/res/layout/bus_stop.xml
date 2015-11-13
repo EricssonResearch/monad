@@ -2,7 +2,10 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal" android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingLeft="@dimen/layout_padding">
+    android:paddingLeft="@dimen/layout_padding"
+    android:paddingTop="@dimen/medium_padding"
+    android:paddingRight="@dimen/layout_padding"
+    android:paddingBottom="@dimen/small_padding">
 
     <ImageView
         android:id="@+id/bus_stop_image"
@@ -12,7 +15,7 @@
         android:contentDescription="@string/img_description"
         android:layout_marginRight="@dimen/activity_horizontal_margin"
         android:layout_marginEnd="@dimen/activity_horizontal_margin"
-        android:visibility="invisible"
+        android:visibility="visible"
         />
 
     <TextView
@@ -21,17 +24,18 @@
         android:layout_weight="1"
         android:gravity="left"
         android:id="@+id/bus_stop"
-        android:textStyle="italic"
-        android:text="BusStop" />
+        style="@style/blackText"
+        android:textStyle="bold"
+        android:textSize="@dimen/medium_text"/>
 
     <TextView
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
+        android:gravity="end"
         android:id="@+id/exit_time"
         android:paddingRight="@dimen/activity_horizontal_margin"
-        android:textColor="@color/black"
+        style="@style/blackText"
         android:textStyle="bold"
-        android:text="12:00"
-        android:gravity="end"/>
+        android:textSize="@dimen/medium_text"/>
 
 </LinearLayout>
