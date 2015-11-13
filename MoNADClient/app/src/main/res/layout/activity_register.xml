@@ -50,7 +50,7 @@
                 />
             <EditText
                 android:id="@+id/field_username"
-                style="@style/inputText"
+                style="@style/blackText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textNoSuggestions"
@@ -66,7 +66,7 @@
                 />
             <EditText
                 android:id="@+id/field_password"
-                style="@style/inputText"
+                style="@style/blackText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textPassword"
@@ -82,7 +82,7 @@
                 />
             <EditText
                 android:id="@+id/field_verify_password"
-                style="@style/inputText"
+                style="@style/blackText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textPassword"
@@ -98,7 +98,7 @@
                 />
             <EditText
                 android:id="@+id/field_email"
-                style="@style/inputText"
+                style="@style/blackText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textEmailAddress"
@@ -114,7 +114,7 @@
                 />
             <EditText
                 android:id="@+id/field_phone"
-                style="@style/inputText"
+                style="@style/blackText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="phone"

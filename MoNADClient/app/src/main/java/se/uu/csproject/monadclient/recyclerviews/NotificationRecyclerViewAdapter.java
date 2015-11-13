@@ -42,7 +42,7 @@ public class NotificationRecyclerViewAdapter extends RecyclerView.Adapter<Notifi
     public int getItemViewType(int position) {
         if(notify.get(position).isToday()) {
 
-            if(notify.get(position).iconID == 3){
+            if(notify.get(position).reschedule){
                 return 2;
             }
             else {

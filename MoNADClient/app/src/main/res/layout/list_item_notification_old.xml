@@ -34,7 +34,7 @@
             android:layout_weight="4"
             android:textSize="@dimen/medium_text"
             android:padding="@dimen/medium_padding"
-            style="@style/importantText"
+            style="@style/blackText"
             android:layout_gravity="center_vertical"
             />
         <ImageView

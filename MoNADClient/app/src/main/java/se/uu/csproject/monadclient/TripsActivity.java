@@ -71,6 +71,7 @@ public class TripsActivity extends MenuedActivity implements AsyncResponse{
             Toast toast = Toast.makeText(context, text, Toast.LENGTH_SHORT);
             toast.show();
         } else {
+            Storage.setBookings(bookings);
             adapter = new TripRecyclerViewAdapter(bookings);
             recyclerView.setAdapter(adapter);
         }

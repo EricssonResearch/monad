@@ -51,7 +51,7 @@
     <!--Activity - Main (Search view)-->
     <!--Activity - Main (Search view) /yonatan-->
     <string name="label_main_searchtext">Where do you want to go?</string>
-    <string name="label_main_advancedsearch">Advanced Search</string>
+    <string name="label_main_advancedsearch">Go to Advanced Search</string>
     <string name="label_main_recommendations">Recommendations</string>
 
     <!--Activity - Notifications-->
@@ -98,6 +98,7 @@
     <string name="label_search_shortesttriptime">Shortest trip </string>
     <string name="label_search_earliesttrip">Earliest trip</string>
     <string name="label_search_results">Results</string>
+    <string name="label_search_search">Search</string>
     <string name="label_search_moreresults">More Results</string>
     <string name="label_searchresult_timeinfo">n/a - n/a (n/a min)</string>
     <string name="label_searchresult_routeinfo">n/a to n/a</string>
@@ -160,7 +161,9 @@
     <string name="java_tripinprogress">Trip in Progress</string>
     <string name="java_passwordsnomatch">Passwords do not match!</string>
     <string name="java_locationpermissionwarning">If you refuse to share your current location then we cannot use it to search for suitable bus trips</string>
+    <string name="java_accountpermissionwarning">If you refuse to give us access to your google account info then you cannot log in with it</string>
     <string name="java_googleplaywarning">If you do not enable Google Play Services then we cannot use your current location to search for suitable bus trips</string>
+    <string name="java_googleplayloginwarning">If you do not enable Google Play Services then you cannot log in with your google account</string>
     <string name="java_confirmcode_error">Invalid code, please try again</string>
     <string name="java_forgotpassword_codesent">The code has been sent to your email address, please check your email and enter the code</string>
     <string name="java_main_noresults">Could not find any trips for this destination. Please try the advanced search</string>
