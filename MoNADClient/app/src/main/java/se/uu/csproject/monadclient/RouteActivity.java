@@ -33,8 +33,8 @@ import se.uu.csproject.monadclient.recyclerviews.PartialTrip;
 
 public class RouteActivity extends AppCompatActivity {
 
-    RecyclerView recycler;
-    boolean flagListVisible = false;
+//    RecyclerView recycler;
+//    boolean flagListVisible = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,27 +88,20 @@ public class RouteActivity extends AppCompatActivity {
 
 
                 if (j == 0) {
-                    textBusStop.setTextColor(Color.BLACK);
                     exitTime.setText(formatTime((Date) time));
-                    textBusStop.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
-                    textBusStop.setTypeface(null, Typeface.BOLD);
-                    busStopImage.setVisibility(View.VISIBLE);
                     busStopImage.setImageResource(R.drawable.ic_directions_bus_black_24dp);
-                    busStopView.setPadding(16, 8, 16, 4);
                 }
                 else if (j == busStops.size() - 1) {
-                    textBusStop.setTextColor(Color.BLACK);
                     exitTime.setText(formatTime((Date) exit));
-                    textBusStop.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
-                    textBusStop.setTypeface(null, Typeface.BOLD);
-                    busStopImage.setVisibility(View.VISIBLE);
                     busStopImage.setImageResource(R.drawable.ic_directions_bus_black_24dp);
-                    busStopView.setPadding(16,8,16,4);
 
                 }
                 else {
-                    textBusStop.setTextColor(Color.BLACK);
                     exitTime.setVisibility(View.INVISIBLE);
+                    busStopImage.setVisibility(View.INVISIBLE);
+                    textBusStop.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
+                    textBusStop.setTypeface(null, Typeface.ITALIC);
+                    busStopView.setPadding(busStopView.getPaddingLeft(),0,0,0);
                 }
                 insertPoint.addView(busStopView);
             }
@@ -139,16 +132,16 @@ public class RouteActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void expandBusStopList(View view){
-        if(!flagListVisible){
-            recycler.setVisibility(View.VISIBLE);
-            flagListVisible = true;
-        }
-        else {
-            recycler.setVisibility(View.GONE);
-            flagListVisible = false;
-        }
-    }
+//    public void expandBusStopList(View view){
+//        if(!flagListVisible){
+//            recycler.setVisibility(View.VISIBLE);
+//            flagListVisible = true;
+//        }
+//        else {
+//            recycler.setVisibility(View.GONE);
+//            flagListVisible = false;
+//        }
+//    }
 
     private String formatTime(Date date){
         Calendar calendar = Calendar.getInstance();
