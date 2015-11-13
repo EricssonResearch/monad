@@ -36,7 +36,7 @@ class DB():
     hoursDay = 24
     minutesHour = 60
     formatTime = '%H:%M'
-    yesterday = datetime.datetime(2015, 11, 11)
+    yesterday = datetime.datetime(2015, 11, 12)
 
     # ---------------------------------------------------------------------------------------------------------------------------------------
     # Constructor
@@ -165,14 +165,14 @@ class DB():
         req = self.db.TravelRequestLookAhead.find({}, {"_id": False})
         return self.parseData(req, column)
 
-    def getTravelRequestBetween(self, start, end):
+    def getTravelRequestBetween(self, start, end, line):
         ''' Queries the requests using an initial date and a final date.
         Returns the whole bag of documents found
 
         @param: start - Initial date for the query
         @param: end - Final date for the query
         '''
-        req = self.db.TravelRequestLookAhead.find({"startTime": {"$gte": start, "$lt": end}})
+        req = self.db.UserTrip.find({"startTime": {"$gte": start, "$lt": end}, "line" : line})
         return req
 
     def getTravelRequestSummary(self, start, end):
@@ -246,7 +246,7 @@ class DB():
                    {"$group": {"_id": {"RequestTime": "$startTime", "BusStop": "$startBusStop"}, "total": {"$sum": 1}}},
                    {"$sort": {"_id.RequestTime": 1}}]
         '''
-        pipeline = [{"$match": {"requestTime": {"$gte": start, "$lt": end}}},
+        pipeline = [{"$match": {"startTime": {"$gte": start, "$lt": end}}},
                    {"$group": {"_id": {"RequestTime": "$startTime", "BusStop": "$startBusStop", "line": "$line"}, "total": {"$sum": 1}}},
                    {"$sort": {"_id.RequestTime": 1}}]
         # groupQuery = self.db.TravelRequestLookAhead.aggregate(pipline)
@@ -272,32 +272,6 @@ class DB():
         for req in requests:
             reqs.append([req.get('startTime', None), req.get('startBusStop', None), req.get('endBusStop', None)])
         return reqs
-
-    #def MaxReqNumTrip(self, trip_sTime, tripEnd, lineNum=2):
-    def MaxReqNumTrip(self, start, end, line):
-        BusStplist = []
-        dirlist = []
-        # get the trip time table
-        phenotype = self.generatePhenotype(line, start)
-        for i in phenotype:
-            BusStplist.append([i[0], 0])
-            dirlist.append(i[0])
-        # Get all requests where starting time is more than trip starting time
-        Requests = self.getRequestsFromDB(start, end)
-        # Get only the requests with start location in bus stops and end
-        # location in bus stps
-        for req in Requests:
-            for i in BusStplist:
-                if (req[1], req[2]) in itertools.combinations(dirlist, 2):
-                    if req[1] == i[0]:
-                        i[1] += 1
-                    if req[2] == i[0]:
-                        i[1] += -1
-        sum = 0
-        for i in BusStplist:
-            sum += i[1]
-            i[1] = sum
-        return BusStplist
 
     def calculateReqNumTrip(self, capacity, trip_stTime, trip_endTime, requestLeftIn, lineNum = 2):
         ''' Calculate average waiting time for request for specific trip(defined by starting trip time and end trip time)
@@ -504,7 +478,7 @@ class DB():
 
     # Trip
     #<--------------------------------Functions for new encoding including multiple line------------------------------->
-    busLine = [2,2,2,2,2,2,2,102,102,102,102,102,102,102]
+    busLine = [2,2,2,2,2,2,2,102,102,102,102,102,102,102, 114, 114,114,114,114,114,114, 1, 1, 1, 1, 1, 1,1, 101, 101, 101, 101, 101, 101,101, 14, 14, 14, 14, 14, 14, 14]
     noOfslices = 0
     timeSliceArray = [[3, 5], [6, 8], [9, 11], [12, 14], [15, 17], [18, 20], [21, 23]]
 
@@ -514,7 +488,8 @@ class DB():
             DB.busLine.remove(x)
 
             if len(DB.busLine)==0:
-                DB.busLine = [2,2,2,2,2,2,2,102,102,102,102,102,102,102]
+                DB.busLine = [2,2,2,2,2,2,2,102,102,102,102,102,102,102, 114, 114,114,114,114,114,114, 1, 1, 1, 1, 1, 1,
+                        1, 101, 101, 101, 101, 101, 101,101, 14, 14, 14, 14, 14, 14, 14]
             return x
 
 
@@ -525,10 +500,11 @@ class DB():
             DB.noOfslices = 0
 
 
+       #random.seed(64)
        b = DB.timeSliceArray[DB.noOfslices]
        hour = random.randint(b[0], b[1])
        minute = random.randint(0, 59)
-       seconds = random.randint(0, 59)
+       seconds = random.randint(1, 59)
        randomTime = datetime.time(hour, minute, seconds)
        DB.noOfslices = DB.noOfslices+1
 
