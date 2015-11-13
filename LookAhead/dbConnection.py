@@ -37,6 +37,7 @@ class DB():
     minutesHour = 60
     formatTime = '%H:%M'
     yesterday = datetime.datetime(2015, 11, 11)
+    BUSID = 1
 
     # ---------------------------------------------------------------------------------------------------------------------------------------
     # Constructor
@@ -708,6 +709,8 @@ class DB():
             tripObjectList.append(objID)
             capacity = individual[i][1]
             startTime = individual[i][2] + timedelta(1)
+            
+            busID = BUSID #Need to assign busID for every Trip
    
             trajectory = self.getRoute(line, "trajectory")
             if i == 0:
@@ -740,6 +743,7 @@ class DB():
                 "capacity": capacity,
                 "line": line,
                 "startTime": startTime,
+                "busID": busID,
                 "endTime": trajectory[len(trajectory)-1]["time"],
                 "trajectory": trajectory 
             }
