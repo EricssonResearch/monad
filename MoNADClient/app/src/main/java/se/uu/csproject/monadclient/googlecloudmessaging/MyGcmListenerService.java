@@ -68,7 +68,7 @@ public class  MyGcmListenerService extends GcmListenerService {
                 .setSmallIcon(R.drawable.ic_directions_bus_black_24dp)
                 .setContentTitle(Title)
                 .setContentText(message)
-                .setAutoCancel(true)
+                .setAutoCancel(false)
                 .setSound(defaultSoundUri)
                 .setContentIntent(pendingIntent);
 
