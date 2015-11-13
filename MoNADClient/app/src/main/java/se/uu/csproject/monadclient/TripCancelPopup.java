@@ -85,7 +85,7 @@ public class TripCancelPopup extends AppCompatActivity implements AsyncResponseS
         }
         else{
             if(trip.isToday()){
-                date.setText("TODAY");
+                date.setText(getString(R.string.java_today));
                 date.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.warnColor));
             }
             else {
@@ -157,7 +157,8 @@ public class TripCancelPopup extends AppCompatActivity implements AsyncResponseS
 
     // Deals with the response by the server after requesting the updated user's bookings
     public void processFinish(ArrayList<FullTrip> bookings){
-        Intent intent = new Intent(TripCancelPopup.this, TripsActivity.class);
+        Storage.setBookings(bookings);
+        Intent intent = new Intent(this, TripsActivity.class);
         startActivity(intent);
         finish();
     }
@@ -191,8 +192,8 @@ public class TripCancelPopup extends AppCompatActivity implements AsyncResponseS
     }
 
     private void formatAsInProgress() {
-        date.setText("TODAY");
-        countdown.setText("Trip in Progress");
+        date.setText(getString(R.string.java_today));
+        countdown.setText(getString(R.string.java_tripinprogress));
         countdown.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.green));
         date.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.green));
         clockIcon.setVisibility(View.INVISIBLE);

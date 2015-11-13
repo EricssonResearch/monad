@@ -67,10 +67,11 @@ public class TripsActivity extends MenuedActivity implements AsyncResponse{
     // Deals with the response by the server
     public void processFinish(ArrayList<FullTrip> bookings){
         if (bookings.isEmpty()){
-            CharSequence text = "You haven't booked any trips.";
+            CharSequence text = getString(R.string.java_trips_notripsbooked);
             Toast toast = Toast.makeText(context, text, Toast.LENGTH_SHORT);
             toast.show();
         } else {
+            Storage.setBookings(bookings);
             adapter = new TripRecyclerViewAdapter(bookings);
             recyclerView.setAdapter(adapter);
         }

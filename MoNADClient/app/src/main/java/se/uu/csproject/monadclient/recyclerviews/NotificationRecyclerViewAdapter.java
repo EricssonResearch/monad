@@ -30,26 +30,26 @@ public class NotificationRecyclerViewAdapter extends RecyclerView.Adapter<Notifi
 
     List<Notify> notify;
     private Context mContext;
+    ArrayList<FullTrip> bookings;
 
 
-    public NotificationRecyclerViewAdapter(Context context, List<Notify> notify) {
+    public NotificationRecyclerViewAdapter(Context context, List<Notify> notify, ArrayList<FullTrip> bookings) {
         this.notify = notify;
         mContext = context;
+        this.bookings = bookings;
     }
 
 
     @Override
     public int getItemViewType(int position) {
-        if(notify.get(position).isToday()) {
+        if (notify.get(position).isToday()) {
 
-            if(notify.get(position).iconID == 3){
+            if (notify.get(position).reschedule) {
                 return 2;
-            }
-            else {
+            } else {
                 return 1;
             }
-        }
-        else {
+        } else {
             return 0;
         }
     }
@@ -62,15 +62,13 @@ public class NotificationRecyclerViewAdapter extends RecyclerView.Adapter<Notifi
     @Override
     public NotificationViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
         View view;
-        if(viewType == 2){
+        if (viewType == 2) {
             view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.list_item_notification_reschedule, viewGroup, false);
 
-        }
-        else if(viewType == 1){
+        } else if (viewType == 1) {
             view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.list_item_notification, viewGroup, false);
 
-        }
-        else {
+        } else {
             view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.list_item_notification_old, viewGroup, false);
 
         }
@@ -88,15 +86,16 @@ public class NotificationRecyclerViewAdapter extends RecyclerView.Adapter<Notifi
         notificationViewHolder.notificationPhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                  int index = notify.indexOf(i);
-//                  notify = Storage.getNotifications();
-//                  notifyItemRemoved(index);
 
-//            TODO:  Get trip based on tripID
-                FullTrip fullTrip = getTrip();
-                Intent intent = new Intent(notificationViewHolder.itemView.getContext(), RouteActivity.class);
-                intent.putExtra("selectedTrip", fullTrip);
-                notificationViewHolder.itemView.getContext().startActivity(intent);
+                FullTrip fullTrip = getTrip(notify.get(i).getTripID());
+                if (fullTrip != null) {
+                    Intent intent = new Intent(notificationViewHolder.itemView.getContext(), RouteActivity.class);
+                    intent.putExtra("selectedTrip", fullTrip);
+                    notificationViewHolder.itemView.getContext().startActivity(intent);
+                } else {
+                    System.out.println("Trip is not in bookings list");
+
+                }
             }
 
         });
@@ -105,15 +104,17 @@ public class NotificationRecyclerViewAdapter extends RecyclerView.Adapter<Notifi
         notificationViewHolder.notificationText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                  int index = notify.indexOf(i);
-//                  notify = Storage.getNotifications();
-//                  notifyItemRemoved(index);
 
-//                 TODO:  Get trip based on tripID
-                FullTrip fullTrip = getTrip();
-                Intent intent = new Intent(notificationViewHolder.itemView.getContext(), RouteActivity.class);
-                intent.putExtra("selectedTrip", fullTrip);
-                notificationViewHolder.itemView.getContext().startActivity(intent);
+                FullTrip fullTrip = getTrip(notify.get(i).getTripID());
+
+                if (fullTrip != null) {
+                    Intent intent = new Intent(notificationViewHolder.itemView.getContext(), RouteActivity.class);
+                    intent.putExtra("selectedTrip", fullTrip);
+                    notificationViewHolder.itemView.getContext().startActivity(intent);
+                } else {
+                    System.out.println("Trip is not in bookings list");
+
+                }
             }
         });
 
@@ -130,17 +131,22 @@ public class NotificationRecyclerViewAdapter extends RecyclerView.Adapter<Notifi
             }
         });
 
-        if (getItemViewType(i) == 2){
+        if (getItemViewType(i) == 2) {
             notificationViewHolder.rescheduleText.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
 
-//                 TODO:  Get trip based on tripID
-                    FullTrip fullTrip = getTrip();
-                    Intent intent = new Intent(notificationViewHolder.itemView.getContext(), SearchActivity.class);
-                    intent.putExtra("selectedTrip", fullTrip);
-                    notificationViewHolder.itemView.getContext().startActivity(intent);
+                    FullTrip fullTrip = getTrip(notify.get(i).getTripID());
+                    if (fullTrip != null) {
+                        Intent intent = new Intent(notificationViewHolder.itemView.getContext(), SearchActivity.class);
+                        intent.putExtra("selectedTrip", fullTrip);
+                        notificationViewHolder.itemView.getContext().startActivity(intent);
+                    } else {
+                        System.out.println("Trip is not in bookings list");
+
+                    }
                 }
+
             });
         }
 
@@ -153,6 +159,7 @@ public class NotificationRecyclerViewAdapter extends RecyclerView.Adapter<Notifi
 
 
     public static class NotificationViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+
         Context mContext;
         CardView cv;
         TextView notificationText;
@@ -165,6 +172,7 @@ public class NotificationRecyclerViewAdapter extends RecyclerView.Adapter<Notifi
 
 
         NotificationViewHolder(Context context, View itemView) {
+
             super(itemView);
             mContext = context;
             cv = (CardView) itemView.findViewById(R.id.cv);
@@ -193,7 +201,7 @@ public class NotificationRecyclerViewAdapter extends RecyclerView.Adapter<Notifi
                 mBuilder.setContentTitle(mContext.getString(R.string.label_notification_notification));
                 mBuilder.setContentText(notificationText.getText());
                 mBuilder.setAutoCancel(true);
-                mBuilder.setContentText("You've received new messages.")
+                mBuilder.setContentText(this.itemView.getResources().getString(R.string.java_notificationsrva_newmessages))
                         .setNumber(++numMessages);
 
                 NotificationManager mNotificationManager = (NotificationManager)
@@ -203,49 +211,40 @@ public class NotificationRecyclerViewAdapter extends RecyclerView.Adapter<Notifi
             }
 
 
-
         }
     }
 
-    private String formatTime(Date date, boolean today){
+    private String formatTime(Date date, boolean today) {
 
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
         String time;
 
-        if(today) {
-
+        if (today) {
             long timeDifference = Calendar.getInstance().getTimeInMillis() - calendar.getTimeInMillis();
             time = formatTodayTime(timeDifference);
-//            timeFormat = new SimpleDateFormat("HH:mm");
-
-        }
-        else {
+        } else {
             SimpleDateFormat timeFormat = new SimpleDateFormat("MM/dd");
             time = timeFormat.format(calendar.getTime());
         }
-
-
         return time;
     }
 
-    private String formatTodayTime(long millisecondsTime){
-        millisecondsTime %= (1000*60*60*24);
+    private String formatTodayTime(long millisecondsTime) {
+
+        millisecondsTime %= (1000 * 60 * 60 * 24);
         int hours = (int) millisecondsTime / (1000 * 60 * 60);
-        millisecondsTime %= (1000*60*60);
-        int minutes = (int) millisecondsTime / (1000*60);
-        millisecondsTime %= (1000*60);
+        millisecondsTime %= (1000 * 60 * 60);
+        int minutes = (int) millisecondsTime / (1000 * 60);
+        millisecondsTime %= (1000 * 60);
         int seconds = (int) millisecondsTime / 1000;
-        if(minutes == 0){
+        if (minutes == 0) {
             return seconds + " sec ago";
-        }
-        else if(hours==0){
+        } else if (hours == 0) {
             return minutes + " min ago";
-        }
-        else if(hours==1){
+        } else if (hours == 1) {
             return hours + " hr, " + minutes + "ago";
-        }
-        else{
+        } else {
             return hours + " hrs ago";
         }
     }
@@ -256,28 +255,13 @@ public class NotificationRecyclerViewAdapter extends RecyclerView.Adapter<Notifi
     // Because the ID remains unchanged, the existing notification is
     // updated.
 
-    //TEMPORARY FUNCTION TODO: Remove this function once the bookings list is set
-    private FullTrip getTrip(){
-        Calendar calendar = new GregorianCalendar(2015, 10, 26, 10, 40, 0);
-        Date startdate1 = calendar.getTime();
-        calendar = new GregorianCalendar(2015, 10, 26, 10, 50, 0);
-        Date enddate1 = calendar.getTime();
+    private FullTrip getTrip(String id) {
 
-        ArrayList<PartialTrip> partialTrips = new ArrayList<>();
-        ArrayList<String> trajectory = new ArrayList<>();
-
-        trajectory.add("BMC");
-        trajectory.add("Akademiska Sjukhuset");
-        trajectory.add("Ekeby Bruk");
-        trajectory.add("Ekeby");
-        partialTrips.add(new PartialTrip("1", 2, 3, "Polacksbacken",startdate1,"Flogsta", enddate1, trajectory));
-        FullTrip trip = new FullTrip("1", "2", partialTrips, 10, true, 0);
-
-        return trip;
+        for (int i = 0; i < bookings.size(); i++) {
+            if (bookings.get(i).getId().equals(id)) {
+                return bookings.get(i);
+            }
+        }
+        return null;
     }
-
 }
-
-
-
-

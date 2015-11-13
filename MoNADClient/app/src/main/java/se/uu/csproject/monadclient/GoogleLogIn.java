@@ -1,16 +1,23 @@
 package se.uu.csproject.monadclient;
 
+import android.Manifest;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
+import android.content.pm.PackageManager;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.Scopes;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
@@ -24,6 +31,9 @@ public class GoogleLogIn extends Activity implements
         OnConnectionFailedListener,
         OnClickListener {
 
+    private Context context;
+    private final int MY_PERMISSIONS_REQUEST = 123;
+    private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
     private static final int SIGN_IN_REQUEST_CODE = 10;
     /* Is there a ConnectionResult resolution in progress? */
     private boolean mIsResolving = false;
@@ -48,6 +58,7 @@ public class GoogleLogIn extends Activity implements
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        context = getApplicationContext();
 
         // Build GoogleApiClient with access to basic profile
         mGoogleApiClient = new GoogleApiClient.Builder(this)
@@ -60,9 +71,21 @@ public class GoogleLogIn extends Activity implements
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
-        mGoogleApiClient.connect();
+    protected void onResume() {
+        super.onResume();
+        if (checkPlayServices()){
+            if (!mGoogleApiClient.isConnected()) {
+                if (Build.VERSION.SDK_INT >= 23){
+                    checkForPermission();
+                } else {
+                    mGoogleApiClient.connect();
+                }
+            }
+        } else {
+            CharSequence text = getString(R.string.java_googleplayloginwarning);
+            Toast toast = Toast.makeText(context, text, Toast.LENGTH_LONG);
+            toast.show();
+        }
     }
 
     @Override
@@ -163,5 +186,48 @@ public class GoogleLogIn extends Activity implements
             String response = ClientAuthentication.postGoogleSignInRequest(params[0]);
             return response;
         }
+    }
+
+    // Checks if the user has given google account permission and asks for it if he hasn't
+    private void checkForPermission(){
+        if (ContextCompat.checkSelfPermission(GoogleLogIn.this, Manifest.permission.GET_ACCOUNTS)
+                != PackageManager.PERMISSION_GRANTED){
+            ActivityCompat.requestPermissions(GoogleLogIn.this,
+                    new String[]{Manifest.permission.GET_ACCOUNTS}, MY_PERMISSIONS_REQUEST);
+        } else {
+            mGoogleApiClient.connect();
+        }
+    }
+
+    // Checks the result of the permission asked of the user
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case MY_PERMISSIONS_REQUEST: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    mGoogleApiClient.connect();
+                } else {
+                    // Permission denied, boo! Disable the functionality that depends on this permission.
+                    CharSequence text = getString(R.string.java_accountpermissionwarning);
+                    Toast toast = Toast.makeText(context, text, Toast.LENGTH_LONG);
+                    toast.show();
+                }
+                return;
+            }
+        }
+    }
+
+    // Checks if the user has google play services enabled
+    private boolean checkPlayServices() {
+        GoogleApiAvailability apiAvailability = GoogleApiAvailability.getInstance();
+        int resultCode = apiAvailability.isGooglePlayServicesAvailable(this);
+        if (resultCode != ConnectionResult.SUCCESS) {
+            if (apiAvailability.isUserResolvableError(resultCode)) {
+                apiAvailability.getErrorDialog(this, resultCode, PLAY_SERVICES_RESOLUTION_REQUEST).show();
+            }
+            return false;
+        }
+        return true;
     }
 }
