@@ -21,7 +21,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/textView_profile_info"
-            android:textColor="@color/primaryColor"
             />
 
         <View
@@ -31,146 +30,127 @@
             >
         </View>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="3"
-                android:orientation="vertical"
-                >
-
-                <TextView
-                    android:id="@+id/textView_profile_username"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/label_profile_username"
-                    android:layout_marginTop="@dimen/layout_padding"
-                    android:gravity="center_vertical"
-                    android:layout_weight="2"
-                    />
-                <EditText
-                    android:id="@+id/textView_profile_user"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/non_available"
-                    style="@style/blackText"
-                    android:inputType="textNoSuggestions"
-                    android:layout_marginBottom="@dimen/edittext_vertical_margin"
-                    android:layout_weight="1"
-                    />
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:orientation="horizontal"
-                    android:layout_weight="10"
-                    android:layout_marginTop="@dimen/layout_padding"
-                    android:layout_marginBottom="@dimen/edittext_vertical_margin"
-                    >
-
-                    <TextView
-                        android:id="@+id/textView_password_change"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:text="@string/label_profile_changepassword"
-                        android:layout_marginRight="@dimen/layout_padding"
-                        android:layout_marginEnd="@dimen/layout_padding"
-                        />
-
-                    <ImageButton
-                        android:id="@+id/button_changepassword"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/ic_lock_white_36dp"
-                        android:theme="@style/ToolbarTheme"
-                        android:background="?attr/colorPrimary"
-                        android:padding="@dimen/small_margin"
-                        android:layout_toRightOf="@id/textView_password_change"
-                        android:layout_toEndOf="@id/textView_password_change"
-                        android:contentDescription="@string/img_description"
-                        android:onClick="changePassword"
-                        />
-
-                </RelativeLayout>
-
-            </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="3"
+            android:orientation="vertical"
+            >
 
             <TextView
-                android:text="@string/label_profile_contactinfo"
-                style="@style/headerText"
+                android:id="@+id/textView_profile_username"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/textView_profile_contactinfo"
-                android:textColor="@color/primaryColor"
+                android:text="@string/label_profile_username"
+                android:layout_marginTop="@dimen/layout_padding"
+                android:gravity="center_vertical"
+                android:layout_weight="2"
+                />
+            <EditText
+                android:id="@+id/textView_profile_user"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/non_available"
+                style="@style/blackText"
+                android:inputType="textNoSuggestions"
+                android:layout_marginBottom="@dimen/medium_padding"
+                android:layout_weight="1"
                 />
 
-            <View
-                android:layout_width="@dimen/underline_width"
-                android:layout_height="1dp"
-                android:background="@color/primaryColor"
-                >
-            </View>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="3"
-                android:orientation="vertical"
-                android:layout_marginTop="@dimen/small_padding">
-
-                <TextView
-                    android:id="@+id/textView_profile_phoneno"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/label_profile_phone"
-                    android:layout_marginTop="@dimen/layout_padding"
-                    android:gravity="center_vertical"
-                    android:layout_weight="2"
-                    />
-                <EditText
-                    android:id="@+id/textView_profile_phone"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/non_available"
-                    style="@style/blackText"
-                    android:inputType="phone"
-                    android:layout_marginBottom="@dimen/edittext_vertical_margin"
-                    android:layout_weight="1"
-                    />
-
-                <TextView
-                    android:id="@+id/textView_profile_emailaddress"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/label_profile_email"
-                    android:layout_marginTop="@dimen/layout_padding"
-                    android:gravity="center_vertical"
-                    android:layout_weight="2"
-                    />
-                <EditText
-                    android:id="@+id/textView_profile_email"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/non_available"
-                    style="@style/blackText"
-                    android:inputType="textEmailAddress"
-                    android:layout_marginBottom="@dimen/edittext_vertical_margin"
-                    android:layout_weight="1"
-                    />
-
-            </LinearLayout>
-
             <Button
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:text="@string/label_profile_savechanges"
-                android:theme="@style/ToolbarTheme"
-                android:background="?attr/colorPrimary"
-                android:id="@+id/button_updateprofile"
-                android:gravity="center"
+                android:id="@+id/button_changepassword"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableLeft="@drawable/ic_lock_black_24dp"
+                android:drawableStart="@drawable/ic_lock_black_24dp"
+                android:text="@string/label_profile_changepassword"
+                android:gravity="center_vertical"
+                android:padding="@dimen/medium_padding"
                 android:contentDescription="@string/img_description"
-                android:onClick="editProfileInfo"/>
+                android:onClick="changePassword"
+                android:layout_marginBottom="@dimen/login_vertical_margin"
+                android:layout_weight="1"
+                />
+
 
         </LinearLayout>
+
+        <TextView
+            android:text="@string/label_profile_contactinfo"
+            style="@style/headerText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView_profile_contactinfo"
+            />
+
+        <View
+            android:layout_width="@dimen/underline_width"
+            android:layout_height="1dp"
+            android:background="@color/primaryColor"
+            >
+        </View>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="3"
+            android:orientation="vertical"
+            android:layout_marginTop="@dimen/small_padding">
+
+            <TextView
+                android:id="@+id/textView_profile_phoneno"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/label_profile_phone"
+                android:layout_marginTop="@dimen/layout_padding"
+                android:gravity="center_vertical"
+                android:layout_weight="2"
+                />
+            <EditText
+                android:id="@+id/textView_profile_phone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/non_available"
+                style="@style/blackText"
+                android:inputType="phone"
+                android:layout_marginBottom="@dimen/edittext_vertical_margin"
+                android:layout_weight="1"
+                />
+
+            <TextView
+                android:id="@+id/textView_profile_emailaddress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/label_profile_email"
+                android:layout_marginTop="@dimen/layout_padding"
+                android:gravity="center_vertical"
+                android:layout_weight="2"
+                />
+            <EditText
+                android:id="@+id/textView_profile_email"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/non_available"
+                style="@style/blackText"
+                android:inputType="textEmailAddress"
+                android:layout_marginBottom="@dimen/edittext_vertical_margin"
+                android:layout_weight="1"
+                />
+
+        </LinearLayout>
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:text="@string/label_profile_savechanges"
+            android:textColor="@color/white"
+            android:background="?attr/colorPrimary"
+            android:id="@+id/button_updateprofile"
+            android:gravity="center"
+            android:contentDescription="@string/img_description"
+            android:onClick="editProfileInfo"/>
+
+    </LinearLayout>
 
 </RelativeLayout>

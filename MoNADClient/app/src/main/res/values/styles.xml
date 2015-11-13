@@ -22,6 +22,7 @@
         <item name="android:textStyle">bold</item>
         <item name="android:textColor">@color/primaryColor</item>
         <item name="android:textAllCaps">true</item>
+        <item name="android:textAppearance">?android:attr/textAppearanceMedium</item>
     </style>
 
     <!-- Theme for all EditText and black TextViews -->
