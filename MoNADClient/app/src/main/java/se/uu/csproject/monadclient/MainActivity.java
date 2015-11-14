@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.location.Location;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -23,7 +24,6 @@ import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
-import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -38,20 +38,15 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.List;
 import java.util.Locale;
-import java.util.concurrent.ExecutionException;
 
 import se.uu.csproject.monadclient.recyclerviews.FullTrip;
-import se.uu.csproject.monadclient.recyclerviews.PartialTrip;
 import se.uu.csproject.monadclient.recyclerviews.SearchRecyclerViewAdapter;
 import se.uu.csproject.monadclient.recyclerviews.Storage;
 
-public class MainActivity extends MenuedActivity implements
-        GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener, AsyncResponse {
+public class MainActivity extends MenuedActivity implements GoogleApiClient.ConnectionCallbacks,
+        GoogleApiClient.OnConnectionFailedListener, LocationListener, AsyncResponse, AsyncRecommendationsInteraction {
 
     private AutoCompleteTextView destination;
     private GoogleApiClient mGoogleApiClient;
@@ -60,6 +55,8 @@ public class MainActivity extends MenuedActivity implements
     private Context context;
     private Toolbar toolbar;
     private AlertDialog.Builder builder;
+    private RecyclerView recyclerView;
+    private SearchRecyclerViewAdapter adapter;
 
     private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
     private final int MY_PERMISSIONS_REQUEST = 123;
@@ -83,23 +80,9 @@ public class MainActivity extends MenuedActivity implements
         currentLongitude = 0;
         setSupportActionBar(toolbar);
 
-        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler_view_main);
+        recyclerView = (RecyclerView) findViewById(R.id.recycler_view_main);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getBaseContext());
         recyclerView.setLayoutManager(linearLayoutManager);
-
-        /* TODO: Routes Generation (Please ignore that) */
-//        RoutesGenerationTask rt = new RoutesGenerationTask();
-//        rt.execute();
-
-        /* TODO: GetRecommendations */
-        new RecommendationsInteraction("MainActivity").getRecommendations();
-
-        /* TODO: GetNotifications */
-        new NotificationsInteraction("MainActivity").getNotifications();
-
-//        generateSearchResults(searchResults);
-        SearchRecyclerViewAdapter adapter = new SearchRecyclerViewAdapter(Storage.getRecommendations());
-        recyclerView.setAdapter(adapter);
 
         buildGoogleApiClient();
         initializeLocationRequest();
@@ -169,7 +152,7 @@ public class MainActivity extends MenuedActivity implements
             CharSequence text = getString(R.string.java_main_noresults);
             Toast toast = Toast.makeText(context, text, Toast.LENGTH_SHORT);
             toast.show();
-            Storage.clearAll();
+            Storage.clearSearchResults();
         }
         Intent myIntent = new Intent(MainActivity.this, SearchActivity.class);
         myIntent.putExtra("destination", destination.getText().toString());
@@ -247,43 +230,8 @@ public class MainActivity extends MenuedActivity implements
     }
 
     public void goToAdvancedSearch(View v) {
-        Storage.clearAll();
+        Storage.clearSearchResults();
         startActivity(new Intent(this, SearchActivity.class));
-    }
-
-    //TEMPORARY FUNCTION TODO: Remove this function once the database connection is set
-    private void generateSearchResults(List<FullTrip> trips){
-        Calendar calendar = new GregorianCalendar(2015, 10, 26, 10, 40, 0);
-        Date startdate1 = calendar.getTime();
-        calendar = new GregorianCalendar(2015, 10, 26, 10, 50, 0);
-        Date enddate1 = calendar.getTime();
-        calendar = new GregorianCalendar(2015, 10, 26, 10, 45, 0);
-        Date startdate2 = calendar.getTime();
-        calendar = new GregorianCalendar(2015, 10, 26, 11, 0, 0);
-        Date enddate2 = calendar.getTime();
-        calendar = new GregorianCalendar(2015, 10, 27, 9, 50, 0);
-        Date startdate3 = calendar.getTime();
-        calendar = new GregorianCalendar(2015, 10, 27, 10, 5, 0);
-        Date enddate3 = calendar.getTime();
-        calendar = new GregorianCalendar(2015, 10, 22, 11, 30, 0);
-        Date startdate4 = calendar.getTime();
-        calendar = new GregorianCalendar(2015, 10, 22, 12, 0, 0);
-        Date enddate4 = calendar.getTime();
-
-        ArrayList<PartialTrip> partialTrips = new ArrayList<>();
-        ArrayList<String> trajectory = new ArrayList<>();
-        trajectory.add("BMC");
-        trajectory.add("Akademiska Sjukhuset");
-        trajectory.add("Ekeby Bruk");
-        trajectory.add("Ekeby");
-        partialTrips.add(new PartialTrip("1", 2, 3, "Polacksbacken",startdate1,"Flogsta", enddate1, trajectory));
-        trips.add(new FullTrip("1", "2", partialTrips, 10, true, 0));
-        partialTrips.clear(); partialTrips.add(new PartialTrip("1", 2, 3, "Gamla Uppsala", startdate2, "Gottsunda", enddate2, trajectory));
-        trips.add(new FullTrip("2", "3", partialTrips, 15, true, 0));
-        partialTrips.clear(); partialTrips.add(new PartialTrip("1",2,3, "Granby",startdate3,"Tunna Backar", enddate3, trajectory));
-        trips.add(new FullTrip("3", "4", partialTrips, 15, true, 0));
-        partialTrips.clear(); partialTrips.add(new PartialTrip("1",2,3, "Kungsgatan", startdate4, "Observatoriet", enddate4, trajectory));
-        trips.add(new FullTrip("4", "5", partialTrips, 30, true, 0));
     }
 
     @Override
@@ -294,9 +242,21 @@ public class MainActivity extends MenuedActivity implements
         if (finish) {
             //clear user profile
             ClientAuthentication.initProfile();
+            Storage.clearAll();
             startActivity(new Intent(MainActivity.this, LoginActivity.class));
             finish();
         }
+
+        /* GetRecommendations */
+        if (!Storage.isEmptyRecommendations()) {
+            displayRecommendations();
+        }
+        else {
+            getRecommendations();
+        }
+
+        /* TODO: GetNotifications */
+        new NotificationsInteraction("MainActivity").getNotifications();
 
         if (checkPlayServices()){
             if (!mGoogleApiClient.isConnected()) {
@@ -389,5 +349,19 @@ public class MainActivity extends MenuedActivity implements
             return false;
         }
         return true;
+    }
+
+    public void getRecommendations() {
+        new GetRecommendationsTask(this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+    }
+
+    @Override
+    public void processReceivedRecommendations() {
+        displayRecommendations();
+    }
+
+    public void displayRecommendations() {
+        adapter = new SearchRecyclerViewAdapter(Storage.getRecommendations());
+        recyclerView.setAdapter(adapter);
     }
 }

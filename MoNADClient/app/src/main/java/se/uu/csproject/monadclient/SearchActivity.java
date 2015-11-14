@@ -24,7 +24,6 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.DatePicker;
-import android.widget.EditText;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.TimePicker;
@@ -310,7 +309,7 @@ public class SearchActivity extends MenuedActivity implements
         }
 
         if(stPosition != null && !stPosition.trim().isEmpty() && edPosition != null && !edPosition.trim().isEmpty()){
-            Storage.clearAll();
+            Storage.clearSearchResults();
             SendTravelRequest asyncTask = new SendTravelRequest();
             asyncTask.delegate = this;
             asyncTask.execute(userId, startTime, endTime, requestTime, stPosition, edPosition, priority,

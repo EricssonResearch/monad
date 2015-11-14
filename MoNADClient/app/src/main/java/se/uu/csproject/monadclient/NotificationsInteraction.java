@@ -34,6 +34,7 @@ public class NotificationsInteraction {
     }
 
     public void getNotifications() {
+        Storage.clearNotifications();
         GetNotificationsTask notificationsTask = new GetNotificationsTask();
         try {
             String response = notificationsTask.execute().get();

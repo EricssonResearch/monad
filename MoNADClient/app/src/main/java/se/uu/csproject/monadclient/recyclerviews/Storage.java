@@ -15,9 +15,16 @@ public class Storage{
     private static ArrayList<FullTrip> recommendations = new ArrayList();
     private static ArrayList<Notify> notifications = new ArrayList<>();
 
+    public static void clearAll() {
+        clearSearchResults();
+        clearBookings();
+        clearRecommendations();
+        clearNotifications();
+    }
+
     /** Methods for searchResults */
-    public static void setSearchResults(ArrayList<FullTrip> searchResults1){
-        searchResults = searchResults1;
+    public static void setSearchResults(ArrayList<FullTrip> searchResults){
+        Storage.searchResults = searchResults;
     }
 
     public static ArrayList<FullTrip> getSearchResults(){
@@ -28,27 +35,30 @@ public class Storage{
         Collections.sort(searchResults, new FullTripsStartTimeComparator());
     }
 
-    public static void clearAll(){
+    public static void clearSearchResults(){
         searchResults.clear();
     }
 
-    public static boolean isEmptySearchResults(){
-        if (searchResults != null && !searchResults.isEmpty()){
-            return false;
-        } else {
-            return true;
-        }
+    public static boolean isEmptySearchResults() {
+        return searchResults.isEmpty();
     }
 
     /** Methods for bookings */
-    public static void setBookings(ArrayList<FullTrip> bookings1){
-        bookings = bookings1;
+    public static void setBookings(ArrayList<FullTrip> bookings){
+        Storage.bookings = bookings;
     }
 
     public static ArrayList<FullTrip> getBookings(){
         return bookings;
     }
 
+    public static void clearBookings() {
+        bookings.clear();
+    }
+
+    public static boolean isEmptyBookings() {
+        return bookings.isEmpty();
+    }
 
     /** Methods for recommendations */
     public static ArrayList<FullTrip> getRecommendations() {
@@ -64,12 +74,7 @@ public class Storage{
     }
 
     public static boolean isEmptyRecommendations() {
-        if (recommendations != null && !recommendations.isEmpty()) {
-            return false;
-        }
-        else {
-            return true;
-        }
+        return recommendations.isEmpty();
     }
 
     public static void addRecommendation(FullTrip recommendation) {
@@ -79,7 +84,6 @@ public class Storage{
     public static void clearRecommendations() {
         recommendations.clear();
     }
-
 
     /** Methods for notifications */
     public static ArrayList<Notify> getNotifications() {
@@ -97,13 +101,7 @@ public class Storage{
     }
 
     public static boolean isEmptyNotifications() {
-
-        if (notifications != null && !notifications.isEmpty()) {
-            return false;
-        }
-        else {
-            return true;
-        }
+        return notifications.isEmpty();
     }
 
     public static void addNotification(Notify notification) {

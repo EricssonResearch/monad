@@ -166,16 +166,16 @@ public class ClientAuthentication extends Authentication {
 
     public static String profileToString() {
         String strProfile = "\nclientId: " + getClientId()
-                + "\nusername: " + getUsername()
-                + "\npassword: " + getPassword()
-                + "\nemail: " + getEmail()
-                + "\nphone: " + getPhone()
-                + "\nlanguage: " + getLanguage()
-                + "\nstoreLocation: " + getStoreLocation()
-                + "\nnotificationsAlert: " + getNotificationsAlert()
-                + "\nrecommendationsAlert: " + getRecommendationsAlert()
-                + "\ntheme: " + getTheme()
-                + "\ngoogleRegistrationToken: " + getGoogleRegistrationToken();
+                          + "\nusername: " + getUsername()
+                          + "\npassword: " + getPassword()
+                          + "\nemail: " + getEmail()
+                          + "\nphone: " + getPhone()
+                          + "\nlanguage: " + getLanguage()
+                          + "\nstoreLocation: " + getStoreLocation()
+                          + "\nnotificationsAlert: " + getNotificationsAlert()
+                          + "\nrecommendationsAlert: " + getRecommendationsAlert()
+                          + "\ntheme: " + getTheme()
+                          + "\ngoogleRegistrationToken: " + getGoogleRegistrationToken();
         return strProfile;
     }
 
@@ -723,7 +723,7 @@ public class ClientAuthentication extends Authentication {
                 JSONObject recommendationObjectID = (JSONObject) recommendation.get("_id");
                 String recommendationID = (String) recommendationObjectID.get("$oid");
 
-                String userID = recommendation.get("userID").toString();
+//                String userID = recommendation.get("userID").toString();
 
                 JSONArray userTripsList = (JSONArray) recommendation.get("userTrip");
                 Iterator<JSONObject> userTripsIterator = userTripsList.iterator();
@@ -743,12 +743,10 @@ public class ClientAuthentication extends Authentication {
                     int busID = new BigDecimal(tempBusID).intValueExact();
 
                     String startBusStop = (String) trip.get("startPlace");
-                    System.out.println("----------------Start:" + startBusStop);
                     JSONObject startTimeObject = (JSONObject) trip.get("startTime");
                     Date startTime = new Date((long) startTimeObject.get("$date"));
 
                     String endBusStop = (String) trip.get("endPlace");
-                    System.out.println("----------------End:" + endBusStop);
                     JSONObject endTimeObject = (JSONObject) trip.get("endTime");
                     Date endTime = new Date((long) endTimeObject.get("$date"));
 
@@ -824,7 +822,7 @@ public class ClientAuthentication extends Authentication {
                 Storage.addNotification(notify);
             }
             Storage.sortNotifications();
-            Storage.printNotifications();
+//            Storage.printNotifications();
         }
         catch (Exception e) {
             e.printStackTrace();
@@ -864,30 +862,17 @@ public class ClientAuthentication extends Authentication {
     }
 
     /* TODO: Will be changed */
-    public static String postGetNearestBusStopRequest() {
-        String request = ROUTES_GENERATOR_HOST + ROUTES_GENERATOR_PORT + "/get_nearest_stop_from_coordinates";
-        // String urlParameters = "client_id=" + getClientId();
-        String urlParameters = "lon=17.6093985&lat=59.8578199";
-
-        /* Send the request to the Authentication Module */
-        String response = postRequest(request, urlParameters);
-
-        System.out.println("--------RRRR_--------------: " + response);
-        return "ok";
-
+//    public static String postGetNearestBusStopRequest() {
+//        String request = ROUTES_GENERATOR_HOST + ROUTES_GENERATOR_PORT + "/get_nearest_stop_from_coordinates";
+//        // String urlParameters = "client_id=" + getClientId();
+//        String urlParameters = "lon=17.6093985&lat=59.8578199";
 //
-//        /* Handle response in case of exception */
-//        if (response.equals("-1")) {
-//            return exceptionMessage();
-//        }
+//        /* Send the request to the Authentication Module */
+//        String response = postRequest(request, urlParameters);
 //
-//        /*
-//         * By default, Erlang adds the newline '\n' character at the beginning of response.
-//         * For this reason substring() function is used
-//         */
-//        response = response.substring(1);
-//        return processGetRecommendationsResponse(response);
-    }
+//        System.out.println("--------RRRR_--------------: " + response);
+//        return "ok";
+//    }
 
     public static String exceptionMessage() {
         return "ERROR - An Exception was thrown";

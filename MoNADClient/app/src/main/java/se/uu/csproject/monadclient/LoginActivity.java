@@ -2,16 +2,15 @@ package se.uu.csproject.monadclient;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.v4.app.NavUtils;
+import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
@@ -22,18 +21,16 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.SignInButton;
 
-import java.util.concurrent.ExecutionException;
-
 import se.uu.csproject.monadclient.googlecloudmessaging.RegistrationIntentService;
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity implements AsyncLoginInteraction {
     private final int GOOGLE_LOGIN_REQUEST = 1;
     private final int REGISTER_REQUEST = 2;
 
     private EditText usernameField;
     private EditText passwordField;
     private SignInButton googleLogInButton;
-    private TextView wrongCredentialsTextView;
+//    private TextView wrongCredentialsTextView;
 
     //Google Cloud Services
     private static final String TAG = "MainActivity";
@@ -47,6 +44,9 @@ public class LoginActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.actionToolBar);
         setSupportActionBar(toolbar);
 
+        /* Hide the keyboard when launching this activity */
+        this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+
         if (checkPlayServices()) {
             Intent intent = new Intent(this, RegistrationIntentService.class);
             startService(intent);
@@ -55,9 +55,11 @@ public class LoginActivity extends AppCompatActivity {
         usernameField = (EditText) findViewById(R.id.field_username);
         passwordField = (EditText) findViewById(R.id.field_password);
         Button logInButton = (Button) findViewById(R.id.button_login);
+        initializeUsernameAndPasswordFields();
+
         TextView forgotPasswordTextView = (TextView) findViewById(R.id.forgotpassword_text_view);
         TextView registerTextView = (TextView) findViewById(R.id.textview_register);
-        wrongCredentialsTextView = (TextView) findViewById(R.id.wrong_credentials);
+//        wrongCredentialsTextView = (TextView) findViewById(R.id.wrong_credentials);
         googleLogInButton = (SignInButton) findViewById(R.id.google_login_button);
 
         googleLogInButton.setOnClickListener(new View.OnClickListener() {
@@ -68,36 +70,10 @@ public class LoginActivity extends AppCompatActivity {
         });
 
         logInButton.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View v) {
-                LogInTask task = new LogInTask();
-                try {
-                    // Get the username and password, send them with the request
-                    String response = task.execute(usernameField.getText().toString(), passwordField.getText().toString()).get();
-
-                    Toast.makeText(getApplicationContext(), response, Toast.LENGTH_LONG).show();
-
-                    // If the response starts with the specific word, it means the users logged in successfully
-                    if (response.startsWith("Success (1)")) {
-                        LoginActivity.this.startActivity(new Intent(LoginActivity.this, MainActivity.class));
-                        finish();
-                    }
-                    else if (response.equals("Wrong Credentials (0)")) {
-                        wrongCredentialsTextView.setVisibility(View.VISIBLE);
-                    }
-                    else {
-                        LoginActivity.this.startActivity(new Intent(LoginActivity.this, LoginActivity.class));
-                        finish();
-                    }
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                    LoginActivity.this.startActivity(new Intent(LoginActivity.this, LoginActivity.class));
-                    finish();
-                } catch (ExecutionException e) {
-                    e.printStackTrace();
-                    LoginActivity.this.startActivity(new Intent(LoginActivity.this, LoginActivity.class));
-                    finish();
-                }
+                login();
             }
         });
 
@@ -129,6 +105,7 @@ public class LoginActivity extends AppCompatActivity {
 
     // hides the phone keyboard when an element is touched besides the keyboard and text fields
     public boolean onTouchEvent(MotionEvent event) {
+        initializeUsernameAndPasswordFields();
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
         return true;
@@ -148,5 +125,42 @@ public class LoginActivity extends AppCompatActivity {
             return false;
         }
         return true;
+    }
+
+    public void initializeUsernameAndPasswordFields() {
+        usernameField.setFocusable(false);
+        usernameField.setFocusableInTouchMode(true);
+        passwordField.setFocusable(false);
+        passwordField.setFocusableInTouchMode(true);
+    }
+
+    public void clearUsernameAndPasswordFields() {
+        usernameField.setText("");
+        passwordField.setText("");
+    }
+
+    public void login() {
+        new LoginTask(this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, usernameField.getText().toString(),
+                                              passwordField.getText().toString());
+        clearUsernameAndPasswordFields();
+    }
+
+    @Override
+    public void processReceivedLoginResponse(String response) {
+
+        /* If the response starts with the specific word, it means the user logged in successfully */
+        if (response.startsWith("Success (1)")) {
+//            Toast.makeText(getApplicationContext(), "Welcome to MoNAD", Toast.LENGTH_LONG).show();
+            LoginActivity.this.startActivity(new Intent(LoginActivity.this, MainActivity.class));
+            finish();
+        }
+        else if (response.equals("Wrong Credentials (0)")) {
+            Toast.makeText(getApplicationContext(), "Invalid Credentials - Please, try again", Toast.LENGTH_LONG).show();
+//            wrongCredentialsTextView.setVisibility(View.VISIBLE);
+        }
+        else {
+            LoginActivity.this.startActivity(new Intent(LoginActivity.this, LoginActivity.class));
+            finish();
+        }
     }
 }
