@@ -2,6 +2,7 @@ package se.uu.csproject.monadclient;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
@@ -17,7 +18,7 @@ public class ProfileActivity extends MenuedActivity {
 
     Toolbar toolbar;
     Button submitButton;
-    ImageButton passwordButton;
+    AppCompatButton passwordButton;
     private EditText usernameField;
     private EditText emailField;
     private EditText phoneField;
@@ -53,7 +54,7 @@ public class ProfileActivity extends MenuedActivity {
             }
         });
 
-        passwordButton = (ImageButton) findViewById(R.id.button_changepassword);
+        passwordButton = (AppCompatButton) findViewById(R.id.button_changepassword);
         passwordButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
