@@ -178,6 +178,7 @@
     <string name="java_settings_themechanged_default">Theme changed to default</string>
     <string name="java_settings_themechanged_dark">Theme changed to dark</string>
     <string name="java_trips_notripsbooked">No trips have been booked</string>
+    <string name="java_trips_samebooking">You have already booked this trip</string>
     <string name="java_languagerva_languagechanged">Language changed to</string>
     <string name="java_notificationsrva_newmessages">You have received new messages</string>
 </resources>

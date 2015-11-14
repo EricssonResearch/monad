@@ -15,6 +15,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.Selection;
 import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -216,7 +217,11 @@ public class SearchActivity extends MenuedActivity implements
             int year = c.get(Calendar.YEAR);
             int month = c.get(Calendar.MONTH);
             int day = c.get(Calendar.DAY_OF_MONTH);
-            return new DatePickerDialog(getActivity(), this, year, month, day);
+            DatePickerDialog dialog = new DatePickerDialog(getActivity(), this, year, month, day);
+            // TODO: Uncomment the next line when we reliably have new timetables every day - it prevents
+            // TODO: the user from searching for an old trip
+            //dialog.getDatePicker().setMinDate(new Date().getTime() - 1000);
+            return dialog;
         }
 
         public void onDateSet(DatePicker view, int year, int month, int day) {
@@ -261,6 +266,7 @@ public class SearchActivity extends MenuedActivity implements
     public void useCurrentPosition(View v){
         if (mGoogleApiClient.isConnected()){
             positionEditText.setText(getString(R.string.java_search_currentposition));
+            Selection.setSelection(positionEditText.getText(), positionEditText.length());
         } else {
             CharSequence text = getString(R.string.java_search_locationfailed);
             Toast toast = Toast.makeText(context, text, Toast.LENGTH_LONG);

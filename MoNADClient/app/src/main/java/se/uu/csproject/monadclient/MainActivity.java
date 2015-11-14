@@ -284,17 +284,17 @@ public class MainActivity extends MenuedActivity implements GoogleApiClient.Conn
 
     private void initAlertDialog(){
         builder = new AlertDialog.Builder(this);
-        builder.setTitle("Confirm");
-        builder.setMessage("Do you want to exit MoNAD?");
+        builder.setTitle(getString(R.string.java_confirm));
+        builder.setMessage(getString(R.string.java_main_exitmonad));
         // Add the buttons
-        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+        builder.setPositiveButton(getString(R.string.java_yes), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 // User clicked Yes button
                 MainActivity.super.onBackPressed();
-                Toast.makeText(getApplicationContext(), "You have exited MoNAD.", Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), getString(R.string.java_main_leftmonad), Toast.LENGTH_LONG).show();
             }
         });
-        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+        builder.setNegativeButton(getString(R.string.java_cancel), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 // User cancelled the dialog
                 //do nothing

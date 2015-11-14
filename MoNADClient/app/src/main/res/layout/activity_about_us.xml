@@ -23,9 +23,6 @@
             android:layout_marginTop="@dimen/medium_padding"
             android:text="@string/label_aboutus_texttitle"
             style="@style/headerText"
-            android:textAllCaps="true"
-            android:textStyle="bold"
-            android:textColor="@color/primaryColor"
             android:layout_marginLeft="@dimen/medium_padding"
             android:layout_marginStart="@dimen/medium_padding"/>
         <View
