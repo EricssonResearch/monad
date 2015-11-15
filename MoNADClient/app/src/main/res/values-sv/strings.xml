@@ -6,7 +6,7 @@
     <string name="title_activity_main">Sök</string>
     <string name="title_activity_notifications">Aviseringar</string>
     <string name="title_activity_profile">Profil</string>
-    <string name="title_activity_register">Registera dig</string>
+    <string name="title_activity_register">Registrera dig</string>
     <string name="title_activity_reset_password">Återställ lösenord</string>
     <string name="title_activity_route">Resvägsinformation</string>
     <string name="title_activity_settings">Inställningar</string>
@@ -57,7 +57,7 @@
     <!--Activity - Profile-->
     <string name="label_profile_contactinfo">Kontaktinformation</string>
     <string name="label_profile_username">Användarnamn:</string>
-    <string name="label_profile_phone">Telefon nr.:</string>
+    <string name="label_profile_phone">Telefonnummer:</string>
     <string name="label_profile_email">E-post:</string>
     <string name="label_profile_info">Profilinformation</string>
     <string name="label_profile_savechanges">Spara ändringar</string>
@@ -69,8 +69,8 @@
     <string name="label_register_password">Lösenord</string>
     <string name="label_register_verifypassword">Bekräfta lösenord</string>
     <string name="label_register_email">E-post</string>
-    <string name="label_register_mobilenumber">Telfon nr</string>
-    <string name="label_register_register">Registera dig</string>
+    <string name="label_register_mobilenumber">Telefonnummer</string>
+    <string name="label_register_register">Registrera dig</string>
 
     <!--Activity - Reset Password-->
     <string name="label_resetpassword_resetpassword">Återställ lösenord</string>
@@ -106,7 +106,7 @@
 
     <!--Settings - Alert settings -->
     <string name="label_fragmentsettingsalert_recommendation">Rekommendationer</string>
-    <string name="label_fragmentsettingsalert_alert">Påminnelser om resor</string>
+    <string name="label_fragmentsettingsalert_alert">Påminnelse om resor</string>
 
     <!-- Settings - Theme settings -->
     <string name="label_fragmentsettingstheme_light">Ljust</string>
@@ -124,8 +124,8 @@
 
     <!--Popup - Route Confirmation -->
     <string name="label_trip_confirmation">Bekräfta din resa</string>
-    <string name="label_trip_depart">Avresa:</string>
-    <string name="label_trip_arrive">Ankomst:</string>
+    <string name="label_trip_depart">Avresa</string>
+    <string name="label_trip_arrive">Ankomst</string>
     <string name="label_trip_button_confirm">Bekräfta</string>
     <string name="label_trip_businfo">Buss</string>
     <string name="label_tripsactivity_from">Från</string>
@@ -164,6 +164,6 @@
     <string name="java_settings_themechanged_dark">Temat har ändrats till Mörk</string>
     <string name="java_trips_notripsbooked">Ingen resa har blivit bokad</string>
     <string name="java_trips_samebooking">Du har redan bokat den här resan</string>
-    <string name="java_languagerva_languagechanged">Språketinställningarna har ändrats till</string>
+    <string name="java_languagerva_languagechanged">Språkinställningen har ändrats till</string>
     <string name="java_notificationsrva_newmessages">Du har ett nytt meddelande</string>
 </resources>
