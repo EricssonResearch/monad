@@ -138,8 +138,8 @@ species client skills: [SQLSKILL] {
 	float end_time_duration <- current_time + (duration_hour_end*3600000);
 	float va_titude <- (rnd(9999))/10000000 update: (rnd(9999))/10000000;
 	
-	float longitude <- 59.858 + va_titude;
-	float latitude <- 17.644 + va_titude;
+	float longitude <- 17.644 + va_titude;
+	float latitude <- 59.858 + va_titude;
 	int weekday <- mod(((current_time/1000) + float(13050000))/(24 * 60 * 60), 7);
 	 //+ 13050000
 	int weekday1 <- mod(13.5, 7);
