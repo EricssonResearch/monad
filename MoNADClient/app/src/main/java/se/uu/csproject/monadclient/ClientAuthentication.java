@@ -814,11 +814,53 @@ public class ClientAuthentication extends Authentication {
                 JSONObject timeObject = (JSONObject) notification.get("time");
                 Date notificationTime = new Date((long) timeObject.get("$date"));
 
-                long temp = (long) notification.get("icon_id");
-
+                long temp = (long) notification.get("iconID");
                 int notificationIconID = new BigDecimal(temp).intValueExact();
 
-                Notify notify = new Notify(notificationID, notificationText, notificationTime, notificationIconID);
+                JSONArray partialTripsList = (JSONArray) notification.get("partialTrips");
+                Iterator<JSONObject> partialTripsIterator = partialTripsList.iterator();
+
+                ArrayList<PartialTrip> partialTrips = new ArrayList<>();
+
+                while (partialTripsIterator.hasNext()) {
+                    JSONObject trip = partialTripsIterator.next();
+
+                    JSONObject tripObjectID = (JSONObject) trip.get("_id");
+                    String tripID = (String) tripObjectID.get("$oid");
+
+                    long tempLine = (long) trip.get("line");
+                    int line = new BigDecimal(tempLine).intValueExact();
+
+//                    long tempBusID = (long) trip.get("busID");
+                    double tempBusID = (double) trip.get("busID");
+                    int busID = new BigDecimal(tempBusID).intValueExact();
+
+                    String startBusStop = (String) trip.get("startBusStop");
+                    JSONObject startTimeObject = (JSONObject) trip.get("startTime");
+                    Date startTime = new Date((long) startTimeObject.get("$date"));
+
+                    String endBusStop = (String) trip.get("endBusStop");
+                    JSONObject endTimeObject = (JSONObject) trip.get("endTime");
+                    Date endTime = new Date((long) endTimeObject.get("$date"));
+
+                    ArrayList<String> trajectory = new ArrayList<>();
+                    JSONArray trajectoryArray = (JSONArray) trip.get("trajectory");
+                    Iterator<String> trajectoryObjectIterator = trajectoryArray.iterator();
+
+                    /* TODO: Parse specific time for each partial trip */
+                    while (trajectoryObjectIterator.hasNext()) {
+                        String busStopName = trajectoryObjectIterator.next();
+                        trajectory.add(busStopName);
+                    }
+
+                    PartialTrip partialTrip = new PartialTrip(tripID, line, busID, startBusStop, startTime,
+                                                              endBusStop, endTime, trajectory);
+
+                    partialTrips.add(partialTrip);
+                }
+                FullTrip fullTrip = new FullTrip(partialTrips);
+
+                Notify notify = new Notify(notificationID, notificationText, notificationTime, notificationIconID, fullTrip);
                 Storage.addNotification(notify);
             }
             Storage.sortNotifications();

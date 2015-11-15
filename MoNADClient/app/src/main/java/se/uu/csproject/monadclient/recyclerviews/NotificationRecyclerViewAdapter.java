@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,8 +18,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.List;
 
 import se.uu.csproject.monadclient.NotificationsActivity;
 import se.uu.csproject.monadclient.R;
@@ -26,25 +25,19 @@ import se.uu.csproject.monadclient.RouteActivity;
 import se.uu.csproject.monadclient.SearchActivity;
 
 public class NotificationRecyclerViewAdapter extends RecyclerView.Adapter<NotificationRecyclerViewAdapter.NotificationViewHolder> {
+    private ArrayList<Notify> notifications;
+    private Context context;
 
-
-    List<Notify> notify;
-    private Context mContext;
-    ArrayList<FullTrip> bookings;
-
-
-    public NotificationRecyclerViewAdapter(Context context, List<Notify> notify, ArrayList<FullTrip> bookings) {
-        this.notify = notify;
-        mContext = context;
-        this.bookings = bookings;
+    public NotificationRecyclerViewAdapter(Context context, ArrayList<Notify> notifications) {
+        this.notifications = notifications;
+        this.context = context;
     }
-
 
     @Override
     public int getItemViewType(int position) {
-        if (notify.get(position).isToday()) {
 
-            if (notify.get(position).reschedule) {
+        if (notifications.get(position).isToday()) {
+            if (notifications.get(position).getReschedule()) {
                 return 2;
             } else {
                 return 1;
@@ -62,58 +55,55 @@ public class NotificationRecyclerViewAdapter extends RecyclerView.Adapter<Notifi
     @Override
     public NotificationViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
         View view;
+
         if (viewType == 2) {
             view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.list_item_notification_reschedule, viewGroup, false);
-
-        } else if (viewType == 1) {
-            view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.list_item_notification, viewGroup, false);
-
-        } else {
-            view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.list_item_notification_old, viewGroup, false);
-
         }
-
-        return new NotificationViewHolder(mContext, view);
-
+        else if (viewType == 1) {
+            view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.list_item_notification, viewGroup, false);
+        }
+        else {
+            view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.list_item_notification_old, viewGroup, false);
+        }
+        return new NotificationViewHolder(context, view);
     }
 
 
     @Override
     public void onBindViewHolder(final NotificationViewHolder notificationViewHolder, final int i) {
-        notificationViewHolder.notificationTime.setText(formatTime((Date) notify.get(i).time, notify.get(i).isToday()));
+        notificationViewHolder.notificationTime.setText(formatTime((Date) notifications.get(i).getTime(), notifications.get(i).isToday()));
+        notificationViewHolder.notificationPhoto.setImageResource(notifications.get(i).getIconID());
 
-        notificationViewHolder.notificationPhoto.setImageResource(notify.get(i).iconID);
         notificationViewHolder.notificationPhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                FullTrip fullTrip = notifications.get(i).getFullTrip();
 
-                FullTrip fullTrip = getTrip(notify.get(i).getTripID());
                 if (fullTrip != null) {
                     Intent intent = new Intent(notificationViewHolder.itemView.getContext(), RouteActivity.class);
                     intent.putExtra("selectedTrip", fullTrip);
                     notificationViewHolder.itemView.getContext().startActivity(intent);
-                } else {
-                    System.out.println("Trip is not in bookings list");
-
+                }
+                else {
+                    Log.d(this.getClass().getCanonicalName(), "FullTrip of notification is null");
                 }
             }
 
         });
+        notificationViewHolder.notificationText.setText(notifications.get(i).getText());
 
-        notificationViewHolder.notificationText.setText(notify.get(i).text);
         notificationViewHolder.notificationText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                FullTrip fullTrip = getTrip(notify.get(i).getTripID());
+                FullTrip fullTrip = notifications.get(i).getFullTrip();
 
                 if (fullTrip != null) {
                     Intent intent = new Intent(notificationViewHolder.itemView.getContext(), RouteActivity.class);
                     intent.putExtra("selectedTrip", fullTrip);
                     notificationViewHolder.itemView.getContext().startActivity(intent);
-                } else {
-                    System.out.println("Trip is not in bookings list");
-
+                }
+                else {
+                    Log.d(this.getClass().getCanonicalName(), "FullTrip of notification is null");
                 }
             }
         });
@@ -122,44 +112,42 @@ public class NotificationRecyclerViewAdapter extends RecyclerView.Adapter<Notifi
             @Override
             public void onClick(View v) {
 //                notificationViewHolder.itemView.setVisibility(View.GONE);
-//                int index = notify.indexOf(i);
+//                int index = notifications.indexOf(i);
 
                 Storage.removeNotification(i);
-                notify = Storage.getNotifications();
+                notifications = Storage.getNotifications();
 //                notifyItemRemoved(index);
                 notifyDataSetChanged();
             }
         });
 
         if (getItemViewType(i) == 2) {
+
             notificationViewHolder.rescheduleText.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    FullTrip fullTrip = notifications.get(i).getFullTrip();
 
-                    FullTrip fullTrip = getTrip(notify.get(i).getTripID());
                     if (fullTrip != null) {
                         Intent intent = new Intent(notificationViewHolder.itemView.getContext(), SearchActivity.class);
                         intent.putExtra("selectedTrip", fullTrip);
                         notificationViewHolder.itemView.getContext().startActivity(intent);
-                    } else {
-                        System.out.println("Trip is not in bookings list");
-
+                    }
+                    else {
+                        Log.d(this.getClass().getCanonicalName(), "FullTrip of notification is null");
                     }
                 }
 
             });
         }
-
     }
 
     @Override
     public int getItemCount() {
-        return notify.size();
+        return notifications.size();
     }
 
-
     public static class NotificationViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-
         Context mContext;
         CardView cv;
         TextView notificationText;
@@ -170,9 +158,7 @@ public class NotificationRecyclerViewAdapter extends RecyclerView.Adapter<Notifi
         int numMessages = 0;
         ImageView hideNotificationButton;
 
-
         NotificationViewHolder(Context context, View itemView) {
-
             super(itemView);
             mContext = context;
             cv = (CardView) itemView.findViewById(R.id.cv);
@@ -188,7 +174,6 @@ public class NotificationRecyclerViewAdapter extends RecyclerView.Adapter<Notifi
             itemView.setTag(itemView);
         }
 
-
         public void onClick(View v) {
 
             if (v.getId() == R.id.image1) {
@@ -201,21 +186,17 @@ public class NotificationRecyclerViewAdapter extends RecyclerView.Adapter<Notifi
                 mBuilder.setContentTitle(mContext.getString(R.string.label_notification_notification));
                 mBuilder.setContentText(notificationText.getText());
                 mBuilder.setAutoCancel(true);
-                mBuilder.setContentText(this.itemView.getResources().getString(R.string.java_notificationsrva_newmessages))
-                        .setNumber(++numMessages);
+                mBuilder.setContentText(this.itemView.getResources().getString(R.string.java_notificationsrva_newmessages)).setNumber(++numMessages);
 
                 NotificationManager mNotificationManager = (NotificationManager)
                         mContext.getSystemService(Context.NOTIFICATION_SERVICE);
 
                 mNotificationManager.notify(NotificationsActivity.NOTIFICATION_ID, mBuilder.build());
             }
-
-
         }
     }
 
     private String formatTime(Date date, boolean today) {
-
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
         String time;
@@ -223,7 +204,8 @@ public class NotificationRecyclerViewAdapter extends RecyclerView.Adapter<Notifi
         if (today) {
             long timeDifference = Calendar.getInstance().getTimeInMillis() - calendar.getTimeInMillis();
             time = formatTodayTime(timeDifference);
-        } else {
+        }
+        else {
             SimpleDateFormat timeFormat = new SimpleDateFormat("MM/dd");
             time = timeFormat.format(calendar.getTime());
         }
@@ -234,17 +216,23 @@ public class NotificationRecyclerViewAdapter extends RecyclerView.Adapter<Notifi
 
         millisecondsTime %= (1000 * 60 * 60 * 24);
         int hours = (int) millisecondsTime / (1000 * 60 * 60);
+
         millisecondsTime %= (1000 * 60 * 60);
         int minutes = (int) millisecondsTime / (1000 * 60);
+
         millisecondsTime %= (1000 * 60);
         int seconds = (int) millisecondsTime / 1000;
+
         if (minutes == 0) {
             return seconds + " sec ago";
-        } else if (hours == 0) {
+        }
+        else if (hours == 0) {
             return minutes + " min ago";
-        } else if (hours == 1) {
+        }
+        else if (hours == 1) {
             return hours + " hr, " + minutes + "ago";
-        } else {
+        }
+        else {
             return hours + " hrs ago";
         }
     }
@@ -255,13 +243,13 @@ public class NotificationRecyclerViewAdapter extends RecyclerView.Adapter<Notifi
     // Because the ID remains unchanged, the existing notification is
     // updated.
 
-    private FullTrip getTrip(String id) {
-
-        for (int i = 0; i < bookings.size(); i++) {
-            if (bookings.get(i).getId().equals(id)) {
-                return bookings.get(i);
-            }
-        }
-        return null;
-    }
+//    private FullTrip getTrip(String id) {
+//
+//        for (int i = 0; i < bookings.size(); i++) {
+//            if (bookings.get(i).getId().equals(id)) {
+//                return bookings.get(i);
+//            }
+//        }
+//        return null;
+//    }
 }

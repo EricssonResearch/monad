@@ -8,12 +8,13 @@ import java.util.Date;
 import se.uu.csproject.monadclient.R;
 
 public class Notify {
-    String tripID;
-    String id;      /* Corresponds to the Notification _id value in the database  */
-    String text;
-    Date time;
-    int iconID;
-    boolean reschedule; // notification includes reschedule option
+    private String tripID;
+    private String id;      /* Corresponds to the Notification _id value in the database  */
+    private String text;
+    private Date time;
+    private int iconID;
+    private boolean reschedule; // notification includes reschedule option
+    private FullTrip fullTrip;
 
     /* Used for generating notifications, which do not exist in the database */
     public Notify(String text, Date time, int iconID) {
@@ -34,6 +35,7 @@ public class Notify {
         this.reschedule = false;
         this.iconID = parseIconID(iconID);
     }
+
     /* Used for generating notifications, with the new tripID attribute.... */
     public Notify(String tripID, String id, String text, Date time, int iconID) {
         this.tripID = tripID;
@@ -42,6 +44,16 @@ public class Notify {
         this.time = time;
         this.reschedule = false;
         this.iconID = parseIconID(iconID);
+    }
+
+    /* Used for generating notifications, which are parsed from the database */
+    public Notify(String id, String text, Date time, int iconID, FullTrip fullTrip) {
+        this.id = id;
+        this.text = text;
+        this.time = time;
+        this.reschedule = false;
+        this.iconID = parseIconID(iconID);
+        this.fullTrip = fullTrip;
     }
 
     public int parseIconID(int iconID) {
@@ -80,6 +92,7 @@ public class Notify {
         Log.d("Notification", "Text: " + this.getText());
         Log.d("Notification", "Time: " + getTime());
         Log.d("Notification", "IconID: " + getIconID());
+        Log.d("Notification", "Reschedule: " + getReschedule());
     }
 
     public String getID() {
@@ -114,4 +127,19 @@ public class Notify {
         this.iconID = iconID;
     }
 
+    public boolean getReschedule() {
+        return reschedule;
+    }
+
+    public void setReschedule(boolean reschedule) {
+        this.reschedule = reschedule;
+    }
+
+    public FullTrip getFullTrip() {
+        return fullTrip;
+    }
+
+    public void setFullTrip(FullTrip fullTrip) {
+        this.fullTrip = fullTrip;
+    }
 }

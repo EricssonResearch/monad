@@ -256,7 +256,7 @@ public class MainActivity extends MenuedActivity implements GoogleApiClient.Conn
         }
 
         /* TODO: GetNotifications */
-        new NotificationsInteraction("MainActivity").getNotifications();
+//        new NotificationsInteraction("MainActivity").getNotifications();
 
         if (checkPlayServices()){
             if (!mGoogleApiClient.isConnected()) {
