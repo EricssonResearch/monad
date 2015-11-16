@@ -752,13 +752,20 @@ public class ClientAuthentication extends Authentication {
 
                     ArrayList<String> trajectory = new ArrayList<>();
                     JSONArray trajectoryArray = (JSONArray) trip.get("trajectory");
-                    Iterator<JSONArray> trajectoryObjectIterator = trajectoryArray.iterator();
 
-                    /* TODO: Parse specific time for each partial trip */
+                    Iterator<String> trajectoryObjectIterator = trajectoryArray.iterator();
                     while (trajectoryObjectIterator.hasNext()) {
-                        String busStopName = (String) trajectoryObjectIterator.next().get(0);
+                        String busStopName = trajectoryObjectIterator.next();
                         trajectory.add(busStopName);
                     }
+
+//                    Iterator<JSONArray> trajectoryObjectIterator = trajectoryArray.iterator();
+//
+//                    /* TODO: Parse specific time for each partial trip */
+//                    while (trajectoryObjectIterator.hasNext()) {
+//                        String busStopName = (String) trajectoryObjectIterator.next().get(0);
+//                        trajectory.add(busStopName);
+//                    }
 
                     PartialTrip partialTrip = new PartialTrip(tripID, line, busID, startBusStop, startTime,
                                                               endBusStop, endTime, trajectory);
@@ -769,10 +776,11 @@ public class ClientAuthentication extends Authentication {
                 if (!fullTrip.isHistory()) {
                     Storage.addRecommendation(fullTrip);
                 }
+//                Storage.addRecommendation(fullTrip);
             }
             Storage.sortRecommendations();
         }
-        catch (ParseException e) {
+        catch (Exception e) {
             e.printStackTrace();
             return "0";
         }
