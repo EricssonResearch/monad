@@ -51,7 +51,7 @@ public class SendBookingCancelRequest extends AsyncTask<String, Void, String>{
             BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream(), "utf-8"), 8);
             String line;
             while ((line = br.readLine()) != null) {
-                response = response + line + "\n";
+                response = response + line;
             }
 
         } catch (MalformedURLException e) {

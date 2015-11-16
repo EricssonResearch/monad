@@ -5,7 +5,7 @@
     android:id="@+id/popupinfo"
     android:layout_gravity="center"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:layout_centerInParent="true"
     android:background="@color/primaryColor">
 
@@ -56,7 +56,8 @@
                 style="@style/whiteText"
                 android:textSize="@dimen/medium_text"
                 android:layout_centerHorizontal="true"
-                android:padding="@dimen/medium_padding"
+                android:paddingTop="@dimen/medium_padding"
+                android:paddingBottom="@dimen/medium_padding"
                 />
 
             <TextView
@@ -67,9 +68,8 @@
                 style="@style/whiteText"
                 android:textSize="@dimen/medium_text"
                 android:padding="@dimen/medium_padding"
-                android:layout_toLeftOf="@id/departname"
-                android:layout_toStartOf="@id/departname"
-                android:layout_alignBottom="@id/departname"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentLeft="true"
                 />
 
             <TextView
@@ -81,8 +81,8 @@
                 android:textSize="@dimen/medium_text"
                 android:padding="@dimen/medium_padding"
                 android:layout_alignBottom="@+id/departname"
-                android:layout_toRightOf="@id/departname"
-                android:layout_toEndOf="@id/departname"/>
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"/>
 
             <TextView
                 android:id="@+id/arrivename"
@@ -104,11 +104,9 @@
                 android:textSize="@dimen/medium_text"
                 android:padding="@dimen/medium_padding"
                 android:layout_centerVertical="true"
-                android:layout_toLeftOf="@+id/arrivename"
-                android:layout_toStartOf="@+id/arrivename"
                 android:layout_alignBottom="@id/arrivename"
-                android:layout_alignLeft="@id/departlabel"
-                android:layout_alignStart="@id/departlabel"/>
+                android:layout_alignParentStart="true"
+                android:layout_alignParentLeft="true"/>
 
             <TextView
                 android:id="@+id/arrivetime"
@@ -118,9 +116,9 @@
                 style="@style/whiteText"
                 android:textSize="@dimen/medium_text"
                 android:padding="@dimen/medium_padding"
-                android:layout_below="@+id/departtime"
-                android:layout_alignLeft="@+id/departtime"
-                android:layout_alignStart="@+id/departtime" />
+                android:layout_alignBottom="@id/arrivename"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true" />
         </RelativeLayout>
 
 

@@ -548,24 +548,22 @@ class DB():
 
         return reqs
 
-    def insertTimeTable2(self, line, startTime, tripObjectList):            
-        ''' 
+    def insertTimeTable2(self, line, startTime, tripObjectList):
+        '''
         Insert object list of BusTrip to TimeTable
         @param: line, lineNo
         @param: startTime, the date of timetable will be used for
         @param: tripObjectList, list of trip object id of specific line
         '''
-
         objID = ObjectId()
         timeTable = {
             "_id": objID,
             "line": line,
             "date": datetime.datetime(startTime.date().year, startTime.date().month, startTime.date().day, 0, 0, 0),
             "timetable": tripObjectList
-        }    
-        #print timeTable
+        }
+        # print timeTable
         self.db.TimeTable1.insert_one(timeTable) 
-
 
     def getBusStopline(self,id):
 
@@ -710,9 +708,7 @@ class DB():
             tripObjectList.append(objID)
             capacity = individual[i][1]
             startTime = individual[i][2] + timedelta(1)
-            
-            busID = BUSID #Need to assign busID for every Trip
-   
+            busID = BUSID  # Need to assign busID for every Trip
             trajectory = self.getRoute(line, "trajectory")
             if i == 0:
                 startTimeLastTrip = datetime.datetime(startTime.date().year, startTime.date().month, startTime.date().day, 0, 0, 0)
@@ -722,23 +718,19 @@ class DB():
                 endTime = (individual[i][2])
             else:
                 endTime = datetime.datetime(startTime.date().year, startTime.date().month, startTime.date().day, 23, 59, 59)
-
             passengerNumList, requestLeftIn, twt, awt = self.calculateReqNumTrip(capacity, startTimeLastTrip, endTime, requestLeftIn)
             sorted(passengerNumList, key=itemgetter(1))
-            #print passengerNumList
-
+            # print passengerNumList
             for j in range(len(trajectory)):
                 interval = int(trajectory[j]["interval"])
                 if j == 0:
                     trajectory[j]["time"] = startTime + datetime.timedelta(minutes=interval)
-                else: 
+                else:
                     trajectory[j]["time"] = trajectory[j-1]["time"] + datetime.timedelta(minutes=interval)
                 trajectory[j]["totalPassengers"] = passengerNumList[j][4]
                 trajectory[j]["boardingPassengers"] = passengerNumList[j][2]
                 trajectory[j]["departingPassengers"] = passengerNumList[j][3]
-               
                 del trajectory[j]["interval"]
-
             trip = {
                 "_id": objID,
                 "capacity": capacity,
@@ -746,10 +738,10 @@ class DB():
                 "startTime": startTime,
                 "busID": busID,
                 "endTime": trajectory[len(trajectory)-1]["time"],
-                "trajectory": trajectory 
+                "trajectory": trajectory
             }
-            #print trip
+            # print trip
             self.db.BusTrip1.insert_one(trip)
             if i == len(individual) - 1:
                 self.insertTimeTable2(line, startTime, tripObjectList)
-        #self.insertTimeTable1(line, startTime, tripObjectList)
+        # self.insertTimeTable1(line, startTime, tripObjectList)

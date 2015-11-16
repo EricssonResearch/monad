@@ -16,7 +16,8 @@ global skills: [SQLSKILL] {
 	int weekDay <- 0 ;
 	int duration_hour_start <- 1;
 	int duration_hour_end <- 72;
-	int regular_user_flag <- 0;	
+	int regular_user_flag <- 0;
+	int regular_weekly_user_flag <- 0;	
 	
 	//counters for the data classify by time range
 	int counter_before_morning_rush <- 0;
@@ -30,6 +31,7 @@ global skills: [SQLSKILL] {
 	
 	//Matrix which keeps regular user info
 	matrix<string> regular_user2 <- matrix<string>(csv_file("../includes/Regular_user_info.csv","&"));
+	matrix<string> regular_user_weekly <- matrix<string>(csv_file("../includes/Regular_user_info_weekly.csv","&"));
 	int mx_index;
 	list spname_ls2 <- ['Kungshögarna','Regins väg','Valhalls väg','Huges väg','Topeliusgatan','Värnlundsgatan','Ferlinsgatan','Heidenstamstorg','Kantorsgatan','Djäknegatan',
 							 'Portalgatan','Höganäsgatan','Väderkvarnsgatan','Vaksala torg','Stadshuset','Skolgatan','Götgatan','Ekonomikum','Studentstaden','Rickomberga','Oslogatan',
@@ -136,8 +138,11 @@ species client skills: [SQLSKILL] {
 	float end_time_duration <- current_time + (duration_hour_end*3600000);
 	float va_titude <- (rnd(9999))/10000000 update: (rnd(9999))/10000000;
 	
-	float longitude <- 59.858 + va_titude;
-	float latitude <- 17.644 + va_titude;
+	float longitude <- 17.644 + va_titude;
+	float latitude <- 59.858 + va_titude;
+	int weekday <- mod(((current_time/1000) + float(13050000))/(24 * 60 * 60), 7);
+	 //+ 13050000
+	int weekday1 <- mod(13.5, 7);
 	
 		
 	float st_time;
@@ -243,6 +248,7 @@ species client skills: [SQLSKILL] {
 	string new_st_day_str;
 	string new_req_month_str;
 	string new_req_day_str;
+	list<int> user_habit;
 	
 	//list spname_ls2 <- ['Kungshögarna','Regins väg','Valhalls väg','Huges väg','Topeliusgatan','Värnlundsgatan','Ferlinsgatan','Heidenstamstorg','Kantorsgatan','Djäknegatan',
 	//						 'Portalgatan','Höganäsgatan','Väderkvarnsgatan','Vaksala torg','Stadshuset','Skolgatan','Götgatan','Ekonomikum','Studentstaden','Rickomberga','Oslogatan',
@@ -389,17 +395,63 @@ species client skills: [SQLSKILL] {
 		}
 	}
 		
-	
+	//regular_request_weekly
+	action regular_request_weekly{
+		loop i from: 0 to: (regular_user_weekly.rows - 1) {
+			if regular_user_weekly[1,i] = nil or regular_user_weekly[2,i] = nil {
+				break;
+			}
+			user_habit <- regular_user_weekly[9,i] split_with ',';
+			//write weekday;
+			
+			//To make weekday here same as what it is in python. 0 for Sunday, 6 for Satureday
+			if (weekday - 1) in user_habit{
+				if regular_user_weekly[1,i] = nil or regular_user_weekly[2,i] = nil {
+					write "regular_user_weekly is nil!"; 
+					break;
+				}
+				if regular_user_weekly[1,i] != 'null' {
+					org_st_time <- copy_between(regular_user_weekly[1,i], 11,19);
+				} else if regular_user_weekly[2,i] != 'null' {
+					org_st_time <- copy_between(regular_user_weekly[2,i], 11,19);
+				}
+
+				org_req_time <- copy_between(regular_user_weekly[3,i], 11,19);
+			
+				if regular_user_weekly[1,i] != 'null' {
+					start_time <- string(1970 + int(st_year) - 1)  + "-" + st_month + "-" + st_day + ' ' + org_st_time;
+					end_time <- regular_user_weekly[2,i];		
+				} else {
+					end_time <- string(1970 + int(st_year) - 1)  + "-" + st_month + "-" + st_day + ' ' + org_st_time;
+					start_time <- regular_user_weekly[1,i];					
+				}
+
+				user_name_str <- regular_user_weekly[0,i];
+				request_time <- string(1970 + int(year) - 1)  + "-" + month + "-" + day + ' ' + org_req_time;
+		
+				start_position <- regular_user_weekly[4,i];
+				end_position <- regular_user_weekly[5,i];
+				priority <- regular_user_weekly[6,i];
+				startPositionLatitude <- regular_user_weekly[7,i];
+				startPositionLongitude <- regular_user_weekly[8,i];
+		
+				save [user_name_str + "&" + start_time + "&" + end_time + "&" + request_time  + start_position + end_position + priority 
+						+ startPositionLatitude + startPositionLongitude
+				] 
+		    					to: "ClientRequest" type:csv;
+			}
+		}
+	}
+		
 	/* Executed every cycle to update start_time and request_time */
-	reflex update_att when: weekDay = 1 { 
+	reflex update_att when: (weekDay = 1) { 
 		
 		do priority;
 //		write va_titude;
 //		write regular_user2[0,1];
 		mor_rush <- (7.5 * 60 * 60 * 1000);
 		aft_rush <- (16.5 * 60 * 60 * 1000);
-				
-
+		
 		//Form request time (BOTH)
 		ct_y_index <- cur_time_str index_of "y";
 		year <- cur_time_str at (ct_y_index-3) + cur_time_str at (ct_y_index-2); 
@@ -436,12 +488,18 @@ species client skills: [SQLSKILL] {
 		}	
 
 		request_time <- string(1970 + int(year) - 1)  + "-" + month + "-" + day + " " + hour + ":" + minute+ ":" + second;
-		//	write request_time;
+		//write request_time;
 
 		//prepare start_time and end_time for both random and regular request
 		do normal_request;
 			
-		//if the request come from a reqular user
+		//Generate weekly habit user's request
+		if regular_weekly_user_flag = 0 {
+			do regular_request_weekly;
+			regular_weekly_user_flag <- 1;
+		}			
+		
+		//If the request come from a reqular user
 		//regular_request
 		if regular_user_flag = 0 {
 			do regular_request;
@@ -572,13 +630,19 @@ species client skills: [SQLSKILL] {
 		
 			//prepare start_time and end_time for both random and regular request
 			do normal_request;
+			
+			//Generate weekly habit user's request
+			if regular_weekly_user_flag = 0 {
+				do regular_request_weekly;
+				regular_weekly_user_flag <- 1;
+			}				
 					
 			//if the request come from a reqular user
 			//regular_request
 			if regular_user_flag = 0 {
 				do regular_request;
 				regular_user_flag <- 1;
-
+				
 			}else{
 				
 				mor_rush <- (10.5 * 60 * 60 * 1000);
