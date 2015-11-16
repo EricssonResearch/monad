@@ -1,5 +1,6 @@
-userId=403&null&2015-06-12 16:19:48&2015-06-11 10:19:38&stPosition=Stadshuset&edPosition=Kungshögarna&priority=distance&startPositionLatitude=17.644993&startPositionLongitude=59.858993
-userId=296531&2015-06-12 15:32:19&null&2015-06-11 10:19:38&stPosition=Sernanders väg&edPosition=Oslogatan&priority=time&startPositionLatitude=17.6447829&startPositionLongitude=59.858782899999994
-userId=229676&2015-06-12 15:24:37&null&2015-06-11 10:19:38&stPosition=Ekonomikum&edPosition=Oslogatan&priority=time&startPositionLatitude=17.644838699999998&startPositionLongitude=59.8588387
-userId=191610&null&2015-06-12 06:34:50&2015-06-11 10:19:38&stPosition=Sernanders väg&edPosition=Ihres väg&priority=time&startPositionLatitude=17.6446334&startPositionLongitude=59.858633399999995
-
+userId=403&null&2015-06-12 16:19:48&2015-06-11 10:19:38&stPosition=Stadshuset&edPosition=Kungshögarna&priority=distance&startPositionLatitude=59.858993&startPositionLongitude=17.644993
+userId=296531&2015-06-12 15:32:19&null&2015-06-11 10:19:38&stPosition=Sernanders väg&edPosition=Oslogatan&priority=time&startPositionLatitude=59.858782899999994&startPositionLongitude=17.6447829
+userId=229676&2015-06-12 15:24:37&null&2015-06-11 10:19:38&stPosition=Ekonomikum&edPosition=Oslogatan&priority=time&startPositionLatitude=59.8588387&startPositionLongitude=17.644838699999998
+userId=191610&null&2015-06-12 06:34:50&2015-06-11 10:19:38&stPosition=Sernanders väg&edPosition=Ihres väg&priority=time&startPositionLatitude=59.858633399999995&startPositionLongitude=17.6446334
+userId=1&2015-11-12 08:00:00&null&2015-11-12 07:00:00&stPosition=Centralstationen&edPosition=Polacksbacken&priority=time&startPositionLatitude=59.858401&startPositionLongitude=17.645222
+userId=1&2015-11-12 17:00:00&null&2015-11-12 16:00:00&stPosition=Polacksbacken&edPosition=Centralstationen&priority=time&startPositionLatitude=59.8407238&startPositionLongitude=17.6467723

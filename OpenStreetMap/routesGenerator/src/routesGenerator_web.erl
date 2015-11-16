@@ -77,8 +77,8 @@ loop(Req, DocRoot) ->
                 case Path of
                     "get_nearest_stop" ->
                         get_nearest_stop(Req);
-                    "get_nearest_stop_from_coordinates" ->
-                        get_nearest_stop_from_coordinates(Req);
+                    "get_nearest_stops_from_coordinates" ->
+                        get_nearest_stops_from_coordinates(Req);
                     "get_route_from_coordinates" ->
                         get_route_from_coordinates(Req);
                     "get_coordinates_from_address" ->
@@ -120,12 +120,13 @@ get_nearest_stop(Req) ->
             handle_error(Msg, Req)
     end.
 
-get_nearest_stop_from_coordinates(Req) ->
+get_nearest_stops_from_coordinates(Req) ->
     PostData = Req:parse_post(),
     Longitude = proplists:get_value("lon", PostData, "Anonymous"),
     Latitude = proplists:get_value("lat", PostData, "Anonymous"),
+    Distance = proplists:get_value("distance", PostData, "Anonymous"),
     PythonInstance = whereis(python_instance),
-    PythonInstance ! {<<"get_nearest_stop_from_coordinates">>, Longitude, Latitude, self()},
+    PythonInstance ! {<<"get_nearest_stops_from_coordinates">>, Longitude, Latitude, Distance, self()},
     receive
         {ok, Response} ->
             Req:respond({200, [{"Content-Type", "text/plain"}], Response});

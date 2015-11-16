@@ -73,6 +73,7 @@
 
     <string name="label_trips_join">搭乘</string>
 
+    <string name="label_search_search">高级搜索</string>
     <string name="label_search_shortesttriptime">最短路程</string>
     <string name="label_search_earliesttrip">最早出发</string>
     <string name="label_search_results">结果</string>
@@ -148,5 +149,10 @@
     <string name="java_trips_notripsbooked">您没有搭乘任何线路</string>
     <string name="java_languagerva_languagechanged">语言切换至</string>
     <string name="java_notificationsrva_newmessages">您收到了新信息</string>
-    <string name="label_search_search">高级搜索</string>
+    <string name="java_login_wrongcredential">用户名密码错误.请再次尝试</string>
+    <string name="java_profile_updatesuccess">个人资料已更新</string>
+    <string name="java_signupsuccess">注册成功</string>
+    <string name="java_pswd_resetsuccess">密码重置成功</string>
+    <string name="java_pswd_updatesuccess">密码更新成功</string>
+    <string name="java_settings_updatesuccess">设置更新成功</string>
 </resources>

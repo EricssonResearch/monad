@@ -17,9 +17,9 @@ import sys
 import math
 import time
 
-import Image, ImageDraw
+import Image
+import ImageDraw
 from xml.sax import make_parser, handler
-from heapq import heappush, heappop
 
 from aStar import AStar
 from busStop import BusStop
@@ -43,6 +43,7 @@ class RouteHandler(handler.ContentHandler):
     """
 
     def __init__(self):
+
         # all nodes in the map with Id as key
         self.nodes = {}
         # all nodes with coord as key id as value
@@ -128,9 +129,10 @@ class RouteHandler(handler.ContentHandler):
                                      roadTypeIndex, wayID=self.roadId)
                         if not oneway:
                             self.addEdge(self.nd[nd + 1], self.nd[nd],
-                                         maxspeed, roadTypeIndex, wayID=self.roadId)
+                                         maxspeed, roadTypeIndex,
+                                         wayID=self.roadId)
 
-                    self.roads[self.roadId] = [(roadName, junction, nd)]
+                    self.roads[self.roadId] = [(roadName, junction, self.nd)]
 
             # Add the name of the road to the address list if it is a road
             # with a name.
@@ -194,6 +196,12 @@ class RouteHandler(handler.ContentHandler):
                 self.addresses[key] = Address(street)
                 self.addresses[key].addNumber(number, self.nodes[node])
 
+    def makeRoadIntersectionGraph(self):
+        for road in self.roads:
+            # print self.roads[road]
+            pass
+        print len(self.roads)
+
 
 class Map:
     """
@@ -221,6 +229,7 @@ class Map:
         self.nodes = self.handler.nodes
         self.busStopList = self.handler.busStops
         self.edges = self.handler.roadMapGraph
+        self.handler.makeRoadIntersectionGraph()
 
     def getNodeIdFromCoordinates(self, coordinates):
         """
@@ -284,6 +293,31 @@ class Map:
                 dist = _dist
 
         return stop
+
+    def findBusStopsFromCoordinates(self, lon, lat, distance):
+        """
+        Find the bus stops to the position of (lon, lat) and that is in the
+        radius of distance.
+
+        :param lon: longitude float
+        :param lat: latitude float
+        :param distance: meters float
+        :return: list of tuples [(name, coordinates, distance)]
+        """
+
+        position = Coordinate(longitude=lon, latitude=lat)
+        busStops = []
+
+        for _stop in self.busStopList:
+            _dist = coordinate.measure(_stop, position)
+            if _dist <= distance:
+                busStops.append((_stop.name, _stop.coordinates, _dist))
+
+        if not busStops:
+            _closest = self.findClosestBusStopFromCoordinates(lon, lat)
+            _cdist = coordinate.measure(_closest, position)
+            busStops.append((_closest.name, _closest.coordinates, _cdist))
+        return busStops
 
     def findCoordinatesFromAdress(self, address, number=None):
         """
@@ -551,7 +585,7 @@ if __name__ == '__main__':
     myMap.parsData()
     print "Data loaded in: %f sec\n" % (time.time() - timer)
 
-    #print "We have " + str(len(myMap.nodes)) + " nodes in total"
+    """#print "We have " + str(len(myMap.nodes)) + " nodes in total"
     #print "We have " + str(len(myMap.busStopList)) + " bus stops in total\n"
 
     #print "Find a bus stop name: ", myMap.findBusStopName(17.6666581,
@@ -563,9 +597,9 @@ if __name__ == '__main__':
     #    myMap.getNodeIdFromCoordinates((17.6130204, 59.8545318)))
 
     #print "\nFinding path... "
-    ## flogsta vardcentral
+    ## Flogsta vårdcentral
     #nTo = 2198905720
-    ## polacksbacken
+    ## Polacksbacken
     #nFrom = 1125461154
 
     #timer = time.time()
@@ -584,7 +618,7 @@ if __name__ == '__main__':
     #wayP = myMap.getWayPointsFromPath(myPath)
 
     #print "Finding path with four points..."
-    ## Flogsta vardcentral
+    ## Flogsta vårdcentral
     #nTo = 2198905720
     ## Kungsgatan
     #nThrough = 25734373
@@ -623,4 +657,9 @@ if __name__ == '__main__':
     #print myMap.findRouteFromCoordinateList([
     #    (17.593290, 59.851252),
     #    (17.647628, 59.840427)
-    #])
+    #])"""
+
+    coord = myMap.nodes[1125461154]
+    print myMap.findBusStopsFromCoordinates(coord.longitude+1,
+                                            coord.latitude+1,
+                                            0.0)

@@ -96,12 +96,15 @@ public class ProfileActivity extends MenuedActivity {
         } catch (ExecutionException e) {
             e.printStackTrace();
         }
-        Toast.makeText(getApplicationContext(), response, Toast.LENGTH_LONG).show();
 
         if(response.startsWith("Success (1)")){
+            Toast.makeText(getApplicationContext(), getString(R.string.java_profile_updatesuccess), Toast.LENGTH_LONG).show();
             usernameField.setText(ClientAuthentication.getUsername());
             emailField.setText(ClientAuthentication.getEmail());
             phoneField.setText(ClientAuthentication.getPhone());
+        }
+        else{
+            Toast.makeText(getApplicationContext(), response, Toast.LENGTH_LONG).show();
         }
     }
 }

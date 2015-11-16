@@ -15,7 +15,7 @@ import ast
 import multiprocessing
 import requests
 
-ROUTES_GENERATOR_HOST = 'http://localhost:'
+ROUTES_GENERATOR_HOST = 'http://130.238.15.114:'
 ROUTES_GENERATOR_PORT = '9998'
 
 headers = {'Content-type': 'application/x-www-form-urlencoded'}
@@ -46,9 +46,10 @@ def string_to_coordinates(string):
     return response.json()
 
 
-def coordinates_to_nearest_stop(longitude, latitude):
+def coordinates_to_nearest_stops(longitude, latitude, distance):
     """
-    Finds the nearest bus stop according to the coordinates supplied.
+    Finds the nearest bus stops according to the coordinates supplied and the
+    maximum distance.
 
     :param longitude: float
     :param latitude: float
@@ -56,16 +57,46 @@ def coordinates_to_nearest_stop(longitude, latitude):
                             name: String, name of the bus stop
                             latitude: float
                             longitude: float
+                            distance: float
                             }
     """
     url = (ROUTES_GENERATOR_HOST +
            ROUTES_GENERATOR_PORT +
-           '/get_nearest_stop_from_coordinates')
+           '/get_nearest_stops_from_coordinates')
 
-    data = {'lat': latitude, 'lon': longitude}
+    data = {'lat': latitude, 'lon': longitude, 'distance': distance}
     response = requests.post(url, data=data, headers=headers)
 
-    return response.json()
+    responseJson = response.json()
+
+    responseJson['bus_stops'] = ast.literal_eval(responseJson['bus_stops'])
+
+    return responseJson
+
+
+def coordinates_to_nearest_stop(longitude, latitude):
+    """
+
+    :param longitude:
+    :param latitude:
+    :return:
+    """
+    url = (ROUTES_GENERATOR_HOST +
+           ROUTES_GENERATOR_PORT +
+           '/get_nearest_stops_from_coordinates')
+
+    data = {'lat': latitude, 'lon': longitude, 'distance': 0.0}
+    response = requests.post(url, data=data, headers=headers)
+
+    responseJson = response.json()
+    responseJson['bus_stops'] = ast.literal_eval(responseJson['bus_stops'])
+
+    busStop = {}
+    busStop['_id'] = responseJson['_id']
+    busStop['name'] = responseJson['bus_stops'][0][0]
+    busStop['longitude'] = responseJson['bus_stops'][0][1][0]
+    busStop['latitude'] = responseJson['bus_stops'][0][1][1]
+    return busStop
 
 
 def get_route(coordinates_list):
@@ -104,11 +135,12 @@ def get_route(coordinates_list):
 
 
 if __name__ == '__main__':
-    print string_to_coordinates("sErnanders vÄG")
+    print string_to_coordinates("Polacksbacken")
     print string_to_coordinates("SernandeRs VäG 10")
     print get_route([(17.6130204, 59.8545318),
                      (17.5817552, 59.8507556),
                      (17.6476356, 59.8402173)])
     print get_route([])
-    print coordinates_to_nearest_stop(latitude=59.8710848,
-                                      longitude=17.6546528)
+    print coordinates_to_nearest_stops(latitude=59.8710848,
+                                       longitude=17.6546528,
+                                       distance=1300.0)

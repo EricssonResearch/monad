@@ -19,7 +19,7 @@ import re
 
 from router import Map
 
-#the_map = Map("testmap.xml")
+# the_map = Map("testmap.xml")
 the_map = Map("../UppsalaTest.osm")
 
 
@@ -39,11 +39,12 @@ def message_handler(message):
             address = message[1]
             pid = message[2]
             get_nearest_stop(address, pid)
-        elif message[0] == Atom('get_nearest_stop_from_coordinates'):
+        elif message[0] == Atom('get_nearest_stops_from_coordinates'):
             lon = message[1]
             lat = message[2]
-            pid = message[3]
-            get_nearest_stop_from_coordinates(lon, lat, pid)
+            dist = message[3]
+            pid = message[4]
+            get_nearest_stops_from_coordinates(lon, lat, dist, pid)
         elif message[0] == Atom('get_route_from_coordinates'):
             list = message[1]
             pid = message[2]
@@ -76,16 +77,20 @@ def get_nearest_stop(address, pid):
     cast(pid, response)
 
 
-def get_nearest_stop_from_coordinates(lon, lat, pid):
+def get_nearest_stops_from_coordinates(lon, lat, distance, pid):
     longitude = ''.join(chr(i) for i in lon)
     latitude = ''.join(chr(i) for i in lat)
-    bus_stop = the_map.findClosestBusStopFromCoordinates(float(longitude),
-                                                         float(latitude))
+    distance = ''.join(chr(i) for i in distance)
+
+    bus_stop_list = the_map.findBusStopsFromCoordinates(float(longitude),
+                                                        float(latitude),
+                                                        float(distance))
+
     busStop = {}
     busStop['_id'] = "1234"
-    busStop['name'] = bus_stop.name
-    busStop['longitude'] = bus_stop.longitude
-    busStop['latitude'] = bus_stop.latitude
+    busStop['bus_stops'] = str(bus_stop_list)
+    #busStop['longitude'] = "lon" #"bus_stop.longitude
+    #busStop['latitude'] = "lat " #bus_stop.latitude
     response = Atom("ok"), dumps(busStop)
     cast(pid, response)
 
