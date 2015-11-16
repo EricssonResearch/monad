@@ -1,5 +1,6 @@
 package se.uu.csproject.monadclient;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -30,6 +31,8 @@ public class LoginActivity extends AppCompatActivity implements AsyncLoginIntera
     private EditText usernameField;
     private EditText passwordField;
     private SignInButton googleLogInButton;
+
+    private ProgressDialog pd;
 //    private TextView wrongCredentialsTextView;
 
     //Google Cloud Services
@@ -40,6 +43,13 @@ public class LoginActivity extends AppCompatActivity implements AsyncLoginIntera
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        pd = new ProgressDialog(this);
+        pd.setTitle("Processing...");
+        pd.setMessage("Please wait.");
+        pd.setCancelable(false);
+        pd.setCanceledOnTouchOutside(false);
+        pd.setIndeterminate(true);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.actionToolBar);
         setSupportActionBar(toolbar);
@@ -141,13 +151,14 @@ public class LoginActivity extends AppCompatActivity implements AsyncLoginIntera
 
     public void login() {
         new LoginTask(this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, usernameField.getText().toString(),
-                                              passwordField.getText().toString());
+                passwordField.getText().toString());
+        pd.show();
         clearUsernameAndPasswordFields();
     }
 
     @Override
     public void processReceivedLoginResponse(String response) {
-
+        pd.dismiss();
         /* If the response starts with the specific word, it means the user logged in successfully */
         if (response.startsWith("Success (1)")) {
 //            Toast.makeText(getApplicationContext(), "Welcome to MoNAD", Toast.LENGTH_LONG).show();
@@ -155,7 +166,7 @@ public class LoginActivity extends AppCompatActivity implements AsyncLoginIntera
             finish();
         }
         else if (response.equals("Wrong Credentials (0)")) {
-            Toast.makeText(getApplicationContext(), "Invalid Credentials - Please, try again", Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), getString(R.string.java_login_wrongcredential), Toast.LENGTH_LONG).show();
 //            wrongCredentialsTextView.setVisibility(View.VISIBLE);
         }
         else {

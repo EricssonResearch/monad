@@ -77,9 +77,13 @@ public class ResetPasswordActivity extends MenuedActivity {
                     } catch (ExecutionException e) {
                         e.printStackTrace();
                     }
-                    Toast.makeText(getApplicationContext(), response, Toast.LENGTH_LONG).show();
+
                     if(response.startsWith("Success (1)")) {
+                        Toast.makeText(getApplicationContext(), getString(R.string.java_pswd_resetsuccess), Toast.LENGTH_LONG).show();
                         finish();
+                    }
+                    else {
+                        Toast.makeText(getApplicationContext(), response, Toast.LENGTH_LONG).show();
                     }
                 }
                 else {
@@ -95,9 +99,13 @@ public class ResetPasswordActivity extends MenuedActivity {
                     } catch (ExecutionException e) {
                         e.printStackTrace();
                     }
-                    Toast.makeText(getApplicationContext(), response, Toast.LENGTH_LONG).show();
+
                     if(response.startsWith("Success (1)")) {
+                        Toast.makeText(getApplicationContext(), getString(R.string.java_pswd_updatesuccess), Toast.LENGTH_LONG).show();
                         finish();
+                    }
+                    else {
+                        Toast.makeText(getApplicationContext(), response, Toast.LENGTH_LONG).show();
                     }
                 }
             }

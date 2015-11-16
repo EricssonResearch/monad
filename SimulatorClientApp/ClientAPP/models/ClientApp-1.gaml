@@ -138,8 +138,8 @@ species client skills: [SQLSKILL] {
 	float end_time_duration <- current_time + (duration_hour_end*3600000);
 	float va_titude <- (rnd(9999))/10000000 update: (rnd(9999))/10000000;
 	
-	float longitude <- 59.858 + va_titude;
-	float latitude <- 17.644 + va_titude;
+	float longitude <- 17.644 + va_titude;
+	float latitude <- 59.858 + va_titude;
 	int weekday <- mod(((current_time/1000) + float(13050000))/(24 * 60 * 60), 7);
 	 //+ 13050000
 	int weekday1 <- mod(13.5, 7);
@@ -404,7 +404,8 @@ species client skills: [SQLSKILL] {
 			user_habit <- regular_user_weekly[9,i] split_with ',';
 			//write weekday;
 			
-			if weekday in user_habit{
+			//To make weekday here same as what it is in python. 0 for Sunday, 6 for Satureday
+			if (weekday - 1) in user_habit{
 				if regular_user_weekly[1,i] = nil or regular_user_weekly[2,i] = nil {
 					write "regular_user_weekly is nil!"; 
 					break;
@@ -641,7 +642,7 @@ species client skills: [SQLSKILL] {
 			if regular_user_flag = 0 {
 				do regular_request;
 				regular_user_flag <- 1;
-
+				
 			}else{
 				
 				mor_rush <- (10.5 * 60 * 60 * 1000);
