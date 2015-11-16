@@ -629,6 +629,12 @@ species client skills: [SQLSKILL] {
 		
 			//prepare start_time and end_time for both random and regular request
 			do normal_request;
+			
+			//Generate weekly habit user's request
+			if regular_weekly_user_flag = 0 {
+				do regular_request_weekly;
+				regular_weekly_user_flag <- 1;
+			}				
 					
 			//if the request come from a reqular user
 			//regular_request
