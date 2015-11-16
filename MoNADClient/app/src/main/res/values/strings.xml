@@ -181,4 +181,10 @@
     <string name="java_trips_samebooking">You have already booked this trip</string>
     <string name="java_languagerva_languagechanged">Language changed to</string>
     <string name="java_notificationsrva_newmessages">You have received new messages</string>
+    <string name="java_login_wrongcredential">Invalid credentials. Please, try again.</string>
+    <string name="java_profile_updatesuccess">Profile updated successfully</string>
+    <string name="java_signupsuccess">Signup succeeded</string>
+    <string name="java_pswd_resetsuccess">Password reset successfully</string>
+    <string name="java_pswd_updatesuccess">Password updated successfully</string>
+    <string name="java_settings_updatesuccess">Settings updated successfully</string>
 </resources>

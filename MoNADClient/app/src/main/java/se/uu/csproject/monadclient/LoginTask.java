@@ -1,5 +1,6 @@
 package se.uu.csproject.monadclient;
 
+import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -9,6 +10,11 @@ public class LoginTask extends AsyncTask <String, Void, String> {
 
     public LoginTask(AsyncLoginInteraction callingClass) {
         this.callingClass = callingClass;
+    }
+
+    @Override
+    protected void onPreExecute() {
+        super.onPreExecute();
     }
 
     @Override

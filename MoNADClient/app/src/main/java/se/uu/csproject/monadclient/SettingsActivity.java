@@ -77,7 +77,7 @@ public class SettingsActivity extends MenuedActivity {
             }
 
             if(response.startsWith("Success (1)")){
-                Toast.makeText(this, response, Toast.LENGTH_LONG).show();
+                Toast.makeText(this, getString(R.string.java_settings_updatesuccess), Toast.LENGTH_LONG).show();
                 ClientAuthentication.setIfSettingsChanged(false);
             }
             else{
