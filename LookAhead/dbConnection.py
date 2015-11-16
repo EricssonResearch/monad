@@ -36,7 +36,7 @@ class DB():
     hoursDay = 24
     minutesHour = 60
     formatTime = '%H:%M'
-    yesterday = datetime.datetime(2015, 11, 11)
+    yesterday = datetime.datetime(2015, 11, 16)
     
 
     # ---------------------------------------------------------------------------------------------------------------------------------------
@@ -247,7 +247,7 @@ class DB():
                    {"$group": {"_id": {"RequestTime": "$startTime", "BusStop": "$startBusStop"}, "total": {"$sum": 1}}},
                    {"$sort": {"_id.RequestTime": 1}}]
         '''
-        pipeline = [{"$match": {"requestTime": {"$gte": start, "$lt": end}}},
+        pipeline = [{"$match": {"startTime": {"$gte": start, "$lt": end}}},
                    {"$group": {"_id": {"RequestTime": "$startTime", "BusStop": "$startBusStop", "line": "$line"}, "total": {"$sum": 1}}},
                    {"$sort": {"_id.RequestTime": 1}}]
         # groupQuery = self.db.TravelRequestLookAhead.aggregate(pipline)
