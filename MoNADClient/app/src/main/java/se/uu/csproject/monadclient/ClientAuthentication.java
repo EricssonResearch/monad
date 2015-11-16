@@ -742,11 +742,11 @@ public class ClientAuthentication extends Authentication {
                     long tempBusID = (long) trip.get("busID");
                     int busID = new BigDecimal(tempBusID).intValueExact();
 
-                    String startBusStop = (String) trip.get("startPlace");
+                    String startBusStop = (String) trip.get("startBusStop");
                     JSONObject startTimeObject = (JSONObject) trip.get("startTime");
                     Date startTime = new Date((long) startTimeObject.get("$date"));
 
-                    String endBusStop = (String) trip.get("endPlace");
+                    String endBusStop = (String) trip.get("endBusStop");
                     JSONObject endTimeObject = (JSONObject) trip.get("endTime");
                     Date endTime = new Date((long) endTimeObject.get("$date"));
 
@@ -766,8 +766,11 @@ public class ClientAuthentication extends Authentication {
                     partialTrips.add(partialTrip);
                 }
                 FullTrip fullTrip = new FullTrip(partialTrips);
-                Storage.addRecommendation(fullTrip);
+                if (!fullTrip.isHistory()) {
+                    Storage.addRecommendation(fullTrip);
+                }
             }
+            Storage.sortRecommendations();
         }
         catch (ParseException e) {
             e.printStackTrace();

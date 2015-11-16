@@ -259,12 +259,12 @@ def application(env, start_response):
 					collection.update({"_id": objectID}, {"$set": {"booked": True}}, upsert = False)
 					document = collection.find_one({"$and": [{"_id": objectID}, {"next": {'$exists': True}}]})	
 					
-				collection = database.TravelRequest
-				collection.update({"_id": requestId}, {"$set": {"reservedTrip": ObjectId(userTripId)}}, upsert = False)
-
 				collection = database.BookedTrip
 				document = {"userID": userId, "partialTrips": partialTrips}
 				collection.insert_one(document)
+					
+				"""collection = database.TravelRequest
+				collection.update({"_id": requestId}, {"$set": {"reservedTrip": ObjectId(userTripId)}}, upsert = False)"""				
 				
 			except pymongo.errors.PyMongoError as e:
 				start_response("500 INTERNAL ERROR", [("Content-Type", "text/plain")])	
@@ -311,8 +311,8 @@ def application(env, start_response):
 					collection.update({"_id": objectID}, {"$set": {"booked": False}}, upsert = False)
 					document = collection.find_one({"$and": [{"_id": objectID}, {"next": {'$exists': True}}]})
 					
-				collection = database.TravelRequest
-				collection.update({"_id": requestId}, {"$unset": {"reservedTrip": 1}})				
+				"""collection = database.TravelRequest				
+				collection.update({"_id": requestId}, {"$unset": {"reservedTrip": 1}})"""				
 				
 			except pymongo.errors.PyMongoError as e:
 				start_response("500 INTERNAL ERROR", [("Content-Type", "text/plain")])	
@@ -347,7 +347,7 @@ def application(env, start_response):
 					# Delete bookings more than the specified days old
 					cursor = collection.find_one({"_id": partialTripIDs[0]})
 					if ((datetime.now() - cursor["startTime"]).days 
-							> serverConfig.NUMBER_OF_DAYS_TO_KEEP_USER_BOOKINGS):						
+							>= serverConfig.NUMBER_OF_DAYS_TO_KEEP_USER_BOOKINGS):						
 						collection = database.BookedTrip	
 						collection.delete_one({"_id": bookedTrip["_id"]})
 						collection = database.UserTrip
