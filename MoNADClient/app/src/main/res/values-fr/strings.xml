@@ -8,7 +8,7 @@
     <string name="action_search">Accueil</string>
     <string name="action_settings">Paramètres</string>
     <string name="action_signout">Déconnexion</string>
-    <string name="hello_world">Wesh tout l\'monde!</string>
+    <string name="hello_world">Hello world!</string>
     <string name="label_login_anonymous">Rester anonyme</string>
     <string name="label_login_login">Connexion</string>
     <string name="label_login_newuser">Nouvel Utilisateur? Créer un compte</string>
@@ -123,4 +123,8 @@
     <string name="java_main_leftmonad">Vous avez quitté MoNAD</string>
     <string name="java_main_exitmonad">Voulez-vous quitter MoNAD?</string>
     <string name="java_passwordsnomatch">Les mots de passe ne correspondent pas!</string>
+    <string name="java_googleplayloginwarning">Sans Google Play Services, vous ne pouvez pas vous connecter avec votre compte Google</string>
+    <string name="java_trips_samebooking">Vous avez déjà réservé ce voyage</string>
+    <string name="label_search_search">Recherche</string>
+    <string name="java_accountpermissionwarning">Vous ne pouvez pas vous connecter avec votre compte Google sans nous donner accés aux informations de votre compte </string>
 </resources>

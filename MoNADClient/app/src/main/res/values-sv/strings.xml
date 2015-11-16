@@ -166,4 +166,8 @@
     <string name="java_trips_samebooking">Du har redan bokat den här resan</string>
     <string name="java_languagerva_languagechanged">Språkinställningen har ändrats till</string>
     <string name="java_notificationsrva_newmessages">Du har ett nytt meddelande</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="label_searchresult_routeinfo">n/a till n/a</string>
+    <string name="label_searchresult_timeinfo">n/a - n/a (n/a min)</string>
+    <string name="non_available">n/a</string>
 </resources>

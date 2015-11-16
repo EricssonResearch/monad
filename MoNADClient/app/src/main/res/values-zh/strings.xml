@@ -148,4 +148,5 @@
     <string name="java_trips_notripsbooked">您没有搭乘任何线路</string>
     <string name="java_languagerva_languagechanged">语言切换至</string>
     <string name="java_notificationsrva_newmessages">您收到了新信息</string>
+    <string name="label_search_search">高级搜索</string>
 </resources>
