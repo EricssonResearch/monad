@@ -39,14 +39,13 @@ def get_nearest_stop(address):
     print_lock.release()
 
 
-def get_nearest_stop_from_coordinates():
-    url = ROUTES_GENERATOR_HOST + ROUTES_GENERATOR_PORT + '/get_nearest_stop_from_coordinates'
+def get_nearest_stops_from_coordinates():
+    url = ROUTES_GENERATOR_HOST + ROUTES_GENERATOR_PORT + '/get_nearest_stops_from_coordinates'
     #data = {'lon': 17.6666581, 'lat': 59.8556742}
-    data = {'lat': 59.8578199, 'lon': 17.6093985}
-    data_json = json.dumps(data)
+    data = {'lat': 59.8578199, 'lon': 17.6093985, 'distance': 300}
     response = requests.post(url, data=data, headers=headers)
     print_lock.acquire()
-    print '\nRequest: get_nearest_stop_from_coordinates' \
+    print '\nRequest: get_nearest_stops_from_coordinates' \
           '\nData: ', data, \
           '\nResponse status: ', response.status_code, \
           '\nResponse: ', response.text, '\n'
@@ -95,7 +94,7 @@ if __name__ == '__main__':
     #pool = multiprocessing.Pool(processes = 5)
     #pool.map(get_nearest_stop, [i for i in range(0, 1000)])
     print "----- test1 -----"
-    get_nearest_stop_from_coordinates()
+    get_nearest_stops_from_coordinates()
     #print "----- test2 -----"
     #get_nearest_stop(1)
     print "----- test3 -----"
