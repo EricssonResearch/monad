@@ -122,7 +122,7 @@ public class SearchActivity extends MenuedActivity implements
         String line;
 
         try{
-            BufferedReader reader = new BufferedReader( new InputStreamReader(getAssets().open("addresses.txt")));
+            BufferedReader reader = new BufferedReader(new InputStreamReader(getAssets().open("addresses.txt")));
             while ((line = reader.readLine()) != null) {
                 addressesList.add(line);
             }

@@ -26,6 +26,16 @@
             android:contentDescription="@string/img_description"
             />
 
+        <TextView
+            android:id="@+id/busNumber"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:text="@string/non_available"
+            android:layout_alignBaseline="@+id/label_arrivaltime"
+            android:layout_alignBottom="@+id/label_arrivaltime"
+            android:layout_centerHorizontal="true" />
+
         <!--text: from to-->
         <TextView
             android:id="@+id/info_tripsactivity_from3"

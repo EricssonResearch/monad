@@ -11,6 +11,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -172,12 +173,12 @@ public class SettingsActivity extends MenuedActivity {
             }
             else if(page == 2){
                 layout = inflater.inflate(R.layout.fragment_settings_alerts,container,false);
-                final Switch switchrecommendation;
-                final Switch switchalert;
+                final SwitchCompat switchrecommendation;
+                final SwitchCompat switchalert;
 
                 // switch button for alerts and recommendations
-                switchrecommendation = (Switch)layout.findViewById(R.id.switch_fragmentsettingsalert_recommendations);
-                switchalert = (Switch)layout.findViewById(R.id.switch_fragmentsettingsalert_alerts);
+                switchrecommendation = (SwitchCompat)layout.findViewById(R.id.switch_fragmentsettingsalert_recommendations);
+                switchalert = (SwitchCompat)layout.findViewById(R.id.switch_fragmentsettingsalert_alerts);
                 if(ClientAuthentication.getRecommendationsAlert().equals("1")) {
                     switchrecommendation.setChecked(true);
                 }
@@ -278,12 +279,12 @@ public class SettingsActivity extends MenuedActivity {
 
         private void initializeLanguages(List<Language> languages){
             languages.add(new Language("English", "en", R.drawable.lang_en));
+            languages.add(new Language("Svenska", "sv", R.drawable.lang_sv));
             languages.add(new Language("Français", "fr", R.drawable.lang_fr));
+            languages.add(new Language("Norsk", "no", R.drawable.lang_no));
             languages.add(new Language("中文", "zh", R.drawable.lang_zh));
-//            languages.add(new Language("Svenska", "sv", R.drawable.lang_sv));
 //            languages.add(new Language("Dansk", "dk", R.drawable.lang_dk));
 //            languages.add(new Language("Deutsch", "de", R.drawable.lang_de));
-//            languages.add(new Language("Norsk", "nr", R.drawable.lang_nr));
 //            languages.add(new Language("Suomi", "fi", R.drawable.lang_fi));
         }
     }
