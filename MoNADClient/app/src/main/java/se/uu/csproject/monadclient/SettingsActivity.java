@@ -11,6 +11,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -172,12 +173,12 @@ public class SettingsActivity extends MenuedActivity {
             }
             else if(page == 2){
                 layout = inflater.inflate(R.layout.fragment_settings_alerts,container,false);
-                final Switch switchrecommendation;
-                final Switch switchalert;
+                final SwitchCompat switchrecommendation;
+                final SwitchCompat switchalert;
 
                 // switch button for alerts and recommendations
-                switchrecommendation = (Switch)layout.findViewById(R.id.switch_fragmentsettingsalert_recommendations);
-                switchalert = (Switch)layout.findViewById(R.id.switch_fragmentsettingsalert_alerts);
+                switchrecommendation = (SwitchCompat)layout.findViewById(R.id.switch_fragmentsettingsalert_recommendations);
+                switchalert = (SwitchCompat)layout.findViewById(R.id.switch_fragmentsettingsalert_alerts);
                 if(ClientAuthentication.getRecommendationsAlert().equals("1")) {
                     switchrecommendation.setChecked(true);
                 }
