@@ -50,5 +50,11 @@
         <item name="colorAccent">@color/primaryColor</item>
     </style>
 
+    <style name="Color1SwitchStyle" parent = "Theme.AppCompat">
+        <item name="colorControlActivated">@color/primaryColor</item>
+        <item name="android:colorForeground">@color/accentColor</item>
+
+    </style>
+
 
 </resources>

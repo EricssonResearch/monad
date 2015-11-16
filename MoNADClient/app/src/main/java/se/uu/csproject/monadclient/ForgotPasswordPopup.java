@@ -46,7 +46,7 @@ public class ForgotPasswordPopup extends AppCompatActivity {
                                 Toast.LENGTH_LONG).show();
                         Intent intent = new Intent(v.getContext(), ConfirmCodePopup.class);
                         intent.putExtra("EMAIL", email);
-                        intent.putExtra("CODE", response.substring(1));
+                        intent.putExtra("CODE", response);
                         startActivity(intent);
                         finish();
                     } catch (InterruptedException e) {
