@@ -68,7 +68,7 @@
                 style="@style/whiteText"
                 android:textSize="@dimen/medium_text"
                 android:padding="@dimen/medium_padding"
-
+                android:layout_alignParentStart="true"
                 android:layout_alignParentLeft="true"
                 />
 
@@ -81,7 +81,8 @@
                 android:textSize="@dimen/medium_text"
                 android:padding="@dimen/medium_padding"
                 android:layout_alignBottom="@+id/departname"
-                android:layout_alignParentRight="true"/>
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"/>
 
             <TextView
                 android:id="@+id/arrivename"
@@ -103,9 +104,8 @@
                 android:textSize="@dimen/medium_text"
                 android:padding="@dimen/medium_padding"
                 android:layout_centerVertical="true"
-
                 android:layout_alignBottom="@id/arrivename"
-
+                android:layout_alignParentStart="true"
                 android:layout_alignParentLeft="true"/>
 
             <TextView
@@ -117,6 +117,7 @@
                 android:textSize="@dimen/medium_text"
                 android:padding="@dimen/medium_padding"
                 android:layout_alignBottom="@id/arrivename"
+                android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true" />
         </RelativeLayout>
 
