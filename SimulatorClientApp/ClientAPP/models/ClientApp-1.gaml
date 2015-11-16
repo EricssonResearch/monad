@@ -404,7 +404,8 @@ species client skills: [SQLSKILL] {
 			user_habit <- regular_user_weekly[9,i] split_with ',';
 			//write weekday;
 			
-			if weekday in user_habit{
+			//To make weekday here same as what it is in python. 0 for Sunday, 6 for Satureday
+			if (weekday - 1) in user_habit{
 				if regular_user_weekly[1,i] = nil or regular_user_weekly[2,i] = nil {
 					write "regular_user_weekly is nil!"; 
 					break;
@@ -641,7 +642,7 @@ species client skills: [SQLSKILL] {
 			if regular_user_flag = 0 {
 				do regular_request;
 				regular_user_flag <- 1;
-
+				
 			}else{
 				
 				mor_rush <- (10.5 * 60 * 60 * 1000);
