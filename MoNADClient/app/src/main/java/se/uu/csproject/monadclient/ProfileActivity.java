@@ -18,7 +18,7 @@ public class ProfileActivity extends MenuedActivity {
 
     Toolbar toolbar;
     Button submitButton;
-    AppCompatButton passwordButton;
+    Button passwordButton;
     private EditText usernameField;
     private EditText emailField;
     private EditText phoneField;
@@ -54,7 +54,7 @@ public class ProfileActivity extends MenuedActivity {
             }
         });
 
-        passwordButton = (AppCompatButton) findViewById(R.id.button_changepassword);
+        passwordButton = (Button) findViewById(R.id.button_changepassword);
         passwordButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
