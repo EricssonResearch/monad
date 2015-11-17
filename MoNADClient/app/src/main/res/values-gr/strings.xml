@@ -4,7 +4,6 @@
 
     <!--Activity titles (label displayed on the Toolbar)-->
     <string name="title_activity_about_us">Σχετικά με εμάς</string>
-    <string name="title_activity_login" translatable="false">MoNAD</string>
     <string name="title_activity_main">Αναζήτηση</string>
     <string name="title_activity_notifications">Ειδοποιήσεις</string>
     <string name="title_activity_profile">Προφίλ</string>
@@ -34,7 +33,6 @@
     <string name="label_aboutus_projectName">Όνομα εργασίας</string>
     <string name="label_aboutus_project">Εργασία φοιτητών Ε.Υ. Ουψάλας 2015 (MoNAD)</string>
     <string name="label_aboutus_productowner">Ιδιοκτήτης προϊόντος</string>
-    <string name="label_aboutus_product" translatable="false">Ericsson</string>
     <string name="label_aboutus_description">Περιγραφή</string>
     <string name="label_aboutus_texttitle">Σχετικά με εμάς</string>
     <string name="label_aboutus_descriptiontext">Το MoNAD είναι μια εργασία υπό ανάπτυξη από τους μεταπτυχιακούς φοιτητές του Πανεπιστημίου της Ουψάλα.</string>
@@ -114,7 +112,6 @@
     <!--Settings - Alert settings -->
     <string name="label_fragmentsettingsalert_recommendation">Προτάσεις</string>
     <string name="label_fragmentsettingsalert_alert">Υπενθυμίσεις ταξιδιών</string>
-    <string name="label_fragmentsettingsalert_recommendationsswitch" translatable="false">ON </string>
 
     <!-- Settings - Theme settings -->
     <string name="label_fragmentsettingstheme_light">Ανοιχτό</string>
@@ -124,12 +121,10 @@
     <!--Popup - Confirmation Code -->
     <string name="label_confirmcode_codesent">Κωδικός επιβεβαίωσης εστάλη!</string>
     <string name="label_confirmcode_code">Κωδικός επιβεβαίωσης</string>
-    <string name="label_confirmcode_codehint" translatable="false">000000</string>
     <string name="label_confirmcode_submit">Υποβολή</string>
 
     <!--Popup - Forgotten Password -->
     <string name="label_forgotpassword_enteremail">Παρακαλούμε εισάγετε email</string>
-    <string name="label_forgotpassword_emailhint" translatable="false">somebody@example.com</string>
     <string name="label_forgotpassword_email">Διεύθυνση email</string>
 
     <!--Popup - Route Confirmation -->
@@ -140,9 +135,6 @@
     <string name="label_trip_businfo">Λεωφορείο </string>
     <string name="label_tripsactivity_from">Από</string>
     <string name="label_tripsactivity_to">Προς</string>
-    <string name="label_tripsactivity_time" translatable="false">00:00</string>
-    <string name="label_tripsactivity_countdown" translatable="false">00:00:00</string>
-    <string name="label_tripsactivity_date" translatable="false">00/00/00</string>
 
     <!--Popup - Trip Cancellation -->
     <string name="label_tripcancel_buttonback">Πίσω</string>
@@ -153,7 +145,6 @@
     <string name="img_description">Μη διαθέσιμη εικόνα</string>
     <string name="non_available">μ/δ</string>
     <string name="hello_world">Γεια σου κόσμε!</string>
-    <string name="GoogleProjectID" translatable="false">81265551950</string>
     <string name="java_to">προς</string>
     <string name="java_yes">Ναι</string>
     <string name="java_cancel">Ακύρο</string>
