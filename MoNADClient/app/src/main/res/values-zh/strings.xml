@@ -132,7 +132,9 @@
     <string name="java_tripinprogress">进行中</string>
     <string name="java_passwordsnomatch">密码不匹配!</string>
     <string name="java_locationpermissionwarning">如果您拒绝发送您的当前位置，我们将无法使用您的位置信息来搜索合适的公交线路</string>
+    <string name="java_accountpermissionwarning">如果您拒绝我们访问您的Google账户，您将无法用它来登陆</string>
     <string name="java_googleplaywarning">如果您不启用Google Play服务，我们将无法使用您的位置信息来搜索合适的公交线路</string>
+    <string name="java_googleplayloginwarning">如果您不启用Google Play服务，您将无法用您的Google账户来登陆</string>
     <string name="java_confirmcode_error">验证码错误。请再试一次</string>
     <string name="java_forgotpassword_codesent">验证码已发送至您的邮箱，请查收邮件并输入验证码</string>
     <string name="java_main_noresults">无法找到任何到达该目的地的路线，请尝试高级搜索</string>
@@ -146,7 +148,8 @@
     <string name="java_settings_themechanged_light">主题切换至浅色</string>
     <string name="java_settings_themechanged_default">主题切换至默认</string>
     <string name="java_settings_themechanged_dark">主题切换至深色</string>
-    <string name="java_trips_notripsbooked">您没有搭乘任何线路</string>
+    <string name="java_trips_notripsbooked">您没有预定任何线路</string>
+    <string name="java_trips_samebooking">您已经预定了该线路</string>
     <string name="java_languagerva_languagechanged">语言切换至</string>
     <string name="java_notificationsrva_newmessages">您收到了新信息</string>
     <string name="java_login_wrongcredential">用户名密码错误.请再次尝试</string>
