@@ -113,7 +113,6 @@
     <!--Settings - Alert settings -->
     <string name="label_fragmentsettingsalert_recommendation">Recommendations</string>
     <string name="label_fragmentsettingsalert_alert">Reminders about trips</string>
-    <string name="label_fragmentsettingsalert_recommendationsswitch" translatable="false">ON </string>
 
     <!-- Settings - Theme settings -->
     <string name="label_fragmentsettingstheme_light">Light</string>

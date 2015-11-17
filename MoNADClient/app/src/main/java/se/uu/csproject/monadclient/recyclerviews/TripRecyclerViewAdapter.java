@@ -158,7 +158,20 @@ public class TripRecyclerViewAdapter
         }
         // if the trip already happened
         else {
-            tripViewHolder.feedback.setRating(trips.get(i).getFeedback());
+            int feedback = trips.get(i).getFeedback();
+            tripViewHolder.feedback.setRating(feedback);
+            if(feedback == -1) {
+                tripViewHolder.feedback.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
+                    @Override
+                    public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
+                        //TODO: update the feedback in the database
+                        //note: rating is always an integer even though it is float type
+                    }
+                });
+            }
+            else{
+                tripViewHolder.feedback.setEnabled(false);
+            }
             tripViewHolder.date.setText(formatDate(trips.get(i).getStartTime()));
         }
     }

@@ -78,7 +78,7 @@ public class SettingsActivity extends MenuedActivity {
             }
 
             if(response.startsWith("Success (1)")){
-                Toast.makeText(this, getString(R.string.java_settings_updatesuccess), Toast.LENGTH_LONG).show();
+                //Toast.makeText(this, getString(R.string.java_settings_updatesuccess), Toast.LENGTH_LONG).show();
                 ClientAuthentication.setIfSettingsChanged(false);
             }
             else{
@@ -87,7 +87,7 @@ public class SettingsActivity extends MenuedActivity {
                 //also, this situation: SettingsActivity1 -> ... -> SettingsActivity2, and some settings are changed in SettingsActivity2,
                 //then the setting update should be shown in SettingsActivity1 once resumed.
                 //however, this is not done yet (and low priority) since it's a bit tricky dealing with fragment
-//                Toast.makeText(this, response, Toast.LENGTH_LONG).show();
+                //Toast.makeText(this, response, Toast.LENGTH_LONG).show();
             }
         }
     }
@@ -281,6 +281,7 @@ public class SettingsActivity extends MenuedActivity {
             languages.add(new Language("English", "en", R.drawable.lang_en));
             languages.add(new Language("Svenska", "sv", R.drawable.lang_sv));
             languages.add(new Language("Français", "fr", R.drawable.lang_fr));
+            languages.add(new Language("Ελληνικά", "gr", R.drawable.lang_gr));
             languages.add(new Language("Norsk", "no", R.drawable.lang_no));
             languages.add(new Language("中文", "zh", R.drawable.lang_zh));
 //            languages.add(new Language("Dansk", "dk", R.drawable.lang_dk));

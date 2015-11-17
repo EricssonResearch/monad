@@ -127,4 +127,9 @@
     <string name="java_trips_samebooking">Vous avez déjà réservé ce voyage</string>
     <string name="label_search_search">Recherche</string>
     <string name="java_accountpermissionwarning">Vous ne pouvez pas vous connecter avec votre compte Google sans nous donner accés aux informations de votre compte </string>
+    <string-array name="settings_tab_titles">
+        <item>Langue</item>
+        <item>Alertes</item>
+        <item>Thème</item>
+    </string-array>
 </resources>

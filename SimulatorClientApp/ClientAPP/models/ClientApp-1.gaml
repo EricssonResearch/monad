@@ -261,7 +261,7 @@ species client skills: [SQLSKILL] {
 	action normal_request{
 		
 		//Using Gauss distribution to simulate rush time for start time , either in moring or in afternoon
-			//Calculate Tomorrow's start time 00:00
+			//Calculate Tomorrow's start time 00:00regular_user_weekly
 		today_cur_sec <- float(hour) * 60 * 60 + float(minute) * 60 + float(second);
 		tom_start_time <- current_time - today_cur_sec * 1000 + a_day_in_ms;
 		//write current_time;
@@ -370,8 +370,8 @@ species client skills: [SQLSKILL] {
 			startPositionLatitude <- regular_user2[7,i];
 			startPositionLongitude <- regular_user2[8,i];
 			
-			save [user_name_str + "&" + start_time + "&" + end_time + "&" + request_time  + start_position + end_position + priority 
-					+ startPositionLatitude + startPositionLongitude
+			save [user_name_str + "&" + start_time + "&" + end_time + "&" + request_time + "&" + start_position + "&"+ end_position + "&"+ priority 
+					+ "&" + startPositionLatitude + "&" + startPositionLongitude
 			] 
 		    				to: "ClientRequest" type:csv;
 		    				
@@ -435,8 +435,8 @@ species client skills: [SQLSKILL] {
 				startPositionLatitude <- regular_user_weekly[7,i];
 				startPositionLongitude <- regular_user_weekly[8,i];
 		
-				save [user_name_str + "&" + start_time + "&" + end_time + "&" + request_time  + start_position + end_position + priority 
-						+ startPositionLatitude + startPositionLongitude
+				save [user_name_str + "&" + start_time + "&" + end_time + "&" + request_time + "&" + start_position + "&"+ end_position+ "&" + priority 
+						+ "&"+ startPositionLatitude + "&" + startPositionLongitude
 				] 
 		    					to: "ClientRequest" type:csv;
 			}
