@@ -69,10 +69,10 @@ class Fitness():
         endTime = datetime.datetime.combine(Fitness.yesterday, datetime.datetime.strptime(Fitness.lastMinute, Fitness.formatTime).time())
         # Create index for the people going on the bus
         Fitness.request = db.grpReqByBusstopAndTime(startTime, endTime)
-        #self.createRequestIndex(Fitness.request)
+        self.createRequestIndex(Fitness.request)
         # Create index for the people going down the bus
         Fitness.requestOut = db.getReqCountByEndBusStop(startTime, endTime)
-        #self.createRequestIndexOut(Fitness.requestOut)
+        self.createRequestIndexOut(Fitness.requestOut)
 
  #<--------------------------------Functions for new encoding including multiple line---------------------------------->
 

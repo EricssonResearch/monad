@@ -178,7 +178,7 @@ def evaluateNewIndividualFormat(individual):
             #if initialTrip > lastTrip:
             #    initialTrip = lastTrip - timedelta(minutes=db.getFrequency(individual[i][0]))
             # Search on Fitness.request array for the particular requests
-            request = fitnessClass.search(initialTrip, lastTrip, phenotype[j][0], individual[i][0])
+            request = fitnessClass.searchRequest(initialTrip, lastTrip, phenotype[j][0], individual[i][0])
 
             initialTripTime = phenotype[j][1]
             if len(request) > 0:
