@@ -2,7 +2,7 @@ DROP DATABASE IF EXISTS clients;
 CREATE DATABASE clients;
 USE clients;
 
-DROP TABLE IF EXISTS client_profile;
+-- DROP TABLE IF EXISTS client_profile;
 CREATE TABLE client_profile (
 	id INT NOT NULL AUTO_INCREMENT,
 	username VARCHAR(255),
@@ -15,18 +15,18 @@ CREATE TABLE client_profile (
 	recommendations_alert VARCHAR(1) DEFAULT '1',
     theme VARCHAR(1) DEFAULT '1',
 	registration_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    google_registraton_token VARCHAR(255),
+    google_registration_token VARCHAR(255),
 	PRIMARY KEY (id)
 );
 
 DELIMITER $$
-DROP FUNCTION IF EXISTS client_sign_up;
+-- DROP FUNCTION IF EXISTS client_sign_up;
 CREATE FUNCTION client_sign_up (
 	in_username VARCHAR(255),
 	in_pass CHAR(40),
 	in_email VARCHAR(255),
 	in_phone VARCHAR(15),
-    in_google_registraton_token VARCHAR(255)
+    in_google_registration_token VARCHAR(255)
 )
 RETURNS TEXT
 BEGIN
@@ -60,8 +60,8 @@ BEGIN
 	THEN
 		RETURN '03';
 	ELSE
-		INSERT INTO client_profile (username, pass, email, phone, google_registraton_token)
-        VALUES (in_username, in_pass, in_email, in_phone, in_google_registraton_token);
+		INSERT INTO client_profile (username, pass, email, phone, google_registration_token)
+        VALUES (in_username, in_pass, in_email, in_phone, in_google_registration_token);
 
         GET DIAGNOSTICS rows = ROW_COUNT;
 
@@ -73,11 +73,11 @@ BEGIN
 	END IF;
 END $$
 
-DROP FUNCTION IF EXISTS client_sign_in;
+-- DROP FUNCTION IF EXISTS client_sign_in;
 CREATE FUNCTION client_sign_in (
 	in_username VARCHAR(255),
 	in_pass CHAR(40),
-    in_google_registraton_token VARCHAR(255)
+    in_google_registration_token VARCHAR(255)
 )
 RETURNS TEXT
 BEGIN
@@ -111,7 +111,7 @@ BEGIN
 
     IF code = '00000' AND rows = 1 THEN
         UPDATE client_profile
-        SET google_registraton_token = in_google_registraton_token
+        SET google_registration_token = in_google_registration_token
         WHERE id = ret_id;
 
         RETURN CONCAT(
@@ -124,7 +124,7 @@ BEGIN
     END IF;
 END $$
 
-DROP FUNCTION IF EXISTS google_sign_in;
+-- DROP FUNCTION IF EXISTS google_sign_in;
 CREATE FUNCTION google_sign_in (
 	in_email VARCHAR(255)
 )
@@ -186,7 +186,7 @@ BEGIN
 	END IF;
 END $$
 
-DROP FUNCTION IF EXISTS google_sign_up;
+-- DROP FUNCTION IF EXISTS google_sign_up;
 CREATE FUNCTION google_sign_up (
 	in_email VARCHAR(255)
 )
@@ -212,7 +212,7 @@ BEGIN
     END IF;
 END $$
 
-DROP FUNCTION IF EXISTS client_profile_update;
+-- DROP FUNCTION IF EXISTS client_profile_update;
 CREATE FUNCTION client_profile_update (
     in_id INT,
 	in_username VARCHAR(255),
@@ -266,7 +266,7 @@ BEGIN
 	END IF;
 END $$
 
-DROP FUNCTION IF EXISTS client_settings_update;
+-- DROP FUNCTION IF EXISTS client_settings_update;
 CREATE FUNCTION client_settings_update (
     in_id INT,
     in_language VARCHAR(2),
@@ -302,7 +302,7 @@ BEGIN
     END IF;
 END $$
 
-DROP FUNCTION IF EXISTS client_existing_password_update;
+-- DROP FUNCTION IF EXISTS client_existing_password_update;
 CREATE FUNCTION client_existing_password_update (
     in_id INT,
     in_old_pass CHAR(40),
@@ -331,7 +331,7 @@ BEGIN
     END IF;
 END $$
 
-DROP FUNCTION IF EXISTS client_forgotten_password_reset;
+-- DROP FUNCTION IF EXISTS client_forgotten_password_reset;
 CREATE FUNCTION client_forgotten_password_reset (
     in_email VARCHAR(255),
     in_new_pass CHAR(40)
@@ -359,15 +359,46 @@ BEGIN
     END IF;
 END $$
 
+-- DROP FUNCTION IF EXISTS get_google_registration_token;
+CREATE FUNCTION get_google_registration_token (
+    in_id INT
+)
+RETURNS VARCHAR(255)
+BEGIN
+    DECLARE ret_google_registration_token VARCHAR(255);
+    DECLARE code CHAR(5) DEFAULT '00000';
+    DECLARE rows INT;
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION
+    BEGIN
+        GET DIAGNOSTICS CONDITION 1
+            code = RETURNED_SQLSTATE;
+    END;
+
+    SELECT google_registration_token
+    INTO ret_google_registration_token
+    FROM client_profile
+    WHERE id = in_id;
+
+    GET DIAGNOSTICS rows = ROW_COUNT;
+
+    IF code = '00000' AND rows > 0 THEN
+        RETURN ret_google_registration_token;
+    ELSE
+        RETURN '';
+    END IF;
+END $$
+
+DELIMITER ;
+
 -- ------------------------------------------------ DEBUGGING CODE ----------------------------------------------------
 
--- SELECT client_sign_up('u1', 'p1', 'e1', 'ph1');
+-- SELECT id, username, pass, email, phone FROM client_profile;
 -- SELECT client_existing_password_update(1, 'p1', 'p');
 -- SELECT client_existing_password_update(1, 'p1', 'p2');
 -- SELECT client_existing_password_update(2, 'p1', 'p3');
 -- SELECT client_forgotten_password_reset('e1', 'p10');
 -- SELECT client_forgotten_password_reset('e', 'p100');
---
+-- 
 -- SELECT google_sign_in('e8');
 -- SELECT google_new_password_register(1, 'p30');
 -- SELECT google_new_password_register(2, 'p30');

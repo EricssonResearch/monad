@@ -53,7 +53,7 @@ stop_broadcaster() ->
 start_python() ->
     {ok, PythonInstance} = python:start([{python_path, "src/python"}]),
     register(python_instance, PythonInstance),
-    python:call(PythonInstance, mongodb_parser, start, [<<"">>]),
+    python:call(PythonInstance, mongodb_parser, start, [<<"130.238.15.114">>]),
     Broadcaster = whereis(broadcaster),
     Msg = [{message, "PythonInstance: started"},
            {process, PythonInstance}],
@@ -70,11 +70,11 @@ stop_python() ->
 start_emysql() ->
     application:start(emysql),
     emysql:add_pool(mysql_pool, [
-        {size, 1},
+        {size, },
         {user, ""},
         {password, ""},
         {host, ""},
-        {port, 3306},
+        {port, },
         {database, ""},
         {encoding, utf8}]),
 
@@ -118,6 +118,9 @@ loop(Req, DocRoot) ->
                         get_notifications(Req);
                     "remove_notification" ->
                         remove_notification(Req);
+                    "generate_notification" ->
+                        Req:respond({200, [{"Content-Type", "text/plain"}], "OK"}),
+                        generate_notification(Req);
                     _ ->
                         Req:not_found()
                 end;
@@ -475,6 +478,50 @@ remove_notification(Req) ->
                           {type, Type}, {what, What},
                           {trace, erlang:get_stacktrace()}],
                 handle_error(Report, Req)
+    end.
+
+generate_notification(Req) ->
+    PostData = Req:parse_post(),
+
+    ClientID_str = proplists:get_value("userID", PostData, "Anonymous"),
+    {ClientID, _} = string:to_integer(ClientID_str),
+    io:format("ClientID: ~p~n", [ClientID]),
+
+    BookedTripID = proplists:get_value("bookedTripID", PostData, "Anonymous"),
+    io:format("BookedTripID: ~p~n", [BookedTripID]),
+
+    try
+        % Prepare and execute get_google_registration_token_statement
+        emysql:prepare(get_google_registration_token_statement,
+                       <<"SELECT get_google_registration_token(?)">>),
+        Result = emysql:execute(mysql_pool, get_google_registration_token_statement, [ClientID]),
+        case Result of
+            {_, _, _, [[Response]], _} ->
+                Msg = [{type, generate_notification},
+                       {clientID, ClientID},
+                       {bookedTripID, BookedTripID},
+                       {response, Response},
+                       {process, self()}],
+                % io:format("~n~p~n", [Msg]),
+                Broadcaster = whereis(broadcaster),
+                Broadcaster ! {broadcast, Msg},
+                PythonInstance = whereis(python_instance),
+                T = python:call(PythonInstance, mongodb_parser, generate_notification, [ClientID, Response, BookedTripID]);
+
+                % Req:respond({200, [{"Content-Type", "text/plain"}], Response});
+            _ ->
+                Msg = ["Unexpected Database Response",
+                       {result, Result},
+                       {trace, erlang:get_stacktrace()}],
+                handle_error(Msg, Req)
+        end
+    catch
+        Type:What ->
+            Report = ["Failed Request: generate notification",
+                      {type, Type}, {what, What},
+                      {trace, erlang:get_stacktrace()}],
+            error_logger:error_report(Report)
+            % handle_error(Report, Req)
     end.
 
 %% Internal API

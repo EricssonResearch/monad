@@ -16,6 +16,7 @@ import com.google.android.gms.gcm.GcmListenerService;
 
 import se.uu.csproject.monadclient.LoginActivity;
 import se.uu.csproject.monadclient.MainActivity;
+import se.uu.csproject.monadclient.NotificationsActivity;
 import se.uu.csproject.monadclient.R;
 
 
@@ -58,7 +59,7 @@ public class  MyGcmListenerService extends GcmListenerService {
      * Create and show a simple notification containing the received GCM message.
      */
     private void sendNotification(String message, String Title) {
-        Intent intent = new Intent(this,LoginActivity.class);
+        Intent intent = new Intent(this, NotificationsActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 , intent,
                 PendingIntent.FLAG_UPDATE_CURRENT);

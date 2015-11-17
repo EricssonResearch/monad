@@ -842,8 +842,8 @@ public class ClientAuthentication extends Authentication {
                     long tempLine = (long) trip.get("line");
                     int line = new BigDecimal(tempLine).intValueExact();
 
-//                    long tempBusID = (long) trip.get("busID");
-                    double tempBusID = (double) trip.get("busID");
+                    long tempBusID = (long) trip.get("busID");
+//                    double tempBusID = (double) trip.get("busID");
                     int busID = new BigDecimal(tempBusID).intValueExact();
 
                     String startBusStop = (String) trip.get("startBusStop");
