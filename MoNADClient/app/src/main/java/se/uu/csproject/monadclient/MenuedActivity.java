@@ -1,6 +1,7 @@
 package se.uu.csproject.monadclient;
 
 import android.content.Intent;
+import android.os.Build;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
@@ -30,8 +31,10 @@ public class MenuedActivity extends AppCompatActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        if(id == android.R.id.home){
-            NavUtils.navigateUpFromSameTask(this);
+        if(id == android.R.id.home) {
+            Intent intent = NavUtils.getParentActivityIntent(this);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            NavUtils.navigateUpTo(this, intent);
         }
 
         if (id == R.id.action_search) {

@@ -13,6 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
+        android:focusableInTouchMode="true"
         android:layout_below="@+id/actionToolBar">
 
         <TextView
@@ -28,7 +29,7 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-            <EditText
+            <AutoCompleteTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/edittext_search_position"
@@ -63,26 +64,25 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-            <EditText
+            <AutoCompleteTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/edittext_search_destination"
                 android:layout_weight="5"
                 android:textColor="@color/black"
                 android:hint="@string/label_search_hintdestination"
-                android:layout_marginTop="@dimen/medium_padding"
                 android:textSize="@dimen/header_textlarge"
                 android:textColorHint="@drawable/hint_hide_selector"/>
 
-            <ImageView
+            <!--ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="0"
                 android:background="@color/primaryColor"
                 android:contentDescription="@string/img_description"
                 android:src="@drawable/ic_search_white_48dp"
-                android:onClick="sendTravelRequest"
-                />
+
+                /-->
 
         </LinearLayout>
 
@@ -145,12 +145,20 @@
 
         </LinearLayout>
 
-        <TextView
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:orientation="horizontal">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
             android:id="@+id/textview_search_priority"
             android:text="@string/label_search_priority"
-            android:padding="@dimen/small_padding"/>
+            android:padding="@dimen/small_padding"
+            android:layout_marginRight="@dimen/medium_padding"
+            android:layout_marginEnd="@dimen/medium_padding"
+            />
 
         <RadioGroup
             android:layout_width="match_parent"
@@ -175,17 +183,16 @@
                 android:text="@string/label_search_shortesttriptime"/>
 
         </RadioGroup>
+    </LinearLayout>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/textview_search"
             android:text="@string/label_search_results"
-            android:textAllCaps="true"
-            android:textStyle="bold"
+            style="@style/headerText"
             android:layout_marginLeft="@dimen/medium_padding"
-            android:layout_marginStart="@dimen/medium_padding"
-            android:textColor="@color/primaryColor"/>
+            android:layout_marginStart="@dimen/medium_padding" />
 
         <View
             android:layout_width="match_parent"
@@ -213,11 +220,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/button_search_search"
-            android:text="@string/label_search_moreresults"
+            android:text="@string/label_search_search"
             android:textColor="@color/white"
             android:background="@color/primaryColor"
+            android:drawableLeft="@drawable/ic_search_white_36dp"
+            android:drawableStart="@drawable/ic_search_white_36dp"
             android:layout_gravity="bottom"
             android:layout_marginTop="@dimen/small_padding"
+            android:onClick="sendTravelRequest"
             />
     </LinearLayout>
 

@@ -22,7 +22,7 @@
             android:gravity="center_horizontal"
             android:focusable="true">
 
-            <EditText
+            <AutoCompleteTextView
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:id="@+id/main_search_destination"
@@ -45,17 +45,14 @@
                 android:onClick="openMainSearch" />
         </LinearLayout>
 
-        <TextView
-            android:id="@+id/link_advancedsearch"
+
+        <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:id="@+id/link_advancedsearch"
             android:layout_margin="@dimen/small_margin"
             android:text="@string/label_main_advancedsearch"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:gravity="start"
-            android:autoLink="all"
-            android:clickable="true"
-            android:linksClickable="true"
+            android:gravity="center"
             android:onClick="goToAdvancedSearch"
             />
 
@@ -64,10 +61,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/large_padding"
             android:text="@string/label_main_recommendations"
-            android:textAllCaps="true"
-            android:textStyle="bold"
-            android:textColor="@color/primaryColor"
-            android:textAppearance="?android:attr/textAppearanceMedium"
+            style="@style/headerText"
             android:layout_marginLeft="@dimen/medium_padding"
             android:layout_marginStart="@dimen/medium_padding"
             />

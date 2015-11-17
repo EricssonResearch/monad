@@ -165,7 +165,8 @@ class DB():
         req = self.db.TravelRequestLookAhead.find({}, {"_id": False})
         return self.parseData(req, column)
 
-    def getTravelRequestBetween(self, start, end):
+
+    def getTravelRequestBetween(self, start, end, line):
 
         ''' Queries the requests using an initial date and a final date.
         Returns the whole bag of documents found
@@ -173,12 +174,9 @@ class DB():
         @param: start - Initial date for the query
         @param: end - Final date for the query
         '''
-        #print(start)
-        #print(end)
-        req = self.db.TravelRequest.find({"startTime": {"$gte": start, "$lt": end}})
-        #for x in req:
-        #    print("this is X")
-        #    print(x)
+
+        req = self.db.UserTrip.find({"startTime": {"$gte": start, "$lt": end}, "line" : line})
+
         return req
 
     def getTravelRequestSummary(self, start, end):
@@ -309,7 +307,7 @@ class DB():
             i[1] = sum
         return BusStplist
 
-    #TODO: THIS FUNCTION HAS ERRORS BUT ITS NOT CALLED
+    # TODO: THIS FUNCTION HAS ERRORS BUT ITS NOT CALLED
     def calculateReqNumTrip(self, capacity, trip_stTime, trip_endTime, requestLeftIn, lineNum = 2):
         ''' Calculate average waiting time for request for specific trip(defined by starting trip time and end trip time)
         @param capacity of specific trip, trip start time and end time should be given
@@ -317,7 +315,6 @@ class DB():
         @param line number 
         return average waiting time, request list which can't be taken because of capacity
         '''
-
 
         BusStplist = []
         dirlist =[]
@@ -374,7 +371,10 @@ class DB():
                         pplInBus = pplInBus - 1
                         i[4] = pplInBus
 
-        avgWaitingTime = (totalWaitingTime.total_seconds()/60.0)/totalrequestnum
+        if totalrequestnum != 0:
+            avgWaitingTime = (totalWaitingTime.total_seconds()/60.0)/totalrequestnum
+        else: 
+            avgWaitingTime = 0
 
         return BusStplist, requestLeftOut, totalWaitingTime.total_seconds()/60.0, avgWaitingTime
 
@@ -461,10 +461,64 @@ class DB():
         capacity = [20, 60, 120]
         return random.choice(capacity)
 
+    def generatePlate(self):
+        return self.generateRandomText() + self.generateRandomNumber()
+
+    def dropBusCollection(self):
+        self.db.bus.drop()
+
+    def populateBus(self, size):
+        for x in range(0, size):
+            bus = {"capacity": self.generateRandomCapacity(), "plate": self.generatePlate()}
+            self.db.bus.insert_one(bus)
+
+    def getBusCount(self):
+        return self.db.bus.count()
+
+    def getRandomBusId(self):
+        bus = self.db.bus.find()[random.randrange(self.getBusCount())]
+        return bus["_id"]
+
+    def getRandomBus(self, column):
+        bus = self.db.bus.find(
+            {"_id": ObjectId(self.getRandomBusId())})
+        return self.parseData(bus, column)
+
+    # Generate fake time table
+    # Let's create a trip every headway minutes
+    def setHeadWay(self, line):
+        tripDay = int(self.getTripDay(line))
+        return DB.minutesDay / tripDay
+
+    def getRandomHour(self):
+        return random.randrange(DB.hoursDay)
+
+    def getRandomMinute(self):
+        return random.randrange(DB.minutesHour)
+
+    def mergeRandomTime(self, hour, minute):
+        if len(str(hour)) == 1:
+            hour = "0" + str(hour)
+        if len(str(minute)) == 1:
+            minute = "0" + str(minute)
+        return str(hour) + DB.timeSeparator + str(minute)
+
+    def generateMinute(self, time):
+        hours, minutes = time.split(DB.timeSeparator)
+        if int(hours) == DB.hoursDay:
+            hours = "0"
+        return int(hours) * DB.minutesHour + int(minutes)
+
+    def generateTime(self, time):
+        hours, minutes = divmod(time, DB.minutesHour)
+        if hours == DB.hoursDay:
+            hours = 0
+        return self.mergeRandomTime(hours, minutes)
+
 
     # Trip
     #<--------------------------------Functions for new encoding including multiple line------------------------------->
-    busLine = [2,2,2,2,2,2,2,102,102,102,102,102,102,102]
+    busLine = [2,2,2,2,2,2,2,102,102,102,102,102,102,102, 114, 114,114,114,114,114,114, 1, 1, 1, 1, 1, 1,1, 101, 101, 101, 101, 101, 101,101, 14, 14, 14, 14, 14, 14, 14]
     noOfslices = 0
     timeSliceArray = [[3, 5], [6, 8], [9, 11], [12, 14], [15, 17], [18, 20], [21, 23]]
 
@@ -474,7 +528,8 @@ class DB():
             DB.busLine.remove(x)
 
             if len(DB.busLine)==0:
-                DB.busLine = [2,2,2,2,2,2,2,102,102,102,102,102,102,102]
+                DB.busLine = [2,2,2,2,2,2,2,102,102,102,102,102,102,102, 114, 114,114,114,114,114,114, 1, 1, 1, 1, 1, 1,
+                        1, 101, 101, 101, 101, 101, 101,101, 14, 14, 14, 14, 14, 14, 14]
             return x
 
 
@@ -485,10 +540,11 @@ class DB():
             DB.noOfslices = 0
 
 
+       #random.seed(64)
        b = DB.timeSliceArray[DB.noOfslices]
        hour = random.randint(b[0], b[1])
        minute = random.randint(0, 59)
-       seconds = random.randint(0, 59)
+       seconds = random.randint(1, 59)
        randomTime = datetime.time(hour, minute, seconds)
        DB.noOfslices = DB.noOfslices+1
 
@@ -606,6 +662,24 @@ class DB():
 
 
         return reqs
+
+    def insertTimeTable2(self, line, startTime, tripObjectList):
+        '''
+        Insert object list of BusTrip to TimeTable
+        @param: line, lineNo
+        @param: startTime, the date of timetable will be used for
+        @param: tripObjectList, list of trip object id of specific line
+        '''
+        objID = ObjectId()
+        timeTable = {
+            "_id": objID,
+            "line": line,
+            "date": datetime.datetime(startTime.date().year, startTime.date().month, startTime.date().day, 0, 0, 0),
+            "timetable": tripObjectList
+        }
+        # print timeTable
+        self.db.TimeTable1.insert_one(timeTable) 
+
     def getBusStopline(self,id):
 
         line = self.db.Route.find({"trajectory.busStop": ObjectId(id)})
@@ -738,51 +812,51 @@ class DB():
 
         tripObjectList = []
         requestLeftIn = []
+        BUSID = 1
         for i in range(len(individual)):
+            line = individual[i][0]
+            if i > 0:
+                if line != individual[i-1][0]:
+                    self.insertTimeTable2(individual[i-1][0], startTime, tripObjectList)
+                    tripObjectList[:] = []
             objID = ObjectId()
             tripObjectList.append(objID)
-            line = individual[i][0]
             capacity = individual[i][1]
-            startTime = individual[i][2]
-   
-            trajectory = self.getRoute("trajectory")
+            startTime = individual[i][2] + timedelta(1)
+            busID = BUSID  # Need to assign busID for every Trip
+            trajectory = self.getRoute(line, "trajectory")
             if i == 0:
                 startTimeLastTrip = datetime.datetime(startTime.date().year, startTime.date().month, startTime.date().day, 0, 0, 0)
             else:
                 startTimeLastTrip = startTime = individual[i-1][2]
             if i < len(individual):
-                print (i)
-                print (len(individual))
                 endTime = (individual[i][2])
             else:
-                print ("i > len: " + str(i))
-                print (len(individual))
                 endTime = datetime.datetime(startTime.date().year, startTime.date().month, startTime.date().day, 23, 59, 59)
-
             passengerNumList, requestLeftIn, twt, awt = self.calculateReqNumTrip(capacity, startTimeLastTrip, endTime, requestLeftIn)
             sorted(passengerNumList, key=itemgetter(1))
-            #print passengerNumList
-
+            # print passengerNumList
             for j in range(len(trajectory)):
                 interval = int(trajectory[j]["interval"])
                 if j == 0:
                     trajectory[j]["time"] = startTime + datetime.timedelta(minutes=interval)
-                else: 
+                else:
                     trajectory[j]["time"] = trajectory[j-1]["time"] + datetime.timedelta(minutes=interval)
                 trajectory[j]["totalPassengers"] = passengerNumList[j][4]
                 trajectory[j]["boardingPassengers"] = passengerNumList[j][2]
                 trajectory[j]["departingPassengers"] = passengerNumList[j][3]
-               
                 del trajectory[j]["interval"]
-
             trip = {
                 "_id": objID,
                 "capacity": capacity,
                 "line": line,
                 "startTime": startTime,
+                "busID": busID,
                 "endTime": trajectory[len(trajectory)-1]["time"],
-                "trajectory": trajectory 
+                "trajectory": trajectory
             }
-            #print trip
-            self.db.BusTrip.insert_one(trip)
-        self.insertTimeTable1(line, startTime, tripObjectList)
+            # print trip
+            self.db.BusTrip1.insert_one(trip)
+            if i == len(individual) - 1:
+                self.insertTimeTable2(line, startTime, tripObjectList)
+        # self.insertTimeTable1(line, startTime, tripObjectList)

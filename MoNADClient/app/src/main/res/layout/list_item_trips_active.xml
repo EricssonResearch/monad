@@ -40,7 +40,7 @@
             android:id="@+id/label_origin"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            style="@style/importantText"
+            style="@style/blackText"
             android:text="@string/non_available"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:paddingTop="@dimen/small_padding"
@@ -63,6 +63,16 @@
             />
 
         <TextView
+            android:id="@+id/busNumber"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:text="@string/non_available"
+            android:layout_alignBaseline="@+id/label_arrivaltime"
+            android:layout_alignBottom="@+id/label_arrivaltime"
+            android:layout_centerHorizontal="true" />
+
+        <TextView
             android:id="@+id/info_text_to"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -76,7 +86,7 @@
             android:id="@+id/label_destination"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            style="@style/importantText"
+            style="@style/blackText"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:text="@string/non_available"
             android:paddingTop="@dimen/small_padding"
@@ -90,7 +100,7 @@
             android:id="@+id/label_departuretime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            style="@style/importantText"
+            style="@style/blackText"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:text="@string/non_available"
             android:paddingTop="@dimen/small_padding"
@@ -102,7 +112,7 @@
             android:id="@+id/label_arrivaltime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            style="@style/importantText"
+            style="@style/blackText"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:text="@string/non_available"
             android:paddingTop="@dimen/small_padding"
