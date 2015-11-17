@@ -26,6 +26,16 @@
             android:contentDescription="@string/img_description"
             />
 
+        <TextView
+            android:id="@+id/busNumber"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:text="@string/non_available"
+            android:layout_alignBaseline="@+id/label_arrivaltime"
+            android:layout_alignBottom="@+id/label_arrivaltime"
+            android:layout_centerHorizontal="true" />
+
         <!--text: from to-->
         <TextView
             android:id="@+id/info_tripsactivity_from3"
@@ -49,7 +59,7 @@
             android:id="@+id/label_origin"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            style="@style/importantText"
+            style="@style/blackText"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:text="@string/non_available"
             android:paddingTop="@dimen/small_padding"
@@ -61,7 +71,7 @@
             android:id="@+id/label_destination"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            style="@style/importantText"
+            style="@style/blackText"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:text="@string/non_available"
             android:paddingTop="@dimen/small_padding"
@@ -75,7 +85,7 @@
             android:id="@+id/label_departuretime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            style="@style/importantText"
+            style="@style/blackText"
             android:text="@string/non_available"
             android:paddingTop="@dimen/small_padding"
             android:paddingLeft="@dimen/layout_padding"
@@ -86,7 +96,7 @@
             android:id="@+id/label_arrivaltime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            style="@style/importantText"
+            style="@style/blackText"
             android:text="@string/non_available"
             android:paddingTop="@dimen/small_padding"
             android:paddingLeft="@dimen/layout_padding"

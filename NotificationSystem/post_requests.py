@@ -37,8 +37,11 @@ def send_notification(user_to_send_to,message_title_to_send,message_body_to_send
 
 	try:
 		response=requests.post(url,data=json.dumps(message_body),headers=custom_header)
-		print(response.content)
-
+		if (response.status_code==200):
+			print(response.content)
+			print(response.status_code)
+		else:
+			print("Error with http status_code "+str(response.status_code))
 	except Exception as ex:
                 template = "An exception of type {0} occured. Arguments:\n{1!r}"
                 message = template.format(type(ex).__name__, ex.args)

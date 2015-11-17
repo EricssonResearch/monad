@@ -5,15 +5,26 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.List;
+
+import se.uu.csproject.monadclient.NotificationsInteraction;
 
 public class Storage{
     private static ArrayList<FullTrip> searchResults = new ArrayList<>();
+    private static ArrayList<FullTrip> bookings = new ArrayList<>();
     private static ArrayList<FullTrip> recommendations = new ArrayList();
     private static ArrayList<Notify> notifications = new ArrayList<>();
 
+    public static void clearAll() {
+        clearSearchResults();
+        clearBookings();
+        clearRecommendations();
+        clearNotifications();
+    }
+
     /** Methods for searchResults */
-    public static void setSearchResults(ArrayList<FullTrip> searchResults1){
-        searchResults = searchResults1;
+    public static void setSearchResults(ArrayList<FullTrip> searchResults){
+        Storage.searchResults = searchResults;
     }
 
     public static ArrayList<FullTrip> getSearchResults(){
@@ -24,16 +35,29 @@ public class Storage{
         Collections.sort(searchResults, new FullTripsStartTimeComparator());
     }
 
-    public static void clearAll(){
+    public static void clearSearchResults(){
         searchResults.clear();
     }
 
-    public static boolean isEmptySearchResults(){
-        if (searchResults != null && !searchResults.isEmpty()){
-            return false;
-        } else {
-            return true;
-        }
+    public static boolean isEmptySearchResults() {
+        return searchResults.isEmpty();
+    }
+
+    /** Methods for bookings */
+    public static void setBookings(ArrayList<FullTrip> bookings){
+        Storage.bookings = bookings;
+    }
+
+    public static ArrayList<FullTrip> getBookings(){
+        return bookings;
+    }
+
+    public static void clearBookings() {
+        bookings.clear();
+    }
+
+    public static boolean isEmptyBookings() {
+        return bookings.isEmpty();
     }
 
     /** Methods for recommendations */
@@ -50,12 +74,7 @@ public class Storage{
     }
 
     public static boolean isEmptyRecommendations() {
-        if (recommendations != null && !recommendations.isEmpty()) {
-            return false;
-        }
-        else {
-            return true;
-        }
+        return recommendations.isEmpty();
     }
 
     public static void addRecommendation(FullTrip recommendation) {
@@ -65,7 +84,6 @@ public class Storage{
     public static void clearRecommendations() {
         recommendations.clear();
     }
-
 
     /** Methods for notifications */
     public static ArrayList<Notify> getNotifications() {
@@ -83,15 +101,14 @@ public class Storage{
     }
 
     public static boolean isEmptyNotifications() {
-        if (notifications != null && !notifications.isEmpty()) {
-            return false;
-        }
-        else {
-            return true;
-        }
+        return notifications.isEmpty();
     }
 
     public static void addNotification(Notify notification) {
+        notifications.add(notification);
+    }
+
+    public static void addNotificationAndSort(Notify notification) {
         notifications.add(notification);
         sortNotifications();
     }
@@ -100,11 +117,33 @@ public class Storage{
         notifications.clear();
     }
 
-    public static void removeNotification(int i){
+    public static void removeNotification(int i) {
+        new NotificationsInteraction("Storage").removeNotification(i);
         notifications.remove(i);
     }
 
-    public static void initializeNotificationData(){
+    public static void printNotifications() {
+
+        if (!isEmptyNotifications()) {
+
+            for (int i = 0; i < notifications.size(); i++) {
+                notifications.get(i).printValues();
+            }
+        }
+    }
+
+    public static void printSortedNotifications() {
+
+        if (!isEmptyNotifications()) {
+            sortNotifications();
+
+            for (int i = 0; i < notifications.size(); i++) {
+                notifications.get(i).printValues();
+            }
+        }
+    }
+
+    public static void initializeNotificationData() {
         ArrayList<Notify> notifications = new ArrayList<>();
         Calendar calendar = new GregorianCalendar(2015, 10, 26, 10, 40, 0);
         Date time1 = calendar.getTime();
@@ -128,5 +167,44 @@ public class Storage{
         setNotifications(notifications);
     }
 
-}
+    public static void initializeRecommendationsData() {
+        Calendar calendar = new GregorianCalendar(2015, 10, 26, 10, 40, 0);
+        Date startdate1 = calendar.getTime();
+        calendar = new GregorianCalendar(2015, 10, 26, 10, 50, 0);
+        Date enddate1 = calendar.getTime();
+        calendar = new GregorianCalendar(2015, 10, 26, 10, 45, 0);
+        Date startdate2 = calendar.getTime();
+        calendar = new GregorianCalendar(2015, 10, 26, 11, 0, 0);
+        Date enddate2 = calendar.getTime();
+        calendar = new GregorianCalendar(2015, 10, 27, 9, 50, 0);
+        Date startdate3 = calendar.getTime();
+        calendar = new GregorianCalendar(2015, 10, 27, 10, 5, 0);
+        Date enddate3 = calendar.getTime();
+        calendar = new GregorianCalendar(2015, 10, 22, 11, 30, 0);
+        Date startdate4 = calendar.getTime();
+        calendar = new GregorianCalendar(2015, 10, 22, 12, 0, 0);
+        Date enddate4 = calendar.getTime();
 
+        ArrayList<PartialTrip> partialTrips = new ArrayList<>();
+        ArrayList<String> trajectory = new ArrayList<>();
+        trajectory.add("BMC");
+        trajectory.add("Akademiska Sjukhuset");
+        trajectory.add("Ekeby Bruk");
+        trajectory.add("Ekeby");
+
+        partialTrips.add(new PartialTrip("1", 2, 3, "Polacksbacken",startdate1,"Flogsta", enddate1, trajectory));
+        recommendations.add(new FullTrip("1", "2", partialTrips, 10, true, 0));
+
+        partialTrips.clear();
+        partialTrips.add(new PartialTrip("1", 2, 3, "Gamla Uppsala", startdate2, "Gottsunda", enddate2, trajectory));
+        recommendations.add(new FullTrip("2", "3", partialTrips, 15, true, 0));
+
+        partialTrips.clear();
+        partialTrips.add(new PartialTrip("1",2,3, "Granby",startdate3,"Tunna Backar", enddate3, trajectory));
+        recommendations.add(new FullTrip("3", "4", partialTrips, 15, true, 0));
+
+        partialTrips.clear();
+        partialTrips.add(new PartialTrip("1",2,3, "Kungsgatan", startdate4, "Observatoriet", enddate4, trajectory));
+        recommendations.add(new FullTrip("4", "5", partialTrips, 30, true, 0));
+    }
+}

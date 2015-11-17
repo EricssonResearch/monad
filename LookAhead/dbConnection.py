@@ -36,7 +36,8 @@ class DB():
     hoursDay = 24
     minutesHour = 60
     formatTime = '%H:%M'
-    yesterday = datetime.datetime(2015, 11, 12)
+    yesterday = datetime.datetime(2015, 11, 16)
+    
 
     # ---------------------------------------------------------------------------------------------------------------------------------------
     # Constructor
@@ -273,6 +274,33 @@ class DB():
             reqs.append([req.get('startTime', None), req.get('startBusStop', None), req.get('endBusStop', None)])
         return reqs
 
+    #def MaxReqNumTrip(self, trip_sTime, tripEnd, lineNum=2):
+    def MaxReqNumTrip(self, start, end, line):
+        BusStplist = []
+        dirlist = []
+        # get the trip time table
+        phenotype = self.generatePhenotype(line, start)
+        for i in phenotype:
+            BusStplist.append([i[0], 0])
+            dirlist.append(i[0])
+        # Get all requests where starting time is more than trip starting time
+        Requests = self.getRequestsFromDB(start, end)
+        # Get only the requests with start location in bus stops and end
+        # location in bus stps
+        for req in Requests:
+            for i in BusStplist:
+                if (req[1], req[2]) in itertools.combinations(dirlist, 2):
+                    if req[1] == i[0]:
+                        i[1] += 1
+                    if req[2] == i[0]:
+                        i[1] += -1
+        sum = 0
+        for i in BusStplist:
+            sum += i[1]
+            i[1] = sum
+        return BusStplist
+
+    # TODO: THIS FUNCTION HAS ERRORS BUT ITS NOT CALLED
     def calculateReqNumTrip(self, capacity, trip_stTime, trip_endTime, requestLeftIn, lineNum = 2):
         ''' Calculate average waiting time for request for specific trip(defined by starting trip time and end trip time)
         @param capacity of specific trip, trip start time and end time should be given
@@ -280,6 +308,7 @@ class DB():
         @param line number 
         return average waiting time, request list which can't be taken because of capacity
         '''
+
         BusStplist = []
         dirlist =[]
         RequestTaken = []
@@ -292,7 +321,7 @@ class DB():
         else:
             a = trip_stTime
 
-        trip_time_table = self.generateFitnessTripTimeTable(lineNum, a)
+        trip_time_table = self.generatePhenotype(lineNum, a)
 
         for i in trip_time_table:
             BusStplist.append([i[0], i[1], 0,0,0])
@@ -335,7 +364,10 @@ class DB():
                         pplInBus = pplInBus - 1
                         i[4] = pplInBus
 
-        avgWaitingTime = (totalWaitingTime.total_seconds()/60.0)/totalrequestnum
+        if totalrequestnum != 0:
+            avgWaitingTime = (totalWaitingTime.total_seconds()/60.0)/totalrequestnum
+        else: 
+            avgWaitingTime = 0
 
         return BusStplist, requestLeftOut, totalWaitingTime.total_seconds()/60.0, avgWaitingTime
 
@@ -601,6 +633,7 @@ class DB():
             timeTable.append({"busId": bus, "busStops": trip})
         self.db.timeTable.insert_one({"line": document[0][0], "date": datetime.datetime.now(), "timetable": timeTable})
 
+    # TODO: THERE IS AN ERROR HERE FIX IT BUT SINCE THE FUNCTION IS NOT CALLED ERROR DOESNT OCCUR
     def insertTimeTable1(self, line, startTime, tripObjectList):
         ''' Insert object list of BusTrip to TimeTable
 
@@ -608,7 +641,7 @@ class DB():
         @param: startTime, the date of timetable will be used for
         @param: tripObjectList, list of trip object id of specific line
         '''
-
+        
         yesterday = datetime.date.today() - datetime.timedelta(days=1)
         yesterdayStart = datetime.datetime(yesterday.year, yesterday.month, yesterday.day,0,0,0)
         todayStart = datetime.datetime(datetime.date.today().year,datetime.date.today().month,datetime.date.today().day,0,0,0)
@@ -621,11 +654,30 @@ class DB():
 
 
         return reqs
+
+    def insertTimeTable2(self, line, startTime, tripObjectList):
+        '''
+        Insert object list of BusTrip to TimeTable
+        @param: line, lineNo
+        @param: startTime, the date of timetable will be used for
+        @param: tripObjectList, list of trip object id of specific line
+        '''
+        objID = ObjectId()
+        timeTable = {
+            "_id": objID,
+            "line": line,
+            "date": datetime.datetime(startTime.date().year, startTime.date().month, startTime.date().day, 0, 0, 0),
+            "timetable": tripObjectList
+        }
+        # print timeTable
+        self.db.TimeTable1.insert_one(timeTable) 
+
     def getBusStopline(self,id):
 
         line = self.db.Route.find({"trajectory.busStop": ObjectId(id)})
         return line[0]['line']
 
+    #TODO: THIS FUNCTION IS NOT CALLED; IT HAS ERRORSSS??!?!?
     def processReqest(self, start, end):
         '''
 
@@ -659,7 +711,7 @@ class DB():
 
                 nreqs.append([req[0], req[1], commonbusstop])
                 #print " breakdown request into" % req[0], req[1], commonbusstop
-                triptimetable = self.generateFitnessTripTimeTable(sourceline, req[0])
+                triptimetable = self.generatePhenotype(sourceline, req[0])
                 for x in triptimetable:
                     if x[0] == commonbusstop:
                         tripdate = x[1]
@@ -667,17 +719,6 @@ class DB():
                 diflinereq += 1
 
         return nreqs
-
-
-
-
-
-
-
-
-
-
-
 
         objID = ObjectId()
         timeTable = {
@@ -721,15 +762,16 @@ class DB():
         '''
         return self.parseData(self.db.BusStop.find({"_id": id}), "name")
 
-
+     # TODO: THIS FUNCTION IS NOT CALLED???
     def MaxReqNumTrip(self,trip_sTime,tripEnd, lineNum = 2):
         BusStplist = []
         dirlist =[]
+
         a = datetime.datetime.strptime(trip_sTime, '%Y-%m-%d %H:%M:%S')
         # t =datetime.datetime.strptime(trip_sTime,'%Y-%m-%d %H:%M:%S').time()
         # e =datetime.datetime.strptime(tripEnd,'%Y-%m-%d %H:%M:%S').time()
         #get the trip time table
-        # trip_time_table = self.generateFitnessTripTimeTable(lineNum,trip_sTime[11:16])
+        # trip_time_table = self.generatePhenotypelineNum,trip_sTime[11:16])
         trip_time_table = self.generatePhenotype(lineNum,a)
 
         for i in trip_time_table:
@@ -753,7 +795,7 @@ class DB():
             i[1] = sum
         return BusStplist
 
-
+    #TODO: THIS FUNCTION HAS ERRORS BUT ITS NOT CALLED SO ERROR IS NOT SEEN
     def insertBusTrip(self, individual):
         '''
         Insert trip details to BusTrip by best individual
@@ -762,51 +804,51 @@ class DB():
 
         tripObjectList = []
         requestLeftIn = []
+        BUSID = 1
         for i in range(len(individual)):
+            line = individual[i][0]
+            if i > 0:
+                if line != individual[i-1][0]:
+                    self.insertTimeTable2(individual[i-1][0], startTime, tripObjectList)
+                    tripObjectList[:] = []
             objID = ObjectId()
             tripObjectList.append(objID)
-            line = individual[i][0]
             capacity = individual[i][1]
-            startTime = individual[i][2]
-   
-            trajectory = self.getRoute("trajectory")
+            startTime = individual[i][2] + timedelta(1)
+            busID = BUSID  # Need to assign busID for every Trip
+            trajectory = self.getRoute(line, "trajectory")
             if i == 0:
                 startTimeLastTrip = datetime.datetime(startTime.date().year, startTime.date().month, startTime.date().day, 0, 0, 0)
             else:
                 startTimeLastTrip = startTime = individual[i-1][2]
             if i < len(individual):
-                print i
-                print len(individual)
-                endTime = individual[i][2]                
+                endTime = (individual[i][2])
             else:
-                print "i > len: " + str(i)
-                print len(individual)
                 endTime = datetime.datetime(startTime.date().year, startTime.date().month, startTime.date().day, 23, 59, 59)
-
             passengerNumList, requestLeftIn, twt, awt = self.calculateReqNumTrip(capacity, startTimeLastTrip, endTime, requestLeftIn)
             sorted(passengerNumList, key=itemgetter(1))
-            #print passengerNumList
-
+            # print passengerNumList
             for j in range(len(trajectory)):
                 interval = int(trajectory[j]["interval"])
                 if j == 0:
                     trajectory[j]["time"] = startTime + datetime.timedelta(minutes=interval)
-                else: 
+                else:
                     trajectory[j]["time"] = trajectory[j-1]["time"] + datetime.timedelta(minutes=interval)
                 trajectory[j]["totalPassengers"] = passengerNumList[j][4]
                 trajectory[j]["boardingPassengers"] = passengerNumList[j][2]
                 trajectory[j]["departingPassengers"] = passengerNumList[j][3]
-               
                 del trajectory[j]["interval"]
-
             trip = {
                 "_id": objID,
                 "capacity": capacity,
                 "line": line,
                 "startTime": startTime,
+                "busID": busID,
                 "endTime": trajectory[len(trajectory)-1]["time"],
-                "trajectory": trajectory 
+                "trajectory": trajectory
             }
-            #print trip
-            self.db.BusTrip.insert_one(trip)
-        self.insertTimeTable1(line, startTime, tripObjectList)
+            # print trip
+            self.db.BusTrip1.insert_one(trip)
+            if i == len(individual) - 1:
+                self.insertTimeTable2(line, startTime, tripObjectList)
+        # self.insertTimeTable1(line, startTime, tripObjectList)

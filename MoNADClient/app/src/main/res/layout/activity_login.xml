@@ -14,7 +14,7 @@
         android:orientation="vertical"
         android:padding="@dimen/activity_horizontal_margin"
         android:layout_below="@id/actionToolBar"
-        >
+        android:focusableInTouchMode="true">
 
         <TextView
             android:text="@string/label_login_login"
@@ -51,7 +51,7 @@
                 android:orientation="vertical"
                 android:layout_weight="1"
                 android:weightSum="9"
-                >
+                android:focusableInTouchMode="false">
 
                 <TextView
                     android:id="@+id/wrong_credentials"
@@ -69,7 +69,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/label_login_username"
-                    android:layout_marginTop="@dimen/layout_padding"
+                    android:layout_marginTop="@dimen/medium_padding"
                     android:gravity="center_vertical"
                     android:layout_weight="2"
                     />
@@ -77,11 +77,11 @@
                     android:id="@+id/field_username"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    style="@style/inputText"
+                    style="@style/blackText"
                     android:inputType="textNoSuggestions"
                     android:layout_marginBottom="@dimen/edittext_vertical_margin"
                     android:layout_weight="1"
-                    />
+                    android:focusableInTouchMode="false"/>
                 <TextView
                     android:id="@+id/password_text_view"
                     android:layout_width="wrap_content"
@@ -95,10 +95,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="textPassword"
-                    style="@style/inputText"
+                    style="@style/blackText"
                     android:layout_marginBottom="@dimen/edittext_vertical_margin"
                     android:layout_weight="1"
-                    />
+                    android:focusableInTouchMode="false"/>
 
                 <Button
                     android:id="@+id/button_login"

@@ -2,13 +2,12 @@ package se.uu.csproject.monadclient;
 
 //import com.google.common.base.Charsets;
 
-import android.widget.SectionIndexer;
-
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
@@ -167,16 +166,16 @@ public class ClientAuthentication extends Authentication {
 
     public static String profileToString() {
         String strProfile = "\nclientId: " + getClientId()
-                + "\nusername: " + getUsername()
-                + "\npassword: " + getPassword()
-                + "\nemail: " + getEmail()
-                + "\nphone: " + getPhone()
-                + "\nlanguage: " + getLanguage()
-                + "\nstoreLocation: " + getStoreLocation()
-                + "\nnotificationsAlert: " + getNotificationsAlert()
-                + "\nrecommendationsAlert: " + getRecommendationsAlert()
-                + "\ntheme: " + getTheme()
-                + "\ngoogleRegistrationToken: " + getGoogleRegistrationToken();
+                          + "\nusername: " + getUsername()
+                          + "\npassword: " + getPassword()
+                          + "\nemail: " + getEmail()
+                          + "\nphone: " + getPhone()
+                          + "\nlanguage: " + getLanguage()
+                          + "\nstoreLocation: " + getStoreLocation()
+                          + "\nnotificationsAlert: " + getNotificationsAlert()
+                          + "\nrecommendationsAlert: " + getRecommendationsAlert()
+                          + "\ntheme: " + getTheme()
+                          + "\ngoogleRegistrationToken: " + getGoogleRegistrationToken();
         return strProfile;
     }
 
@@ -724,7 +723,7 @@ public class ClientAuthentication extends Authentication {
                 JSONObject recommendationObjectID = (JSONObject) recommendation.get("_id");
                 String recommendationID = (String) recommendationObjectID.get("$oid");
 
-                String userID = recommendation.get("userID").toString();
+//                String userID = recommendation.get("userID").toString();
 
                 JSONArray userTripsList = (JSONArray) recommendation.get("userTrip");
                 Iterator<JSONObject> userTripsIterator = userTripsList.iterator();
@@ -737,13 +736,11 @@ public class ClientAuthentication extends Authentication {
                     JSONObject tripObjectID = (JSONObject) trip.get("_id");
                     String tripID = (String) tripObjectID.get("$oid");
 
-                    /* TODO: CASTING TO INTEGER THROWS EXCEPTION */
+                    long tempLine = (long) trip.get("line");
+                    int line = new BigDecimal(tempLine).intValueExact();
 
-                    System.out.println("--------------OK1-----------");
-                    int line = (int) trip.get("line");
-                    System.out.println("--------------OK2-----------");
-                    int busID = (int) trip.get("busID");
-                    System.out.println("--------------OK3-----------");
+                    long tempBusID = (long) trip.get("busID");
+                    int busID = new BigDecimal(tempBusID).intValueExact();
 
                     String startBusStop = (String) trip.get("startBusStop");
                     JSONObject startTimeObject = (JSONObject) trip.get("startTime");
@@ -754,13 +751,21 @@ public class ClientAuthentication extends Authentication {
                     Date endTime = new Date((long) endTimeObject.get("$date"));
 
                     ArrayList<String> trajectory = new ArrayList<>();
-                    JSONArray trajectoryObject = (JSONArray) trip.get("trajectory");
-                    Iterator<JSONObject> trajectoryObjectIterator = trajectoryObject.iterator();
+                    JSONArray trajectoryArray = (JSONArray) trip.get("trajectory");
 
+                    Iterator<String> trajectoryObjectIterator = trajectoryArray.iterator();
                     while (trajectoryObjectIterator.hasNext()) {
-                        String busStopName = trajectoryObjectIterator.next().toString();
+                        String busStopName = trajectoryObjectIterator.next();
                         trajectory.add(busStopName);
                     }
+
+//                    Iterator<JSONArray> trajectoryObjectIterator = trajectoryArray.iterator();
+//
+//                    /* TODO: Parse specific time for each partial trip */
+//                    while (trajectoryObjectIterator.hasNext()) {
+//                        String busStopName = (String) trajectoryObjectIterator.next().get(0);
+//                        trajectory.add(busStopName);
+//                    }
 
                     PartialTrip partialTrip = new PartialTrip(tripID, line, busID, startBusStop, startTime,
                                                               endBusStop, endTime, trajectory);
@@ -768,15 +773,18 @@ public class ClientAuthentication extends Authentication {
                     partialTrips.add(partialTrip);
                 }
                 FullTrip fullTrip = new FullTrip(partialTrips);
-                Storage.addRecommendation(fullTrip);
+                if (!fullTrip.isHistory()) {
+                    Storage.addRecommendation(fullTrip);
+                }
+//                Storage.addRecommendation(fullTrip);
             }
+            Storage.sortRecommendations();
         }
-        catch (ParseException e) {
+        catch (Exception e) {
             e.printStackTrace();
+            return "0";
         }
-
-        response = "Success (1)";
-        return response;
+        return "1";
     }
 
     public static String postGetNotificationsRequest() {
@@ -812,50 +820,112 @@ public class ClientAuthentication extends Authentication {
                 JSONObject notificationObjectID = (JSONObject) notification.get("_id");
                 String notificationID = (String) notificationObjectID.get("$oid");
 
-                String notificationText = (String) notificationObjectID.get("text");
+                String notificationText = (String) notification.get("text");
 
                 JSONObject timeObject = (JSONObject) notification.get("time");
                 Date notificationTime = new Date((long) timeObject.get("$date"));
 
-                Integer notificationIconID = (Integer) notification.get("icon_id");
+                long temp = (long) notification.get("iconID");
+                int notificationIconID = new BigDecimal(temp).intValueExact();
 
-                Notify notify = new Notify(notificationID, notificationText, notificationTime, notificationIconID);
+                JSONArray partialTripsList = (JSONArray) notification.get("partialTrips");
+                Iterator<JSONObject> partialTripsIterator = partialTripsList.iterator();
+
+                ArrayList<PartialTrip> partialTrips = new ArrayList<>();
+
+                while (partialTripsIterator.hasNext()) {
+                    JSONObject trip = partialTripsIterator.next();
+
+                    JSONObject tripObjectID = (JSONObject) trip.get("_id");
+                    String tripID = (String) tripObjectID.get("$oid");
+
+                    long tempLine = (long) trip.get("line");
+                    int line = new BigDecimal(tempLine).intValueExact();
+
+//                    long tempBusID = (long) trip.get("busID");
+                    double tempBusID = (double) trip.get("busID");
+                    int busID = new BigDecimal(tempBusID).intValueExact();
+
+                    String startBusStop = (String) trip.get("startBusStop");
+                    JSONObject startTimeObject = (JSONObject) trip.get("startTime");
+                    Date startTime = new Date((long) startTimeObject.get("$date"));
+
+                    String endBusStop = (String) trip.get("endBusStop");
+                    JSONObject endTimeObject = (JSONObject) trip.get("endTime");
+                    Date endTime = new Date((long) endTimeObject.get("$date"));
+
+                    ArrayList<String> trajectory = new ArrayList<>();
+                    JSONArray trajectoryArray = (JSONArray) trip.get("trajectory");
+                    Iterator<String> trajectoryObjectIterator = trajectoryArray.iterator();
+
+                    /* TODO: Parse specific time for each partial trip */
+                    while (trajectoryObjectIterator.hasNext()) {
+                        String busStopName = trajectoryObjectIterator.next();
+                        trajectory.add(busStopName);
+                    }
+
+                    PartialTrip partialTrip = new PartialTrip(tripID, line, busID, startBusStop, startTime,
+                                                              endBusStop, endTime, trajectory);
+
+                    partialTrips.add(partialTrip);
+                }
+                FullTrip fullTrip = new FullTrip(partialTrips);
+
+                Notify notify = new Notify(notificationID, notificationText, notificationTime, notificationIconID, fullTrip);
                 Storage.addNotification(notify);
             }
+            Storage.sortNotifications();
+//            Storage.printNotifications();
         }
-        catch (ParseException e) {
+        catch (Exception e) {
             e.printStackTrace();
+            return "0";
         }
-
-        response = "Success (1)";
-        return response;
+        return "1";
     }
 
-    /* TODO: Will be changed */
-    public static String postGetNearestBusStopRequest() {
-        String request = ROUTES_GENERATOR_HOST + ROUTES_GENERATOR_PORT + "/get_nearest_stop_from_coordinates";
-        // String urlParameters = "client_id=" + getClientId();
-        String urlParameters = "lon=17.6093985&lat=59.8578199";
+    public static String postRemoveNotificationRequest(String notificationID) {
+        String request = AUTHENTICATION_HOST + AUTHENTICATION_PORT + "/remove_notification";
+        String urlParameters = "notification_id=" + notificationID;
 
         /* Send the request to the Authentication Module */
         String response = postRequest(request, urlParameters);
 
-        System.out.println("--------RRRR_--------------: " + response);
-        return "ok";
+        /* Handle response in case of exception */
+        if (response.equals("-1")) {
+            return exceptionMessage();
+        }
 
-//
-//        /* Handle response in case of exception */
-//        if (response.equals("-1")) {
-//            return exceptionMessage();
-//        }
-//
-//        /*
-//         * By default, Erlang adds the newline '\n' character at the beginning of response.
-//         * For this reason substring() function is used
-//         */
-//        response = response.substring(1);
-//        return processGetRecommendationsResponse(response);
+        /*
+         * By default, Erlang adds the newline '\n' character at the beginning of response.
+         * For this reason substring() function is used
+         */
+        response = response.substring(1);
+        return processRemoveNotificationResponse(response);
     }
+
+    public static String processRemoveNotificationResponse(String response) {
+
+        if (response.equals("1")) {
+            return "1";
+        }
+        else {
+            return "0";
+        }
+    }
+
+    /* TODO: Will be changed */
+//    public static String postGetNearestBusStopRequest() {
+//        String request = ROUTES_GENERATOR_HOST + ROUTES_GENERATOR_PORT + "/get_nearest_stop_from_coordinates";
+//        // String urlParameters = "client_id=" + getClientId();
+//        String urlParameters = "lon=17.6093985&lat=59.8578199";
+//
+//        /* Send the request to the Authentication Module */
+//        String response = postRequest(request, urlParameters);
+//
+//        System.out.println("--------RRRR_--------------: " + response);
+//        return "ok";
+//    }
 
     public static String exceptionMessage() {
         return "ERROR - An Exception was thrown";

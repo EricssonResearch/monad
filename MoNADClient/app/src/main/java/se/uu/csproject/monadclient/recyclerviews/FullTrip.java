@@ -17,7 +17,7 @@ public class FullTrip implements Parcelable {
     private String id;                                              /* Same as the id of the first partial trip */
     private String travelRequestID;
     private String recommendationID;                                /* Same as the recommendation id in the database */
-    private ArrayList<PartialTrip> partialTrips = new ArrayList<>();
+    private ArrayList<PartialTrip> partialTrips;
     /* TODO: Duration should not be a variable - It should be estimated on the fly, based on the partial trips */
     /* TODO: Should be replaced by the method getDuration */
     private long duration;                                          /* Corresponds to minutes */

@@ -3,16 +3,20 @@ package se.uu.csproject.monadclient;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -29,8 +33,8 @@ import se.uu.csproject.monadclient.recyclerviews.PartialTrip;
 
 public class RouteActivity extends AppCompatActivity {
 
-    RecyclerView recycler;
-    boolean flagListVisible = false;
+//    RecyclerView recycler;
+//    boolean flagListVisible = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,29 +70,38 @@ public class RouteActivity extends AppCompatActivity {
             exit = partialTrips.get(i).getEndTime();
             ArrayList<String> busStops = partialTrips.get(i).getTrajectory();
 
-            View v = vi.inflate(R.layout.route_details, null);
-
-            TextView stopTime = (TextView) v.findViewById(R.id.label_first_time);
-            stopTime.setText(formatTime(time));
-            TextView stopName = (TextView) v.findViewById(R.id.label_first_stop);
-            stopName.setText(name);
-            insertPoint.addView(v);
+//            View v = vi.inflate(R.layout.route_details, null);
+//
+//            TextView stopTime = (TextView) v.findViewById(R.id.label_first_time);
+//            stopTime.setText(formatTime(time));
+//            TextView stopName = (TextView) v.findViewById(R.id.label_first_stop);
+//            stopName.setText(name);
+//            insertPoint.addView(v);
 
             for(int j = 0 ; j < busStops.size(); j++) {
                 busStop = busStops.get(j);
                 View busStopView = vi.inflate(R.layout.bus_stop, null);
                 TextView textBusStop = (TextView) busStopView.findViewById(R.id.bus_stop);
+                ImageView busStopImage = (ImageView) busStopView.findViewById(R.id.bus_stop_image);
                 textBusStop.setText(busStop);
                 TextView exitTime = (TextView) busStopView.findViewById(R.id.exit_time);
 
-                if (j == busStops.size() - 1) {
-                    textBusStop.setTextColor(Color.RED);
+
+                if (j == 0) {
+                    exitTime.setText(formatTime((Date) time));
+                    busStopImage.setImageResource(R.drawable.ic_directions_bus_black_24dp);
+                }
+                else if (j == busStops.size() - 1) {
                     exitTime.setText(formatTime((Date) exit));
+                    busStopImage.setImageResource(R.drawable.ic_directions_bus_black_24dp);
 
-
-                } else {
-                    textBusStop.setTextColor(Color.BLACK);
+                }
+                else {
                     exitTime.setVisibility(View.INVISIBLE);
+                    busStopImage.setVisibility(View.INVISIBLE);
+                    textBusStop.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
+                    textBusStop.setTypeface(null, Typeface.ITALIC);
+                    busStopView.setPadding(busStopView.getPaddingLeft(),0,0,0);
                 }
                 insertPoint.addView(busStopView);
             }
@@ -119,16 +132,16 @@ public class RouteActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void expandBusStopList(View view){
-        if(!flagListVisible){
-            recycler.setVisibility(View.VISIBLE);
-            flagListVisible = true;
-        }
-        else {
-            recycler.setVisibility(View.GONE);
-            flagListVisible = false;
-        }
-    }
+//    public void expandBusStopList(View view){
+//        if(!flagListVisible){
+//            recycler.setVisibility(View.VISIBLE);
+//            flagListVisible = true;
+//        }
+//        else {
+//            recycler.setVisibility(View.GONE);
+//            flagListVisible = false;
+//        }
+//    }
 
     private String formatTime(Date date){
         Calendar calendar = Calendar.getInstance();

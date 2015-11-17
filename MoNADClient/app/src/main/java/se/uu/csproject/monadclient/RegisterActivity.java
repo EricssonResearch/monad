@@ -51,7 +51,7 @@ public class RegisterActivity extends AppCompatActivity {
 
                 //check if the two passwords match or not
                 if(!passwordEntered.equals(passwordVerifyEntered)) {
-                    Toast.makeText(getApplicationContext(), "Passwords do not match!",
+                    Toast.makeText(getApplicationContext(), getString(R.string.java_passwordsnomatch),
                             Toast.LENGTH_LONG).show();
                     return;
                 }
@@ -61,13 +61,15 @@ public class RegisterActivity extends AppCompatActivity {
                 try {
                     // Get the info of the user, send them with the request
                     String response = task.execute(username.getText().toString(), passwordEntered, email.getText().toString(), phone.getText().toString()).get();
-                    Toast.makeText(getApplicationContext(), response,
-                            Toast.LENGTH_LONG).show();
                     // If the user successfully registered, the app will jump to search activity.
                     if (response.startsWith("Success (1)")) {
+                        Toast.makeText(getApplicationContext(), getString(R.string.java_signupsuccess), Toast.LENGTH_LONG).show();
                         RegisterActivity.this.startActivity(new Intent(RegisterActivity.this, MainActivity.class));
                         setResult(RESULT_OK);
                         finish();
+                    }
+                    else{
+                        Toast.makeText(getApplicationContext(), response, Toast.LENGTH_LONG).show();
                     }
                 } catch (InterruptedException e) {
                     e.printStackTrace();

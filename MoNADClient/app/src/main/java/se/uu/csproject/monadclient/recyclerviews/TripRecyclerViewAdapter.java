@@ -12,8 +12,11 @@ import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
+import org.w3c.dom.Text;
+
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -41,6 +44,7 @@ public class TripRecyclerViewAdapter
         ImageButton routeInfoButton; //active trips only
         ImageButton cancelButton; //active trips only
         RatingBar feedback; // past trips only
+        TextView busNumbers;
 
         TripViewHolder(final View itemView) {
             super(itemView);
@@ -54,6 +58,7 @@ public class TripRecyclerViewAdapter
             clockIcon = (ImageView) itemView.findViewById(R.id.icon_clock);
             routeInfoButton = (ImageButton) itemView.findViewById(R.id.button_routeinfo);
             cancelButton = (ImageButton) itemView.findViewById(R.id.cancel);
+            busNumbers = (TextView) itemView.findViewById(R.id.busNumber);
         }
     }
 
@@ -94,6 +99,7 @@ public class TripRecyclerViewAdapter
         tripViewHolder.destination.setText(trips.get(i).getEndBusStop());
         tripViewHolder.departureTime.setText(formatTime(trips.get(i).getStartTime()));
         tripViewHolder.arrivalTime.setText(formatTime(trips.get(i).getEndTime()));
+        tripViewHolder.busNumbers.setText(formatBusNumbers(trips.get(i).getBusLines()));
 
         final int MILLISECONDS = 1000;
 
@@ -153,6 +159,7 @@ public class TripRecyclerViewAdapter
         // if the trip already happened
         else {
             tripViewHolder.feedback.setRating(trips.get(i).getFeedback());
+            tripViewHolder.date.setText(formatDate(trips.get(i).getStartTime()));
         }
     }
 
@@ -182,8 +189,8 @@ public class TripRecyclerViewAdapter
     }
 
     private void formatAsInProgress(TripViewHolder tripViewHolder) {
-        tripViewHolder.date.setText("TODAY");
-        tripViewHolder.countdownTime.setText("Trip in Progress");
+        tripViewHolder.date.setText(tripViewHolder.itemView.getResources().getString(R.string.java_today));
+        tripViewHolder.countdownTime.setText(tripViewHolder.itemView.getResources().getString(R.string.java_tripinprogress));
         tripViewHolder.countdownTime.setTextColor(ContextCompat.getColor(tripViewHolder.itemView.getContext(), R.color.green));
         tripViewHolder.date.setTextColor(ContextCompat.getColor(tripViewHolder.itemView.getContext(), R.color.green));
         tripViewHolder.clockIcon.setVisibility(View.INVISIBLE);
@@ -203,4 +210,12 @@ public class TripRecyclerViewAdapter
         SimpleDateFormat dateFormat = new SimpleDateFormat("EEE dd MMM.");
         return dateFormat.format(calendar.getTime());
     }
+
+    private String formatBusNumbers(ArrayList<Integer> busNumbers){
+        String busNum="";
+        for (int i = 0; i < busNumbers.size(); i++){
+           busNum = busNum + " " + busNumbers.get(i);
+        } return busNum;
+    }
+
 }

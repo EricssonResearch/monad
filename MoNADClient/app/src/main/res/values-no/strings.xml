@@ -1,0 +1,173 @@
+<resources>
+    <string name="app_name">MoNAD - Ready Set GO!</string>
+
+    <!--Activity titles (label displayed on the Toolbar)-->
+    <string name="title_activity_about_us">Om oss</string>
+    <string name="title_activity_main">Søk</string>
+    <string name="title_activity_notifications">Varsler</string>
+    <string name="title_activity_profile">Profil</string>
+    <string name="title_activity_register">Registrer deg</string>
+    <string name="title_activity_reset_password">Tilbakestill passord</string>
+    <string name="title_activity_route">Ruteinformasjon</string>
+    <string name="title_activity_settings">Innstillinger</string>
+    <string name="title_activity_search">Søk</string>
+    <string name="title_activity_trips">Mine turer</string>
+    <string name="title_activity_confirm_code_popup">Aktiveringskode</string>
+    <string name="title_activity_forgot_password_popup">Skriv inn e-postadresse din</string>
+    <string name="title_activity_route_confirm_popup">Bekreft?</string>
+    <string name="title_activity_trip_cancel_popup">Avbryt?</string>
+    <string name="title_activity_google_log_in">Logg inn med Google</string>
+
+    <!--Toolbar/Actionbar menu items-->
+    <string name="action_search">Hjem</string>
+    <string name="action_notifications">Varslinger</string>
+    <string name="action_mytrips">Mine turer</string>
+    <string name="action_profile">Profil</string>
+    <string name="action_settings">Innstillinger</string>
+    <string name="action_aboutus">Om oss</string>
+    <string name="action_signout">Logg av</string>
+
+    <!--Activity strings (content)-->
+    <string name="label_aboutus_projectName">Prosjektnavn</string>
+    <string name="label_aboutus_project">Uppsala Student Project CS 2015 (MoNAD)</string>
+    <string name="label_aboutus_productowner">Produkt eier</string>
+    <string name="label_aboutus_description">Beskrivelse</string>
+    <string name="label_aboutus_texttitle">Om oss</string>
+    <string name="label_aboutus_descriptiontext">MoNAD er et prosjekt utviklet av masterstudenter i informatikk ved Uppsala Universitet.</string>
+
+
+    <!--Activity - Login-->
+    <string name="label_login_login">Logg inn</string>
+    <string name="label_login_username">Brukenavn</string>
+    <string name="label_login_password">Passord</string>
+    <string name="label_login_anonymous">Anonym innloggning</string>
+    <string name="label_login_newuser">Ny bruker? Opprett en brukerkonto</string>
+    <string name="label_login_forgottenpassword">Glemt passordet?</string>
+    <string name="label_login_wrongcredentials">Innloggingen mislyktes. Prøv igjen</string>
+
+    <!--Activity - Main (Search view)-->
+    <string name="label_main_searchtext">Hvor vil du reise?</string>
+    <string name="label_main_advancedsearch">Avansert søk</string>
+    <string name="label_main_recommendations">Anbefaling</string>
+
+    <!--Activity - Notifications-->
+    <string name="label_notification_notification">Varsler</string>
+    <string name="label_notification_reschedule">Planlegg på nytt</string>
+
+    <!--Activity - Profile-->
+    <string name="label_profile_contactinfo">Kontaktinformasjon</string>
+    <string name="label_profile_username">Brukernavn</string>
+    <string name="label_profile_phone">Telefonnummer</string>
+    <string name="label_profile_email">E-postadresse</string>
+    <string name="label_profile_info">Profilinformasjon</string>
+    <string name="label_profile_savechanges">Lagre endringer</string>
+    <string name="label_profile_changepassword">Endre passord</string>
+
+    <!--Activity -Register-->
+    <string name="label_register_newaccount">Ny brukerkonto</string>
+    <string name="label_register_username">Brukernavn</string>
+    <string name="label_register_password">Passord</string>
+    <string name="label_register_verifypassword">Bekreft passord</string>
+    <string name="label_register_email">E-post</string>
+    <string name="label_register_mobilenumber">Telefonnummer</string>
+    <string name="label_register_register">Registrer deg</string>
+
+    <!--Activity - Reset Password-->
+    <string name="label_resetpassword_resetpassword">Tilbakestill passord</string>
+    <string name="label_resetpassword_enternewpassword">Angi nytt passord</string>
+    <string name="label_resetpassword_confirmnewpassword">Bekreft nytt passord</string>
+    <string name="label_resetpassword_resetbutton">Tilbakestill</string>
+    <string name="label_resetpassword_entercurrentpassword">Ange ditt nuvarande lösenord</string>
+    <string name="label_resetpassword_changepassword">Endre passord</string>
+
+    <!--Activity - Route -->
+    <string name="label_trips_join">Bli med turen</string>
+
+    <!--Activity - Search-->
+    <string name="label_search_from">Fra</string>
+    <string name="label_search_hintposition">Din posisjon</string>
+    <string name="label_search_destination">Destinasjon</string>
+    <string name="label_search_hintdestination">Din destinasjon</string>
+    <string name="label_search_depature">Avgang</string>
+    <string name="label_search_arrival">Ankomst</string>
+    <string name="label_search_priority">Prioritering</string>
+    <string name="label_search_shortesttriptime">Korteste turen</string>
+    <string name="label_search_earliesttrip">Tidigste turen</string>
+    <string name="label_search_results">Reiseforslag</string>
+    <string name="label_search_search">Søk</string>
+    <string name="label_search_moreresults">Vis flere turer</string>
+
+    <!--Activity - Settings-->
+    <string-array name="settings_tab_titles">
+        <item>Språk</item>
+        <item>Varsler</item>
+        <item>Temaer</item>
+    </string-array>
+
+    <!--Settings - Alert settings -->
+    <string name="label_fragmentsettingsalert_recommendation">Anbefalinger</string>
+    <string name="label_fragmentsettingsalert_alert">Påminnelser om turen</string>
+
+    <!-- Settings - Theme settings -->
+    <string name="label_fragmentsettingstheme_light">Lys</string>
+    <string name="label_fragmentsettingstheme_dark">Mørk</string>
+    <string name="label_fragmentsettingstheme_default">Standard</string>
+
+    <!--Popup - Confirmation Code -->
+    <string name="label_confirmcode_codesent">Bekreftelsekode sendt!</string>
+    <string name="label_confirmcode_code">Bekreftelsekode</string>
+    <string name="label_confirmcode_submit">Send</string>
+
+    <!--Popup - Forgotten Password -->
+    <string name="label_forgotpassword_enteremail">Angi din e-postadresse</string>
+    <string name="label_forgotpassword_email">E-postadresse</string>
+
+    <!--Popup - Route Confirmation -->
+    <string name="label_trip_confirmation">Bekrefte din tur</string>
+    <string name="label_trip_depart">Avgang:</string>
+    <string name="label_trip_arrive">Ankomst:</string>
+    <string name="label_trip_button_confirm">Bekrefte</string>
+    <string name="label_trip_businfo">Buss</string>
+    <string name="label_tripsactivity_from">Fra</string>
+    <string name="label_tripsactivity_to">Til</string>
+
+    <!--Popup - Trip Cancellation -->
+    <string name="label_tripcancel_buttonback">Tilbake</string>
+    <string name="label_tripcancel_buttoncancel">Kansellere tur</string>
+    <string name="label_tripcancel_cancellation">Bekrefte kansellering</string>
+
+    <!--MISCELLANEOUS-->
+    <string name="img_description">Ikon mangler</string>
+    <string name="java_to">til</string>
+    <string name="java_yes">Ja</string>
+    <string name="java_cancel">Avbryt</string>
+    <string name="java_confirm">Bekrefte</string>
+    <string name="java_today">I DAG</string>
+    <string name="java_tripinprogress">Tur i fremgang</string>
+    <string name="java_passwordsnomatch">Passorde samsvarer ikke!</string>
+    <string name="java_locationpermissionwarning">Hvis du ikke å dele posisjonen din, kan vi ikke bruke den i resie søk.</string>
+    <string name="java_accountpermissionwarning">Hvis du ikke ønske å gi oss tilgang til Google-kontoen din, kan du ikke logge på med det.</string>
+    <string name="java_googleplaywarning">Hvis du ikke har aktivert Google Play Services kan vi ikke bruke din posisjon for reise søk.</string>
+    <string name="java_googleplayloginwarning">Hvis du ikke har aktivert Google Play Services kan du ikke logge på med Google-kontoen din.</string>
+    <string name="java_confirmcode_error">Ugyldig kode, prøv igjen</string>
+    <string name="java_forgotpassword_codesent">En aktiveringskode har blitt sendt til din e-postadresse, skriv inn denne koden.</string>
+    <string name="java_main_noresults">Det er ingen resie til destinasjonen din. Prøv avansert søk</string>
+    <string name="java_main_exitmonad">Vil du avslutte MoNAD?</string>
+    <string name="java_main_leftmonad">Du har forlatt MoNAD</string>
+    <string name="java_search_locationfailed">Visste ikke din posisjon. Aktiver Google Play Services og/eller gi oss tilgang til din posisjon</string>
+    <string name="java_search_currentposition">Min posisjon</string>
+    <string name="java_search_enterdeparture">Velg hvor du vil rese fra</string>
+    <string name="java_search_enterdestination">Velg hvor du vil resie til</string>
+    <string name="java_search_emptysearch">Kunne ikke finne noen tur som er i samsvar med dine ønsker.</string>
+    <string name="java_settings_themechanged_light">Temaet har blitt endret til Lys</string>
+    <string name="java_settings_themechanged_default">Temaet har blitt endret til Standard</string>
+    <string name="java_settings_themechanged_dark">Temaet har blitt endret til Mørk</string>
+    <string name="java_trips_notripsbooked">Ingen tur er booket</string>
+    <string name="java_trips_samebooking">Du har allerede bestilt denne turen</string>
+    <string name="java_languagerva_languagechanged">Språkinnstillingene har blitt endret til</string>
+    <string name="java_notificationsrva_newmessages">Du har en ny melding</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="label_searchresult_timeinfo">n/a - n/a (n/a min)</string>
+    <string name="non_available">n/a</string>
+    <string name="label_searchresult_routeinfo">n/a til n/a</string>
+</resources>

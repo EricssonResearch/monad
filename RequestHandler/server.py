@@ -25,6 +25,7 @@ from datetime import datetime
 from random import randint
 from bson.objectid import ObjectId
 from planner import TravelPlanner, Mode
+from routeGenerator import string_to_coordinates, coordinates_to_nearest_stop
 
 
 def escape(text):
@@ -63,19 +64,28 @@ def application(env, start_response):
 			edPosition = escape(data.getvalue("edPosition"))
 			priority = escape(data.getvalue("priority"))
 			startPositionLatitude = float(escape(data.getvalue("startPositionLatitude")))
-			startPositionLongitude = float(escape(data.getvalue("startPositionLongitude")))	
+			startPositionLongitude = float(escape(data.getvalue("startPositionLongitude")))
 			
-			# dummy coordinates, have to update to real ones when Ilyass implements the required module
 			if (stPosition != "Current Position"):
-				startPositionLatitude = 59.8572316
-				startPositionLongitude = 17.6479787			
+				coordinates = string_to_coordinates(stPosition)
+				if ((coordinates["latitude"] == None) or (coordinates["longitude"] == None)):
+					start_response("200 OK", [("Content-Type", "application/json")])							
+					return [json.dumps({})]
+				else:
+					startPositionLatitude = coordinates["latitude"]
+					startPositionLongitude = coordinates["longitude"]														
+			stop = coordinates_to_nearest_stop(startPositionLongitude, startPositionLatitude)
+			startStop = stop["name"]
 			
-			endPositionLatitude = 58.8167503
-			endPositionLongitude = 16.8683923
-			
-			# dummy bus stops, have to update to real ones when Jens implements the required module
-			startBusStop = ObjectId("5640a09273b239624322ed1f")
-			endBusStop = ObjectId("5640a09273b239624322ed25")
+			coordinates = string_to_coordinates(edPosition)
+			if (coordinates["latitude"] == None or coordinates["longitude"] == None):
+				start_response("200 OK", [("Content-Type", "application/json")])							
+				return [json.dumps({})]
+			else:
+				endPositionLatitude = coordinates["latitude"]
+				endPositionLongitude = coordinates["longitude"]
+			stop = coordinates_to_nearest_stop(endPositionLongitude, endPositionLatitude)
+			endStop = stop["name"]			
 			
 			try:
 				requestTime = datetime.strptime(requestTime, serverConfig.DATE_FORMAT)
@@ -90,6 +100,17 @@ def application(env, start_response):
 			
 			try:						
 				database = serverConfig.MONGO_DATABASE
+				collection = database.BusStop
+				
+				stop1 = collection.find_one({"name": startStop})
+				stop2 = collection.find_one({"name": endStop})
+				if (stop1 != None and stop2 != None):
+					startBusStop = stop1["_id"]
+					endBusStop = stop2["_id"]
+				else:
+					start_response("200 OK", [("Content-Type", "application/json")])							
+					return [json.dumps({})]
+				
 				collection = database.TravelRequest		
 				document = {"userID": userId, "startTime": startTime, "endTime": endTime,
 							"requestTime": requestTime, "startPositionLatitude": startPositionLatitude,
@@ -145,15 +166,20 @@ def application(env, start_response):
 			startPositionLatitude = float(escape(data.getvalue("startPositionLatitude")))
 			startPositionLongitude = float(escape(data.getvalue("startPositionLongitude")))
 			edPosition = escape(data.getvalue("edPosition"))
-			priority = escape(data.getvalue("priority"))
+			priority = escape(data.getvalue("priority"))			
+																	
+			stop = coordinates_to_nearest_stop(startPositionLongitude, startPositionLatitude)			
+			startStop = stop["name"]
 			
-			# dummy coordinates, have to update to real ones when Ilyass implements the required module
-			endPositionLatitude = 58.8167503
-			endPositionLongitude = 16.8683923
-			
-			# dummy bus stops, have to update to real ones when Jens implements the required module
-			startBusStop = ObjectId("5640a09273b239624322ed1f")
-			endBusStop = ObjectId("5640a09273b239624322ed25")	
+			coordinates = string_to_coordinates(edPosition)
+			if (coordinates["latitude"] == None or coordinates["longitude"] == None):
+				start_response("200 OK", [("Content-Type", "application/json")])							
+				return [json.dumps({})]
+			else:
+				endPositionLatitude = coordinates["latitude"]
+				endPositionLongitude = coordinates["longitude"]
+			stop = coordinates_to_nearest_stop(endPositionLongitude, endPositionLatitude)
+			endStop = stop["name"]
 		
 			try:
 				requestTime = datetime.strptime(requestTime, serverConfig.DATE_FORMAT)
@@ -168,6 +194,17 @@ def application(env, start_response):
 			
 			try:						
 				database = serverConfig.MONGO_DATABASE
+				collection = database.BusStop
+				
+				stop1 = collection.find_one({"name": startStop})
+				stop2 = collection.find_one({"name": endStop})
+				if (stop1 != None and stop2 != None):
+					startBusStop = stop1["_id"]
+					endBusStop = stop2["_id"]
+				else:
+					start_response("200 OK", [("Content-Type", "application/json")])							
+					return [json.dumps({})]
+				
 				collection = database.TravelRequest		
 				document = {"userID": userId, "startTime": startTime, "endTime": endTime,
 							"requestTime": requestTime, "startPositionLatitude": startPositionLatitude,
@@ -222,12 +259,12 @@ def application(env, start_response):
 					collection.update({"_id": objectID}, {"$set": {"booked": True}}, upsert = False)
 					document = collection.find_one({"$and": [{"_id": objectID}, {"next": {'$exists': True}}]})	
 					
-				collection = database.TravelRequest
-				collection.update({"_id": requestId}, {"$set": {"reservedTrip": ObjectId(userTripId)}}, upsert = False)
-
 				collection = database.BookedTrip
 				document = {"userID": userId, "partialTrips": partialTrips}
 				collection.insert_one(document)
+					
+				"""collection = database.TravelRequest
+				collection.update({"_id": requestId}, {"$set": {"reservedTrip": ObjectId(userTripId)}}, upsert = False)"""				
 				
 			except pymongo.errors.PyMongoError as e:
 				start_response("500 INTERNAL ERROR", [("Content-Type", "text/plain")])	
@@ -274,8 +311,8 @@ def application(env, start_response):
 					collection.update({"_id": objectID}, {"$set": {"booked": False}}, upsert = False)
 					document = collection.find_one({"$and": [{"_id": objectID}, {"next": {'$exists': True}}]})
 					
-				collection = database.TravelRequest
-				collection.update({"_id": requestId}, {"$unset": {"reservedTrip": 1}})				
+				"""collection = database.TravelRequest				
+				collection.update({"_id": requestId}, {"$unset": {"reservedTrip": 1}})"""				
 				
 			except pymongo.errors.PyMongoError as e:
 				start_response("500 INTERNAL ERROR", [("Content-Type", "text/plain")])	
@@ -307,11 +344,17 @@ def application(env, start_response):
 					partialTripIDs = bookedTrip["partialTrips"]
 					partialTrips = []
 					
+					# Delete bookings more than the specified days old
+					cursor = collection.find_one({"_id": partialTripIDs[0]})
+					if ((datetime.now() - cursor["startTime"]).days 
+							>= serverConfig.NUMBER_OF_DAYS_TO_KEEP_USER_BOOKINGS):						
+						collection = database.BookedTrip	
+						collection.delete_one({"_id": bookedTrip["_id"]})
+						collection = database.UserTrip
+						continue
+					
 					for partialTripID in partialTripIDs:
-						partialTripCursor = collection.find_one({"_id": partialTripID})
-						trajectory = []
-						for stop in partialTripCursor["trajectory"]:
-							trajectory.append(stop)
+						partialTripCursor = collection.find_one({"_id": partialTripID})								
 						partialTrip = {
 							"_id": str(partialTripCursor["_id"]),
 							"userID" : partialTripCursor["userID"],
@@ -322,7 +365,7 @@ def application(env, start_response):
 							"startTime": str(partialTripCursor["startTime"]),
 							"endTime": str(partialTripCursor["endTime"]),
 							"requestTime": str(partialTripCursor["requestTime"]),
-							"trajectory": trajectory,
+							"trajectory": partialTripCursor["trajectory"],
 							"feedback": partialTripCursor["feedback"],
 							"requestID": str(partialTripCursor["requestID"]),
 							"booked": partialTripCursor["booked"]
