@@ -30,7 +30,7 @@ from datetime import timedelta
 BUS_LINE = 2
 DB.noOfslices = 0
 # The individual size corresponds to the number of trips
-INDIVIDUAL_SIZE =  14
+INDIVIDUAL_SIZE =  42
 INDIVIDUAL_SIZE_BOUNDS = [30, 90]
 
 
@@ -93,13 +93,26 @@ def genTimetable(individual):
     print times[2]
     print times[102]
 
+def getTimeSlice(startTime):
+    ''' Evaluates the time slice a given starting time in a gene belongs to.
+    @ param startTime datetime
+    @ return (start, end) datetime.datetime objects
+    '''
+
+    startTimeArray = []
+    for x in DB.timeSliceArray:
+        start = datetime.datetime.combine(Fitness.yesterday, datetime.time(x[0], 0, 0))
+        end = datetime.datetime.combine(Fitness.yesterday, datetime.time(x[1], 59, 59))
+
+        if start <= startTime <= end:
+            return start
 
 
 def evaluateNewIndividualFormat(individual):
     individual = sorted(individual, key=itemgetter(3))
     individual = sorted(individual, key=itemgetter(0))
-    #print "Individual................."
-    #print individual
+    print "Individual................."
+    print individual
     
     # Second, we loop trough the number of genes in order to retrieve the
     # number of requests for that particular trip
@@ -107,14 +120,19 @@ def evaluateNewIndividualFormat(individual):
     request = []
     totalWaitingMinutes = []
     cnt = []
-    initialTripTime = datetime.datetime.combine(fitnessClass.yesterday, 
-                                       datetime.datetime.strptime("00:00", 
-                                       fitnessClass.formatTime).time())
+    #initialTripTime = datetime.datetime.combine(fitnessClass.yesterday, 
+    #                                   datetime.datetime.strptime("00:00", 
+    #                                   fitnessClass.formatTime).time())
     db = DB()
     # ----------------------------------------------------
     # Evaluate average time based on requests (& capacity)
     # ----------------------------------------------------
     leftOver = []
+    l = len(db.timeSliceArray) - 1
+    startT = datetime.datetime.combine(Fitness.yesterday, datetime.time(db.timeSliceArray[l][0], 0, 0))
+    endT = datetime.datetime.combine(Fitness.yesterday, datetime.time(db.timeSliceArray[l][1], 59, 59))
+    firstSliceHr = datetime.datetime.combine(Fitness.yesterday, datetime.time(db.timeSliceArray[0][0], 0, 0))
+
 
     for i in range(len(individual)):
         phenotype = db.generatePhenotype(individual[i][0], individual[i][3])
@@ -123,31 +141,34 @@ def evaluateNewIndividualFormat(individual):
         leftOversWaitTime = 0
         sliceLength = (db.timeSliceArray[0][1] - db.timeSliceArray[0][0]) + 1
         noOfTrips = sliceLength*60/individual[i][2]
+        initialTrip = getTimeSlice(individual[i][3])
+
+        for key in fitnessClass.totalRequestsBusline:
+            if individual[i][0] == key[0] and (key[1] <= individual[i][3] <= key[2]):
+                initialCrew = fitnessClass.totalRequestsBusline[key]
+                try:
+                    if (initialCrew > noOfTrips * individual[i][1]):
+                        leftOvers = initialCrew - noOfTrips * individual[i][1]
+                        if (startT <= individual[i][3] <= endT):
+                            timed =  (endT - individual[i][3]) + timedelta(hours=2*db.timeSliceArray[0][0])
+                            timed = (timed.days * databaseClass.minutesDay) + (timed.seconds / databaseClass.minutesHour)
+                            leftOver.append([timed, leftOvers])
+                        else:
+                            timed =  (individual[i+1][3] - individual[i][3])
+                            timed = (timed.days * databaseClass.minutesDay) + (timed.seconds / databaseClass.minutesHour)
+                            leftOver.append([timed, leftOvers])
+                except IndexError:
+                    print "Error"
 
         for j in range(len(phenotype)):
             # TODO: Fix trips that finish at the next day
-            initialTrip = initialTripTime
+            #initialTrip = initialTripTime
             lastTrip = phenotype[j][1]
-            if initialTrip > lastTrip:
-                initialTrip = lastTrip - timedelta(minutes=db.getFrequency(individual[i][0]))
+            #if initialTrip > lastTrip:
+            #    initialTrip = lastTrip - timedelta(minutes=db.getFrequency(individual[i][0]))
             # Search on Fitness.request array for the particular requests
-            #request = fitnessClass.searchRequest(initialTrip, lastTrip, phenotype[j][0], individual[i][0])
-            request, count = fitnessClass.search(initialTrip, lastTrip, phenotype[j][0], individual[i][0])
+            request = fitnessClass.search(initialTrip, lastTrip, phenotype[j][0], individual[i][0])
 
-            #requestOut = fitnessClass.searchRequestOut(initialTrip, lastTrip, phenotype[j][0], individual[i][0])
-            # TODO: Replace the length by the sum of the number of requests
-            #initialCrew = initialCrew + (len(request) - len(requestOut))
-            initialCrew = initialCrew + count 
-            totalRequests = 0
-            if(initialCrew > noOfTrips * individual[i][1]):
-                # People that did not make it !!
-                leftOvers = initialCrew - noOfTrips * individual[i][1]
-                # Total time = number of people times waiting time in minutes
-                if i < len(phenotype)-1: # wth is this?
-                    leftOversWaitTime = leftOvers * fitnessClass.getMinutesNextTrip(db.generatePhenotype(individual[i+1][0], individual[i+1][3]), lastTrip, phenotype[j][0])
-                else:
-                    # Heuristic, computation of this would result really expensive
-                    leftOversWaitTime = leftOvers * db.minutesHour
             initialTripTime = phenotype[j][1]
             if len(request) > 0:
                 waitingMinutes = 0
@@ -156,17 +177,24 @@ def evaluateNewIndividualFormat(individual):
                     waitingTime = phenotype[j][1] - request[k]["_id"]["RequestTime"]
                     waitingMinutes = waitingMinutes + (waitingTime.days * databaseClass.minutesDay) + (waitingTime.seconds / databaseClass.minutesHour)
                     count = count + int(request[k]["total"])
+                    waitingMinutes = waitingMinutes * request[k]["total"]
                 totalWaitingMinutes.append(waitingMinutes)
                 cnt.append(count)
+        try:
+            initialTripTime = getTimeSlice(individual[i+1][3])
+        except:
+            initialTripTime = firstSliceHr
+            #print initialTripTime
+            #print "last gene"
 
     totalLeftOverTime = 0
+    noOfLeftOvers = 0
     for k in range(len(leftOver)):
-        totalLeftOverTime += leftOver[k][1]
+        totalLeftOverTime += leftOver[k][0]
     totalWaitingTime = sum(totalWaitingMinutes) + totalLeftOverTime
-    # totalWaitingTime = sum(totalWaitingMinutes) + tripWaitingTime.total_seconds()/60.0
-    # averageWaitingTime = totalWaitingTime / (sum(cnt) + noOfLeftOvers)
+    #totalWaitingTime = sum(totalWaitingMinutes) + tripWaitingTime.total_seconds()/60.0
+    #averageWaitingTime = totalWaitingTime / (sum(cnt) + noOfLeftOvers)
     return fitnessClass.calculateCost(individual, totalWaitingTime, 0),
-
 
 def evalIndividual(individual):
     ''' Evaluate an individual in the population. Based on how close the

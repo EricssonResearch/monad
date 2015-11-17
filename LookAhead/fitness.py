@@ -35,6 +35,7 @@ class Fitness():
     requestIndex = []
     requestOut = []
     requestIndexOut = []
+    totalRequestsBusline = {}
     # yesterday = date.today() - timedelta(13)
     x = 0
     yesterday = datetime.datetime(2015, 11, 12)
@@ -76,8 +77,6 @@ class Fitness():
  #<--------------------------------Functions for new encoding including multiple line---------------------------------->
 
         busLines = set(db.busLine)
-        print "bus lines..........."
-        print busLines
         for line in busLines:
             for x in db.timeSliceArray:
                 start = datetime.datetime.combine(Fitness.yesterday,datetime.time(x[0], 0, 0))
@@ -88,9 +87,11 @@ class Fitness():
                     countingNoOfRequest = (count[0])
 
                 finalNoReqBetweenTimeSlice = countingNoOfRequest
+                Fitness.totalRequestsBusline[(line, start,end)] = finalNoReqBetweenTimeSlice
             #print (__file__)
-                print "Line number: " + str(line)
-                print "final number of requests " + str(finalNoReqBetweenTimeSlice)
+                #print "Line number: " + str(line)
+                #print "final number of requests " + str(finalNoReqBetweenTimeSlice)
+            #print Fitness.totalRequestsBusline
 
 
  #<--------------------------------END END END END END----------------------------------------------------------------->
@@ -160,15 +161,11 @@ class Fitness():
         ''' what does it do?
         '''
         res = []
-        counting = 0
         for match in Fitness.request:
             if (initialTime <= match["_id"]["RequestTime"] <= NextTime) and (match["_id"]["line"] == Line and 
                 match["_id"]["BusStop"] == BusStop):
-                    counting += 1
                     res.append(match)
-                    if match["total"] > 1:
-                        counting += match["total"] - 1
-        return res, counting
+        return res 
 
     def searchRequestIndex(self, index, initialDate, finalDate):
         ''' Search the index to get the position on the request array for a specific time frame

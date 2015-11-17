@@ -23,8 +23,8 @@ from operator import itemgetter
 # Variables
 MUTATION_PROB = 0.0
 CROSS_OVER_PROB = 0.5
-NO_OF_GENERATION = 10
-POPULATION_SIZE = 100
+NO_OF_GENERATION = 0
+POPULATION_SIZE = 2
 
 
 def main():
