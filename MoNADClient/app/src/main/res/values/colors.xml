@@ -10,4 +10,5 @@
     <color name="white">#FFFFFF</color>
     <color name="grayDark">#333333</color>
     <color name="green">#2e7d32</color>
+    <color name="transparentAccent">#649E9E9E</color>
 </resources>

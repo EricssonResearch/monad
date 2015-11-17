@@ -11,7 +11,6 @@ import android.os.Parcelable;
 import java.util.Calendar;
 import java.util.Date;
 
-//TODO: change times data types
 public class Trip implements Parcelable {
     private int tripId;
     private String startBusStop; // this is the bus stop name

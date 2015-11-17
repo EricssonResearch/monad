@@ -48,32 +48,10 @@ public class RegisterActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String passwordEntered = password.getText().toString();
                 String passwordVerifyEntered = passwordVerify.getText().toString();
-                String emailEntered = email.getText().toString();
-                String phoneEntered = phone.getText().toString();
 
-                //check if the fields entered are valid or not
+                //check if the two passwords match or not
                 if(!passwordEntered.equals(passwordVerifyEntered)) {
                     Toast.makeText(getApplicationContext(), "Passwords do not match!",
-                            Toast.LENGTH_LONG).show();
-                    return;
-                }
-
-                if(passwordEntered.length() < 6) {
-                    Toast.makeText(getApplicationContext(), "Password must have at least 6 characters!",
-                            Toast.LENGTH_LONG).show();
-                    return;
-                }
-
-                EmailValidator validator = EmailValidator.getInstance();
-
-                if (!validator.isValid(emailEntered)) {
-                    Toast.makeText(getApplicationContext(), "Please enter a valid email address!",
-                            Toast.LENGTH_LONG).show();
-                    return;
-                }
-
-                if(!phoneEntered.matches("\\d+")) {
-                    Toast.makeText(getApplicationContext(), "Please enter a valid phone number!",
                             Toast.LENGTH_LONG).show();
                     return;
                 }
@@ -82,12 +60,14 @@ public class RegisterActivity extends AppCompatActivity {
                 SignUpTask task = new SignUpTask();
                 try {
                     // Get the info of the user, send them with the request
-                    String response = task.execute(username.getText().toString(), password.getText().toString(), email.getText().toString(), phone.getText().toString()).get();
+                    String response = task.execute(username.getText().toString(), passwordEntered, email.getText().toString(), phone.getText().toString()).get();
                     Toast.makeText(getApplicationContext(), response,
                             Toast.LENGTH_LONG).show();
                     // If the user successfully registered, the app will jump to search activity.
                     if (response.startsWith("Success (1)")) {
                         RegisterActivity.this.startActivity(new Intent(RegisterActivity.this, MainActivity.class));
+                        setResult(RESULT_OK);
+                        finish();
                     }
                 } catch (InterruptedException e) {
                     e.printStackTrace();
@@ -102,13 +82,6 @@ public class RegisterActivity extends AppCompatActivity {
     public boolean onTouchEvent(MotionEvent event) {
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
-        return true;
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_login, menu);
         return true;
     }
 }

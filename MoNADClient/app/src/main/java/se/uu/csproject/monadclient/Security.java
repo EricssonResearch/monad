@@ -37,7 +37,7 @@ public class Security {
     }
 
     public static boolean isSmallCase(int ascii) {
-        if (ascii > 96 && ascii < 121) {
+        if (ascii > 96 && ascii < 123) {
             return true;
         }
         return false;
@@ -50,6 +50,15 @@ public class Security {
             return true;
         }
         return false;
+    }
+
+    public static boolean validatePassword(String password){
+        if(password.length() < 6) {
+            return false;
+        }
+        else {
+            return true;
+        }
     }
 
     public static boolean validateEmail(String email) {
@@ -96,6 +105,10 @@ public class Security {
 
     public static String invalidUsernameMessage() {
         return "ERROR - Invalid username. Valid characters: (a-z, A-Z, 0-9)";
+    }
+
+    public static String invalidPasswordMessage(){
+        return "ERROR - Password must have at least 6 characters";
     }
 
     public static String invalidEmailMessage() {

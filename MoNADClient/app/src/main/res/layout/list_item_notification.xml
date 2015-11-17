@@ -7,6 +7,7 @@
     card_view:cardCornerRadius="@dimen/cardview_default_radius"
     card_view:cardUseCompatPadding="true"
     card_view:cardElevation="@dimen/cardview_default_elevation"
+    card_view:cardBackgroundColor="@color/white"
     >
 
     <LinearLayout
@@ -15,12 +16,11 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/first_notification"
         android:orientation="horizontal"
-        android:background="@color/white"
         android:padding="@dimen/medium_padding"
         >
 
         <ImageView
-            android:id="@+id/icon"
+            android:id="@+id/label_icon"
             android:layout_width="@dimen/icon_medium"
             android:layout_height="@dimen/icon_medium"
             android:layout_gravity="center_vertical"
@@ -28,27 +28,15 @@
             />
 
         <TextView
-            android:id="@+id/text"
+            android:id="@+id/label_text"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="4"
+            android:layout_weight="3"
             android:textSize="@dimen/medium_text"
             android:padding="@dimen/medium_padding"
             style="@style/importantText"
             android:layout_gravity="center_vertical"
             />
-
-        <TextView
-            android:id="@+id/time"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:textSize="@dimen/medium_text"
-            android:layout_gravity="bottom"
-            android:textColor="@color/primaryColorDark"
-
-            />
-
         <ImageView
             android:layout_width="@dimen/cancel_size"
             android:layout_height="@dimen/cancel_size"
@@ -57,14 +45,24 @@
             android:contentDescription="@string/img_description"
             android:id="@+id/image1"
             />
+        <TextView
+            android:id="@+id/label_time"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textSize="@dimen/small_text"
+            android:gravity="end"
+            android:layout_gravity="bottom"
+            android:textColor="@color/primaryColorDark"
+            />
 
-          <ImageView
-            android:layout_width="@dimen/cancel_size"
-            android:layout_height="@dimen/cancel_size"
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:src="@drawable/ic_clear_black_24dp"
+            android:contentDescription="@string/img_description"
             android:layout_gravity="center_vertical"
-              android:id="@+id/image2"
-              android:layout_marginBottom="13dp"
+            android:id="@+id/image2"
             />
 
     </LinearLayout>

@@ -16,7 +16,7 @@
         android:id="@+id/rv"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:padding="@dimen/activity_horizontal_margin"
+        android:padding="@dimen/medium_padding"
         android:layout_gravity="center"
         />
 
