@@ -33,11 +33,24 @@ DB.noOfslices = 0
 INDIVIDUAL_SIZE =  42
 INDIVIDUAL_SIZE_BOUNDS = [30, 90]
 
+# The individual size corresponds to the number of trips
+startTimeArray = []
+startTimeForABusStop = []
+theTimes = []
+completeStartTimeArray =[]
 
 # Initialize the classes
 databaseClass = DB()
 fitnessClass = Fitness()
+
 def generateStartTimeBasedOnFreq(busLine,frequency, startTime):
+
+    print("----INFORMATION FROM GENE----")
+    print(frequency)
+    print(startTime)
+    #print(busLine)
+    print("\n")
+
     # we make sure the starting time is in between the upper and lower bound of our time slices
     startTimeArray = []
     lineTimes = {}
@@ -56,29 +69,29 @@ def generateStartTimeBasedOnFreq(busLine,frequency, startTime):
                 startTimeArray.append(NextstartTime2)
 
             while NextstartTime <= end:
-
                 NextstartTime = NextstartTime + datetime.timedelta(minutes=frequency)
                 if NextstartTime <= end:
                     startTimeArray.append(NextstartTime)
 
             while NextstartTime2 >= start:
-
                 NextstartTime2 = NextstartTime2 - datetime.timedelta(minutes=frequency)
-
                 if NextstartTime2 >= start:
                     startTimeArray.append(NextstartTime2)
 
     return sorted(startTimeArray) 
 
 def genTimetable(individual):
-
     busLines = [x[0] for x in individual]
     busLines[:] = set(busLines)
     times = {}
+    counter = 0
     for line in busLines:
         ind = [x for x in individual if x[0] == line]
         for i, val in enumerate(ind):
+            counter+=1
+            print(counter)
             generate = generateStartTimeBasedOnFreq(line,val[2], val[3])
+
             if line not in times:
                 times[line] = generate
             else:
@@ -195,6 +208,46 @@ def evaluateNewIndividualFormat(individual):
     #totalWaitingTime = sum(totalWaitingMinutes) + tripWaitingTime.total_seconds()/60.0
     #averageWaitingTime = totalWaitingTime / (sum(cnt) + noOfLeftOvers)
     return fitnessClass.calculateCost(individual, totalWaitingTime, 0),
+=======
+    print((times))
+    #print(sorted(times[102]))
+
+    """
+    for i, trip in enumerate(times):
+        count = 0
+        for tr in sorted(times[trip]):
+            if datetime.time(0,0,0) <= tr <= datetime.time(6, 0, 0):
+                count+=1
+                print count
+            elif datetime.time(6,0,0) <= tr <= datetime.time(9, 0, 0):
+                count+=1
+                print count
+            elif datetime.time(9,0,0) <= tr <= datetime.time(12, 0, 0):
+                count+=1
+                print count
+            elif datetime.time(12,0,0) <= tr <= datetime.time(15, 0, 0):
+                count+=1
+                print count
+            elif datetime.time(15,0,0) <= tr <= datetime.time(18, 0, 0):
+                count+=1
+                print count
+            elif datetime.time(18,0,0) <= tr <= datetime.time(21, 0, 0):
+                count+=1
+                print count
+            elif datetime.time(21,0,0) <= tr <= datetime.time(23, 59, 59):
+                count+=1
+                print count
+        print "No of trips " + str(len(times[trip]))
+        print""
+
+        print "Departure times, line " + str(trip)
+        print sorted(times[trip])
+        """
+# TODO: count the number of trips
+
+
+    return 1,
+>>>>>>> upstream/test
 
 def evalIndividual(individual):
     ''' Evaluate an individual in the population. Based on how close the
