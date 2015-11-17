@@ -124,6 +124,4 @@ public class NotificationsActivity extends MenuedActivity implements AsyncNotifi
         adapter = new NotificationRecyclerViewAdapter(getApplicationContext(), notifications);
         rv.setAdapter(adapter);
     }
-
-
 }

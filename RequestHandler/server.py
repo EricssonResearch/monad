@@ -19,6 +19,7 @@ import pymongo
 import smtplib
 import json
 import serverConfig
+import requests
 
 from pymongo import errors
 from datetime import datetime
@@ -32,6 +33,7 @@ def escape(text):
 	"""Replace dangerous characters with blanks"""
 	return "".join(serverConfig.escape_table.get(c,c) for c in text)
 	
+	
 def send_email(from_addr, to_addr_list, subject, message): 
 	"""Send an email"""
 	header  = "From: {0}\n".format(from_addr)
@@ -44,7 +46,14 @@ def send_email(from_addr, to_addr_list, subject, message):
 	server.login(serverConfig.EMAIL_ADDRESS, serverConfig.EMAIL_PASSWORD)
 	server.sendmail(from_addr, to_addr_list, message)
 	server.quit()
-  			
+	
+	
+def generate_notification(user_id, booked_trip_id):    
+	url = serverConfig.NOTIFICATIONS_SERVER
+	headers = {'Content-type': 'application/x-www-form-urlencoded'}
+	data = {"userID" : str(user_id), "bookedTripID" : str(booked_trip_id)}	
+	requests.post(url, data = data, headers = headers) 
+	  			
 
 def application(env, start_response):
 	"""Get data from the client and handle them according to the type of the request"""
@@ -244,7 +253,7 @@ def application(env, start_response):
 				objectID = ObjectId(userTripId)				
 				
 				document = collection.find_one({"_id": objectID})
-				requestId = document["requestID"]
+				#requestId = document["requestID"]
 				userId = document["userID"]
 				collection.update({"_id": objectID}, {"$set": {"booked": True}}, upsert = False)
 				partialTrips = []
@@ -261,18 +270,22 @@ def application(env, start_response):
 					
 				collection = database.BookedTrip
 				document = {"userID": userId, "partialTrips": partialTrips}
-				collection.insert_one(document)
+				booked_trip_id = collection.insert_one(document).inserted_id
 					
 				"""collection = database.TravelRequest
-				collection.update({"_id": requestId}, {"$set": {"reservedTrip": ObjectId(userTripId)}}, upsert = False)"""				
+				collection.update({"_id": requestId}, {"$set": {"reservedTrip": ObjectId(userTripId)}}, upsert = False)"""
+				
+				generate_notification(userId, booked_trip_id)				
 				
 			except pymongo.errors.PyMongoError as e:
 				start_response("500 INTERNAL ERROR", [("Content-Type", "text/plain")])	
 				logging.error("Something went wrong: {0}".format(e))
-				return [serverConfig.ERROR_MESSAGE]		
+				return [serverConfig.ERROR_MESSAGE]
+			except Exception as e:
+				logging.error("Something went wrong with the notification: {0}".format(e))		
 			else:
 				start_response("200 OK", [("Content-Type", "text/plain")])				
-				return ["Confirmation successful, enjoy your trip!"]
+				return [serverConfig.BOOKING_SUCCESSFUL_MESSAGE]
 			finally:					
 				serverConfig.MONGO_CLIENT.close()
 		else:
@@ -290,7 +303,7 @@ def application(env, start_response):
 				objectID = ObjectId(userTripId)
 				
 				document = collection.find_one({"_id": objectID})
-				requestId = document["requestID"]
+				#requestId = document["requestID"]
 				userId = document["userID"]
 				collection.update({"_id": objectID}, {"$set": {"booked": False}}, upsert = False)
 				
@@ -320,7 +333,7 @@ def application(env, start_response):
 				return [serverConfig.ERROR_MESSAGE]		
 			else:
 				start_response("200 OK", [("Content-Type", "text/plain")])				
-				return ["The trip has been successfully cancelled."]
+				return [serverConfig.BOOKING_CANCEL_SUCCESSFUL_MESSAGE]
 			finally:					
 				serverConfig.MONGO_CLIENT.close()
 		else:
@@ -354,7 +367,13 @@ def application(env, start_response):
 						continue
 					
 					for partialTripID in partialTripIDs:
-						partialTripCursor = collection.find_one({"_id": partialTripID})								
+						partialTripCursor = collection.find_one({"_id": partialTripID})	
+						if ("requestTime" in partialTripCursor and "requestID" in partialTripCursor):
+							requestTime = str(partialTripCursor["requestTime"])	
+							requestID = str(partialTripCursor["requestID"])
+						else:
+							requestTime = str(datetime.now())													
+							requestID = "null"																									
 						partialTrip = {
 							"_id": str(partialTripCursor["_id"]),
 							"userID" : partialTripCursor["userID"],
@@ -364,10 +383,10 @@ def application(env, start_response):
 							"endBusStop": partialTripCursor["endBusStop"],
 							"startTime": str(partialTripCursor["startTime"]),
 							"endTime": str(partialTripCursor["endTime"]),
-							"requestTime": str(partialTripCursor["requestTime"]),
+							"requestTime": requestTime,
 							"trajectory": partialTripCursor["trajectory"],
 							"feedback": partialTripCursor["feedback"],
-							"requestID": str(partialTripCursor["requestID"]),
+							"requestID": requestID,
 							"booked": partialTripCursor["booked"]
 						}
 						if ("next" in partialTripCursor):
@@ -376,7 +395,7 @@ def application(env, start_response):
 					
 					i += 1
 					userTripJson[i] = partialTrips
-		
+				
 			except pymongo.errors.PyMongoError as e:
 				start_response("500 INTERNAL ERROR", [("Content-Type", "text/plain")])	
 				logging.error("Something went wrong: {0}".format(e))
