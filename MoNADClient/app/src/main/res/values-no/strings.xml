@@ -138,6 +138,9 @@
 
     <!--MISCELLANEOUS-->
     <string name="img_description">Ikon mangler</string>
+    <string name="non_available">n/a</string>
+    <string name="hello_world">Hello world!</string>
+
     <string name="java_to">til</string>
     <string name="java_yes">Ja</string>
     <string name="java_cancel">Avbryt</string>
@@ -166,8 +169,12 @@
     <string name="java_trips_samebooking">Du har allerede bestilt denne turen</string>
     <string name="java_languagerva_languagechanged">Språkinnstillingene har blitt endret til</string>
     <string name="java_notificationsrva_newmessages">Du har en ny melding</string>
-    <string name="hello_world">Hello world!</string>
     <string name="label_searchresult_timeinfo">n/a - n/a (n/a min)</string>
-    <string name="non_available">n/a</string>
     <string name="label_searchresult_routeinfo">n/a til n/a</string>
+    <string name="java_login_wrongcredential">Ugyldige inloggningsdetaljer</string>
+    <string name="java_profile_updatesuccess">Profil oppdatert</string>
+    <string name="java_signupsuccess">Registrering lyktes</string>
+    <string name="java_pswd_resetsuccess">Passord er nullstilt</string>
+    <string name="java_pswd_updatesuccess">Passord er oppdatert</string>
+    <string name="java_settings_updatesuccess">Innstillinger oppdatert</string>
 </resources>
