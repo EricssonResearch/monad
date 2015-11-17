@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">MoNAD - Ready Set GO!</string>
+
+    <!--Activity titles (label displayed on the Toolbar)-->
+    <string name="title_activity_about_us">Σχετικά με εμάς</string>
+    <string name="title_activity_login" translatable="false">MoNAD</string>
+    <string name="title_activity_main">Αναζήτηση</string>
+    <string name="title_activity_notifications">Ειδοποιήσεις</string>
+    <string name="title_activity_profile">Προφίλ</string>
+    <string name="title_activity_register">Εγγραφή</string>
+    <string name="title_activity_reset_password">Αναίρεση κωδικού</string>
+    <string name="title_activity_route">Πληροφορίες Διαδρομής</string>
+    <string name="title_activity_settings">Ρυθμίσεις</string>
+    <string name="title_activity_search">Αναζήτηση</string>
+    <string name="title_activity_trips">Τα ταξίδια μου</string>
+    <string name="title_activity_confirm_code_popup">Κωδικός ενεργοποίησης</string>
+    <string name="title_activity_forgot_password_popup">Εισάγετε το email σας</string>
+    <string name="title_activity_route_confirm_popup">Επιβεβαίωση;</string>
+    <string name="title_activity_trip_cancel_popup">Ακύρωση;</string>
+    <string name="title_activity_google_log_in">Είσοδος με λογαριασμό Google</string>
+
+    <!--Toolbar/Actionbar menu items-->
+    <string name="action_search">Αρχική</string>
+    <string name="action_notifications">Ειδοποιήσεις</string>
+    <string name="action_mytrips">Τα ταξίδια μου</string>
+    <string name="action_profile">Προφίλ</string>
+    <string name="action_settings">Ρυθμίσεις</string>
+    <string name="action_aboutus">Σχετικά με εμάς</string>
+    <string name="action_signout">Αποσύνδεση</string>
+
+    <!--Activity strings (content)-->
+    <!--Activity - AboutUs /yonatan -->
+    <string name="label_aboutus_projectName">Όνομα εργασίας</string>
+    <string name="label_aboutus_project">Εργασία φοιτητών Ε.Υ. Ουψάλας 2015 (MoNAD)</string>
+    <string name="label_aboutus_productowner">Ιδιοκτήτης προϊόντος</string>
+    <string name="label_aboutus_product" translatable="false">Ericsson</string>
+    <string name="label_aboutus_description">Περιγραφή</string>
+    <string name="label_aboutus_texttitle">Σχετικά με εμάς</string>
+    <string name="label_aboutus_descriptiontext">Το MoNAD είναι μια εργασία υπό ανάπτυξη από τους μεταπτυχιακούς φοιτητές του Πανεπιστημίου της Ουψάλα.</string>
+
+
+    <!--Activity - Login-->
+    <string name="label_login_login">Είσοδος</string>
+    <string name="label_login_username">Όνομα χρήστη</string>
+    <string name="label_login_password">Κωδικός</string>
+    <string name="label_login_anonymous">Παραμείνετε ανώνυμος</string>
+    <string name="label_login_newuser">Νέος χρήστης; Δημιουργία λογαριασμού</string>
+    <string name="label_login_forgottenpassword">Ξεχάσατε τον κωδικό σας;</string>
+    <string name="label_login_wrongcredentials">Η είσοδος απέτυχε. Παρακαλούμε, προσπαθήστε ξανά</string>
+
+    <!--Activity - Main (Search view)-->
+    <!--Activity - Main (Search view) /yonatan-->
+    <string name="label_main_searchtext">Πού θα θέλατε να πάτε;</string>
+    <string name="label_main_advancedsearch">Σύνθετη αναζήτηση</string>
+    <string name="label_main_recommendations">Προτάσεις</string>
+
+    <!--Activity - Notifications-->
+    <string name="label_notification_notification">Ειδοποιήσεις</string>
+    <string name="label_notification_reschedule">Επανασχεδιασμός ταξιδιού</string>
+
+    <!--Activity - Profile-->
+    <string name="label_profile_contactinfo">Πληροφορίες επικοινωνίας</string>
+    <string name="label_profile_username">Όνομα χρήστη:</string>
+    <string name="label_profile_phone">Τηλέφωνο.:</string>
+    <string name="label_profile_email">E-Mail:</string>
+    <string name="label_profile_info">Πληροφορίες προφίλ</string>
+    <string name="label_profile_savechanges">Αποθήκευση αλλαγών</string>
+    <string name="label_profile_changepassword">Αλλαγή κωδικού</string>
+
+    <!--Activity -Register-->
+    <string name="label_register_newaccount">Νέος λογαριασμός</string>
+    <string name="label_register_username">Όνομα χρήστη</string>
+    <string name="label_register_password">Κωδικός</string>
+    <string name="label_register_verifypassword">Επιβεβαίωση κωδικού</string>
+    <string name="label_register_email">Email</string>
+    <string name="label_register_mobilenumber">Αριθμός κινητού τηλεφώνου</string>
+    <string name="label_register_register">Εγγραφή</string>
+
+    <!--Activity - Reset Password-->
+    <string name="label_resetpassword_resetpassword">Αναίρεση κωδικού</string>
+    <string name="label_resetpassword_enternewpassword">Εισάγετε το νέο κωδικό</string>
+    <string name="label_resetpassword_confirmnewpassword">Επιβεβαιώστε το νέο κωδικό</string>
+    <string name="label_resetpassword_resetbutton">Αναίρεση</string>
+    <string name="label_resetpassword_entercurrentpassword">Εισάγετε τον τρέχων κωδικό</string>
+    <string name="label_resetpassword_changepassword">Αλλαγή κωδικού</string>
+
+    <!--Activity - Route -->
+    <string name="label_trips_join">Join Trip</string>
+
+    <!--Activity - Search-->
+    <string name="label_search_from">Από</string>
+    <string name="label_search_hintposition">Η τοποθεσία σας</string>
+    <string name="label_search_destination">Προορισμός</string>
+    <string name="label_search_hintdestination">Ο προορισμός σας</string>
+    <string name="label_search_depature">Αναχώρηση</string>
+    <string name="label_search_arrival">Άφιξη</string>
+    <string name="label_search_priority">Προτεραιότητα</string>
+    <string name="label_search_shortesttriptime">Διάρκεια ταξιδιού</string>
+    <string name="label_search_earliesttrip">Νωρίτερη αναχώρηση</string>
+    <string name="label_search_results">Αποτελέσματα</string>
+    <string name="label_search_search">Αναζήτηση</string>
+    <string name="label_search_moreresults">Περισσότερα αποτελέσματα</string>
+    <string name="label_searchresult_timeinfo">μ/δ - μ/δ (μ/δ λεπτά)</string>
+    <string name="label_searchresult_routeinfo">μ/δ προς μ/δ</string>
+
+    <!--Activity - Settings-->
+    <string-array name="settings_tab_titles">
+        <item>Γλώσσες</item>
+        <item>Ειδοποιήσεις</item>
+        <item>Θέματα</item>
+    </string-array>
+
+    <!--Settings - Alert settings -->
+    <string name="label_fragmentsettingsalert_recommendation">Προτάσεις</string>
+    <string name="label_fragmentsettingsalert_alert">Υπενθυμίσεις ταξιδιών</string>
+    <string name="label_fragmentsettingsalert_recommendationsswitch" translatable="false">ON </string>
+
+    <!-- Settings - Theme settings -->
+    <string name="label_fragmentsettingstheme_light">Ανοιχτό</string>
+    <string name="label_fragmentsettingstheme_dark">Σκούρο</string>
+    <string name="label_fragmentsettingstheme_default">Προεπιλεγμένο</string>
+
+    <!--Popup - Confirmation Code -->
+    <string name="label_confirmcode_codesent">Κωδικός επιβεβαίωσης εστάλη!</string>
+    <string name="label_confirmcode_code">Κωδικός επιβεβαίωσης</string>
+    <string name="label_confirmcode_codehint" translatable="false">000000</string>
+    <string name="label_confirmcode_submit">Υποβολή</string>
+
+    <!--Popup - Forgotten Password -->
+    <string name="label_forgotpassword_enteremail">Παρακαλούμε εισάγετε email</string>
+    <string name="label_forgotpassword_emailhint" translatable="false">somebody@example.com</string>
+    <string name="label_forgotpassword_email">Διεύθυνση email</string>
+
+    <!--Popup - Route Confirmation -->
+    <string name="label_trip_confirmation">Επιβεβαίωση ταξιδιού</string>
+    <string name="label_trip_depart">Αναχωρηση:</string>
+    <string name="label_trip_arrive">Άφιξη:</string>
+    <string name="label_trip_button_confirm">Επιβεβαίωση</string>
+    <string name="label_trip_businfo">Λεωφορείο </string>
+    <string name="label_tripsactivity_from">Από</string>
+    <string name="label_tripsactivity_to">Προς</string>
+    <string name="label_tripsactivity_time" translatable="false">00:00</string>
+    <string name="label_tripsactivity_countdown" translatable="false">00:00:00</string>
+    <string name="label_tripsactivity_date" translatable="false">00/00/00</string>
+
+    <!--Popup - Trip Cancellation -->
+    <string name="label_tripcancel_buttonback">Πίσω</string>
+    <string name="label_tripcancel_buttoncancel">Ακύρωση ταξιδιού</string>
+    <string name="label_tripcancel_cancellation">Επιβεβαίωση ακύρωσης</string>
+
+    <!--MISCELLANEOUS-->
+    <string name="img_description">Μη διαθέσιμη εικόνα</string>
+    <string name="non_available">μ/δ</string>
+    <string name="hello_world">Γεια σου κόσμε!</string>
+    <string name="GoogleProjectID" translatable="false">81265551950</string>
+    <string name="java_to">προς</string>
+    <string name="java_yes">Ναι</string>
+    <string name="java_cancel">Ακύρο</string>
+    <string name="java_confirm">Επιβεβαίωση</string>
+    <string name="java_today">ΣΗΜΕΡΑ</string>
+    <string name="java_tripinprogress">Ταξίδι σε εξέλιξη</string>
+    <string name="java_passwordsnomatch">Ο κωδικός δεν ταιριάζει!</string>
+    <string name="java_locationpermissionwarning">Άν αρνηθείτε να μοιραστείτε την τρέχουσα τοποθεσία σας, τότε δεν μπορούμε να τη χρησιμοποιήσουμε ώστε να αναζητήσουμε ταξίδια που είναι κατάλληλα</string>
+    <string name="java_accountpermissionwarning">Άν αρνηθείτε να μας παρέχετε πρόσβαση στις πληροφορίες του λογαριασμού Google σας, τότε δεν είναι εφικτή η είσοδος στο σύστημά μας με αυτόν</string>
+    <string name="java_googleplaywarning">Αν δεν ενεργοποιήσετε τις υπηρεσίες Google Play, τότε δεν μπορούμε να χρησιμοποιήσουμε την τρέχουσα τοποθεσία σας, ώστε να αναζητήσουμε ταξίδια που είναι κατάλληλα</string>
+    <string name="java_googleplayloginwarning">Αν δεν ενεργοποιήσετε τις υπηρεσίες Google Play, τότε δεν είναι εφικτή η είσοδος με το λογαρισαμό Google σας</string>
+    <string name="java_confirmcode_error">Λάθος κωδικός, παρακαλούμε προσπαθήστε ξανά</string>
+    <string name="java_forgotpassword_codesent">Ο κωδικός έχει σταλεί στην ηλεκτρονική σας διεύθυνση, παρακαλούμε ελέγξτε το ταχυδρομείο σας και εισάγετε τον κωδικό</string>
+    <string name="java_main_noresults">Δεν βρέθηκαν ταξίδια γι αυτόν τον προορισμό. Παρακαλούμε προσπαθήστε στη σύνθετη αναζήτηση</string>
+    <string name="java_main_exitmonad">Έξοδος από το MoNAD?</string>
+    <string name="java_main_leftmonad">Έχετε αποσυνδεθεί από το MoNAD</string>
+    <string name="java_search_locationfailed">Ή εύρεση της τρέχουσας τοποθεσίας δεν ήταν δυνατή. Παρακαλούμε ενεργοποιείστε τις υπηρεσίες Google Play και/ή επιτρέψτε άδεια χρήσης τοποθεσίας</string>
+    <string name="java_search_currentposition">Τρέχουσα τοποθεσία</string>
+    <string name="java_search_enterdeparture">Παρακαλούμε εισάγετε διεύθυνση αναχώρησης</string>
+    <string name="java_search_enterdestination">Παρακαλούμε εισάγετε διεύθυνση προορισμού</string>
+    <string name="java_search_emptysearch">Δεν βρέθηκαν ταξίδια που να ταιριάζουν στα κριτήρια αναζήτησής σας</string>
+    <string name="java_settings_themechanged_light">Το θέμα άλλαξε σε "ανοιχτό"</string>
+    <string name="java_settings_themechanged_default">Το θέμα άλλαξε σε "προεπιλεγμένο"</string>
+    <string name="java_settings_themechanged_dark">Το θέμα άλλαξε σε "σκούρο"</string>
+    <string name="java_trips_notripsbooked">Κανένα προγραμματισμένο ταξίδι</string>
+    <string name="java_trips_samebooking">Έχετε ήδη προγραμματίσει το συγκεκριμένο ταξίδι</string>
+    <string name="java_languagerva_languagechanged">Η γλώσσα άλλαξε σε</string>
+    <string name="java_notificationsrva_newmessages">Έχετε νέα μηνύματα</string>
+    <string name="java_login_wrongcredential">Λάθος δεδομένα. Παρακαλούμε, προσπαθήστε ξανά.</string>
+    <string name="java_profile_updatesuccess">Το προφίλ ενημερώθηκε επιτυχώς</string>
+    <string name="java_signupsuccess">Εγγραφή επιτυχής</string>
+    <string name="java_pswd_resetsuccess">Αναίρεση κωδικού επιτυχής</string>
+    <string name="java_pswd_updatesuccess">Ενημέρωση κωδικού επιτυχής</string>
+    <string name="java_settings_updatesuccess">Οι ρυθμίσεις ενημερώθηκαν επιτυχώς</string>
+</resources>
