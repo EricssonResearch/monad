@@ -84,7 +84,7 @@
     <string name="label_resetpassword_changepassword">Αλλαγή κωδικού</string>
 
     <!--Activity - Route -->
-    <string name="label_trips_join">Join Trip</string>
+    <string name="label_trips_join">Επιλογή ταξιδιού</string>
 
     <!--Activity - Search-->
     <string name="label_search_from">Από</string>

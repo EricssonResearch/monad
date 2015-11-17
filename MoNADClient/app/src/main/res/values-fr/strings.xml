@@ -132,4 +132,10 @@
         <item>Alertes</item>
         <item>Thème</item>
     </string-array>
+    <string name="java_login_wrongcredential">Connexion échouée. Veuillez réessayer</string>
+    <string name="java_profile_updatesuccess">Votre profil a été mis à jour</string>
+    <string name="java_pswd_resetsuccess">Votre mot de passe a réinitialisé</string>
+    <string name="java_pswd_updatesuccess">Votre mot de passe a été mis à jour</string>
+    <string name="java_settings_updatesuccess">Vos paramétres ont été mis à jour</string>
+    <string name="java_signupsuccess">Vous êtes connectés</string>
 </resources>
