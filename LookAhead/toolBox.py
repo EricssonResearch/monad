@@ -186,7 +186,7 @@ def evaluateNewIndividualFormat(individual):
                 count = 0
                 for k in range(len(request)):
                     waitingTime = phenotype[j][1] - request[k]["_id"]["RequestTime"]
-                    waitingMinutes = waitingMinutes + (waitingTime.days * databaseClass.minutesDay) + (waitingTime.seconds / databaseClass.minutesHour)
+                    waitingMinutes = waitingTime.days * databaseClass.minutesDay + waitingTime.seconds / databaseClass.minutesHour
                     count = count + int(request[k]["total"])
                     waitingMinutes = waitingMinutes * request[k]["total"]
                 totalWaitingMinutes.append(waitingMinutes)
@@ -203,6 +203,9 @@ def evaluateNewIndividualFormat(individual):
     for k in range(len(leftOver)):
         totalLeftOverTime += leftOver[k][0]
     totalWaitingTime = sum(totalWaitingMinutes) + totalLeftOverTime
+    # print sum(totalWaitingMinutes)
+    # print totalLeftOverTime
+    # print totalWaitingTime
     #totalWaitingTime = sum(totalWaitingMinutes) + tripWaitingTime.total_seconds()/60.0
     #averageWaitingTime = totalWaitingTime / (sum(cnt) + noOfLeftOvers)
     return fitnessClass.calculateCost(individual, totalWaitingTime, 0),
