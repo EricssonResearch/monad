@@ -78,7 +78,7 @@ public class SettingsActivity extends MenuedActivity {
             }
 
             if(response.startsWith("Success (1)")){
-                Toast.makeText(this, getString(R.string.java_settings_updatesuccess), Toast.LENGTH_LONG).show();
+                //Toast.makeText(this, getString(R.string.java_settings_updatesuccess), Toast.LENGTH_LONG).show();
                 ClientAuthentication.setIfSettingsChanged(false);
             }
             else{
@@ -87,7 +87,7 @@ public class SettingsActivity extends MenuedActivity {
                 //also, this situation: SettingsActivity1 -> ... -> SettingsActivity2, and some settings are changed in SettingsActivity2,
                 //then the setting update should be shown in SettingsActivity1 once resumed.
                 //however, this is not done yet (and low priority) since it's a bit tricky dealing with fragment
-//                Toast.makeText(this, response, Toast.LENGTH_LONG).show();
+                //Toast.makeText(this, response, Toast.LENGTH_LONG).show();
             }
         }
     }

@@ -218,9 +218,7 @@ public class SearchActivity extends MenuedActivity implements
             int month = c.get(Calendar.MONTH);
             int day = c.get(Calendar.DAY_OF_MONTH);
             DatePickerDialog dialog = new DatePickerDialog(getActivity(), this, year, month, day);
-            // TODO: Uncomment the next line when we reliably have new timetables every day - it prevents
-            // TODO: the user from searching for an old trip
-            //dialog.getDatePicker().setMinDate(new Date().getTime() - 1000);
+            dialog.getDatePicker().setMinDate(new Date().getTime() - 1000);
             return dialog;
         }
 
