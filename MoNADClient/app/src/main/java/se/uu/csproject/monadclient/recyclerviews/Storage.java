@@ -144,67 +144,67 @@ public class Storage{
     }
 
     public static void initializeNotificationData() {
-        ArrayList<Notify> notifications = new ArrayList<>();
-        Calendar calendar = new GregorianCalendar(2015, 10, 26, 10, 40, 0);
-        Date time1 = calendar.getTime();
-        calendar = new GregorianCalendar(2015, 10, 26, 10, 50, 0);
-        Date time2 = calendar.getTime();
-        calendar = new GregorianCalendar(2015, 10, 26, 10, 45, 0);
-        Date time3 = calendar.getTime();
-        calendar = new GregorianCalendar(2015, 10, 26, 11, 0, 0);
-        Date time4 = calendar.getTime();
-        calendar = new GregorianCalendar(2015, 10, 27, 9, 50, 0);
-        Date time5 = calendar.getTime();
-        calendar = new GregorianCalendar(2015, 10, 27, 10, 5, 0);
-        Date time6 = calendar.getTime();
-        notifications.add(new Notify("Bus 805: 5 min delay", time1, 1));
-        notifications.add(new Notify("Bus 805: Coming in 5 min", time2, 2));
-        notifications.add(new Notify("Bus 805: Departing now", time3, 3));
-        notifications.add(new Notify("Bus 801: 5 min delay", time4, 1));
-        notifications.add(new Notify("Bus 801: Coming in 5 min", time5, 2));
-        notifications.add(new Notify("Bus 801: Departing now", time6, 3));
-
-        setNotifications(notifications);
+//        ArrayList<Notify> notifications = new ArrayList<>();
+//        Calendar calendar = new GregorianCalendar(2015, 10, 26, 10, 40, 0);
+//        Date time1 = calendar.getTime();
+//        calendar = new GregorianCalendar(2015, 10, 26, 10, 50, 0);
+//        Date time2 = calendar.getTime();
+//        calendar = new GregorianCalendar(2015, 10, 26, 10, 45, 0);
+//        Date time3 = calendar.getTime();
+//        calendar = new GregorianCalendar(2015, 10, 26, 11, 0, 0);
+//        Date time4 = calendar.getTime();
+//        calendar = new GregorianCalendar(2015, 10, 27, 9, 50, 0);
+//        Date time5 = calendar.getTime();
+//        calendar = new GregorianCalendar(2015, 10, 27, 10, 5, 0);
+//        Date time6 = calendar.getTime();
+//        notifications.add(new Notify("Bus 805: 5 min delay", time1, 1));
+//        notifications.add(new Notify("Bus 805: Coming in 5 min", time2, 2));
+//        notifications.add(new Notify("Bus 805: Departing now", time3, 3));
+//        notifications.add(new Notify("Bus 801: 5 min delay", time4, 1));
+//        notifications.add(new Notify("Bus 801: Coming in 5 min", time5, 2));
+//        notifications.add(new Notify("Bus 801: Departing now", time6, 3));
+//
+//        setNotifications(notifications);
     }
 
     public static void initializeRecommendationsData() {
-        Calendar calendar = new GregorianCalendar(2015, 10, 26, 10, 40, 0);
-        Date startdate1 = calendar.getTime();
-        calendar = new GregorianCalendar(2015, 10, 26, 10, 50, 0);
-        Date enddate1 = calendar.getTime();
-        calendar = new GregorianCalendar(2015, 10, 26, 10, 45, 0);
-        Date startdate2 = calendar.getTime();
-        calendar = new GregorianCalendar(2015, 10, 26, 11, 0, 0);
-        Date enddate2 = calendar.getTime();
-        calendar = new GregorianCalendar(2015, 10, 27, 9, 50, 0);
-        Date startdate3 = calendar.getTime();
-        calendar = new GregorianCalendar(2015, 10, 27, 10, 5, 0);
-        Date enddate3 = calendar.getTime();
-        calendar = new GregorianCalendar(2015, 10, 22, 11, 30, 0);
-        Date startdate4 = calendar.getTime();
-        calendar = new GregorianCalendar(2015, 10, 22, 12, 0, 0);
-        Date enddate4 = calendar.getTime();
-
-        ArrayList<PartialTrip> partialTrips = new ArrayList<>();
-        ArrayList<String> trajectory = new ArrayList<>();
-        trajectory.add("BMC");
-        trajectory.add("Akademiska Sjukhuset");
-        trajectory.add("Ekeby Bruk");
-        trajectory.add("Ekeby");
-
-        partialTrips.add(new PartialTrip("1", 2, 3, "Polacksbacken",startdate1,"Flogsta", enddate1, trajectory));
-        recommendations.add(new FullTrip("1", "2", partialTrips, 10, true, 0));
-
-        partialTrips.clear();
-        partialTrips.add(new PartialTrip("1", 2, 3, "Gamla Uppsala", startdate2, "Gottsunda", enddate2, trajectory));
-        recommendations.add(new FullTrip("2", "3", partialTrips, 15, true, 0));
-
-        partialTrips.clear();
-        partialTrips.add(new PartialTrip("1",2,3, "Granby",startdate3,"Tunna Backar", enddate3, trajectory));
-        recommendations.add(new FullTrip("3", "4", partialTrips, 15, true, 0));
-
-        partialTrips.clear();
-        partialTrips.add(new PartialTrip("1",2,3, "Kungsgatan", startdate4, "Observatoriet", enddate4, trajectory));
-        recommendations.add(new FullTrip("4", "5", partialTrips, 30, true, 0));
+//        Calendar calendar = new GregorianCalendar(2015, 10, 26, 10, 40, 0);
+//        Date startdate1 = calendar.getTime();
+//        calendar = new GregorianCalendar(2015, 10, 26, 10, 50, 0);
+//        Date enddate1 = calendar.getTime();
+//        calendar = new GregorianCalendar(2015, 10, 26, 10, 45, 0);
+//        Date startdate2 = calendar.getTime();
+//        calendar = new GregorianCalendar(2015, 10, 26, 11, 0, 0);
+//        Date enddate2 = calendar.getTime();
+//        calendar = new GregorianCalendar(2015, 10, 27, 9, 50, 0);
+//        Date startdate3 = calendar.getTime();
+//        calendar = new GregorianCalendar(2015, 10, 27, 10, 5, 0);
+//        Date enddate3 = calendar.getTime();
+//        calendar = new GregorianCalendar(2015, 10, 22, 11, 30, 0);
+//        Date startdate4 = calendar.getTime();
+//        calendar = new GregorianCalendar(2015, 10, 22, 12, 0, 0);
+//        Date enddate4 = calendar.getTime();
+//
+//        ArrayList<PartialTrip> partialTrips = new ArrayList<>();
+//        ArrayList<String> trajectory = new ArrayList<>();
+//        trajectory.add("BMC");
+//        trajectory.add("Akademiska Sjukhuset");
+//        trajectory.add("Ekeby Bruk");
+//        trajectory.add("Ekeby");
+//
+//        partialTrips.add(new PartialTrip("1", 2, 3, "Polacksbacken",startdate1,"Flogsta", enddate1, trajectory));
+//        recommendations.add(new FullTrip("1", "2", partialTrips, 10, true, 0));
+//
+//        partialTrips.clear();
+//        partialTrips.add(new PartialTrip("1", 2, 3, "Gamla Uppsala", startdate2, "Gottsunda", enddate2, trajectory));
+//        recommendations.add(new FullTrip("2", "3", partialTrips, 15, true, 0));
+//
+//        partialTrips.clear();
+//        partialTrips.add(new PartialTrip("1",2,3, "Granby",startdate3,"Tunna Backar", enddate3, trajectory));
+//        recommendations.add(new FullTrip("3", "4", partialTrips, 15, true, 0));
+//
+//        partialTrips.clear();
+//        partialTrips.add(new PartialTrip("1",2,3, "Kungsgatan", startdate4, "Observatoriet", enddate4, trajectory));
+//        recommendations.add(new FullTrip("4", "5", partialTrips, 30, true, 0));
     }
 }
