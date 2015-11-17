@@ -36,7 +36,7 @@ class DB():
     hoursDay = 24
     minutesHour = 60
     formatTime = '%H:%M'
-    yesterday = datetime.datetime(2015, 11, 16)
+    yesterday = datetime.datetime(2015, 11, 12)
     
 
     # ---------------------------------------------------------------------------------------------------------------------------------------

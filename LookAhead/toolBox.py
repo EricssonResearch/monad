@@ -124,8 +124,6 @@ def getTimeSlice(startTime):
 def evaluateNewIndividualFormat(individual):
     individual = sorted(individual, key=itemgetter(3))
     individual = sorted(individual, key=itemgetter(0))
-    print "Individual................."
-    print individual
     
     # Second, we loop trough the number of genes in order to retrieve the
     # number of requests for that particular trip
@@ -208,9 +206,6 @@ def evaluateNewIndividualFormat(individual):
     #totalWaitingTime = sum(totalWaitingMinutes) + tripWaitingTime.total_seconds()/60.0
     #averageWaitingTime = totalWaitingTime / (sum(cnt) + noOfLeftOvers)
     return fitnessClass.calculateCost(individual, totalWaitingTime, 0),
-=======
-    print((times))
-    #print(sorted(times[102]))
 
     """
     for i, trip in enumerate(times):
@@ -244,10 +239,6 @@ def evaluateNewIndividualFormat(individual):
         print sorted(times[trip])
         """
 # TODO: count the number of trips
-
-
-    return 1,
->>>>>>> upstream/test
 
 def evalIndividual(individual):
     ''' Evaluate an individual in the population. Based on how close the
