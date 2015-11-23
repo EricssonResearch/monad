@@ -143,6 +143,7 @@
         </RelativeLayout>
 
         <LinearLayout
+            android:id="@+id/side_list"
             android:layout_width="300dp"
             android:layout_height="match_parent"
             android:orientation="vertical"
@@ -150,14 +151,13 @@
             android:layout_toEndOf="@+id/side_bar"
             android:background="@color/warnColor"
             android:padding="@dimen/sideframe_padding"
-            android:visibility="gone">
+            android:visibility="gone"
+            >
 
             <!-- separator-->
             <View
                 android:layout_width="0dp"
                 android:layout_height="@dimen/display_bar_margin_top"/>
-
-            <include layout="@layout/list_item_busstop"/>
 
         </LinearLayout>
 

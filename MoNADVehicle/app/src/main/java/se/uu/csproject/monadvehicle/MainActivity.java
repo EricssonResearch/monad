@@ -2,15 +2,23 @@ package se.uu.csproject.monadvehicle;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
+import android.media.Image;
 import android.os.Environment;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageButton;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -36,11 +44,17 @@ import org.mapsforge.map.reader.MapFile;
 import org.mapsforge.map.rendertheme.InternalRenderTheme;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 
 public class MainActivity extends Activity implements ConnectionCallbacks, OnConnectionFailedListener{
 
+    LinearLayout sideList;
+    Route route;
     // name of the map file in the external storage, it should be stored in the root directory of the sdcard
     private static final String MAPFILE = "uppsala.map";
     // MapView provided by mapsforge instead of native MapView in Android
@@ -84,6 +98,9 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        sideList = (LinearLayout) findViewById(R.id.side_list);
+        route = new Route(generateBusStops());
 
         mapView = (MapView) findViewById(R.id.mapView);
 
@@ -156,6 +173,25 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
         mapView.getLayerManager().getLayers().add(this.myLocationOverlay);
 
         buildGoogleApiClient();
+
+        ImageButton showBusStopList =(ImageButton)findViewById(R.id.busStopButton);
+        showBusStopList.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sideList.setVisibility(View.VISIBLE);
+                LayoutInflater inflater = (LayoutInflater) getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                ViewGroup insertPoint = (ViewGroup) findViewById(R.id.side_list);
+
+                for (int j = 0; j < route.getBusStopList().size(); j++) {
+                    View busStopView = inflater.inflate(R.layout.list_item_busstop, null);
+                    TextView busStopTime = (TextView) busStopView.findViewById(R.id.text_busstoptime);
+                    TextView busStopName = (TextView) busStopView.findViewById(R.id.text_busstopname);
+                    busStopTime.setText(route.getBusStopList().get(j).getArrivalTime().toString());
+                    busStopName.setText(route.getBusStopList().get(j).getName());
+                    insertPoint.addView(busStopView);
+                }
+            }
+        });
     }
 
     @Override
@@ -311,4 +347,26 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
         LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, myLocationOverlay);
     }
 
+    public ArrayList<BusStop> generateBusStops(){
+        ArrayList<BusStop> busStops = new ArrayList<>();
+        Calendar calendar = new GregorianCalendar(2015, 11, 23, 15, 0, 0);
+        Date arrival1 = calendar.getTime();
+        calendar = new GregorianCalendar(2015, 11, 23, 15, 5, 0);
+        Date arrival2 = calendar.getTime();
+        calendar = new GregorianCalendar(2015, 11, 23, 15, 10, 0);
+        Date arrival3 = calendar.getTime();
+        calendar = new GregorianCalendar(2015, 11, 23, 15, 20, 0);
+        Date arrival4 = calendar.getTime();
+
+        BusStop stop1 = new BusStop(1, "Centralstation", 0, 0, arrival1, 2, 0);
+        busStops.add(stop1);
+        BusStop stop2 = new BusStop(1, "Centralstation", 0, 0, arrival2, 1, 1);
+        busStops.add(stop2);
+        BusStop stop3 = new BusStop(1, "Centralstation", 0, 0, arrival3, 3, 4);
+        busStops.add(stop3);
+        BusStop stop4 = new BusStop(1, "Centralstation", 0, 0, arrival4, 0, 1);
+        busStops.add(stop4);
+
+        return busStops;
+    }
 }

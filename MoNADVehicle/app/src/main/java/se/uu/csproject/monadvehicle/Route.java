@@ -1,10 +1,9 @@
 package se.uu.csproject.monadvehicle;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class Route {
-    private List<BusStop> busStopList;
+    private ArrayList<BusStop> busStopList;
     private boolean completed;
 
     public Route(ArrayList<BusStop> busStops){
@@ -21,7 +20,7 @@ public class Route {
     }
 
 
-    public List<BusStop> getBusStopList() {
+    public ArrayList<BusStop> getBusStopList() {
         return busStopList;
     }
 }
