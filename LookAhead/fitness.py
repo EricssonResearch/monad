@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+#11 -*- coding: utf-8 -*-
 """
 Copyright 2015 Ericsson AB
 
@@ -15,6 +15,7 @@ See the License for the specific language governing permissions and limitations 
 """
 from dbConnection import DB
 from datetime import datetime
+import datetime
 from datetime import timedelta
 from datetime import date
 
@@ -34,9 +35,10 @@ class Fitness():
     requestIndex = []
     requestOut = []
     requestIndexOut = []
+    totalRequestsBusline = {}
     # yesterday = date.today() - timedelta(13)
-    yesterday = datetime(2015, 11, 16)
 
+    yesterday = datetime.datetime(2015, 11, 12)
 
 
 # A decorator is a function that can accept another function as
@@ -62,15 +64,62 @@ class Fitness():
     def runOnce(self):
         db = DB()
         # Setting the start time boundary of request that we want
-        startTime = datetime.combine(Fitness.yesterday, datetime.strptime(Fitness.firstMinute, Fitness.formatTime).time())
+        startTime = datetime.datetime.combine(Fitness.yesterday, datetime.datetime.strptime(Fitness.firstMinute, Fitness.formatTime).time())
+        #print("THIS IS STARTTIME")
+        #print(startTime)
         # Setting the end time boundary of request that we want
-        endTime = datetime.combine(Fitness.yesterday, datetime.strptime(Fitness.lastMinute, Fitness.formatTime).time())
+        #print("THIS IS ENDTIME")
+
+        endTime = datetime.datetime.combine(Fitness.yesterday, datetime.datetime.strptime(Fitness.lastMinute, Fitness.formatTime).time())
+       # print(endTime)
         # Create index for the people going on the bus
         Fitness.request = db.grpReqByBusstopAndTime(startTime, endTime)
+
         self.createRequestIndex(Fitness.request)
         # Create index for the people going down the bus
         Fitness.requestOut = db.getReqCountByEndBusStop(startTime, endTime)
         self.createRequestIndexOut(Fitness.requestOut)
+
+ #<--------------------------------Functions for new encoding including multiple line---------------------------------->
+
+        busLines = set(db.busLine)
+        for line in busLines:
+            for x in db.timeSliceArray:
+                start = datetime.datetime.combine(Fitness.yesterday,datetime.time(x[0], 0, 0))
+                end = datetime.datetime.combine(Fitness.yesterday, datetime.time(x[1], 59, 59))
+                requestBetweenTimeSlices = db.getTravelRequestBetween(start, end, line)
+
+                for count in enumerate(requestBetweenTimeSlices, start=1):
+                    countingNoOfRequest = (count[0])
+
+                finalNoReqBetweenTimeSlice = countingNoOfRequest
+                Fitness.totalRequestsBusline[(line, start,end)] = finalNoReqBetweenTimeSlice
+            #print (__file__)
+                #print "Line number: " + str(line)
+                #print "final number of requests " + str(finalNoReqBetweenTimeSlice)
+            #print Fitness.totalRequestsBusline
+
+
+ #<--------------------------------END END END END END----------------------------------------------------------------->
+
+    def search(self,initialTime,NextTime,BusStop,Line):
+        res = []
+        counting = 0
+
+        for match in Fitness.request:
+
+            if initialTime <= match["_id"]["RequestTime"] <= NextTime and match["_id"]["line"]==Line and match["_id"]["BusStop"] == BusStop:
+                counting+=1
+                res.append(match)
+
+                if match["total"] > 1:
+                    counting += match["total"]-1
+                #print("THIS IS TOTAL")
+                #print(match["total"])
+
+        #print("result from gene ")
+        #print(counting)
+        return res, counting
 
     def timeDiff(self, time1, time2):
         ''' Evaluates the difference between two times.
@@ -106,14 +155,43 @@ class Fitness():
         '''
         result = []
         index = self.searchRequestIndex(Fitness.requestIndex, initialTime, finalTime)
+
         if index != False:
             request = Fitness.request[index[0]:index[1]]
             for i in range(len(request)):
                 if request[i]["_id"]["BusStop"] == busStop and request[i]["_id"]["line"] == line:
                     result.append(request[i])
+
         return result
 
+    def searchRequestNew(self, initialTime, finalTime, line):
+        ''' Search on the request array based on an inital time, a final time and a particular bus stop
+
+        @param: initialTime (datetime): Initial time to perform the request's search
+        @param: finalTime (datetime): Final time to perform the request's search
+        @param: busStop (string): Bus stop name used on the request's search
+        '''
+        result = []
+        index = self.searchRequestIndex(Fitness.requestIndex, initialTime, finalTime)
+        if index != False:
+            request = Fitness.request[index[0]:index[1]]
+            for i in range(len(request)):
+                if request[i]["_id"]["line"] == line:
+                    result.append(request[i])
+        return result
+
+    def search(self, initialTime, NextTime, BusStop, Line):
+        ''' what does it do?
+        '''
+        res = []
+        for match in Fitness.request:
+            if (initialTime <= match["_id"]["RequestTime"] <= NextTime) and (match["_id"]["line"] == Line and 
+                match["_id"]["BusStop"] == BusStop):
+                    res.append(match)
+        return res 
+
     def searchRequestIndex(self, index, initialDate, finalDate):
+
         ''' Search the index to get the position on the request array for a specific time frame
         
         @param: index (array): Structure that stores hour, minute and the request's array position for this time
@@ -150,8 +228,10 @@ class Fitness():
         # Check if both values were generated, if not return an array with false values
         if test:
             return result
+
         else:
             return False
+
 
     def createRequestIndexOut(self, request):
         ''' Creates a structure that stores the hour, the minute and the position on the request array for this particular time
@@ -222,4 +302,74 @@ class Fitness():
                         break
             waitingCost = totalWaitingTime * waitingCostPerMin
             cost = busCost + waitingCost + penaltyOverCapacity
-        return cost
+        # return cost
+        return waitingCost
+
+    def generateStartTimeBasedOnFreq(self, busLine,frequency, startTime):
+        #print("----INFORMATION FROM GENE----")
+        #print(frequency)
+        #print(startTime)
+        #print(busLine)
+        #print("\n")
+        # we make sure the starting time is in between the upper and lower bound of our time slices
+        startTimeArray = []
+        lineTimes = {}
+        for x in DB.timeSliceArray:
+            start = datetime.datetime.combine(Fitness.yesterday, datetime.time(x[0], 0, 0))
+            end = datetime.datetime.combine(Fitness.yesterday, datetime.time(x[1], 59, 59))
+
+            # if the startTime is in a specific time slice
+            if start <= startTime <= end:
+                NextstartTime = startTime + datetime.timedelta(minutes=frequency)
+                NextstartTime2 = startTime - datetime.timedelta(minutes=frequency)
+                startTimeArray.append(startTime)
+                if NextstartTime <= end:
+                    startTimeArray.append(NextstartTime)
+                if NextstartTime2 >= start:
+                    startTimeArray.append(NextstartTime2)
+
+                while NextstartTime <= end:
+                    NextstartTime = NextstartTime + datetime.timedelta(minutes=frequency)
+                    if NextstartTime <= end:
+                        startTimeArray.append(NextstartTime)
+
+                while NextstartTime2 >= start:
+                    NextstartTime2 = NextstartTime2 - datetime.timedelta(minutes=frequency)
+                    if NextstartTime2 >= start:
+
+                        startTimeArray.append(NextstartTime2.time())
+                        #theTimes.append(NextstartTime2.time())
+                        #print("while loop2 running ", NextstartTime2)
+        return startTimeArray
+
+    def genTimetable(self, individual):
+        busLines = [x[0] for x in individual]
+        busLines[:] = set(busLines)
+        times = {}
+        counter = 0
+        for line in busLines:
+            ind = [x for x in individual if x[0] == line]
+            for i, val in enumerate(ind):
+
+                counter+=1 # NOT BEING USED??
+                #print(counter)
+                generate = generateStartTimeBasedOnFreq(line,val[2], val[3])
+
+                if line not in times:
+                    times[line] = generate
+                else:
+                    times[line] = times[line] + generate
+                    #print "Result starting times....."
+
+    def getTimeSlice(self, startTime):
+        ''' Evaluates the time slice a given starting time in a gene belongs to.
+        @ param startTime datetime
+        @ return (start, end) datetime.datetime objects
+        '''
+        startTimeArray = []
+        for x in DB.timeSliceArray:
+            start = datetime.datetime.combine(Fitness.yesterday, datetime.time(x[0], 0, 0))
+            end = datetime.datetime.combine(Fitness.yesterday, datetime.time(x[1], 59, 59))
+
+            if start <= startTime <= end:
+                return start
