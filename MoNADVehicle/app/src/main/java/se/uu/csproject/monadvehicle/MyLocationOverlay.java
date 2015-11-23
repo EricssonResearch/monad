@@ -17,6 +17,7 @@ import org.mapsforge.map.model.MapViewPosition;
 import android.content.Context;
 import android.location.Location;
 import android.location.LocationProvider;
+import android.util.Log;
 
 import com.google.android.gms.location.LocationListener;
 
@@ -126,7 +127,7 @@ public class MyLocationOverlay extends Layer implements LocationListener {
 
 		synchronized (this) {
 			//remove it when necessary
-			System.out.println("current location: "+location.getLatitude()+", "+location.getLongitude());
+			Log.i("current location", location.getLatitude() + ", " + location.getLongitude());
 
 			LatLong latLong = locationToLatLong(location);
 			this.marker.setLatLong(latLong);
