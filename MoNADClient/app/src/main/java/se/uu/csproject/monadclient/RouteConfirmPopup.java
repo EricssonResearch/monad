@@ -20,7 +20,7 @@ import se.uu.csproject.monadclient.recyclerviews.FullTrip;
 import se.uu.csproject.monadclient.recyclerviews.PartialTrip;
 import se.uu.csproject.monadclient.recyclerviews.Storage;
 
-public class RouteConfirmPopup extends AppCompatActivity implements AsyncResponseString, AsyncResponse, AsyncResponseMulti{
+public class RouteConfirmPopup extends AppCompatActivity implements AsyncResponseString{
 
     private TextView busIdView, startTimeView, endTimeView, startPositionView, endPositionView;
     private FullTrip trip;
@@ -66,84 +66,24 @@ public class RouteConfirmPopup extends AppCompatActivity implements AsyncRespons
 
     // Book the trip
     public void confirmTrip(View view){
-        ArrayList<FullTrip> bookings = Storage.getBookings();
-
-        if (bookings.isEmpty()){
-            getBookings();
-        } else if (!isAlreadyBooked(trip, bookings)){
-            SendBookingRequest asyncTask = new SendBookingRequest();
-            asyncTask.delegate = this;
-            asyncTask.execute(trip.getId());
-        } else {
-            CharSequence text = getString(R.string.java_trips_samebooking);
-            Toast toast = Toast.makeText(context, text, Toast.LENGTH_SHORT);
-            toast.show();
-        }
-    }
-
-    // Gets the user's bookings from the server
-    private void getBookings(){
-        String userId = ClientAuthentication.getClientId();
-        SendUserBookingsRequestExtra asyncTaskMulti = new SendUserBookingsRequestExtra();
-        asyncTaskMulti.delegateMulti = this;
-        asyncTaskMulti.execute(userId);
-    }
-
-    // Checks if the user has already booked this trip
-    private boolean isAlreadyBooked(FullTrip fullTrip, ArrayList<FullTrip> bookings){
-        boolean isAlreadyBooked = false;
-        ArrayList<PartialTrip> partialTrips;
-        PartialTrip partialTripFirst, partialTripLast;
-
-        for (int i = 0; i < bookings.size(); i++){
-            partialTrips = bookings.get(i).getPartialTrips();
-            partialTripFirst = partialTrips.get(0);
-            partialTripLast = partialTrips.get(partialTrips.size() - 1);
-
-            if (partialTripFirst.getStartTime().equals(fullTrip.getStartTime()) &&
-                    partialTripLast.getEndTime().equals(fullTrip.getEndTime()) &&
-                    partialTripFirst.getStartBusStop().equals(fullTrip.getStartBusStop()) &&
-                    partialTripLast.getEndBusStop().equals(fullTrip.getEndBusStop())){
-                isAlreadyBooked = true;
-                break;
-            }
-        }
-
-        return isAlreadyBooked;
-    }
-
-    // Deals with the response by the server after requesting the user's bookings to check for double bookings
-    public void processFinishMulti(ArrayList<FullTrip> bookings){
-        Storage.setBookings(bookings);
-
-        if (bookings.isEmpty() || !isAlreadyBooked(trip, bookings)){
-            SendBookingRequest asyncTask = new SendBookingRequest();
-            asyncTask.delegate = this;
-            asyncTask.execute(trip.getId());
-        } else {
-            CharSequence text = getString(R.string.java_trips_samebooking);
-            Toast toast = Toast.makeText(context, text, Toast.LENGTH_SHORT);
-            toast.show();
-        }
+        SendBookingRequest asyncTask = new SendBookingRequest();
+        asyncTask.delegate = this;
+        asyncTask.execute(trip.getId());
     }
 
     // Deal with the response from the server after the user books the trip
     public void processFinish(String response){
         Toast toast = Toast.makeText(context, response, Toast.LENGTH_SHORT);
         toast.show();
-
-        String userId = ClientAuthentication.getClientId();
-        SendUserBookingsRequest asyncTask = new SendUserBookingsRequest();
-        asyncTask.delegate = this;
-        asyncTask.execute(userId);
-    }
-
-    // Deals with the response by the server after requesting the updated user's bookings
-    public void processFinish(ArrayList<FullTrip> bookings){
-        Storage.setBookings(bookings);
-        Intent intent = new Intent(this, TripsActivity.class);
-        startActivity(intent);
-        finish();
+        if (!response.contains("already")){
+            if (!Storage.isEmptyBookings()){
+                Storage.addBooking(trip);
+                Storage.sortBookings();
+            }
+            Intent intent = new Intent(this, TripsActivity.class);
+            startActivity(intent);
+            finish();
+        }
     }
 
     private String formatTime(Date date){

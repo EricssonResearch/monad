@@ -8,6 +8,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 
 import se.uu.csproject.monadclient.recyclerviews.FullTrip;
@@ -15,7 +17,7 @@ import se.uu.csproject.monadclient.recyclerviews.Storage;
 import se.uu.csproject.monadclient.recyclerviews.TripRecyclerViewAdapter;
 
 
-public class TripsActivity extends MenuedActivity implements AsyncResponse{
+public class TripsActivity extends MenuedActivity implements AsyncResponse, AsyncResponseString{
     private Toolbar toolbar;
     private Context context;
     private RecyclerView recyclerView;
@@ -54,6 +56,23 @@ public class TripsActivity extends MenuedActivity implements AsyncResponse{
     @Override
     protected void onPause() {
         super.onPause();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+
+        /*JSONObject changedFeedback = Storage.getChangedFeedback();
+        if (changedFeedback.length() != 0){
+            SendUpdateFeedbackRequest asyncTask = new SendUpdateFeedbackRequest();
+            asyncTask.delegate = this;
+            asyncTask.execute(changedFeedback.toString());
+        }*/
+    }
+
+    public void processFinish(String response){
+        Toast toast = Toast.makeText(context, response, Toast.LENGTH_SHORT);
+        toast.show();
     }
 
     // Gets the user's bookings from the server
