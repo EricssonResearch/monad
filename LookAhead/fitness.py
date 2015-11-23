@@ -302,4 +302,74 @@ class Fitness():
                         break
             waitingCost = totalWaitingTime * waitingCostPerMin
             cost = busCost + waitingCost + penaltyOverCapacity
-        return cost
+        # return cost
+        return waitingCost
+
+    def generateStartTimeBasedOnFreq(self, busLine,frequency, startTime):
+        #print("----INFORMATION FROM GENE----")
+        #print(frequency)
+        #print(startTime)
+        #print(busLine)
+        #print("\n")
+        # we make sure the starting time is in between the upper and lower bound of our time slices
+        startTimeArray = []
+        lineTimes = {}
+        for x in DB.timeSliceArray:
+            start = datetime.datetime.combine(Fitness.yesterday, datetime.time(x[0], 0, 0))
+            end = datetime.datetime.combine(Fitness.yesterday, datetime.time(x[1], 59, 59))
+
+            # if the startTime is in a specific time slice
+            if start <= startTime <= end:
+                NextstartTime = startTime + datetime.timedelta(minutes=frequency)
+                NextstartTime2 = startTime - datetime.timedelta(minutes=frequency)
+                startTimeArray.append(startTime)
+                if NextstartTime <= end:
+                    startTimeArray.append(NextstartTime)
+                if NextstartTime2 >= start:
+                    startTimeArray.append(NextstartTime2)
+
+                while NextstartTime <= end:
+                    NextstartTime = NextstartTime + datetime.timedelta(minutes=frequency)
+                    if NextstartTime <= end:
+                        startTimeArray.append(NextstartTime)
+
+                while NextstartTime2 >= start:
+                    NextstartTime2 = NextstartTime2 - datetime.timedelta(minutes=frequency)
+                    if NextstartTime2 >= start:
+
+                        startTimeArray.append(NextstartTime2.time())
+                        #theTimes.append(NextstartTime2.time())
+                        #print("while loop2 running ", NextstartTime2)
+        return startTimeArray
+
+    def genTimetable(self, individual):
+        busLines = [x[0] for x in individual]
+        busLines[:] = set(busLines)
+        times = {}
+        counter = 0
+        for line in busLines:
+            ind = [x for x in individual if x[0] == line]
+            for i, val in enumerate(ind):
+
+                counter+=1 # NOT BEING USED??
+                #print(counter)
+                generate = generateStartTimeBasedOnFreq(line,val[2], val[3])
+
+                if line not in times:
+                    times[line] = generate
+                else:
+                    times[line] = times[line] + generate
+                    #print "Result starting times....."
+
+    def getTimeSlice(self, startTime):
+        ''' Evaluates the time slice a given starting time in a gene belongs to.
+        @ param startTime datetime
+        @ return (start, end) datetime.datetime objects
+        '''
+        startTimeArray = []
+        for x in DB.timeSliceArray:
+            start = datetime.datetime.combine(Fitness.yesterday, datetime.time(x[0], 0, 0))
+            end = datetime.datetime.combine(Fitness.yesterday, datetime.time(x[1], 59, 59))
+
+            if start <= startTime <= end:
+                return start
