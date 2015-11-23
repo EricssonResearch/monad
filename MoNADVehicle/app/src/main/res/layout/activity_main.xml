@@ -149,8 +149,10 @@
             android:layout_toRightOf="@+id/side_bar"
             android:layout_toEndOf="@+id/side_bar"
             android:background="@color/warnColor"
-            android:padding="@dimen/sideframe_padding">
+            android:padding="@dimen/sideframe_padding"
+            android:visibility="gone">
 
+            <!-- separator-->
             <View
                 android:layout_width="0dp"
                 android:layout_height="@dimen/display_bar_margin_top"/>

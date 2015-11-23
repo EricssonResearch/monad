@@ -11,19 +11,6 @@
         android:background="?attr/colorPrimary"
         android:id="@+id/toolBar">
 
-        <!-- Following button should be deleted after test on Android phone is done or test on Android tablet is available -->
-        <!-- the button is added to facilitate the test on Android phone; it will fill the whole screen -->
-        <!-- The commented button in the bottom of the layout should be restored once this one is deleted-->
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="@string/label_login_login"
-            android:id="@+id/loginButton"
-            android:theme="@style/darkTheme"
-            android:background="?attr/colorPrimary"
-            android:layout_gravity="center_horizontal"
-            android:elevation="@dimen/button_elevation"/>
-
         <TextView
             android:text="@string/title_activity_login"
             android:layout_width="match_parent"
@@ -113,17 +100,16 @@
                 android:layout_height="wrap_content"
                 android:hint="@string/label_login_busnumber"
                 android:layout_marginBottom="@dimen/activity_vertical_margin"/>
-
-             <!--uncomment the button once test on Android phone is done / test on Android tablet is available-->
-            <!--<Button-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:text="@string/label_login_login"-->
-                <!--android:id="@+id/loginButton"-->
-                <!--android:theme="@style/darkTheme"-->
-                <!--android:background="?attr/colorPrimary"-->
-                <!--android:layout_gravity="center_horizontal"-->
-                <!--android:elevation="@dimen/button_elevation"/>-->
+            
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/label_login_login"
+                android:id="@+id/loginButton"
+                android:theme="@style/darkTheme"
+                android:background="?attr/colorPrimary"
+                android:layout_gravity="center_horizontal"
+                android:elevation="@dimen/button_elevation"/>
 
 
         </LinearLayout>

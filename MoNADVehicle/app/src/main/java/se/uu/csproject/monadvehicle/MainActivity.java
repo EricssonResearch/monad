@@ -5,6 +5,7 @@ import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.os.Environment;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -99,7 +100,7 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
                 this.mapView.getModel().frameBufferModel.getOverdrawFactor());
 
         //the bitmap that shows the current location
-        Drawable drawable = getResources().getDrawable(R.drawable.marker_red);
+        Drawable drawable = ContextCompat.getDrawable(getBaseContext(), R.drawable.marker_red);
         Bitmap bitmap = AndroidGraphicFactory.convertToBitmap(drawable);
 
         myLocationOverlay = new MyLocationOverlay(this, this.mapView.getModel().mapViewPosition, bitmap);
