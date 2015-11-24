@@ -337,6 +337,7 @@ public class SearchActivity extends MenuedActivity implements
             CharSequence text = getString(R.string.java_search_emptysearch);
             Toast toast = Toast.makeText(context, text, Toast.LENGTH_SHORT);
             toast.show();
+            Storage.clearSearchResults();
         }
         adapter = new SearchRecyclerViewAdapter(searchResults);
         recyclerView.setAdapter(adapter);
