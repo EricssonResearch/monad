@@ -1,6 +1,5 @@
 package se.uu.csproject.monadclient;
 
-
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -15,6 +14,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+
 
 public class SendUpdateFeedbackRequest extends AsyncTask<String, Void, String> {
     private static String SERVER = "http://130.238.15.114:2001";
@@ -36,7 +36,7 @@ public class SendUpdateFeedbackRequest extends AsyncTask<String, Void, String> {
             conn.setDoOutput(true);
             conn.setInstanceFollowRedirects(false);
             conn.setRequestMethod("POST");
-            conn.setRequestProperty("Content-Type", "application/json");
+            conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
             conn.setRequestProperty("charset", "utf-8");
             conn.setRequestProperty("Content-Length", Integer.toString(postDataLength));
             conn.setUseCaches(false);

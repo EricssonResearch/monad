@@ -440,21 +440,23 @@ def application(env, start_response):
 			logging.error("Get user bookings request: Something went wrong with the data sent by the user's request.")
 			return [serverConfig.ERROR_MESSAGE]
 	
-	elif (data_env["PATH_INFO"] == "/updateFeedbackRequest"):
+	elif (data_env["PATH_INFO"] == "/updateFeedbackRequest"):		
 		if ("changedFeedback" in data):
-			try:
-				changedFeedback = json.load(data.getvalue("changedFeedback"))
+			try:			
+				changedFeedback = json.loads(data.getvalue("changedFeedback"))
 				database = serverConfig.MONGO_DATABASE				
 				collection = database.UserTrip
 				
 				for userTripID in changedFeedback:
-					objectID = ObjectId(userTripID)
-					collection.update({"_id": objectID}, {"$set": {"feedback": changedFeedback[userTripID]}}, upsert = False)
+					userTripID = escape(userTripID)									
+					objectID = ObjectId(userTripID)					
+					feedback = changedFeedback[userTripID]					
+					collection.update({"_id": objectID}, {"$set": {"feedback": feedback}}, upsert = False)					
 					
 					document = collection.find_one({"$and": [{"_id": objectID}, {"next": {'$exists': True}}]})				
 					while (document != None):
 						objectID = document["next"]
-						collection.update({"_id": objectID}, {"$set": {"feedback": changedFeedback[userTripID]}}, upsert = False)
+						collection.update({"_id": objectID}, {"$set": {"feedback": feedback}}, upsert = False)
 						document = collection.find_one({"$and": [{"_id": objectID}, {"next": {'$exists': True}}]})
 				
 			except pymongo.errors.PyMongoError as e:
@@ -462,7 +464,7 @@ def application(env, start_response):
 				logging.error("Something went wrong: {0}".format(e))
 				return [serverConfig.ERROR_MESSAGE]
 			except Exception as e:
-				logging.error("Something went wrong with the json parsing: {0}".format(e))		
+				logging.error("Something went wrong: {0}".format(e))		
 			else:
 				start_response("200 OK", [("Content-Type", "text/plain")])				
 				return [serverConfig.FEEDBACK_UPDATE_SUCCESSFUL_MESSAGE]
@@ -471,7 +473,7 @@ def application(env, start_response):
 		else:
 			start_response("500 INTERNAL ERROR", [("Content-Type", "text/plain")])	
 			logging.error("Update feedback request: Something went wrong with the data sent by the user's request.")
-			return [serverConfig.ERROR_MESSAGE]
+			return [serverConfig.ERROR_MESSAGE]		
 			
 	else:
 		start_response("403 FORBIDDEN", [("Content-Type", "text/plain")])
