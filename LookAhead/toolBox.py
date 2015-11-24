@@ -44,12 +44,16 @@ databaseClass = DB()
 fitnessClass = Fitness()
 
 def generateStartTimeBasedOnFreq(busLine,frequency, startTime):
-
-    print("----INFORMATION FROM GENE----")
-    print(frequency)
-    print(startTime)
-    #print(busLine)
-    print("\n")
+    """ Generate all the trips within a time slice given a single starting time
+    
+    Args: 
+         busLine: an integer representing the bus line ID
+         frequency: the headway in minutes between successive buses
+         startTime: a datetime object representing the start time within the time slice
+    
+    Return: 
+         an array containing all the starting times for the bus trips within the corresponding time slice.
+    """
 
     # we make sure the starting time is in between the upper and lower bound of our time slices
     startTimeArray = []
@@ -58,53 +62,48 @@ def generateStartTimeBasedOnFreq(busLine,frequency, startTime):
         start = datetime.datetime.combine(Fitness.yesterday, datetime.time(x[0], 0, 0))
         end = datetime.datetime.combine(Fitness.yesterday, datetime.time(x[1], 59, 59))
 
-        # if the startTime is in a specific time slice
         if start <= startTime <= end:
-            NextstartTime = startTime + datetime.timedelta(minutes=frequency)
-            NextstartTime2 = startTime - datetime.timedelta(minutes=frequency)
+            nextStartTime = startTime + datetime.timedelta(minutes=frequency)
+            nextStartTime2 = startTime - datetime.timedelta(minutes=frequency)
             startTimeArray.append(startTime)
-            if NextstartTime <= end:
-                startTimeArray.append(NextstartTime)
-            if NextstartTime2 >= start:
-                startTimeArray.append(NextstartTime2)
+            if nextStartTime <= end:
+                startTimeArray.append(nextStartTime)
+            if nextStartTime2 >= start:
+                startTimeArray.append(nextStartTime2)
 
-            while NextstartTime <= end:
-                NextstartTime = NextstartTime + datetime.timedelta(minutes=frequency)
-                if NextstartTime <= end:
-                    startTimeArray.append(NextstartTime)
+            while nextStartTime <= end:
+                nextStartTime = nextStartTime + datetime.timedelta(minutes=frequency)
+                if nextStartTime <= end:
+                    startTimeArray.append(nextStartTime)
 
-            while NextstartTime2 >= start:
-                NextstartTime2 = NextstartTime2 - datetime.timedelta(minutes=frequency)
-                if NextstartTime2 >= start:
-                    startTimeArray.append(NextstartTime2)
+            while nextStartTime2 >= start:
+                nextStartTime2 = nextStartTime2 - datetime.timedelta(minutes=frequency)
+                if nextStartTime2 >= start:
+                    startTimeArray.append(nextStartTime2)
 
     return sorted(startTimeArray) 
 
 def genTimetable(individual):
-    busLines = [x[0] for x in individual]
-    busLines[:] = set(busLines)
-    times = {}
+    """ Generate a timetable for the whole day, for all the bus lines."""
+
+    timetable = {}
     counter = 0
+    busLines = set([x[0] for x in individual])
     for line in busLines:
-        ind = [x for x in individual if x[0] == line]
+        ind = [y for y in individual if y[0] == line]
         for i, val in enumerate(ind):
             counter+=1
-            print(counter)
             generate = generateStartTimeBasedOnFreq(line,val[2], val[3])
 
-            if line not in times:
-                times[line] = generate
+            if line not in timetable:
+                timetable[line] = generate
             else:
-                times[line] = times[line] + generate
-                #print "Result starting times....."
+                timetable[line] = timetable[line] + generate
 
-
-    print "best individual"
+    print "best individual............................"
     print individual
-    print "times..................."
-    #print sorted(times.items(), key = lambda e: e[0])
-    print times[2]
-    print times[102]
+    print "timetable.................................."
+    print sorted(timetable.items(), key = lambda e: e[0])
 
 def getTimeSlice(startTime):
     ''' Evaluates the time slice a given starting time in a gene belongs to.
@@ -122,6 +121,17 @@ def getTimeSlice(startTime):
 
 
 def evaluateNewIndividualFormat(individual):
+    """ Evaluate an individual's fitness as a candidate timetable for the bus network.
+
+    An individual's fitness is evaluated based on the waiting time for passengers requesting buses for the lines
+    represented in the individual. Shorter waiting times on average mean better solutions.
+
+    Args:
+        individual: an individual represented as [[lineID, Capacity, frequency, startTime]...]
+
+    Return:
+        a fitness score calculated as a cost to the bus company.
+    """
     individual = sorted(individual, key=itemgetter(3))
     individual = sorted(individual, key=itemgetter(0))
     
@@ -186,7 +196,7 @@ def evaluateNewIndividualFormat(individual):
                 count = 0
                 for k in range(len(request)):
                     waitingTime = phenotype[j][1] - request[k]["_id"]["RequestTime"]
-                    waitingMinutes = waitingMinutes + (waitingTime.days * databaseClass.minutesDay) + (waitingTime.seconds / databaseClass.minutesHour)
+                    waitingMinutes = (waitingTime.days * databaseClass.minutesDay) + (waitingTime.seconds / databaseClass.minutesHour)
                     count = count + int(request[k]["total"])
                     waitingMinutes = waitingMinutes * request[k]["total"]
                 totalWaitingMinutes.append(waitingMinutes)
@@ -207,38 +217,6 @@ def evaluateNewIndividualFormat(individual):
     #averageWaitingTime = totalWaitingTime / (sum(cnt) + noOfLeftOvers)
     return fitnessClass.calculateCost(individual, totalWaitingTime, 0),
 
-    """
-    for i, trip in enumerate(times):
-        count = 0
-        for tr in sorted(times[trip]):
-            if datetime.time(0,0,0) <= tr <= datetime.time(6, 0, 0):
-                count+=1
-                print count
-            elif datetime.time(6,0,0) <= tr <= datetime.time(9, 0, 0):
-                count+=1
-                print count
-            elif datetime.time(9,0,0) <= tr <= datetime.time(12, 0, 0):
-                count+=1
-                print count
-            elif datetime.time(12,0,0) <= tr <= datetime.time(15, 0, 0):
-                count+=1
-                print count
-            elif datetime.time(15,0,0) <= tr <= datetime.time(18, 0, 0):
-                count+=1
-                print count
-            elif datetime.time(18,0,0) <= tr <= datetime.time(21, 0, 0):
-                count+=1
-                print count
-            elif datetime.time(21,0,0) <= tr <= datetime.time(23, 59, 59):
-                count+=1
-                print count
-        print "No of trips " + str(len(times[trip]))
-        print""
-
-        print "Departure times, line " + str(trip)
-        print sorted(times[trip])
-        """
-# TODO: count the number of trips
 
 def evalIndividual(individual):
     ''' Evaluate an individual in the population. Based on how close the

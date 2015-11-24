@@ -23,8 +23,8 @@ from operator import itemgetter
 # Variables
 MUTATION_PROB = 0.0
 CROSS_OVER_PROB = 0.5
-NO_OF_GENERATION = 5
-POPULATION_SIZE = 10
+NO_OF_GENERATION = 1
+POPULATION_SIZE = 2
 
 def main():
     # Generate the population
@@ -72,7 +72,7 @@ def main():
     print("Best individual is %s, %s" % (sorted(best_ind, key=itemgetter(2)), best_ind.fitness.values))
     print ("Length of best individual: " + str(len(best_ind)))
     #generateTimeTable(best_ind)
-    #toolBox.genTimetable(best_ind)
+    toolBox.genTimetable(best_ind)
 
 
 # def crossover(offspring):
