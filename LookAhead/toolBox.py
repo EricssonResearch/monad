@@ -124,7 +124,8 @@ def evaluateNewIndividualFormat(individual):
     """ Evaluate an individual's fitness as a candidate timetable for the bus network.
 
     An individual's fitness is evaluated based on the waiting time for passengers requesting buses for the lines
-    represented in the individual. Shorter waiting times on average mean better solutions.
+    represented in the individual. Shorter waiting times on average mean better solutions. The algorithm works by by
+    first sorting the individual by starting times, grouped by the bus  lines.
 
     Args:
         individual: an individual represented as [[lineID, Capacity, frequency, startTime]...]
@@ -154,7 +155,6 @@ def evaluateNewIndividualFormat(individual):
     endT = datetime.datetime.combine(Fitness.yesterday, datetime.time(db.timeSliceArray[l][1], 59, 59))
     firstSliceHr = datetime.datetime.combine(Fitness.yesterday, datetime.time(db.timeSliceArray[0][0], 0, 0))
 
-
     for i in range(len(individual)):
         phenotype = db.generatePhenotype(individual[i][0], individual[i][3])
         initialCrew = 0
@@ -170,16 +170,18 @@ def evaluateNewIndividualFormat(individual):
                 try:
                     if (initialCrew > noOfTrips * individual[i][1]):
                         leftOvers = initialCrew - noOfTrips * individual[i][1]
+                        # Check if starting time is in last time slice (21:00 - 23:59)
                         if (startT <= individual[i][3] <= endT):
                             timed =  (endT - individual[i][3]) + timedelta(hours=2*db.timeSliceArray[0][0])
                             timed = (timed.days * databaseClass.minutesDay) + (timed.seconds / databaseClass.minutesHour)
                             leftOver.append([timed, leftOvers])
                         else:
+                            # TODO: shouldn't take trip in the next time slice, but the next one here
                             timed =  (individual[i+1][3] - individual[i][3])
                             timed = (timed.days * databaseClass.minutesDay) + (timed.seconds / databaseClass.minutesHour)
                             leftOver.append([timed, leftOvers])
-                except IndexError:
-                    print "Error"
+                except IndexError as e:
+                    print e
 
         for j in range(len(phenotype)):
             # TODO: Fix trips that finish at the next day
