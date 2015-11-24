@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+#11 -*- coding: utf-8 -*-
 """
 Copyright 2015 Ericsson AB
 
@@ -15,6 +15,7 @@ See the License for the specific language governing permissions and limitations 
 """
 from dbConnection import DB
 from datetime import datetime
+import datetime
 from datetime import timedelta
 from datetime import date
 
@@ -34,8 +35,9 @@ class Fitness():
     requestIndex = []
     requestOut = []
     requestIndexOut = []
+    totalRequestsBusline = {}
     # yesterday = date.today() - timedelta(13)
-    yesterday = datetime(2015, 11, 16)
+    yesterday = datetime.datetime(2015, 11, 12)
 
 
 
@@ -62,15 +64,39 @@ class Fitness():
     def runOnce(self):
         db = DB()
         # Setting the start time boundary of request that we want
-        startTime = datetime.combine(Fitness.yesterday, datetime.strptime(Fitness.firstMinute, Fitness.formatTime).time())
+        startTime = datetime.datetime.combine(Fitness.yesterday, datetime.datetime.strptime(Fitness.firstMinute, Fitness.formatTime).time())
         # Setting the end time boundary of request that we want
-        endTime = datetime.combine(Fitness.yesterday, datetime.strptime(Fitness.lastMinute, Fitness.formatTime).time())
+        endTime = datetime.datetime.combine(Fitness.yesterday, datetime.datetime.strptime(Fitness.lastMinute, Fitness.formatTime).time())
         # Create index for the people going on the bus
         Fitness.request = db.grpReqByBusstopAndTime(startTime, endTime)
         self.createRequestIndex(Fitness.request)
         # Create index for the people going down the bus
         Fitness.requestOut = db.getReqCountByEndBusStop(startTime, endTime)
         self.createRequestIndexOut(Fitness.requestOut)
+
+ #<--------------------------------Functions for new encoding including multiple line---------------------------------->
+
+        busLines = set(db.busLine)
+        for line in busLines:
+            for x in db.timeSliceArray:
+                start = datetime.datetime.combine(Fitness.yesterday,datetime.time(x[0], 0, 0))
+                end = datetime.datetime.combine(Fitness.yesterday, datetime.time(x[1], 59, 59))
+                requestBetweenTimeSlices = db.getTravelRequestBetween(start, end, line)
+
+                for count in enumerate(requestBetweenTimeSlices, start=1):
+                    countingNoOfRequest = (count[0])
+
+                finalNoReqBetweenTimeSlice = countingNoOfRequest
+                Fitness.totalRequestsBusline[(line, start,end)] = finalNoReqBetweenTimeSlice
+            #print (__file__)
+                #print "Line number: " + str(line)
+                #print "final number of requests " + str(finalNoReqBetweenTimeSlice)
+            #print Fitness.totalRequestsBusline
+
+
+ #<--------------------------------END END END END END----------------------------------------------------------------->
+
+
 
     def timeDiff(self, time1, time2):
         ''' Evaluates the difference between two times.
@@ -111,7 +137,35 @@ class Fitness():
             for i in range(len(request)):
                 if request[i]["_id"]["BusStop"] == busStop and request[i]["_id"]["line"] == line:
                     result.append(request[i])
+        #print "result..........."
+        #print result
         return result
+
+    def searchRequestNew(self, initialTime, finalTime, line):
+        ''' Search on the request array based on an inital time, a final time and a particular bus stop
+
+        @param: initialTime (datetime): Initial time to perform the request's search
+        @param: finalTime (datetime): Final time to perform the request's search
+        @param: busStop (string): Bus stop name used on the request's search
+        '''
+        result = []
+        index = self.searchRequestIndex(Fitness.requestIndex, initialTime, finalTime)
+        if index != False:
+            request = Fitness.request[index[0]:index[1]]
+            for i in range(len(request)):
+                if request[i]["_id"]["line"] == line:
+                    result.append(request[i])
+        return result
+
+    def search(self, initialTime, NextTime, BusStop, Line):
+        ''' what does it do?
+        '''
+        res = []
+        for match in Fitness.request:
+            if (initialTime <= match["_id"]["RequestTime"] <= NextTime) and (match["_id"]["line"] == Line and 
+                match["_id"]["BusStop"] == BusStop):
+                    res.append(match)
+        return res 
 
     def searchRequestIndex(self, index, initialDate, finalDate):
         ''' Search the index to get the position on the request array for a specific time frame
