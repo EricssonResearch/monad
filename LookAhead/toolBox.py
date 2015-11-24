@@ -31,7 +31,7 @@ DB.noOfslices = 0
 # TODO: Change how the INDIVIDUAL_SIZE is calculated
 INDIVIDUAL_SIZE =  42
 
-# The individual size corresponds to the number of trips
+# Initialize variables
 startTimeArray = []
 theTimes = []
 
@@ -39,8 +39,19 @@ theTimes = []
 databaseClass = DB()
 fitnessClass = Fitness()
 
+
 def evaluateNewIndividualFormat(individual):
-    # Initialize variables
+    """ Evaluate an individual's fitness as a candidate timetable for the bus network.
+
+    An individual's fitness is evaluated based on the waiting time for passengers requesting buses for the lines
+    represented in the individual. Shorter waiting times on average mean better solutions.
+
+    Args:
+        individual: an individual represented as [[lineID, Capacity, frequency, startTime]...]
+
+    Return:
+        a fitness score calculated as a cost to the bus company.
+    """
     totalWaitingMinutes = []
     totalNumberRequests = []
     leftOver = []
@@ -66,7 +77,6 @@ def evaluateNewIndividualFormat(individual):
         # Evaluate average time and capacity for each gene now
         # ------------------------------------------------------
         for j in range(len(phenotype)):
-            print "trip " + str(j)
             for k in range(len(phenotype[j])):
                 # Define parameters for the first search
                 initialTrip = initialTripTime
@@ -75,7 +85,6 @@ def evaluateNewIndividualFormat(individual):
                 if initialTrip > lastTrip:
                     initialTrip = lastTrip - timedelta(minutes=individual[i][2])
                 # Search on requests from people going in and out of the bus
-                print initialTrip
                 request = fitnessClass.searchRequest(initialTrip, lastTrip, phenotype[j][k][0], individual[i][0])
                 requestOut = fitnessClass.searchRequestOut(initialTrip, lastTrip, phenotype[j][k][0], individual[i][0])
                 # TODO: Replace the length by the sum of the number of requests

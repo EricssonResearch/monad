@@ -5,6 +5,7 @@
 
     <string name="hello_world">Hello world!</string>
     <string name="label_emergency">S.O.S</string>
+    <string name="img_description">missing icon</string>
 
     <!--Login Activity-->
     <string name="label_login_login">Log In</string>

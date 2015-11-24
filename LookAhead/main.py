@@ -17,6 +17,7 @@ import toolBox
 from deap import tools
 from deap import algorithms
 from dbConnection import DB
+from fitness import Fitness
 from operator import itemgetter
 
 
@@ -25,10 +26,6 @@ MUTATION_PROB = 0.0
 CROSS_OVER_PROB = 0.5
 NO_OF_GENERATION = 0
 POPULATION_SIZE = 1
-
-
-
-
 
 def main():
     # Generate the population
@@ -77,7 +74,9 @@ def main():
     #databaseClass.insertBusTrip(best_ind)
     print("Best individual is %s, %s" % (individual, best_ind.fitness.values))
     print ("Length of best individual: " + str(len(best_ind)))
-    #toolBox.genTimetable(best_ind)
+    # fitnessClass = Fitness()
+    # fitnessClass.genTimetable(best_ind)
+
 
 
 # def crossover(offspring):
