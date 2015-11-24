@@ -52,10 +52,8 @@ class Fitness():
             # Checks whether or not the original function as been executed once
             if not wrapper.has_run:
                 wrapper.has_run = True
-
                 return afunction(*args)
             else:
-
                 pass
         wrapper.has_run = False
         return wrapper
