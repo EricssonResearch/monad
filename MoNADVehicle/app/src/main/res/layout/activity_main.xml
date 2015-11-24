@@ -1,9 +1,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="se.uu.csproject.monadvehicle.LoginActivity">
+    tools:context="se.uu.csproject.monadvehicle.MainActivity">
 
 
 
@@ -21,14 +20,16 @@
             android:theme="@style/darkTheme"
             style="@style/mediumText"
             android:layout_marginLeft="@dimen/passenger_frame_width"
+            android:layout_marginStart="@dimen/passenger_frame_width"
             />
 
     </android.support.v7.widget.Toolbar>
 
-    <RelativeLayout
+    <LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:orientation="horizontal"
         android:layout_below="@id/toolBar">
 
         <LinearLayout
@@ -49,6 +50,7 @@
                 android:adjustViewBounds="true"
                 android:id="@+id/notificationButton"
                 android:src="@mipmap/ic_notifications_black_48dp"
+                android:contentDescription="@string/img_description"
                 android:background="@color/notificationsColor"
                 android:layout_marginTop="@dimen/action_button_top_margin"
                 android:layout_marginBottom="@dimen/action_button_vertical_margin"
@@ -61,6 +63,7 @@
                 android:adjustViewBounds="true"
                 android:id="@+id/busStopButton"
                 android:src="@mipmap/ic_directions_bus_black_48dp"
+                android:contentDescription="@string/img_description"
                 android:background="@color/busColor"
                 android:theme="@style/AppTheme.busStopTheme"
                 android:layout_marginBottom="@dimen/action_button_vertical_margin"
@@ -73,6 +76,7 @@
                 android:adjustViewBounds="true"
                 android:id="@+id/emergencyButton"
                 android:src="@mipmap/ic_report_white_48dp"
+                android:contentDescription="@string/img_description"
                 android:background="@color/warnColor"
                 style="@style/emergencyTheme"
                 android:layout_marginBottom="@dimen/action_button_vertical_margin"
@@ -82,7 +86,8 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="#ffffff"
+                android:background="@color/notificationsColor"
+                android:layout_marginTop="@dimen/action_button_vertical_margin"
                 android:layout_marginBottom="@dimen/action_button_vertical_margin"
                 />
 
@@ -126,13 +131,58 @@
 
         </LinearLayout>
 
+        <LinearLayout
+            android:id="@+id/side_list"
+            android:layout_width="300dp"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:background="@color/warnColor"
+            android:visibility="gone"
+            >
+
+            <!-- separator-->
+            <View
+                android:layout_width="0dp"
+                android:layout_height="@dimen/display_bar_margin_top"/>
+
+            <LinearLayout
+                android:id="@+id/side_list_notifications"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:visibility="gone"
+                android:padding="@dimen/sideframe_padding"
+                >
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/side_list_busstops"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:visibility="gone"
+                android:padding="@dimen/sideframe_padding"
+                >
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/side_list_emergency"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:visibility="gone"
+                android:padding="@dimen/sideframe_padding"
+                >
+
+            </LinearLayout>
+        </LinearLayout>
 
         <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/mapLayout"
-            android:layout_toRightOf="@+id/side_bar"
-            android:layout_toEndOf="@+id/side_bar">
+            >
 
             <org.mapsforge.map.android.view.MapView
                 android:id="@+id/mapView"
@@ -142,26 +192,7 @@
 
         </RelativeLayout>
 
-        <LinearLayout
-            android:id="@+id/side_list"
-            android:layout_width="300dp"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:layout_toRightOf="@+id/side_bar"
-            android:layout_toEndOf="@+id/side_bar"
-            android:background="@color/warnColor"
-            android:padding="@dimen/sideframe_padding"
-            android:visibility="gone"
-            >
-
-            <!-- separator-->
-            <View
-                android:layout_width="0dp"
-                android:layout_height="@dimen/display_bar_margin_top"/>
-
-        </LinearLayout>
-
-    </RelativeLayout>
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="@dimen/passenger_frame_width"
