@@ -36,7 +36,7 @@ class DB():
     hoursDay = 24
     minutesHour = 60
     formatTime = '%H:%M'
-    yesterday = datetime.datetime(2015, 11, 16)
+    yesterday = datetime.datetime(2015, 11, 12)
     
 
     # ---------------------------------------------------------------------------------------------------------------------------------------
@@ -166,14 +166,14 @@ class DB():
         req = self.db.TravelRequestLookAhead.find({}, {"_id": False})
         return self.parseData(req, column)
 
-    def getTravelRequestBetween(self, start, end):
+    def getTravelRequestBetween(self, start, end, line):
         ''' Queries the requests using an initial date and a final date.
         Returns the whole bag of documents found
 
         @param: start - Initial date for the query
         @param: end - Final date for the query
         '''
-        req = self.db.TravelRequestLookAhead.find({"startTime": {"$gte": start, "$lt": end}})
+        req = self.db.UserTrip.find({"startTime": {"$gte": start, "$lt": end}, "line" : line})
         return req
 
     def getTravelRequestSummary(self, start, end):
@@ -454,6 +454,113 @@ class DB():
         capacity = [20, 60, 120]
         return random.choice(capacity)
 
+    def generatePlate(self):
+        return self.generateRandomText() + self.generateRandomNumber()
+
+    def dropBusCollection(self):
+        self.db.bus.drop()
+
+    def populateBus(self, size):
+        for x in range(0, size):
+            bus = {"capacity": self.generateRandomCapacity(), "plate": self.generatePlate()}
+            self.db.bus.insert_one(bus)
+
+    def getBusCount(self):
+        return self.db.bus.count()
+
+    def getRandomBusId(self):
+        bus = self.db.bus.find()[random.randrange(self.getBusCount())]
+        return bus["_id"]
+
+    def getRandomBus(self, column):
+        bus = self.db.bus.find(
+            {"_id": ObjectId(self.getRandomBusId())})
+        return self.parseData(bus, column)
+
+    # Generate fake time table
+    # Let's create a trip every headway minutes
+    def setHeadWay(self, line):
+        tripDay = int(self.getTripDay(line))
+        return DB.minutesDay / tripDay
+
+    def getRandomHour(self):
+        return random.randrange(DB.hoursDay)
+
+    def getRandomMinute(self):
+        return random.randrange(DB.minutesHour)
+
+    def mergeRandomTime(self, hour, minute):
+        if len(str(hour)) == 1:
+            hour = "0" + str(hour)
+        if len(str(minute)) == 1:
+            minute = "0" + str(minute)
+        return str(hour) + DB.timeSeparator + str(minute)
+
+    def generateMinute(self, time):
+        hours, minutes = time.split(DB.timeSeparator)
+        if int(hours) == DB.hoursDay:
+            hours = "0"
+        return int(hours) * DB.minutesHour + int(minutes)
+
+    def generateTime(self, time):
+        hours, minutes = divmod(time, DB.minutesHour)
+        if hours == DB.hoursDay:
+            hours = 0
+        return self.mergeRandomTime(hours, minutes)
+
+    # Trip
+    #<--------------------------------Functions for new encoding including multiple line------------------------------->
+    busLine = [2,2,2,2,2,2,2,102,102,102,102,102,102,102, 114, 114,114,114,114,114,114, 1, 1, 1, 1, 1, 1,1, 101, 101, 101, 101, 101, 101,101, 14, 14, 14, 14, 14, 14, 14]
+    noOfslices = 0
+    timeSliceArray = [[3, 5], [6, 8], [9, 11], [12, 14], [15, 17], [18, 20], [21, 23]]
+
+    def generateBusLine(self):
+
+        for x in DB.busLine:
+            DB.busLine.remove(x)
+
+            if len(DB.busLine)==0:
+                DB.busLine = [2,2,2,2,2,2,2,102,102,102,102,102,102,102, 114, 114,114,114,114,114,114, 1, 1, 1, 1, 1, 1,
+                        1, 101, 101, 101, 101, 101, 101,101, 14, 14, 14, 14, 14, 14, 14]
+            return x
+
+
+    def generateRandomStartTimeSlice(self):
+
+
+       if DB.noOfslices == len(DB.timeSliceArray):
+            DB.noOfslices = 0
+
+
+       #random.seed(64)
+       b = DB.timeSliceArray[DB.noOfslices]
+       hour = random.randint(b[0], b[1])
+       minute = random.randint(0, 59)
+       seconds = random.randint(1, 59)
+       randomTime = datetime.time(hour, minute, seconds)
+       DB.noOfslices = DB.noOfslices+1
+
+       return randomTime
+
+
+    # This function is called for each gene, ie. this function creates a gene
+    def generateRandomStartingTimeForTrip(self):
+        today = DB.yesterday
+        randomFrequency = random.randrange(5, 30)
+        BUS_LINE = self.generateBusLine()
+        startTimeSlice = self.generateRandomStartTimeSlice()
+
+        return list([BUS_LINE, self.generateRandomCapacity(), randomFrequency,
+                     datetime.datetime.combine(today, startTimeSlice)])
+
+
+
+ #<------------------------------------------------END---------------------------------------------------------------->
+
+
+
+
+    # Generate TT from seed random starting time. Called when generating the initial population
     # ---------------------------------------------------------------------------------------------------------------------------------------
     # GA Helpers
     # ---------------------------------------------------------------------------------------------------------------------------------------

@@ -43,5 +43,5 @@ def mutUniformTime(individual):
     capacity = databaseClass.generateRandomCapacity()
     # Assign new values to the gene
     individual[mutLocation][1] = capacity
-    individual[mutLocation][2] = datetime.combine(fitnessClass.yesterday, datetime.strptime(hour, formatString).time())
+    individual[mutLocation][3] = datetime.combine(fitnessClass.yesterday, datetime.strptime(hour, formatString).time())
     return individual,
