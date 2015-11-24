@@ -44,6 +44,7 @@ import org.mapsforge.map.reader.MapFile;
 import org.mapsforge.map.rendertheme.InternalRenderTheme;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -186,7 +187,7 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
                     View busStopView = inflater.inflate(R.layout.list_item_busstop, null);
                     TextView busStopTime = (TextView) busStopView.findViewById(R.id.text_busstoptime);
                     TextView busStopName = (TextView) busStopView.findViewById(R.id.text_busstopname);
-                    busStopTime.setText(route.getBusStopList().get(j).getArrivalTime().toString());
+                    busStopTime.setText(formatTime(route.getBusStopList().get(j).getArrivalTime()));
                     busStopName.setText(route.getBusStopList().get(j).getName());
                     insertPoint.addView(busStopView);
                 }
@@ -345,6 +346,12 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
         // The final argument to {@code requestLocationUpdates()} is a LocationListener
         // (http://developer.android.com/reference/com/google/android/gms/location/LocationListener.html).
         LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, myLocationOverlay);
+    }
+
+    private String formatTime(Date arrival) {
+        final String TIME_FORMAT = "HH:mm";
+        SimpleDateFormat timeFormat = new SimpleDateFormat(TIME_FORMAT);
+        return timeFormat.format(arrival);
     }
 
     public ArrayList<BusStop> generateBusStops(){
