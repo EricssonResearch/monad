@@ -56,6 +56,7 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
 
     LinearLayout sideList, notificationsList, busStopsList, emergencyList;
     Route route;
+    NotificationList notifications;
     // name of the map file in the external storage, it should be stored in the root directory of the sdcard
     private static final String MAPFILE = "uppsala.map";
     // MapView provided by mapsforge instead of native MapView in Android
@@ -105,9 +106,19 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
         busStopsList = (LinearLayout) findViewById(R.id.side_list_busstops);
         emergencyList = (LinearLayout) findViewById(R.id.side_list_emergency);
         route = new Route(generateBusStops());
+        notifications = new NotificationList(generateNotifications());
+
+        LayoutInflater inflater = (LayoutInflater) getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        for (int j = 0; j < notifications.getNotificationsList().size(); j++) {
+            View notificationView = inflater.inflate(R.layout.list_item_notification, null);
+            TextView incomingTime = (TextView) notificationView.findViewById(R.id.text_incomingtime);
+            TextView message = (TextView) notificationView.findViewById(R.id.text_message);
+            incomingTime.setText(formatTime(notifications.getNotificationsList().get(j).getIncomingTime()));
+            message.setText(notifications.getNotificationsList().get(j).getMessage());
+            notificationsList.addView(notificationView);
+        }
 
         //Fill the bus stop list sidebar
-        LayoutInflater inflater = (LayoutInflater) getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         for (int j = 0; j < route.getBusStopList().size(); j++) {
             View busStopView = inflater.inflate(R.layout.list_item_busstop, null);
             TextView busStopTime = (TextView) busStopView.findViewById(R.id.text_busstoptime);
@@ -117,6 +128,7 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
             busStopsList.addView(busStopView);
         }
 
+        //TODO: fill the emergency side bar
 
         mapView = (MapView) findViewById(R.id.mapView);
 
@@ -431,4 +443,33 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
 
         return busStops;
     }
+
+    public ArrayList<Notification> generateNotifications(){
+        ArrayList<Notification> notifications = new ArrayList<>();
+        Calendar calendar = new GregorianCalendar(2015, 11, 23, 15, 0, 0);
+        Date arrival1 = calendar.getTime();
+        calendar = new GregorianCalendar(2015, 11, 23, 15, 5, 0);
+        Date arrival2 = calendar.getTime();
+
+        Notification message1 = new Notification(1, "Updated route", arrival1);
+        notifications.add(message1);
+        Notification message2 = new Notification(1, "Route Cancelled", arrival2);
+        notifications.add(message2);
+        return notifications;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }
