@@ -17,6 +17,7 @@ import random
 import string
 import collections
 import datetime
+import time
 import itertools
 from datetime import timedelta
 from pymongo import MongoClient
@@ -51,10 +52,10 @@ class DB():
     minutesHour = 60
     formatTime = '%H:%M'
     yesterday = datetime.datetime(2015, 11, 12)
-    # busLine = [2,2,2,2,2,2,2,102,102,102,102,102,102,102, 114, 114,114,114,114,114,114, 1, 1, 1, 1, 1, 1,1, 101, 101, 101, 101, 101, 101,101, 14, 14, 14, 14, 14, 14, 14]
     busLine = []
     initBusLine = []
     noOfslices = 0
+    # Could we store datetime here, instead of integers ?????????????
     timeSliceArray = [[3, 5], [6, 8], [9, 11], [12, 14], [15, 17], [18, 20], [21, 23]]
 
     # ---------------------------------------------------------------------------------------------------------------------------------------
@@ -173,14 +174,24 @@ class DB():
         hour = self.mergeRandomTime(self.getRandomHour(), self.getRandomMinute())
         return list([line, self.generateRandomCapacity(), datetime.datetime.combine(today, datetime.datetime.strptime(hour, self.formatTime).time())])
     '''
+    def generateGenotype(self):
+        ''' This function is called for each gene, ie. this function creates a gene
+        Similar to generateGenotype
+        '''
+        today = DB.yesterday
+        randomFrequency = random.randrange(5, 30)
+        busLine = self.generateBusLine()
+        startTimeSlice = self.generateRandomStartTimeSlice()
+        return list([busLine, self.generateRandomCapacity(), randomFrequency, datetime.datetime.combine(today, startTimeSlice)])
 
+    '''
     def generatePhenotype(self, line, startingTime):
-        ''' This is the function that changes the genotype into a phenotype.
+         This is the function that changes the genotype into a phenotype.
         It generates the time table for a particular individual.
 
         @param: line - integer with the line's ID
         @param: startingTime - initial starting time for the trip
-        '''
+        
         tripTimeTable = []
         busStop = self.getRouteStop(line)
         startingBusStopTime = startingTime
@@ -189,6 +200,57 @@ class DB():
             startingBusStopTime = startingBusStopTime + timedelta(minutes=busStop[j]["interval"])
             tripTimeTable.append([self.getBusStopName(busStop[j+1]["busStop"]), startingBusStopTime])
         return tripTimeTable
+    '''
+
+    def generatePhenotype2(self, genotype):
+        ''' It will generate a set of trips for the current time slice
+        @param: genotype - array containing info for a time slice
+        @return: [[[busStop, Time],[busStop, Time]],[[busStop, Time],[busStop, Time]]
+        '''
+        gene = []
+        phenotype = []
+        busStop = self.getRouteStop(genotype[0])
+        timeSlice = self.getCurrentTimeSlice(genotype[3])
+        tripsBefore = self.calculateTrips(timeSlice[0], genotype[3], genotype[2])
+        initialTripStartTime = self.getInitialTripStartTime(tripsBefore, genotype[2], genotype[3])
+        tripsAfter = self.calculateTrips(timeSlice[1], genotype[3], genotype[2])
+        totalTrips = tripsBefore + tripsAfter + 1
+        for i in range(totalTrips):
+            gene = []
+            startTime = initialTripStartTime + timedelta(minutes=i*genotype[2])
+            gene.append([self.getBusStopName(busStop[0]["busStop"]), startTime])
+            # Update starting time for new trip
+            for j in range(len(busStop)-1):
+                startTime = startTime + timedelta(minutes=busStop[j]["interval"])
+                gene.append([self.getBusStopName(busStop[j+1]["busStop"]), startTime])
+            phenotype.append(gene)
+        return phenotype
+
+    def getCurrentTimeSlice(self, time):
+        ''' It will return starting time of timeSlice and it will return ending time of timeSlice
+        '''
+        currentHour = time.hour
+        for i in range(len(DB.timeSliceArray)):
+            if currentHour >= DB.timeSliceArray[i][0] and currentHour <= DB.timeSliceArray[i][1]:
+                startingTime = DB.timeSliceArray[i][0]
+                endingTime = DB.timeSliceArray[i][1]
+                break
+        startingTime = datetime.datetime.combine(DB.yesterday, datetime.time(startingTime, 0, 0))
+        endingTime = datetime.datetime.combine(DB.yesterday, datetime.time(endingTime, 59, 59))
+        return [startingTime, endingTime]
+
+    def calculateTrips(self, boundary, point, frequency):
+        ''' Returns the number of trips between two times, given a frequency
+        '''
+        secDif = abs(int(time.mktime(boundary.timetuple())-time.mktime(point.timetuple())))
+        minDif = secDif / DB.minutesHour
+        return minDif / frequency
+
+    def getInitialTripStartTime(self, trips, frequency, startingTime):
+        ''' Returns the time for the first trip
+        '''
+        totalMinutes = trips * frequency
+        return startingTime - timedelta(minutes=totalMinutes)
 
     @decorator
     def generateInitialBusLine(self, line, sliceLength):
@@ -196,7 +258,6 @@ class DB():
             for j in range(sliceLength):
                 DB.initBusLine.append(i)
         DB.busLine = DB.initBusLine
-        print DB.busLine
 
     def generateBusLine(self):
         ''' Generates an array that will provide with line ID for each gene
@@ -222,16 +283,6 @@ class DB():
         randomTime = datetime.time(hour, minute, seconds)
         DB.noOfslices = DB.noOfslices+1
         return randomTime
-
-    def generateRandomStartingTimeForTrip(self):
-        ''' This function is called for each gene, ie. this function creates a gene
-        Similar to generateGenotype
-        '''
-        today = DB.yesterday
-        randomFrequency = random.randrange(5, 30)
-        busLine = self.generateBusLine()
-        startTimeSlice = self.generateRandomStartTimeSlice()
-        return list([busLine, self.generateRandomCapacity(), randomFrequency,datetime.datetime.combine(today, startTimeSlice)])
 
     # ---------------------------------------------------------------------------------------------------------------------------------------
     # Travel Requests
