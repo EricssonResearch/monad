@@ -22,7 +22,7 @@ import time
 # import Image
 # import ImageDraw
 from xml.sax import make_parser, handler
-from Tkinter import Tk, Canvas, Frame, BOTH
+# from Tkinter import Tk, Canvas, Frame, BOTH
 from multiprocessing import Process
 
 
