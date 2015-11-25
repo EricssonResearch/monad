@@ -1,7 +1,9 @@
 package se.uu.csproject.monadclient;
 
 import android.Manifest;
+import android.app.AlarmManager;
 import android.app.AlertDialog;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -358,6 +360,20 @@ public class MainActivity extends MenuedActivity implements GoogleApiClient.Conn
     @Override
     public void processReceivedRecommendations() {
         displayRecommendations();
+
+        //add to notify
+        Intent myIntent = new Intent(MainActivity.this, RecommendationAlarmReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(MainActivity.this, 0, myIntent, 0);
+
+        AlarmManager am = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+//
+//        Calendar calendar = Calendar.getInstance();
+//        calendar.setTimeInMillis(System.currentTimeMillis());
+//        calendar.set(Calendar.HOUR_OF_DAY, 16);
+//        calendar.set(Calendar.MINUTE, 0);
+
+        am.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 5000, pendingIntent);
+
     }
 
     public void displayRecommendations() {

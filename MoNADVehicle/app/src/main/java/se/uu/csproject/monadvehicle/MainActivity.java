@@ -45,6 +45,7 @@ import org.mapsforge.map.reader.MapFile;
 import org.mapsforge.map.rendertheme.InternalRenderTheme;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -55,8 +56,9 @@ import java.util.List;
 public class MainActivity extends Activity implements ConnectionCallbacks, OnConnectionFailedListener,
         AsyncGetNextTripInteraction {
 
-    LinearLayout sideList;
+    LinearLayout sideList, notificationsList, busStopsList, emergencyList;
     Route route;
+    NotificationList notifications;
     // name of the map file in the external storage, it should be stored in the root directory of the sdcard
     private static final String MAPFILE = "uppsala.map";
     // MapView provided by mapsforge instead of native MapView in Android
@@ -102,7 +104,33 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
         setContentView(R.layout.activity_main);
 
         sideList = (LinearLayout) findViewById(R.id.side_list);
+        notificationsList = (LinearLayout) findViewById(R.id.side_list_notifications);
+        busStopsList = (LinearLayout) findViewById(R.id.side_list_busstops);
+        emergencyList = (LinearLayout) findViewById(R.id.side_list_emergency);
         route = new Route(generateBusStops());
+        notifications = new NotificationList(generateNotifications());
+
+        LayoutInflater inflater = (LayoutInflater) getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        for (int j = 0; j < notifications.getNotificationsList().size(); j++) {
+            View notificationView = inflater.inflate(R.layout.list_item_notification, null);
+            TextView incomingTime = (TextView) notificationView.findViewById(R.id.text_incomingtime);
+            TextView message = (TextView) notificationView.findViewById(R.id.text_message);
+            incomingTime.setText(formatTime(notifications.getNotificationsList().get(j).getIncomingTime()));
+            message.setText(notifications.getNotificationsList().get(j).getMessage());
+            notificationsList.addView(notificationView);
+        }
+
+        //Fill the bus stop list sidebar
+//        for (int j = 0; j < route.getBusStopList().size(); j++) {
+//            View busStopView = inflater.inflate(R.layout.list_item_busstop, null);
+//            TextView busStopTime = (TextView) busStopView.findViewById(R.id.text_busstoptime);
+//            TextView busStopName = (TextView) busStopView.findViewById(R.id.text_busstopname);
+//            busStopTime.setText(formatTime(route.getBusStopList().get(j).getArrivalTime()));
+//            busStopName.setText(route.getBusStopList().get(j).getName());
+//            busStopsList.addView(busStopView);
+//        }
+
+        //TODO: fill the emergency side bar
 
         mapView = (MapView) findViewById(R.id.mapView);
 
@@ -138,6 +166,68 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
         this.mapView.getLayerManager().getLayers().add(tileRendererLayer);
 
         buildGoogleApiClient();
+//<<<<<<< HEAD
+//=======
+//
+//        ImageButton showBusStopList =(ImageButton)findViewById(R.id.busStopButton);
+//        showBusStopList.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                if (busStopsList.getVisibility() == View.VISIBLE) {
+//                    busStopsList.setVisibility(View.GONE);
+//                    sideList.setVisibility(View.GONE);
+//                } else if (notificationsList.getVisibility() == View.VISIBLE
+//                        || emergencyList.getVisibility() == View.VISIBLE) {
+//                    notificationsList.setVisibility(View.GONE);
+//                    emergencyList.setVisibility(View.GONE);
+//                    busStopsList.setVisibility(View.VISIBLE);
+//                } else {
+//                    sideList.setVisibility(View.VISIBLE);
+//                    busStopsList.setVisibility(View.VISIBLE);
+//                }
+//            }
+//        });
+//
+//        ImageButton showNotificationsList =(ImageButton)findViewById(R.id.notificationButton);
+//        showNotificationsList.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                if(notificationsList.getVisibility() == View.VISIBLE){
+//                    notificationsList.setVisibility(View.GONE);
+//                    sideList.setVisibility(View.GONE);
+//                }
+//                else if (busStopsList.getVisibility() == View.VISIBLE
+//                        || emergencyList.getVisibility() == View.VISIBLE){
+//                    busStopsList.setVisibility(View.GONE);
+//                    emergencyList.setVisibility(View.GONE);
+//                    notificationsList.setVisibility(View.VISIBLE);
+//                }
+//                else {
+//                    sideList.setVisibility(View.VISIBLE);
+//                    notificationsList.setVisibility(View.VISIBLE);
+//                }
+//            }
+//        });
+//
+//        ImageButton showEmergencyList =(ImageButton)findViewById(R.id.emergencyButton);
+//        showEmergencyList.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                if (emergencyList.getVisibility() == View.VISIBLE) {
+//                    emergencyList.setVisibility(View.GONE);
+//                    sideList.setVisibility(View.GONE);
+//                } else if (notificationsList.getVisibility() == View.VISIBLE
+//                        || busStopsList.getVisibility() == View.VISIBLE) {
+//                    notificationsList.setVisibility(View.GONE);
+//                    busStopsList.setVisibility(View.GONE);
+//                    emergencyList.setVisibility(View.VISIBLE);
+//                } else {
+//                    sideList.setVisibility(View.VISIBLE);
+//                    emergencyList.setVisibility(View.VISIBLE);
+//                }
+//            }
+//        });
+//>>>>>>> 0066078511e50bcbc2d9e529ba98b2a7624fb177
     }
 
     @Override
@@ -300,6 +390,12 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
         LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, myLocationOverlay);
     }
 
+    private String formatTime(Date arrival) {
+        final String TIME_FORMAT = "HH:mm";
+        SimpleDateFormat timeFormat = new SimpleDateFormat(TIME_FORMAT);
+        return timeFormat.format(arrival);
+    }
+
     public ArrayList<BusStop> generateBusStops(){
 //        ArrayList<BusStop> busStops = new ArrayList<>();
 //        Calendar calendar = new GregorianCalendar(2015, 11, 23, 15, 0, 0);
@@ -403,4 +499,33 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
             Log.d("MainActivity", "Error while receiving BusTrip data");
         }
     }
+
+    public ArrayList<Notification> generateNotifications(){
+        ArrayList<Notification> notifications = new ArrayList<>();
+        Calendar calendar = new GregorianCalendar(2015, 11, 23, 15, 0, 0);
+        Date arrival1 = calendar.getTime();
+        calendar = new GregorianCalendar(2015, 11, 23, 15, 5, 0);
+        Date arrival2 = calendar.getTime();
+
+        Notification message1 = new Notification(1, "Updated route", arrival1);
+        notifications.add(message1);
+        Notification message2 = new Notification(1, "Route Cancelled", arrival2);
+        notifications.add(message2);
+        return notifications;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }

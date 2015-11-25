@@ -1,3 +1,5 @@
+#!/usr/bin/python -m 
+
 # -*- coding: utf-8 -*-
 """Copyright 2015 Ericsson AB
 
@@ -17,6 +19,7 @@ import toolBox
 from deap import tools
 from deap import algorithms
 from dbConnection import DB
+from fitness import Fitness
 from operator import itemgetter
 
 
@@ -24,7 +27,7 @@ from operator import itemgetter
 MUTATION_PROB = 0.0
 CROSS_OVER_PROB = 0.5
 NO_OF_GENERATION = 1
-POPULATION_SIZE = 2
+POPULATION_SIZE = 10
 
 def main():
     # Generate the population
@@ -66,13 +69,15 @@ def main():
 
     # The Best Individual found
     best_ind = tools.selBest(pop, 1)[0]
+    individual = sorted(best_ind, key=itemgetter(3))
+    individual = sorted(individual, key=itemgetter(0))
     #print "InsertBusTrip and TimeTable......"
     #databaseClass = DB()
     #databaseClass.insertBusTrip(best_ind)
-    print("Best individual is %s, %s" % (sorted(best_ind, key=itemgetter(2)), best_ind.fitness.values))
+    print("Best individual is %s, %s" % (individual, best_ind.fitness.values))
     print ("Length of best individual: " + str(len(best_ind)))
-    #generateTimeTable(best_ind)
-    toolBox.genTimetable(best_ind)
+    fitnessClass = Fitness()
+    fitnessClass.genTimetable(best_ind)
 
 
 # def crossover(offspring):
@@ -111,13 +116,6 @@ def main():
 #    print("  Max %s" % max(fits))
 #    print("  Avg %s" % mean)
 #    print("  Std %s" % std)
-
-
-def generateTimeTable(individual):
-    databaseClass = DB()
-    timetable = databaseClass.generateTripTimeTable(individual)
-    databaseClass.insertTimeTable(timetable)
-
 
 if __name__ == '__main__':
     main()

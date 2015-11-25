@@ -250,7 +250,10 @@ def application(env, start_response):
 			try:						
 				database = serverConfig.MONGO_DATABASE				
 				collection = database.UserTrip
-				objectID = ObjectId(userTripId)				
+				objectID = ObjectId(userTripId)
+				busTripIDs = []
+				startBusStops = []
+				endBusStops = []												
 				
 				document = collection.find_one({"_id": objectID})
 				startTime = document["startTime"]
@@ -260,13 +263,19 @@ def application(env, start_response):
 				startbusID = document["busID"]
 				lastbusID = document["busID"]				
 				#requestId = document["requestID"]
-				userId = document["userID"]
+				userId = document["userID"]	
+				busTripIDs.append(document["busTripID"])
+				startBusStops.append(startBusStop)
+				endBusStops.append(endBusStop)			
 				
 				while ("next" in document):
 					document = collection.find_one({"_id": document["next"]})
 					endTime = document["endTime"]
 					endBusStop = document["endBusStop"]
 					lastbusID = document["busID"]
+					busTripIDs.append(document["busTripID"])
+					startBusStops.append(document["startBusStop"])
+					endBusStops.append(endBusStop)					
 					
 				collection = database.BookedTrip
 				bookedTrips = collection.find({"userID": userId})
@@ -303,6 +312,22 @@ def application(env, start_response):
 				collection = database.BookedTrip
 				document = {"userID": userId, "partialTrips": partialTrips}
 				booked_trip_id = collection.insert_one(document).inserted_id
+				
+				# Update the number of passengers boarding/departing
+				for index in range(len(busTripIDs)):
+					collection = database.BusStop
+					document = collection.find_one({"name": startBusStops[index]})
+					startBusStop = document["_id"]
+					document = collection.find_one({"name": endBusStops[index]})
+					endBusStop = document["_id"]
+					
+					collection = database.BusTrip
+					collection.update_one({"$and": [{"_id": busTripIDs[index]}, 
+											{"trajectory": {"$elemMatch": {"busStop": startBusStop}}}]}, 
+											{"$inc": {"trajectory.$.boardingPassengers": 1}})
+					collection.update_one({"$and": [{"_id": busTripIDs[index]}, 
+											{"trajectory": {"$elemMatch": {"busStop": endBusStop}}}]}, 
+											{"$inc": {"trajectory.$.departingPassengers": 1}})
 					
 				"""collection = database.TravelRequest
 				collection.update({"_id": requestId}, {"$set": {"reservedTrip": ObjectId(userTripId)}}, upsert = False)"""
@@ -331,10 +356,24 @@ def application(env, start_response):
 				database = serverConfig.MONGO_DATABASE				
 				collection = database.UserTrip
 				objectID = ObjectId(userTripId)
+				busTripIDs = []
+				startBusStops = []
+				endBusStops = []
 				
 				document = collection.find_one({"_id": objectID})
 				#requestId = document["requestID"]
 				userId = document["userID"]
+				busTripIDs.append(document["busTripID"])
+				startBusStops.append(document["startBusStop"])
+				endBusStops.append(document["endBusStop"])			
+				
+				while ("next" in document):
+					document = collection.find_one({"_id": document["next"]})					
+					endBusStop = document["endBusStop"]					
+					busTripIDs.append(document["busTripID"])
+					startBusStops.append(document["startBusStop"])
+					endBusStops.append(endBusStop)
+					
 				collection.update({"_id": objectID}, {"$set": {"booked": False}}, upsert = False)
 				
 				collection = database.BookedTrip
@@ -353,6 +392,22 @@ def application(env, start_response):
 					objectID = document["next"]
 					collection.update({"_id": objectID}, {"$set": {"booked": False}}, upsert = False)
 					document = collection.find_one({"$and": [{"_id": objectID}, {"next": {'$exists': True}}]})
+					
+				# Update the number of passengers boarding/departing
+				for index in range(len(busTripIDs)):
+					collection = database.BusStop
+					document = collection.find_one({"name": startBusStops[index]})
+					startBusStop = document["_id"]
+					document = collection.find_one({"name": endBusStops[index]})
+					endBusStop = document["_id"]
+					
+					collection = database.BusTrip
+					collection.update_one({"$and": [{"_id": busTripIDs[index]}, 
+											{"trajectory": {"$elemMatch": {"busStop": startBusStop}}}]}, 
+											{"$inc": {"trajectory.$.boardingPassengers": -1}})
+					collection.update_one({"$and": [{"_id": busTripIDs[index]}, 
+											{"trajectory": {"$elemMatch": {"busStop": endBusStop}}}]}, 
+											{"$inc": {"trajectory.$.departingPassengers": -1}})					
 					
 				"""collection = database.TravelRequest				
 				collection.update({"_id": requestId}, {"$unset": {"reservedTrip": 1}})"""				
@@ -440,21 +495,23 @@ def application(env, start_response):
 			logging.error("Get user bookings request: Something went wrong with the data sent by the user's request.")
 			return [serverConfig.ERROR_MESSAGE]
 	
-	elif (data_env["PATH_INFO"] == "/updateFeedbackRequest"):
+	elif (data_env["PATH_INFO"] == "/updateFeedbackRequest"):		
 		if ("changedFeedback" in data):
-			try:
-				changedFeedback = json.load(data.getvalue("changedFeedback"))
+			try:			
+				changedFeedback = json.loads(data.getvalue("changedFeedback"))
 				database = serverConfig.MONGO_DATABASE				
 				collection = database.UserTrip
 				
 				for userTripID in changedFeedback:
-					objectID = ObjectId(userTripID)
-					collection.update({"_id": objectID}, {"$set": {"feedback": changedFeedback[userTripID]}}, upsert = False)
+					userTripID = escape(userTripID)									
+					objectID = ObjectId(userTripID)					
+					feedback = changedFeedback[userTripID]					
+					collection.update({"_id": objectID}, {"$set": {"feedback": feedback}}, upsert = False)					
 					
 					document = collection.find_one({"$and": [{"_id": objectID}, {"next": {'$exists': True}}]})				
 					while (document != None):
 						objectID = document["next"]
-						collection.update({"_id": objectID}, {"$set": {"feedback": changedFeedback[userTripID]}}, upsert = False)
+						collection.update({"_id": objectID}, {"$set": {"feedback": feedback}}, upsert = False)
 						document = collection.find_one({"$and": [{"_id": objectID}, {"next": {'$exists': True}}]})
 				
 			except pymongo.errors.PyMongoError as e:
@@ -462,7 +519,7 @@ def application(env, start_response):
 				logging.error("Something went wrong: {0}".format(e))
 				return [serverConfig.ERROR_MESSAGE]
 			except Exception as e:
-				logging.error("Something went wrong with the json parsing: {0}".format(e))		
+				logging.error("Something went wrong: {0}".format(e))		
 			else:
 				start_response("200 OK", [("Content-Type", "text/plain")])				
 				return [serverConfig.FEEDBACK_UPDATE_SUCCESSFUL_MESSAGE]
@@ -471,7 +528,7 @@ def application(env, start_response):
 		else:
 			start_response("500 INTERNAL ERROR", [("Content-Type", "text/plain")])	
 			logging.error("Update feedback request: Something went wrong with the data sent by the user's request.")
-			return [serverConfig.ERROR_MESSAGE]
+			return [serverConfig.ERROR_MESSAGE]		
 			
 	else:
 		start_response("403 FORBIDDEN", [("Content-Type", "text/plain")])

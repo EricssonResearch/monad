@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Toast;
 
@@ -62,17 +63,16 @@ public class TripsActivity extends MenuedActivity implements AsyncResponse, Asyn
     protected void onStop() {
         super.onStop();
 
-        /*JSONObject changedFeedback = Storage.getChangedFeedback();
+        JSONObject changedFeedback = Storage.getChangedFeedback();
         if (changedFeedback.length() != 0){
             SendUpdateFeedbackRequest asyncTask = new SendUpdateFeedbackRequest();
             asyncTask.delegate = this;
             asyncTask.execute(changedFeedback.toString());
-        }*/
+        }
     }
 
     public void processFinish(String response){
-        Toast toast = Toast.makeText(context, response, Toast.LENGTH_SHORT);
-        toast.show();
+        Storage.clearChangedFeedback();
     }
 
     // Gets the user's bookings from the server

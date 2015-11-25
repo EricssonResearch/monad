@@ -24,7 +24,7 @@ public class Storage{
         clearNotifications();
     }
 
-    /** Methods for searchResults */
+    /** Methods for feedback */
     public static JSONObject getChangedFeedback(){
         return changedFeedback;
     }
@@ -35,6 +35,10 @@ public class Storage{
         } catch (JSONException e) {
             Log.d("oops", e.toString());
         }
+    }
+
+    public static void clearChangedFeedback(){
+        changedFeedback = new JSONObject();
     }
 
     /** Methods for searchResults */
