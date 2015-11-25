@@ -1,5 +1,4 @@
-#!/usr/bin/env python 
-#-*- m: scoop -*-
+#!/usr/bin/python -m 
 
 # -*- coding: utf-8 -*-
 """Copyright 2015 Ericsson AB
