@@ -136,7 +136,7 @@ creator.create("Individual", list, fitness=creator.FitnessMin)
 toolbox = base.Toolbox()
 # Register the operations to be used in the toolbox
 toolbox.register("attribute", databaseClass.generateGenotype)
-toolbox.register("individual", tools.initRepeat, creator.Individual,toolbox.attribute, INDIVIDUAL_SIZE)
+toolbox.register("individual", tools.initRepeat, creator.Individual, toolbox.attribute, INDIVIDUAL_SIZE)
 toolbox.register("population", tools.initRepeat, list, toolbox.individual)
 toolbox.register("evaluate", evaluateNewIndividualFormat)
 toolbox.register("mate", tools.cxOnePoint)

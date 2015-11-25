@@ -46,6 +46,8 @@ class DB():
     server = "130.238.15.114"
     port = 27017
     database = "monad1"
+    user = "monadStudent"
+    password = "M0nad2015"
     timeSeparator = ":"
     minutesDay = 1440
     hoursDay = 24
@@ -62,7 +64,8 @@ class DB():
     # Constructor
     # ---------------------------------------------------------------------------------------------------------------------------------------
     def __init__(self):
-        self.client = MongoClient(DB.server, DB.port, maxPoolSize=200)
+        # self.client = MongoClient(DB.server, DB.port, maxPoolSize=200)
+        self.client = MongoClient("mongodb://" + DB.user + ":" + DB.password + "@" + DB.server, DB.port, maxPoolSize=200, connectTimeoutMS=5000, serverSelectionTimeoutMS=5000)
         self.db = self.client[DB.database]
         self.generateInitialBusLine(self.getRouteId(), len(DB.timeSliceArray))
 
@@ -210,6 +213,10 @@ class DB():
         gene = []
         phenotype = []
         busStop = self.getRouteStop(genotype[0])
+        if busStop is None:
+            print "======="
+            print genotype
+            print "======="
         timeSlice = self.getCurrentTimeSlice(genotype[3])
         tripsBefore = self.calculateTrips(timeSlice[0], genotype[3], genotype[2])
         initialTripStartTime = self.getInitialTripStartTime(tripsBefore, genotype[2], genotype[3])
@@ -218,6 +225,8 @@ class DB():
         for i in range(totalTrips):
             gene = []
             startTime = initialTripStartTime + timedelta(minutes=i*genotype[2])
+            # print busStop[0]["busStop"]
+            # print startTime
             gene.append([self.getBusStopName(busStop[0]["busStop"]), startTime])
             # Update starting time for new trip
             for j in range(len(busStop)-1):
@@ -262,6 +271,16 @@ class DB():
     def generateBusLine(self):
         ''' Generates an array that will provide with line ID for each gene
         '''
+        if len(DB.busLine) == 0:
+            line = self.getRouteId()
+            sliceLength = len(DB.timeSliceArray)
+            for i in line:
+                for j in range(sliceLength):
+                    DB.initBusLine.append(i)
+            DB.busLine = DB.initBusLine
+            print "abc"
+            print DB.initBusLine
+            # DB.busLine = DB.initBusLine
         for x in DB.busLine:
             DB.busLine.remove(x)
             if len(DB.busLine) == 0:
