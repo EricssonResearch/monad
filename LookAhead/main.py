@@ -1,3 +1,5 @@
+#!/usr/bin/python -m 
+
 # -*- coding: utf-8 -*-
 """Copyright 2015 Ericsson AB
 
@@ -24,7 +26,7 @@ from operator import itemgetter
 # Variables
 MUTATION_PROB = 0.0
 CROSS_OVER_PROB = 0.5
-NO_OF_GENERATION = 0
+NO_OF_GENERATION = 1
 POPULATION_SIZE = 10
 
 def main():
@@ -74,9 +76,8 @@ def main():
     #databaseClass.insertBusTrip(best_ind)
     print("Best individual is %s, %s" % (individual, best_ind.fitness.values))
     print ("Length of best individual: " + str(len(best_ind)))
-    # fitnessClass = Fitness()
-    # fitnessClass.genTimetable(best_ind)
-
+    fitnessClass = Fitness()
+    fitnessClass.genTimetable(best_ind)
 
 
 # def crossover(offspring):
