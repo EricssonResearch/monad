@@ -1,11 +1,12 @@
 package se.uu.csproject.monadclient.recyclerviews;
 
+import android.util.Log;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collections;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.List;
 
 import se.uu.csproject.monadclient.NotificationsInteraction;
 
@@ -14,12 +15,30 @@ public class Storage{
     private static ArrayList<FullTrip> bookings = new ArrayList<>();
     private static ArrayList<FullTrip> recommendations = new ArrayList();
     private static ArrayList<Notify> notifications = new ArrayList<>();
+    private static JSONObject changedFeedback = new JSONObject();
 
     public static void clearAll() {
         clearSearchResults();
         clearBookings();
         clearRecommendations();
         clearNotifications();
+    }
+
+    /** Methods for feedback */
+    public static JSONObject getChangedFeedback(){
+        return changedFeedback;
+    }
+
+    public static void changeFeedback(String tripID, int feedback){
+        try {
+            changedFeedback.put(tripID, new Integer(feedback));
+        } catch (JSONException e) {
+            Log.d("oops", e.toString());
+        }
+    }
+
+    public static void clearChangedFeedback(){
+        changedFeedback = new JSONObject();
     }
 
     /** Methods for searchResults */
@@ -52,12 +71,29 @@ public class Storage{
         return bookings;
     }
 
+    public static void addBooking(FullTrip fullTrip){
+        bookings.add(fullTrip);
+    }
+
+    public static void removeBooking(FullTrip fullTrip){
+        for (int i = 0; i < bookings.size(); i++){
+            if (bookings.get(i).getId().equals(fullTrip.getId())){
+                bookings.remove(i);
+                break;
+            }
+        }
+    }
+
     public static void clearBookings() {
         bookings.clear();
     }
 
     public static boolean isEmptyBookings() {
         return bookings.isEmpty();
+    }
+
+    public static void sortBookings(){
+        Collections.sort(bookings, new FullTripsStartTimeComparator());
     }
 
     /** Methods for recommendations */

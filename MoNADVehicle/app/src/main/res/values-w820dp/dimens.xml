@@ -5,9 +5,10 @@
     <dimen name="activity_horizontal_margin">64dp</dimen>
     <dimen name="login_horizontal_margin">264dp</dimen>
     <dimen name="login_vertical_margin">120dp</dimen>
-    <dimen name="action_button_top_margin">56dp</dimen>
-    <dimen name="action_button_vertical_margin">24dp</dimen>
+    <dimen name="action_button_top_margin">48dp</dimen>
+    <dimen name="action_button_vertical_margin">16dp</dimen>
     <dimen name="big_bold_text_size">32dp</dimen>
     <dimen name="medium_text_size">24dp</dimen>
     <dimen name="display_bar_margin_top">32dp</dimen>
+    <dimen name="list_margin">8dp</dimen>
 </resources>

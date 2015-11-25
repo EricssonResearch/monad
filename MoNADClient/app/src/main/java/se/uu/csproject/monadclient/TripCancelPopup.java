@@ -24,7 +24,7 @@ import se.uu.csproject.monadclient.recyclerviews.Storage;
 
 import static java.lang.Math.floor;
 
-public class TripCancelPopup extends AppCompatActivity implements AsyncResponseString, AsyncResponse{
+public class TripCancelPopup extends AppCompatActivity implements AsyncResponseString{
     private TextView startBusStop, endBusStop, startTime, endTime, date, countdown;
     private ImageView clockIcon;
     private FullTrip trip;
@@ -149,15 +149,10 @@ public class TripCancelPopup extends AppCompatActivity implements AsyncResponseS
         Toast toast = Toast.makeText(context, response, Toast.LENGTH_SHORT);
         toast.show();
 
-        String userId = ClientAuthentication.getClientId();
-        SendUserBookingsRequest asyncTask = new SendUserBookingsRequest();
-        asyncTask.delegate = this;
-        asyncTask.execute(userId);
-    }
+        if (response.contains("successfully")){
+            Storage.removeBooking(trip);
+        }
 
-    // Deals with the response by the server after requesting the updated user's bookings
-    public void processFinish(ArrayList<FullTrip> bookings){
-        Storage.setBookings(bookings);
         Intent intent = new Intent(this, TripsActivity.class);
         startActivity(intent);
         finish();

@@ -1,12 +1,10 @@
 package se.uu.csproject.monadclient;
 
-
 import android.os.AsyncTask;
 import android.util.Log;
 
 import com.google.common.base.Charsets;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
@@ -16,17 +14,16 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.ArrayList;
 
-import se.uu.csproject.monadclient.recyclerviews.FullTrip;
 
-public class SendUserBookingsRequestExtra extends AsyncTask<String, Void, ArrayList<FullTrip>> {
+public class SendUpdateFeedbackRequest extends AsyncTask<String, Void, String> {
     private static String SERVER = "http://130.238.15.114:2001";
-    public AsyncResponseMulti delegateMulti = null;
+    private static String ERROR_RESPONSE = "Something went wrong, please try again.";
+    public AsyncResponseString delegate = null;
 
     /* Send the data to the server via POST and receive the response */
-    public static ArrayList<FullTrip> postRequest(String request, String urlParameters) {
-        ArrayList<FullTrip> bookings = new ArrayList<>();
+    public static String postRequest(String request, String urlParameters) {
+        String response = "";
         HttpURLConnection conn = null;
 
         try {
@@ -54,27 +51,22 @@ public class SendUserBookingsRequestExtra extends AsyncTask<String, Void, ArrayL
                 throw new RuntimeException("Something went wrong - HTTP error code: " + responseCode);
             }
             BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream(), "utf-8"), 8);
-            StringBuilder sb = new StringBuilder();
-            String inputStr;
-
-            while ((inputStr = br.readLine()) != null){
-                sb.append(inputStr);
+            String line;
+            while ((line = br.readLine()) != null) {
+                response = response + line;
             }
-            JSONObject trips = new JSONObject(sb.toString());
-
-            bookings = new StoreTrips().storeTheTrips(trips, 1);
 
         } catch (MalformedURLException e) {
             Log.d("oops", e.toString());
+            response = ERROR_RESPONSE;
 
         } catch (IOException e) {
             Log.d("oops", e.toString());
+            response = ERROR_RESPONSE;
 
         } catch (RuntimeException e) {
             Log.d("oops", e.toString());
-
-        } catch (JSONException e) {
-            Log.d("oops", e.toString());
+            response = ERROR_RESPONSE;
         }
         finally {
             if (conn != null) {
@@ -82,32 +74,32 @@ public class SendUserBookingsRequestExtra extends AsyncTask<String, Void, ArrayL
             }
         }
 
-        return bookings;
+        return response;
     }
 
     /* Get the data from the interface and wrap them in a request */
-    public static ArrayList<FullTrip> wrapRequest(String userId) {
-        String request = SERVER + "/getUserBookingsRequest";
+    public static String wrapRequest(String changedFeedback) {
+        String request = SERVER + "/updateFeedbackRequest";
 
-        String urlParameters = "userId=" + userId;
-        ArrayList<FullTrip> bookings = postRequest(request, urlParameters);
+        String urlParameters = "changedFeedback=" + changedFeedback;
+        String response = postRequest(request, urlParameters);
 
-        return bookings;
+        return response;
     }
 
     /* This is the function that is called by the button listener */
     @Override
-    protected ArrayList<FullTrip> doInBackground(String... params) {
-        ArrayList<FullTrip> bookings;
+    protected String doInBackground(String... params) {
+        String response;
 
-        bookings = wrapRequest(params[0]);
+        response = wrapRequest(params[0]);
 
-        return bookings;
+        return response;
     }
 
     /* Deal with the response returned by the server */
     @Override
-    protected void onPostExecute(ArrayList<FullTrip> bookings) {
-        delegateMulti.processFinishMulti(bookings);
+    protected void onPostExecute(String response) {
+        delegate.processFinish(response);
     }
 }

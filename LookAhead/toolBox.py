@@ -21,110 +21,108 @@ from scoop import futures
 from dbConnection import DB
 from fitness import Fitness
 from operator import itemgetter
-from datetime import datetime
+import datetime
 from datetime import timedelta
 
-
-
 # Constant
-BUS_LINE = 2
-# The individual size corresponds to the number of trips
-# INDIVIDUAL_SIZE =  10
-INDIVIDUAL_SIZE_BOUNDS = [30, 90]
+DB.noOfslices = 0
 
+# The individual size corresponds to the number of trips
+# TODO: Change how the INDIVIDUAL_SIZE is calculated
+INDIVIDUAL_SIZE =  42
+
+# Initialize variables
+startTimeArray = []
+theTimes = []
 
 # Initialize the classes
 databaseClass = DB()
 fitnessClass = Fitness()
 
 
-def evalIndividual(individual):
-    ''' Evaluate an individual in the population. Based on how close the
-    average bus request time is to the actual bus trip time.
+def evaluateNewIndividualFormat(individual):
+    """ Evaluate an individual's fitness as a candidate timetable for the bus network.
 
-    @param an individual in the population
-    @return a summation of the difference between past past requests'
-    average trip starting time and actual start time
-    according to the evolving timetable.
-    Lower values are better.
-    '''
-    # First, the randomly-generated starting times are sorted in order to
-    # check sequentially the number of requests for that particular trip
-    individual = sorted(individual, key=itemgetter(2))
-    # Second, we loop trough the number of genes in order to retrieve the
-    # number of requests for that particular trip
-    # For the 1st trip, the starting time has to be selected
-    request = []
+    An individual's fitness is evaluated based on the waiting time for passengers requesting buses for the lines
+    represented in the individual. Shorter waiting times on average mean better solutions. The algorithm works by by
+    first sorting the individual by starting times, grouped by the bus  lines.
+
+    Args:
+        individual: an individual represented as [[lineID, Capacity, frequency, startTime]...]
+
+    Return:
+        a fitness score calculated as a cost to the bus company.
+    """
     totalWaitingMinutes = []
-    cnt = []
-    initialTripTime = datetime.combine(fitnessClass.yesterday, datetime.strptime(fitnessClass.firstMinute,  fitnessClass.formatTime).time())
-    db = DB()
-    # ------------------------------------------
-    # Evaluate average time based on capacity
-    # ------------------------------------------
-    '''
-    tripWaitingTime = timedelta(minutes=0)
-    noOfLeftOvers = 0
-    initialTrip = initialTripTime
-    for i, trip in enumerate(individual):
-        tripStartTime = trip[2]
-
-        stopsAndRequests = db.MaxReqNumTrip(initialTrip, tripStartTime, trip[0])
-
-        for i, stop in enumerate(stopsAndRequests):
-            if stop[1] > trip[1] and i < len(individual)-1:
-                nextTripTime = individual[i+1][2]
-                nextTripWait = nextTripTime - individual[i][2]
-                noOfLeftOvers = noOfLeftOvers + (stop[1] - trip[1])   # must wait for the next bus trip
-                tripWaitingTime += nextTripWait*(stop[1] - trip[1])
-        initialTrip = tripStartTime
-    '''
-    # ----------------------------------------------------
-    # Evaluate average time based on requests (& capacity)
-    # ----------------------------------------------------
+    totalNumberRequests = []
     leftOver = []
+    db = DB()
+    # Order individual by starting slice time
+    individual = sorted(individual, key=itemgetter(3))
+    # Order individual by bus line
+    individual = sorted(individual, key=itemgetter(0))
+    # ------------------------------------------------------------
+    # Evaluate average time based on requests & bus capacity
+    # ------------------------------------------------------------
+    # Get the starting time for the 1st slice
+    firstSliceHr = datetime.datetime.combine(Fitness.yesterday, datetime.time(db.timeSliceArray[0][0], 0, 0))
+    # Initialize initial trip time
+    initialTripTime = firstSliceHr
     for i in range(len(individual)):
-        phenotype = db.generatePhenotype(individual[i][0], individual[i][2])
+        # phenotype = db.generatePhenotype(individual[i][0], individual[i][3])
+        phenotype = db.generatePhenotype2(individual[i])
         initialCrew = 0
         leftOvers = 0
-        leftOversWaitTime = 0
+        # ------------------------------------------------------
+        # Evaluate average time and capacity for each gene now
+        # ------------------------------------------------------
         for j in range(len(phenotype)):
-            # TODO: Fix trips that finish at the next day
-            initialTrip = initialTripTime
-            lastTrip = phenotype[j][1]
-            if initialTrip > lastTrip:
-                initialTrip = lastTrip - timedelta(minutes=db.getFrequency(individual[i][0]))
-            # Search on Fitness.request array for the particular requests
-            request = fitnessClass.searchRequest(initialTrip, lastTrip, phenotype[j][0], individual[i][0])
-            requestOut = fitnessClass.searchRequestOut(initialTrip, lastTrip, phenotype[j][0], individual[i][0])
-            # TODO: Replace the length by the sum of the number of requests
-            initialCrew = initialCrew + (len(request) - len(requestOut))
-            if(initialCrew > individual[i][1]):
-                # People that did not make it !!
-                leftOvers = initialCrew - individual[i][1]
-                # Total time = number of people times waiting time in minutes
-                if i < len(phenotype)-1:
-                    leftOversWaitTime = leftOvers * fitnessClass.getMinutesNextTrip(db.generatePhenotype(individual[i+1][0], individual[i+1][2]), lastTrip, phenotype[j][0])
-                else:
-                    # Heuristic, computation of this would result really expensive
-                    leftOversWaitTime = leftOvers * db.minutesHour
-                leftOver.append([leftOvers,leftOversWaitTime])
-            initialTripTime = phenotype[j][1]
-            if len(request) > 0:
-                waitingMinutes = 0
-                count = 0
-                for k in range(len(request)):
-                    waitingTime = phenotype[j][1] - request[k]["_id"]["RequestTime"]
-                    waitingMinutes = waitingMinutes + (waitingTime.days * databaseClass.minutesDay) + (waitingTime.seconds / databaseClass.minutesHour)
-                    count = count + int(request[k]["total"])
-                totalWaitingMinutes.append(waitingMinutes)
-                cnt.append(count)
+            for k in range(len(phenotype[j])):
+                # Define parameters for the first search
+                initialTrip = initialTripTime
+                lastTrip = phenotype[j][k][1]
+                # This is a restriction, so the search is not incoherent
+                if initialTrip > lastTrip:
+                    initialTrip = lastTrip - timedelta(minutes=individual[i][2])
+                # Search on requests from people going in and out of the bus
+                request = fitnessClass.searchRequest(initialTrip, lastTrip, phenotype[j][k][0], individual[i][0])
+                requestOut = fitnessClass.searchRequestOut(initialTrip, lastTrip, phenotype[j][k][0], individual[i][0])
+                # TODO: Replace the length by the sum of the number of requests
+                # Calculate the number of people that is left on the bus
+                initialCrew = initialCrew + (len(request) - len(requestOut))
+                # Compare the crew against the capacity, if it is higher then the waiting time based on capacity is calculated
+                if(initialCrew > individual[i][1]):
+                    # People that did not make it !!
+                    leftOvers = initialCrew - individual[i][1]
+                    # Total waiting time is number of people left times waiting time in minutes
+                    if i < len(phenotype[j])-1:
+                        # Send next gene and bus stop
+                        leftOversWaitTime = leftOvers * individual[i][2]
+                    else:
+                        # Heuristic, computation of this would result really expensive
+                        leftOversWaitTime = leftOvers * db.minutesHour
+                    leftOver.append([leftOvers,leftOversWaitTime])
+                # Assign the last trip value to the initial trip
+                initialTripTime = phenotype[j][k][1]
+                if len(request) > 0:
+                    waitingMinutes = 0
+                    numberRequests = 0
+                    for l in range(len(request)):
+                        waitingTime = phenotype[j][k][1] - request[l]["_id"]["RequestTime"]
+                        waitingMinutes = waitingMinutes + round(((waitingTime.total_seconds() % 3600) / databaseClass.minutesHour), 2)
+                        numberRequests = numberRequests + int(request[l]["total"])
+                    totalWaitingMinutes.append(waitingMinutes)
+                    totalNumberRequests.append(numberRequests)
+    # Summarize the results 
+    # Initialize total variable
     totalLeftOverTime = 0
-    for k in range(len(leftOver)):
-        totalLeftOverTime += leftOver[k][1]
+    # noOfLeftOvers = 0
+    # Loop trough leftovers array
+    for z in range(len(leftOver)):
+        # Summarize the waiting time for all the leftovers in every bus stop
+        totalLeftOverTime += leftOver[z][0]
+    # Summarize the waiting times based on requests and based on capacity
     totalWaitingTime = sum(totalWaitingMinutes) + totalLeftOverTime
-    # totalWaitingTime = sum(totalWaitingMinutes) + tripWaitingTime.total_seconds()/60.0
-    # averageWaitingTime = totalWaitingTime / (sum(cnt) + noOfLeftOvers)
     return fitnessClass.calculateCost(individual, totalWaitingTime, 0),
 
 
@@ -134,18 +132,13 @@ creator.create("FitnessMin", base.Fitness, weights=(-1.0,))
 # Creating an individual class that inherits a list property and has a fitness
 # attribute of type FitnessMin
 creator.create("Individual", list, fitness=creator.FitnessMin)
-
 # Initialize the toolbox from the base class
 toolbox = base.Toolbox()
-
 # Register the operations to be used in the toolbox
-toolbox.register("attribute", databaseClass.generateGenotype, BUS_LINE)
-#toolbox.register("individual", tools.initRepeat, creator.Individual,
-#                 toolbox.attribute, INDIVIDUAL_SIZE)
-toolbox.register("individual", inits.initRepeatBound, creator.Individual,
-                  toolbox.attribute, INDIVIDUAL_SIZE_BOUNDS)
+toolbox.register("attribute", databaseClass.generateGenotype)
+toolbox.register("individual", tools.initRepeat, creator.Individual, toolbox.attribute, INDIVIDUAL_SIZE)
 toolbox.register("population", tools.initRepeat, list, toolbox.individual)
-toolbox.register("evaluate", evalIndividual)
+toolbox.register("evaluate", evaluateNewIndividualFormat)
 toolbox.register("mate", tools.cxOnePoint)
 toolbox.register("select", tools.selTournament, tournsize=3)
 toolbox.register("mutate", mutation.mutUniformTime)

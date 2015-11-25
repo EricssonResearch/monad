@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.CountDownTimer;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -160,18 +161,14 @@ public class TripRecyclerViewAdapter
         else {
             int feedback = trips.get(i).getFeedback();
             tripViewHolder.feedback.setRating(feedback);
-            if(feedback == -1) {
-                tripViewHolder.feedback.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
-                    @Override
-                    public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
-                        //TODO: update the feedback in the database
-                        //note: rating is always an integer even though it is float type
-                    }
-                });
-            }
-            else{
-                tripViewHolder.feedback.setEnabled(false);
-            }
+            tripViewHolder.feedback.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
+                @Override
+                public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
+                    int feedback = Math.round(rating);
+                    trips.get(i).setFeedback(feedback);
+                    Storage.changeFeedback(trips.get(i).getId(), feedback);
+                }
+            });
             tripViewHolder.date.setText(formatDate(trips.get(i).getStartTime()));
         }
     }
