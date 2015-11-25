@@ -27,8 +27,7 @@ from operator import itemgetter
 MUTATION_PROB = 0.0
 CROSS_OVER_PROB = 0.5
 NO_OF_GENERATION = 1
-POPULATION_SIZE = 10
->>>>>>> upstream/Development
+POPULATION_SIZE = 2
 
 def main():
     # Generate the population
@@ -77,8 +76,8 @@ def main():
     #databaseClass.insertBusTrip(best_ind)
     print("Best individual is %s, %s" % (individual, best_ind.fitness.values))
     print ("Length of best individual: " + str(len(best_ind)))
-    # fitnessClass = Fitness()
-    # fitnessClass.genTimetable(best_ind)
+    fitnessClass = Fitness()
+    fitnessClass.genTimetable(best_ind)
 
 
 # def crossover(offspring):
