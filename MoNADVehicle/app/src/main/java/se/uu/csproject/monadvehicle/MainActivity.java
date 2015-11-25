@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.media.Image;
+import android.os.AsyncTask;
 import android.os.Environment;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
@@ -51,7 +52,8 @@ import java.util.GregorianCalendar;
 import java.util.List;
 
 
-public class MainActivity extends Activity implements ConnectionCallbacks, OnConnectionFailedListener{
+public class MainActivity extends Activity implements ConnectionCallbacks, OnConnectionFailedListener,
+        AsyncGetNextTripInteraction {
 
     LinearLayout sideList;
     Route route;
@@ -110,7 +112,7 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
         mapView.setBuiltInZoomControls(true);
         mapView.getMapZoomControls().setZoomLevelMin((byte) 10);
         mapView.getMapZoomControls().setZoomLevelMax((byte) 20);
-        // the cente should be the current location, but now it's just in flogsta
+        // the centre should be the current location, but now it's just in flogsta
         mapView.getModel().mapViewPosition.setCenter(new LatLong(59.851294, 17.593113));
         mapView.getModel().mapViewPosition.setZoomLevel((byte) 12);
 
@@ -135,63 +137,7 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
         // only once a layer is associated with a mapView the rendering starts
         this.mapView.getLayerManager().getLayers().add(tileRendererLayer);
 
-        // instantiating the paint object
-        Paint paint = AndroidGraphicFactory.INSTANCE.createPaint();
-        paint.setColor(Color.RED);
-        paint.setStrokeWidth(10);
-        paint.setStyle(Style.STROKE);
-
-        // instantiating the polyline object
-        Polyline polyline = new Polyline(paint, AndroidGraphicFactory.INSTANCE);
-
-        //// TODO: receive route from server and draw it. The following route is just for demo.
-        // the route from polacksbacken to flogsta
-        // to draw the route, all the turning points along the route must be specified,
-        // mapsforge does not have the functionality to draw the route between two points with auto detection of turning points
-        List<LatLong> coordinateList = polyline.getLatLongs();
-        coordinateList.add(new LatLong(59.851294, 17.593113));
-        coordinateList.add(new LatLong(59.850208, 17.600629));
-        coordinateList.add(new LatLong(59.851952, 17.603680));
-        coordinateList.add(new LatLong(59.850008, 17.610965));
-        coordinateList.add(new LatLong(59.852265, 17.613409));
-        coordinateList.add(new LatLong(59.853481, 17.616570));
-        coordinateList.add(new LatLong(59.850975, 17.618847));
-        coordinateList.add(new LatLong(59.849815, 17.620939));
-        coordinateList.add(new LatLong(59.846652, 17.624497));
-        coordinateList.add(new LatLong(59.846425, 17.624276));
-        coordinateList.add(new LatLong(59.844812, 17.625015));
-        coordinateList.add(new LatLong(59.840875, 17.630646));
-        coordinateList.add(new LatLong(59.841609, 17.639105));
-        coordinateList.add(new LatLong(59.839344, 17.640161));
-        coordinateList.add(new LatLong(59.840673, 17.647350));
-        coordinateList.add(new LatLong(59.840063, 17.647760));
-
-        // adding the layer with the route to the mapview
-        mapView.getLayerManager().getLayers().add(polyline);
-
-        // adding the layer with current location to the mapview
-        mapView.getLayerManager().getLayers().add(this.myLocationOverlay);
-
         buildGoogleApiClient();
-
-        ImageButton showBusStopList =(ImageButton)findViewById(R.id.busStopButton);
-        showBusStopList.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                sideList.setVisibility(View.VISIBLE);
-                LayoutInflater inflater = (LayoutInflater) getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                ViewGroup insertPoint = (ViewGroup) findViewById(R.id.side_list);
-
-                for (int j = 0; j < route.getBusStopList().size(); j++) {
-                    View busStopView = inflater.inflate(R.layout.list_item_busstop, null);
-                    TextView busStopTime = (TextView) busStopView.findViewById(R.id.text_busstoptime);
-                    TextView busStopName = (TextView) busStopView.findViewById(R.id.text_busstopname);
-                    busStopTime.setText(route.getBusStopList().get(j).getArrivalTime().toString());
-                    busStopName.setText(route.getBusStopList().get(j).getName());
-                    insertPoint.addView(busStopView);
-                }
-            }
-        });
     }
 
     @Override
@@ -207,7 +153,14 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
     protected void onResume() {
         super.onResume();
 
-        if(mGoogleApiClient.isConnected()) {
+        if (!Storage.isEmptyBusTrip()) {
+            displayBusTrip();
+        }
+        else {
+            getNextTrip();
+        }
+
+        if (mGoogleApiClient.isConnected()) {
             myLocationOverlay.enableMyLocation(true);
             startLocationUpdates();
         }
@@ -348,25 +301,106 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
     }
 
     public ArrayList<BusStop> generateBusStops(){
-        ArrayList<BusStop> busStops = new ArrayList<>();
-        Calendar calendar = new GregorianCalendar(2015, 11, 23, 15, 0, 0);
-        Date arrival1 = calendar.getTime();
-        calendar = new GregorianCalendar(2015, 11, 23, 15, 5, 0);
-        Date arrival2 = calendar.getTime();
-        calendar = new GregorianCalendar(2015, 11, 23, 15, 10, 0);
-        Date arrival3 = calendar.getTime();
-        calendar = new GregorianCalendar(2015, 11, 23, 15, 20, 0);
-        Date arrival4 = calendar.getTime();
+//        ArrayList<BusStop> busStops = new ArrayList<>();
+//        Calendar calendar = new GregorianCalendar(2015, 11, 23, 15, 0, 0);
+//        Date arrival1 = calendar.getTime();
+//        calendar = new GregorianCalendar(2015, 11, 23, 15, 5, 0);
+//        Date arrival2 = calendar.getTime();
+//        calendar = new GregorianCalendar(2015, 11, 23, 15, 10, 0);
+//        Date arrival3 = calendar.getTime();
+//        calendar = new GregorianCalendar(2015, 11, 23, 15, 20, 0);
+//        Date arrival4 = calendar.getTime();
+//
+//        BusStop stop1 = new BusStop(1, "Centralstation", 0, 0, arrival1, 2, 0);
+//        busStops.add(stop1);
+//        BusStop stop2 = new BusStop(1, "Centralstation", 0, 0, arrival2, 1, 1);
+//        busStops.add(stop2);
+//        BusStop stop3 = new BusStop(1, "Centralstation", 0, 0, arrival3, 3, 4);
+//        busStops.add(stop3);
+//        BusStop stop4 = new BusStop(1, "Centralstation", 0, 0, arrival4, 0, 1);
+//        busStops.add(stop4);
+//
+//        return busStops;
+        return null;
+    }
 
-        BusStop stop1 = new BusStop(1, "Centralstation", 0, 0, arrival1, 2, 0);
-        busStops.add(stop1);
-        BusStop stop2 = new BusStop(1, "Centralstation", 0, 0, arrival2, 1, 1);
-        busStops.add(stop2);
-        BusStop stop3 = new BusStop(1, "Centralstation", 0, 0, arrival3, 3, 4);
-        busStops.add(stop3);
-        BusStop stop4 = new BusStop(1, "Centralstation", 0, 0, arrival4, 0, 1);
-        busStops.add(stop4);
+    public void displayBusTrip() {
+        // instantiating the paint object
+        Paint paint = AndroidGraphicFactory.INSTANCE.createPaint();
+        paint.setColor(Color.RED);
+        paint.setStrokeWidth(10);
+        paint.setStyle(Style.STROKE);
 
-        return busStops;
+        Polyline polyline = new Polyline(paint, AndroidGraphicFactory.INSTANCE);
+
+        //// TODO: receive route from server and draw it. The following route is just for demo.
+        // the route from polacksbacken to flogsta
+        // to draw the route, all the turning points along the route must be specified,
+        // mapsforge does not have the functionality to draw the route between two points with auto detection of turning points
+        List<LatLong> coordinateList = polyline.getLatLongs();
+
+        BusTrip busTrip = Storage.getBusTrip();
+
+        for (int i = 0; i < busTrip.getTrajectory().size(); i++) {
+            coordinateList.add(new LatLong(busTrip.getTrajectory().get(i).getLatitude(), busTrip.getTrajectory().get(i).getLongitude()));
+        }
+//        coordinateList.add(new LatLong(59.851294, 17.593113));
+//        coordinateList.add(new LatLong(59.850208, 17.600629));
+//        coordinateList.add(new LatLong(59.851952, 17.603680));
+//        coordinateList.add(new LatLong(59.850008, 17.610965));
+//        coordinateList.add(new LatLong(59.852265, 17.613409));
+//        coordinateList.add(new LatLong(59.853481, 17.616570));
+//        coordinateList.add(new LatLong(59.850975, 17.618847));
+//        coordinateList.add(new LatLong(59.849815, 17.620939));
+//        coordinateList.add(new LatLong(59.846652, 17.624497));
+//        coordinateList.add(new LatLong(59.846425, 17.624276));
+//        coordinateList.add(new LatLong(59.844812, 17.625015));
+//        coordinateList.add(new LatLong(59.840875, 17.630646));
+//        coordinateList.add(new LatLong(59.841609, 17.639105));
+//        coordinateList.add(new LatLong(59.839344, 17.640161));
+//        coordinateList.add(new LatLong(59.840673, 17.647350));
+//        coordinateList.add(new LatLong(59.840063, 17.647760));
+
+        // adding the layer with the route to the mapview
+        mapView.getLayerManager().getLayers().add(polyline);
+
+        // adding the layer with current location to the mapview
+        mapView.getLayerManager().getLayers().add(this.myLocationOverlay);
+
+        /* TODO: Needs to be changed */
+        ImageButton showBusStopList =(ImageButton)findViewById(R.id.busStopButton);
+        showBusStopList.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sideList.setVisibility(View.VISIBLE);
+                LayoutInflater inflater = (LayoutInflater) getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                ViewGroup insertPoint = (ViewGroup) findViewById(R.id.side_list);
+
+                for (int j = 0; j < route.getBusStopList().size(); j++) {
+                    View busStopView = inflater.inflate(R.layout.list_item_busstop, null);
+                    TextView busStopTime = (TextView) busStopView.findViewById(R.id.text_busstoptime);
+                    TextView busStopName = (TextView) busStopView.findViewById(R.id.text_busstopname);
+                    busStopTime.setText(route.getBusStopList().get(j).getArrivalTime().toString());
+                    busStopName.setText(route.getBusStopList().get(j).getName());
+                    insertPoint.addView(busStopView);
+                }
+            }
+        });
+    }
+
+    public void getNextTrip() {
+        new GetNextTripTask(this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+    }
+
+
+    @Override
+    public void processReceivedLoginResponse(String response) {
+        if (response.equals("1")) {
+            Log.d("MainActivity", "Successfully received BusTrip data");
+            displayBusTrip();
+        }
+        else {
+            Log.d("MainActivity", "Error while receiving BusTrip data");
+        }
     }
 }
