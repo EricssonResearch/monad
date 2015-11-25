@@ -13,19 +13,26 @@ under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
 CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
+# from heapq import heappop, heappush
+import threading
 import sys
-import math
+# import math
 import time
 
-import Image
-import ImageDraw
+# import Image
+# import ImageDraw
 from xml.sax import make_parser, handler
+from Tkinter import Tk, Canvas, Frame, BOTH
+from multiprocessing import Process
+
 
 from aStar import AStar
 from busStop import BusStop
 from coordinate import Coordinate
 from address import Address
 import coordinate
+from mapDrawing import Example, DrawImage
+
 
 # The size width of the produced image in pixels
 picSize = 3000
@@ -50,6 +57,7 @@ class RouteHandler(handler.ContentHandler):
         self.nodeID = {}
         # all bus stop nodes
         self.busStops = []
+        self.busStopNode = {}
 
         self.roadMapGraph = {}
         self.roadIntersectionGraph = {}
@@ -59,7 +67,7 @@ class RouteHandler(handler.ContentHandler):
 
         self.addresses = {}
 
-        self.index = 0
+        # self.index = 0
 
         # Used as temp
         self.nd = []
@@ -113,6 +121,7 @@ class RouteHandler(handler.ContentHandler):
             oneway = self.tag.get('oneway', '') in ('yes', 'true', '1')
             maxspeed = self.tag.get('maxspeed', standardSpeed)
             motorcar = self.tag.get('motorcar', '')
+            # motorVehicle = self.tag.get('motor_vehicle', '')
             junction = self.tag.get('junction', '')
             roadName = self.tag.get('name', '')
             street = self.tag.get('addr:street', '')
@@ -132,7 +141,8 @@ class RouteHandler(handler.ContentHandler):
                                          maxspeed, roadTypeIndex,
                                          wayID=self.roadId)
 
-                    self.roads[self.roadId] = [(roadName, junction, self.nd)]
+                    self.roads[self.roadId] = [roadName, junction, self.nd,
+                                               oneway]
 
             # Add the name of the road to the address list if it is a road
             # with a name.
@@ -148,16 +158,19 @@ class RouteHandler(handler.ContentHandler):
 
         elif name == 'node':
             # Look for nodes that are bus stops
-            highway = self.tag.get('highway', '')
+            # highway = self.tag.get('highway', '')
+            bus = self.tag.get('bus', '')
+            public_transport = self.tag.get('public_transport', '')
+
             stopName = self.tag.get('name', '')
             street = self.tag.get('addr:street', '')
             housenumber = self.tag.get('addr:housenumber', '')
-            if highway == 'bus_stop':
-                self.busStops.append(BusStop(stopName,
-                                             longitude=self.nodes[
-                                                 self.node].longitude,
-                                             latitude=self.nodes[
-                                                 self.node].latitude))
+            if bus == 'yes' and public_transport == 'stop_position' and stopName != '':
+                busStop = BusStop(stopName,
+                                  longitude=self.nodes[self.node].longitude,
+                                  latitude=self.nodes[self.node].latitude)
+                self.busStops.append(busStop)
+                self.busStopNode[self.node] = busStop
             if street != '' and housenumber != '':
                 self.addAddress(street, self.node, housenumber)
                 pass
@@ -197,9 +210,14 @@ class RouteHandler(handler.ContentHandler):
                 self.addresses[key].addNumber(number, self.nodes[node])
 
     def makeRoadIntersectionGraph(self):
+        # print len(self.roadMapGraph)
+
         for road in self.roads:
-            # print self.roads[road]
-            pass
+            # print "--", road
+            for nodeID in self.roads[road][2]:
+                # print nodeID, self.roadMapGraph[nodeID]
+                pass
+
         print len(self.roads)
 
 
@@ -236,10 +254,58 @@ class Map:
         :param coordinates: (longitude, latitude)
         :return: nodeID
         """
-        if coordinates in self.handler.nodeID:
+        if coordinates in self.handler.nodeID and self.inEdgeList(
+                self.handler.nodeID[coordinates]):
+
             return self.handler.nodeID[coordinates]
         else:
             return self.closestRoadNode(coordinates)
+
+    def makeBusGraph(self):
+
+        graph = {}
+
+        i = 0
+        l = len(self.busStopList)
+        timer = time.time()
+        for busStopA in self.handler.busStops:
+
+            if busStopA.name not in graph:
+                graph[busStopA.name] = {}
+
+            i = i + 1
+            print "\n%f s\n (%d / %d) - %s" % (time.time() - timer, i, l, busStopA.name)
+            timer = time.time()
+            for busStopB in self.handler.busStops:
+
+                if busStopB.name not in graph[busStopA.name] and busStopA != busStopB:
+                    print '\033[91m' + '.' + '\033[0m',
+                    path, cost = self.findRouteFromCoordinateList([
+                        busStopA.coordinates,
+                        busStopB.coordinates])
+
+                    start = busStopA.name
+                    _cameFrom = []
+                    for node in path[1:]:
+                        id = self.handler.nodeID[node]
+
+                        if id in self.handler.busStopNode:
+                            b = self.handler.busStopNode[id].name
+
+                            if start not in graph:
+                                graph[start] = {}
+
+                            graph[start][b] = []
+                            graph[busStopA.name][b] = False
+                            graph[start][busStopB.name] = False
+
+                            for name in _cameFrom:
+                                graph[name][b] = False
+
+                            _cameFrom.append(start)
+                            start = b
+
+        return graph
 
     def getNodeIdFromCoordinatesList(self, coordinatesList):
         """
@@ -451,120 +517,17 @@ class Map:
         path, cost = self.astar.findRoute(stopA, stopB)
         return cost[stopB]
 
-    def y2lat(self, a):
-        return 180.0 / math.pi * (2.0 *
-                                  math.atan(math.exp(a * math.pi / 180.0)) -
-                                  math.pi / 2.0)
 
-    def lat2y(self, a):
-        return 180.0 / math.pi * (math.log(math.tan(math.pi / 4.0 + a *
-                                                    (math.pi / 180.0) / 2.0)))
+class drawApp(threading.Thread):
+    def __init__(self):
+        threading.Thread.__init__(self)
 
-    # Contains some drawing functions that can/should be left out. They are
-    # mainly used for testing the other functions.
-    def drawInit(self, x):
-        self.lonLength = (self.handler.maxlon - self.handler.minlon)
-        self.imgScaling = (x / self.lonLength)
-
-        y = ((self.lat2y(self.handler.maxlat) -
-              self.lat2y(self.handler.minlat)) *
-             self.imgScaling)
-
-        self.im = Image.new('RGBA', (x, int(y)), 'white')
-        self.draw = ImageDraw.Draw(self.im)
-
-    def drawSave(self, name):
-        self.im.show()
-        self.im.save(name)
-
-    def drawNodes(self, nodes, colour):
-        y1 = self.lat2y(self.handler.minlat)
-        y2 = self.lat2y(self.handler.maxlat)
-        y = (y2 - y1) * self.imgScaling
-
-        for id, n in nodes.items():
-            pointX = (n.longitude - self.handler.minlon) * self.imgScaling
-            pointY = y - (self.lat2y(n.latitude) - y1) * self.imgScaling
-            self.draw.point((pointX, pointY), colour)
-
-    def drawNodeIds(self, nodeIds, colour):
-        y1 = self.lat2y(self.handler.minlat)
-        y2 = self.lat2y(self.handler.maxlat)
-        y = (y2 - y1) * self.imgScaling
-
-        for nd in nodeIds:
-            n = self.nodes[nd].coordinates
-            pointX = (n[0] - self.handler.minlon) * self.imgScaling
-            pointY = y - (self.lat2y(n[1]) - y1) * self.imgScaling
-            self.draw.point((pointX, pointY), colour)
-
-    def drawRoads(self, edges, nodes):
-        y1 = self.lat2y(self.handler.minlat)
-        y2 = self.lat2y(self.handler.maxlat)
-        y = (y2 - y1) * self.imgScaling
-
-        for id, n in edges.items():
-            a = nodes[id].coordinates
-
-            for k, z, i, _ in n:
-                b = nodes[k].coordinates
-
-                colr = 255 - min(int(255 * (float(z) / 120)), 255)
-                if int(z) < 31:
-                    colr = 220
-                self.drawLine(y, y1, a[0], a[1], b[0], b[1], self.imgScaling,
-                              (colr, colr, colr, 255))
-
-    def drawBusStops(self, busStops, nodes):
-        y1 = self.lat2y(self.handler.minlat)
-        y2 = self.lat2y(self.handler.maxlat)
-        y = (y2 - y1) * self.imgScaling
-
-        for stopName, stopIDs in busStops.items():
-            radius = 2
-            if stopName == '':
-                for bid in stopIDs:
-                    stop = nodes[bid]
-                    self.drawCircle(y, y1, stop[0], stop[1], radius,
-                                    self.imgScaling, (110, 50, 200))
-            else:
-                stop = nodes[stopIDs[0]]
-                self.drawCircle(y, y1, stop[0], stop[1], radius,
-                                self.imgScaling, (254, 122, 85))
-
-    def drawPath(self, path, colour):
-        y1 = self.lat2y(self.handler.minlat)
-        y2 = self.lat2y(self.handler.maxlat)
-        y = (y2 - y1) * self.imgScaling
-
-        fromNode = 0
-        for pid in path:
-            toNode = self.nodes[pid].coordinates
-            if fromNode == 0:
-                fromNode = toNode
-            else:
-                self.drawLine(y, y1, fromNode[0], fromNode[1], toNode[0],
-                              toNode[1], self.imgScaling, colour)
-
-                fromNode = toNode
-
-    def drawPoint(self, y, y1, lon, lat, scale, colour):
-        pointPX = (lon - self.minlon) * scale
-        pointPY = y - ((self.lat2y(lat) - y1) * scale)
-        self.draw.point((pointPX, int(pointPY)), colour)
-
-    def drawLine(self, y, y1, aLon, aLat, bLon, bLat, scale, colour):
-        pointAX = (aLon - self.handler.minlon) * scale
-        pointAY = y - ((self.lat2y(aLat) - y1) * scale)
-        pointBX = (bLon - self.handler.minlon) * scale
-        pointBY = y - ((self.lat2y(bLat) - y1) * scale)
-        self.draw.line((pointAX, pointAY, pointBX, pointBY), colour)
-
-    def drawCircle(self, y, y1, lon, lat, r, scale, colour):
-        pointCX = (lon - self.handler.minlon) * scale
-        pointCY = y - ((self.lat2y(lat) - y1) * scale)
-        self.draw.ellipse((pointCX - r, pointCY - r, pointCX + r, pointCY + r),
-                          fill=colour)
+    def run(self):
+        print "Starting thread"
+        root = Tk()
+        ex = Example(root)
+        root.geometry("400x250+300+300")
+        ex.mainloop()
 
 
 if __name__ == '__main__':
@@ -585,81 +548,17 @@ if __name__ == '__main__':
     myMap.parsData()
     print "Data loaded in: %f sec\n" % (time.time() - timer)
 
-    """#print "We have " + str(len(myMap.nodes)) + " nodes in total"
-    #print "We have " + str(len(myMap.busStopList)) + " bus stops in total\n"
+    print "We have " + str(len(myMap.nodes)) + " nodes in total"
+    print "We have " + str(len(myMap.busStopList)) + " bus stops in total\n"
 
-    #print "Find a bus stop name: ", myMap.findBusStopName(17.6666581,
-    #                                                      59.8556742)
-    #print "Find a bus stop position: ", str(
-    #    myMap.findBusStopPosition("Danmarksgatan"))
+    print "Draw image ..."
+    img = DrawImage(3000,
+                    myMap.handler.minlon,
+                    myMap.handler.minlat,
+                    myMap.handler.maxlon,
+                    myMap.handler.maxlat)
 
-    #print "Node id for (17.6130204, 59.8545318):", (
-    #    myMap.getNodeIdFromCoordinates((17.6130204, 59.8545318)))
+    img.drawRoads(myMap.edges, myMap.nodes)
+    img.drawSave(sys.argv[1])
 
-    #print "\nFinding path... "
-    ## Flogsta vårdcentral
-    #nTo = 2198905720
-    ## Polacksbacken
-    #nFrom = 1125461154
-
-    #timer = time.time()
-    #myPath, cost = myMap.findRoute(nFrom, nTo)
-    #print "Found path in: %f sec, cost: %f sec\n" % (
-    #    (time.time() - timer), cost)
-
-    #print "Finding path from coordinate list... "
-    #timer = time.time()
-    #path2, cost2 = myMap.findRouteFromCoordinateList([(17.6130204, 59.8545318),
-    #                                                 (17.5817552, 59.8507556),
-    #                                                 (17.6476356, 59.8402173)])
-    #print "Found path in: %f sec, cost: %s sec\n" % (
-    #    (time.time() - timer), str(cost2))
-
-    #wayP = myMap.getWayPointsFromPath(myPath)
-
-    #print "Finding path with four points..."
-    ## Flogsta vårdcentral
-    #nTo = 2198905720
-    ## Kungsgatan
-    #nThrough = 25734373
-    ## Bruno Liljeforsgata
-    #nThrough2 = 31996288
-    ## Polacksbacken
-    #nFrom = 1125461154
-
-    #timer = time.time()
-    #my4Path, _ = myMap.findWayPointsFromList([nFrom, nThrough, nThrough2, nTo])
-    #print "Found path in: %f sec\n" % (time.time() - timer)
-
-    #print "Draw image ..."
-    #myMap.drawInit(3000)
-    #myMap.drawNodes(myMap.nodes, (227, 254, 212, 255))
-    #myMap.drawRoads(myMap.edges, myMap.nodes)
-    ###    myMap.drawBusStops(myMap.handler.busStops, myMap.nodes)
-    #myMap.drawPath(myPath, 'red')
-    #myMap.drawNodeIds(wayP, 'blue')
-    #myMap.drawPath(my4Path, 'green')
-    #myMap.drawSave(sys.argv[1])
-    #print "Image done,", sys.argv[1]
-
-    #myMap.getBusStopConnections()
-    #print myMap.closestRoadNode((17.59329, 59.851252))
-
-    #print myMap.busStopList
-    #for bus in myMap.busStopList:
-    #    print bus.name.encode('utf-8')
-    #    #pass
-
-    #for addr in myMap.handler.addresses:
-    #    for num in myMap.handler.addresses[addr].numbers:
-    #        print addr.encode('utf-8'), num
-
-    #print myMap.findRouteFromCoordinateList([
-    #    (17.593290, 59.851252),
-    #    (17.647628, 59.840427)
-    #])"""
-
-    coord = myMap.nodes[1125461154]
-    print myMap.findBusStopsFromCoordinates(coord.longitude+1,
-                                            coord.latitude+1,
-                                            0.0)
+    # myMap.makeBusGraph()

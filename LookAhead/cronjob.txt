@@ -21,6 +21,6 @@
 # 
 # m h  dom mon dow   command
 MAILTO="nicholas.got@gmail.com"
-49 11 * * * /home/ngot/ProjectCS/sprint4/monad/LookAhead/startup.sh 
+49 11 * * * $HOME/ProjectCS/sprint4/monad/LookAhead/startup.sh 
 
 #>> $HOME/ProjectCS/sprint4/monad/LookAhead/log.txt 2>&1
