@@ -30,6 +30,12 @@ class Coordinate(object):
     def coordinates(self):
         return (self.longitude, self.latitude)
 
+    def longitude(self):
+        return self.longitude
+
+    def latitude(self):
+        return self.latitude
+
 
 # def measure(lon1, lat1, lon2, lat2):
 def measure(coordinate1, coordinate2):
@@ -76,3 +82,13 @@ def closestTo(coord, coodinateList):
     f = lambda x, y: x if measure(x, coord) < measure(y, coord) else y
 
     return reduce(f, coodinateList)
+
+
+def y2lat(a):
+    return 180.0 / math.pi * (2.0 * math.atan(math.exp(a * math.pi / 180.0)) -
+                              math.pi / 2.0)
+
+
+def lat2y(a):
+    return 180.0 / math.pi * (math.log(math.tan(math.pi / 4.0 + a *
+                                                (math.pi / 180.0) / 2.0)))
