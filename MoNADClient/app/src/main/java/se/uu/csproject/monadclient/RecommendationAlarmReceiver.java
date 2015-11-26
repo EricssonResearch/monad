@@ -12,13 +12,19 @@ public class RecommendationAlarmReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent)
     {
+        Intent newintent = new Intent(context.getApplicationContext(), MainActivity.class);
+        newintent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        PendingIntent pendingIntent = PendingIntent.getActivity(context.getApplicationContext(), 0, newintent,
+                PendingIntent.FLAG_UPDATE_CURRENT);
+
         NotificationCompat.Builder mBuilder;
         mBuilder = new NotificationCompat.Builder(context);
         mBuilder.setSmallIcon(R.mipmap.ic_launcher);
         mBuilder.setContentTitle("Recommendation");
         mBuilder.setContentText("You have a new recommendation");
         mBuilder.setAutoCancel(true);
-        mBuilder.setVibrate(new long[] { 1000, 1000, 1000 });
+        mBuilder.setVibrate(new long[]{1000, 1000, 1000});
+        mBuilder.setContentIntent(pendingIntent);
 
         NotificationManager mNotificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 

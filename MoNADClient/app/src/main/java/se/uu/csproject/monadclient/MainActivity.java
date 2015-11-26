@@ -59,6 +59,7 @@ public class MainActivity extends MenuedActivity implements GoogleApiClient.Conn
     private AlertDialog.Builder builder;
     private RecyclerView recyclerView;
     private SearchRecyclerViewAdapter adapter;
+    private boolean recommendNotifyAdded;
 
     private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
     private final int MY_PERMISSIONS_REQUEST = 123;
@@ -81,6 +82,8 @@ public class MainActivity extends MenuedActivity implements GoogleApiClient.Conn
         currentLatitude = 0;
         currentLongitude = 0;
         setSupportActionBar(toolbar);
+
+        recommendNotifyAdded = false;
 
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view_main);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getBaseContext());
@@ -361,19 +364,18 @@ public class MainActivity extends MenuedActivity implements GoogleApiClient.Conn
     public void processReceivedRecommendations() {
         displayRecommendations();
 
-        //add to notify
-        Intent myIntent = new Intent(MainActivity.this, RecommendationAlarmReceiver.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(MainActivity.this, 0, myIntent, 0);
+        if(!recommendNotifyAdded) {
+            //add to notify
+            Log.i("boolean", recommendNotifyAdded+"");
+            Intent myIntent = new Intent(MainActivity.this, RecommendationAlarmReceiver.class);
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(MainActivity.this, 0, myIntent, 0);
 
-        AlarmManager am = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-//
-//        Calendar calendar = Calendar.getInstance();
-//        calendar.setTimeInMillis(System.currentTimeMillis());
-//        calendar.set(Calendar.HOUR_OF_DAY, 16);
-//        calendar.set(Calendar.MINUTE, 0);
+            AlarmManager am = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
 
-        am.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 5000, pendingIntent);
+            am.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 5000, pendingIntent);
 
+            recommendNotifyAdded = true;
+        }
     }
 
     public void displayRecommendations() {
