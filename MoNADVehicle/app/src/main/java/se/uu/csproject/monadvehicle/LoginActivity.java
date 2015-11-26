@@ -1,8 +1,10 @@
 package se.uu.csproject.monadvehicle;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -12,12 +14,11 @@ import android.widget.EditText;
 
 import org.mapsforge.map.android.graphics.AndroidGraphicFactory;
 
-public class LoginActivity extends AppCompatActivity {
-
-    EditText usernameField;
-    EditText passwordField;
-    EditText busNumberField;
-    Button loginButton;
+public class LoginActivity extends AppCompatActivity implements AsyncLoginInteraction {
+    private EditText usernameField;
+    private EditText passwordField;
+    private EditText busNumberField;
+    private Button loginButton;
     //ToggleButton emergencyButton;
 
     @Override
@@ -36,11 +37,12 @@ public class LoginActivity extends AppCompatActivity {
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(usernameField.getText().length() >= 0
-                        && passwordField.getText().length() >= 0
-                        && busNumberField.getText().length() >= 0) {
-                    startActivity(new Intent(v.getContext(), MainActivity.class));
-                }
+                login();
+//                if(usernameField.getText().length() >= 0
+//                        && passwordField.getText().length() >= 0
+//                        && busNumberField.getText().length() >= 0) {
+//                    startActivity(new Intent(v.getContext(), MainActivity.class));
+//                }
             }
         });
 
@@ -73,5 +75,39 @@ public class LoginActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void login() {
+        new LoginTask(this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,
+                                              usernameField.getText().toString(),
+                                              passwordField.getText().toString(),
+                                              busNumberField.getText().toString());
+    }
+
+    @Override
+    public void processReceivedLoginResponse(String response) {
+
+        /* If the response starts with the specific word, it means the user logged in successfully */
+        if (response.startsWith("Success (1)")) {
+            Log.d("LoginActivity", "Success");
+//            Toast.makeText(getApplicationContext(), "Welcome to MoNAD", Toast.LENGTH_LONG).show();
+            try {
+                LoginActivity.this.startActivity(new Intent(LoginActivity.this, MainActivity.class));
+            }
+            catch (Exception e) {
+                e.printStackTrace();
+            }
+            finally {
+                finish();
+            }
+        }
+        else if (response.equals("Wrong Credentials (0)")) {
+//            Toast.makeText(getApplicationContext(), getString(R.string.java_login_wrongcredential), Toast.LENGTH_LONG).show();
+//            wrongCredentialsTextView.setVisibility(View.VISIBLE);
+        }
+        else {
+            LoginActivity.this.startActivity(new Intent(LoginActivity.this, LoginActivity.class));
+            finish();
+        }
     }
 }

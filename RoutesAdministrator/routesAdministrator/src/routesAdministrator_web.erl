@@ -1,0 +1,200 @@
+%% @author Mochi Media <dev@mochimedia.com>
+%% @copyright 2010 Mochi Media <dev@mochimedia.com>
+
+%% @doc Web server for routesAdministrator.
+
+-module(routesAdministrator_web).
+-author("Mochi Media <dev@mochimedia.com>").
+
+-export([start/1, stop/0, loop/2, broadcast_server/0]).
+
+%% External API
+
+start(Options) ->
+    start_broadcaster(),
+    start_python(),
+    start_emysql(),
+
+    {DocRoot, Options1} = get_option(docroot, Options),
+    Loop = fun (Req) ->
+                   ?MODULE:loop(Req, DocRoot)
+           end,
+    mochiweb_http:start([{name, ?MODULE}, {loop, Loop} | Options1]).
+
+stop() ->
+    stop_python(),
+    stop_emysql(),
+    stop_broadcaster(),
+    mochiweb_http:stop(?MODULE).
+
+start_broadcaster() ->
+    Broadcaster = spawn_link(?MODULE, broadcast_server, []),
+    register(broadcaster, Broadcaster),
+    Msg = [{message, "Broadcaster: started"},
+           {process, Broadcaster}],
+    Broadcaster ! {broadcast, Msg}.
+
+broadcast_server() ->
+    receive
+        {broadcast, Message} ->
+            io:format("~n~p~n", [Message]);
+        Msg ->
+            io:format("~nBroadcaster - Unknown message: ~p~n", [Msg])
+    end,
+    erlang:hibernate(?MODULE, broadcast_server, []).
+
+stop_broadcaster() ->
+    Broadcaster = whereis(broadcaster),
+    exit(Broadcaster, normal),
+    Msg = [{message, "Broadcaster: stopped"},
+           {process, Broadcaster}],
+    io:format("~n~p~n", [Msg]).
+
+start_python() ->
+    {ok, PythonInstance} = python:start([{python_path, "src/python"}]),
+    register(python_instance, PythonInstance),
+    python:call(PythonInstance, mongodb_parser, start, [<<"130.238.15.114">>]),
+    Broadcaster = whereis(broadcaster),
+    Msg = [{message, "PythonInstance: started"},
+           {process, PythonInstance}],
+    Broadcaster ! {broadcast, Msg}.
+
+stop_python() ->
+    PythonInstance = whereis(python_instance),
+    python:stop(PythonInstance),
+    Broadcaster = whereis(broadcaster),
+    Msg = [{message, "PythonInstance: stopped"},
+           {process, PythonInstance}],
+    Broadcaster ! {broadcast, Msg}.
+
+start_emysql() ->
+    application:start(emysql),
+    emysql:add_pool(mysql_pool, [
+        {size, 1},
+        {user, ""},
+        {password, ""},
+        {host, ""},
+        {port, 3306},
+        {database, ""},
+        {encoding, utf8}]),
+
+    Broadcaster = whereis(broadcaster),
+    Msg = [{message, "eMySQL: started"},
+           {process, self()}],
+    Broadcaster ! {broadcast, Msg}.
+
+stop_emysql() ->
+    application:stop(emysql),
+    Broadcaster = whereis(broadcaster),
+    Msg = [{message, "eMySQL: stopped"},
+           {process, self()}],
+    Broadcaster ! {broadcast, Msg}.
+
+loop(Req, DocRoot) ->
+    "/" ++ Path = Req:get(path),
+    try
+        case Req:get(method) of
+            Method when Method =:= 'GET'; Method =:= 'HEAD' ->
+                Req:serve_file(Path, DocRoot);
+            'POST' ->
+                case Path of
+                    "vehicle_sign_in" ->
+                        vehicle_sign_in(Req);
+                    "vehicle_get_next_trip" ->
+                        vehicle_get_next_trip(Req);
+                    _ ->
+                        Req:not_found()
+                end;
+            _ ->
+                Req:respond({501, [], []})
+        end
+    catch
+        Type:What ->
+            Report = ["Failed Request: loop",
+                      {path, Path},
+                      {type, Type}, {what, What},
+                      {trace, erlang:get_stacktrace()}],
+            handle_error(Report, Req)
+    end.
+
+handle_error(Report, Req) ->
+    error_logger:error_report(Report),
+    Req:respond({500, [{"Content-Type", "text/plain"}], "Failed Request\n"}).
+
+vehicle_sign_in(Req) ->
+    % Parse driver_id, password, bus_line
+    PostData = Req:parse_post(),
+    DriverID = proplists:get_value("driver_id", PostData, "Anonymous"),
+    Password = proplists:get_value("password", PostData, "Anonymous"),
+    BusLine = proplists:get_value("bus_line", PostData, "Anonymous"),
+    try
+        % Prepare and execute client_sign_in statement
+        emysql:prepare(vehicle_sign_in_statement, <<"SELECT vehicle_sign_in(?, SHA1(MD5(?)), ?)">>),
+        Result = emysql:execute(mysql_pool, vehicle_sign_in_statement, [DriverID, Password, BusLine]),
+        case Result of
+            {_, _, _, [[Response]], _} ->
+                Msg = [{type, vehicle_sign_in},
+                       {driverID, DriverID},
+                       {password, Password},
+                       {busLine, BusLine},
+                       {response, Response},
+                       {process, self()}],
+                % io:format("~n~p~n", [Msg]),
+                Broadcaster = whereis(broadcaster),
+                Broadcaster ! {broadcast, Msg},
+                Req:respond({200, [{"Content-Type", "text/plain"}], Response});
+            _ ->
+                Msg = ["Unexpected Database Response",
+                       {result, Result},
+                       {trace, erlang:get_stacktrace()}],
+                handle_error(Msg, Req)
+        end
+    catch
+        Type:What ->
+            Report = ["Failed Request: vehicle_sign_in",
+                      {type, Type}, {what, What},
+                      {trace, erlang:get_stacktrace()}],
+            handle_error(Report, Req)
+    end.
+
+vehicle_get_next_trip(Req) ->
+    PostData = Req:parse_post(),
+    VehicleID_str = proplists:get_value("vehicle_id", PostData, "Anonymous"),
+    {VehicleID, _} = string:to_integer(VehicleID_str),
+    try
+        PythonInstance = whereis(python_instance),
+        Response = python:call(PythonInstance, mongodb_parser, vehicle_get_next_trip, [VehicleID]),
+        % io:format("Response: ~p~n", [Response]),
+        Msg = [{type, vehicle_get_next_trip},
+               {vehicleID, VehicleID},
+               {response, Response},
+               {process, self()}],
+        Broadcaster = whereis(broadcaster),
+        Broadcaster ! {broadcast, Msg},
+        Req:respond({200, [{"Content-Type", "text/plain"}], Response})
+    catch
+        Type:What ->
+            Report = ["Failed Request: vehicle_get_next_trip",
+                      {type, Type}, {what, What},
+                      {trace, erlang:get_stacktrace()}],
+            handle_error(Report, Req)
+    end.
+
+%% Internal API
+
+get_option(Option, Options) ->
+    {proplists:get_value(Option, Options), proplists:delete(Option, Options)}.
+
+%%
+%% Tests
+%%
+-ifdef(TEST).
+-include_lib("eunit/include/eunit.hrl").
+
+you_should_write_a_test() ->
+    ?assertEqual(
+       "No, but I will!",
+       "Have you written any tests?"),
+    ok.
+
+-endif.

@@ -31,7 +31,7 @@ from busStop import BusStop
 from coordinate import Coordinate
 from address import Address
 import coordinate
-from mapDrawing import Example, DrawImage
+from mapDrawing import DrawImage
 
 
 # The size width of the produced image in pixels

@@ -293,7 +293,7 @@ class Fitness():
             ind = [y for y in individual if y[0] == line]
             for i, val in enumerate(ind):
                 counter+=1
-                generate = generateStartTimeBasedOnFreq(line,val[2], val[3])
+                generate = self.generateStartTimeBasedOnFreq(line,val[2], val[3])
 
                 if line not in timetable:
                     timetable[line] = generate

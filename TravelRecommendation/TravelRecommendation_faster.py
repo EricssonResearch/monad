@@ -86,7 +86,7 @@ def populateRequests(TravelRequest):
 def getTodayTimeTable():
     TimeTable = db2.TimeTable
     first = datetime.datetime.today()
-    first = first.replace(day = 18, hour = 0, minute = 0, second = 0, microsecond = 0)
+    first = first.replace(day = 25, hour = 0, minute = 0, second = 0, microsecond = 0)
     route = TimeTable.find({'date': {'$gte': first}})
     return route
 
@@ -188,21 +188,19 @@ def nearestStops(lat, lon, dist):
 def calculateDistanceDeparture(tup1):
     dist_departure = []
     pos_departure = []
+    cent_num = 0
     for i in selected_centroids:
-        cent_num = 0
         position = -1
         min_value = 1000
         min_position = 0
         centroid_departure = (i[0]*W_1, i[1]*W_1,i[4]*W_2, i[5]*W_2)
         centroid_departure = numpy.array(centroid_departure)
-        temp_dist = []
         for l in range(len(tup1)-1):
-            stop_lat, stop_long = backToCoordinates(tup1[l][0], tup1[l][1])
-            if(tup1[l][4] in nearest_stops[cent_num]):
-            #if(True):
+            #stop_lat, stop_long = backToCoordinates(tup1[l][0], tup1[l][1])
+            position = position + 1
+            if(tup1[l][4] in nearest_stops_dep[cent_num]):
                 current_stop = numpy.array(tup1[l][:4]) * numpy.array((W_1,W_1,W_2,W_2))
                 distance = numpy.linalg.norm(centroid_departure - current_stop)
-                position = position + 1
                 if (distance < min_value):
                     min_value = distance
                     min_position = position
@@ -216,21 +214,20 @@ def calculateDistanceArrival(tup1,pos_departure):
     dist_arrival = []
     pos_arrival = []
     counter=-1
+    cent_num = 0
     for i in selected_centroids:
-        cent_num = 0
         min_value = 1000
         min_position = 0
         centroid_arrival = (i[2]*W_1, i[3]*W_1, i[6]*W_2, i[7]*W_2)
         centroid_arrival = numpy.array(centroid_arrival)
-        temp_dist = []
         counter = counter + 1
         position = pos_departure[counter]
         for l in range(pos_departure[counter]+1, len(tup1)):
-            stop_lat, stop_long = backToCoordinates(tup1[l][0], tup1[l][1])
-            if(tup1[l][4] in nearest_stops[cent_num]):
+            #stop_lat, stop_long = backToCoordinates(tup1[l][0], tup1[l][1])
+            position = position + 1
+            if(tup1[l][4] in nearest_stops_arr[cent_num]):
                 current_stop = numpy.array(tup1[l][:4]) * numpy.array((W_1,W_1,W_2,W_2))
                 distance = numpy.linalg.norm(centroid_arrival - current_stop)
-                position = position + 1
                 if (distance < min_value):
                     min_value = distance
                     min_position = position
@@ -327,7 +324,7 @@ if __name__ == "__main__":
 
     userIds = []
     #userIds = userIds[]
-    userIds.append(1)
+    userIds.append(1111111)
 
     for userId in userIds:
         recommendations = []
@@ -336,7 +333,8 @@ if __name__ == "__main__":
         selected_centroids = []
         routesDistances = []
         to_return = []
-        nearest_stops = []
+        nearest_stops_dep = []
+        nearest_stops_arr = []
 
         myRdd = (initialRdd.filter(lambda (x,y): x == userId)
                            .map(lambda (x,y): y))
@@ -354,7 +352,10 @@ if __name__ == "__main__":
         for i in range(len(selected_centroids)):
             cent_lat, cent_long = backToCoordinates(selected_centroids[i][0],
                                                     selected_centroids[i][1])
-            nearest_stops.append(nearestStops(cent_lat, cent_long, 250))
+            nearest_stops_dep.append(nearestStops(cent_lat, cent_long, 200))
+            cent_lat, cent_long = backToCoordinates(selected_centroids[i][2],
+                                                    selected_centroids[i][3])
+            nearest_stops_arr.append(nearestStops(cent_lat, cent_long, 200))
 
         routesDistances = myRoutes.map(lambda x: (x[0],
         calculateDistanceDeparture(x[1])['dist_departure'],
