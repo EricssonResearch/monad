@@ -17,8 +17,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -118,18 +122,19 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
             notificationsList.addView(notificationView);
         }
 
-        //Fill the bus stop list sidebar
-//        for (int j = 0; j < route.getBusStopList().size(); j++) {
+//        for (int j = 0; j < Storage.getBusTrip().getBusStops().size(); j++) {
 //            View busStopView = inflater.inflate(R.layout.list_item_busstop, null);
 //            TextView busStopTime = (TextView) busStopView.findViewById(R.id.text_busstoptime);
 //            TextView busStopName = (TextView) busStopView.findViewById(R.id.text_busstopname);
-//            busStopTime.setText(formatTime(route.getBusStopList().get(j).getArrivalTime()));
-//            busStopName.setText(route.getBusStopList().get(j).getName());
+//            busStopTime.setText(formatTime(Storage.getBusTrip().getBusStops().get(j).getArrivalTime()));
+//            busStopName.setText(Storage.getBusTrip().getBusStops().get(j).getName());
 //            busStopsList.addView(busStopView);
 //        }
 
-        //TODO: fill the emergency side bar
-
+        RadioGroup radioGroup = (RadioGroup) findViewById(R.id.radio_emergency);
+        CheckBox otherCheckBox = (CheckBox) findViewById(R.id.other_possiblity);
+        EditText emergencyDescription = (EditText) findViewById(R.id.text_description);
+        Button submitButton= (Button) findViewById(R.id.button_submit);
         mapView = (MapView) findViewById(R.id.mapView);
 
         //setup mapView
