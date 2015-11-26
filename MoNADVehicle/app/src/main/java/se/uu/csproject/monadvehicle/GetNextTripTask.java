@@ -19,7 +19,7 @@ public class GetNextTripTask extends AsyncTask<Void, Void, String> {
 
     @Override
     protected void onPostExecute(String response) {
-        callingClass.processReceivedLoginResponse(response);
+        callingClass.processReceivedGetNextTripResponse(response);
     }
 
 }

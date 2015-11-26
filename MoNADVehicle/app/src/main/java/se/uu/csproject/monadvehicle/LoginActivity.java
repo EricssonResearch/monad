@@ -11,10 +11,11 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import org.mapsforge.map.android.graphics.AndroidGraphicFactory;
 
-public class LoginActivity extends AppCompatActivity implements AsyncLoginInteraction {
+public class LoginActivity extends AppCompatActivity implements AsyncLoginInteraction, AsyncGetNextTripInteraction {
     private EditText usernameField;
     private EditText passwordField;
     private EditText busNumberField;
@@ -79,9 +80,9 @@ public class LoginActivity extends AppCompatActivity implements AsyncLoginIntera
 
     public void login() {
         new LoginTask(this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,
-                                              usernameField.getText().toString(),
-                                              passwordField.getText().toString(),
-                                              busNumberField.getText().toString());
+                usernameField.getText().toString(),
+                passwordField.getText().toString(),
+                busNumberField.getText().toString());
     }
 
     @Override
@@ -89,8 +90,31 @@ public class LoginActivity extends AppCompatActivity implements AsyncLoginIntera
 
         /* If the response starts with the specific word, it means the user logged in successfully */
         if (response.startsWith("Success (1)")) {
-            Log.d("LoginActivity", "Success");
-//            Toast.makeText(getApplicationContext(), "Welcome to MoNAD", Toast.LENGTH_LONG).show();
+            Log.d("LoginActivity", "Successfully signed in");
+            getNextTrip();
+        }
+        else if (response.equals("Wrong Credentials (0)")) {
+            Log.d("LoginActivity", "Wrong credentials");
+            Toast.makeText(getApplicationContext(), "Wrong credentials", Toast.LENGTH_LONG).show();
+        }
+        else {
+            Log.d("LoginActivity", "ERROR - login");
+            Toast.makeText(getApplicationContext(), "ERROR - login", Toast.LENGTH_LONG).show();
+            LoginActivity.this.startActivity(new Intent(LoginActivity.this, LoginActivity.class));
+            finish();
+        }
+    }
+
+    public void getNextTrip() {
+        new GetNextTripTask(this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+    }
+
+    @Override
+    public void processReceivedGetNextTripResponse(String response) {
+
+        if (response.equals("1")) {
+            Log.d("LoginActivity", "Successfully received BusTrip data");
+
             try {
                 LoginActivity.this.startActivity(new Intent(LoginActivity.this, MainActivity.class));
             }
@@ -101,11 +125,8 @@ public class LoginActivity extends AppCompatActivity implements AsyncLoginIntera
                 finish();
             }
         }
-        else if (response.equals("Wrong Credentials (0)")) {
-//            Toast.makeText(getApplicationContext(), getString(R.string.java_login_wrongcredential), Toast.LENGTH_LONG).show();
-//            wrongCredentialsTextView.setVisibility(View.VISIBLE);
-        }
         else {
+            Log.d("LoginActivity", "Error while receiving BusTrip data");
             LoginActivity.this.startActivity(new Intent(LoginActivity.this, LoginActivity.class));
             finish();
         }
