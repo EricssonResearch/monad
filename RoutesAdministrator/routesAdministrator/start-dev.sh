@@ -2,6 +2,6 @@
 exec erl \
     -pa ebin deps/*/ebin \
     -boot start_sasl \
-    -sname authentication_dev \
-    -s authentication \
+    -sname routesAdministrator_dev \
+    -s routesAdministrator \
     -s reloader
