@@ -12,12 +12,14 @@ import android.content.res.Configuration;
 import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Build;
+import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -139,13 +141,17 @@ public class MainActivity extends MenuedActivity implements GoogleApiClient.Conn
         endTime = "null";
         priority = "distance";
 
-        if(edPosition != null && !edPosition.trim().isEmpty()){
+        if (edPosition != null && !edPosition.trim().isEmpty() && isLocationEnabled(this)){
             SendQuickTravelRequest asyncTask = new SendQuickTravelRequest();
             asyncTask.delegate = this;
             asyncTask.execute(userId, startTime, endTime, requestTime, startPositionLatitude,
                     startPositionLongitude, edPosition, priority);
-        } else {
+        } else if (edPosition == null || edPosition.trim().isEmpty()){
             CharSequence text = getString(R.string.java_search_enterdestination);
+            Toast toast = Toast.makeText(context, text, Toast.LENGTH_SHORT);
+            toast.show();
+        } else {
+            CharSequence text = getString(R.string.java_search_locationdisabled);
             Toast toast = Toast.makeText(context, text, Toast.LENGTH_SHORT);
             toast.show();
         }
@@ -381,5 +387,25 @@ public class MainActivity extends MenuedActivity implements GoogleApiClient.Conn
     public void displayRecommendations() {
         adapter = new SearchRecyclerViewAdapter(Storage.getRecommendations());
         recyclerView.setAdapter(adapter);
+    }
+
+    // Checks if the user has location settings enabled
+    public static boolean isLocationEnabled(Context context) {
+        int locationMode = Settings.Secure.LOCATION_MODE_OFF;
+        String locationProviders;
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT){
+            try {
+                locationMode = Settings.Secure.getInt(context.getContentResolver(), Settings.Secure.LOCATION_MODE);
+
+            } catch (Settings.SettingNotFoundException e) {
+                Log.d("oops", e.toString());
+            }
+            return locationMode != Settings.Secure.LOCATION_MODE_OFF;
+
+        }else{
+            locationProviders = Settings.Secure.getString(context.getContentResolver(), Settings.Secure.LOCATION_PROVIDERS_ALLOWED);
+            return !TextUtils.isEmpty(locationProviders);
+        }
     }
 }
