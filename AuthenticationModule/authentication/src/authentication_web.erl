@@ -121,6 +121,9 @@ loop(Req, DocRoot) ->
                     "generate_notification" ->
                         Req:respond({200, [{"Content-Type", "text/plain"}], "OK"}),
                         generate_notification(Req);
+                    "send_notification" ->
+                        Req:respond({200, [{"Content-Type", "text/plain"}], "OK"}),
+                        send_notification(Req);
                     _ ->
                         Req:not_found()
                 end;
@@ -455,17 +458,11 @@ get_notifications(Req) ->
 
 remove_notification(Req) ->
     PostData = Req:parse_post(),
-    % ClientID_str = proplists:get_value("client_id", PostData, "Anonymous"),
-    % {ClientID, _} = string:to_integer(ClientID_str),
-    % % io:format("ClientID: ~p~n", [ClientID]),
     NotificationID = proplists:get_value("notification_id", PostData, "Anonymous"),
     try
         PythonInstance = whereis(python_instance),
         Response = python:call(PythonInstance, mongodb_parser, remove_notification, [NotificationID]),
-        % Response = python:call(PythonInstance, mongodb_parser, remove_notification, [io:format("~p", [NotificationID])]),
-        % io:format("Response: ~p~n", [Response]),
         Msg = [{type, get_notifications},
-            %    {clientID, ClientID},
                {notificationID, NotificationID},
                {response, Response},
                {process, self()}],
@@ -517,7 +514,53 @@ generate_notification(Req) ->
         end
     catch
         Type:What ->
-            Report = ["Failed Request: generate notification",
+            Report = ["Failed Request: generate_notification",
+                      {type, Type}, {what, What},
+                      {trace, erlang:get_stacktrace()}],
+            error_logger:error_report(Report)
+            % handle_error(Report, Req)
+    end.
+
+send_notification(Req) ->
+    PostData = Req:parse_post(),
+    ClientID_str = proplists:get_value("user_id", PostData, "Anonymous"),
+    {ClientID, _} = string:to_integer(ClientID_str),
+    % io:format("ClientID: ~p~n", [ClientID]),
+
+    MessageTitle = proplists:get_value("message_title", PostData, "Anonymous"),
+    % io:format("MessageTitle: ~p~n", [MessageTitle]),
+
+    MessageBody = proplists:get_value("message_body", PostData, "Anonymous"),
+    % io:format("MessageBody: ~p~n", [MessageBody]),
+
+    try
+        % Prepare and execute get_google_registration_token_statement
+        emysql:prepare(get_google_registration_token_statement,
+                       <<"SELECT get_google_registration_token(?)">>),
+        Result = emysql:execute(mysql_pool, get_google_registration_token_statement, [ClientID]),
+        case Result of
+            {_, _, _, [[Response]], _} ->
+                Msg = [{type, send_notification},
+                       {clientID, ClientID},
+                       {messageTitle, MessageTitle},
+                       {messageBody, MessageBody},
+                       {response, Response},
+                       {process, self()}],
+                % io:format("~n~p~n", [Msg]),
+                Broadcaster = whereis(broadcaster),
+                Broadcaster ! {broadcast, Msg},
+                PythonInstance = whereis(python_instance),
+                python:call(PythonInstance, mongodb_parser, send_notification,
+                            [Response, MessageTitle, MessageBody]);
+            _ ->
+                Msg = ["Unexpected Database Response",
+                       {result, Result},
+                       {trace, erlang:get_stacktrace()}],
+                handle_error(Msg, Req)
+        end
+    catch
+        Type:What ->
+            Report = ["Failed Request: send_notification",
                       {type, Type}, {what, What},
                       {trace, erlang:get_stacktrace()}],
             error_logger:error_report(Report)

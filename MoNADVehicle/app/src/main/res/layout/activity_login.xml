@@ -31,8 +31,7 @@
             android:layout_width="@dimen/button_size_small"
             android:layout_height="@dimen/button_size_small"
             android:adjustViewBounds="true"
-            android:textOff=""
-            android:textOn=""
+            android:contentDescription="@string/img_description"
             android:id="@+id/emergencyButton"
             android:src="@mipmap/ic_report_white_48dp"
             android:background="@color/warnColor"
@@ -75,6 +74,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/label_login_driverid"
+                android:singleLine="true"
                 android:layout_marginBottom="@dimen/activity_vertical_margin"/>
 
             <TextView
@@ -87,6 +87,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/label_login_password"
+                android:singleLine="true"
                 android:layout_marginBottom="@dimen/activity_vertical_margin"/>
 
             <TextView
