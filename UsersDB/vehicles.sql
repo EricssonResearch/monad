@@ -8,6 +8,7 @@ CREATE TABLE vehicle_profile (
     driver_id VARCHAR(255),
     pass CHAR(40),
     bus_line VARCHAR(10),
+    google_registration_token VARCHAR(255),
     PRIMARY KEY (vehicle_id)
 );
 
@@ -28,8 +29,8 @@ BEGIN
             code = RETURNED_SQLSTATE;
     END;
 
-    INSERT INTO vehicle_profile (driver_id, pass, bus_line)
-    VALUES (in_driver_id, SHA1(MD5(in_pass)), in_bus_line);
+    INSERT INTO vehicle_profile (driver_id, pass, bus_line, google_registration_token)
+    VALUES (in_driver_id, SHA1(MD5(in_pass)), in_bus_line, '');
 
     GET DIAGNOSTICS rows = ROW_COUNT;
 
@@ -60,7 +61,7 @@ BEGIN
 
     SELECT vehicle_id INTO ret_vehicle_id
     FROM vehicle_profile
-    WHERE driver_id = in_driver_id AND pass = SHA1(MD5(in_pass)) AND bus_line = in_bus_line;
+    WHERE driver_id = in_driver_id AND pass = in_pass AND bus_line = in_bus_line;
 
     GET DIAGNOSTICS rows = ROW_COUNT;
 
@@ -75,6 +76,6 @@ DELIMITER ;
 
 -- ------------------------------------------------- DEBUGGING CODE ---------------------------------------------------
 
-SELECT vehicle_sign_up('d1', 'p1', '5');
+SELECT vehicle_sign_up('d1', 'p1', '1');
 
 -- --------------------------------------------------------------------------------------------------------------------

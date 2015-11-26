@@ -76,8 +76,8 @@ def main():
     #databaseClass.insertBusTrip(best_ind)
     print("Best individual is %s, %s" % (individual, best_ind.fitness.values))
     print ("Length of best individual: " + str(len(best_ind)))
-    # fitnessClass = Fitness()
-    # fitnessClass.genTimetable(best_ind)
+    fitnessClass = Fitness()
+    fitnessClass.genTimetable(best_ind)
 
 
 # def crossover(offspring):
