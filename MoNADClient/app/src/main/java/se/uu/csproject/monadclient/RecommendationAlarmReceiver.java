@@ -12,8 +12,11 @@ public class RecommendationAlarmReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent)
     {
-        Intent newintent = new Intent(context.getApplicationContext(), MainActivity.class);
-        newintent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        Intent newintent = new Intent(context.getApplicationContext(), RouteActivity.class);
+        newintent.putExtra("selectedTrip", intent.getParcelableExtra("selectedTrip"));
+
+        //Intent newintent = new Intent(context.getApplicationContext(), MainActivity.class);
+        newintent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent pendingIntent = PendingIntent.getActivity(context.getApplicationContext(), 0, newintent,
                 PendingIntent.FLAG_UPDATE_CURRENT);
 

@@ -59,13 +59,13 @@ public class MainActivity extends MenuedActivity implements GoogleApiClient.Conn
     private AlertDialog.Builder builder;
     private RecyclerView recyclerView;
     private SearchRecyclerViewAdapter adapter;
-    private boolean recommendNotifyAdded;
 
     private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
     private final int MY_PERMISSIONS_REQUEST = 123;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        //Log.i("mainactivity", "oncreate");
         super.onCreate(savedInstanceState);
         Locale locale = new Locale(ClientAuthentication.getLanguage());
         Locale.setDefault(locale);
@@ -82,8 +82,6 @@ public class MainActivity extends MenuedActivity implements GoogleApiClient.Conn
         currentLatitude = 0;
         currentLongitude = 0;
         setSupportActionBar(toolbar);
-
-        recommendNotifyAdded = false;
 
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view_main);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getBaseContext());
@@ -247,6 +245,7 @@ public class MainActivity extends MenuedActivity implements GoogleApiClient.Conn
         if (finish) {
             //clear user profile
             ClientAuthentication.initProfile();
+            ClientAuthentication.clearGlobalVariables();
             Storage.clearAll();
             startActivity(new Intent(MainActivity.this, LoginActivity.class));
             finish();
@@ -364,21 +363,29 @@ public class MainActivity extends MenuedActivity implements GoogleApiClient.Conn
     public void processReceivedRecommendations() {
         displayRecommendations();
 
-        if(!recommendNotifyAdded) {
+        if(!ClientAuthentication.getIfRecommendNotifyAdded()) {
             //add to notify
-            Log.i("boolean", recommendNotifyAdded+"");
-            Intent myIntent = new Intent(MainActivity.this, RecommendationAlarmReceiver.class);
-            PendingIntent pendingIntent = PendingIntent.getBroadcast(MainActivity.this, 0, myIntent, 0);
+            //Log.i("boolean", recommendNotifyAdded+"");
+            ArrayList<FullTrip> recommendations = Storage.getRecommendations();
 
-            AlarmManager am = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+            for(FullTrip ft:recommendations) {
+                Intent myIntent = new Intent(MainActivity.this, RecommendationAlarmReceiver.class);
+                myIntent.putExtra("selectedTrip", ft);
 
-            am.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 5000, pendingIntent);
+                PendingIntent pendingIntent = PendingIntent.getBroadcast(MainActivity.this, 0, myIntent, 0);
 
-            recommendNotifyAdded = true;
+                AlarmManager am = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+
+                //notify the user half an hour before the beginning of the trip
+                am.set(AlarmManager.RTC_WAKEUP, ft.getStartTime().getTime() - 1800000, pendingIntent);
+                
+                ClientAuthentication.setIfRecommendNotifyAdded(true);
+            }
         }
     }
 
     public void displayRecommendations() {
+        Log.i("# of recommendations", Storage.getRecommendations().toArray().length+"");
         adapter = new SearchRecyclerViewAdapter(Storage.getRecommendations());
         recyclerView.setAdapter(adapter);
     }
