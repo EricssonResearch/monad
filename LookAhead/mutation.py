@@ -14,6 +14,9 @@ See the License for the specific language governing permissions and limitations 
 
 """
 import random
+import sys
+sys.path.append('../OpenStreetMap')
+from routeGenerator import coordinates_to_nearest_stops, get_route
 from datetime import datetime
 from fitness import Fitness
 from dbConnection import DB

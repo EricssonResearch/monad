@@ -12,9 +12,9 @@ CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
 import unittest
-#import sys
-#sys.path.append('../OpenStreetMap')
-#from routeGenerator import coordinates_to_nearest_stops, get_route
+import sys
+sys.path.append('../OpenStreetMap')
+from routeGenerator import coordinates_to_nearest_stops, get_route
 import toolBox
 from fitness import Fitness
 from datetime import datetime, timedelta
