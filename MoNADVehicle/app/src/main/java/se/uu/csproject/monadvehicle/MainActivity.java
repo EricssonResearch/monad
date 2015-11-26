@@ -57,7 +57,6 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
         AsyncGetNextTripInteraction {
 
     LinearLayout sideList, notificationsList, busStopsList, emergencyList;
-    Route route;
     NotificationList notifications;
     // name of the map file in the external storage, it should be stored in the root directory of the sdcard
     private static final String MAPFILE = "uppsala.map";
@@ -107,7 +106,6 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
         notificationsList = (LinearLayout) findViewById(R.id.side_list_notifications);
         busStopsList = (LinearLayout) findViewById(R.id.side_list_busstops);
         emergencyList = (LinearLayout) findViewById(R.id.side_list_emergency);
-        route = new Route(generateBusStops());
         notifications = new NotificationList(generateNotifications());
 
         LayoutInflater inflater = (LayoutInflater) getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -140,8 +138,8 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
         mapView.setBuiltInZoomControls(true);
         mapView.getMapZoomControls().setZoomLevelMin((byte) 10);
         mapView.getMapZoomControls().setZoomLevelMax((byte) 20);
-        // the centre should be the current location, but now it's just in flogsta
-        mapView.getModel().mapViewPosition.setCenter(new LatLong(59.851294, 17.593113));
+        //TODO: change the center to the current user location, now it's in Uppsala Central Station
+        mapView.getModel().mapViewPosition.setCenter(new LatLong(59.8586, 17.6461));
         mapView.getModel().mapViewPosition.setZoomLevel((byte) 12);
 
         // create a tile cache of suitable size
@@ -166,67 +164,65 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
         this.mapView.getLayerManager().getLayers().add(tileRendererLayer);
 
         buildGoogleApiClient();
-//<<<<<<< HEAD
-//=======
-//
-//        ImageButton showBusStopList =(ImageButton)findViewById(R.id.busStopButton);
-//        showBusStopList.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                if (busStopsList.getVisibility() == View.VISIBLE) {
-//                    busStopsList.setVisibility(View.GONE);
-//                    sideList.setVisibility(View.GONE);
-//                } else if (notificationsList.getVisibility() == View.VISIBLE
-//                        || emergencyList.getVisibility() == View.VISIBLE) {
-//                    notificationsList.setVisibility(View.GONE);
-//                    emergencyList.setVisibility(View.GONE);
-//                    busStopsList.setVisibility(View.VISIBLE);
-//                } else {
-//                    sideList.setVisibility(View.VISIBLE);
-//                    busStopsList.setVisibility(View.VISIBLE);
-//                }
-//            }
-//        });
-//
-//        ImageButton showNotificationsList =(ImageButton)findViewById(R.id.notificationButton);
-//        showNotificationsList.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                if(notificationsList.getVisibility() == View.VISIBLE){
-//                    notificationsList.setVisibility(View.GONE);
-//                    sideList.setVisibility(View.GONE);
-//                }
-//                else if (busStopsList.getVisibility() == View.VISIBLE
-//                        || emergencyList.getVisibility() == View.VISIBLE){
-//                    busStopsList.setVisibility(View.GONE);
-//                    emergencyList.setVisibility(View.GONE);
-//                    notificationsList.setVisibility(View.VISIBLE);
-//                }
-//                else {
-//                    sideList.setVisibility(View.VISIBLE);
-//                    notificationsList.setVisibility(View.VISIBLE);
-//                }
-//            }
-//        });
-//
-//        ImageButton showEmergencyList =(ImageButton)findViewById(R.id.emergencyButton);
-//        showEmergencyList.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                if (emergencyList.getVisibility() == View.VISIBLE) {
-//                    emergencyList.setVisibility(View.GONE);
-//                    sideList.setVisibility(View.GONE);
-//                } else if (notificationsList.getVisibility() == View.VISIBLE
-//                        || busStopsList.getVisibility() == View.VISIBLE) {
-//                    notificationsList.setVisibility(View.GONE);
-//                    busStopsList.setVisibility(View.GONE);
-//                    emergencyList.setVisibility(View.VISIBLE);
-//                } else {
-//                    sideList.setVisibility(View.VISIBLE);
-//                    emergencyList.setVisibility(View.VISIBLE);
-//                }
-//            }
-//        });
+
+        ImageButton showBusStopList =(ImageButton)findViewById(R.id.busStopButton);
+        showBusStopList.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (busStopsList.getVisibility() == View.VISIBLE) {
+                    busStopsList.setVisibility(View.GONE);
+                    sideList.setVisibility(View.GONE);
+                } else if (notificationsList.getVisibility() == View.VISIBLE
+                        || emergencyList.getVisibility() == View.VISIBLE) {
+                    notificationsList.setVisibility(View.GONE);
+                    emergencyList.setVisibility(View.GONE);
+                    busStopsList.setVisibility(View.VISIBLE);
+                } else {
+                    sideList.setVisibility(View.VISIBLE);
+                    busStopsList.setVisibility(View.VISIBLE);
+                }
+            }
+        });
+
+        ImageButton showNotificationsList =(ImageButton)findViewById(R.id.notificationButton);
+        showNotificationsList.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(notificationsList.getVisibility() == View.VISIBLE){
+                    notificationsList.setVisibility(View.GONE);
+                    sideList.setVisibility(View.GONE);
+                }
+                else if (busStopsList.getVisibility() == View.VISIBLE
+                        || emergencyList.getVisibility() == View.VISIBLE){
+                    busStopsList.setVisibility(View.GONE);
+                    emergencyList.setVisibility(View.GONE);
+                    notificationsList.setVisibility(View.VISIBLE);
+                }
+                else {
+                    sideList.setVisibility(View.VISIBLE);
+                    notificationsList.setVisibility(View.VISIBLE);
+                }
+            }
+        });
+
+        ImageButton showEmergencyList =(ImageButton)findViewById(R.id.emergencyButton);
+        showEmergencyList.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (emergencyList.getVisibility() == View.VISIBLE) {
+                    emergencyList.setVisibility(View.GONE);
+                    sideList.setVisibility(View.GONE);
+                } else if (notificationsList.getVisibility() == View.VISIBLE
+                        || busStopsList.getVisibility() == View.VISIBLE) {
+                    notificationsList.setVisibility(View.GONE);
+                    busStopsList.setVisibility(View.GONE);
+                    emergencyList.setVisibility(View.VISIBLE);
+                } else {
+                    sideList.setVisibility(View.VISIBLE);
+                    emergencyList.setVisibility(View.VISIBLE);
+                }
+            }
+        });
 //>>>>>>> 0066078511e50bcbc2d9e529ba98b2a7624fb177
     }
 
@@ -437,8 +433,8 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
 
         BusTrip busTrip = Storage.getBusTrip();
 
-        for (int i = 0; i < busTrip.getTrajectory().size(); i++) {
-            coordinateList.add(new LatLong(busTrip.getTrajectory().get(i).getLatitude(), busTrip.getTrajectory().get(i).getLongitude()));
+        for (int i = 0; i < busTrip.getBusStops().size(); i++) {
+            coordinateList.add(new LatLong(busTrip.getBusStops().get(i).getLatitude(), busTrip.getBusStops().get(i).getLongitude()));
         }
 //        coordinateList.add(new LatLong(59.851294, 17.593113));
 //        coordinateList.add(new LatLong(59.850208, 17.600629));
@@ -472,12 +468,12 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
                 LayoutInflater inflater = (LayoutInflater) getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 ViewGroup insertPoint = (ViewGroup) findViewById(R.id.side_list);
 
-                for (int j = 0; j < route.getBusStopList().size(); j++) {
+                for (int j = 0; j < Storage.getBusTrip().getBusStops().size(); j++) {
                     View busStopView = inflater.inflate(R.layout.list_item_busstop, null);
                     TextView busStopTime = (TextView) busStopView.findViewById(R.id.text_busstoptime);
                     TextView busStopName = (TextView) busStopView.findViewById(R.id.text_busstopname);
-                    busStopTime.setText(route.getBusStopList().get(j).getArrivalTime().toString());
-                    busStopName.setText(route.getBusStopList().get(j).getName());
+                    busStopTime.setText(Storage.getBusTrip().getBusStops().get(j).getArrivalTime().toString());
+                    busStopName.setText(Storage.getBusTrip().getBusStops().get(j).getName());
                     insertPoint.addView(busStopView);
                 }
             }
