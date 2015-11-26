@@ -1,10 +1,6 @@
 from pymongo import MongoClient
 from bson.json_util import dumps
 from bson.objectid import ObjectId
-import datetime
-
-import requests
-import json
 
 def start(host):
     global mongo_client
@@ -13,14 +9,12 @@ def start(host):
     global user_trips_collection
     global bus_stop_collection
     global notifications_collection
-    global bookings_collection
     mongo_client = MongoClient(host, 27017)
     db = mongo_client.monad1
-    recommendations_collection = db.TravelRecommendation
-    user_trips_collection = db.UserTrip
+    recommendations_collection = db.TravelRecommendationFromRecommendation
+    user_trips_collection = db.UserTripFromRecommendation
     bus_stops_collection = db.BusStop
     notifications_collection = db.Notifications
-    bookings_collection = db.BookedTrip
 
 def parse_recommendations(user_id):
     # print user_id
@@ -50,91 +44,7 @@ def parse_notifications(user_id):
     notifications_list = list(notifications_collection.find({'userID' : user_id}))
     return dumps(notifications_list)
 
-def create_notification(user_id, partial_trips, icon_id):
-    notification = {}
-    notification['userID'] = user_id
-    notification['partialTrips'] = partial_trips
-    # notification['text'] = 'Trip to ' + str(partial_trips[0]['endBusStop']) \
-    #                      + ' starts at: ' + str(partial_trips[0]['startTime'])
-    notification['text'] = 'Booking Confirmation: Enjoy your trip to ' + str(partial_trips[0]['endBusStop'])
-    notification['time'] = datetime.datetime.now() - datetime.timedelta(hours = 2)
-    notification['iconID'] = icon_id
-    return notification
-
-# def add_notification(user_id, google_token, partial_trips):
-
-
 def remove_notification(notification_id_binary):
     notification_id = ''.join([chr(c) for c in notification_id_binary])
     notifications_collection.remove({'_id' : ObjectId(notification_id)})
     return '1'
-
-def generate_notification(user_id, token, booked_trip_id_binary):
-    booked_trip_id = ''.join([chr(c) for c in booked_trip_id_binary])
-    print booked_trip_id
-    booking = bookings_collection.find_one({'_id' : ObjectId(booked_trip_id)})
-    print booking
-
-    partial_trips = list()
-    partial_trip_ids = booking['partialTrips']
-
-    for partial_trip_id in partial_trip_ids:
-        partial_trip = user_trips_collection.find_one({'_id' : partial_trip_id})
-        partial_trips.append(partial_trip)
-
-    notifications_collection.insert_one(create_notification(user_id, partial_trips, 1))
-
-    # text = 'Trip to ' + str(partial_trips[0]['endBusStop']) \
-    #      + ' starts at: ' + str(partial_trips[0]['startTime'])
-
-    text = 'Booking Confirmation: Enjoy your trip to ' + str(partial_trips[0]['endBusStop'])
-
-    # print token
-    send_notification(token, 'MoNAD', text)
-    return 'ok'
-    # token = ''.join([chr(c) for c in token_binary])
-    # send_notification(token, 'Notyfication', 'Hello')
-
-def surround_in_quotes(astring):
-    return "'%s'" % astring
-
-def send_notification(user_to_send_to, message_title_to_send, message_body_to_send):
-    API_KEY='key=AIzaSyAPIZuvmfsf8TZHz3q09G_9evAmGUekdrI'
-    url = 'https://gcm-http.googleapis.com/gcm/send'
-
-    message_title_to_send=surround_in_quotes(message_title_to_send)
-    message_body_to_send=surround_in_quotes(message_body_to_send)
-    user_to_send_to=surround_in_quotes(user_to_send_to)
-
-    # print repr(message_body_to_send)
-    # print repr(message_title_to_send)
-
-    user_to_send_to = user_to_send_to[1:-1]
-
-    custom_header = {
-        'Content-Type' : 'application/json',
-        'Authorization' : API_KEY
-    }
-
-    message_payload = {
-        'title' : message_title_to_send,
-        'message' : message_body_to_send
-    }
-
-    message_body = {
-        'to' : user_to_send_to,
-        'data' : message_payload
-    }
-
-    try:
-        response=requests.post(url, data = json.dumps(message_body), headers = custom_header)
-
-        if (response.status_code == 200):
-            print(response.content)
-            print(response.status_code)
-        else:
-            print("Error with http status_code "+str(response.status_code))
-    except Exception as ex:
-        template = "An exception of type {0} occured. Arguments:\n{1!r}"
-        message = template.format(type(ex).__name__, ex.args)
-        print message
