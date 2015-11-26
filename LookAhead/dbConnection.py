@@ -19,10 +19,15 @@ import collections
 import datetime
 import time
 import itertools
+import sys
+sys.path.append('../OpenStreetMap')
+
 from datetime import timedelta
 from pymongo import MongoClient
 from bson.objectid import ObjectId
 from operator import itemgetter
+from routeGenerator import coordinates_to_nearest_stops, get_route
+
 
 
 class DB():
@@ -686,7 +691,7 @@ class DB():
                 "trajectory": trajectory
             }
             # print trip
-            self.db.BusTrip1.insert_one(trip)
+            self.db.BusTrip.insert_one(trip)
             if i == len(individual) - 1:
                 self.insertTimeTable2(line, startTime, tripObjectList)
 
@@ -705,7 +710,7 @@ class DB():
             "timetable": tripObjectList
         }
         # print timeTable
-        self.db.TimeTable1.insert_one(timeTable) 
+        self.db.TimeTable.insert_one(timeTable) 
 
     # ---------------------------------------------------------------------------------------------------------------------------------------
     # Bus Stop Location
@@ -745,3 +750,43 @@ class DB():
         '''
         line = self.db.Route.find({"trajectory.busStop": ObjectId(id)})
         return line[0]['line']
+
+    def generateRouteGraph(self):
+        '''Generate Directed RouteGraph
+        It's a one time job, won't be called by other functions.
+        Only when there is new bus stop added should use this function to update RouteGraph
+        '''
+        allBusStop = self.db.BusStop.find()
+        busstop = allBusStop
+        busStopNameList = {}
+        tmpList = []
+        for bs in allBusStop:
+            busStopNameList[bs['name']] = bs['_id']
+        dictKey = ['busStop', 'condinates', 'distance', '_id']
+
+        busstop = self.db.BusStop.find() 
+        for b in busstop:
+            connectedBusStop = []
+            connectedNameList = []
+            nearStop = coordinates_to_nearest_stops(float(b['longitude']), float(b['latitude']), 2000)
+            #print list(nearStop['bus_stops'])[:1]
+            for j in range(len(nearStop['bus_stops'])):
+                if nearStop['bus_stops'][j][0] in busStopNameList.keys() and len(nearStop['bus_stops'][j][0]) > 0 \
+                and nearStop['bus_stops'][j][0] not in connectedNameList and nearStop['bus_stops'][j][0] != b['name']:
+                    tmpList = list(nearStop['bus_stops'][j])
+                    tmpList.append(busStopNameList.get(nearStop['bus_stops'][j][0]))
+                    busStopDict = dict(zip(dictKey, tmpList))
+                    connectedBusStop.append(busStopDict)
+                    connectedNameList.append(nearStop['bus_stops'][j][0])
+
+            objID = ObjectId()
+            orgBusID = busStopNameList.get(b['name'])
+            orgBusName = b['name']
+            newRoute = {
+            "_id": objID,
+            "orgBusID": orgBusID,
+            "orgBusName": orgBusName,
+            "connectedBusStop": connectedBusStop
+            }
+            #print newRoute
+            self.db.RouteGraph.insert_one(newRoute)
