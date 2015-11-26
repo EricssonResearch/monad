@@ -15,7 +15,7 @@ specific language governing permissions and limitations under the License.
 """
 import Image
 import ImageDraw
-from Tkinter import Tk, Canvas, Frame, BOTH
+# from Tkinter import Tk, Canvas, Frame, BOTH
 import coordinate
 
 
@@ -54,6 +54,16 @@ class DrawImage:
             pointY = y - (coordinate.lat2y(n.latitude) - y1) * self.imgScaling
             self.draw.point((pointX, pointY), colour)
 
+    def drawNodeList(self, nodes, colour):
+        y1 = coordinate.lat2y(self.minlat)
+        y2 = coordinate.lat2y(self.maxlat)
+        y = (y2 - y1) * self.imgScaling
+
+        for n in nodes:
+            pointX = (n.longitude - self.minlon) * self.imgScaling
+            pointY = y - (coordinate.lat2y(n.latitude) - y1) * self.imgScaling
+            self.draw.point((pointX, pointY), colour)
+
     """
     def drawNodeIds(self, nodeIds, colour):
         y1 = coordinate.lat2y(self.minlat)
@@ -83,6 +93,7 @@ class DrawImage:
                     colr = 220
                 self.drawLine(y, y1, a[0], a[1], b[0], b[1], self.imgScaling,
                               (colr, colr, colr, 255))
+                self.drawPoint(y, y1, a[0], a[1], self.imgScaling, 'blue')
 
     def drawBusStops(self, busStops, nodes):
         y1 = coordinate.lat2y(self.minlat)
@@ -135,23 +146,23 @@ class DrawImage:
                           fill=colour)
 
 
-class Example(Frame):
-    def __init__(self, parent):
-        Frame.__init__(self, parent)
-        self.parent = parent
-        self.canvas = Canvas(self)
-
-        self.initUI()
-
-    def initUI(self):
-        self.parent.title("Lines")
-        self.pack(fill=BOTH, expand=1)
-
-        self.canvas.create_line(15, 25, 200, 25)
-        self.canvas.create_line(55, 85, 155, 85, 105, 180, 55, 85)
-
-        self.canvas.pack(fill=BOTH, expand=1)
-
-    def add(self):
-        self.canvas.create_line(300, 35, 300, 200, dash=(4, 2))
+#class Example(Frame):
+#    def __init__(self, parent):
+#        Frame.__init__(self, parent)
+#        self.parent = parent
+#        self.canvas = Canvas(self)
+#
+#        self.initUI()
+#
+#    def initUI(self):
+#        self.parent.title("Lines")
+#        self.pack(fill=BOTH, expand=1)
+#
+#        self.canvas.create_line(15, 25, 200, 25)
+#        self.canvas.create_line(55, 85, 155, 85, 105, 180, 55, 85)
+#
+#        self.canvas.pack(fill=BOTH, expand=1)
+#
+#    def add(self):
+#        self.canvas.create_line(300, 35, 300, 200, dash=(4, 2))
 

@@ -13,7 +13,7 @@ under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
 CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
-# from heapq import heappop, heappush
+from heapq import heappop, heappush
 import threading
 import sys
 # import math
@@ -22,7 +22,7 @@ import time
 # import Image
 # import ImageDraw
 from xml.sax import make_parser, handler
-from Tkinter import Tk, Canvas, Frame, BOTH
+# from Tkinter import Tk, Canvas, Frame, BOTH
 from multiprocessing import Process
 
 
@@ -209,16 +209,34 @@ class RouteHandler(handler.ContentHandler):
                 self.addresses[key] = Address(street)
                 self.addresses[key].addNumber(number, self.nodes[node])
 
+    def rmEdge(self, edgeList, id):
+        for x in edgeList:
+            if x[0] == id:
+                edgeList.remove(x)
+                break
+
     def makeRoadIntersectionGraph(self):
-        # print len(self.roadMapGraph)
 
-        for road in self.roads:
-            # print "--", road
-            for nodeID in self.roads[road][2]:
-                # print nodeID, self.roadMapGraph[nodeID]
-                pass
+        myRoad = dict(self.roads)
+        nodeList = []
 
-        print len(self.roads)
+        i = len(myRoad)
+        for road in myRoad:
+            print i,
+            i = i -1
+            if i == 6000:
+                break
+
+            nodeList.append(myRoad[road][2][0])
+
+            for nodeID in myRoad[road][2][1:]:
+
+                for road2 in myRoad:
+                    if nodeID == myRoad[road2][2][0] or nodeID == myRoad[road2][2][-1]:
+                        nodeList.append(nodeID)
+
+
+        self.NOD = nodeList
 
 
 class Map:
@@ -518,16 +536,16 @@ class Map:
         return cost[stopB]
 
 
-class drawApp(threading.Thread):
-    def __init__(self):
-        threading.Thread.__init__(self)
-
-    def run(self):
-        print "Starting thread"
-        root = Tk()
-        ex = Example(root)
-        root.geometry("400x250+300+300")
-        ex.mainloop()
+#class drawApp(threading.Thread):
+#    def __init__(self):
+#        threading.Thread.__init__(self)
+#
+#    def run(self):
+#        print "Starting thread"
+#        root = Tk()
+#        ex = Example(root)
+#        root.geometry("400x250+300+300")
+#        ex.mainloop()
 
 
 if __name__ == '__main__':
@@ -551,14 +569,19 @@ if __name__ == '__main__':
     print "We have " + str(len(myMap.nodes)) + " nodes in total"
     print "We have " + str(len(myMap.busStopList)) + " bus stops in total\n"
 
+
     print "Draw image ..."
-    img = DrawImage(3000,
+    img = DrawImage(10000,
                     myMap.handler.minlon,
                     myMap.handler.minlat,
                     myMap.handler.maxlon,
                     myMap.handler.maxlat)
 
     img.drawRoads(myMap.edges, myMap.nodes)
+    #img.drawNodeList(myMap.nodes, 'blue')
+    img.drawNodeList([myMap.nodes[x] for x in myMap.handler.NOD], 'red')
     img.drawSave(sys.argv[1])
+
+
 
     # myMap.makeBusGraph()
