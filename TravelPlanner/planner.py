@@ -24,6 +24,7 @@ from bson.objectid import ObjectId
 # constants
 NUM_OF_ROUTES_RETURNED = 5
 MAXIMUM_NUMBER_OF_LINES = 150
+MAXIMUM_TIME_DIFFERENCE = datetime.timedelta(hours = 3)
 # tripTuple
 TT_ROUTE = 0
 TT_TIME_DIFFERENCE = 1
@@ -122,10 +123,12 @@ class TravelPlanner:
             self.startTime = request["startTime"]
             self.endTime   = 0
             self.timeMode  = Mode.startTime
+            self.searchDay = request["startTime"].replace(hour = 0, minute = 0)
         elif (request["startTime"] == "null"):
             self.startTime = 0
             self.endTime   = request["endTime"]
             self.timeMode  = Mode.arrivalTime
+            self.searchDay = request["endTime"].replace(hour = 0, minute = 0)
         else:
             return
 
@@ -231,8 +234,8 @@ class TravelPlanner:
 
     def _findSecondTrip(self, route, startTrip):
         if (self.lineSchedules[route[DR_LINE2]] == None):
-            ttCollection = self.timeTable.find_one({"line": route[DR_LINE2]})
-            trips = list(self.busTrip.find({"_id": {"$in": ttCollection["timetable"]}}))
+            ttColl = self.timeTable.find_one({"line": route[DR_LINE2]})
+            trips = list(self.busTrip.find({"_id": {"$in": ttColl["timetable"]}}))
             self.lineSchedules[route[DR_LINE2]] = trips
         else:
             trips = self.lineSchedules[route[DR_LINE2]]
@@ -246,8 +249,8 @@ class TravelPlanner:
 
     def _findFirstTrip(self, route, trip):
         if (self.lineSchedules[route[DR_LINE1]] == None):
-            ttCollection = self.timeTable.find_one({"line": route[DR_LINE1]})
-            trips = list(self.busTrip.find({"_id": {"$in": ttCollection["timetable"]}}))
+            ttColl = self.timeTable.find_one({"line": route[DR_LINE1]})
+            trips = list(self.busTrip.find({"_id": {"$in": ttColl["timetable"]}}))
             self.lineSchedules[route[DR_LINE1]] = trips
         else:
             trips = self.lineSchedules[route[DR_LINE1]]
@@ -263,8 +266,8 @@ class TravelPlanner:
         counter = 0
         for route in self.fittingRoutes:
             if (self.lineSchedules[route["line"]] == None):
-                ttCollection = self.timeTable.find_one({"line": route["line"]})
-                trips = list(self.busTrip.find({"_id": {"$in": ttCollection["timetable"]}}))
+                ttColl = self.timeTable.find_one({"line": route["line"]})
+                trips = list(self.busTrip.find({"_id": {"$in": ttColl["timetable"]}}))
                 self.lineSchedules[route["line"]] = trips
             else:
                 trips = self.lineSchedules[route["line"]]
@@ -291,8 +294,8 @@ class TravelPlanner:
 
             if (self.timeMode == Mode.startTime):
                 if (self.lineSchedules[route[DR_LINE1]] == None):
-                    ttCollection = self.timeTable.find_one({"line": route[DR_LINE1]})
-                    trips = list(self.busTrip.find({"_id": {"$in": ttCollection["timetable"]}}))
+                    ttColl = self.timeTable.find_one({"line": route[DR_LINE1]})
+                    trips = list(self.busTrip.find({"_id": {"$in": ttColl["timetable"]}}))
                     self.lineSchedules[route[DR_LINE1]] = trips
                 else:
                     trips = self.lineSchedules[route[DR_LINE1]]
@@ -352,6 +355,7 @@ class TravelPlanner:
                         "feedback": -1,
                         "requestID": self.requestID,
                         "next": endID,
+                        "busTripID": startTrip["_id"],
                         "booked": False
                 }
                 started = False
@@ -379,6 +383,7 @@ class TravelPlanner:
                         "requestTime": self.requestTime,
                         "feedback": -1,
                         "requestID": self.requestID,
+                        "busTripID": endTrip["_id"],
                         "booked": False
                 }
                 started = False
@@ -409,6 +414,7 @@ class TravelPlanner:
                         "requestTime": self.requestTime,
                         "feedback": -1,
                         "requestID": self.requestID,
+                        "busTripID": trip["_id"],
                         "booked": False
                 }
                 started = False
@@ -448,6 +454,7 @@ class TravelPlanner:
                         "feedback": -1,
                         "requestID": str(entry["requestID"]),
                         "booked": False,
+                        "busTripID": str(entry["busTripID"]),
                         "trajectory": entry["trajectory"]
                 }
                 if ("next" in entry):
