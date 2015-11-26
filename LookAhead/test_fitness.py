@@ -14,11 +14,11 @@ specific language governing permissions and limitations under the License.
 import unittest
 import sys
 sys.path.append('../OpenStreetMap')
-
+from routeGenerator import coordinates_to_nearest_stops, get_route
 import toolBox
 from fitness import Fitness
 from datetime import datetime, timedelta
-from routeGenerator import coordinates_to_nearest_stops, get_route
+
 
 # Variables
 MUTPB = 0.5
