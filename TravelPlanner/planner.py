@@ -235,16 +235,7 @@ class TravelPlanner:
     def _findSecondTrip(self, route, startTrip):
         if (self.lineSchedules[route[DR_LINE2]] == None):
             ttColls = self.timeTable.find({"line": route[DR_LINE2]})
-            trips = []
-            for ttColl in ttColls:
-                if (self.startTime == 0):
-                    if (ttColl["date"].date() == self.endTime.date()):
-                        trips = list(self.busTrip.find({"_id": {"$in": ttColl["timetable"]}}))
-                        break
-                elif (self.endTime == 0):
-                    if (ttColl["date"].date() == self.startTime.date()):
-                        trips = list(self.busTrip.find({"_id": {"$in": ttColl["timetable"]}}))
-                        break            
+            trips = self._getBusTrips(ttColls)                        
             self.lineSchedules[route[DR_LINE2]] = trips
         else:
             trips = self.lineSchedules[route[DR_LINE2]]
@@ -259,16 +250,7 @@ class TravelPlanner:
     def _findFirstTrip(self, route, trip):
         if (self.lineSchedules[route[DR_LINE1]] == None):
             ttColls = self.timeTable.find({"line": route[DR_LINE1]})
-            trips = []
-            for ttColl in ttColls:
-                if (self.startTime == 0):
-                    if (ttColl["date"].date() == self.endTime.date()):
-                        trips = list(self.busTrip.find({"_id": {"$in": ttColl["timetable"]}}))
-                        break
-                elif (self.endTime == 0):
-                    if (ttColl["date"].date() == self.startTime.date()):
-                        trips = list(self.busTrip.find({"_id": {"$in": ttColl["timetable"]}}))
-                        break            
+            trips = self._getBusTrips(ttColls)                       
             self.lineSchedules[route[DR_LINE1]] = trips
         else:
             trips = self.lineSchedules[route[DR_LINE1]]
@@ -285,16 +267,7 @@ class TravelPlanner:
         for route in self.fittingRoutes:
             if (self.lineSchedules[route["line"]] == None):
                 ttColls = self.timeTable.find({"line": route["line"]})
-                trips = []
-                for ttColl in ttColls:
-                    if (self.startTime == 0):
-                        if (ttColl["date"].date() == self.endTime.date()):
-                            trips = list(self.busTrip.find({"_id": {"$in": ttColl["timetable"]}}))
-                            break
-                    elif (self.endTime == 0):
-                        if (ttColl["date"].date() == self.startTime.date()):
-                            trips = list(self.busTrip.find({"_id": {"$in": ttColl["timetable"]}}))
-                            break                
+                trips = self._getBusTrips(ttColls)                               
                 self.lineSchedules[route["line"]] = trips
             else:
                 trips = self.lineSchedules[route["line"]]
@@ -322,16 +295,7 @@ class TravelPlanner:
             if (self.timeMode == Mode.startTime):
                 if (self.lineSchedules[route[DR_LINE1]] == None):
                     ttColls = self.timeTable.find({"line": route[DR_LINE1]})
-                    trips = []
-                    for ttColl in ttColls:
-                        if (self.startTime == 0):
-                            if (ttColl["date"].date() == self.endTime.date()):
-                                trips = list(self.busTrip.find({"_id": {"$in": ttColl["timetable"]}}))
-                                break
-                        elif (self.endTime == 0):
-                            if (ttColl["date"].date() == self.startTime.date()):
-                                trips = list(self.busTrip.find({"_id": {"$in": ttColl["timetable"]}}))
-                                break
+                    trips = self._getBusTrips(ttColls)                    
                     self.lineSchedules[route[DR_LINE1]] = trips
                 else:
                     trips = self.lineSchedules[route[DR_LINE1]]
@@ -346,16 +310,7 @@ class TravelPlanner:
             elif (self.timeMode == Mode.arrivalTime):
                 if (self.lineSchedules[route[DR_LINE2]] == None):
                     ttColls = self.timeTable.find({"line": route[DR_LINE2]})
-                    trips = []
-                    for ttColl in ttColls:
-                        if (self.startTime == 0):
-                            if (ttColl["date"].date() == self.endTime.date()):
-                                trips = list(self.busTrip.find({"_id": {"$in": ttColl["timetable"]}}))
-                                break
-                        elif (self.endTime == 0):
-                            if (ttColl["date"].date() == self.startTime.date()):
-                                trips = list(self.busTrip.find({"_id": {"$in": ttColl["timetable"]}}))
-                                break
+                    trips = self._getBusTrips(ttColls)                    
                     self.lineSchedules[route[DR_LINE2]] = trips
                 else:
                     trips = self.lineSchedules[route[DR_LINE2]]
@@ -507,7 +462,19 @@ class TravelPlanner:
                 entries.append(newEntry)
             self.jsonObject[ut] = entries
 
-
+    def _getBusTrips(self, ttColls):
+        trips = []
+        for ttColl in ttColls:
+            if (self.timeMode == Mode.arrivalTime):
+                if (ttColl["date"].date() == self.endTime.date()):
+                    trips = list(self.busTrip.find({"_id": {"$in": ttColl["timetable"]}}))
+                    break
+            elif (self.timeMode == Mode.startTime):
+                if (ttColl["date"].date() == self.startTime.date()):
+                    trips = list(self.busTrip.find({"_id": {"$in": ttColl["timetable"]}}))
+                    break
+        return trips
+    
     def getBestRoutes(self, requestID, mode = Mode.tripTime):
         self.requestID = requestID
         self.routeMode = mode
