@@ -93,8 +93,11 @@ class TravelPlanner:
             return False
 
     def _searchOtherRoutes(self, busLine, busStopID):
-        cursor = self.route.find({"trajectory.busStop": busStopID, 
-                "trajectory.busStop": self.endBusStop, "line": {"$ne": busLine}})
+        cursor = self.route.find({"$and": [
+                {"trajectory.busStop": busStopID}, 
+                {"trajectory.busStop": self.endBusStop},
+                {"line": {"$ne": busLine}},
+                {"trajectory.busStop": {"$nin": [self.startBusStop]}}]})
         if (cursor is None):
             return []
         possibilities = []
