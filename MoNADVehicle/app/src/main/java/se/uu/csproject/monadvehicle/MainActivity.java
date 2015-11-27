@@ -72,31 +72,21 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
     // this layer shows the current location of the bus
     private MyLocationOverlay myLocationOverlay;
 
-    /**
-     * The desired interval for location updates. Inexact. Updates may be more or less frequent.
-     */
+    //The desired interval for location updates. Inexact. Updates may be more or less frequent.
     public static final long UPDATE_INTERVAL_IN_MILLISECONDS = 1000;
 
-    /**
-     * The fastest rate for active location updates. Exact. Updates will never be more frequent
-     * than this value.
-     */
+    //The fastest rate for active location updates. Exact.
+    // Updates will never be more frequent than this value.
     public static final long FASTEST_UPDATE_INTERVAL_IN_MILLISECONDS =
             UPDATE_INTERVAL_IN_MILLISECONDS / 2;
 
-    /**
-     * Provides the entry point to Google Play services.
-     */
+    //Provides the entry point to Google Play services.
     protected GoogleApiClient mGoogleApiClient;
 
-    /**
-     * Stores parameters for requests to the FusedLocationProviderApi.
-     */
+    //Stores parameters for requests to the FusedLocationProviderApi.
     protected LocationRequest mLocationRequest;
 
-    /**
-     * Represents a geographical location.
-     */
+    // Represents a geographical location.
     protected Location mCurrentLocation;
 
 
@@ -111,6 +101,7 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
         emergencyList = (LinearLayout) findViewById(R.id.side_list_emergency);
         notifications = new NotificationList(generateNotifications());
 
+        //Fill the notifications list
         LayoutInflater inflater = (LayoutInflater) getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         for (int j = 0; j < notifications.getNotificationsList().size(); j++) {
             View notificationView = inflater.inflate(R.layout.list_item_notification, null);
@@ -121,22 +112,24 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
             notificationsList.addView(notificationView);
         }
 
-//        for (int j = 0; j < Storage.getBusTrip().getBusStops().size(); j++) {
-//            View busStopView = inflater.inflate(R.layout.list_item_busstop, null);
-//            TextView busStopTime = (TextView) busStopView.findViewById(R.id.text_busstoptime);
-//            TextView busStopName = (TextView) busStopView.findViewById(R.id.text_busstopname);
-//            busStopTime.setText(formatTime(Storage.getBusTrip().getBusStops().get(j).getArrivalTime()));
-//            busStopName.setText(Storage.getBusTrip().getBusStops().get(j).getName());
-//            busStopsList.addView(busStopView);
-//        }
+        //Fill the bus stop list
+        for (int j = 0; j < Storage.getBusTrip().getBusStops().size(); j++) {
+            View busStopView = inflater.inflate(R.layout.list_item_busstop, null);
+            TextView busStopTime = (TextView) busStopView.findViewById(R.id.text_busstoptime);
+            TextView busStopName = (TextView) busStopView.findViewById(R.id.text_busstopname);
+            busStopTime.setText(formatTime(Storage.getBusTrip().getBusStops().get(j).getArrivalTime()));
+            busStopName.setText(Storage.getBusTrip().getBusStops().get(j).getName());
+            busStopsList.addView(busStopView);
+        }
 
+        //Fill (Declare) the emergency layout content
         RadioGroup radioGroup = (RadioGroup) findViewById(R.id.radio_emergency);
         CheckBox otherCheckBox = (CheckBox) findViewById(R.id.other_possiblity);
         EditText emergencyDescription = (EditText) findViewById(R.id.text_description);
         Button submitButton= (Button) findViewById(R.id.button_submit);
-        mapView = (MapView) findViewById(R.id.mapView);
 
-        //setup mapView
+        //Set up mapView
+        mapView = (MapView) findViewById(R.id.mapView);
         mapView.setClickable(true);
         mapView.getMapScaleBar().setVisible(true);
         mapView.setBuiltInZoomControls(true);
@@ -186,45 +179,26 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
         // adding the layer with current location to the mapview
         mapView.getLayerManager().getLayers().add(this.myLocationOverlay);
 
-        ImageButton showBusStopList = (ImageButton)findViewById(R.id.busStopButton);
+        buildGoogleApiClient();
+
+        ImageButton showBusStopList =(ImageButton)findViewById(R.id.busStopButton);
         showBusStopList.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                sideList.setVisibility(View.VISIBLE);
-                LayoutInflater inflater = (LayoutInflater) getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                ViewGroup insertPoint = (ViewGroup) findViewById(R.id.side_list);
-
-                for (int j = 0; j < Storage.getBusTrip().getBusStops().size(); j++) {
-                    View busStopView = inflater.inflate(R.layout.list_item_busstop, null);
-                    TextView busStopTime = (TextView) busStopView.findViewById(R.id.text_busstoptime);
-                    TextView busStopName = (TextView) busStopView.findViewById(R.id.text_busstopname);
-                    busStopTime.setText(Storage.getBusTrip().getBusStops().get(j).getArrivalTime().toString());
-                    busStopName.setText(Storage.getBusTrip().getBusStops().get(j).getName());
-                    insertPoint.addView(busStopView);
+                if (busStopsList.getVisibility() == View.VISIBLE) {
+                    busStopsList.setVisibility(View.GONE);
+                    sideList.setVisibility(View.GONE);
+                } else if (notificationsList.getVisibility() == View.VISIBLE
+                        || emergencyList.getVisibility() == View.VISIBLE) {
+                    notificationsList.setVisibility(View.GONE);
+                    emergencyList.setVisibility(View.GONE);
+                    busStopsList.setVisibility(View.VISIBLE);
+                } else {
+                    sideList.setVisibility(View.VISIBLE);
+                    busStopsList.setVisibility(View.VISIBLE);
                 }
             }
         });
-
-        buildGoogleApiClient();
-
-//        ImageButton showBusStopList =(ImageButton)findViewById(R.id.busStopButton);
-//        showBusStopList.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                if (busStopsList.getVisibility() == View.VISIBLE) {
-//                    busStopsList.setVisibility(View.GONE);
-//                    sideList.setVisibility(View.GONE);
-//                } else if (notificationsList.getVisibility() == View.VISIBLE
-//                        || emergencyList.getVisibility() == View.VISIBLE) {
-//                    notificationsList.setVisibility(View.GONE);
-//                    emergencyList.setVisibility(View.GONE);
-//                    busStopsList.setVisibility(View.VISIBLE);
-//                } else {
-//                    sideList.setVisibility(View.VISIBLE);
-//                    busStopsList.setVisibility(View.VISIBLE);
-//                }
-//            }
-//        });
 
         ImageButton showNotificationsList =(ImageButton)findViewById(R.id.notificationButton);
         showNotificationsList.setOnClickListener(new View.OnClickListener() {
@@ -493,25 +467,7 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
 //        // adding the layer with current location to the mapview
 //        mapView.getLayerManager().getLayers().add(this.myLocationOverlay);
 //
-//        /* TODO: Needs to be changed */
-//        ImageButton showBusStopList =(ImageButton)findViewById(R.id.busStopButton);
-//        showBusStopList.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                sideList.setVisibility(View.VISIBLE);
-//                LayoutInflater inflater = (LayoutInflater) getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-//                ViewGroup insertPoint = (ViewGroup) findViewById(R.id.side_list);
 //
-//                for (int j = 0; j < Storage.getBusTrip().getBusStops().size(); j++) {
-//                    View busStopView = inflater.inflate(R.layout.list_item_busstop, null);
-//                    TextView busStopTime = (TextView) busStopView.findViewById(R.id.text_busstoptime);
-//                    TextView busStopName = (TextView) busStopView.findViewById(R.id.text_busstopname);
-//                    busStopTime.setText(Storage.getBusTrip().getBusStops().get(j).getArrivalTime().toString());
-//                    busStopName.setText(Storage.getBusTrip().getBusStops().get(j).getName());
-//                    insertPoint.addView(busStopView);
-//                }
-//            }
-//        });
 //    }
 
     public ArrayList<Notification> generateNotifications(){
@@ -526,5 +482,9 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
         Notification message2 = new Notification(1, "Route Cancelled", arrival2);
         notifications.add(message2);
         return notifications;
+    }
+
+    public void onCheckboxClicked(View view) {
+        //TODO:implement checkbox-related function
     }
 }
