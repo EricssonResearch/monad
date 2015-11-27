@@ -102,6 +102,9 @@ loop(Req, DocRoot) ->
                         vehicle_sign_in(Req);
                     "vehicle_get_next_trip" ->
                         vehicle_get_next_trip(Req);
+                    "send_notification" ->
+                        Req:respond({200, [{"Content-Type", "text/plain"}], "OK"}),
+                        send_notification(Req);
                     _ ->
                         Req:not_found()
                 end;
@@ -178,6 +181,52 @@ vehicle_get_next_trip(Req) ->
                       {type, Type}, {what, What},
                       {trace, erlang:get_stacktrace()}],
             handle_error(Report, Req)
+    end.
+
+send_notification(Req) ->
+    PostData = Req:parse_post(),
+    VehicleID_str = proplists:get_value("vehicle_id", PostData, "Anonymous"),
+    {VehicleID, _} = string:to_integer(VehicleID_str),
+    % io:format("VehicleID: ~p~n", [VehicleID]),
+
+    MessageTitle = proplists:get_value("message_title", PostData, "Anonymous"),
+    % io:format("MessageTitle: ~p~n", [MessageTitle]),
+
+    MessageBody = proplists:get_value("message_body", PostData, "Anonymous"),
+    % io:format("MessageBody: ~p~n", [MessageBody]),
+
+    try
+        % Prepare and execute get_google_registration_token_statement
+        emysql:prepare(get_google_registration_token_statement,
+                       <<"SELECT get_google_registration_token(?)">>),
+        Result = emysql:execute(mysql_pool, get_google_registration_token_statement, [VehicleID]),
+        case Result of
+            {_, _, _, [[Response]], _} ->
+                Msg = [{type, send_notification},
+                       {vehicleID, VehicleID},
+                       {messageTitle, MessageTitle},
+                       {messageBody, MessageBody},
+                       {response, Response},
+                       {process, self()}],
+                % io:format("~n~p~n", [Msg]),
+                Broadcaster = whereis(broadcaster),
+                Broadcaster ! {broadcast, Msg},
+                PythonInstance = whereis(python_instance),
+                python:call(PythonInstance, mongodb_parser, send_notification_binary,
+                            [Response, MessageTitle, MessageBody]);
+            _ ->
+                Msg = ["Unexpected Database Response",
+                       {result, Result},
+                       {trace, erlang:get_stacktrace()}],
+                handle_error(Msg, Req)
+        end
+    catch
+        Type:What ->
+            Report = ["Failed Request: send_notification",
+                      {type, Type}, {what, What},
+                      {trace, erlang:get_stacktrace()}],
+            error_logger:error_report(Report)
+            % handle_error(Report, Req)
     end.
 
 %% Internal API
