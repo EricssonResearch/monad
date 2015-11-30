@@ -29,7 +29,6 @@ import java.util.List;
 import se.uu.csproject.monadclient.recyclerviews.FullTrip;
 //import se.uu.csproject.monadclient.recyclerviews.Notify;
 import se.uu.csproject.monadclient.recyclerviews.PartialTrip;
-//import se.uu.csproject.monadclient.recyclerviews.RouteRecyclerViewAdapter;
 
 public class RouteActivity extends AppCompatActivity {
 
