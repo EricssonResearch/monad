@@ -14,7 +14,6 @@ CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
 import urllib2, urllib
-import json, requests
 import string
 import xml.etree.ElementTree
 from xml.etree import ElementTree as ET
