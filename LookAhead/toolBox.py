@@ -14,6 +14,9 @@ specific language governing permissions and limitations under the License.
 """
 import mutation
 import inits
+import sys
+sys.path.append('../OpenStreetMap')
+
 from deap import base
 from deap import creator
 from deap import tools
@@ -23,6 +26,7 @@ from fitness import Fitness
 from operator import itemgetter
 import datetime
 from datetime import timedelta
+from routeGenerator import coordinates_to_nearest_stops, get_route
 
 # Constant
 DB.noOfslices = 0
@@ -44,7 +48,8 @@ def evaluateNewIndividualFormat(individual):
     """ Evaluate an individual's fitness as a candidate timetable for the bus network.
 
     An individual's fitness is evaluated based on the waiting time for passengers requesting buses for the lines
-    represented in the individual. Shorter waiting times on average mean better solutions.
+    represented in the individual. Shorter waiting times on average mean better solutions. The algorithm works by by
+    first sorting the individual by starting times, grouped by the bus  lines.
 
     Args:
         individual: an individual represented as [[lineID, Capacity, frequency, startTime]...]
@@ -55,7 +60,6 @@ def evaluateNewIndividualFormat(individual):
     totalWaitingMinutes = []
     totalNumberRequests = []
     leftOver = []
-    # Initialize DB class
     db = DB()
     # Order individual by starting slice time
     individual = sorted(individual, key=itemgetter(3))

@@ -26,5 +26,15 @@
     <string name="label_main_arrivaltime_value">18:02</string>
 
     <string name="action_settings">Settings</string>
+    <string name="label_emergencytype">Type of emergency</string>
+    <string name="label_emergency_accident">Accident</string>
+    <string name="label_emergency_trafficjam">Traffic jam</string>
+    <string name="label_emergency_mechanicalissue">Mechanical Issue</string>
+    <string name="label_emergency_driverhealth">Driver Health</string>
+    <string name="label_emergency_other">Other (Please specify)</string>
+    <string name="label_emergency_description">Description:</string>
+    <string name="label_emergency_description_hint">Please enter the necessary information for your request...</string>
+    <string name="button_emergency_submit">Submit</string>
+    <string name="non_available">n/a</string>
 
 </resources>

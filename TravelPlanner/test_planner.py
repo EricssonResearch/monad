@@ -264,6 +264,7 @@ class TestTravelPlanner(unittest.TestCase):
                     "feedback": -1,
                     "requestID": objectID,
                     "next": objectID,
+                    "busTripID": objectID,
                     "booked": False,
                     "trajectory": [stops[0], stops[1]]
                 },
@@ -279,6 +280,7 @@ class TestTravelPlanner(unittest.TestCase):
                     "requestTime": time,
                     "feedback": -1,
                     "requestID": objectID,
+                    "busTripID": objectID,
                     "booked": False,
                     "trajectory": [stops[0], stops[1]]
                 }
@@ -288,9 +290,11 @@ class TestTravelPlanner(unittest.TestCase):
         jsonObject = self.tp.jsonObject
         self.assertEqual(objectIDstr, jsonObject[1][0]["_id"])
         self.assertEqual(objectIDstr, jsonObject[1][0]["requestID"])
+        self.assertEqual(objectIDstr, jsonObject[1][1]["busTripID"])
         self.assertEqual(objectIDstr, jsonObject[1][0]["next"])
         self.assertEqual(objectIDstr, jsonObject[1][1]["_id"])
         self.assertEqual(objectIDstr, jsonObject[1][1]["requestID"])
+        self.assertEqual(objectIDstr, jsonObject[1][1]["busTripID"])
 
         self.assertEqual(stops[0], jsonObject[1][0]["startBusStop"])
         self.assertEqual(stops[1], jsonObject[1][0]["endBusStop"])

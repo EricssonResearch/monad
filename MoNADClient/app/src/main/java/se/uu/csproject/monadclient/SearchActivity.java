@@ -10,12 +10,14 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.Selection;
+import android.text.TextUtils;
 import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -262,7 +264,7 @@ public class SearchActivity extends MenuedActivity implements
 
     // Called when the user clicks on the pinpoint icon next to the departure address field
     public void useCurrentPosition(View v){
-        if (mGoogleApiClient.isConnected()){
+        if (isLocationEnabled(this) && mGoogleApiClient.isConnected()){
             positionEditText.setText(getString(R.string.java_search_currentposition));
             Selection.setSelection(positionEditText.getText(), positionEditText.length());
         } else {
@@ -416,5 +418,25 @@ public class SearchActivity extends MenuedActivity implements
             return false;
         }
         return true;
+    }
+
+    // Checks if the user has location settings enabled
+    public static boolean isLocationEnabled(Context context) {
+        int locationMode = Settings.Secure.LOCATION_MODE_OFF;
+        String locationProviders;
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT){
+            try {
+                locationMode = Settings.Secure.getInt(context.getContentResolver(), Settings.Secure.LOCATION_MODE);
+
+            } catch (Settings.SettingNotFoundException e) {
+                Log.d("oops", e.toString());
+            }
+            return locationMode != Settings.Secure.LOCATION_MODE_OFF;
+
+        }else{
+            locationProviders = Settings.Secure.getString(context.getContentResolver(), Settings.Secure.LOCATION_PROVIDERS_ALLOWED);
+            return !TextUtils.isEmpty(locationProviders);
+        }
     }
 }

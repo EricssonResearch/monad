@@ -26,6 +26,8 @@ public class ClientAuthentication extends Authentication {
     //only for local use, has nothing to do with database
     private static boolean ifSettingsChanged = false;
 
+    private static boolean ifRecommendNotifyAdded = false;
+
     /*
      * 0: clientId ("1", "2", ...)
      * 1: username
@@ -154,6 +156,19 @@ public class ClientAuthentication extends Authentication {
 
     public static void setIfSettingsChanged(boolean settingsChanged){
         ifSettingsChanged = settingsChanged;
+    }
+
+    public static boolean getIfRecommendNotifyAdded(){
+        return ifRecommendNotifyAdded;
+    }
+
+    public static void setIfRecommendNotifyAdded(boolean recommendNotifyAdded){
+        ifRecommendNotifyAdded = recommendNotifyAdded;
+    }
+
+    public static void clearGlobalVariables(){
+        ifSettingsChanged = false;
+        ifRecommendNotifyAdded = false;
     }
 
     public static void setGoogleRegistrationToken(String googleRegistrationTokenToken) {

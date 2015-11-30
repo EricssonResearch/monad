@@ -1,3 +1,5 @@
+#!/usr/bin/python -m 
+
 # -*- coding: utf-8 -*-
 """Copyright 2015 Ericsson AB
 
@@ -13,6 +15,9 @@ CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
 import numpy
+import sys
+sys.path.append('../OpenStreetMap')
+from routeGenerator import coordinates_to_nearest_stops, get_route
 import toolBox
 from deap import tools
 from deap import algorithms
@@ -20,11 +25,10 @@ from dbConnection import DB
 from fitness import Fitness
 from operator import itemgetter
 
-
 # Variables
 MUTATION_PROB = 0.0
 CROSS_OVER_PROB = 0.5
-NO_OF_GENERATION = 5
+NO_OF_GENERATION = 1
 POPULATION_SIZE = 10
 
 def main():
@@ -74,9 +78,8 @@ def main():
     #databaseClass.insertBusTrip(best_ind)
     print("Best individual is %s, %s" % (individual, best_ind.fitness.values))
     print ("Length of best individual: " + str(len(best_ind)))
-    # fitnessClass = Fitness()
-    # fitnessClass.genTimetable(best_ind)
-
+    fitnessClass = Fitness()
+    fitnessClass.genTimetable(best_ind)
 
 
 # def crossover(offspring):

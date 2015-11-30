@@ -13,6 +13,9 @@ Unless required by applicable law or agreed to in writing, software distributed 
 See the License for the specific language governing permissions and limitations under the License.
 
 """
+import sys
+sys.path.append('../OpenStreetMap')
+from routeGenerator import coordinates_to_nearest_stops, get_route
 from dbConnection import DB
 from datetime import datetime
 import datetime
@@ -293,7 +296,7 @@ class Fitness():
             ind = [y for y in individual if y[0] == line]
             for i, val in enumerate(ind):
                 counter+=1
-                generate = generateStartTimeBasedOnFreq(line,val[2], val[3])
+                generate = self.generateStartTimeBasedOnFreq(line,val[2], val[3])
 
                 if line not in timetable:
                     timetable[line] = generate

@@ -6,15 +6,17 @@ import java.net.HttpURLConnection;
 import java.io.DataOutputStream;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.io.IOException;
 
 /**
  *
  */
-public abstract class Authentication {
+public abstract class Administration {
     /* "http://localhost:" "http://130.238.15.114:" */
-    public static final String AUTHENTICATION_HOST = "http://130.238.15.114:";
-    public static final String AUTHENTICATION_PORT = "9999";
+    public static final String ROUTES_ADMINISTRATOR_HOST = "http://130.238.15.114:";
+    public static final String ROUTES_ADMINISTRATOR_PORT = "9997";
+
+    public static final String ROUTES_GENERATOR_HOST = "http://130.238.15.114:";
+    public static final String ROUTES_GENERATOR_PORT = "9998";
 
     public static String postRequest(String request, String urlParameters) {
         String response = "";
@@ -41,7 +43,8 @@ public abstract class Authentication {
             dos.write(postData);
 
             if (connection.getResponseCode() != 200) {
-                throw new RuntimeException("Failed : HTTP error code : " + connection.getResponseCode());
+                return "-1";
+                /* throw new RuntimeException("Failed : HTTP error code : " + connection.getResponseCode()); */
             }
             br = new BufferedReader(new InputStreamReader(connection.getInputStream()));
             String line = "";
@@ -53,8 +56,9 @@ public abstract class Authentication {
             dos.close();
             connection.disconnect();
         }
-        catch (IOException e) {
+        catch (Exception e) {
             e.printStackTrace();
+            return "-1";
         }
         finally {
             if (connection != null) {

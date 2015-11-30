@@ -1,0 +1,9 @@
+%% -*- erlang -*-
+{application, routesAdministrator,
+ [{description, "routesAdministrator"},
+  {vsn, "0.1"},
+  {modules, []},
+  {registered, []},
+  {mod, {'routesAdministrator_app', []}},
+  {env, []},
+  {applications, [kernel, stdlib, crypto]}]}.
