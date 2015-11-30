@@ -62,15 +62,7 @@
             android:padding="@dimen/small_padding"
             />
 
-        <TextView
-            android:id="@+id/busNumber"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
 
-            android:text="@string/non_available"
-            android:layout_alignBaseline="@+id/label_arrivaltime"
-            android:layout_alignBottom="@+id/label_arrivaltime"
-            android:layout_centerHorizontal="true" />
 
         <TextView
             android:id="@+id/info_text_to"
@@ -122,19 +114,17 @@
             android:layout_toEndOf="@id/bus"
             />
 
-        <!--clock icon-->
-        <ImageView
-            android:id="@+id/icon_clock"
+        <TextView
+            android:id="@+id/bus_number"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:cropToPadding="false"
-            android:src="@drawable/ic_access_alarms_red_24dp"
-            android:visibility="invisible"
-            android:contentDescription="@string/img_description"
+
+            android:text="@string/non_available"
+            android:layout_alignBaseline="@+id/label_arrivaltime"
+            android:layout_alignBottom="@+id/label_arrivaltime"
             android:padding="@dimen/small_padding"
-            android:layout_centerHorizontal="true"
             android:layout_below="@id/bus"
-            />
+            android:layout_centerHorizontal="true" />
 
         <!--text: countdown info-->
         <TextView
@@ -146,7 +136,7 @@
             android:textColor="@color/black"
             android:padding="@dimen/small_padding"
             android:layout_centerHorizontal="true"
-            android:layout_below="@id/icon_clock"
+            android:layout_below="@id/bus_number"
             />
 
         <TextView

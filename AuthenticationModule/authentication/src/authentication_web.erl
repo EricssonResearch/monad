@@ -70,12 +70,12 @@ stop_python() ->
 start_emysql() ->
     application:start(emysql),
     emysql:add_pool(mysql_pool, [
-        {size, },
-        {user, ""},
-        {password, ""},
-        {host, ""},
-        {port, },
-        {database, ""},
+        {size, 1},
+        {user, "root"},
+        {password, "p0l4x"},
+        {host, "localhost"},
+        {port, 3306},
+        {database, "clients"},
         {encoding, utf8}]),
 
     Broadcaster = whereis(broadcaster),
@@ -550,7 +550,7 @@ send_notification(Req) ->
                 Broadcaster = whereis(broadcaster),
                 Broadcaster ! {broadcast, Msg},
                 PythonInstance = whereis(python_instance),
-                python:call(PythonInstance, mongodb_parser, send_notification,
+                python:call(PythonInstance, mongodb_parser, send_notification_binary,
                             [Response, MessageTitle, MessageBody]);
             _ ->
                 Msg = ["Unexpected Database Response",

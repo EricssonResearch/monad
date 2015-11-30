@@ -98,13 +98,18 @@ def generate_notification(user_id, token, booked_trip_id_binary):
 def surround_in_quotes(astring):
     return "'%s'" % astring
 
+def send_notification_binary(user_to_send_to, message_title, message_body):
+	message_title_to_send = ''.join([chr(c) for c in message_title])
+	message_body_to_send = ''.join([chr(c) for c in message_body])
+	send_notification(user_to_send_to, message_title_to_send, message_body_to_send)
+
 def send_notification(user_to_send_to, message_title_to_send, message_body_to_send):
     API_KEY='key=AIzaSyAPIZuvmfsf8TZHz3q09G_9evAmGUekdrI'
     url = 'https://gcm-http.googleapis.com/gcm/send'
 
-    message_title_to_send=surround_in_quotes(message_title_to_send)
-    message_body_to_send=surround_in_quotes(message_body_to_send)
-    user_to_send_to=surround_in_quotes(user_to_send_to)
+    message_title_to_send = surround_in_quotes(message_title_to_send)
+    message_body_to_send = surround_in_quotes(message_body_to_send)
+    user_to_send_to = surround_in_quotes(user_to_send_to)
 
     # print repr(message_body_to_send)
     # print repr(message_title_to_send)

@@ -8,7 +8,7 @@ def start(host):
     global db
     global bus_trip_collection
     global bus_stop_collection
-    
+
     mongo_client = MongoClient(host, 27017)
     db = mongo_client.monad1
     bus_trip_collection = db.BusTrip
@@ -48,3 +48,49 @@ def vehicle_get_next_trip(bus_id):
 # if __name__ == "__main__":
 #     start("130.238.15.114")
 #     get_current_bus_trip(1)
+
+def send_notification_binary(user_to_send_to, message_title, message_body):
+	message_title_to_send = ''.join([chr(c) for c in message_title])
+	message_body_to_send = ''.join([chr(c) for c in message_body])
+	send_notification(user_to_send_to, message_title_to_send, message_body_to_send)
+
+def send_notification(user_to_send_to, message_title_to_send, message_body_to_send):
+    API_KEY='key=AIzaSyAPIZuvmfsf8TZHz3q09G_9evAmGUekdrI'
+    url = 'https://gcm-http.googleapis.com/gcm/send'
+
+    message_title_to_send = surround_in_quotes(message_title_to_send)
+    message_body_to_send = surround_in_quotes(message_body_to_send)
+    user_to_send_to = surround_in_quotes(user_to_send_to)
+
+    # print repr(message_body_to_send)
+    # print repr(message_title_to_send)
+
+    user_to_send_to = user_to_send_to[1:-1]
+
+    custom_header = {
+        'Content-Type' : 'application/json',
+        'Authorization' : API_KEY
+    }
+
+    message_payload = {
+        'title' : message_title_to_send,
+        'message' : message_body_to_send
+    }
+
+    message_body = {
+        'to' : user_to_send_to,
+        'data' : message_payload
+    }
+
+    try:
+        response = requests.post(url, headers = custom_header, data = json.dumps(message_body))
+
+        if (response.status_code == 200):
+            print(response.content)
+            print(response.status_code)
+        else:
+            print("Error with http status_code " + str(response.status_code))
+    except Exception as ex:
+        template = "An exception of type {0} occured. Arguments:\n{1!r}"
+        message = template.format(type(ex).__name__, ex.args)
+        print message

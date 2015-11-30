@@ -25,6 +25,7 @@ from bson.objectid import ObjectId
 NUM_OF_ROUTES_RETURNED = 5
 MAXIMUM_NUMBER_OF_LINES = 150
 MAXIMUM_TIME_DIFFERENCE = datetime.timedelta(hours = 3)
+TIME_DIFF_15MIN = datetime.timedelta(minutes = 15)
 # tripTuple
 TT_ROUTE = 0
 TT_TIME_DIFFERENCE = 1
@@ -92,8 +93,11 @@ class TravelPlanner:
             return False
 
     def _searchOtherRoutes(self, busLine, busStopID):
-        cursor = self.route.find({"trajectory.busStop": busStopID, 
-                "trajectory.busStop": self.endBusStop, "line": {"$ne": busLine}})
+        cursor = self.route.find({"$and": [
+                {"trajectory.busStop": busStopID}, 
+                {"trajectory.busStop": self.endBusStop},
+                {"line": {"$ne": busLine}},
+                {"trajectory.busStop": {"$nin": [self.startBusStop]}}]})
         if (cursor is None):
             return []
         possibilities = []
@@ -232,22 +236,25 @@ class TravelPlanner:
                 return
             self._rankTrip(trip)
 
-    def _findSecondTrip(self, route, startTrip):
-        if (self.lineSchedules[route[DR_LINE2]] == None):
-            ttColls = self.timeTable.find({"line": route[DR_LINE2]})
-            trips = []
+    def _getBusTrips(self, line):
+        if (self.lineSchedules[line] == None):
+            ttColls = self.timeTable.find({"line": line})
             for ttColl in ttColls:
-                if (self.startTime == 0):
+                if (self.timeMode == Mode.startTime):
+                    if (ttColl["date"].date() == self.startTime.date()):
+                        trips = list(self.busTrip.find({"_id": {"$in": ttColl["timetable"]}}))
+                        break
+                elif (self.timeMode == Mode.arrivalTime):
                     if (ttColl["date"].date() == self.endTime.date()):
                         trips = list(self.busTrip.find({"_id": {"$in": ttColl["timetable"]}}))
                         break
-                elif (self.endTime == 0):
-                    if (ttColl["date"].date() == self.startTime.date()):
-                        trips = list(self.busTrip.find({"_id": {"$in": ttColl["timetable"]}}))
-                        break            
-            self.lineSchedules[route[DR_LINE2]] = trips
+            self.lineSchedules[line] = trips
         else:
-            trips = self.lineSchedules[route[DR_LINE2]]
+            trips = self.lineSchedules[line]
+        return trips
+
+    def _findSecondTrip(self, route, startTrip):
+        trips = self._getBusTrips(route[DR_LINE2])
         self.bestArrivalTime = datetime.datetime.max
         for trip in trips:
             self.dptSwitch = trip["trajectory"][route[DR_START2]]["time"]
@@ -257,21 +264,7 @@ class TravelPlanner:
                 self.bestArrivalTime = self.arrTime
 
     def _findFirstTrip(self, route, trip):
-        if (self.lineSchedules[route[DR_LINE1]] == None):
-            ttColls = self.timeTable.find({"line": route[DR_LINE1]})
-            trips = []
-            for ttColl in ttColls:
-                if (self.startTime == 0):
-                    if (ttColl["date"].date() == self.endTime.date()):
-                        trips = list(self.busTrip.find({"_id": {"$in": ttColl["timetable"]}}))
-                        break
-                elif (self.endTime == 0):
-                    if (ttColl["date"].date() == self.startTime.date()):
-                        trips = list(self.busTrip.find({"_id": {"$in": ttColl["timetable"]}}))
-                        break            
-            self.lineSchedules[route[DR_LINE1]] = trips
-        else:
-            trips = self.lineSchedules[route[DR_LINE1]]
+        trips = self._getBusTrips(route[DR_LINE1])
         self.bestDepartureTime = datetime.datetime.min
         for trip in trips:
             self.dptTime   = trip["trajectory"][route[DR_START1]]["time"]
@@ -280,25 +273,18 @@ class TravelPlanner:
                 self.bestFirstTrip = trip
                 self.bestDepartureTime = self.dptTime
 
+    def _isFastRoute(self):
+        if (len(self.tripTuples) > 0):
+            departure = self.tripTuples[0][TT_DEPARTURE_TIME]
+            arrival = self.tripTuples[0][TT_ARRIVAL_TIME]
+            if ((arrival - departure) < TIME_DIFF_15MIN):
+                return True
+        return False
+
     def _findBestRoute(self):
         counter = 0
         for route in self.fittingRoutes:
-            if (self.lineSchedules[route["line"]] == None):
-                ttColls = self.timeTable.find({"line": route["line"]})
-                trips = []
-                for ttColl in ttColls:
-                    if (self.startTime == 0):
-                        if (ttColl["date"].date() == self.endTime.date()):
-                            trips = list(self.busTrip.find({"_id": {"$in": ttColl["timetable"]}}))
-                            break
-                    elif (self.endTime == 0):
-                        if (ttColl["date"].date() == self.startTime.date()):
-                            trips = list(self.busTrip.find({"_id": {"$in": ttColl["timetable"]}}))
-                            break                
-                self.lineSchedules[route["line"]] = trips
-            else:
-                trips = self.lineSchedules[route["line"]]
-
+            trips = self._getBusTrips(route["line"])
             for trip in trips:
                 self.dptTime = trip["trajectory"][self.startingWaypoint[counter]]["time"]
                 self.arrTime = trip["trajectory"][self.endingWaypoint[counter]]["time"]
@@ -311,6 +297,9 @@ class TravelPlanner:
 
             counter = counter + 1
 
+        if (self._isFastRoute()):
+            return
+
         for route in self.doubleRoutes:
             if ((route[DR_LINE1], route[DR_LINE2]) in self.lineTuples):
                 continue
@@ -320,22 +309,7 @@ class TravelPlanner:
                 print "Line 1: " + str(route[DR_LINE1]) + " - Line 2: " + str(route[DR_LINE2])
 
             if (self.timeMode == Mode.startTime):
-                if (self.lineSchedules[route[DR_LINE1]] == None):
-                    ttColls = self.timeTable.find({"line": route[DR_LINE1]})
-                    trips = []
-                    for ttColl in ttColls:
-                        if (self.startTime == 0):
-                            if (ttColl["date"].date() == self.endTime.date()):
-                                trips = list(self.busTrip.find({"_id": {"$in": ttColl["timetable"]}}))
-                                break
-                        elif (self.endTime == 0):
-                            if (ttColl["date"].date() == self.startTime.date()):
-                                trips = list(self.busTrip.find({"_id": {"$in": ttColl["timetable"]}}))
-                                break
-                    self.lineSchedules[route[DR_LINE1]] = trips
-                else:
-                    trips = self.lineSchedules[route[DR_LINE1]]
-
+                trips = self._getBusTrips(route[DR_LINE1])
                 for trip in trips:
                     self.dptTime   = trip["trajectory"][route[DR_START1]]["time"]
                     self.arrSwitch = trip["trajectory"][route[DR_END1]]["time"]
@@ -344,22 +318,7 @@ class TravelPlanner:
                         self._insertTrip((route, trip, self.bestSecondTrip))
 
             elif (self.timeMode == Mode.arrivalTime):
-                if (self.lineSchedules[route[DR_LINE2]] == None):
-                    ttColls = self.timeTable.find({"line": route[DR_LINE2]})
-                    trips = []
-                    for ttColl in ttColls:
-                        if (self.startTime == 0):
-                            if (ttColl["date"].date() == self.endTime.date()):
-                                trips = list(self.busTrip.find({"_id": {"$in": ttColl["timetable"]}}))
-                                break
-                        elif (self.endTime == 0):
-                            if (ttColl["date"].date() == self.startTime.date()):
-                                trips = list(self.busTrip.find({"_id": {"$in": ttColl["timetable"]}}))
-                                break
-                    self.lineSchedules[route[DR_LINE2]] = trips
-                else:
-                    trips = self.lineSchedules[route[DR_LINE2]]
-
+                trips = self._getBusTrips(route[DR_LINE2])
                 for trip in trips:
                     self.dptSwitch = trip["trajectory"][route[DR_START2]]["time"]
                     self.arrTime   = trip["trajectory"][route[DR_END2]]["time"]

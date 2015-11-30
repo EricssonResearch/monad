@@ -33,9 +33,14 @@ public class BusTrip {
         Log.d("BusTrip", "ID: " + getBusTripID());
         Log.d("BusTrip", "Capacity: " + getCapacity());
 
-        if (getTrajectory() != null) {
+        if (getBusStops() != null) {
             for (int i = 0; i < busStops.size(); i++) {
                 busStops.get(i).printValues();
+            }
+        }
+        if (getTrajectory() != null) {
+            for (int i = 0; i < trajectory.size(); i++) {
+                Log.d("Trajectory >>>>>>>> ", trajectory.get(i).toString());
             }
         }
     }

@@ -15,20 +15,32 @@ def send_notification_to_authentication(user_id, message_title, message_body):
     data = {'user_id': user_id, 'message_title': message_title, 'message_body': message_body}
     requests.post(url, headers = headers, data = data)
 
+def parse_user_trip(user_trips_list, user_trip):
+    if 'next' in user_trip.keys():
+        user_trips_list.append(user_trip)
+        return parse_user_trip(user_trips_list,
+                               user_trips.find_one({'_id' : ObjectId(user_trip['next'])}))
+    else:
+        user_trips_list.append(user_trip)
+        return user_trips_list
+    requests.post(url, headers = headers, data = data)
+
 def create_notification(user_id, partial_trips, icon_id):
     notification = {}
     notification['userID'] = user_id
     trip = user_trips.find_one({'_id': partial_trips[0]})
     line = trip['line']
     start_time = trip['startTime']
-    notification['partialTrips'] = partial_trips
-
+    user_trip = user_trips.find_one({'_id' : partial_trips[0]})
+    # print user_trip
+    user_trips_list = parse_user_trip(list(), user_trip)
+    notification['partialTrips'] = user_trips_list
     notification['text'] = "Alert: Bus {} is arriving at {}".format(line, 
                             start_time)
     notification['time'] = datetime.datetime.now()
     notification['iconID'] = icon_id
-    print notification
-    return notification
+    print notification['userID'] , start_time 
+    return notification 
 
 def main():
     global user
@@ -53,10 +65,12 @@ def main():
             notification = create_notification(user_id, list_trips, 3)
             try: 
                 notifications_collection.insert_one(notification)
+                send_notification_to_authentication(user_id, 'MoNAD', notification['text'])
             except pymongo.errors.PyMongoError as e:
                 print e
                 
-            send_notification_to_authentication(user_id, 'MoNAD', notification['text'])
+            
+            
 
 if __name__ == '__main__':
     main()
