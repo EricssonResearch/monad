@@ -155,6 +155,11 @@
 
         <receiver
             android:name=".RecommendationAlarmReceiver">
+            <intent-filter>
+                <action android:name=".MainActivity" />
+                <category android:name="se.uu.csproject.monadclient" />
+                <data android:scheme="timer:" />
+            </intent-filter>
         </receiver>
 
 
