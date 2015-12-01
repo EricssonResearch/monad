@@ -100,4 +100,8 @@ public class BusStop {
     public void setLeavingPassengers(int leavingPassengers) {
         this.leavingPassengers = leavingPassengers;
     }
+
+    public String coordinatesToString() {
+        return "(" + longitude + ", " + latitude + ")";
+    }
 }

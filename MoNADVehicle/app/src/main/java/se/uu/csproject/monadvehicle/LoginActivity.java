@@ -15,7 +15,8 @@ import android.widget.Toast;
 
 import org.mapsforge.map.android.graphics.AndroidGraphicFactory;
 
-public class LoginActivity extends AppCompatActivity implements AsyncLoginInteraction, AsyncGetNextTripInteraction {
+public class LoginActivity extends AppCompatActivity implements AsyncLoginInteraction, AsyncGetNextTripInteraction,
+        AsyncGetTrajectoryInteraction {
     private EditText usernameField;
     private EditText passwordField;
     private EditText busNumberField;
@@ -114,21 +115,31 @@ public class LoginActivity extends AppCompatActivity implements AsyncLoginIntera
 
         if (response.equals("1")) {
             Log.d("LoginActivity", "Successfully received BusTrip data");
-
-            try {
-                LoginActivity.this.startActivity(new Intent(LoginActivity.this, MainActivity.class));
-            }
-            catch (Exception e) {
-                e.printStackTrace();
-            }
-            finally {
-                finish();
-            }
+            getTrajectory();
         }
         else {
             Log.d("LoginActivity", "Error while receiving BusTrip data");
             LoginActivity.this.startActivity(new Intent(LoginActivity.this, LoginActivity.class));
             finish();
         }
+    }
+
+    public void getTrajectory() {
+        new GetTrajectoryTask(this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+    }
+
+    @Override
+    public void processGetTrajectoryResponse(String response) {
+        try {
+            Log.d("LoginActivity", "Received trajectory response");
+            LoginActivity.this.startActivity(new Intent(LoginActivity.this, MainActivity.class));
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+        finally {
+            finish();
+        }
+
     }
 }

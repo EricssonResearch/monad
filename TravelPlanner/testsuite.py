@@ -63,6 +63,9 @@ class tester:
 
     #TODO: works only with single or double routes (just one change)
     def printBestResult(self, jsonObject):
+        if (jsonObject == None or jsonObject == {}):
+            print "No route found!"
+            return
         best = jsonObject[1]
         trip = "Route from " + best[0]["startBusStop"] + " to " + best[-1]["endBusStop"]
         time = "Trip starts at " + best[0]["startTime"] + " and ends at " + best[-1]["endTime"]
@@ -76,6 +79,9 @@ class tester:
         print line
 
     def printJson(self, jsonObject):
+        if (jsonObject == None or jsonObject == {}):
+            print "No route found!"
+            return
         best = jsonObject[1]
         print "Route from " + best[0]["startBusStop"] + " to " + best[-1]["endBusStop"]
         for key in jsonObject.keys():
