@@ -93,7 +93,7 @@ class DrawImage:
                     colr = 220
                 self.drawLine(y, y1, a[0], a[1], b[0], b[1], self.imgScaling,
                               (colr, colr, colr, 255))
-                self.drawPoint(y, y1, a[0], a[1], self.imgScaling, 'blue')
+                # self.drawPoint(y, y1, a[0], a[1], self.imgScaling, 'blue')
 
     def drawBusStops(self, busStops, nodes):
         y1 = coordinate.lat2y(self.minlat)
@@ -108,6 +108,12 @@ class DrawImage:
             else:
                 self.drawCircle(y, y1, stop.longitude, stop.latitude, radius,
                                 self.imgScaling, (254, 122, 85))
+
+
+            pointCX = (stop.longitude - self.minlon) * self.imgScaling
+            pointCY = y - ((coordinate.lat2y(stop.latitude) - y1) * self.imgScaling)
+            self.draw.text((pointCX, pointCY), stop.name.encode('utf-8'), fill=(0,0,0,255))
+
 
     """
     def drawPath(self, path, colour):

@@ -25,13 +25,13 @@ from xml.sax import make_parser, handler
 # from Tkinter import Tk, Canvas, Frame, BOTH
 from multiprocessing import Process
 
-
 from aStar import AStar
 from busStop import BusStop
 from coordinate import Coordinate
 from address import Address
 import coordinate
 from mapDrawing import DrawImage
+from busNetwork import BusNetwork
 
 
 # The size width of the produced image in pixels
@@ -41,7 +41,8 @@ standardSpeed = 50
 # Roads buses can drive on
 busRoadTypes = ('motorway', 'motorway_link', 'trunk', 'trunk_link', 'primary',
                 'primary_link', 'secondary', 'secondary_link', 'tertiary',
-                'tertiary_link', 'unclassified', 'residential', 'service')
+                'tertiary_link', 'unclassified', 'residential')
+# , 'service')
 
 
 class RouteHandler(handler.ContentHandler):
@@ -216,14 +217,14 @@ class RouteHandler(handler.ContentHandler):
                 break
 
     def makeRoadIntersectionGraph(self):
-
+        """
         myRoad = dict(self.roads)
         nodeList = []
 
         i = len(myRoad)
         for road in myRoad:
             print i,
-            i = i -1
+            i -= 1
             if i == 6000:
                 break
 
@@ -237,6 +238,8 @@ class RouteHandler(handler.ContentHandler):
 
 
         self.NOD = nodeList
+        """
+        pass
 
 
 class Map:
@@ -278,7 +281,7 @@ class Map:
             return self.handler.nodeID[coordinates]
         else:
             return self.closestRoadNode(coordinates)
-
+    """
     def makeBusGraph(self):
 
         graph = {}
@@ -324,7 +327,7 @@ class Map:
                             start = b
 
         return graph
-
+    """
     def getNodeIdFromCoordinatesList(self, coordinatesList):
         """
         :param coordinates: [(longitude, latitude)]
@@ -578,10 +581,11 @@ if __name__ == '__main__':
                     myMap.handler.maxlat)
 
     img.drawRoads(myMap.edges, myMap.nodes)
-    #img.drawNodeList(myMap.nodes, 'blue')
-    img.drawNodeList([myMap.nodes[x] for x in myMap.handler.NOD], 'red')
+    # img.drawNodeList(myMap.nodes, 'blue')
+    # img.drawNodeList([myMap.nodes[x] for x in myMap.handler.NOD], 'red')
+    img.drawBusStops(myMap.busStopList, myMap.nodes)
     img.drawSave(sys.argv[1])
-
-
-
+    
+    # b = BusNetwork()
+    # b.makeBusGraph(myMap.handler.nodes, myMap.handler.busStopNode, myMap.edges)
     # myMap.makeBusGraph()
