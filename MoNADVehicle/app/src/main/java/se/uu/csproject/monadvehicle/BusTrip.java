@@ -1,9 +1,9 @@
 package se.uu.csproject.monadvehicle;
 
 import android.util.Log;
-
 import java.util.ArrayList;
 import java.util.Date;
+
 
 /**
  *
@@ -12,6 +12,7 @@ public class BusTrip {
     String busTripID;
     int capacity;
     private ArrayList<BusStop> trajectory;
+
 
     public BusTrip(String busTripID, int capacity, ArrayList<BusStop> trajectory) {
         this.busTripID = busTripID;
@@ -69,4 +70,6 @@ public class BusTrip {
         }
         return null;
     }
+
+
 }

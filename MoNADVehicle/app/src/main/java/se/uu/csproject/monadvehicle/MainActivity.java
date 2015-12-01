@@ -51,6 +51,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 
 public class MainActivity extends Activity implements ConnectionCallbacks, OnConnectionFailedListener,
@@ -69,6 +70,13 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
     private TileRendererLayer tileRendererLayer;
     // this layer shows the current location of the bus
     private MyLocationOverlay myLocationOverlay;
+
+    Location location, loc, locDestination;
+    long diffInMinutes;
+    double distanceInMeters;
+    Date nextArrivalTime;
+    ArrayList<BusStop> traj;
+
 
     /**
      * The desired interval for location updates. Inexact. Updates may be more or less frequent.
@@ -228,6 +236,13 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
 //            }
 //        });
 //>>>>>>> 0066078511e50bcbc2d9e529ba98b2a7624fb177
+
+
+        /*double distance = calculateDistance();
+        long timediff = getTimeDifference();
+        TextView tv = (TextView)findViewById(R.id.);
+        String x = Double.toString(distance);
+        tv.setText(x);*/
     }
 
     @Override
@@ -515,17 +530,45 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
     }
 
 
+    //  get the current bus stop location and arrival time
+    //  calculates the time difference in minutes between
+    //  current and next location
+    public long getTimeDifference() {
+        myLocationOverlay.onLocationChanged(location);
+        double currentLat = location.getLatitude();
+        double currentLong = location.getLongitude();
+        Calendar cal = Calendar.getInstance();
+        long currentTime = cal.get(Calendar.MILLISECOND);
+        //for (int i = 0; i < traj.size(); i++) {
+            //if(currentLat == traj.get(i).getLatitude() && currentLong == traj.get(i).getLongitude()) {
+                nextArrivalTime = traj.get(1).getArrivalTime();
+            //}
+                diffInMinutes = TimeUnit.MILLISECONDS.toMinutes(nextArrivalTime.getTime() - currentTime);
+        //}
+        return diffInMinutes;
+    }
 
-
-
-
-
-
-
-
-
-
-
+    //gets the coordinates between current location and a given bus stop location
+    //calculates and returns the distance between them
+    public double calculateDistance() {
+        myLocationOverlay.onLocationChanged(loc);
+        double currentLat = loc.getLatitude();
+        double currentLong = loc.getLongitude();
+        double nextLat,nextLong;
+        //for (int i = 0; i < traj.size(); i++) {
+            //if (currentLat == traj.get(i).getLatitude() && currentLong == traj.get(i).getLongitude()) {
+                loc.setLatitude(currentLat);
+                loc.setLongitude(currentLong);
+                //myLocationOverlay.onLocationChanged(locDestination);
+                nextLat = traj.get(1).getLatitude();
+                nextLong = traj.get(1).getLongitude();
+                locDestination.setLatitude(nextLat);
+                locDestination.setLongitude(nextLong);
+                distanceInMeters = loc.distanceTo(locDestination);
+            //}
+        //}
+        return distanceInMeters;
+    }
 
 
 }
