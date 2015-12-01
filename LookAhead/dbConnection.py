@@ -757,24 +757,32 @@ class DB():
         Only when there is new bus stop added should use this function to update RouteGraph
         '''
         allBusStop = self.db.BusStop.find()
-        busstop = allBusStop
+
         busStopNameList = {}
         tmpList = []
+        print allBusStop.count()
         for bs in allBusStop:
             busStopNameList[bs['name']] = bs['_id']
-        dictKey = ['busStop', 'condinates', 'distance', '_id']
+        dictKey = ['busStop', 'condinates', 'distance', '_id', 'timeCost']
 
         busstop = self.db.BusStop.find() 
         for b in busstop:
             connectedBusStop = []
             connectedNameList = []
-            nearStop = coordinates_to_nearest_stops(float(b['longitude']), float(b['latitude']), 2000)
+            nearStop = coordinates_to_nearest_stops(float(b['longitude']), float(b['latitude']), 300)
             #print list(nearStop['bus_stops'])[:1]
             for j in range(len(nearStop['bus_stops'])):
                 if nearStop['bus_stops'][j][0] in busStopNameList.keys() and len(nearStop['bus_stops'][j][0]) > 0 \
                 and nearStop['bus_stops'][j][0] not in connectedNameList and nearStop['bus_stops'][j][0] != b['name']:
+                    condinatesList = [(float(b['longitude']), float(b['latitude'])), (nearStop['bus_stops'][j][1][0], nearStop['bus_stops'][j][1][1])]
+                    #print condinatesList
+                    timeDict = get_route(condinatesList)
+                    timeCost = timeDict['cost'][1]
+                    #print timeC
                     tmpList = list(nearStop['bus_stops'][j])
                     tmpList.append(busStopNameList.get(nearStop['bus_stops'][j][0]))
+                    #print tmpList
+                    tmpList.append(timeCost)
                     busStopDict = dict(zip(dictKey, tmpList))
                     connectedBusStop.append(busStopDict)
                     connectedNameList.append(nearStop['bus_stops'][j][0])
