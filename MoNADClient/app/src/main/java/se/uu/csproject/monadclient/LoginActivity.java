@@ -162,6 +162,7 @@ public class LoginActivity extends AppCompatActivity implements AsyncLoginIntera
         /* If the response starts with the specific word, it means the user logged in successfully */
         if (response.startsWith("Success (1)")) {
 //            Toast.makeText(getApplicationContext(), "Welcome to MoNAD", Toast.LENGTH_LONG).show();
+            startService(new Intent(this, LocationService.class));
             LoginActivity.this.startActivity(new Intent(LoginActivity.this, MainActivity.class));
             finish();
         }

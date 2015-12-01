@@ -16,12 +16,30 @@ public class Storage{
     private static ArrayList<FullTrip> recommendations = new ArrayList();
     private static ArrayList<Notify> notifications = new ArrayList<>();
     private static JSONObject changedFeedback = new JSONObject();
+    private static double latitude = 0.0, longitude = 0.0;
 
     public static void clearAll() {
         clearSearchResults();
         clearBookings();
         clearRecommendations();
         clearNotifications();
+    }
+
+    /** Methods for coordinates */
+    public static void setLatitude(double currentLatitude){
+        latitude = currentLatitude;
+    }
+
+    public static double getLatitude(){
+        return latitude;
+    }
+
+    public static void setLongitude(double currentLongitude){
+        longitude = currentLongitude;
+    }
+
+    public static double getLongitude(){
+        return longitude;
     }
 
     /** Methods for feedback */

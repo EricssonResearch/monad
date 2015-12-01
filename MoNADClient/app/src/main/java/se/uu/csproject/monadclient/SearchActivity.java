@@ -1,23 +1,15 @@
 package se.uu.csproject.monadclient;
 
-import android.Manifest;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.app.TimePickerDialog;
 import android.content.Context;
-import android.content.pm.PackageManager;
-import android.location.Location;
-import android.os.Build;
 import android.os.Bundle;
-import android.provider.Settings;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.Selection;
-import android.text.TextUtils;
 import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -32,13 +24,6 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GoogleApiAvailability;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.location.LocationListener;
-import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationServices;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -52,24 +37,17 @@ import se.uu.csproject.monadclient.recyclerviews.FullTrip;
 import se.uu.csproject.monadclient.recyclerviews.SearchRecyclerViewAdapter;
 import se.uu.csproject.monadclient.recyclerviews.Storage;
 
-public class SearchActivity extends MenuedActivity implements
-        GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener, AsyncResponse{
+public class SearchActivity extends MenuedActivity implements AsyncResponse{
     private TextView textViewTripDate, textViewTripTime;
     DialogFragment dateFragment, timeFragment;
     private RadioGroup tripTimeRadioGroup, priorityRadioGroup;
     private AutoCompleteTextView positionEditText, destinationEditText;
-    private GoogleApiClient mGoogleApiClient;
-    private LocationRequest mLocationRequest;
-    private double currentLatitude, currentLongitude;
     private Context context;
     private ArrayList<FullTrip> searchResults;
     private SearchRecyclerViewAdapter adapter;
     private LinearLayoutManager linearLayoutManager;
     private RecyclerView recyclerView;
     private Toolbar toolbar;
-
-    private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
-    private final int MY_PERMISSIONS_REQUEST = 123;
 
     public Calendar calendar;
 
@@ -100,13 +78,7 @@ public class SearchActivity extends MenuedActivity implements
         linearLayoutManager = new LinearLayoutManager(getApplicationContext());
         recyclerView.setLayoutManager(linearLayoutManager);
 
-        currentLatitude = 0;
-        currentLongitude = 0;
-
-        buildGoogleApiClient();
-        initializeLocationRequest();
         String[] addresses = getAddressesFromFileAsset();
-
         if (addresses != null){
             ArrayAdapter<String> adapterString =
                     new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, addresses);
@@ -136,56 +108,6 @@ public class SearchActivity extends MenuedActivity implements
         }
 
         return addresses;
-    }
-
-    // Checks if the user has given location permission and asks for it if he hasn't
-    private void checkForPermission(){
-        if (ContextCompat.checkSelfPermission(SearchActivity.this, Manifest.permission.ACCESS_FINE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED){
-            ActivityCompat.requestPermissions(SearchActivity.this,
-                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, MY_PERMISSIONS_REQUEST);
-        } else {
-            mGoogleApiClient.connect();
-        }
-    }
-
-    // Checks the result of the permission asked of the user
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
-        switch (requestCode) {
-            case MY_PERMISSIONS_REQUEST: {
-                // Permission granted!
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    mGoogleApiClient.connect();
-                } else {
-                    // Permission denied, boo! Pester him until he changes his mind
-                    CharSequence text = getString(R.string.java_locationpermissionwarning);
-                    Toast toast = Toast.makeText(context, text, Toast.LENGTH_LONG);
-                    toast.show();
-                }
-                return;
-            }
-        }
-    }
-
-    private void handleNewLocation(Location location) {
-        currentLatitude = location.getLatitude();
-        currentLongitude = location.getLongitude();
-    }
-
-    protected synchronized void buildGoogleApiClient() {
-        mGoogleApiClient = new GoogleApiClient.Builder(this)
-                .addConnectionCallbacks(this)
-                .addOnConnectionFailedListener(this)
-                .addApi(LocationServices.API)
-                .build();
-    }
-
-    protected void initializeLocationRequest() {
-        mLocationRequest = LocationRequest.create()
-                .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
-                .setInterval(60 * 1000)        // 1 minute, in milliseconds
-                .setFastestInterval(10 * 1000); // 10 seconds, in milliseconds
     }
 
     public void showDatePickerDialog(View v) {
@@ -264,7 +186,7 @@ public class SearchActivity extends MenuedActivity implements
 
     // Called when the user clicks on the pinpoint icon next to the departure address field
     public void useCurrentPosition(View v){
-        if (isLocationEnabled(this) && mGoogleApiClient.isConnected()){
+        if (Storage.getLatitude() != 0.0 && Storage.getLongitude() != 0.0){
             positionEditText.setText(getString(R.string.java_search_currentposition));
             Selection.setSelection(positionEditText.getText(), positionEditText.length());
         } else {
@@ -289,8 +211,8 @@ public class SearchActivity extends MenuedActivity implements
         userId = ClientAuthentication.getClientId();
         stPosition = positionEditText.getText().toString();
         edPosition = destinationEditText.getText().toString();
-        startPositionLatitude = String.valueOf(currentLatitude);
-        startPositionLongitude = String.valueOf(currentLongitude);
+        startPositionLatitude = String.valueOf(Storage.getLatitude());
+        startPositionLongitude = String.valueOf(Storage.getLongitude());
 
         selectedId = tripTimeRadioGroup.getCheckedRadioButtonId();
         switch(selectedId){
@@ -349,20 +271,6 @@ public class SearchActivity extends MenuedActivity implements
     protected void onResume() {
         super.onResume();
 
-        if (checkPlayServices()){
-            if (!mGoogleApiClient.isConnected()) {
-                if (Build.VERSION.SDK_INT >= 23){
-                    checkForPermission();
-                } else {
-                    mGoogleApiClient.connect();
-                }
-            }
-        } else {
-            CharSequence text = getString(R.string.java_googleplaywarning);
-            Toast toast = Toast.makeText(context, text, Toast.LENGTH_LONG);
-            toast.show();
-        }
-
         if (getIntent().hasExtra("destination")){
             destinationEditText.setText(getIntent().getStringExtra("destination"));
         }
@@ -375,68 +283,5 @@ public class SearchActivity extends MenuedActivity implements
     @Override
     protected void onPause() {
         super.onPause();
-        if (mGoogleApiClient.isConnected()) {
-            LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
-            mGoogleApiClient.disconnect();
-        }
-    }
-
-    @Override
-    public void onConnected(Bundle bundle) {
-        Location location = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
-
-        if (location == null) {
-            LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
-        } else {
-            handleNewLocation(location);
-        }
-    }
-
-    @Override
-    public void onConnectionSuspended(int i) {
-
-    }
-
-    @Override
-    public void onConnectionFailed(ConnectionResult connectionResult) {
-        Log.d("oops", "Connection failed with error code: " + Integer.toString(connectionResult.getErrorCode()));
-    }
-
-    @Override
-    public void onLocationChanged(Location location) {
-        handleNewLocation(location);
-    }
-
-    // Checks if the user has google play services enabled
-    private boolean checkPlayServices() {
-        GoogleApiAvailability apiAvailability = GoogleApiAvailability.getInstance();
-        int resultCode = apiAvailability.isGooglePlayServicesAvailable(this);
-        if (resultCode != ConnectionResult.SUCCESS) {
-            if (apiAvailability.isUserResolvableError(resultCode)) {
-                apiAvailability.getErrorDialog(this, resultCode, PLAY_SERVICES_RESOLUTION_REQUEST).show();
-            }
-            return false;
-        }
-        return true;
-    }
-
-    // Checks if the user has location settings enabled
-    public static boolean isLocationEnabled(Context context) {
-        int locationMode = Settings.Secure.LOCATION_MODE_OFF;
-        String locationProviders;
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT){
-            try {
-                locationMode = Settings.Secure.getInt(context.getContentResolver(), Settings.Secure.LOCATION_MODE);
-
-            } catch (Settings.SettingNotFoundException e) {
-                Log.d("oops", e.toString());
-            }
-            return locationMode != Settings.Secure.LOCATION_MODE_OFF;
-
-        }else{
-            locationProviders = Settings.Secure.getString(context.getContentResolver(), Settings.Secure.LOCATION_PROVIDERS_ALLOWED);
-            return !TextUtils.isEmpty(locationProviders);
-        }
     }
 }

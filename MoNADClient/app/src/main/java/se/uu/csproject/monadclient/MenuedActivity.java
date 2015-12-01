@@ -67,6 +67,7 @@ public class MenuedActivity extends AppCompatActivity {
         }
 
         if (id == R.id.action_signout) {
+            stopService(new Intent(this, LocationService.class));
             Intent intent = new Intent(this, MainActivity.class);
             intent.putExtra("FINISH", true);
             //To clean up all activities

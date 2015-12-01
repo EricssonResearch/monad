@@ -191,6 +191,8 @@
             android:exported="false">
         </service>
 
+        <service android:name=".LocationService" />
+
     </application>
 
 </manifest>
