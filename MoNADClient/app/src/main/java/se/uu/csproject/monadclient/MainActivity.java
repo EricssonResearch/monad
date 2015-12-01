@@ -76,19 +76,19 @@ public class MainActivity extends MenuedActivity implements AsyncResponse, Async
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getBaseContext());
         recyclerView.setLayoutManager(linearLayoutManager);
 
-        // Start the location service if the user has given permission
-        if (checkPlayServices()){
-            if (Build.VERSION.SDK_INT >= 23){
-                checkForPermission();
-            } else {
-                if (!getIntent().getBooleanExtra("FINISH", false)){
+        if (!getIntent().getBooleanExtra("FINISH", false)){
+            // Start the location service if the user has given permission
+            if (checkPlayServices()){
+                if (Build.VERSION.SDK_INT >= 23){
+                    checkForPermission();
+                } else {
                     startService(new Intent(this, LocationService.class));
                 }
+            } else {
+                CharSequence text = getString(R.string.java_googleplaywarning);
+                Toast toast = Toast.makeText(context, text, Toast.LENGTH_LONG);
+                toast.show();
             }
-        } else {
-            CharSequence text = getString(R.string.java_googleplaywarning);
-            Toast toast = Toast.makeText(context, text, Toast.LENGTH_LONG);
-            toast.show();
         }
 
         String[] addresses = getAddressesFromFileAsset();
@@ -175,9 +175,7 @@ public class MainActivity extends MenuedActivity implements AsyncResponse, Async
             ActivityCompat.requestPermissions(MainActivity.this,
                     new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, MY_PERMISSIONS_REQUEST);
         } else {
-            if (!getIntent().getBooleanExtra("FINISH", false)){
-                startService(new Intent(this, LocationService.class));
-            }
+            startService(new Intent(this, LocationService.class));
         }
     }
 
@@ -188,9 +186,7 @@ public class MainActivity extends MenuedActivity implements AsyncResponse, Async
             case MY_PERMISSIONS_REQUEST: {
                 // If request is cancelled, the result arrays are empty.
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    if (!getIntent().getBooleanExtra("FINISH", false)){
-                        startService(new Intent(this, LocationService.class));
-                    }
+                    startService(new Intent(this, LocationService.class));
                 } else {
                     // Permission denied, boo! Disable the functionality that depends on this permission.
                     CharSequence text = getString(R.string.java_locationpermissionwarning);
