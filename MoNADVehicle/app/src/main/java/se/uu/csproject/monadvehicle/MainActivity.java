@@ -152,7 +152,7 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
         myLocationOverlay.setSnapToLocationEnabled(false);
 
         //for simulation
-        myLocationOverlay.stops = Storage.getBusTrip().getBusStops();
+        myLocationOverlay.trajectory = Storage.getBusTrip().getTrajectory();
 
         // tile renderer layer using internal render theme
         MapDataStore mapDataStore = new MapFile(getMapFile());
@@ -172,8 +172,8 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
         List<LatLong> coordinateList = polyline.getLatLongs();
         BusTrip busTrip = Storage.getBusTrip();
 
-        for (int i = 0; i < busTrip.getBusStops().size(); i++) {
-            coordinateList.add(new LatLong(busTrip.getBusStops().get(i).getLatitude(), busTrip.getBusStops().get(i).getLongitude()));
+        for (int i = 0; i < busTrip.getTrajectory().size(); i++) {
+            coordinateList.add(busTrip.getTrajectory().get(i));
         }
 
         // adding the layer with the route to the mapview

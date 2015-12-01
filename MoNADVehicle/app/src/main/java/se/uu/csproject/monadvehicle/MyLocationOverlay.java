@@ -34,7 +34,7 @@ public class MyLocationOverlay extends Layer implements LocationListener {
 	private static final GraphicFactory GRAPHIC_FACTORY = AndroidGraphicFactory.INSTANCE;
 	private final int RADIUS = 40;
 
-	public ArrayList<BusStop> stops;
+	public ArrayList<LatLong> trajectory;
 	/**
 	 * @param location
 	 *            the location whose geographical coordinates should be converted.
@@ -169,15 +169,15 @@ public class MyLocationOverlay extends Layer implements LocationListener {
 
 	class SimulateThread extends Thread {
 		public void run() {
-			BusStop tmp = null;
-			ListIterator<BusStop> ite = stops.listIterator();
+			LatLong tmp = null;
+			ListIterator<LatLong> ite = trajectory.listIterator();
 			while(ite.hasNext()){
 				tmp = ite.next();
 				//Log.i("move", tmp.getLatitude() + ", " + tmp.getLongitude());
 
 				//redraw the location
-				marker.setLatLong(new LatLong(tmp.getLatitude(),tmp.getLongitude()));
-				circle.setLatLong(new LatLong(tmp.getLatitude(),tmp.getLongitude()));
+				marker.setLatLong(tmp);
+				circle.setLatLong(tmp);
 
 				//uncomment it if you want the map's center set to the current location every time its location gets updated
 				//mapViewPosition.setCenter(tmp);
@@ -185,7 +185,7 @@ public class MyLocationOverlay extends Layer implements LocationListener {
 				requestRedraw();
 
 				try {
-					sleep(5000);
+					sleep(500);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
