@@ -16,4 +16,5 @@
     <dimen name="button_elevation">6dp</dimen>
     <dimen name="display_bar_margin_top">24dp</dimen>
     <dimen name="list_margin">2dp</dimen>
+    <dimen name="sidelist_width">300dp</dimen>
 </resources>

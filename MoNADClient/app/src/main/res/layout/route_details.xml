@@ -1,41 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/Row1"
+    android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="@dimen/layout_padding"
-    android:orientation="horizontal"
-    >
+    android:paddingLeft="@dimen/layout_padding"
+    android:paddingTop="0dp"
+    android:paddingRight="0dp"
+    android:paddingBottom="0dp">
 
-        <ImageView
-            android:layout_width="@dimen/icon_small"
-            android:layout_height="@dimen/icon_small"
-            android:src="@drawable/ic_directions_bus_black_24dp"
-            android:contentDescription="@string/img_description"
-            android:layout_marginRight="@dimen/activity_horizontal_margin"
-            android:layout_marginEnd="@dimen/activity_horizontal_margin"
-            />
+    <ImageView
+        android:id="@+id/bus_stop_image"
+        android:layout_width="@dimen/icon_small"
+        android:layout_height="@dimen/icon_small"
+        android:layout_gravity="center_vertical"
+        android:src="@drawable/ic_directions_bus_black_24dp"
+        android:contentDescription="@string/img_description"
+        android:layout_marginRight="@dimen/activity_horizontal_margin"
+        android:layout_marginEnd="@dimen/activity_horizontal_margin"
+        android:visibility="invisible"
+        />
 
-        <TextView
-            android:id="@+id/label_first_stop"
-            android:text="@string/non_available"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:textStyle="bold"
-            style="@style/blackText"/>
-
-        <TextView
-            android:id="@+id/label_first_time"
-            android:text="@string/label_tripsactivity_time"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:textStyle="bold"
-            style="@style/blackText"
-            android:layout_marginLeft="@dimen/activity_horizontal_margin"
-            android:layout_marginStart="@dimen/activity_horizontal_margin"
-            />
+    <TextView
+        android:layout_weight="3"
+        android:orientation="vertical"
+        android:paddingLeft="16dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="start"
+        android:id="@+id/bus_stop"
+        style="@style/blackText"
+        android:textSize="14sp"
+        android:text="@string/non_available"
+        android:textStyle="italic"/>
 
 </LinearLayout>

@@ -199,7 +199,7 @@ class DB():
 
         @param: line - integer with the line's ID
         @param: startingTime - initial starting time for the trip
-        
+
         tripTimeTable = []
         busStop = self.getRouteStop(line)
         startingBusStopTime = startingTime
@@ -218,10 +218,12 @@ class DB():
         gene = []
         phenotype = []
         busStop = self.getRouteStop(genotype[0])
+        '''
         if busStop is None:
             print "======="
             print genotype
             print "======="
+        '''
         timeSlice = self.getCurrentTimeSlice(genotype[3])
         tripsBefore = self.calculateTrips(timeSlice[0], genotype[3], genotype[2])
         initialTripStartTime = self.getInitialTripStartTime(tripsBefore, genotype[2], genotype[3])
@@ -283,8 +285,10 @@ class DB():
                 for j in range(sliceLength):
                     DB.initBusLine.append(i)
             DB.busLine = DB.initBusLine
+            '''
             print "abc"
             print DB.initBusLine
+            '''
             # DB.busLine = DB.initBusLine
         for x in DB.busLine:
             DB.busLine.remove(x)

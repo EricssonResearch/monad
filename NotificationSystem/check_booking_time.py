@@ -13,6 +13,7 @@ def send_notification_to_authentication(user_id, message_title, message_body):
     headers = {'Content-type': 'application/x-www-form-urlencoded'}
     url = AUTHENTICATION_MODULE_HOST + AUTHENTICATION_MODULE_PORT + '/send_notification'
     data = {'user_id': user_id, 'message_title': message_title, 'message_body': message_body}
+    requests.post(url, headers = headers, data = data)
 
 def parse_user_trip(user_trips_list, user_trip):
     if 'next' in user_trip.keys():
@@ -64,10 +65,11 @@ def main():
             notification = create_notification(user_id, list_trips, 3)
             try: 
                 notifications_collection.insert_one(notification)
+                send_notification_to_authentication(user_id, 'MoNAD', notification['text'])
             except pymongo.errors.PyMongoError as e:
                 print e
                 
-            send_notification_to_authentication(user_id, 'MoNAD', notification['text'])
+            
             
 
 if __name__ == '__main__':

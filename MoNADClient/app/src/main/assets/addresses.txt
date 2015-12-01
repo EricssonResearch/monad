@@ -919,7 +919,6 @@ furugatan 7
 furugatan 8A
 furugatan 9
 Fyrishov
-Fyrishov entre
 Fyrishovs entré
 fyrislundsgatan 54
 Fyristorg
@@ -3125,7 +3124,6 @@ talgoxvägen 6B
 talgoxvägen 7
 Täljstenen
 Tallbacksvägen
-Tallbäcksvägen
 tältarvägen 10
 tältarvägen 11
 tältarvägen 12
@@ -3429,7 +3427,6 @@ ultunaallén 5
 Ultuna södra
 Universitetet
 Uppsala Business Park
-Uppsala folkhögskola
 Uppsala Folkhögskola
 Uppsala Science Park
 Vackra Birgers väg
