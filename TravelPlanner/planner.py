@@ -116,6 +116,9 @@ class TravelPlanner:
                     break
         return possibilities
 
+    def _searchTriple(self):
+        pass
+
     def _findFittingRoutes(self):
         request = self.travelRequest.find_one({"_id": self.requestID})
         self.startBusStop = request["startBusStop"]
@@ -168,8 +171,10 @@ class TravelPlanner:
                     for entry in self.possibleRoutes:
                         self.doubleRoutes.append((startLine, startNumber, i, startLine["line"],
                                 entry[PR_ROUTE], entry[PR_START], entry[PR_END], entry[PR_LINE]))
-        
-   
+
+        if ((self.fittingRoutes == []) and (self.doubleRoutes == [])):
+            self._searchTriple()
+
     def _isBetterTrip(self, i):
         if (self.timeMode == Mode.startTime):
             if (self.timeToArrival < self.tripTuples[i][TT_TIME_DIFFERENCE]):
@@ -238,16 +243,8 @@ class TravelPlanner:
 
     def _getBusTrips(self, line):
         if (self.lineSchedules[line] == None):
-            ttColls = self.timeTable.find({"line": line})
-            for ttColl in ttColls:
-                if (self.timeMode == Mode.startTime):
-                    if (ttColl["date"].date() == self.startTime.date()):
-                        trips = list(self.busTrip.find({"_id": {"$in": ttColl["timetable"]}}))
-                        break
-                elif (self.timeMode == Mode.arrivalTime):
-                    if (ttColl["date"].date() == self.endTime.date()):
-                        trips = list(self.busTrip.find({"_id": {"$in": ttColl["timetable"]}}))
-                        break
+            ttColl = self.timeTable.find_one({"line": line, "date": self.searchDay})
+            trips = list(self.busTrip.find({"_id": {"$in": ttColl["timetable"]}}))
             self.lineSchedules[line] = trips
         else:
             trips = self.lineSchedules[line]

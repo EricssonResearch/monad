@@ -13,7 +13,7 @@ under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
 CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
-# from heapq import heappop, heappush
+from heapq import heappop, heappush
 import threading
 import sys
 # import math
@@ -25,13 +25,13 @@ from xml.sax import make_parser, handler
 # from Tkinter import Tk, Canvas, Frame, BOTH
 from multiprocessing import Process
 
-
 from aStar import AStar
 from busStop import BusStop
 from coordinate import Coordinate
 from address import Address
 import coordinate
 from mapDrawing import DrawImage
+from busNetwork import BusNetwork
 
 
 # The size width of the produced image in pixels
@@ -41,7 +41,8 @@ standardSpeed = 50
 # Roads buses can drive on
 busRoadTypes = ('motorway', 'motorway_link', 'trunk', 'trunk_link', 'primary',
                 'primary_link', 'secondary', 'secondary_link', 'tertiary',
-                'tertiary_link', 'unclassified', 'residential', 'service')
+                'tertiary_link', 'unclassified', 'residential')
+# , 'service')
 
 
 class RouteHandler(handler.ContentHandler):
@@ -209,16 +210,36 @@ class RouteHandler(handler.ContentHandler):
                 self.addresses[key] = Address(street)
                 self.addresses[key].addNumber(number, self.nodes[node])
 
+    def rmEdge(self, edgeList, id):
+        for x in edgeList:
+            if x[0] == id:
+                edgeList.remove(x)
+                break
+
     def makeRoadIntersectionGraph(self):
-        # print len(self.roadMapGraph)
+        """
+        myRoad = dict(self.roads)
+        nodeList = []
 
-        for road in self.roads:
-            # print "--", road
-            for nodeID in self.roads[road][2]:
-                # print nodeID, self.roadMapGraph[nodeID]
-                pass
+        i = len(myRoad)
+        for road in myRoad:
+            print i,
+            i -= 1
+            if i == 6000:
+                break
 
-        print len(self.roads)
+            nodeList.append(myRoad[road][2][0])
+
+            for nodeID in myRoad[road][2][1:]:
+
+                for road2 in myRoad:
+                    if nodeID == myRoad[road2][2][0] or nodeID == myRoad[road2][2][-1]:
+                        nodeList.append(nodeID)
+
+
+        self.NOD = nodeList
+        """
+        pass
 
 
 class Map:
@@ -260,7 +281,7 @@ class Map:
             return self.handler.nodeID[coordinates]
         else:
             return self.closestRoadNode(coordinates)
-
+    """
     def makeBusGraph(self):
 
         graph = {}
@@ -306,7 +327,7 @@ class Map:
                             start = b
 
         return graph
-
+    """
     def getNodeIdFromCoordinatesList(self, coordinatesList):
         """
         :param coordinates: [(longitude, latitude)]
@@ -551,14 +572,20 @@ if __name__ == '__main__':
     print "We have " + str(len(myMap.nodes)) + " nodes in total"
     print "We have " + str(len(myMap.busStopList)) + " bus stops in total\n"
 
+
     print "Draw image ..."
-    img = DrawImage(3000,
+    img = DrawImage(10000,
                     myMap.handler.minlon,
                     myMap.handler.minlat,
                     myMap.handler.maxlon,
                     myMap.handler.maxlat)
 
     img.drawRoads(myMap.edges, myMap.nodes)
+    # img.drawNodeList(myMap.nodes, 'blue')
+    # img.drawNodeList([myMap.nodes[x] for x in myMap.handler.NOD], 'red')
+    img.drawBusStops(myMap.busStopList, myMap.nodes)
     img.drawSave(sys.argv[1])
-
+    
+    # b = BusNetwork()
+    # b.makeBusGraph(myMap.handler.nodes, myMap.handler.busStopNode, myMap.edges)
     # myMap.makeBusGraph()

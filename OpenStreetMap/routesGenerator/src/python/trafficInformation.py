@@ -14,7 +14,6 @@ CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
 import urllib2, urllib
-import json, requests
 import string
 import xml.etree.ElementTree
 from xml.etree import ElementTree as ET
@@ -50,69 +49,42 @@ class getTrafficInformation():
 		#f = urllib.quote(self.WestLongitude)
 
 		#URL = "http://dev.virtualearth.net/REST/V1/Traffic/Incidents/59.818882,17.472703,59.949800,17.818773/true?t=9,2&s=2,3&o=xml&key=" + securekey
-		URL = "http://dev.virtualearth.net/REST/V1/Traffic/Incidents/" + a + "," + b + "," + c + "," + d + "/true?t=9,2&s=2,3&o=xml&key=" + securekey
+		URL = "http://dev.virtualearth.net/REST/V1/Traffic/Incidents/" + a + "," + b + "," + c + "," + d + "/true?t=9&s=2,3&o=xml&key=" + securekey
 
 		response = urllib.urlopen(URL).read()
 		root = ET.fromstring(response)
+		trafficDic = {}
+		index = 0
 		
 
 		for TrafficIncident in root.iter('{http://schemas.microsoft.com/search/local/ws/rest/v1}TrafficIncident'):
-			#print TrafficIncident
-			for i in range(13):
-				#print TrafficIncident[6][0][1][0][i].text
-
-				#print TrafficIncident[i].text   
+			trafficDic[index] = {}
+			for i in range(13): 
 				if i == 0:
-					print ("StartPoint Latitude: " + TrafficIncident[i][0].text)
-					print ("StartPoint Longitude: " + TrafficIncident[i][1].text)
+					trafficDic[index]["StartPoint Latitude: "] = TrafficIncident[i][0].text
+					trafficDic[index]["StartPoint Longitude: "] = TrafficIncident[i][1].text
 				if i == 3:
-					print ("LastModifiedUTC: " + TrafficIncident[i].text)
+					trafficDic[index]["LastModifiedUTC: "] = TrafficIncident[i].text
+				if i == 4:
+					trafficDic[index]["StartTimeUTC: "] = TrafficIncident[i].text
+				if i == 5:
+					trafficDic[index]["EndTimeUTC: "] = TrafficIncident[i].text
 				if i == 6:
-					print ("Incident Type: " + TrafficIncident[i].text)
+					trafficDic[index]["Incident Type: "] = TrafficIncident[i].text
 				if i == 7:
-					print ("Incident Severity: " + TrafficIncident[i].text)
+					trafficDic[index]["Incident Severity: "] = TrafficIncident[i].text
 				if i == 9:
-					print ("Road Closed: " + TrafficIncident[i].text)
+					trafficDic[index]["Road Closed: "] = TrafficIncident[i].text
 				if i == 10:
-					print ("Description: " + TrafficIncident[i].text)
+					trafficDic[index]["Description: "] = TrafficIncident[i].text
 				if i == 11:
-					print ("StopPoint Latitude: " + TrafficIncident[i][0].text)
-					print ("StopPoint Longitude: " + TrafficIncident[i][1].text)
-					print "____________________________________________________________________________"
+					trafficDic[index]["StopPoint Latitude: "] = TrafficIncident[i][0].text
+					trafficDic[index]["StopPoint Longitude: "] = TrafficIncident[i][1].text
+			index = index + 1
 
-
-	def getDirectionofCoordinates(self):
-		pass
-
-		currentPosLatitude = 10
-		destinationPosLatitude = 20
-		currentPosLongitude = 30
-		destinationPoslongitude = 40
-
-		if currentPosLatitude < destinationPosLatitude:
-			EastLongitude = currentPosLatitude
-			WestLongitude = destinationPosLatitude
-		else:
-			EastLongitude = destinationPosLatitude
-			WestLongitude = currentPosLatitude
-
-
-		if currentPosLongitude < destinationPosLongitude:
-			SouthLatitude = currentPosLatitude
-			NorthLatitude = destinationPosLatitude
-		else:
-			SouthLatitude = destinationPosLongitude
-			NorthLatitude = currentPosLongitude
-
-		
-		
-	def parseResponse(self):
-		json_data = json.loads(response)
-		print type(json_data)
-
+		print trafficDic
 
 getTrafficInformation().postRequest()
-#getTrafficInformation().parseResponse()
 
 
 

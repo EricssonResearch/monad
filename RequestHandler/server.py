@@ -103,9 +103,12 @@ def application(env, start_response):
     data_env = env.copy()
     # Remove the query string from the request, we only accept data through POST
     data_env["QUERY_STRING"] = ""   
-    data = cgi.FieldStorage(fp = env["wsgi.input"], environ = data_env)     
+    data = cgi.FieldStorage(fp = env["wsgi.input"], environ = data_env)
+    responseCode = "200 OK" 
+    reponseType = "text/plain"    
     
     if (data_env["PATH_INFO"] == "/request"):
+        searchResults = {}
         if ("userId" and "startTime" and "endTime" and "requestTime" and "stPosition" and "edPosition" 
             and "priority" and "startPositionLatitude" and "startPositionLongitude" in data):
             userId = int(escape(data.getvalue("userId")))
@@ -116,7 +119,7 @@ def application(env, start_response):
             edPosition = escape(data.getvalue("edPosition"))
             priority = escape(data.getvalue("priority"))
             startPositionLatitude = float(escape(data.getvalue("startPositionLatitude")))
-            startPositionLongitude = float(escape(data.getvalue("startPositionLongitude")))         
+            startPositionLongitude = float(escape(data.getvalue("startPositionLongitude"))) 
             
             try:
                 if (stPosition != "Current Position"):
@@ -146,7 +149,7 @@ def application(env, start_response):
                 
                 if (startBusStop == None or endBusStop == None):
                     start_response("200 OK", [("Content-Type", "application/json")])                            
-                    return [json.dumps({})]                 
+                    return [json.dumps(searchResults)]                 
                 
                 collection = database.TravelRequest     
                 document = {"userID": userId, "startTime": startTime, "endTime": endTime,
@@ -156,43 +159,39 @@ def application(env, start_response):
                             "endPositionLongitude": endPositionLongitude}           
                 result = collection.insert_one(document)
                 requestId = result.inserted_id              
-                userTripJson = get_search_results(database, priority, requestId)
+                searchResults = get_search_results(database, priority, requestId)
             
             except ValueError as e:
-                start_response("500 INTERNAL ERROR", [("Content-Type", "text/plain")])
-                logging.error("Something went wrong: {0}".format(e))
-                return [json.dumps({})] 
+                responseCode = "500 INTERNAL ERROR"                
+                logging.error("Something went wrong: {0}".format(e))                
             except pymongo.errors.PyMongoError as e:
-                start_response("500 INTERNAL ERROR", [("Content-Type", "text/plain")])  
+                responseCode = "500 INTERNAL ERROR"  
                 logging.error("Something went wrong: {0}".format(e))
-                return [json.dumps({})]
-            else:
-                start_response("200 OK", [("Content-Type", "application/json")])                            
-                return [json.dumps(userTripJson)]
-            finally:                    
-                serverConfig.MONGO_CLIENT.close()
+            finally:                                    
+                serverConfig.MONGO_CLIENT.close()                
 
         else:
-            start_response("500 INTERNAL ERROR", [("Content-Type", "text/plain")])  
+            responseCode = "500 INTERNAL ERROR"  
             logging.error("Request: Something went wrong with the data sent by the user's request.")
-            return [serverConfig.ERROR_MESSAGE]
+        
+        reponseType = "application/json"
+        response = json.dumps(searchResults)
             
-    elif (data_env["PATH_INFO"] == "/resetPassword"):
+    elif (data_env["PATH_INFO"] == "/resetPassword"):        
         if ("email" in data):
             email = data.getvalue("email")          
             email_list = [email]            
             code = randint(1000, 9999)
             message = serverConfig.EMAIL_MESSAGE.format(code)
             send_email(serverConfig.EMAIL_ADDRESS, email_list, serverConfig.EMAIL_SUBJECT, message)
-            
-            start_response("200 OK", [("Content-Type", "text/plain")])              
-            return ["{0}".format(code)]
+            response = "{0}".format(code)
         else:
-            start_response("500 INTERNAL ERROR", [("Content-Type", "text/plain")])  
+            responseCode = "500 INTERNAL ERROR"  
             logging.error("Reset Password: Something went wrong with the data sent by the user's request.")
-            return [serverConfig.ERROR_MESSAGE]
+            response = serverConfig.ERROR_MESSAGE
             
     elif (data_env["PATH_INFO"] == "/quickRequest"):
+        searchResults = {}
         if ("userId" and "startTime" and "endTime" and "requestTime" and "startPositionLatitude"
             and "startPositionLongitude" and "edPosition" and "priority" in data):
             userId = int(escape(data.getvalue("userId")))
@@ -202,7 +201,7 @@ def application(env, start_response):
             startPositionLatitude = float(escape(data.getvalue("startPositionLatitude")))
             startPositionLongitude = float(escape(data.getvalue("startPositionLongitude")))
             edPosition = escape(data.getvalue("edPosition"))
-            priority = escape(data.getvalue("priority"))
+            priority = escape(data.getvalue("priority"))            
             
             try:
                 stop = coordinates_to_nearest_stop(startPositionLongitude, startPositionLatitude)           
@@ -236,25 +235,22 @@ def application(env, start_response):
                             "endPositionLongitude": endPositionLongitude}           
                 result = collection.insert_one(document)
                 requestId = result.inserted_id              
-                userTripJson = get_search_results(database, priority, requestId)                                            
+                searchResults = get_search_results(database, priority, requestId)                                            
             
             except ValueError as e:
-                start_response("500 INTERNAL ERROR", [("Content-Type", "text/plain")])
-                logging.error("Something went wrong: {0}".format(e))
-                return [json.dumps({})] 
+                responseCode = "500 INTERNAL ERROR"
+                logging.error("Something went wrong: {0}".format(e))                 
             except pymongo.errors.PyMongoError as e:
-                start_response("500 INTERNAL ERROR", [("Content-Type", "text/plain")])  
-                logging.error("Something went wrong: {0}".format(e))
-                return [json.dumps({})]     
-            else:
-                start_response("200 OK", [("Content-Type", "application/json")])                            
-                return [json.dumps(userTripJson)]
+                responseCode = "500 INTERNAL ERROR"  
+                logging.error("Something went wrong: {0}".format(e)) 
             finally:                    
                 serverConfig.MONGO_CLIENT.close()                                       
         else:
-            start_response("500 INTERNAL ERROR", [("Content-Type", "text/plain")])  
+            responseCode = "500 INTERNAL ERROR"  
             logging.error("Quick request: Something went wrong with the data sent by the user's request.")
-            return [serverConfig.ERROR_MESSAGE]
+        
+        reponseType = "application/json"
+        response = json.dumps(searchResults)
             
     elif (data_env["PATH_INFO"] == "/bookingRequest"):
         if ("userTripId" in data):
@@ -327,18 +323,17 @@ def application(env, start_response):
                 generate_notification(userId, bookedTripID)             
                 
             except pymongo.errors.PyMongoError as e:
-                start_response("500 INTERNAL ERROR", [("Content-Type", "text/plain")])  
+                responseCode = "500 INTERNAL ERROR"  
                 logging.error("Something went wrong: {0}".format(e))
-                return [serverConfig.ERROR_MESSAGE]             
-            else:
-                start_response("200 OK", [("Content-Type", "text/plain")])              
-                return [serverConfig.BOOKING_SUCCESSFUL_MESSAGE]
+                response = serverConfig.ERROR_MESSAGE             
+            else:                              
+                response = serverConfig.BOOKING_SUCCESSFUL_MESSAGE
             finally:                    
                 serverConfig.MONGO_CLIENT.close()
         else:
-            start_response("500 INTERNAL ERROR", [("Content-Type", "text/plain")])  
+            responseCode = "500 INTERNAL ERROR"  
             logging.error("Booking request: Something went wrong with the data sent by the user's request.")
-            return [serverConfig.ERROR_MESSAGE]
+            response = serverConfig.ERROR_MESSAGE        
             
     elif (data_env["PATH_INFO"] == "/bookingCancelRequest"):
         if ("userTripId" in data):
@@ -376,28 +371,27 @@ def application(env, start_response):
                 _update_number_of_passengers(busTripIDs, database, startBusStops, endBusStops, -1)                      
                 
             except pymongo.errors.PyMongoError as e:
-                start_response("500 INTERNAL ERROR", [("Content-Type", "text/plain")])  
+                responseCode = "500 INTERNAL ERROR"  
                 logging.error("Something went wrong: {0}".format(e))
-                return [serverConfig.ERROR_MESSAGE]     
-            else:
-                start_response("200 OK", [("Content-Type", "text/plain")])              
-                return [serverConfig.BOOKING_CANCEL_SUCCESSFUL_MESSAGE]
+                response = serverConfig.ERROR_MESSAGE     
+            else:                              
+                response = serverConfig.BOOKING_CANCEL_SUCCESSFUL_MESSAGE
             finally:                    
                 serverConfig.MONGO_CLIENT.close()
         else:
-            start_response("500 INTERNAL ERROR", [("Content-Type", "text/plain")])  
+            responseCode = "500 INTERNAL ERROR"  
             logging.error("Booking cancel request: Something went wrong with the data sent by the user's request.")
-            return [serverConfig.ERROR_MESSAGE]
+            response = serverConfig.ERROR_MESSAGE        
     
     elif (data_env["PATH_INFO"] == "/getUserBookingsRequest"):
+        userTripJson = {}
         if ("userId" in data):
             userId = int(escape(data.getvalue("userId")))
         
             try:                        
                 database = serverConfig.MONGO_DATABASE              
-                collection = database.BookedTrip
+                collection = database.BookedTrip                
                 
-                userTripJson = {}
                 i = 0
                 bookedTrips = collection.find({"userID": userId})
                 collection = database.UserTrip
@@ -415,14 +409,16 @@ def application(env, start_response):
                         continue
                     
                     for partialTripID in partialTripIDs:
-                        partialTripCursor = collection.find_one({"_id": partialTripID}) 
+                        partialTripCursor = collection.find_one({"_id": partialTripID})
+                         
                         if ("requestTime" in partialTripCursor and "requestID" in partialTripCursor):
                             requestTime = str(partialTripCursor["requestTime"]) 
                             requestID = str(partialTripCursor["requestID"])
                         else:
                             # Applies to user trips generated by the recommendation module
                             requestTime = str(datetime.now())                                                   
-                            requestID = "null"                                                                                                  
+                            requestID = "null" 
+                                                                                                                             
                         partialTrip = {
                             "_id": str(partialTripCursor["_id"]),
                             "userID" : partialTripCursor["userID"],
@@ -446,18 +442,17 @@ def application(env, start_response):
                     userTripJson[i] = partialTrips
                 
             except pymongo.errors.PyMongoError as e:
-                start_response("500 INTERNAL ERROR", [("Content-Type", "text/plain")])  
-                logging.error("Something went wrong: {0}".format(e))
-                return [json.dumps({})]     
-            else:
-                start_response("200 OK", [("Content-Type", "application/json")])                            
-                return [json.dumps(userTripJson)]
+                responseCode = "500 INTERNAL ERROR"
+                userTripJson = {}  
+                logging.error("Something went wrong: {0}".format(e)) 
             finally:                    
                 serverConfig.MONGO_CLIENT.close()
         else:
-            start_response("500 INTERNAL ERROR", [("Content-Type", "text/plain")])  
-            logging.error("Get user bookings request: Something went wrong with the data sent by the user's request.")
-            return [serverConfig.ERROR_MESSAGE]
+            responseCode = "500 INTERNAL ERROR"              
+            logging.error("Get user bookings request: Something went wrong with the data sent by the user's request.")            
+        
+        reponseType = "application/json"
+        response = json.dumps(userTripJson)
     
     elif (data_env["PATH_INFO"] == "/updateFeedbackRequest"):       
         if ("changedFeedback" in data):
@@ -477,23 +472,27 @@ def application(env, start_response):
                         document = collection.find_one_and_update({"_id": objectID}, {"$set": {"feedback": feedback}})
                 
             except pymongo.errors.PyMongoError as e:
-                start_response("500 INTERNAL ERROR", [("Content-Type", "text/plain")])  
+                responseCode = "500 INTERNAL ERROR"  
                 logging.error("Something went wrong: {0}".format(e))
-                return [serverConfig.ERROR_MESSAGE]
+                response = serverConfig.ERROR_MESSAGE
             except ValueError as e:
-                logging.error("Something went wrong: {0}".format(e))        
-            else:
-                start_response("200 OK", [("Content-Type", "text/plain")])              
-                return [serverConfig.FEEDBACK_UPDATE_SUCCESSFUL_MESSAGE]
+                responseCode = "500 INTERNAL ERROR"
+                logging.error("Something went wrong: {0}".format(e)) 
+                response = serverConfig.ERROR_MESSAGE       
+            else:                              
+                response = serverConfig.FEEDBACK_UPDATE_SUCCESSFUL_MESSAGE
             finally:                    
                 serverConfig.MONGO_CLIENT.close()
         else:
-            start_response("500 INTERNAL ERROR", [("Content-Type", "text/plain")])  
+            responseCode = "500 INTERNAL ERROR"  
             logging.error("Update feedback request: Something went wrong with the data sent by the user's request.")
-            return [serverConfig.ERROR_MESSAGE]     
+            response = serverConfig.ERROR_MESSAGE            
             
     else:
-        start_response("403 FORBIDDEN", [("Content-Type", "text/plain")])
+        responseCode = "403 FORBIDDEN"        
         logging.warning("Someone is trying to access the server outside the app.")      
-        return [serverConfig.ERROR_MESSAGE]
+        response = serverConfig.ERROR_MESSAGE
+        
+    start_response(responseCode, [("Content-Type", reponseType)])
+    return [response]
 

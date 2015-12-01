@@ -42,10 +42,8 @@ NUMBER_OF_RECOMMENDATIONS = 2
 client2 = MongoClient('130.238.15.114')
 db2 = client2.monad1
 client3 = MongoClient('130.238.15.114')
-client3 = MongoClient()
+#client3 = MongoClient()
 db3 = client3.monad1
-client4 = MongoClient('130.238.15.114')
-db4 = client4.monad1
 start = datetime.datetime.now()
 dontGoBehind = 0
 
@@ -86,7 +84,7 @@ def populateRequests(TravelRequest):
 def getTodayTimeTable():
     TimeTable = db2.TimeTable
     first = datetime.datetime.today()
-    first = first.replace(day = 25, hour = 0, minute = 0, second = 0, microsecond = 0)
+    first = first.replace(hour = 0, minute = 0, second = 0, microsecond = 0)
     route = TimeTable.find({'date': {'$gte': first}})
     return route
 
@@ -195,11 +193,12 @@ def calculateDistanceDeparture(tup1):
         min_position = 0
         centroid_departure = (i[0]*W_1, i[1]*W_1,i[4]*W_2, i[5]*W_2)
         centroid_departure = numpy.array(centroid_departure)
+        trajectory = []
         for l in range(len(tup1)-1):
-            #stop_lat, stop_long = backToCoordinates(tup1[l][0], tup1[l][1])
             position = position + 1
             if(tup1[l][4] in nearest_stops_dep[cent_num]):
-                current_stop = numpy.array(tup1[l][:4]) * numpy.array((W_1,W_1,W_2,W_2))
+                current_stop = (numpy.array(tup1[l][:4])
+                                * numpy.array((W_1,W_1,W_2,W_2)))
                 distance = numpy.linalg.norm(centroid_departure - current_stop)
                 if (distance < min_value):
                     min_value = distance
@@ -223,10 +222,10 @@ def calculateDistanceArrival(tup1,pos_departure):
         counter = counter + 1
         position = pos_departure[counter]
         for l in range(pos_departure[counter]+1, len(tup1)):
-            #stop_lat, stop_long = backToCoordinates(tup1[l][0], tup1[l][1])
             position = position + 1
             if(tup1[l][4] in nearest_stops_arr[cent_num]):
-                current_stop = numpy.array(tup1[l][:4]) * numpy.array((W_1,W_1,W_2,W_2))
+                current_stop = (numpy.array(tup1[l][:4])
+                                * numpy.array((W_1,W_1,W_2,W_2)))
                 distance = numpy.linalg.norm(centroid_arrival - current_stop)
                 if (distance < min_value):
                     min_value = distance
@@ -254,7 +253,7 @@ def recommendationsToReturn(alist):
         busid = 1.0
         line = trip['line']
         result = (int(line), int(busid), names_only[0], names_only[-1],
-                  names_only, trajectory[0][1], trajectory[-1][1])
+                  names_only, trajectory[0][1], trajectory[-1][1], rec[0])
         to_return.append(result)
 
 def recommendationsToDB(user, alist):
@@ -267,6 +266,7 @@ def recommendationsToDB(user, alist):
         end_place = item[3]
         start_time = item[5]
         end_time = item[6]
+        bus_trip_id = item[7]
         request_time = "null"
         feedback = -1
         request_id = "null"
@@ -281,6 +281,7 @@ def recommendationsToDB(user, alist):
           "startBusStop" : start_place,
           "endBusStop" : end_place,
           "startTime" : start_time,
+          "busTripID" : bus_trip_id,
           "endTime" : end_time,
           "feedback" : feedback,
           "trajectory" : trajectory,
@@ -304,6 +305,9 @@ if __name__ == "__main__":
     routes = []
     userIds = []
 
+    #conf = (SparkConf().setAppName("travel_recommendation")
+                       #.setMaster("spark://<IP>"))
+    #sc = SparkContext(conf = conf)
     sc = SparkContext()
     populateTimeTable()
     myRoutes = sc.parallelize(routes).cache()
@@ -323,7 +327,7 @@ if __name__ == "__main__":
     emptyPastRecommendations()
 
     userIds = []
-    #userIds = userIds[]
+    userIds.append(1)
     userIds.append(1111111)
 
     for userId in userIds:
@@ -389,7 +393,7 @@ if __name__ == "__main__":
         recommendationsToReturn(recommendations)
         recommendationsToDB(userId, to_return)
 
-        # Counting performance time
-        end = datetime.datetime.now()
-        tdelta = end - start
-        print "The total time is: ", tdelta.total_seconds(), " seconds"
+    # Counting performance time
+    end = datetime.datetime.now()
+    tdelta = end - start
+    print "The total time is: ", tdelta.total_seconds(), " seconds"
