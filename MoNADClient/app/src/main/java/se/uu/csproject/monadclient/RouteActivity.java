@@ -29,7 +29,6 @@ import java.util.List;
 import se.uu.csproject.monadclient.recyclerviews.FullTrip;
 //import se.uu.csproject.monadclient.recyclerviews.Notify;
 import se.uu.csproject.monadclient.recyclerviews.PartialTrip;
-//import se.uu.csproject.monadclient.recyclerviews.RouteRecyclerViewAdapter;
 
 public class RouteActivity extends AppCompatActivity {
 
@@ -48,15 +47,17 @@ public class RouteActivity extends AppCompatActivity {
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_home_white_24dp);
 
 
-        String name;
-        Date exit;
-        Date time;
+//        String name;
+        Date timeExit;
+        Date timeStart;
         String busStop;
+        int line;
 
         Bundle b = getIntent().getExtras();
         final FullTrip trip = b.getParcelable("selectedTrip");
         ArrayList <PartialTrip> partialTrips = trip.getPartialTrips();
         Button joinTripButton = (Button)findViewById(R.id.button_jointrip);
+
         if (trip.isReserved()) {
             joinTripButton.setVisibility(View.GONE);
         }
@@ -65,9 +66,10 @@ public class RouteActivity extends AppCompatActivity {
         ViewGroup insertPoint = (ViewGroup) findViewById(R.id.layout1);
 
         for(int i = 0 ; i < partialTrips.size(); i++) {
-            name = partialTrips.get(i).getStartBusStop();
-            time = partialTrips.get(i).getStartTime();
-            exit = partialTrips.get(i).getEndTime();
+//            name = partialTrips.get(i).getStartBusStop();
+            timeStart = partialTrips.get(i).getStartTime();
+            timeExit = partialTrips.get(i).getEndTime();
+            line = partialTrips.get(i).getLine();
             ArrayList<String> busStops = partialTrips.get(i).getTrajectory();
 
 //            View v = vi.inflate(R.layout.route_details, null);
@@ -80,32 +82,33 @@ public class RouteActivity extends AppCompatActivity {
 
             for(int j = 0 ; j < busStops.size(); j++) {
                 busStop = busStops.get(j);
-                View busStopView = vi.inflate(R.layout.bus_stop, null);
+                View busStopView;
+                TextView time;
+                TextView instructions;
+
+                if (j > 0 && j < busStops.size() - 1) {
+                    busStopView = vi.inflate(R.layout.route_details, null);
+                    busStop = "\u2022 " + busStop;
+                } else {
+                    busStopView = vi.inflate(R.layout.bus_stop, null);
+                    time = (TextView) busStopView.findViewById(R.id.exit_time);
+                    instructions = (TextView) busStopView.findViewById(R.id.label_instructions);
+
+                    if (j == 0) {
+                        time.setText(formatTime((Date) timeStart));
+                        instructions.setText("Board Bus " + line + " at:");
+                    } else {
+                        ImageView busStopImage = (ImageView) busStopView.findViewById(R.id.bus_stop_image);
+                        time.setText(formatTime((Date) timeExit));
+                        busStopImage.setVisibility(View.INVISIBLE);
+                        instructions.setText("Depart at:");
+                    }
+                }
+
                 TextView textBusStop = (TextView) busStopView.findViewById(R.id.bus_stop);
-                ImageView busStopImage = (ImageView) busStopView.findViewById(R.id.bus_stop_image);
                 textBusStop.setText(busStop);
-                TextView exitTime = (TextView) busStopView.findViewById(R.id.exit_time);
-
-
-                if (j == 0) {
-                    exitTime.setText(formatTime((Date) time));
-                    busStopImage.setImageResource(R.drawable.ic_directions_bus_black_24dp);
-                }
-                else if (j == busStops.size() - 1) {
-                    exitTime.setText(formatTime((Date) exit));
-                    busStopImage.setImageResource(R.drawable.ic_directions_bus_black_24dp);
-
-                }
-                else {
-                    exitTime.setVisibility(View.INVISIBLE);
-                    busStopImage.setVisibility(View.INVISIBLE);
-                    textBusStop.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
-                    textBusStop.setTypeface(null, Typeface.ITALIC);
-                    busStopView.setPadding(busStopView.getPaddingLeft(),0,0,0);
-                }
                 insertPoint.addView(busStopView);
             }
-
         }
 
         joinTripButton.setOnClickListener(new View.OnClickListener() {

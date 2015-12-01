@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.location.Location;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.provider.Settings;
@@ -252,6 +253,8 @@ public class MainActivity extends MenuedActivity implements GoogleApiClient.Conn
             //clear user profile
             ClientAuthentication.initProfile();
             ClientAuthentication.clearGlobalVariables();
+
+            //clear trip, recommendations, etc.
             Storage.clearAll();
             startActivity(new Intent(MainActivity.this, LoginActivity.class));
             finish();
@@ -371,11 +374,13 @@ public class MainActivity extends MenuedActivity implements GoogleApiClient.Conn
 
         if(!ClientAuthentication.getIfRecommendNotifyAdded()) {
             //add to notify
-            //Log.i("boolean", recommendNotifyAdded+"");
             ArrayList<FullTrip> recommendations = Storage.getRecommendations();
+
+            int i = 1;
 
             for(FullTrip ft:recommendations) {
                 Intent myIntent = new Intent(MainActivity.this, RecommendationAlarmReceiver.class);
+                myIntent.setData(Uri.parse("timer:"+i));
                 myIntent.putExtra("selectedTrip", ft);
 
                 PendingIntent pendingIntent = PendingIntent.getBroadcast(MainActivity.this, 0, myIntent, 0);
@@ -384,14 +389,15 @@ public class MainActivity extends MenuedActivity implements GoogleApiClient.Conn
 
                 //notify the user half an hour before the beginning of the trip
                 am.set(AlarmManager.RTC_WAKEUP, ft.getStartTime().getTime() - 1800000, pendingIntent);
-                
+
                 ClientAuthentication.setIfRecommendNotifyAdded(true);
+
+                i++;
             }
         }
     }
 
     public void displayRecommendations() {
-        Log.i("# of recommendations", Storage.getRecommendations().toArray().length+"");
         adapter = new SearchRecyclerViewAdapter(Storage.getRecommendations());
         recyclerView.setAdapter(adapter);
     }

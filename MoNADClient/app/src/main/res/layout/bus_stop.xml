@@ -11,6 +11,7 @@
         android:id="@+id/bus_stop_image"
         android:layout_width="@dimen/icon_small"
         android:layout_height="@dimen/icon_small"
+        android:layout_gravity="center_vertical"
         android:src="@drawable/ic_directions_bus_black_24dp"
         android:contentDescription="@string/img_description"
         android:layout_marginRight="@dimen/activity_horizontal_margin"
@@ -18,24 +19,43 @@
         android:visibility="visible"
         />
 
-    <TextView
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:gravity="start"
-        android:id="@+id/bus_stop"
-        style="@style/blackText"
-        android:textStyle="bold"
-        android:textSize="@dimen/medium_text"/>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/label_instructions"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/primaryColor"
+                android:text="@string/non_available"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="start"
+                android:id="@+id/bus_stop"
+                style="@style/blackText"
+                android:textStyle="bold"
+                android:textSize="@dimen/medium_text"
+                android:text="@string/non_available"/>
+
+        </LinearLayout>
 
     <TextView
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
         android:gravity="end"
+        android:layout_gravity="center_vertical"
         android:id="@+id/exit_time"
         android:paddingRight="@dimen/activity_horizontal_margin"
         style="@style/blackText"
         android:textStyle="bold"
-        android:textSize="@dimen/medium_text"/>
+        android:textSize="@dimen/medium_text"
+        android:text="@string/non_available"/>
 
 </LinearLayout>
