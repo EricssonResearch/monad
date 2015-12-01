@@ -58,7 +58,8 @@ class DB():
     hoursDay = 24
     minutesHour = 60
     formatTime = '%H:%M'
-    yesterday = datetime.datetime(2015, 11, 12)
+    yesterdayDate = datetime.datetime.now() - timedelta(1)
+    yesterday = datetime.datetime(yesterdayDate.year, yesterdayDate.month, yesterdayDate.day)
     busLine = []
     initBusLine = []
     noOfslices = 0
@@ -284,11 +285,6 @@ class DB():
             for i in line:
                 for j in range(sliceLength):
                     DB.initBusLine.append(i)
-            DB.busLine = DB.initBusLine
-            '''
-            print "abc"
-            print DB.initBusLine
-            '''
             # DB.busLine = DB.initBusLine
         for x in DB.busLine:
             DB.busLine.remove(x)
@@ -654,7 +650,8 @@ class DB():
             objID = ObjectId()
             tripObjectList.append(objID)
             capacity = individual[i][1]
-            startTime = individual[i][2] + timedelta(1)
+            #startTime = individual[i][3] + timedelta(1)
+            startTime = individual[i][2] + timedelta(1)   # TODO seek better solution
             busID = BUSID  # Need to assign busID for every Trip
             trajectory = self.getRoute(line, "trajectory")
             '''
