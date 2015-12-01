@@ -145,11 +145,14 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
                 this.mapView.getModel().frameBufferModel.getOverdrawFactor());
 
         //the bitmap that shows the current location
-        Drawable drawable = ContextCompat.getDrawable(getBaseContext(), R.drawable.marker_red);
+        Drawable drawable = ContextCompat.getDrawable(getBaseContext(), R.drawable.marker_blue);
         Bitmap bitmap = AndroidGraphicFactory.convertToBitmap(drawable);
 
         myLocationOverlay = new MyLocationOverlay(this, this.mapView.getModel().mapViewPosition, bitmap);
         myLocationOverlay.setSnapToLocationEnabled(false);
+
+        //for simulation
+        myLocationOverlay.stops = Storage.getBusTrip().getBusStops();
 
         // tile renderer layer using internal render theme
         MapDataStore mapDataStore = new MapFile(getMapFile());
@@ -256,7 +259,8 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
 
         if (mGoogleApiClient.isConnected()) {
             myLocationOverlay.enableMyLocation(true);
-            startLocationUpdates();
+            //commented since simulation is used now instead of real location
+            //startLocationUpdates();
         }
     }
 
@@ -314,7 +318,12 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
     @Override
     public void onConnected(Bundle bundle) {
         myLocationOverlay.enableMyLocation(true);
-        startLocationUpdates();
+
+        //manually simulate the movement of the bus
+        myLocationOverlay.moveSimulate();
+
+        //commented since simulation is used now instead of real location
+        //startLocationUpdates();
     }
 
     @Override
