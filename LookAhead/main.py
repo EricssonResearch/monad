@@ -15,13 +15,15 @@ CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
 import numpy
+import sys
+sys.path.append('../OpenStreetMap')
+from routeGenerator import coordinates_to_nearest_stops, get_route
 import toolBox
 from deap import tools
 from deap import algorithms
 from dbConnection import DB
 from fitness import Fitness
 from operator import itemgetter
-
 
 # Variables
 MUTATION_PROB = 0.0

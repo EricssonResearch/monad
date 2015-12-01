@@ -16,7 +16,6 @@ class tester:
         print "Setting up test system..."
         client = MongoClient()
         self.db = client.monad
-        self.tp = TravelPlanner(self.db)
 
         busStops = self.db.BusStop.find()
         self.busStopDict = {}
@@ -27,6 +26,7 @@ class tester:
         call(["python", "test_planner.py"])
 
     def test(self, start, end, time, timeMode, routeMode, profiling = False):
+        self.tp = TravelPlanner(self.db)
         print "Testing..."
         request = {
                 "_id": ObjectId(),

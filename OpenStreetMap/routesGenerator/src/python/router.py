@@ -22,7 +22,7 @@ import time
 # import Image
 # import ImageDraw
 from xml.sax import make_parser, handler
-from Tkinter import Tk, Canvas, Frame, BOTH
+# from Tkinter import Tk, Canvas, Frame, BOTH
 from multiprocessing import Process
 
 
@@ -31,7 +31,7 @@ from busStop import BusStop
 from coordinate import Coordinate
 from address import Address
 import coordinate
-from mapDrawing import Example, DrawImage
+from mapDrawing import DrawImage
 
 
 # The size width of the produced image in pixels
@@ -518,16 +518,16 @@ class Map:
         return cost[stopB]
 
 
-class drawApp(threading.Thread):
-    def __init__(self):
-        threading.Thread.__init__(self)
-
-    def run(self):
-        print "Starting thread"
-        root = Tk()
-        ex = Example(root)
-        root.geometry("400x250+300+300")
-        ex.mainloop()
+#class drawApp(threading.Thread):
+#    def __init__(self):
+#        threading.Thread.__init__(self)
+#
+#    def run(self):
+#        print "Starting thread"
+#        root = Tk()
+#        ex = Example(root)
+#        root.geometry("400x250+300+300")
+#        ex.mainloop()
 
 
 if __name__ == '__main__':

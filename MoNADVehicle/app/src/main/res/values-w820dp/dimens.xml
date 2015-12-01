@@ -11,4 +11,5 @@
     <dimen name="medium_text_size">24dp</dimen>
     <dimen name="display_bar_margin_top">32dp</dimen>
     <dimen name="list_margin">8dp</dimen>
+    <dimen name="sidelist_width">300dp</dimen>
 </resources>
