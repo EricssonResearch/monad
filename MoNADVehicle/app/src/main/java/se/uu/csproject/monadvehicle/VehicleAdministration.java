@@ -197,6 +197,26 @@ public class VehicleAdministration extends Administration {
         return "1";
     }
 
+//    public static String getBusStopCoordinatesString() {
+//        BusTrip busTrip = Storage.getBusTrip();
+//
+//        if (busTrip != null && busTrip.getTrajectory() != null) {
+//
+//            for (int i = 0; i < busTrip.getTrajectory().size(); i++) {
+//                double lon = busTrip.getTrajectory().get(i).getLongitude();
+//                double lat = busTrip.getTrajectory().get(i).getLatitude();
+//                String.valueOf();
+//                String res = "(" + String.valueOf()
+//            }
+//
+//            Storage.getBusTrip().getTrajectory()
+//        }
+//        else {
+//
+//        }
+//
+//    }
+
 
     public static String exceptionMessage() {
         return "ERROR - An Exception was thrown";

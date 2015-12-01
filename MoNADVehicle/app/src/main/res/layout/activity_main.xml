@@ -133,7 +133,7 @@
 
         <LinearLayout
             android:id="@+id/side_list"
-            android:layout_width="300dp"
+            android:layout_width="@dimen/sidelist_width"
             android:layout_height="match_parent"
             android:orientation="vertical"
             android:background="@color/warnColor"
@@ -143,28 +143,36 @@
             <!-- separator-->
             <View
                 android:layout_width="0dp"
-                android:layout_height="@dimen/display_bar_margin_top"/>
+                android:layout_height="@dimen/display_bar_margin_top"
+                android:background="@color/accentColor"/>
 
-            <LinearLayout
-                android:id="@+id/side_list_notifications"
+            <ScrollView
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:visibility="gone"
-                android:padding="@dimen/sideframe_padding"
-                >
-            </LinearLayout>
+                android:layout_height="match_parent">
+                <LinearLayout
+                    android:id="@+id/side_list_notifications"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:visibility="gone"
+                    android:padding="@dimen/sideframe_padding"
+                    >
+                </LinearLayout>
+            </ScrollView>
 
-            <LinearLayout
-                android:id="@+id/side_list_busstops"
+            <ScrollView
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:visibility="gone"
-                android:padding="@dimen/sideframe_padding"
-                >
-
-            </LinearLayout>
+                android:layout_height="match_parent">
+                <LinearLayout
+                    android:id="@+id/side_list_busstops"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:visibility="gone"
+                    android:padding="@dimen/sideframe_padding"
+                    >
+                </LinearLayout>
+            </ScrollView>
 
             <LinearLayout
                 android:id="@+id/side_list_emergency"
@@ -175,10 +183,113 @@
                 android:padding="@dimen/sideframe_padding"
                 >
 
+                <TextView
+                    android:id="@+id/text_emergencytype"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/label_emergencytype"
+                    android:theme="@style/darkTheme"
+                    android:layout_marginBottom="@dimen/list_margin"
+                    />
+
+                <RadioGroup
+                    android:id="@+id/radio_emergency"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="2dp"
+                    android:orientation="vertical"
+                    android:theme="@style/darkTheme">
+
+                    <RadioButton
+                        android:id="@+id/accident"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/label_emergency_accident"
+                        android:textAppearance="@android:style/TextAppearance.Medium"
+                        android:layout_marginBottom="@dimen/action_button_vertical_margin"
+                        />
+
+                    <RadioButton
+                        android:id="@+id/trafficjam"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/label_emergency_trafficjam"
+                        android:textAppearance="@android:style/TextAppearance.Medium"
+                        android:layout_marginBottom="@dimen/action_button_vertical_margin"
+                        />
+                    <RadioButton
+                        android:id="@+id/mechanical_issue"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/label_emergency_mechanicalissue"
+                        android:textAppearance="@android:style/TextAppearance.Medium"
+                        android:layout_marginBottom="@dimen/action_button_vertical_margin"
+                        />
+                    <RadioButton
+                        android:id="@+id/driver_health"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/label_emergency_driverhealth"
+                        android:textAppearance="@android:style/TextAppearance.Medium"
+                        android:layout_marginBottom="@dimen/action_button_vertical_margin"
+                        />
+                    <RadioButton
+                        android:id="@+id/flat_tire"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/label_emergency_other"
+                        android:textAppearance="@android:style/TextAppearance.Medium"
+                        />
+                </RadioGroup>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/notificationsColor"
+                    android:layout_marginTop="@dimen/action_button_vertical_margin"
+                    android:layout_marginBottom="@dimen/action_button_vertical_margin"
+                    />
+
+                <CheckBox android:id="@+id/other_possiblity"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:onClick="onCheckboxClicked"
+                    android:text="@string/label_emergency_description"
+                    android:textAppearance="@android:style/TextAppearance.Medium"
+                    android:theme="@style/darkTheme"
+                    />
+                <EditText
+                    android:id="@+id/text_description"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textMultiLine"
+                    android:lines="5"
+                    android:ems="18"
+                    android:gravity="start"
+                    android:background="@color/notificationsColor"
+                    android:textColor="@color/black"
+                    android:padding="@dimen/sideframe_padding"
+                    android:layout_marginTop="@dimen/list_margin"
+                    android:hint="@string/label_emergency_description_hint"
+                    />
+
+                <Button
+                    android:id="@+id/button_submit"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/button_emergency_submit"
+                    android:textAllCaps="true"
+                    android:theme="@style/darkTheme"
+                    android:background="?attr/colorPrimary"
+                    android:gravity="center"
+                    android:layout_marginTop="@dimen/activity_vertical_margin"
+                    android:layout_marginBottom="@dimen/list_margin"
+                    />
+
             </LinearLayout>
         </LinearLayout>
 
-        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/mapLayout"

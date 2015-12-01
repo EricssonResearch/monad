@@ -1,27 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<android.support.v7.widget.CardView
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/cv"
+    android:layout_gravity="center"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/warnColor"
-    android:layout_marginBottom="@dimen/list_margin">
+    card_view:cardCornerRadius="@dimen/cardview_default_radius"
+    card_view:cardUseCompatPadding="true"
+    card_view:cardElevation="@dimen/cardview_default_elevation"
+    card_view:cardBackgroundColor="@color/notificationsColor"
+    >
 
-    <TextView
-        android:id="@+id/text_busstoptime"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        style="@style/blackText"
-        android:text="12:02 PM"
-        android:drawableLeft="@mipmap/ic_directions_bus_black_18dp"
-        android:drawableStart="@mipmap/ic_directions_bus_black_18dp"
-        />
+        android:padding="2dp"
+        >
 
-    <TextView
-        android:id="@+id/text_busstopname"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Uppsala Centralstation"
-        style="@style/mediumText"/>
+        <TextView
+            android:id="@+id/text_busstoptime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/primaryColorDark"
+            android:text="@string/non_available"
+            android:drawableLeft="@mipmap/ic_directions_bus_black_18dp"
+            android:drawableStart="@mipmap/ic_directions_bus_black_18dp"
+            />
 
-</LinearLayout>
+        <TextView
+            android:id="@+id/text_busstopname"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/non_available"
+            style="@style/mediumText"
+            android:gravity="start"
+            android:textColor="@color/primaryColor"/>
+
+    </LinearLayout>
+</android.support.v7.widget.CardView>
