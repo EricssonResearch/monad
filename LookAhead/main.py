@@ -26,7 +26,7 @@ from operator import itemgetter
 # Variables
 MUTATION_PROB = 0.0
 CROSS_OVER_PROB = 0.5
-NO_OF_GENERATION = 1
+NO_OF_GENERATION = 5
 POPULATION_SIZE = 10
 
 def main():
@@ -72,12 +72,12 @@ def main():
     individual = sorted(best_ind, key=itemgetter(3))
     individual = sorted(individual, key=itemgetter(0))
     #print "InsertBusTrip and TimeTable......"
-    #databaseClass = DB()
-    #databaseClass.insertBusTrip(best_ind)
     print("Best individual is %s, %s" % (individual, best_ind.fitness.values))
     print ("Length of best individual: " + str(len(best_ind)))
     fitnessClass = Fitness()
-    fitnessClass.genTimetable(best_ind)
+    timetable = fitnessClass.genTimetable(best_ind)
+    databaseClass = DB()
+    databaseClass.insertBusTrip(timetable)
 
 
 # def crossover(offspring):

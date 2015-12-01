@@ -38,7 +38,8 @@ class Fitness():
     totalRequestsBusline = {}
     # yesterday = date.today() - timedelta(13)
 
-    yesterday = datetime.datetime(2015, 11, 12)
+    yesterdayDate = datetime.datetime.now() - timedelta(1)
+    yesterday = datetime.datetime(yesterdayDate.year, yesterdayDate.month, yesterdayDate.day)
 
 
 # A decorator is a function that can accept another function as
@@ -248,7 +249,7 @@ class Fitness():
         # return cost
         return waitingCost
 
-    def generateStartTimeBasedOnFreq(self, busLine,frequency, startTime):
+    def generateStartTimeBasedOnFreq(self, busLine, capacity, frequency, startTime):
         """ Generate all the trips within a time slice given a single starting time
         
         Args: 
@@ -268,19 +269,19 @@ class Fitness():
             if start <= startTime <= end:
                 nextStartTime = startTime + datetime.timedelta(minutes=frequency)
                 nextStartTime2 = startTime - datetime.timedelta(minutes=frequency)
-                startTimeArray.append(startTime)
+                startTimeArray.append([startTime, capacity])
                 if nextStartTime <= end:
-                    startTimeArray.append(nextStartTime)
+                    startTimeArray.append([nextStartTime, capacity])
                 if nextStartTime2 >= start:
-                    startTimeArray.append(nextStartTime2)
+                    startTimeArray.append([nextStartTime2, capacity])
                 while nextStartTime <= end:
                     nextStartTime = nextStartTime + datetime.timedelta(minutes=frequency)
                     if nextStartTime <= end:
-                        startTimeArray.append(nextStartTime)
+                        startTimeArray.append([nextStartTime, capacity])
                 while nextStartTime2 >= start:
                     nextStartTime2 = nextStartTime2 - datetime.timedelta(minutes=frequency)
                     if nextStartTime2 >= start:
-                        startTimeArray.append(nextStartTime2)
+                        startTimeArray.append([nextStartTime2, capacity])
         return sorted(startTimeArray) 
 
     def genTimetable(self, individual):
@@ -293,17 +294,22 @@ class Fitness():
             ind = [y for y in individual if y[0] == line]
             for i, val in enumerate(ind):
                 counter+=1
-                generate = self.generateStartTimeBasedOnFreq(line,val[2], val[3])
+                generate = self.generateStartTimeBasedOnFreq(line, val[1], val[2], val[3])
 
                 if line not in timetable:
                     timetable[line] = generate
                 else:
                     timetable[line] = timetable[line] + generate
 
-        print "best individual............................"
-        print individual
-        print "timetable.................................."
-        print sorted(timetable.items(), key = lambda e: e[0])
+        timetable = sorted(timetable.items(), key = lambda e: e[0])
+        ttLines = []
+        for i, item in enumerate(timetable):
+            for trip in item[1]:
+                ttLines.append([item[0], trip[1], trip[0]])
+                    #print trip
+        #print sorted(timetable.items(), key = lambda e: e[0])
+
+        return ttLines
 
     def getTimeSlice(self, startTime):
         ''' Evaluates the time slice a given starting time in a gene belongs to.
