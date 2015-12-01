@@ -23,7 +23,6 @@ public class GetRecommendationsTask extends AsyncTask<Void, Void, String> {
 
     @Override
     protected void onPostExecute(String response) {
-
         if (response.equals("1")) {
             Log.d(callingClass.getClass().getCanonicalName(), "Recommendations have been successfully loaded by the database");
         }

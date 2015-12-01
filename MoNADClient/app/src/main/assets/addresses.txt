@@ -5,6 +5,7 @@ Akademiska ingång 60-70
 Akademiska ingång 78-85
 Akademiska sjh västra
 Akademiska sjukhuset
+Akademiska sjukhuset södra
 Akademiska södra
 åkervägen 11
 åkervägen 12
@@ -112,7 +113,6 @@ askvägen 8
 August Södermans väg
 Auroragatan
 axel johanssons gata 4
-axel johanssons gata 4
 axel johanssons gata 5
 axel johanssons gata 6
 Backmovägen
@@ -145,6 +145,8 @@ banérgatan 6
 bangårdsgatan 13
 bangårdsgatan 6
 bangårdsgatan 8
+Bärbygatan
+Bärbyparken
 Barkspadevägen
 barkspadevägen 1
 barkspadevägen 12
@@ -288,6 +290,7 @@ bolandsgatan 20
 bolandsgatan 22
 bolandsgatan 8
 Bonadsvägen
+Börderna Berwalds väg
 börjegatan 10A
 börjegatan 10B
 börjegatan 12
@@ -497,6 +500,7 @@ djäknegatan 50
 djäknegatan 7
 djäknegatan 9
 Djurgårdsvägen
+Djursjukhuset
 Döbelnsgatan
 döbelnsgatan 11
 döbelnsgatan 13
@@ -558,7 +562,6 @@ dragarbrunnsgatan 56
 dragarbrunnsgatan 60
 dragarbrunnsgatan 61
 dragarbrunnsgatan 62
-dragarbrunnsgatan 63
 dragarbrunnsgatan 63
 dragarbrunnsgatan 64
 dragarbrunnsgatan 66A
@@ -820,6 +823,10 @@ flogstavägen 99
 Flogsta vårdcentral
 Flöjtvägen
 flöjtvägen 4
+Flötjvägen
+Flottiljgatan
+Flottörgatan
+Flygargatan
 folkungagatan 10A
 folkungagatan 10B
 folkungagatan 10C
@@ -948,6 +955,7 @@ gärdesvägen 14B
 gärdesvägen 14C
 gärdesvägen 14D
 gärdesvägen 3
+Garnisonen
 Gatstenen
 geijersgatan 1
 geijersgatan 13A
@@ -1557,6 +1565,7 @@ Kungshögarna
 kungskatan 46
 Kungsporten
 Kvarnbolund
+Kvarntorget
 kvarntorget 3
 Kvickstensvägen
 kyrkängsvägen 10
@@ -1618,6 +1627,7 @@ långvägen 9B
 Lapplandsresan
 Lärkdrillsvägen
 Lärkvägen
+Levertinsgatan
 Liljefors torg
 liljegatan 1
 liljegatan 10
@@ -2653,6 +2663,7 @@ söderforsgatan 39
 söderforsgatan 9
 Södra Parkvägen
 södra rosenvägen 4
+Solistvägen
 solrosgatan 1
 solrosgatan 11
 solrosgatan 13
@@ -2671,6 +2682,7 @@ spillkråksvägen 1
 spillkråksvägen 10
 spillkråksvägen 11
 spillkråksvägen 2
+Spinnrocksvägen
 stabby allé 11A
 stabby allé 11B
 stabby allé 13A
@@ -2714,6 +2726,7 @@ stålgatan 59
 stålgatan 61
 Stångjärnsgatan
 stångjärnsgatan 11
+Startgatan
 Stationsgatan
 stationsgatan 4
 stavkärnsvägen 1
@@ -3414,7 +3427,7 @@ ultunaallén 5
 Ultuna södra
 Universitetet
 Uppsala Business Park
-Uppsala folkhögskola
+Uppsala Folkhögskola
 Uppsala Science Park
 Vackra Birgers väg
 Väderkvarnsgatan
@@ -3744,6 +3757,7 @@ vretgränd, dragarbrunnsgatan 53
 wallingatan 1
 wallingatan 14A
 wallingatan 14B
+Wennerbergsgatan
 ymergatan 13A
 ymergatan 13B
 ymergatan 13C

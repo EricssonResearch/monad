@@ -17,8 +17,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -51,14 +55,11 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 
-public class MainActivity extends Activity implements ConnectionCallbacks, OnConnectionFailedListener,
-        AsyncGetNextTripInteraction {
+public class MainActivity extends Activity implements ConnectionCallbacks, OnConnectionFailedListener {
 
     LinearLayout sideList, notificationsList, busStopsList, emergencyList;
-    Route route;
     NotificationList notifications;
     // name of the map file in the external storage, it should be stored in the root directory of the sdcard
     private static final String MAPFILE = "uppsala.map";
@@ -71,38 +72,21 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
     // this layer shows the current location of the bus
     private MyLocationOverlay myLocationOverlay;
 
-    Location location, loc, locDestination;
-    long diffInMinutes;
-    double distanceInMeters;
-    Date nextArrivalTime;
-    ArrayList<BusStop> traj;
-
-
-    /**
-     * The desired interval for location updates. Inexact. Updates may be more or less frequent.
-     */
+    //The desired interval for location updates. Inexact. Updates may be more or less frequent.
     public static final long UPDATE_INTERVAL_IN_MILLISECONDS = 1000;
 
-    /**
-     * The fastest rate for active location updates. Exact. Updates will never be more frequent
-     * than this value.
-     */
+    //The fastest rate for active location updates. Exact.
+    // Updates will never be more frequent than this value.
     public static final long FASTEST_UPDATE_INTERVAL_IN_MILLISECONDS =
             UPDATE_INTERVAL_IN_MILLISECONDS / 2;
 
-    /**
-     * Provides the entry point to Google Play services.
-     */
+    //Provides the entry point to Google Play services.
     protected GoogleApiClient mGoogleApiClient;
 
-    /**
-     * Stores parameters for requests to the FusedLocationProviderApi.
-     */
+    //Stores parameters for requests to the FusedLocationProviderApi.
     protected LocationRequest mLocationRequest;
 
-    /**
-     * Represents a geographical location.
-     */
+    // Represents a geographical location.
     protected Location mCurrentLocation;
 
 
@@ -115,9 +99,9 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
         notificationsList = (LinearLayout) findViewById(R.id.side_list_notifications);
         busStopsList = (LinearLayout) findViewById(R.id.side_list_busstops);
         emergencyList = (LinearLayout) findViewById(R.id.side_list_emergency);
-        route = new Route(generateBusStops());
         notifications = new NotificationList(generateNotifications());
 
+        //Fill the notifications list
         LayoutInflater inflater = (LayoutInflater) getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         for (int j = 0; j < notifications.getNotificationsList().size(); j++) {
             View notificationView = inflater.inflate(R.layout.list_item_notification, null);
@@ -128,28 +112,31 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
             notificationsList.addView(notificationView);
         }
 
-        //Fill the bus stop list sidebar
-//        for (int j = 0; j < route.getBusStopList().size(); j++) {
-//            View busStopView = inflater.inflate(R.layout.list_item_busstop, null);
-//            TextView busStopTime = (TextView) busStopView.findViewById(R.id.text_busstoptime);
-//            TextView busStopName = (TextView) busStopView.findViewById(R.id.text_busstopname);
-//            busStopTime.setText(formatTime(route.getBusStopList().get(j).getArrivalTime()));
-//            busStopName.setText(route.getBusStopList().get(j).getName());
-//            busStopsList.addView(busStopView);
-//        }
+        //Fill the bus stop list
+        for (int j = 0; j < Storage.getBusTrip().getBusStops().size(); j++) {
+            View busStopView = inflater.inflate(R.layout.list_item_busstop, null);
+            TextView busStopTime = (TextView) busStopView.findViewById(R.id.text_busstoptime);
+            TextView busStopName = (TextView) busStopView.findViewById(R.id.text_busstopname);
+            busStopTime.setText(formatTime(Storage.getBusTrip().getBusStops().get(j).getArrivalTime()));
+            busStopName.setText(Storage.getBusTrip().getBusStops().get(j).getName());
+            busStopsList.addView(busStopView);
+        }
 
-        //TODO: fill the emergency side bar
+        //Fill (Declare) the emergency layout content
+        RadioGroup radioGroup = (RadioGroup) findViewById(R.id.radio_emergency);
+        CheckBox otherCheckBox = (CheckBox) findViewById(R.id.other_possiblity);
+        EditText emergencyDescription = (EditText) findViewById(R.id.text_description);
+        Button submitButton= (Button) findViewById(R.id.button_submit);
 
+        //Set up mapView
         mapView = (MapView) findViewById(R.id.mapView);
-
-        //setup mapView
         mapView.setClickable(true);
         mapView.getMapScaleBar().setVisible(true);
         mapView.setBuiltInZoomControls(true);
         mapView.getMapZoomControls().setZoomLevelMin((byte) 10);
         mapView.getMapZoomControls().setZoomLevelMax((byte) 20);
-        // the centre should be the current location, but now it's just in flogsta
-        mapView.getModel().mapViewPosition.setCenter(new LatLong(59.851294, 17.593113));
+        //TODO: change the center to the current user location, now it's in Uppsala Central Station
+        mapView.getModel().mapViewPosition.setCenter(new LatLong(59.8586, 17.6461));
         mapView.getModel().mapViewPosition.setZoomLevel((byte) 12);
 
         // create a tile cache of suitable size
@@ -173,76 +160,85 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
         // only once a layer is associated with a mapView the rendering starts
         this.mapView.getLayerManager().getLayers().add(tileRendererLayer);
 
+        Paint paint = AndroidGraphicFactory.INSTANCE.createPaint();
+        paint.setColor(Color.RED);
+        paint.setStrokeWidth(10);
+        paint.setStyle(Style.STROKE);
+
+        Polyline polyline = new Polyline(paint, AndroidGraphicFactory.INSTANCE);
+        List<LatLong> coordinateList = polyline.getLatLongs();
+        BusTrip busTrip = Storage.getBusTrip();
+
+        for (int i = 0; i < busTrip.getBusStops().size(); i++) {
+            coordinateList.add(new LatLong(busTrip.getBusStops().get(i).getLatitude(), busTrip.getBusStops().get(i).getLongitude()));
+        }
+
+        // adding the layer with the route to the mapview
+        mapView.getLayerManager().getLayers().add(polyline);
+
+        // adding the layer with current location to the mapview
+        mapView.getLayerManager().getLayers().add(this.myLocationOverlay);
+
         buildGoogleApiClient();
-//<<<<<<< HEAD
-//=======
-//
-//        ImageButton showBusStopList =(ImageButton)findViewById(R.id.busStopButton);
-//        showBusStopList.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                if (busStopsList.getVisibility() == View.VISIBLE) {
-//                    busStopsList.setVisibility(View.GONE);
-//                    sideList.setVisibility(View.GONE);
-//                } else if (notificationsList.getVisibility() == View.VISIBLE
-//                        || emergencyList.getVisibility() == View.VISIBLE) {
-//                    notificationsList.setVisibility(View.GONE);
-//                    emergencyList.setVisibility(View.GONE);
-//                    busStopsList.setVisibility(View.VISIBLE);
-//                } else {
-//                    sideList.setVisibility(View.VISIBLE);
-//                    busStopsList.setVisibility(View.VISIBLE);
-//                }
-//            }
-//        });
-//
-//        ImageButton showNotificationsList =(ImageButton)findViewById(R.id.notificationButton);
-//        showNotificationsList.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                if(notificationsList.getVisibility() == View.VISIBLE){
-//                    notificationsList.setVisibility(View.GONE);
-//                    sideList.setVisibility(View.GONE);
-//                }
-//                else if (busStopsList.getVisibility() == View.VISIBLE
-//                        || emergencyList.getVisibility() == View.VISIBLE){
-//                    busStopsList.setVisibility(View.GONE);
-//                    emergencyList.setVisibility(View.GONE);
-//                    notificationsList.setVisibility(View.VISIBLE);
-//                }
-//                else {
-//                    sideList.setVisibility(View.VISIBLE);
-//                    notificationsList.setVisibility(View.VISIBLE);
-//                }
-//            }
-//        });
-//
-//        ImageButton showEmergencyList =(ImageButton)findViewById(R.id.emergencyButton);
-//        showEmergencyList.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                if (emergencyList.getVisibility() == View.VISIBLE) {
-//                    emergencyList.setVisibility(View.GONE);
-//                    sideList.setVisibility(View.GONE);
-//                } else if (notificationsList.getVisibility() == View.VISIBLE
-//                        || busStopsList.getVisibility() == View.VISIBLE) {
-//                    notificationsList.setVisibility(View.GONE);
-//                    busStopsList.setVisibility(View.GONE);
-//                    emergencyList.setVisibility(View.VISIBLE);
-//                } else {
-//                    sideList.setVisibility(View.VISIBLE);
-//                    emergencyList.setVisibility(View.VISIBLE);
-//                }
-//            }
-//        });
-//>>>>>>> 0066078511e50bcbc2d9e529ba98b2a7624fb177
 
+        ImageButton showBusStopList =(ImageButton)findViewById(R.id.busStopButton);
+        showBusStopList.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (busStopsList.getVisibility() == View.VISIBLE) {
+                    busStopsList.setVisibility(View.GONE);
+                    sideList.setVisibility(View.GONE);
+                } else if (notificationsList.getVisibility() == View.VISIBLE
+                        || emergencyList.getVisibility() == View.VISIBLE) {
+                    notificationsList.setVisibility(View.GONE);
+                    emergencyList.setVisibility(View.GONE);
+                    busStopsList.setVisibility(View.VISIBLE);
+                } else {
+                    sideList.setVisibility(View.VISIBLE);
+                    busStopsList.setVisibility(View.VISIBLE);
+                }
+            }
+        });
 
-        /*double distance = calculateDistance();
-        long timediff = getTimeDifference();
-        TextView tv = (TextView)findViewById(R.id.);
-        String x = Double.toString(distance);
-        tv.setText(x);*/
+        ImageButton showNotificationsList =(ImageButton)findViewById(R.id.notificationButton);
+        showNotificationsList.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(notificationsList.getVisibility() == View.VISIBLE){
+                    notificationsList.setVisibility(View.GONE);
+                    sideList.setVisibility(View.GONE);
+                }
+                else if (busStopsList.getVisibility() == View.VISIBLE
+                        || emergencyList.getVisibility() == View.VISIBLE){
+                    busStopsList.setVisibility(View.GONE);
+                    emergencyList.setVisibility(View.GONE);
+                    notificationsList.setVisibility(View.VISIBLE);
+                }
+                else {
+                    sideList.setVisibility(View.VISIBLE);
+                    notificationsList.setVisibility(View.VISIBLE);
+                }
+            }
+        });
+
+        ImageButton showEmergencyList =(ImageButton)findViewById(R.id.emergencyButton);
+        showEmergencyList.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (emergencyList.getVisibility() == View.VISIBLE) {
+                    emergencyList.setVisibility(View.GONE);
+                    sideList.setVisibility(View.GONE);
+                } else if (notificationsList.getVisibility() == View.VISIBLE
+                        || busStopsList.getVisibility() == View.VISIBLE) {
+                    notificationsList.setVisibility(View.GONE);
+                    busStopsList.setVisibility(View.GONE);
+                    emergencyList.setVisibility(View.VISIBLE);
+                } else {
+                    sideList.setVisibility(View.VISIBLE);
+                    emergencyList.setVisibility(View.VISIBLE);
+                }
+            }
+        });
     }
 
     @Override
@@ -257,13 +253,6 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
     @Override
     protected void onResume() {
         super.onResume();
-
-        if (!Storage.isEmptyBusTrip()) {
-            displayBusTrip();
-        }
-        else {
-            getNextTrip();
-        }
 
         if (mGoogleApiClient.isConnected()) {
             myLocationOverlay.enableMyLocation(true);
@@ -411,7 +400,7 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
         return timeFormat.format(arrival);
     }
 
-    public ArrayList<BusStop> generateBusStops(){
+//    public ArrayList<BusStop> generateBusStops(){
 //        ArrayList<BusStop> busStops = new ArrayList<>();
 //        Calendar calendar = new GregorianCalendar(2015, 11, 23, 15, 0, 0);
 //        Date arrival1 = calendar.getTime();
@@ -432,88 +421,54 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
 //        busStops.add(stop4);
 //
 //        return busStops;
-        return null;
-    }
+//        return null;
+//    }
 
-    public void displayBusTrip() {
-        // instantiating the paint object
-        Paint paint = AndroidGraphicFactory.INSTANCE.createPaint();
-        paint.setColor(Color.RED);
-        paint.setStrokeWidth(10);
-        paint.setStyle(Style.STROKE);
-
-        Polyline polyline = new Polyline(paint, AndroidGraphicFactory.INSTANCE);
-
-        //// TODO: receive route from server and draw it. The following route is just for demo.
-        // the route from polacksbacken to flogsta
-        // to draw the route, all the turning points along the route must be specified,
-        // mapsforge does not have the functionality to draw the route between two points with auto detection of turning points
-        List<LatLong> coordinateList = polyline.getLatLongs();
-
-        BusTrip busTrip = Storage.getBusTrip();
-
-        for (int i = 0; i < busTrip.getTrajectory().size(); i++) {
-            coordinateList.add(new LatLong(busTrip.getTrajectory().get(i).getLatitude(), busTrip.getTrajectory().get(i).getLongitude()));
-        }
-//        coordinateList.add(new LatLong(59.851294, 17.593113));
-//        coordinateList.add(new LatLong(59.850208, 17.600629));
-//        coordinateList.add(new LatLong(59.851952, 17.603680));
-//        coordinateList.add(new LatLong(59.850008, 17.610965));
-//        coordinateList.add(new LatLong(59.852265, 17.613409));
-//        coordinateList.add(new LatLong(59.853481, 17.616570));
-//        coordinateList.add(new LatLong(59.850975, 17.618847));
-//        coordinateList.add(new LatLong(59.849815, 17.620939));
-//        coordinateList.add(new LatLong(59.846652, 17.624497));
-//        coordinateList.add(new LatLong(59.846425, 17.624276));
-//        coordinateList.add(new LatLong(59.844812, 17.625015));
-//        coordinateList.add(new LatLong(59.840875, 17.630646));
-//        coordinateList.add(new LatLong(59.841609, 17.639105));
-//        coordinateList.add(new LatLong(59.839344, 17.640161));
-//        coordinateList.add(new LatLong(59.840673, 17.647350));
-//        coordinateList.add(new LatLong(59.840063, 17.647760));
-
-        // adding the layer with the route to the mapview
-        mapView.getLayerManager().getLayers().add(polyline);
-
-        // adding the layer with current location to the mapview
-        mapView.getLayerManager().getLayers().add(this.myLocationOverlay);
-
-        /* TODO: Needs to be changed */
-        ImageButton showBusStopList =(ImageButton)findViewById(R.id.busStopButton);
-        showBusStopList.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                sideList.setVisibility(View.VISIBLE);
-                LayoutInflater inflater = (LayoutInflater) getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                ViewGroup insertPoint = (ViewGroup) findViewById(R.id.side_list);
-
-                for (int j = 0; j < route.getBusStopList().size(); j++) {
-                    View busStopView = inflater.inflate(R.layout.list_item_busstop, null);
-                    TextView busStopTime = (TextView) busStopView.findViewById(R.id.text_busstoptime);
-                    TextView busStopName = (TextView) busStopView.findViewById(R.id.text_busstopname);
-                    busStopTime.setText(route.getBusStopList().get(j).getArrivalTime().toString());
-                    busStopName.setText(route.getBusStopList().get(j).getName());
-                    insertPoint.addView(busStopView);
-                }
-            }
-        });
-    }
-
-    public void getNextTrip() {
-        new GetNextTripTask(this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-    }
-
-
-    @Override
-    public void processReceivedLoginResponse(String response) {
-        if (response.equals("1")) {
-            Log.d("MainActivity", "Successfully received BusTrip data");
-            displayBusTrip();
-        }
-        else {
-            Log.d("MainActivity", "Error while receiving BusTrip data");
-        }
-    }
+//    public void displayBusTrip() {
+//        // instantiating the paint object
+//        Paint paint = AndroidGraphicFactory.INSTANCE.createPaint();
+//        paint.setColor(Color.RED);
+//        paint.setStrokeWidth(10);
+//        paint.setStyle(Style.STROKE);
+//
+//        Polyline polyline = new Polyline(paint, AndroidGraphicFactory.INSTANCE);
+//
+//        //// TODO: receive route from server and draw it. The following route is just for demo.
+//        // the route from polacksbacken to flogsta
+//        // to draw the route, all the turning points along the route must be specified,
+//        // mapsforge does not have the functionality to draw the route between two points with auto detection of turning points
+//        List<LatLong> coordinateList = polyline.getLatLongs();
+//
+//        BusTrip busTrip = Storage.getBusTrip();
+//
+//        for (int i = 0; i < busTrip.getBusStops().size(); i++) {
+//            coordinateList.add(new LatLong(busTrip.getBusStops().get(i).getLatitude(), busTrip.getBusStops().get(i).getLongitude()));
+//        }
+////        coordinateList.add(new LatLong(59.851294, 17.593113));
+////        coordinateList.add(new LatLong(59.850208, 17.600629));
+////        coordinateList.add(new LatLong(59.851952, 17.603680));
+////        coordinateList.add(new LatLong(59.850008, 17.610965));
+////        coordinateList.add(new LatLong(59.852265, 17.613409));
+////        coordinateList.add(new LatLong(59.853481, 17.616570));
+////        coordinateList.add(new LatLong(59.850975, 17.618847));
+////        coordinateList.add(new LatLong(59.849815, 17.620939));
+////        coordinateList.add(new LatLong(59.846652, 17.624497));
+////        coordinateList.add(new LatLong(59.846425, 17.624276));
+////        coordinateList.add(new LatLong(59.844812, 17.625015));
+////        coordinateList.add(new LatLong(59.840875, 17.630646));
+////        coordinateList.add(new LatLong(59.841609, 17.639105));
+////        coordinateList.add(new LatLong(59.839344, 17.640161));
+////        coordinateList.add(new LatLong(59.840673, 17.647350));
+////        coordinateList.add(new LatLong(59.840063, 17.647760));
+//
+//        // adding the layer with the route to the mapview
+//        mapView.getLayerManager().getLayers().add(polyline);
+//
+//        // adding the layer with current location to the mapview
+//        mapView.getLayerManager().getLayers().add(this.myLocationOverlay);
+//
+//
+//    }
 
     public ArrayList<Notification> generateNotifications(){
         ArrayList<Notification> notifications = new ArrayList<>();
@@ -529,46 +484,7 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
         return notifications;
     }
 
-
-    //  get the current bus stop location and arrival time
-    //  calculates the time difference in minutes between
-    //  current and next location
-    public long getTimeDifference() {
-        myLocationOverlay.onLocationChanged(location);
-        double currentLat = location.getLatitude();
-        double currentLong = location.getLongitude();
-        Calendar cal = Calendar.getInstance();
-        long currentTime = cal.get(Calendar.MILLISECOND);
-        //for (int i = 0; i < traj.size(); i++) {
-            //if(currentLat == traj.get(i).getLatitude() && currentLong == traj.get(i).getLongitude()) {
-                nextArrivalTime = traj.get(1).getArrivalTime();
-            //}
-                diffInMinutes = TimeUnit.MILLISECONDS.toMinutes(nextArrivalTime.getTime() - currentTime);
-        //}
-        return diffInMinutes;
+    public void onCheckboxClicked(View view) {
+        //TODO:implement checkbox-related function
     }
-
-    //gets the coordinates between current location and a given bus stop location
-    //calculates and returns the distance between them
-    public double calculateDistance() {
-        myLocationOverlay.onLocationChanged(loc);
-        double currentLat = loc.getLatitude();
-        double currentLong = loc.getLongitude();
-        double nextLat,nextLong;
-        //for (int i = 0; i < traj.size(); i++) {
-            //if (currentLat == traj.get(i).getLatitude() && currentLong == traj.get(i).getLongitude()) {
-                loc.setLatitude(currentLat);
-                loc.setLongitude(currentLong);
-                //myLocationOverlay.onLocationChanged(locDestination);
-                nextLat = traj.get(1).getLatitude();
-                nextLong = traj.get(1).getLongitude();
-                locDestination.setLatitude(nextLat);
-                locDestination.setLongitude(nextLong);
-                distanceInMeters = loc.distanceTo(locDestination);
-            //}
-        //}
-        return distanceInMeters;
-    }
-
-
 }

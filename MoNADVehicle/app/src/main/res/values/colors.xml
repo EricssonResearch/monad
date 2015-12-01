@@ -8,4 +8,5 @@
     <color name="busColor">#c5cae9</color>
     <color name="boardingPassengersColor">#388e3c</color>
     <color name="leavingPassengersColor">#d50000</color>
+    <color name="black">#000000</color>
 </resources>

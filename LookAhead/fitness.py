@@ -13,6 +13,9 @@ Unless required by applicable law or agreed to in writing, software distributed 
 See the License for the specific language governing permissions and limitations under the License.
 
 """
+import sys
+sys.path.append('../OpenStreetMap')
+from routeGenerator import coordinates_to_nearest_stops, get_route
 from dbConnection import DB
 from datetime import datetime
 import datetime

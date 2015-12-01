@@ -14,6 +14,9 @@ specific language governing permissions and limitations under the License.
 """
 import mutation
 import inits
+import sys
+sys.path.append('../OpenStreetMap')
+
 from deap import base
 from deap import creator
 from deap import tools
@@ -23,6 +26,7 @@ from fitness import Fitness
 from operator import itemgetter
 import datetime
 from datetime import timedelta
+from routeGenerator import coordinates_to_nearest_stops, get_route
 
 # Constant
 DB.noOfslices = 0

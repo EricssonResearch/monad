@@ -15,8 +15,8 @@ public abstract class Administration {
     public static final String ROUTES_ADMINISTRATOR_HOST = "http://130.238.15.114:";
     public static final String ROUTES_ADMINISTRATOR_PORT = "9997";
 
-//    public static final String ROUTES_GENERATOR_HOST = "http://130.238.15.114:";
-//    public static final String ROUTES_GENERATOR_PORT = "9998";
+    public static final String ROUTES_GENERATOR_HOST = "http://130.238.15.114:";
+    public static final String ROUTES_GENERATOR_PORT = "9998";
 
     public static String postRequest(String request, String urlParameters) {
         String response = "";

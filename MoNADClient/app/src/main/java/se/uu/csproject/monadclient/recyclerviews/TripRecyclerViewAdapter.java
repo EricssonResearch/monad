@@ -40,7 +40,7 @@ public class TripRecyclerViewAdapter
         TextView departureTime;
         TextView arrivalTime;
         TextView date;
-        ImageView clockIcon;
+//        ImageView clockIcon;
         TextView countdownTime; //active trips only
         ImageButton routeInfoButton; //active trips only
         ImageButton cancelButton; //active trips only
@@ -56,14 +56,14 @@ public class TripRecyclerViewAdapter
             countdownTime = (TextView) itemView.findViewById(R.id.label_countdown);
             date = (TextView) itemView.findViewById(R.id.label_date);
             feedback = (RatingBar) itemView.findViewById(R.id.ratingbar);
-            clockIcon = (ImageView) itemView.findViewById(R.id.icon_clock);
+//            clockIcon = (ImageView) itemView.findViewById(R.id.icon_clock);
             routeInfoButton = (ImageButton) itemView.findViewById(R.id.button_routeinfo);
             cancelButton = (ImageButton) itemView.findViewById(R.id.cancel);
-            busNumbers = (TextView) itemView.findViewById(R.id.busNumber);
+            busNumbers = (TextView) itemView.findViewById(R.id.bus_number);
         }
     }
 
-    @Override
+//    @Override
     public int getItemViewType(int position) {
         if(trips.get(position).isHistory()) {
             return 0;
@@ -128,7 +128,7 @@ public class TripRecyclerViewAdapter
                         //change value to 30min (30*60*1000 = 1 800 000ms)
                         if (millisUntilFinished < 1800000) {
                             tripViewHolder.countdownTime.setTextColor(ContextCompat.getColor(tripViewHolder.itemView.getContext(), R.color.warnColor));
-                            tripViewHolder.clockIcon.setVisibility(View.VISIBLE);
+//                            tripViewHolder.clockIcon.setVisibility(View.VISIBLE);
                         }
                     }
 
@@ -203,7 +203,7 @@ public class TripRecyclerViewAdapter
         tripViewHolder.countdownTime.setText(tripViewHolder.itemView.getResources().getString(R.string.java_tripinprogress));
         tripViewHolder.countdownTime.setTextColor(ContextCompat.getColor(tripViewHolder.itemView.getContext(), R.color.green));
         tripViewHolder.date.setTextColor(ContextCompat.getColor(tripViewHolder.itemView.getContext(), R.color.green));
-        tripViewHolder.clockIcon.setVisibility(View.INVISIBLE);
+//        tripViewHolder.clockIcon.setVisibility(View.INVISIBLE);
         //tripViewHolder.clockIcon.setColorFilter(ContextCompat.getColor(tripViewHolder.itemView.getContext(), R.color.green));
     }
 
@@ -224,7 +224,12 @@ public class TripRecyclerViewAdapter
     private String formatBusNumbers(ArrayList<Integer> busNumbers){
         String busNum="";
         for (int i = 0; i < busNumbers.size(); i++){
-           busNum = busNum + " " + busNumbers.get(i);
+            if (i == busNumbers.size()-1){
+                busNum = busNum + " " + busNumbers.get(i);
+            }
+            else {
+                busNum = busNum + " " + busNumbers.get(i) + ",";
+            }
         } return busNum;
     }
 
