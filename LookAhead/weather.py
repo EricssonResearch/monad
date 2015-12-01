@@ -13,12 +13,13 @@ Unless required by applicable law or agreed to in writing, software distributed 
 See the License for the specific language governing permissions and limitations under the License.
 
 """
+import forecastio
+import sys
+sys.path.append('../OpenStreetMap')
 from datetime import date
 from datetime import timedelta
 from dbConnection import DB
-import forecastio
-
-db = DB()
+from routeGenerator import string_to_coordinates
 
 class Weather(object):
     """Implements a class to modify timetables based on weather"""
@@ -27,23 +28,25 @@ class Weather(object):
     # ------------------------------------------------------------
     # Forecastio API Credentials
     apiKey = "664dfbd4b12d75c56aab4503f2ddda01"
-    # This values can be replaced by Open Maps coordenates values
-    latitude = 59.8552777778
-    longitude = 17.6319444444
+    # Uppsala central address
+    address = "Kungsgatan"
+    # Special weather conditions
+    # conditions = ["clear-day", "clear-night", "rain", "snow", "sleet", "wind", "fog", "cloudy", "partly-cloudy-day", "partly-cloudy-night"]
+    conditions = ["rain", "snow", "fog", "cloudy", "clear-night"]
 
     def __init__(self):
-        super(Weather, self).__init__()
+        # super(Weather, self).__init__()
         # self.arg = arg
-        self.getWeatherData()
+        self.evaluateTrip(self.findTrip(self.getWeather(0, Weather.address, Weather.apiKey), Weather.conditions))
 
-    def setQueryDay(self, days):
-        """Depending on how workflow is gonna be, pass days to query as a
-        parameter"""
-        return date.today() + timedelta(days)
+    def getCoordinates(self, address):
+        """Uses the Route Generator to search for an address"""
+        coordinates = string_to_coordinates(address)
+        return coordinates["latitude"], coordinates["longitude"]
 
-    def callWeatherAPI(self):
+    def callWeatherAPI(self, apiKey, latitude, longitude):
         """Calls API to get weather information"""
-        return forecastio.load_forecast(Weather.apiKey, Weather.latitude, Weather.longitude)
+        return forecastio.load_forecast(apiKey, latitude, longitude)
 
     def getWeatherHourly(self, forecast):
         """Returns the weather info on a specific frequency
@@ -52,18 +55,95 @@ class Weather(object):
         """
         return forecast.hourly()
 
-    '''
-    def getWeatherData(self):
-        """Calls API to get weather information"""
-        forecast = self.getWeatherHourly(self.callWeatherAPI())
+    def setQueryDay(self, days):
+        """Depending on how workflow is gonna be, pass days to query as a
+        parameter
+        """
+        return date.today() + timedelta(days)
+
+    def queryWeather(self, date):
+        """
+        """
+        db = DB()
+        return db.selectWeather(date)
+
+    def countWeather(self, weather):
+        """
+        """
+        return weather.count()
+
+    def insertWeather(self, address, apiKey, days):
+        """Calls API to get weather information
+        """
+        db = DB()
+        coordinates = self.getCoordinates(address)
+        forecast = self.getWeatherHourly(self.callWeatherAPI(apiKey, coordinates[0], coordinates[1]))
         for data in forecast.data:
-            if data.time.date() == self.setQueryDay(2):
-                print "========================"
-                print data.icon
-                print data.time
-                print data.temperature
-    '''
+            if data.time.date() == self.setQueryDay(days):
+                weather = {'icon': data.icon, 'time': data.time, 'temperature': data.temperature}
+                db.insertWeather(weather)
 
+    def getWeather(self, days, address, apiKey):
+        """
+        """
+        if self.countWeather(self.queryWeather(self.setQueryDay(days))) == 0:
+            self.insertWeather(address, apiKey, days)
+        return self.queryWeather(self.setQueryDay(days))
 
-#if __name__ == '__main__':
-#    Weather().__init__()    
+    def findTrip(self, weather, conditions):
+        trip = []
+        db = DB()
+        # Running trough the weather
+        for i in weather:
+            # Search for pre defined special weather conditions
+            # This can be a function that evaluates temperature and time
+            if self.evaluateWeather(i["icon"], i["temperature"], i["time"], conditions):
+                # Query related trips between i["time"] and an hour later
+                trips = db.selectBusTrip(i["time"])
+                # Append them on the trips array
+                trip.append([i["icon"], i["temperature"], i["time"], trips])
+        print trip
+        return trip
+
+    def evaluateWeather(self, icon, temperature, time, conditions):
+        if icon in conditions:
+            return True
+        else:
+            return False
+
+    def evaluateTrip(self, trip):
+        count = 0
+        chromosome = []
+        line = None
+        # Loop trough the whole trip structure
+        # trip structure: icon, temperature, time and trips cursor
+        for i in xrange(len(trip)):
+            # Loop trough trips cursor
+            # trips cursor: startTime, line and capacity
+            for j in trip[i][3]:
+                if line is None:
+                    line = j["line"]
+                    startTime = j["startTime"]
+                    capacity = j["capacity"]
+                if line != j["line"]:
+                    # Divided 60 by that number  to get frequency
+                    if trip[i][0] in Weather.conditions:
+                        # Calculate frequency on that hour
+                        frequency = int(round(60/count))
+                        # Change the frequency of the buses
+                        # >> freq, less buses
+                        # << freq, more buses
+                        frequency = frequency - 2
+                        if frequency < 0:
+                            frequency = 5
+                    chromosome.append([line, capacity, frequency, startTime])
+                    # print j["startTime"], j["line"], j["capacity"]
+                    # time = [trip[i][2],
+                    startTime = j["startTime"]
+                    count = 0
+                count = count + 1
+                line = j["line"]
+        print chromosome
+
+if __name__ == '__main__':
+    Weather()

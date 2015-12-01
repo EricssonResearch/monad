@@ -17,9 +17,13 @@ import org.mapsforge.map.model.MapViewPosition;
 import android.content.Context;
 import android.location.Location;
 import android.location.LocationProvider;
+import android.os.Handler;
 import android.util.Log;
 
 import com.google.android.gms.location.LocationListener;
+
+import java.util.ArrayList;
+import java.util.ListIterator;
 
 /**
  * A thread-safe {@link Layer} implementation to display the current location. Use the new location services provided by Google
@@ -29,6 +33,8 @@ import com.google.android.gms.location.LocationListener;
 public class MyLocationOverlay extends Layer implements LocationListener {
 	private static final GraphicFactory GRAPHIC_FACTORY = AndroidGraphicFactory.INSTANCE;
 	private final int RADIUS = 40;
+
+	public ArrayList<LatLong> trajectory;
 	/**
 	 * @param location
 	 *            the location whose geographical coordinates should be converted.
@@ -156,4 +162,34 @@ public class MyLocationOverlay extends Layer implements LocationListener {
 		this.snapToLocationEnabled = snapToLocationEnabled;
 	}
 
+	public void moveSimulate(){
+		SimulateThread simulateThread = new SimulateThread();
+		simulateThread.start();
+	}
+
+	class SimulateThread extends Thread {
+		public void run() {
+			LatLong tmp = null;
+			ListIterator<LatLong> ite = trajectory.listIterator();
+			while(ite.hasNext()){
+				tmp = ite.next();
+				//Log.i("move", tmp.getLatitude() + ", " + tmp.getLongitude());
+
+				//redraw the location
+				marker.setLatLong(tmp);
+				circle.setLatLong(tmp);
+
+				//uncomment it if you want the map's center set to the current location every time its location gets updated
+				//mapViewPosition.setCenter(tmp);
+
+				requestRedraw();
+
+				try {
+					sleep(500);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
+		};
+	}
 }

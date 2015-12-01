@@ -145,11 +145,14 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
                 this.mapView.getModel().frameBufferModel.getOverdrawFactor());
 
         //the bitmap that shows the current location
-        Drawable drawable = ContextCompat.getDrawable(getBaseContext(), R.drawable.marker_red);
+        Drawable drawable = ContextCompat.getDrawable(getBaseContext(), R.drawable.marker_blue);
         Bitmap bitmap = AndroidGraphicFactory.convertToBitmap(drawable);
 
         myLocationOverlay = new MyLocationOverlay(this, this.mapView.getModel().mapViewPosition, bitmap);
         myLocationOverlay.setSnapToLocationEnabled(false);
+
+        //for simulation
+        myLocationOverlay.trajectory = Storage.getBusTrip().getTrajectory();
 
         // tile renderer layer using internal render theme
         MapDataStore mapDataStore = new MapFile(getMapFile());
@@ -169,8 +172,8 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
         List<LatLong> coordinateList = polyline.getLatLongs();
         BusTrip busTrip = Storage.getBusTrip();
 
-        for (int i = 0; i < busTrip.getBusStops().size(); i++) {
-            coordinateList.add(new LatLong(busTrip.getBusStops().get(i).getLatitude(), busTrip.getBusStops().get(i).getLongitude()));
+        for (int i = 0; i < busTrip.getTrajectory().size(); i++) {
+            coordinateList.add(busTrip.getTrajectory().get(i));
         }
 
         // adding the layer with the route to the mapview
@@ -256,7 +259,8 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
 
         if (mGoogleApiClient.isConnected()) {
             myLocationOverlay.enableMyLocation(true);
-            startLocationUpdates();
+            //commented since simulation is used now instead of real location
+            //startLocationUpdates();
         }
     }
 
@@ -314,7 +318,12 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
     @Override
     public void onConnected(Bundle bundle) {
         myLocationOverlay.enableMyLocation(true);
-        startLocationUpdates();
+
+        //manually simulate the movement of the bus
+        myLocationOverlay.moveSimulate();
+
+        //commented since simulation is used now instead of real location
+        //startLocationUpdates();
     }
 
     @Override

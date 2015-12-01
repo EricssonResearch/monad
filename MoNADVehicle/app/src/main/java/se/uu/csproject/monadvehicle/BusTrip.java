@@ -13,34 +13,47 @@ public class BusTrip {
     private ArrayList<BusStop> busStops;
     private ArrayList<LatLong> trajectory;
 
-    //TODO: Remove this constructor once we integrate the parsing/reading of waypoints
+//    //TODO: Remove this constructor once we integrate the parsing/reading of waypoints
+//    public BusTrip(String busTripID, int capacity, ArrayList<BusStop> busStops) {
+//        this.busTripID = busTripID;
+//        this.capacity = capacity;
+//        this.busStops = busStops;
+//        this.trajectory = new ArrayList<>();
+//        generateFakeTrajectory();
+//    }
+
     public BusTrip(String busTripID, int capacity, ArrayList<BusStop> busStops) {
         this.busTripID = busTripID;
         this.capacity = capacity;
         this.busStops = busStops;
-        this.trajectory = new ArrayList<>();
-        generateFakeTrajectory();
-    }
-
-    public BusTrip(String busTripID, int capacity, ArrayList<BusStop> busStops, ArrayList<LatLong> trajectory) {
-        this.busTripID = busTripID;
-        this.capacity = capacity;
-        this.busStops = busStops;
-        this.trajectory = trajectory;
     }
 
     public void printValues() {
+        Log.d("BusTrip", "-- Printing Values --");
         Log.d("BusTrip", "ID: " + getBusTripID());
         Log.d("BusTrip", "Capacity: " + getCapacity());
+        printBusStops();
+        printTrajectory();
+    }
 
-        if (getBusStops() != null) {
+    public void printBusStops() {
+
+        if (busStops != null) {
+            Log.d("BusTrip", "-- Printing BusStops --");
+
             for (int i = 0; i < busStops.size(); i++) {
                 busStops.get(i).printValues();
             }
         }
-        if (getTrajectory() != null) {
+    }
+
+    public void printTrajectory() {
+
+        if (trajectory != null) {
+            Log.d("BusTrip", "-- Printing Trajectory --");
+
             for (int i = 0; i < trajectory.size(); i++) {
-                Log.d("Trajectory", trajectory.get(i).toString());
+                Log.d("TrajectoryPoint", trajectory.get(i).toString());
             }
         }
     }
@@ -93,23 +106,23 @@ public class BusTrip {
         return null;
     }
 
-    //TODO: Remove this function when reading/parsing real waypoints is implemented
-    private void generateFakeTrajectory(){
-        this.trajectory.add(new LatLong(59.851294, 17.593113));
-        this.trajectory.add(new LatLong(59.850208, 17.600629));
-        this.trajectory.add(new LatLong(59.851952, 17.603680));
-        this.trajectory.add(new LatLong(59.850008, 17.610965));
-        this.trajectory.add(new LatLong(59.852265, 17.613409));
-        this.trajectory.add(new LatLong(59.853481, 17.616570));
-        this.trajectory.add(new LatLong(59.850975, 17.618847));
-        this.trajectory.add(new LatLong(59.849815, 17.620939));
-        this.trajectory.add(new LatLong(59.846652, 17.624497));
-        this.trajectory.add(new LatLong(59.846425, 17.624276));
-        this.trajectory.add(new LatLong(59.844812, 17.625015));
-        this.trajectory.add(new LatLong(59.840875, 17.630646));
-        this.trajectory.add(new LatLong(59.841609, 17.639105));
-        this.trajectory.add(new LatLong(59.839344, 17.640161));
-        this.trajectory.add(new LatLong(59.840673, 17.647350));
-        this.trajectory.add(new LatLong(59.840063, 17.647760));
-    }
+//    //TODO: Remove this function when reading/parsing real waypoints is implemented
+//    private void generateFakeTrajectory(){
+//        this.trajectory.add(new LatLong(59.851294, 17.593113));
+//        this.trajectory.add(new LatLong(59.850208, 17.600629));
+//        this.trajectory.add(new LatLong(59.851952, 17.603680));
+//        this.trajectory.add(new LatLong(59.850008, 17.610965));
+//        this.trajectory.add(new LatLong(59.852265, 17.613409));
+//        this.trajectory.add(new LatLong(59.853481, 17.616570));
+//        this.trajectory.add(new LatLong(59.850975, 17.618847));
+//        this.trajectory.add(new LatLong(59.849815, 17.620939));
+//        this.trajectory.add(new LatLong(59.846652, 17.624497));
+//        this.trajectory.add(new LatLong(59.846425, 17.624276));
+//        this.trajectory.add(new LatLong(59.844812, 17.625015));
+//        this.trajectory.add(new LatLong(59.840875, 17.630646));
+//        this.trajectory.add(new LatLong(59.841609, 17.639105));
+//        this.trajectory.add(new LatLong(59.839344, 17.640161));
+//        this.trajectory.add(new LatLong(59.840673, 17.647350));
+//        this.trajectory.add(new LatLong(59.840063, 17.647760));
+//    }
 }
