@@ -44,6 +44,7 @@ class DB():
     # Bus
     # Time Table
     # Bus Stop Location
+    # Weather
 
     # ---------------------------------------------------------------------------------------------------------------------------------------
     # Class variables
@@ -802,3 +803,18 @@ class DB():
             }
             #print newRoute
             self.db.RouteGraph.insert_one(newRoute)
+
+    # ---------------------------------------------------------------------------------------------------------------------------------------
+    # Weather
+    # ---------------------------------------------------------------------------------------------------------------------------------------
+    def insertWeather(self, weather):
+        ''' '''
+        self.db.Weather.insert_one(weather)
+
+    def selectWeather(self, date):
+        ''' '''
+        return self.db.Weather.find({"time": {"$gte": datetime.datetime.combine(date, datetime.time(0, 0)), "$lt": datetime.datetime.combine(date, datetime.time(23, 59))}})
+
+    def selectBusTrip(self, date):
+        ''' '''
+        return self.db.BusTrip.find({"startTime": {"$gte": date, "$lt": date + timedelta(minutes=60)}}).sort([("line", 1), ("startTime", 1)])
