@@ -55,6 +55,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 
 public class MainActivity extends Activity implements ConnectionCallbacks, OnConnectionFailedListener {
@@ -88,6 +89,10 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
 
     // Represents a geographical location.
     protected Location mCurrentLocation;
+
+    Location location;
+    ArrayList<LatLong> trajectory;
+    ArrayList<BusStop> busStops;
 
 
     @Override
@@ -495,5 +500,35 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
 
     public void onCheckboxClicked(View view) {
         //TODO:implement checkbox-related function
+    }
+
+    //gets the current location of the bus and the next bus stop
+    //calculates the distance between them and returns it.
+    double calculateDistance() {
+        Location destLocation = new Location("");
+        myLocationOverlay.onLocationChanged(location);
+        double currentLat = location.getLatitude();
+        double currentLong = location.getLongitude();
+        location.setLatitude(currentLat);
+        location.setLongitude(currentLong);
+        double nextLat = trajectory.get(1).latitude;
+        double nextLong = trajectory.get(1).longitude;
+        destLocation.setLatitude(nextLat);
+        destLocation.setLongitude(nextLong);
+        return location.distanceTo(destLocation);
+
+    }
+
+    //gets the current time of the bus and the next bus stop
+    //arrival time and calculates the remaining time between
+    //current location time and next bus stop.
+    long calculateTimeDifference() {
+        myLocationOverlay.onLocationChanged(location);
+        //double currentLat = location.getLatitude();
+        //double currentLong = location.getLongitude();
+        Calendar cal = Calendar.getInstance();
+        long currentTime = cal.get(Calendar.MILLISECOND);
+        long nextArrivalTime = busStops.get(1).getArrivalTime().getTime();
+        return TimeUnit.MILLISECONDS.toMinutes(nextArrivalTime - currentTime);
     }
 }
