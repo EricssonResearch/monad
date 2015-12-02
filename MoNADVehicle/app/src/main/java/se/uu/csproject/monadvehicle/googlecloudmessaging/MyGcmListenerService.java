@@ -11,8 +11,6 @@ import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
 import com.google.android.gms.gcm.GcmListenerService;
-
-
 import se.uu.csproject.monadvehicle.LoginActivity;
 import se.uu.csproject.monadvehicle.MainActivity;
 //import se.uu.csproject.monadvehicle.NotificationsActivity;
@@ -34,23 +32,6 @@ public class  MyGcmListenerService extends GcmListenerService {
         Log.d(TAG, "Message: " + message);
         String title=data.getString("title");
 
-//        if (from.startsWith("/topics/")) {
-//            // message received from some topic.
-//        } else {
-//            // normal downstream message.
-//        }
-
-        // [Further improvements]
-        /**
-         * Production applications would usually process the message here.
-         *     - Syncing with server.
-         *     - Store message in local database.
-         *     - Update UI.
-         */
-
-        /**
-         Showing that a notification has been received
-         */
         sendNotification(message, title);
 
     }

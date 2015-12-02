@@ -36,5 +36,6 @@
     <string name="label_emergency_description_hint">Please enter the necessary information for your request...</string>
     <string name="button_emergency_submit">Submit</string>
     <string name="non_available">n/a</string>
+    <string name="GoogleProjectID" translatable="false">81265551950</string>
 
 </resources>
