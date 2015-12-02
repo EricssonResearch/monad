@@ -14,8 +14,9 @@ specific language governing permissions and limitations under the License.
 import ast
 import multiprocessing
 import requests
+import six
 
-ROUTES_GENERATOR_HOST = 'http://130.238.15.114:'
+ROUTES_GENERATOR_HOST = 'http://130.238.15.241:'
 ROUTES_GENERATOR_PORT = '9998'
 
 headers = {'Content-type': 'application/x-www-form-urlencoded'}
@@ -36,6 +37,9 @@ def string_to_coordinates(string):
                             longitude: float|None
                             }
     """
+    if not isinstance(string, six.string_types):
+        raise ValueError("%r is not a string." % (string,))
+
     url = (ROUTES_GENERATOR_HOST +
            ROUTES_GENERATOR_PORT +
            '/get_coordinates_from_string')
@@ -64,7 +68,8 @@ def coordinates_to_nearest_stops(longitude, latitude, distance):
            ROUTES_GENERATOR_PORT +
            '/get_nearest_stops_from_coordinates')
 
-    data = {'lat': latitude, 'lon': longitude, 'distance': distance}
+    data = {'lat': float(latitude), 'lon': float(longitude),
+            'distance': float(distance)}
     response = requests.post(url, data=data, headers=headers)
 
     responseJson = response.json()
@@ -85,7 +90,7 @@ def coordinates_to_nearest_stop(longitude, latitude):
            ROUTES_GENERATOR_PORT +
            '/get_nearest_stops_from_coordinates')
 
-    data = {'lat': latitude, 'lon': longitude, 'distance': 0.0}
+    data = {'lat': float(latitude), 'lon': float(longitude), 'distance': 0.0}
     response = requests.post(url, data=data, headers=headers)
 
     responseJson = response.json()
@@ -117,11 +122,19 @@ def get_route(coordinates_list):
                         and points[1].
                     }
     """
+    for item in coordinates_list:
+        if not len(item) == 2:
+            raise ValueError("Not a tuple of two")
+        a, b = item
+        if not abs(float(a)) < 181 and not abs(float(b)) < 181:
+            raise ValueError("Out of range")
+
     url = (ROUTES_GENERATOR_HOST +
            ROUTES_GENERATOR_PORT +
            '/get_route_from_coordinates')
 
     data = {'list': str(coordinates_list)}
+
     response = requests.post(url, data=data, headers=headers)
     responseJson = response.json()
 
@@ -143,4 +156,4 @@ if __name__ == '__main__':
     print get_route([])
     print coordinates_to_nearest_stops(latitude=59.8710848,
                                        longitude=17.6546528,
-                                       distance=1300.0)
+                                       distance=300.0)
