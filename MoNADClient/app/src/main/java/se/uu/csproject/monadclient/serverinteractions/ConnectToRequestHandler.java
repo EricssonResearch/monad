@@ -16,8 +16,8 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 
-import se.uu.csproject.monadclient.StoreTrips;
-import se.uu.csproject.monadclient.recyclerviews.FullTrip;
+import se.uu.csproject.monadclient.storage.StoreTrips;
+import se.uu.csproject.monadclient.storage.FullTrip;
 
 public class ConnectToRequestHandler {
     private static final String SERVER = "http://130.238.15.114:2001";

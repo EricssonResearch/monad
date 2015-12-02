@@ -1,34 +1,26 @@
-package se.uu.csproject.monadclient;
+package se.uu.csproject.monadclient.activities;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.Typeface;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 
-import se.uu.csproject.monadclient.recyclerviews.FullTrip;
-//import se.uu.csproject.monadclient.recyclerviews.Notify;
-import se.uu.csproject.monadclient.recyclerviews.PartialTrip;
+import se.uu.csproject.monadclient.R;
+import se.uu.csproject.monadclient.storage.FullTrip;
+import se.uu.csproject.monadclient.storage.PartialTrip;
 
 public class RouteActivity extends AppCompatActivity {
 

@@ -1,4 +1,4 @@
-package se.uu.csproject.monadclient;
+package se.uu.csproject.monadclient.activities;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -12,6 +12,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.concurrent.ExecutionException;
+
+import se.uu.csproject.monadclient.ClientAuthentication;
+import se.uu.csproject.monadclient.R;
 
 public class ResetPasswordActivity extends MenuedActivity {
 

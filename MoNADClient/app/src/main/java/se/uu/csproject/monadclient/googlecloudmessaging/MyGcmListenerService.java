@@ -14,9 +14,7 @@ import android.util.Log;
 
 import com.google.android.gms.gcm.GcmListenerService;
 
-import se.uu.csproject.monadclient.LoginActivity;
-import se.uu.csproject.monadclient.MainActivity;
-import se.uu.csproject.monadclient.NotificationsActivity;
+import se.uu.csproject.monadclient.activities.NotificationsActivity;
 import se.uu.csproject.monadclient.R;
 
 

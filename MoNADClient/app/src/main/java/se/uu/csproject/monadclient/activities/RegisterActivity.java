@@ -1,11 +1,10 @@
-package se.uu.csproject.monadclient;
+package se.uu.csproject.monadclient.activities;
 
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -16,7 +15,8 @@ import android.widget.Toast;
 
 import java.util.concurrent.ExecutionException;
 
-import org.apache.commons.validator.routines.EmailValidator;
+import se.uu.csproject.monadclient.R;
+import se.uu.csproject.monadclient.SignUpTask;
 
 public class RegisterActivity extends AppCompatActivity {
 

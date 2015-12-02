@@ -1,4 +1,4 @@
-package se.uu.csproject.monadclient;
+package se.uu.csproject.monadclient.activities;
 
 import android.Manifest;
 import android.app.AlarmManager;
@@ -39,12 +39,19 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 
+import se.uu.csproject.monadclient.AsyncGetBusStopsInteraction;
+import se.uu.csproject.monadclient.ClientAuthentication;
+import se.uu.csproject.monadclient.GetBusStopsTask;
+import se.uu.csproject.monadclient.GetRecommendationsTask;
+import se.uu.csproject.monadclient.R;
+import se.uu.csproject.monadclient.RecommendationAlarmReceiver;
 import se.uu.csproject.monadclient.interfaces.AsyncRecommendationsInteraction;
 import se.uu.csproject.monadclient.interfaces.AsyncResponse;
-import se.uu.csproject.monadclient.recyclerviews.FullTrip;
+import se.uu.csproject.monadclient.storage.FullTrip;
 import se.uu.csproject.monadclient.recyclerviews.SearchRecyclerViewAdapter;
-import se.uu.csproject.monadclient.recyclerviews.Storage;
+import se.uu.csproject.monadclient.storage.Storage;
 import se.uu.csproject.monadclient.serverinteractions.SendQuickTravelRequest;
+import se.uu.csproject.monadclient.services.LocationService;
 
 public class MainActivity extends MenuedActivity implements AsyncResponse, AsyncRecommendationsInteraction,
         AsyncGetBusStopsInteraction {

@@ -1,4 +1,4 @@
-package se.uu.csproject.monadclient.recyclerviews;
+package se.uu.csproject.monadclient.storage;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -9,9 +9,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
-/**
- *
- */
+
 public class FullTrip implements Parcelable {
     /* TODO: Should be replaced by the method getID which returns the id of the first partial trip */
     private String id;                                              /* Same as the id of the first partial trip */

@@ -1,4 +1,4 @@
-package se.uu.csproject.monadclient;
+package se.uu.csproject.monadclient.activities;
 
 import android.Manifest;
 import android.app.Activity;
@@ -25,6 +25,9 @@ import com.google.android.gms.common.api.Scope;
 import com.google.android.gms.plus.Plus;
 
 import java.util.concurrent.ExecutionException;
+
+import se.uu.csproject.monadclient.ClientAuthentication;
+import se.uu.csproject.monadclient.R;
 
 public class GoogleLogIn extends Activity implements
         GoogleApiClient.ConnectionCallbacks,

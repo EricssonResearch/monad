@@ -1,4 +1,4 @@
-package se.uu.csproject.monadclient;
+package se.uu.csproject.monadclient.activities;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import java.util.concurrent.ExecutionException;
 
+import se.uu.csproject.monadclient.R;
 import se.uu.csproject.monadclient.serverinteractions.SendResetPasswordRequest;
 
 public class ForgotPasswordPopup extends AppCompatActivity {

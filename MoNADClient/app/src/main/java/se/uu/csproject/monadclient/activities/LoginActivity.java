@@ -1,4 +1,4 @@
-package se.uu.csproject.monadclient;
+package se.uu.csproject.monadclient.activities;
 
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -22,6 +22,8 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.SignInButton;
 
+import se.uu.csproject.monadclient.LoginTask;
+import se.uu.csproject.monadclient.R;
 import se.uu.csproject.monadclient.googlecloudmessaging.RegistrationIntentService;
 import se.uu.csproject.monadclient.interfaces.AsyncLoginInteraction;
 

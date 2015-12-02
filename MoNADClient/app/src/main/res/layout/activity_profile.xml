@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="se.uu.csproject.monadclient.ProfileActivity">
+    tools:context=".activities.ProfileActivity">
 
     <include
         android:id="@+id/actionToolBar"

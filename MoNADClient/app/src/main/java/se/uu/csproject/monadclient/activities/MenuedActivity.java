@@ -1,11 +1,14 @@
-package se.uu.csproject.monadclient;
+package se.uu.csproject.monadclient.activities;
 
 import android.content.Intent;
-import android.os.Build;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import se.uu.csproject.monadclient.ClientAuthentication;
+import se.uu.csproject.monadclient.R;
+import se.uu.csproject.monadclient.services.LocationService;
 
 
 public class MenuedActivity extends AppCompatActivity {

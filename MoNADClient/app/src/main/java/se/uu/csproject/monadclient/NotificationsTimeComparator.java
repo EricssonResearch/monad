@@ -1,6 +1,8 @@
-package se.uu.csproject.monadclient.recyclerviews;
+package se.uu.csproject.monadclient;
 
 import java.util.Comparator;
+
+import se.uu.csproject.monadclient.storage.Notify;
 
 public class NotificationsTimeComparator implements Comparator<Notify> {
 

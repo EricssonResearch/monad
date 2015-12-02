@@ -1,17 +1,19 @@
-package se.uu.csproject.monadclient;
+package se.uu.csproject.monadclient.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.Toast;
 
 import java.util.concurrent.ExecutionException;
+
+import se.uu.csproject.monadclient.ClientAuthentication;
+import se.uu.csproject.monadclient.R;
+import se.uu.csproject.monadclient.UpdateProfileTask;
 
 
 public class ProfileActivity extends MenuedActivity {

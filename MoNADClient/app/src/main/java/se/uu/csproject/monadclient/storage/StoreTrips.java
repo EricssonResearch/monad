@@ -1,4 +1,4 @@
-package se.uu.csproject.monadclient;
+package se.uu.csproject.monadclient.storage;
 
 import android.util.Log;
 
@@ -12,10 +12,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
-import se.uu.csproject.monadclient.recyclerviews.FullTripsStartTimeComparator;
-import se.uu.csproject.monadclient.recyclerviews.FullTrip;
-import se.uu.csproject.monadclient.recyclerviews.PartialTrip;
-import se.uu.csproject.monadclient.recyclerviews.Storage;
+import se.uu.csproject.monadclient.FullTripsStartTimeComparator;
 
 public class StoreTrips {
 

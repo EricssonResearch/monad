@@ -1,10 +1,15 @@
-package se.uu.csproject.monadclient.googlecloudmessaging;
+package se.uu.csproject.monadvehicle.googlecloudmessaging;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
+import android.util.Log;
 
+import com.google.android.gms.iid.InstanceID;
 import com.google.android.gms.iid.InstanceIDListenerService;
 
-import se.uu.csproject.monadclient.Authentication;
+import se.uu.csproject.monadvehicle.MainActivity;
+import se.uu.csproject.monadvehicle.VehicleAdministration;
 
 public class MyInstanceIDListenerService extends InstanceIDListenerService {
 
@@ -21,7 +26,7 @@ public class MyInstanceIDListenerService extends InstanceIDListenerService {
     @Override
     public void onTokenRefresh() {
         // Fetch updated Instance ID token and notify our app's server of any changes (if applicable).
-        Intent intent = new Intent(this, Authentication.class);
+        Intent intent = new Intent(this, MainActivity.class); //what is this?
         startService(intent);
     }
     // [END refresh_token]

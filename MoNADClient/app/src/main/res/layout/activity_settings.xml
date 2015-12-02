@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    tools:context="se.uu.csproject.monadclient.MainActivity">
+    tools:context=".activities.MainActivity">
 
     <include
         android:id="@+id/actionToolBar"

@@ -1,13 +1,13 @@
 {
   "project_info": {
-    "project_id": "monadclient",
-    "project_number": "46087854555",
-    "name": "MoNADClient"
+    "project_id": "monad-3c05e",
+    "project_number": "81265551950",
+    "name": "MoNAD"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:46087854555:android:edb48746bece72cf",
+        "mobilesdk_app_id": "1:81265551950:android:edb48746bece72cf",
         "client_id": "android:se.uu.csproject.monadclient",
         "client_type": 1,
         "android_client_info": {

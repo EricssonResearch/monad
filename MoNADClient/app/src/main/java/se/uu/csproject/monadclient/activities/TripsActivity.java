@@ -1,4 +1,4 @@
-package se.uu.csproject.monadclient;
+package se.uu.csproject.monadclient.activities;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -12,10 +12,12 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+import se.uu.csproject.monadclient.ClientAuthentication;
+import se.uu.csproject.monadclient.R;
 import se.uu.csproject.monadclient.interfaces.AsyncResponse;
 import se.uu.csproject.monadclient.interfaces.AsyncResponseString;
-import se.uu.csproject.monadclient.recyclerviews.FullTrip;
-import se.uu.csproject.monadclient.recyclerviews.Storage;
+import se.uu.csproject.monadclient.storage.FullTrip;
+import se.uu.csproject.monadclient.storage.Storage;
 import se.uu.csproject.monadclient.recyclerviews.TripRecyclerViewAdapter;
 import se.uu.csproject.monadclient.serverinteractions.SendUpdateFeedbackRequest;
 import se.uu.csproject.monadclient.serverinteractions.SendUserBookingsRequest;
