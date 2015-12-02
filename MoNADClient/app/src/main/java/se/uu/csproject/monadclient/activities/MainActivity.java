@@ -49,7 +49,6 @@ import se.uu.csproject.monadclient.interfaces.AsyncRecommendationsInteraction;
 import se.uu.csproject.monadclient.interfaces.AsyncResponse;
 import se.uu.csproject.monadclient.storage.FullTrip;
 import se.uu.csproject.monadclient.geofences.GeofenceActivity;
-import se.uu.csproject.monadclient.recyclerviews.FullTrip;
 import se.uu.csproject.monadclient.recyclerviews.SearchRecyclerViewAdapter;
 import se.uu.csproject.monadclient.storage.Storage;
 import se.uu.csproject.monadclient.serverinteractions.SendQuickTravelRequest;

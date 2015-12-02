@@ -25,7 +25,7 @@ import java.util.ArrayList;
 import java.util.Map;
 
 import se.uu.csproject.monadclient.R;
-import se.uu.csproject.monadclient.recyclerviews.Storage;
+import se.uu.csproject.monadclient.storage.Storage;
 
 public class GeofenceActivity extends AppCompatActivity implements
         GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, ResultCallback<Status> {

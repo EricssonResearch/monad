@@ -11,6 +11,7 @@ import java.util.Collections;
 import se.uu.csproject.monadclient.NotificationsInteraction;
 import se.uu.csproject.monadclient.FullTripsStartTimeComparator;
 import se.uu.csproject.monadclient.NotificationsTimeComparator;
+import se.uu.csproject.monadclient.recyclerviews.UserLocation;
 
 public class Storage{
     private static ArrayList<FullTrip> searchResults = new ArrayList<>();
@@ -230,6 +231,9 @@ public class Storage{
             for (int i = 0; i < busStops.size(); i++) {
                 busStops.get(i).printValues();
 
+            }
+        }
+    }
 	/* Methods for locations */
     public static void clearLocations() {
         locations.clear();

@@ -41,10 +41,10 @@ import java.util.Date;
 import java.util.List;
 
 import se.uu.csproject.monadclient.R;
-import se.uu.csproject.monadclient.recyclerviews.Storage;
+import se.uu.csproject.monadclient.storage.Storage;
 import se.uu.csproject.monadclient.recyclerviews.UserLocation;
 
-import static se.uu.csproject.monadclient.recyclerviews.Storage.addLocation;
+import static se.uu.csproject.monadclient.storage.Storage.addLocation;
 
 /**
  * Listener for geofence transition changes.
