@@ -41,7 +41,7 @@ standardSpeed = 50
 # Roads buses can drive on
 busRoadTypes = ('motorway', 'motorway_link', 'trunk', 'trunk_link', 'primary',
                 'primary_link', 'secondary', 'secondary_link', 'tertiary',
-                'tertiary_link', 'unclassified', 'residential')
+                'tertiary_link', 'unclassified', 'residential', 'bus_road')
 # , 'service')
 
 
@@ -217,28 +217,6 @@ class RouteHandler(handler.ContentHandler):
                 break
 
     def makeRoadIntersectionGraph(self):
-        """
-        myRoad = dict(self.roads)
-        nodeList = []
-
-        i = len(myRoad)
-        for road in myRoad:
-            print i,
-            i -= 1
-            if i == 6000:
-                break
-
-            nodeList.append(myRoad[road][2][0])
-
-            for nodeID in myRoad[road][2][1:]:
-
-                for road2 in myRoad:
-                    if nodeID == myRoad[road2][2][0] or nodeID == myRoad[road2][2][-1]:
-                        nodeList.append(nodeID)
-
-
-        self.NOD = nodeList
-        """
         pass
 
 
@@ -281,53 +259,7 @@ class Map:
             return self.handler.nodeID[coordinates]
         else:
             return self.closestRoadNode(coordinates)
-    """
-    def makeBusGraph(self):
 
-        graph = {}
-
-        i = 0
-        l = len(self.busStopList)
-        timer = time.time()
-        for busStopA in self.handler.busStops:
-
-            if busStopA.name not in graph:
-                graph[busStopA.name] = {}
-
-            i = i + 1
-            print "\n%f s\n (%d / %d) - %s" % (time.time() - timer, i, l, busStopA.name)
-            timer = time.time()
-            for busStopB in self.handler.busStops:
-
-                if busStopB.name not in graph[busStopA.name] and busStopA != busStopB:
-                    print '\033[91m' + '.' + '\033[0m',
-                    path, cost = self.findRouteFromCoordinateList([
-                        busStopA.coordinates,
-                        busStopB.coordinates])
-
-                    start = busStopA.name
-                    _cameFrom = []
-                    for node in path[1:]:
-                        id = self.handler.nodeID[node]
-
-                        if id in self.handler.busStopNode:
-                            b = self.handler.busStopNode[id].name
-
-                            if start not in graph:
-                                graph[start] = {}
-
-                            graph[start][b] = []
-                            graph[busStopA.name][b] = False
-                            graph[start][busStopB.name] = False
-
-                            for name in _cameFrom:
-                                graph[name][b] = False
-
-                            _cameFrom.append(start)
-                            start = b
-
-        return graph
-    """
     def getNodeIdFromCoordinatesList(self, coordinatesList):
         """
         :param coordinates: [(longitude, latitude)]
@@ -572,7 +504,7 @@ if __name__ == '__main__':
     print "We have " + str(len(myMap.nodes)) + " nodes in total"
     print "We have " + str(len(myMap.busStopList)) + " bus stops in total\n"
 
-
+    """
     print "Draw image ..."
     img = DrawImage(10000,
                     myMap.handler.minlon,
@@ -585,7 +517,8 @@ if __name__ == '__main__':
     # img.drawNodeList([myMap.nodes[x] for x in myMap.handler.NOD], 'red')
     img.drawBusStops(myMap.busStopList, myMap.nodes)
     img.drawSave(sys.argv[1])
-    
-    # b = BusNetwork()
-    # b.makeBusGraph(myMap.handler.nodes, myMap.handler.busStopNode, myMap.edges)
+    """
+
+    b = BusNetwork()
+    b.makeBusGraph(myMap.handler.nodes, myMap.handler.busStopNode, myMap.edges)
     # myMap.makeBusGraph()
