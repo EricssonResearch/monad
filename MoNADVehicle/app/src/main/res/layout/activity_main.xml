@@ -4,9 +4,7 @@
     android:layout_height="match_parent"
     tools:context="se.uu.csproject.monadvehicle.MainActivity">
 
-
-
-    <android.support.v7.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
+    <android.support.v7.widget.Toolbar
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="?attr/colorPrimary"
@@ -26,7 +24,6 @@
     </android.support.v7.widget.Toolbar>
 
     <LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="horizontal"
@@ -40,8 +37,6 @@
             android:orientation="vertical"
             android:layout_gravity="start"
             android:padding="@dimen/sideframe_padding"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
             >
 
             <ImageButton
@@ -147,28 +142,32 @@
                 android:background="@color/accentColor"/>
 
             <ScrollView
+                android:id="@+id/side_list_notifications_scroll"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:visibility="gone"
+                >
                 <LinearLayout
                     android:id="@+id/side_list_notifications"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:visibility="gone"
                     android:padding="@dimen/sideframe_padding"
                     >
                 </LinearLayout>
             </ScrollView>
 
             <ScrollView
+                android:id="@+id/side_list_busstops_scroll"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:visibility="gone"
+                >
                 <LinearLayout
                     android:id="@+id/side_list_busstops"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:visibility="gone"
                     android:padding="@dimen/sideframe_padding"
                     >
                 </LinearLayout>
@@ -189,6 +188,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/label_emergencytype"
                     android:theme="@style/darkTheme"
+                    style="@style/mediumText"
                     android:layout_marginBottom="@dimen/list_margin"
                     />
 

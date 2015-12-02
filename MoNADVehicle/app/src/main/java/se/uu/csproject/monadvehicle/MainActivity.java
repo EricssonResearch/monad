@@ -20,6 +20,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RadioGroup;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -33,6 +34,7 @@ import org.mapsforge.core.graphics.Bitmap;
 import org.mapsforge.core.graphics.Color;
 import org.mapsforge.core.graphics.Paint;
 import org.mapsforge.core.graphics.Style;
+import org.mapsforge.core.model.BoundingBox;
 import org.mapsforge.core.model.LatLong;
 import org.mapsforge.map.android.graphics.AndroidGraphicFactory;
 import org.mapsforge.map.android.util.AndroidUtil;
@@ -58,6 +60,7 @@ import java.util.concurrent.TimeUnit;
 public class MainActivity extends Activity implements ConnectionCallbacks, OnConnectionFailedListener {
 
     LinearLayout sideList, notificationsList, busStopsList, emergencyList;
+    ScrollView notificationsScroll, busStopScroll;
     NotificationList notifications;
     // name of the map file in the external storage, it should be stored in the root directory of the sdcard
     private static final String MAPFILE = "uppsala.map";
@@ -101,6 +104,8 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
         notificationsList = (LinearLayout) findViewById(R.id.side_list_notifications);
         busStopsList = (LinearLayout) findViewById(R.id.side_list_busstops);
         emergencyList = (LinearLayout) findViewById(R.id.side_list_emergency);
+        notificationsScroll = (ScrollView) findViewById(R.id.side_list_notifications_scroll);
+        busStopScroll = (ScrollView) findViewById(R.id.side_list_busstops_scroll);
         notifications = new NotificationList(generateNotifications());
 
         //Fill the notifications list
@@ -135,12 +140,15 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
         mapView.setClickable(true);
         mapView.getMapScaleBar().setVisible(true);
         mapView.setBuiltInZoomControls(true);
-        mapView.getMapZoomControls().setZoomLevelMin((byte) 10);
+        mapView.getMapZoomControls().setZoomLevelMin((byte) 12);
         mapView.getMapZoomControls().setZoomLevelMax((byte) 20);
         //TODO: change the center to the current user location, now it's in Uppsala Central Station
         mapView.getModel().mapViewPosition.setCenter(new LatLong(59.8586, 17.6461));
         mapView.getModel().mapViewPosition.setZoomLevel((byte) 12);
-//TODO: set the map bounds: mapView.getModel().mapViewPosition.setMapLimit(/*use BoundingBox instance*/);
+        // Set the boundaries of the map. Values taken from Uppsala.map
+        mapView.getModel().mapViewPosition.setMapLimit(
+                new BoundingBox(59.7541, 17.392, 59.9086, 17.9039)
+        );
         // create a tile cache of suitable size
         this.tileCache = AndroidUtil.createTileCache(this, "mapcache",
                 mapView.getModel().displayModel.getTileSize(), 1f,
@@ -195,17 +203,17 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
         showBusStopList.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (busStopsList.getVisibility() == View.VISIBLE) {
-                    busStopsList.setVisibility(View.GONE);
+                if (busStopScroll.getVisibility() == View.VISIBLE) {
+                    busStopScroll.setVisibility(View.GONE);
                     sideList.setVisibility(View.GONE);
-                } else if (notificationsList.getVisibility() == View.VISIBLE
+                } else if (notificationsScroll.getVisibility() == View.VISIBLE
                         || emergencyList.getVisibility() == View.VISIBLE) {
-                    notificationsList.setVisibility(View.GONE);
+                    notificationsScroll.setVisibility(View.GONE);
                     emergencyList.setVisibility(View.GONE);
-                    busStopsList.setVisibility(View.VISIBLE);
+                    busStopScroll.setVisibility(View.VISIBLE);
                 } else {
                     sideList.setVisibility(View.VISIBLE);
-                    busStopsList.setVisibility(View.VISIBLE);
+                    busStopScroll.setVisibility(View.VISIBLE);
                 }
             }
         });
@@ -214,19 +222,19 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
         showNotificationsList.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(notificationsList.getVisibility() == View.VISIBLE){
-                    notificationsList.setVisibility(View.GONE);
+                if(notificationsScroll.getVisibility() == View.VISIBLE){
+                    notificationsScroll.setVisibility(View.GONE);
                     sideList.setVisibility(View.GONE);
                 }
-                else if (busStopsList.getVisibility() == View.VISIBLE
+                else if (busStopScroll.getVisibility() == View.VISIBLE
                         || emergencyList.getVisibility() == View.VISIBLE){
-                    busStopsList.setVisibility(View.GONE);
+                    busStopScroll.setVisibility(View.GONE);
                     emergencyList.setVisibility(View.GONE);
-                    notificationsList.setVisibility(View.VISIBLE);
+                    notificationsScroll.setVisibility(View.VISIBLE);
                 }
                 else {
                     sideList.setVisibility(View.VISIBLE);
-                    notificationsList.setVisibility(View.VISIBLE);
+                    notificationsScroll.setVisibility(View.VISIBLE);
                 }
             }
         });
@@ -238,10 +246,10 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
                 if (emergencyList.getVisibility() == View.VISIBLE) {
                     emergencyList.setVisibility(View.GONE);
                     sideList.setVisibility(View.GONE);
-                } else if (notificationsList.getVisibility() == View.VISIBLE
-                        || busStopsList.getVisibility() == View.VISIBLE) {
-                    notificationsList.setVisibility(View.GONE);
-                    busStopsList.setVisibility(View.GONE);
+                } else if (notificationsScroll.getVisibility() == View.VISIBLE
+                        || busStopScroll.getVisibility() == View.VISIBLE) {
+                    notificationsScroll.setVisibility(View.GONE);
+                    busStopScroll.setVisibility(View.GONE);
                     emergencyList.setVisibility(View.VISIBLE);
                 } else {
                     sideList.setVisibility(View.VISIBLE);
