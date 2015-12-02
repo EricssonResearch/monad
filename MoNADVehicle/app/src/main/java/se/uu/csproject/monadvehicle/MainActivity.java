@@ -6,8 +6,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
-import android.media.Image;
-import android.os.AsyncTask;
 import android.os.Environment;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
@@ -18,7 +16,6 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -26,7 +23,6 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RadioGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -44,6 +40,7 @@ import org.mapsforge.map.android.graphics.AndroidGraphicFactory;
 import org.mapsforge.map.android.util.AndroidUtil;
 import org.mapsforge.map.android.view.MapView;
 import org.mapsforge.map.layer.cache.TileCache;
+import org.mapsforge.map.layer.overlay.Marker;
 import org.mapsforge.map.layer.overlay.Polyline;
 import org.mapsforge.map.layer.renderer.TileRendererLayer;
 import org.mapsforge.map.reader.MapDataStore;
@@ -146,7 +143,7 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
         //TODO: change the center to the current user location, now it's in Uppsala Central Station
         mapView.getModel().mapViewPosition.setCenter(new LatLong(59.8586, 17.6461));
         mapView.getModel().mapViewPosition.setZoomLevel((byte) 12);
-
+//TODO: set the map bounds: mapView.getModel().mapViewPosition.setMapLimit(/*use BoundingBox instance*/);
         // create a tile cache of suitable size
         this.tileCache = AndroidUtil.createTileCache(this, "mapcache",
                 mapView.getModel().displayModel.getTileSize(), 1f,
@@ -155,6 +152,10 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
         //the bitmap that shows the current location
         Drawable drawable = ContextCompat.getDrawable(getBaseContext(), R.drawable.marker_blue);
         Bitmap bitmap = AndroidGraphicFactory.convertToBitmap(drawable);
+
+        //the bitmap used for bus stops
+        drawable = ContextCompat.getDrawable(getBaseContext(), R.mipmap.ic_directions_bus_black_18dp);
+        Bitmap busBitmap = AndroidGraphicFactory.convertToBitmap(drawable);
 
         myLocationOverlay = new MyLocationOverlay(this, this.mapView.getModel().mapViewPosition, bitmap);
         myLocationOverlay.setSnapToLocationEnabled(false);
@@ -171,24 +172,32 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
         // only once a layer is associated with a mapView the rendering starts
         this.mapView.getLayerManager().getLayers().add(tileRendererLayer);
 
+        // Drawing the route using the trajectory stored in busTrip
         Paint paint = AndroidGraphicFactory.INSTANCE.createPaint();
         paint.setColor(Color.RED);
         paint.setStrokeWidth(10);
         paint.setStyle(Style.STROKE);
-
         Polyline polyline = new Polyline(paint, AndroidGraphicFactory.INSTANCE);
         List<LatLong> coordinateList = polyline.getLatLongs();
+<<<<<<< HEAD
         //BusTrip busTrip = Storage.getBusTrip();
 
         for (int i = 0; i < busTrip.getTrajectory().size(); i++) {
             coordinateList.add(busTrip.getTrajectory().get(i));
+=======
+        for (int i = 0; i < Storage.getBusTrip().getTrajectory().size(); i++) {
+            coordinateList.add(Storage.getBusTrip().getTrajectory().get(i));
+>>>>>>> 649c8c5e088f80d17847af7937f2a9f27ce15ea3
         }
 
         // adding the layer with the route to the mapview
         mapView.getLayerManager().getLayers().add(polyline);
-
         // adding the layer with current location to the mapview
         mapView.getLayerManager().getLayers().add(this.myLocationOverlay);
+        // adding a marker for each bus stop to the mapview
+        for(int i = 0; i < Storage.getBusTrip().getBusStops().size(); i++) {
+            mapView.getLayerManager().getLayers().add(new Marker(Storage.getBusTrip().getBusStops().get(i).getLatLong(), busBitmap, 0, 0));
+        }
 
         buildGoogleApiClient();
 
@@ -327,8 +336,7 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
      * @return the local map file as a File type
      */
     private File getMapFile() {
-        File file = new File(Environment.getExternalStorageDirectory(), MAPFILE);
-        return file;
+        return new File(Environment.getExternalStorageDirectory(), MAPFILE);
     }
 
     @Override
@@ -424,76 +432,6 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
         SimpleDateFormat timeFormat = new SimpleDateFormat(TIME_FORMAT);
         return timeFormat.format(arrival);
     }
-
-//    public ArrayList<BusStop> generateBusStops(){
-//        ArrayList<BusStop> busStops = new ArrayList<>();
-//        Calendar calendar = new GregorianCalendar(2015, 11, 23, 15, 0, 0);
-//        Date arrival1 = calendar.getTime();
-//        calendar = new GregorianCalendar(2015, 11, 23, 15, 5, 0);
-//        Date arrival2 = calendar.getTime();
-//        calendar = new GregorianCalendar(2015, 11, 23, 15, 10, 0);
-//        Date arrival3 = calendar.getTime();
-//        calendar = new GregorianCalendar(2015, 11, 23, 15, 20, 0);
-//        Date arrival4 = calendar.getTime();
-//
-//        BusStop stop1 = new BusStop(1, "Centralstation", 0, 0, arrival1, 2, 0);
-//        busStops.add(stop1);
-//        BusStop stop2 = new BusStop(1, "Centralstation", 0, 0, arrival2, 1, 1);
-//        busStops.add(stop2);
-//        BusStop stop3 = new BusStop(1, "Centralstation", 0, 0, arrival3, 3, 4);
-//        busStops.add(stop3);
-//        BusStop stop4 = new BusStop(1, "Centralstation", 0, 0, arrival4, 0, 1);
-//        busStops.add(stop4);
-//
-//        return busStops;
-//        return null;
-//    }
-
-//    public void displayBusTrip() {
-//        // instantiating the paint object
-//        Paint paint = AndroidGraphicFactory.INSTANCE.createPaint();
-//        paint.setColor(Color.RED);
-//        paint.setStrokeWidth(10);
-//        paint.setStyle(Style.STROKE);
-//
-//        Polyline polyline = new Polyline(paint, AndroidGraphicFactory.INSTANCE);
-//
-//        //// TODO: receive route from server and draw it. The following route is just for demo.
-//        // the route from polacksbacken to flogsta
-//        // to draw the route, all the turning points along the route must be specified,
-//        // mapsforge does not have the functionality to draw the route between two points with auto detection of turning points
-//        List<LatLong> coordinateList = polyline.getLatLongs();
-//
-//        BusTrip busTrip = Storage.getBusTrip();
-//
-//        for (int i = 0; i < busTrip.getBusStops().size(); i++) {
-//            coordinateList.add(new LatLong(busTrip.getBusStops().get(i).getLatitude(), busTrip.getBusStops().get(i).getLongitude()));
-//        }
-////        coordinateList.add(new LatLong(59.851294, 17.593113));
-////        coordinateList.add(new LatLong(59.850208, 17.600629));
-////        coordinateList.add(new LatLong(59.851952, 17.603680));
-////        coordinateList.add(new LatLong(59.850008, 17.610965));
-////        coordinateList.add(new LatLong(59.852265, 17.613409));
-////        coordinateList.add(new LatLong(59.853481, 17.616570));
-////        coordinateList.add(new LatLong(59.850975, 17.618847));
-////        coordinateList.add(new LatLong(59.849815, 17.620939));
-////        coordinateList.add(new LatLong(59.846652, 17.624497));
-////        coordinateList.add(new LatLong(59.846425, 17.624276));
-////        coordinateList.add(new LatLong(59.844812, 17.625015));
-////        coordinateList.add(new LatLong(59.840875, 17.630646));
-////        coordinateList.add(new LatLong(59.841609, 17.639105));
-////        coordinateList.add(new LatLong(59.839344, 17.640161));
-////        coordinateList.add(new LatLong(59.840673, 17.647350));
-////        coordinateList.add(new LatLong(59.840063, 17.647760));
-//
-//        // adding the layer with the route to the mapview
-//        mapView.getLayerManager().getLayers().add(polyline);
-//
-//        // adding the layer with current location to the mapview
-//        mapView.getLayerManager().getLayers().add(this.myLocationOverlay);
-//
-//
-//    }
 
     public ArrayList<Notification> generateNotifications(){
         ArrayList<Notification> notifications = new ArrayList<>();

@@ -9,7 +9,7 @@
     android:padding="@dimen/big_padding"
     android:orientation="vertical"
     android:gravity="center_vertical"
-    tools:context="se.uu.csproject.monadclient.SettingsActivity"
+    tools:context=".activities.SettingsActivity"
     android:layout_gravity="center"
     >
     <RadioButton

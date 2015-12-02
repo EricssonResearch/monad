@@ -2,6 +2,8 @@ package se.uu.csproject.monadvehicle;
 
 import android.util.Log;
 
+import org.mapsforge.core.model.LatLong;
+
 import java.util.Date;
 
 public class BusStop {
@@ -103,5 +105,9 @@ public class BusStop {
 
     public String coordinatesToString() {
         return "(" + longitude + ", " + latitude + ")";
+    }
+
+    public LatLong getLatLong() {
+        return new LatLong(this.latitude, this.longitude);
     }
 }

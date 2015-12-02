@@ -47,7 +47,12 @@ def string_to_coordinates(string):
     data = {'string': string}
     response = requests.post(url, data=data, headers=headers)
 
-    return response.json()
+    if response.status_code == 500:
+        response = {'error': "Yes"}
+    else:
+        response = response.json()
+
+    return response
 
 
 def coordinates_to_nearest_stops(longitude, latitude, distance):
@@ -72,11 +77,13 @@ def coordinates_to_nearest_stops(longitude, latitude, distance):
             'distance': float(distance)}
     response = requests.post(url, data=data, headers=headers)
 
-    responseJson = response.json()
+    if response.status_code == 500:
+        response = {'error': "Yes"}
+    else:
+        response = response.json()
+        response['bus_stops'] = ast.literal_eval(response['bus_stops'])
 
-    responseJson['bus_stops'] = ast.literal_eval(responseJson['bus_stops'])
-
-    return responseJson
+    return response
 
 
 def coordinates_to_nearest_stop(longitude, latitude):
@@ -93,14 +100,20 @@ def coordinates_to_nearest_stop(longitude, latitude):
     data = {'lat': float(latitude), 'lon': float(longitude), 'distance': 0.0}
     response = requests.post(url, data=data, headers=headers)
 
-    responseJson = response.json()
-    responseJson['bus_stops'] = ast.literal_eval(responseJson['bus_stops'])
-
     busStop = {}
-    busStop['_id'] = responseJson['_id']
-    busStop['name'] = responseJson['bus_stops'][0][0]
-    busStop['longitude'] = responseJson['bus_stops'][0][1][0]
-    busStop['latitude'] = responseJson['bus_stops'][0][1][1]
+
+    if response.status_code == 500:
+        busStop = {'error': "Yes"}
+    else:
+
+        response = response.json()
+        response['bus_stops'] = ast.literal_eval(response['bus_stops'])
+
+        busStop['_id'] = response['_id']
+        busStop['name'] = response['bus_stops'][0][0]
+        busStop['longitude'] = response['bus_stops'][0][1][0]
+        busStop['latitude'] = response['bus_stops'][0][1][1]
+
     return busStop
 
 
@@ -135,20 +148,24 @@ def get_route(coordinates_list):
 
     data = {'list': str(coordinates_list)}
 
+
     response = requests.post(url, data=data, headers=headers)
-    responseJson = response.json()
 
-    responseJson['route'] = ast.literal_eval(responseJson['route'])
-    responseJson['end'] = ast.literal_eval(responseJson['end'])
-    responseJson['points'] = ast.literal_eval(responseJson['points'])
-    responseJson['start'] = ast.literal_eval(responseJson['start'])
-    responseJson['cost'] = ast.literal_eval(responseJson['cost'])
+    if response.status_code == 500:
+        response = {'error': "Yes"}
+    else:
+        response = response.json()
+        response['route'] = ast.literal_eval(response['route'])
+        response['end'] = ast.literal_eval(response['end'])
+        response['points'] = ast.literal_eval(response['points'])
+        response['start'] = ast.literal_eval(response['start'])
+        response['cost'] = ast.literal_eval(response['cost'])
 
-    return responseJson
+    return response
 
 
 if __name__ == '__main__':
-    print string_to_coordinates("Polacksbacken")
+    print string_to_coordinates("Polacksbacken 10")
     print string_to_coordinates("SernandeRs VäG 10")
     print get_route([(17.6130204, 59.8545318),
                      (17.5817552, 59.8507556),

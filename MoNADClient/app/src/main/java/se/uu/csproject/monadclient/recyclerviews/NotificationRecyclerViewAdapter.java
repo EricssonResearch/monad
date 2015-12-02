@@ -19,10 +19,13 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
-import se.uu.csproject.monadclient.NotificationsActivity;
+import se.uu.csproject.monadclient.activities.NotificationsActivity;
 import se.uu.csproject.monadclient.R;
-import se.uu.csproject.monadclient.RouteActivity;
-import se.uu.csproject.monadclient.SearchActivity;
+import se.uu.csproject.monadclient.activities.RouteActivity;
+import se.uu.csproject.monadclient.activities.SearchActivity;
+import se.uu.csproject.monadclient.storage.FullTrip;
+import se.uu.csproject.monadclient.storage.Notify;
+import se.uu.csproject.monadclient.storage.Storage;
 
 public class NotificationRecyclerViewAdapter extends RecyclerView.Adapter<NotificationRecyclerViewAdapter.NotificationViewHolder> {
     private ArrayList<Notify> notifications;

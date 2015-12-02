@@ -102,7 +102,7 @@ loop(Req, DocRoot) ->
 
 handle_error(Report, Req) ->
     error_logger:error_report(Report),
-    Req:respond({500, [{"Content-Type", "text/plain"}], "Failed 1Request\n"}).
+    Req:respond({500, [{"Content-Type", "text/plain"}], "Failed Request\n"}).
 
 get_nearest_stop(Req) ->
     PostData = Req:parse_post(),
