@@ -179,15 +179,10 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
         paint.setStyle(Style.STROKE);
         Polyline polyline = new Polyline(paint, AndroidGraphicFactory.INSTANCE);
         List<LatLong> coordinateList = polyline.getLatLongs();
-<<<<<<< HEAD
         //BusTrip busTrip = Storage.getBusTrip();
 
         for (int i = 0; i < busTrip.getTrajectory().size(); i++) {
             coordinateList.add(busTrip.getTrajectory().get(i));
-=======
-        for (int i = 0; i < Storage.getBusTrip().getTrajectory().size(); i++) {
-            coordinateList.add(Storage.getBusTrip().getTrajectory().get(i));
->>>>>>> 649c8c5e088f80d17847af7937f2a9f27ce15ea3
         }
 
         // adding the layer with the route to the mapview
@@ -258,15 +253,6 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
             }
         });
 
-        TextView tvShowMinutes = (TextView)findViewById(R.id.text_busstoptime);
-        long timeDiff = calculateTimeDifference();
-        String strTimeDiff = Long.toString(timeDiff);
-        tvShowMinutes.setText(strTimeDiff);
-
-        TextView tvShowDistance = (TextView)findViewById(R.id.text_busstoptime);
-        double distance = calculateDistance();
-        String strDistance = Double.toString(distance);
-        tvShowDistance.setText(strDistance);
     }
 
     @Override
