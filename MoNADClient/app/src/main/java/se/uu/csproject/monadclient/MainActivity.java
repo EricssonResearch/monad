@@ -39,9 +39,12 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 
+import se.uu.csproject.monadclient.interfaces.AsyncRecommendationsInteraction;
+import se.uu.csproject.monadclient.interfaces.AsyncResponse;
 import se.uu.csproject.monadclient.recyclerviews.FullTrip;
 import se.uu.csproject.monadclient.recyclerviews.SearchRecyclerViewAdapter;
 import se.uu.csproject.monadclient.recyclerviews.Storage;
+import se.uu.csproject.monadclient.serverinteractions.SendQuickTravelRequest;
 
 public class MainActivity extends MenuedActivity implements AsyncResponse, AsyncRecommendationsInteraction,
         AsyncGetBusStopsInteraction {
@@ -151,7 +154,7 @@ public class MainActivity extends MenuedActivity implements AsyncResponse, Async
             toast.show();
         } else {
             CharSequence text = getString(R.string.java_search_locationdisabled);
-            Toast toast = Toast.makeText(context, text, Toast.LENGTH_SHORT);
+            Toast toast = Toast.makeText(context, text, Toast.LENGTH_LONG);
             toast.show();
         }
     }
@@ -160,7 +163,7 @@ public class MainActivity extends MenuedActivity implements AsyncResponse, Async
     public void processFinish(ArrayList<FullTrip> searchResults){
         if (searchResults.isEmpty()){
             CharSequence text = getString(R.string.java_main_noresults);
-            Toast toast = Toast.makeText(context, text, Toast.LENGTH_SHORT);
+            Toast toast = Toast.makeText(context, text, Toast.LENGTH_LONG);
             toast.show();
             Storage.clearSearchResults();
         }

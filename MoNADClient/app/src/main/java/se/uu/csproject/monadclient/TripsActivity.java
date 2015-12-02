@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Toast;
 
@@ -13,12 +12,16 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+import se.uu.csproject.monadclient.interfaces.AsyncResponse;
+import se.uu.csproject.monadclient.interfaces.AsyncResponseString;
 import se.uu.csproject.monadclient.recyclerviews.FullTrip;
 import se.uu.csproject.monadclient.recyclerviews.Storage;
 import se.uu.csproject.monadclient.recyclerviews.TripRecyclerViewAdapter;
+import se.uu.csproject.monadclient.serverinteractions.SendUpdateFeedbackRequest;
+import se.uu.csproject.monadclient.serverinteractions.SendUserBookingsRequest;
 
 
-public class TripsActivity extends MenuedActivity implements AsyncResponse, AsyncResponseString{
+public class TripsActivity extends MenuedActivity implements AsyncResponse, AsyncResponseString {
     private Toolbar toolbar;
     private Context context;
     private RecyclerView recyclerView;

@@ -23,6 +23,7 @@ import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.SignInButton;
 
 import se.uu.csproject.monadclient.googlecloudmessaging.RegistrationIntentService;
+import se.uu.csproject.monadclient.interfaces.AsyncLoginInteraction;
 
 public class LoginActivity extends AppCompatActivity implements AsyncLoginInteraction {
     private final int GOOGLE_LOGIN_REQUEST = 1;

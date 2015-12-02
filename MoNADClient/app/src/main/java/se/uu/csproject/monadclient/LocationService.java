@@ -72,6 +72,8 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
     @Override
     public void onTaskRemoved(Intent rootIntent){
         super.onTaskRemoved(rootIntent);
+        //TODO: send geofence info
+        //new SendStoreGeofenceInfoRequest().execute();
         stopSelf();
     }
 

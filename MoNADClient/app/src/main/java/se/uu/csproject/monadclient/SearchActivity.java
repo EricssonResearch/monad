@@ -33,11 +33,13 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
+import se.uu.csproject.monadclient.interfaces.AsyncResponse;
 import se.uu.csproject.monadclient.recyclerviews.FullTrip;
 import se.uu.csproject.monadclient.recyclerviews.SearchRecyclerViewAdapter;
 import se.uu.csproject.monadclient.recyclerviews.Storage;
+import se.uu.csproject.monadclient.serverinteractions.SendTravelRequest;
 
-public class SearchActivity extends MenuedActivity implements AsyncResponse{
+public class SearchActivity extends MenuedActivity implements AsyncResponse {
     private TextView textViewTripDate, textViewTripTime;
     DialogFragment dateFragment, timeFragment;
     private RadioGroup tripTimeRadioGroup, priorityRadioGroup;

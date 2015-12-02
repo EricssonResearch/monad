@@ -19,18 +19,18 @@ import se.uu.csproject.monadclient.recyclerviews.Storage;
 
 public class StoreTrips {
 
-    private int numberOfSearchResults, numberOfPartialTrips;
+    private int numberOfResults, numberOfPartialTrips;
     private SimpleDateFormat format;
-    private ArrayList<FullTrip> searchResults;
+    private ArrayList<FullTrip> results;
 
     // Get the trips returned by the server and store them
     public ArrayList<FullTrip> storeTheTrips(JSONObject trips, int searchResultsOrBookings){
-        numberOfSearchResults = trips.length();
+        numberOfResults = trips.length();
         format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        searchResults = new ArrayList<>();
+        results = new ArrayList<>();
 
         try{
-            for (int i = 0; i < numberOfSearchResults; i++){
+            for (int i = 0; i < numberOfResults; i++){
                 String tripID = "", requestID = "";
                 long duration = 0;
                 int feedback = -1;
@@ -75,7 +75,7 @@ public class StoreTrips {
                 FullTrip fullTrip = new FullTrip(tripID, requestID, partialTripArrayList,
                         durationInMinutes, booked, feedback);
 
-                searchResults.add(fullTrip);
+                results.add(fullTrip);
             }
 
         } catch (java.text.ParseException e){
@@ -86,14 +86,14 @@ public class StoreTrips {
         }
 
         // Sort the trips based on their start time and whether they're new or old
-        Collections.sort(searchResults, new FullTripsStartTimeComparator());
+        Collections.sort(results, new FullTripsStartTimeComparator());
 
-        if (searchResultsOrBookings == 0){
-            Storage.setSearchResults(searchResults);
-        } else if (searchResultsOrBookings == 1){
-            Storage.setBookings(searchResults);
+        if (searchResultsOrBookings == Storage.SEARCH_RESULTS){
+            Storage.setSearchResults(results);
+        } else if (searchResultsOrBookings == Storage.BOOKINGS){
+            Storage.setBookings(results);
         }
 
-        return searchResults;
+        return results;
     }
 }

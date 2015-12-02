@@ -15,16 +15,17 @@ import android.widget.Toast;
 
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
+import se.uu.csproject.monadclient.interfaces.AsyncResponseString;
 import se.uu.csproject.monadclient.recyclerviews.FullTrip;
 import se.uu.csproject.monadclient.recyclerviews.Storage;
+import se.uu.csproject.monadclient.serverinteractions.SendBookingCancelRequest;
 
 import static java.lang.Math.floor;
 
-public class TripCancelPopup extends AppCompatActivity implements AsyncResponseString{
+public class TripCancelPopup extends AppCompatActivity implements AsyncResponseString {
     private TextView startBusStop, endBusStop, startTime, endTime, date, countdown;
     private ImageView clockIcon;
     private FullTrip trip;

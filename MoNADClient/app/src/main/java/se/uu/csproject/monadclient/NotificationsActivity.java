@@ -12,11 +12,10 @@ import android.view.View;
 
 import java.util.ArrayList;
 
-import se.uu.csproject.monadclient.recyclerviews.FullTrip;
+import se.uu.csproject.monadclient.interfaces.AsyncNotificationsInteraction;
 import se.uu.csproject.monadclient.recyclerviews.NotificationRecyclerViewAdapter;
 import se.uu.csproject.monadclient.recyclerviews.Notify;
 import se.uu.csproject.monadclient.recyclerviews.Storage;
-import se.uu.csproject.monadclient.recyclerviews.TripRecyclerViewAdapter;
 
 //// TODO (low priority): receive data from notification module (maybe not in this activity - TBD), display them in notification bar as well as in the recyclerview
 //public class NotificationsActivity extends MenuedActivity implements AsyncResponse, AsyncNotificationsInteraction {

@@ -19,6 +19,9 @@ public class Storage{
     private static JSONObject changedFeedback = new JSONObject();
     private static double latitude = 0.0, longitude = 0.0;
 
+    public static final int SEARCH_RESULTS = 0;
+    public static final int BOOKINGS = 1;
+
     public static void clearAll() {
         clearSearchResults();
         clearBookings();

@@ -5,22 +5,21 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
+import se.uu.csproject.monadclient.interfaces.AsyncResponseString;
 import se.uu.csproject.monadclient.recyclerviews.FullTrip;
-import se.uu.csproject.monadclient.recyclerviews.PartialTrip;
 import se.uu.csproject.monadclient.recyclerviews.Storage;
+import se.uu.csproject.monadclient.serverinteractions.SendBookingRequest;
 
-public class RouteConfirmPopup extends AppCompatActivity implements AsyncResponseString{
+public class RouteConfirmPopup extends AppCompatActivity implements AsyncResponseString {
 
     private TextView busIdView, startTimeView, endTimeView, startPositionView, endPositionView;
     private FullTrip trip;

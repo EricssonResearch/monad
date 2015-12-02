@@ -3,6 +3,7 @@ package se.uu.csproject.monadclient;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import se.uu.csproject.monadclient.interfaces.AsyncNotificationsInteraction;
 import se.uu.csproject.monadclient.recyclerviews.Storage;
 
 /**
