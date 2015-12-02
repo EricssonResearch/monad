@@ -58,14 +58,14 @@ public class  MyGcmListenerService extends GcmListenerService {
      * Create and show a simple notification containing the received GCM message.
      */
     private void sendNotification(String message, String Title) {
-        Intent intent = new Intent(this, NotificationsActivity.class);
+        Intent intent = new Intent(this, MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent,
                 PendingIntent.FLAG_UPDATE_CURRENT);
 
         Uri defaultSoundUri= RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
-                .setSmallIcon(R.drawable.ic_directions_bus_black_24dp)
+                .setSmallIcon(R.mipmap.ic_directions_bus_black_18dp)
                 .setContentTitle(Title)
                 .setContentText(message)
                 .setAutoCancel(false)
