@@ -43,7 +43,8 @@ import se.uu.csproject.monadclient.recyclerviews.FullTrip;
 import se.uu.csproject.monadclient.recyclerviews.SearchRecyclerViewAdapter;
 import se.uu.csproject.monadclient.recyclerviews.Storage;
 
-public class MainActivity extends MenuedActivity implements AsyncResponse, AsyncRecommendationsInteraction {
+public class MainActivity extends MenuedActivity implements AsyncResponse, AsyncRecommendationsInteraction,
+        AsyncGetBusStopsInteraction {
 
     private AutoCompleteTextView destination;
     private Context context;
@@ -247,8 +248,10 @@ public class MainActivity extends MenuedActivity implements AsyncResponse, Async
             getRecommendations();
         }
 
-        /* TODO: GetNotifications */
-//        new NotificationsInteraction("MainActivity").getNotifications();
+        /* GetBusStops */
+        if (Storage.isEmptyBusStops()) {
+            getBusStops();
+        }
     }
 
     @Override
@@ -335,5 +338,14 @@ public class MainActivity extends MenuedActivity implements AsyncResponse, Async
     public void displayRecommendations() {
         adapter = new SearchRecyclerViewAdapter(Storage.getRecommendations());
         recyclerView.setAdapter(adapter);
+    }
+
+    public void getBusStops() {
+        new GetBusStopsTask(this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+    }
+
+    @Override
+    public void processReceivedGetBusStopsResponse() {
+
     }
 }

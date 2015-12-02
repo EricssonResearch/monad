@@ -929,18 +929,6 @@ public class ClientAuthentication extends Authentication {
         }
     }
 
-    /* TODO: Will be changed */
-//    public static String postGetNearestBusStopRequest() {
-//        String request = ROUTES_GENERATOR_HOST + ROUTES_GENERATOR_PORT + "/get_nearest_stop_from_coordinates";
-//        // String urlParameters = "client_id=" + getClientId();
-//        String urlParameters = "lon=17.6093985&lat=59.8578199";
-//
-//        /* Send the request to the Authentication Module */
-//        String response = postRequest(request, urlParameters);
-//
-//        System.out.println("--------RRRR_--------------: " + response);
-//        return "ok";
-//    }
 
     public static String exceptionMessage() {
         return "ERROR - An Exception was thrown";
