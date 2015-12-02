@@ -258,15 +258,6 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
             }
         });
 
-        TextView tvShowMinutes = (TextView)findViewById(R.id.text_busstoptime);
-        long timeDiff = calculateTimeDifference();
-        String strTimeDiff = Long.toString(timeDiff);
-        tvShowMinutes.setText(strTimeDiff);
-
-        TextView tvShowDistance = (TextView)findViewById(R.id.text_busstoptime);
-        double distance = calculateDistance();
-        String strDistance = Double.toString(distance);
-        tvShowDistance.setText(strDistance);
     }
 
     @Override
