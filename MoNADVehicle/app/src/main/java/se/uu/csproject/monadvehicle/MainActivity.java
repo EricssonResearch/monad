@@ -11,7 +11,9 @@ import android.os.AsyncTask;
 import android.os.Environment;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
+import android.text.TextWatcher;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -90,9 +92,10 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
     // Represents a geographical location.
     protected Location mCurrentLocation;
 
+    //for distance and time calculations
     Location location;
-    ArrayList<LatLong> trajectory;
-    ArrayList<BusStop> busStops;
+    BusTrip busTrip = Storage.getBusTrip();
+
 
 
     @Override
@@ -175,7 +178,7 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
 
         Polyline polyline = new Polyline(paint, AndroidGraphicFactory.INSTANCE);
         List<LatLong> coordinateList = polyline.getLatLongs();
-        BusTrip busTrip = Storage.getBusTrip();
+        //BusTrip busTrip = Storage.getBusTrip();
 
         for (int i = 0; i < busTrip.getTrajectory().size(); i++) {
             coordinateList.add(busTrip.getTrajectory().get(i));
@@ -212,17 +215,15 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
         showNotificationsList.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(notificationsList.getVisibility() == View.VISIBLE){
+                if (notificationsList.getVisibility() == View.VISIBLE) {
                     notificationsList.setVisibility(View.GONE);
                     sideList.setVisibility(View.GONE);
-                }
-                else if (busStopsList.getVisibility() == View.VISIBLE
-                        || emergencyList.getVisibility() == View.VISIBLE){
+                } else if (busStopsList.getVisibility() == View.VISIBLE
+                        || emergencyList.getVisibility() == View.VISIBLE) {
                     busStopsList.setVisibility(View.GONE);
                     emergencyList.setVisibility(View.GONE);
                     notificationsList.setVisibility(View.VISIBLE);
-                }
-                else {
+                } else {
                     sideList.setVisibility(View.VISIBLE);
                     notificationsList.setVisibility(View.VISIBLE);
                 }
@@ -247,6 +248,16 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
                 }
             }
         });
+
+        TextView tvShowMinutes = (TextView)findViewById(R.id.text_busstoptime);
+        long timeDiff = calculateTimeDifference();
+        String strTimeDiff = Long.toString(timeDiff);
+        tvShowMinutes.setText(strTimeDiff);
+
+        TextView tvShowDistance = (TextView)findViewById(R.id.text_busstoptime);
+        double distance = calculateDistance();
+        String strDistance = Double.toString(distance);
+        tvShowDistance.setText(strDistance);
     }
 
     @Override
@@ -509,14 +520,11 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
         myLocationOverlay.onLocationChanged(location);
         double currentLat = location.getLatitude();
         double currentLong = location.getLongitude();
-        location.setLatitude(currentLat);
-        location.setLongitude(currentLong);
-        double nextLat = trajectory.get(1).latitude;
-        double nextLong = trajectory.get(1).longitude;
-        destLocation.setLatitude(nextLat);
-        destLocation.setLongitude(nextLong);
+        //location.setLatitude(currentLat);
+        //location.setLongitude(currentLong);
+        destLocation.setLatitude(busTrip.getBusStops().get(1).getLatitude());
+        destLocation.setLongitude(busTrip.getBusStops().get(1).getLongitude());
         return location.distanceTo(destLocation);
-
     }
 
     //gets the current time of the bus and the next bus stop
@@ -524,11 +532,8 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
     //current location time and next bus stop.
     long calculateTimeDifference() {
         myLocationOverlay.onLocationChanged(location);
-        //double currentLat = location.getLatitude();
-        //double currentLong = location.getLongitude();
         Calendar cal = Calendar.getInstance();
         long currentTime = cal.get(Calendar.MILLISECOND);
-        long nextArrivalTime = busStops.get(1).getArrivalTime().getTime();
-        return TimeUnit.MILLISECONDS.toMinutes(nextArrivalTime - currentTime);
+        return TimeUnit.MILLISECONDS.toMinutes(busTrip.getBusStops().get(1).getArrivalTime().getTime() - currentTime);
     }
 }
