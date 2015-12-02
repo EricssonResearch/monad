@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 
+import se.uu.csproject.monadclient.recyclerviews.BusStop;
 import se.uu.csproject.monadclient.recyclerviews.FullTrip;
 import se.uu.csproject.monadclient.recyclerviews.Notify;
 import se.uu.csproject.monadclient.recyclerviews.PartialTrip;
@@ -929,6 +930,56 @@ public class ClientAuthentication extends Authentication {
         }
     }
 
+    public static String postGetBusStopsRequest() {
+        String request = AUTHENTICATION_HOST + AUTHENTICATION_PORT + "/get_bus_stops";
+        String urlParameters = "";
+
+        /* Send the request to the Authentication Module */
+        String response = postRequest(request, urlParameters);
+
+        /* Handle response in case of exception */
+        if (response.equals("-1")) {
+            return exceptionMessage();
+        }
+
+        /*
+         * By default, Erlang adds the newline '\n' character at the beginning of response.
+         * For this reason substring() function is used
+         */
+        response = response.substring(1);
+        return processGetBusStopsResponse(response);
+    }
+
+    public static String processGetBusStopsResponse(String response) {
+        JSONParser parser = new JSONParser();
+
+        try {
+            JSONArray busStopsArray = (JSONArray) parser.parse(response);
+            Iterator<JSONObject> busStopsIterator = busStopsArray.iterator();
+
+            ArrayList<BusStop> busStops = new ArrayList<>();
+
+            while (busStopsIterator.hasNext()) {
+                JSONObject busStopObject = busStopsIterator.next();
+
+                JSONObject busStopObjectID = (JSONObject) busStopObject.get("_id");
+                String busStopID = (String) busStopObjectID.get("$oid");
+
+                String busStopName = (String) busStopObject.get("name");
+                double busStopLatitude = (double) busStopObject.get("latitude");
+                double busStopLongitude = (double) busStopObject.get("longitude");
+
+                BusStop busStop = new BusStop(busStopID, busStopName, busStopLatitude, busStopLongitude);
+                busStops.add(busStop);
+            }
+            Storage.setBusStops(busStops);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            return "0";
+        }
+        return "1";
+    }
 
     public static String exceptionMessage() {
         return "ERROR - An Exception was thrown";

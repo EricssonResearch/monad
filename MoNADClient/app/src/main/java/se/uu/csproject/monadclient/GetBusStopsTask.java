@@ -3,6 +3,8 @@ package se.uu.csproject.monadclient;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import se.uu.csproject.monadclient.recyclerviews.Storage;
+
 /**
  *
  */
@@ -15,7 +17,8 @@ public class GetBusStopsTask extends AsyncTask <Void, Void, String> {
 
     @Override
     protected String doInBackground(Void... params) {
-        return "0";
+        String response = ClientAuthentication.postGetBusStopsRequest();
+        return response;
     }
 
     @Override
@@ -23,6 +26,7 @@ public class GetBusStopsTask extends AsyncTask <Void, Void, String> {
         if (response.equals("1")) {
             Log.d(callingClass.getClass().getCanonicalName(),
                     "BusStops have been successfully loaded by the database");
+            Storage.printBusStops();
             callingClass.processReceivedGetBusStopsResponse();
         }
         else {

@@ -216,7 +216,7 @@ public class Storage{
         return busStops.isEmpty();
     }
 
-    public void printBusStops() {
+    public static void printBusStops() {
 
         if (!isEmptyBusStops()) {
 
