@@ -1,4 +1,4 @@
-package se.uu.csproject.monadclient.recyclerviews;
+package se.uu.csproject.monadclient.storage;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -7,9 +7,7 @@ import android.util.Log;
 import java.util.ArrayList;
 import java.util.Date;
 
-/**
- *
- */
+
 public class PartialTrip implements Parcelable {
     private String id;                      /* Same as the user trip id in the database */
     private int line;

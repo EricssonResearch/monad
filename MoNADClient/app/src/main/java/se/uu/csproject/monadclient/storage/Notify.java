@@ -1,4 +1,4 @@
-package se.uu.csproject.monadclient.recyclerviews;
+package se.uu.csproject.monadclient.storage;
 
 import android.util.Log;
 

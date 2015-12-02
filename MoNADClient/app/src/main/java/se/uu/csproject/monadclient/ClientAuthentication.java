@@ -5,18 +5,17 @@ package se.uu.csproject.monadclient;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 
-import se.uu.csproject.monadclient.recyclerviews.BusStop;
-import se.uu.csproject.monadclient.recyclerviews.FullTrip;
-import se.uu.csproject.monadclient.recyclerviews.Notify;
-import se.uu.csproject.monadclient.recyclerviews.PartialTrip;
-import se.uu.csproject.monadclient.recyclerviews.Storage;
+import se.uu.csproject.monadclient.storage.BusStop;
+import se.uu.csproject.monadclient.storage.FullTrip;
+import se.uu.csproject.monadclient.storage.Notify;
+import se.uu.csproject.monadclient.storage.PartialTrip;
+import se.uu.csproject.monadclient.storage.Storage;
 
 /**
  *

@@ -1,4 +1,4 @@
-package se.uu.csproject.monadclient;
+package se.uu.csproject.monadclient.activities;
 
 import android.content.Context;
 import android.content.Intent;
@@ -18,9 +18,10 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
+import se.uu.csproject.monadclient.R;
 import se.uu.csproject.monadclient.interfaces.AsyncResponseString;
-import se.uu.csproject.monadclient.recyclerviews.FullTrip;
-import se.uu.csproject.monadclient.recyclerviews.Storage;
+import se.uu.csproject.monadclient.storage.FullTrip;
+import se.uu.csproject.monadclient.storage.Storage;
 import se.uu.csproject.monadclient.serverinteractions.SendBookingCancelRequest;
 
 import static java.lang.Math.floor;

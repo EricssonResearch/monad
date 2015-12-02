@@ -1,4 +1,4 @@
-package se.uu.csproject.monadclient.recyclerviews;
+package se.uu.csproject.monadclient.storage;
 
 /* This class is derived from the TravelRequest collection
  * The focus is on the assigned route rather than the request itself

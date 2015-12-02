@@ -1,7 +1,7 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="se.uu.csproject.monadclient.RouteConfirmPopup"
+    tools:context=".activities.RouteConfirmPopup"
     android:id="@+id/popupinfo"
     android:layout_gravity="center"
     android:layout_width="match_parent"

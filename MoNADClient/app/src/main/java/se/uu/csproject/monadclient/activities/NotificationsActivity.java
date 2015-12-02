@@ -1,4 +1,4 @@
-package se.uu.csproject.monadclient;
+package se.uu.csproject.monadclient.activities;
 
 import android.app.NotificationManager;
 import android.os.AsyncTask;
@@ -12,10 +12,13 @@ import android.view.View;
 
 import java.util.ArrayList;
 
+import se.uu.csproject.monadclient.ClientAuthentication;
+import se.uu.csproject.monadclient.GetNotificationsTask;
+import se.uu.csproject.monadclient.R;
 import se.uu.csproject.monadclient.interfaces.AsyncNotificationsInteraction;
 import se.uu.csproject.monadclient.recyclerviews.NotificationRecyclerViewAdapter;
-import se.uu.csproject.monadclient.recyclerviews.Notify;
-import se.uu.csproject.monadclient.recyclerviews.Storage;
+import se.uu.csproject.monadclient.storage.Notify;
+import se.uu.csproject.monadclient.storage.Storage;
 
 //// TODO (low priority): receive data from notification module (maybe not in this activity - TBD), display them in notification bar as well as in the recyclerview
 //public class NotificationsActivity extends MenuedActivity implements AsyncResponse, AsyncNotificationsInteraction {

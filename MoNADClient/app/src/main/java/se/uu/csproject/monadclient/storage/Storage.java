@@ -1,4 +1,4 @@
-package se.uu.csproject.monadclient.recyclerviews;
+package se.uu.csproject.monadclient.storage;
 
 import android.util.Log;
 
@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 import se.uu.csproject.monadclient.NotificationsInteraction;
+import se.uu.csproject.monadclient.FullTripsStartTimeComparator;
+import se.uu.csproject.monadclient.NotificationsTimeComparator;
 
 public class Storage{
     private static ArrayList<FullTrip> searchResults = new ArrayList<>();
