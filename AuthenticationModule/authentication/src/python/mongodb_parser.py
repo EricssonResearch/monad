@@ -143,3 +143,7 @@ def send_notification(user_to_send_to, message_title_to_send, message_body_to_se
         template = "An exception of type {0} occured. Arguments:\n{1!r}"
         message = template.format(type(ex).__name__, ex.args)
         print message
+
+def get_bus_stops():
+    bus_stops = list(bus_stops_collection.find())
+    return dumps(bus_stops)
