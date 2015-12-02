@@ -19,8 +19,9 @@ public class Storage{
     private static ArrayList<Notify> notifications = new ArrayList<>();
     private static ArrayList<BusStop> busStops = new ArrayList<>();
     private static JSONObject changedFeedback = new JSONObject();
+    private static ArrayList<UserLocation> locations = new ArrayList<>();
+    
     private static double latitude = 0.0, longitude = 0.0;
-
     public static final int SEARCH_RESULTS = 0;
     public static final int BOOKINGS = 1;
 
@@ -30,6 +31,7 @@ public class Storage{
         clearRecommendations();
         clearNotifications();
         clearBusStops();
+        clearLocations();
     }
 
     /** Methods for coordinates */
@@ -227,6 +229,26 @@ public class Storage{
 
             for (int i = 0; i < busStops.size(); i++) {
                 busStops.get(i).printValues();
+
+	/* Methods for locations */
+    public static void clearLocations() {
+        locations.clear();
+    }
+
+    public static boolean isEmptyLocations() {
+        return locations.isEmpty();
+    }
+
+    public static void addLocation(UserLocation userLocation) {
+        locations.add(userLocation);
+    }
+
+    public static void printLocations() {
+
+        if (!isEmptyLocations()) {
+
+            for (int i = 0; i < locations.size(); i++) {
+                System.out.println(locations.get(i).getUserId() + " " + locations.get(i).getLocationId() + " " + locations.get(i).getTime());
             }
         }
     }
