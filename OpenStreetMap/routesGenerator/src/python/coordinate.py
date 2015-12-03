@@ -13,6 +13,8 @@ CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
 import math
+import numpy as np
+import time
 
 
 class Coordinate(object):
@@ -69,6 +71,11 @@ def measure(coordinate1, coordinate2):
 
 
 def average(coordinateList):
+    """
+
+    :param coordinateList:
+    :return:
+    """
     tuplelist = [coordinate.coordinates for coordinate in coordinateList]
     avg = [sum(y) / len(y) for y in zip(*tuplelist)]
 
@@ -76,6 +83,11 @@ def average(coordinateList):
 
 
 def center(coordinateList):
+    """
+
+    :param coordinateList:
+    :return:
+    """
     tuplelist = [coordinate.coordinates for coordinate in coordinateList]
     _max = reduce(lambda x, y: (max(x[0], y[0]), max(x[1], y[1])), tuplelist)
     _min = reduce(lambda x, y: (min(x[0], y[0]), min(x[1], y[1])), tuplelist)
@@ -86,9 +98,18 @@ def center(coordinateList):
 
 
 def closestTo(coord, coodinateList):
-    f = lambda x, y: x if measure(x, coord) < measure(y, coord) else y
+    """
+    Finds the closest coordinate to the coordinate coord in a coordinate list.
 
-    return reduce(f, coodinateList)
+    :param coord: tuple of two floats, (longitude, latitude)
+    :param coodinateList: list of tuples of two floats, [(lon, lat)]
+    :return: tuple of two floats, an element in coordinateList
+    """
+    coordinates = np.asarray(coodinateList)
+    deltas = coordinates - coord
+    dist = np.einsum('ij,ij->i', deltas, deltas)
+
+    return coodinateList[np.argmin(dist)]
 
 
 def y2lat(a):
