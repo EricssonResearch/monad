@@ -36,6 +36,7 @@ import java.util.Date;
 import java.util.List;
 
 import se.uu.csproject.monadclient.R;
+import se.uu.csproject.monadclient.activities.MainActivity;
 import se.uu.csproject.monadclient.storage.Storage;
 import se.uu.csproject.monadclient.storage.UserLocation;
 
@@ -128,6 +129,7 @@ public class GeofenceTransitionsIntentService extends IntentService {
             triggeringGeofencesIdsList.add(geofence.getRequestId());
             UserLocation location = new UserLocation(geofence.getRequestId(), new Date());
             Storage.addLocation(location);
+            Storage.printLocations();
         }
 
         String triggeringGeofencesIdsString = TextUtils.join(", ",  triggeringGeofencesIdsList);
@@ -142,13 +144,13 @@ public class GeofenceTransitionsIntentService extends IntentService {
      */
     private void sendNotification(String notificationDetails) {
         // Create an explicit content Intent that starts the main Activity.
-        Intent notificationIntent = new Intent(getApplicationContext(), GeofenceActivity.class);
+        Intent notificationIntent = new Intent(getApplicationContext(), MainActivity.class);
 
         // Construct a task stack.
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
 
         // Add the main Activity to the task stack as the parent.
-        stackBuilder.addParentStack(GeofenceActivity.class);
+        stackBuilder.addParentStack(MainActivity.class);
 
         // Push the content Intent onto the stack.
         stackBuilder.addNextIntent(notificationIntent);

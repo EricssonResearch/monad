@@ -197,14 +197,6 @@
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
 
-        <activity
-            android:name=".geofences.GeofenceActivity"
-            android:label="@string/title_activity_geofence" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".activities.MainActivity" />
-        </activity>
-
         <service android:name=".geofences.GeofenceTransitionsIntentService" />
     </application>
 
