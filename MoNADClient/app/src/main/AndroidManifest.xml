@@ -191,8 +191,7 @@
             android:exported="false">
         </service>
 
-   //     <service android:name=".services.LocationService" />
-        <service android:name=".LocationService" />
+        <service android:name=".services.LocationService" />
 
         <meta-data
             android:name="com.google.android.gms.version"
@@ -203,7 +202,7 @@
             android:label="@string/title_activity_geofence" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainActivity" />
+                android:value=".activities.MainActivity" />
         </activity>
 
         <service android:name=".geofences.GeofenceTransitionsIntentService" />
