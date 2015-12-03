@@ -13,7 +13,14 @@ import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+
+import se.uu.csproject.monadclient.ClientAuthentication;
+import se.uu.csproject.monadclient.serverinteractions.SendStoreGeofenceInfoRequest;
 import se.uu.csproject.monadclient.storage.Storage;
+import se.uu.csproject.monadclient.storage.UserLocation;
 
 public class LocationService extends Service implements GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener, LocationListener {
@@ -72,8 +79,17 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
     @Override
     public void onTaskRemoved(Intent rootIntent){
         super.onTaskRemoved(rootIntent);
-        //TODO: send geofence info
-        //new SendStoreGeofenceInfoRequest().execute();
+        ArrayList<UserLocation> locations = Storage.getLocations();
+
+        if (!locations.isEmpty()){
+            Storage.turnLocationsToJson();
+            JSONObject geofenceInfo = Storage.getGeofenceInfo();
+            if (geofenceInfo.length() != 0){
+                String userID = ClientAuthentication.getClientId();
+                new SendStoreGeofenceInfoRequest().execute(userID, geofenceInfo.toString());
+            }
+        }
+
         stopSelf();
     }
 

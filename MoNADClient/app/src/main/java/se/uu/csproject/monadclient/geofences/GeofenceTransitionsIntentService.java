@@ -19,13 +19,10 @@ package se.uu.csproject.monadclient.geofences;
 import android.app.IntentService;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
-import android.database.sqlite.SQLiteDatabase;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.location.Location;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 import android.text.TextUtils;
@@ -34,17 +31,13 @@ import android.util.Log;
 import com.google.android.gms.location.Geofence;
 import com.google.android.gms.location.GeofencingEvent;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
 import se.uu.csproject.monadclient.R;
 import se.uu.csproject.monadclient.storage.Storage;
-import se.uu.csproject.monadclient.recyclerviews.UserLocation;
-
-import static se.uu.csproject.monadclient.storage.Storage.addLocation;
+import se.uu.csproject.monadclient.storage.UserLocation;
 
 /**
  * Listener for geofence transition changes.
