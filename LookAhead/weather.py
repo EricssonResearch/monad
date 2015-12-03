@@ -20,6 +20,7 @@ from datetime import date
 from datetime import timedelta
 from dbConnection import DB
 from routeGenerator import string_to_coordinates
+from operator import itemgetter
 
 class Weather(object):
     """Implements a class to modify timetables based on weather"""
@@ -37,7 +38,7 @@ class Weather(object):
     def __init__(self):
         # super(Weather, self).__init__()
         # self.arg = arg
-        self.evaluateTrip(self.findTrip(self.getWeather(0, Weather.address, Weather.apiKey), Weather.conditions))
+        self.formatBusTrip(self.findTrip(self.getWeather(-1, Weather.address, Weather.apiKey), Weather.conditions))
 
     def getCoordinates(self, address):
         """Uses the Route Generator to search for an address"""
@@ -102,7 +103,7 @@ class Weather(object):
                 trips = db.selectBusTrip(i["time"])
                 # Append them on the trips array
                 trip.append([i["icon"], i["temperature"], i["time"], trips])
-        print trip
+        # print trip
         return trip
 
     def evaluateWeather(self, icon, temperature, time, conditions):
@@ -111,16 +112,61 @@ class Weather(object):
         else:
             return False
 
+    def formatBusTrip(self, trip):
+        busTrip = []
+        for i in xrange(len(trip)):
+            for j in trip[i][3]:
+                busTrip.append([j["line"], j["_id"]])
+        busTrip = sorted(busTrip, key=itemgetter(0))
+        self.searchTimeTable(busTrip)
+
+    def searchTimeTable(self, busTrip):
+        timetable = []
+        busId = []
+        line = busTrip[0][0]
+        busId.append(busTrip[0][1])
+        db = DB()
+        for i in xrange(1, len(busTrip)):
+            if line != busTrip[i][0]:
+                timetable = db.selectTimeTablebyBusTrip(busId)
+                timetable2 = self.processSomething(timetable, busId)
+                db.updateTimetable(timetable2[0], timetable2[1])
+                # db.deleteBusTrip(timetable2[1])
+                # notifyUsers(timetable2[1])
+                busId = []
+            line = busTrip[i][0]
+            busId.append(busTrip[i][1])
+        timetable = db.selectTimeTablebyBusTrip(busId)
+        timetable2 = self.processSomething(timetable, busId)
+        db.updateTimetable(timetable2[0], timetable2[1])
+
+    def processSomething(self, timetable, busId):
+        for t in timetable:
+            tt = [t["_id"], self.diff(t["timetable"], busId)]
+        return tt
+
+    def diff(self, a, b):
+        b = set(b)
+        return [aa for aa in a if aa not in b]
+
     def evaluateTrip(self, trip):
         count = 0
         chromosome = []
         line = None
+        db = DB()
         # Loop trough the whole trip structure
         # trip structure: icon, temperature, time and trips cursor
         for i in xrange(len(trip)):
             # Loop trough trips cursor
             # trips cursor: startTime, line and capacity
             for j in trip[i][3]:
+                # print j["_id"]
+                print j["_id"]
+                selectTimeTablebyBusTrip
+                for reg in db.selectTimeTablebyBusTrip([j["_id"]]):
+                    print reg
+                    print "======"
+                '''
                 if line is None:
                     line = j["line"]
                     startTime = j["startTime"]
@@ -143,7 +189,9 @@ class Weather(object):
                     count = 0
                 count = count + 1
                 line = j["line"]
-        print chromosome
+                '''
+            # print "======"
+        # print chromosome
 
 if __name__ == '__main__':
     Weather()

@@ -1,7 +1,6 @@
 package se.uu.csproject.monadclient.storage;
 
 import java.util.ArrayList;
-import java.util.Date;
 
 public class UserLocation {
     private String locationId;
