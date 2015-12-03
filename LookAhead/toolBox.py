@@ -120,13 +120,15 @@ def evaluateNewIndividualFormat(individual):
     # Summarize the results 
     # Initialize total variable
     totalLeftOverTime = 0
-    # noOfLeftOvers = 0
+    #noOfLeftOvers = 0
     # Loop trough leftovers array
     for z in range(len(leftOver)):
         # Summarize the waiting time for all the leftovers in every bus stop
-        totalLeftOverTime += leftOver[z][0]
+        totalLeftOverTime += leftOver[z][1]
+        #noOfLeftOvers += leftOver[z][0]
     # Summarize the waiting times based on requests and based on capacity
     totalWaitingTime = sum(totalWaitingMinutes) + totalLeftOverTime
+    #averageWaitingTime = totalWaitingTime / (sum(totalNumberRequests) + noOfLeftOvers)
     return fitnessClass.calculateCost(individual, totalWaitingTime, 0),
 
 
