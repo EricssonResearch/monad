@@ -20,7 +20,6 @@ import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.model.LatLng;
 
-
 import org.json.JSONObject;
 
 import java.util.Map;
@@ -70,8 +69,6 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
         populateGeofenceList();
         mGoogleApiClient.connect();
     }
-
-
 
     private void handleNewLocation(Location location) {
         Storage.setLatitude(location.getLatitude());
