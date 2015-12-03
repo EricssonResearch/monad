@@ -48,6 +48,7 @@ import se.uu.csproject.monadclient.RecommendationAlarmReceiver;
 import se.uu.csproject.monadclient.interfaces.AsyncRecommendationsInteraction;
 import se.uu.csproject.monadclient.interfaces.AsyncResponse;
 import se.uu.csproject.monadclient.storage.FullTrip;
+import se.uu.csproject.monadclient.geofences.GeofenceActivity;
 import se.uu.csproject.monadclient.recyclerviews.SearchRecyclerViewAdapter;
 import se.uu.csproject.monadclient.storage.Storage;
 import se.uu.csproject.monadclient.serverinteractions.SendQuickTravelRequest;
@@ -232,6 +233,10 @@ public class MainActivity extends MenuedActivity implements AsyncResponse, Async
     public void goToAdvancedSearch(View v) {
         Storage.clearSearchResults();
         startActivity(new Intent(this, SearchActivity.class));
+    }
+    public void goToGeofenceOptions(View v) {
+        Storage.clearSearchResults();
+        startActivity(new Intent(this, GeofenceActivity.class));
     }
 
     @Override

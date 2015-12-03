@@ -35,16 +35,10 @@ public class LoginActivity extends AppCompatActivity implements AsyncLoginIntera
         loginButton = (Button) findViewById(R.id.loginButton);
         //emergencyButton = (ToggleButton) findViewById(R.id.emergencyButton);
 
-        //// TODO: add login authentication for vehicle app, similar to that in client app
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 login();
-//                if(usernameField.getText().length() >= 0
-//                        && passwordField.getText().length() >= 0
-//                        && busNumberField.getText().length() >= 0) {
-//                    startActivity(new Intent(v.getContext(), MainActivity.class));
-//                }
             }
         });
 

@@ -18,8 +18,11 @@ public class Storage{
     private static ArrayList<FullTrip> recommendations = new ArrayList();
     private static ArrayList<Notify> notifications = new ArrayList<>();
     private static ArrayList<BusStop> busStops = new ArrayList<>();
+    private static ArrayList<UserLocation> locations = new ArrayList<>();
     private static JSONObject changedFeedback = new JSONObject();
+    private static JSONObject geofenceInfo = new JSONObject();
     private static double latitude = 0.0, longitude = 0.0;
+    private static final String TAG = "oops";
 
     public static final int SEARCH_RESULTS = 0;
     public static final int BOOKINGS = 1;
@@ -30,6 +33,8 @@ public class Storage{
         clearRecommendations();
         clearNotifications();
         clearBusStops();
+        clearLocations();
+        clearChangedFeedback();
     }
 
     /** Methods for coordinates */
@@ -58,7 +63,7 @@ public class Storage{
         try {
             changedFeedback.put(tripID, new Integer(feedback));
         } catch (JSONException e) {
-            Log.d("oops", e.toString());
+            Log.d(TAG, e.toString());
         }
     }
 
@@ -227,8 +232,56 @@ public class Storage{
 
             for (int i = 0; i < busStops.size(); i++) {
                 busStops.get(i).printValues();
+
             }
         }
+    }
+
+	/* Methods for locations */
+    public static void clearLocations() {
+        locations.clear();
+    }
+
+    public static ArrayList<UserLocation> getLocations(){
+        return locations;
+    }
+
+    public static boolean isEmptyLocations() {
+        return locations.isEmpty();
+    }
+
+    public static void addLocation(UserLocation userLocation) {
+        locations.add(userLocation);
+    }
+
+    public static void printLocations() {
+
+        if (!isEmptyLocations()) {
+
+            for (int i = 0; i < locations.size(); i++) {
+                Log.d(TAG, locations.get(i).getLocationId() + " " + locations.get(i).getTime());
+            }
+        }
+    }
+
+    public static void turnLocationsToJson(){
+        try {
+            JSONObject location;
+            for (int i = 0; i < locations.size(); i++){
+                location = new JSONObject();
+                location.put("latitude", locations.get(i).getLatitude());
+                location.put("longitude", locations.get(i).getLongitude());
+                location.put("time", locations.get(i).getTime());
+                geofenceInfo.put(locations.get(i).getLocationId(), location);
+            }
+
+        } catch (JSONException e) {
+            Log.d(TAG, e.toString());
+        }
+    }
+
+    public static JSONObject getGeofenceInfo(){
+        return geofenceInfo;
     }
 
     public static void initializeNotificationData() {

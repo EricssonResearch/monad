@@ -133,7 +133,7 @@ public class MyLocationOverlay extends Layer implements LocationListener {
 
 		synchronized (this) {
 			//remove it when necessary
-			Log.i("current location", location.getLatitude() + ", " + location.getLongitude());
+			//Log.i("current location", location.getLatitude() + ", " + location.getLongitude());
 
 			LatLong latLong = locationToLatLong(location);
 			this.marker.setLatLong(latLong);
@@ -169,7 +169,7 @@ public class MyLocationOverlay extends Layer implements LocationListener {
 
 	class SimulateThread extends Thread {
 		public void run() {
-			LatLong tmp = null;
+			LatLong tmp;
 			ListIterator<LatLong> ite = trajectory.listIterator();
 			while(ite.hasNext()){
 				tmp = ite.next();
@@ -190,6 +190,6 @@ public class MyLocationOverlay extends Layer implements LocationListener {
 					e.printStackTrace();
 				}
 			}
-		};
+		}
 	}
 }

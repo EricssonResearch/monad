@@ -16,10 +16,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RadioGroup;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -33,6 +35,7 @@ import org.mapsforge.core.graphics.Bitmap;
 import org.mapsforge.core.graphics.Color;
 import org.mapsforge.core.graphics.Paint;
 import org.mapsforge.core.graphics.Style;
+import org.mapsforge.core.model.BoundingBox;
 import org.mapsforge.core.model.LatLong;
 import org.mapsforge.map.android.graphics.AndroidGraphicFactory;
 import org.mapsforge.map.android.util.AndroidUtil;
@@ -57,7 +60,13 @@ import java.util.concurrent.TimeUnit;
 
 public class MainActivity extends Activity implements ConnectionCallbacks, OnConnectionFailedListener {
 
+    // Interface variables
     LinearLayout sideList, notificationsList, busStopsList, emergencyList;
+    ScrollView notificationsScroll, busStopScroll;
+    RadioGroup radioGroup;
+    CheckBox otherCheckBox;
+    EditText emergencyDescription;
+
     NotificationList notifications;
     // name of the map file in the external storage, it should be stored in the root directory of the sdcard
     private static final String MAPFILE = "uppsala.map";
@@ -85,13 +94,11 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
     protected LocationRequest mLocationRequest;
 
     // Represents a geographical location.
-    protected Location mCurrentLocation;
+    //protected Location mCurrentLocation;
 
+    //for distance and time calculations
     Location location;
-    ArrayList<LatLong> trajectory;
-    ArrayList<BusStop> busStops;
-
-
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -101,7 +108,10 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
         notificationsList = (LinearLayout) findViewById(R.id.side_list_notifications);
         busStopsList = (LinearLayout) findViewById(R.id.side_list_busstops);
         emergencyList = (LinearLayout) findViewById(R.id.side_list_emergency);
+        notificationsScroll = (ScrollView) findViewById(R.id.side_list_notifications_scroll);
+        busStopScroll = (ScrollView) findViewById(R.id.side_list_busstops_scroll);
         notifications = new NotificationList(generateNotifications());
+        emergencyDescription = (EditText) findViewById(R.id.text_description);
 
         //Fill the notifications list
         LayoutInflater inflater = (LayoutInflater) getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -124,23 +134,21 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
             busStopsList.addView(busStopView);
         }
 
-        //Fill (Declare) the emergency layout content
-        RadioGroup radioGroup = (RadioGroup) findViewById(R.id.radio_emergency);
-        CheckBox otherCheckBox = (CheckBox) findViewById(R.id.other_possiblity);
-        EditText emergencyDescription = (EditText) findViewById(R.id.text_description);
-        Button submitButton= (Button) findViewById(R.id.button_submit);
-
         //Set up mapView
         mapView = (MapView) findViewById(R.id.mapView);
         mapView.setClickable(true);
         mapView.getMapScaleBar().setVisible(true);
         mapView.setBuiltInZoomControls(true);
-        mapView.getMapZoomControls().setZoomLevelMin((byte) 10);
+        mapView.getMapZoomControls().setZoomLevelMin((byte) 12);
         mapView.getMapZoomControls().setZoomLevelMax((byte) 20);
-        //TODO: change the center to the current user location, now it's in Uppsala Central Station
+        // Setting the center of the map before user location is detected
+        // Coordinates lat=59.8586, lon=17.6461 are Uppsala Central Station
         mapView.getModel().mapViewPosition.setCenter(new LatLong(59.8586, 17.6461));
         mapView.getModel().mapViewPosition.setZoomLevel((byte) 12);
-//TODO: set the map bounds: mapView.getModel().mapViewPosition.setMapLimit(/*use BoundingBox instance*/);
+        // Set the boundaries of the map. Values taken from Uppsala.map
+        mapView.getModel().mapViewPosition.setMapLimit(
+                new BoundingBox(59.7541, 17.392, 59.9086, 17.9039)
+        );
         // create a tile cache of suitable size
         this.tileCache = AndroidUtil.createTileCache(this, "mapcache",
                 mapView.getModel().displayModel.getTileSize(), 1f,
@@ -191,21 +199,24 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
 
         buildGoogleApiClient();
 
+        /*
+         * Click listeners to manage the side list buttons
+         */
         ImageButton showBusStopList =(ImageButton)findViewById(R.id.busStopButton);
         showBusStopList.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (busStopsList.getVisibility() == View.VISIBLE) {
-                    busStopsList.setVisibility(View.GONE);
+                if (busStopScroll.getVisibility() == View.VISIBLE) {
+                    busStopScroll.setVisibility(View.GONE);
                     sideList.setVisibility(View.GONE);
-                } else if (notificationsList.getVisibility() == View.VISIBLE
+                } else if (notificationsScroll.getVisibility() == View.VISIBLE
                         || emergencyList.getVisibility() == View.VISIBLE) {
-                    notificationsList.setVisibility(View.GONE);
+                    notificationsScroll.setVisibility(View.GONE);
                     emergencyList.setVisibility(View.GONE);
-                    busStopsList.setVisibility(View.VISIBLE);
+                    busStopScroll.setVisibility(View.VISIBLE);
                 } else {
                     sideList.setVisibility(View.VISIBLE);
-                    busStopsList.setVisibility(View.VISIBLE);
+                    busStopScroll.setVisibility(View.VISIBLE);
                 }
             }
         });
@@ -214,19 +225,19 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
         showNotificationsList.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(notificationsList.getVisibility() == View.VISIBLE){
-                    notificationsList.setVisibility(View.GONE);
+                if(notificationsScroll.getVisibility() == View.VISIBLE){
+                    notificationsScroll.setVisibility(View.GONE);
                     sideList.setVisibility(View.GONE);
                 }
-                else if (busStopsList.getVisibility() == View.VISIBLE
+                else if (busStopScroll.getVisibility() == View.VISIBLE
                         || emergencyList.getVisibility() == View.VISIBLE){
-                    busStopsList.setVisibility(View.GONE);
+                    busStopScroll.setVisibility(View.GONE);
                     emergencyList.setVisibility(View.GONE);
-                    notificationsList.setVisibility(View.VISIBLE);
+                    notificationsScroll.setVisibility(View.VISIBLE);
                 }
                 else {
                     sideList.setVisibility(View.VISIBLE);
-                    notificationsList.setVisibility(View.VISIBLE);
+                    notificationsScroll.setVisibility(View.VISIBLE);
                 }
             }
         });
@@ -238,14 +249,46 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
                 if (emergencyList.getVisibility() == View.VISIBLE) {
                     emergencyList.setVisibility(View.GONE);
                     sideList.setVisibility(View.GONE);
-                } else if (notificationsList.getVisibility() == View.VISIBLE
-                        || busStopsList.getVisibility() == View.VISIBLE) {
-                    notificationsList.setVisibility(View.GONE);
-                    busStopsList.setVisibility(View.GONE);
+                } else if (notificationsScroll.getVisibility() == View.VISIBLE
+                        || busStopScroll.getVisibility() == View.VISIBLE) {
+                    notificationsScroll.setVisibility(View.GONE);
+                    busStopScroll.setVisibility(View.GONE);
                     emergencyList.setVisibility(View.VISIBLE);
                 } else {
                     sideList.setVisibility(View.VISIBLE);
                     emergencyList.setVisibility(View.VISIBLE);
+                }
+            }
+        });
+
+        /*
+         * Checkbox and Radio listeners to handle options in the emergency screen
+         */
+        otherCheckBox = (CheckBox) findViewById(R.id.other_possiblity);
+        otherCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    emergencyDescription.setEnabled(true);
+                }
+                else {
+                    emergencyDescription.setEnabled(false);
+                }
+            }
+        });
+
+        radioGroup = (RadioGroup) findViewById(R.id.radio_emergency);
+        radioGroup.clearCheck();
+        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                if (checkedId == R.id.radio_otherissue) {
+                    otherCheckBox.setChecked(true);
+                    emergencyDescription.setEnabled(true);
+                }
+                else {
+                    otherCheckBox.setChecked(true);
+                    emergencyDescription.setEnabled(false);
                 }
             }
         });
@@ -421,16 +464,15 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
         Date arrival1 = calendar.getTime();
         calendar = new GregorianCalendar(2015, 11, 23, 15, 5, 0);
         Date arrival2 = calendar.getTime();
+        Notification message;
 
-        Notification message1 = new Notification(1, "Updated route", arrival1);
-        notifications.add(message1);
-        Notification message2 = new Notification(1, "Route Cancelled", arrival2);
-        notifications.add(message2);
+        for(int i=0; i<7; i++) {
+            message = new Notification(i, "Updated route", arrival1);
+            notifications.add(message);
+            message = new Notification(i, "Route Cancelled", arrival2);
+            notifications.add(message);
+        }
         return notifications;
-    }
-
-    public void onCheckboxClicked(View view) {
-        //TODO:implement checkbox-related function
     }
 
     //gets the current location of the bus and the next bus stop
@@ -440,14 +482,11 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
         myLocationOverlay.onLocationChanged(location);
         double currentLat = location.getLatitude();
         double currentLong = location.getLongitude();
-        location.setLatitude(currentLat);
-        location.setLongitude(currentLong);
-        double nextLat = trajectory.get(1).latitude;
-        double nextLong = trajectory.get(1).longitude;
-        destLocation.setLatitude(nextLat);
-        destLocation.setLongitude(nextLong);
+        //location.setLatitude(currentLat);
+        //location.setLongitude(currentLong);
+        destLocation.setLatitude(Storage.getBusTrip().getBusStops().get(1).getLatitude());
+        destLocation.setLongitude(Storage.getBusTrip().getBusStops().get(1).getLongitude());
         return location.distanceTo(destLocation);
-
     }
 
     //gets the current time of the bus and the next bus stop
@@ -455,11 +494,8 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
     //current location time and next bus stop.
     long calculateTimeDifference() {
         myLocationOverlay.onLocationChanged(location);
-        //double currentLat = location.getLatitude();
-        //double currentLong = location.getLongitude();
         Calendar cal = Calendar.getInstance();
         long currentTime = cal.get(Calendar.MILLISECOND);
-        long nextArrivalTime = busStops.get(1).getArrivalTime().getTime();
-        return TimeUnit.MILLISECONDS.toMinutes(nextArrivalTime - currentTime);
+        return TimeUnit.MILLISECONDS.toMinutes(Storage.getBusTrip().getBusStops().get(1).getArrivalTime().getTime() - currentTime);
     }
 }
