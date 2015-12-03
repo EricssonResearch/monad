@@ -105,6 +105,8 @@ loop(Req, DocRoot) ->
                     "send_notification" ->
                         Req:respond({200, [{"Content-Type", "text/plain"}], "OK"}),
                         send_notification(Req);
+                    "get_passengers" ->
+                        get_passengers(Req);
                     _ ->
                         Req:not_found()
                 end;
@@ -227,6 +229,36 @@ send_notification(Req) ->
                       {trace, erlang:get_stacktrace()}],
             error_logger:error_report(Report)
             % handle_error(Report, Req)
+    end.
+
+get_passengers(Req) ->
+    PostData = Req:parse_post(),
+    BusTripID = proplists:get_value("bus_trip_id", PostData, "Anonymous"),
+    % io:format("BusTripID: ~p~n", [BusTripID]),
+    CurrentBusStop = proplists:get_value("current_bus_stop", PostData, "Anonymous"),
+    % io:format("CurrentBusStop: ~p~n", [CurrentBusStop]),
+    NextBusStop = proplists:get_value("next_bus_stop", PostData, "Anonymous"),
+    % io:format("NextBusStop: ~p~n", [NextBusStop]),
+    try
+        PythonInstance = whereis(python_instance),
+        Response = python:call(PythonInstance, mongodb_parser, get_passengers,
+                               [BusTripID, CurrentBusStop, NextBusStop]),
+        Msg = [{type, get_passengers},
+               {busTripID, BusTripID},
+               {currentBusStop, CurrentBusStop},
+               {nextBusStop, NextBusStop},
+               {response, Response},
+               {process, self()}],
+        Broadcaster = whereis(broadcaster),
+        Broadcaster ! {broadcast, Msg},
+        Req:respond({200, [{"Content-Type", "text/plain"}], Response})
+    catch
+        Type:What ->
+            Report = ["Failed Request: get_passengers",
+                      {type, Type}, {what, What},
+                      {trace, erlang:get_stacktrace()}],
+            error_logger:error_report(Report),
+            handle_error(Report, Req)
     end.
 
 %% Internal API
