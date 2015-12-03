@@ -87,19 +87,9 @@ public class MainActivity extends MenuedActivity implements AsyncResponse, Async
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getBaseContext());
         recyclerView.setLayoutManager(linearLayoutManager);
 
-        if (!getIntent().getBooleanExtra("FINISH", false)){
-            // Start the location service if the user has given permission
-            if (checkPlayServices()){
-                if (Build.VERSION.SDK_INT >= 23){
-                    checkForPermission();
-                } else {
-                    startService(new Intent(this, LocationService.class));
-                }
-            } else {
-                CharSequence text = getString(R.string.java_googleplaywarning);
-                Toast toast = Toast.makeText(context, text, Toast.LENGTH_LONG);
-                toast.show();
-            }
+        /* GetBusStops */
+        if (Storage.isEmptyBusStops() && !getIntent().getBooleanExtra("FINISH", false)) {
+            getBusStops();
         }
 
         String[] addresses = getAddressesFromFileAsset();
@@ -211,8 +201,7 @@ public class MainActivity extends MenuedActivity implements AsyncResponse, Async
     }
 
     public boolean onTouchEvent(MotionEvent event) {
-        InputMethodManager imm = (InputMethodManager)getSystemService(Context.
-                INPUT_METHOD_SERVICE);
+        InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
         return true;
     }
@@ -256,11 +245,6 @@ public class MainActivity extends MenuedActivity implements AsyncResponse, Async
         }
         else {
             getRecommendations();
-        }
-
-        /* GetBusStops */
-        if (Storage.isEmptyBusStops()) {
-            getBusStops();
         }
     }
 
@@ -356,6 +340,17 @@ public class MainActivity extends MenuedActivity implements AsyncResponse, Async
 
     @Override
     public void processReceivedGetBusStopsResponse() {
-
+        // Start the location service if the user has given permission
+        if (checkPlayServices()){
+            if (Build.VERSION.SDK_INT >= 23){
+                checkForPermission();
+            } else {
+                startService(new Intent(this, LocationService.class));
+            }
+        } else {
+            CharSequence text = getString(R.string.java_googleplaywarning);
+            Toast toast = Toast.makeText(context, text, Toast.LENGTH_LONG);
+            toast.show();
+        }
     }
 }

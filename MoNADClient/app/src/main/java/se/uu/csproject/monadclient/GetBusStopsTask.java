@@ -26,7 +26,8 @@ public class GetBusStopsTask extends AsyncTask <Void, Void, String> {
         if (response.equals("1")) {
             Log.d(callingClass.getClass().getCanonicalName(),
                     "BusStops have been successfully loaded by the database");
-            Storage.printBusStops();
+            //Storage.printBusStops();
+
             callingClass.processReceivedGetBusStopsResponse();
         }
         else {
