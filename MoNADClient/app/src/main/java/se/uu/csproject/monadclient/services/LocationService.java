@@ -1,7 +1,9 @@
 package se.uu.csproject.monadclient.services;
 
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.IBinder;
@@ -9,17 +11,39 @@ import android.util.Log;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Status;
+import com.google.android.gms.location.Geofence;
+import com.google.android.gms.location.GeofencingRequest;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.model.LatLng;
 
+
+import org.json.JSONObject;
+
+import java.util.Map;
+import java.util.ArrayList;
+
+import se.uu.csproject.monadclient.ClientAuthentication;
+import se.uu.csproject.monadclient.serverinteractions.SendStoreGeofenceInfoRequest;
+import se.uu.csproject.monadclient.geofences.Constants;
+import se.uu.csproject.monadclient.geofences.GeofenceErrorMessages;
+import se.uu.csproject.monadclient.geofences.GeofenceTransitionsIntentService;
 import se.uu.csproject.monadclient.storage.Storage;
 
+
 public class LocationService extends Service implements GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener, LocationListener {
+        GoogleApiClient.OnConnectionFailedListener, LocationListener, ResultCallback<Status> {
     private static final String TAG = "oops";
     private GoogleApiClient mGoogleApiClient;
     private LocationRequest mLocationRequest;
+    private PendingIntent mGeofencePendingIntent;
+    private SharedPreferences mSharedPreferences;
+    private boolean mGeofencesAdded;
+
+    protected ArrayList<Geofence> mGeofenceList;
 
     @Override
     public IBinder onBind(Intent arg0){
@@ -33,12 +57,21 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
     }
 
     @Override
-    public void onCreate(){
+    public void onCreate() {
         super.onCreate();
         buildGoogleApiClient();
         initializeLocationRequest();
+
+        mGeofenceList = new ArrayList<>();
+        mGeofencePendingIntent = null;
+        mSharedPreferences = getSharedPreferences(Constants.SHARED_PREFERENCES_NAME, MODE_PRIVATE);
+        mGeofencesAdded = mSharedPreferences.getBoolean(Constants.GEOFENCES_ADDED_KEY, false);
+        Constants.initializeGeofences();
+        populateGeofenceList();
         mGoogleApiClient.connect();
     }
+
+
 
     private void handleNewLocation(Location location) {
         Storage.setLatitude(location.getLatitude());
@@ -64,16 +97,24 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
     public void onDestroy(){
         super.onDestroy();
         if (mGoogleApiClient.isConnected()) {
-            LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
+            LocationServices.GeofencingApi.removeGeofences(mGoogleApiClient, getGeofencePendingIntent())
+                    .setResultCallback(this);
             mGoogleApiClient.disconnect();
+        }
+
+        if (!Storage.isEmptyLocations()){
+            Storage.turnLocationsToJson();
+            JSONObject geofenceInfo = Storage.getGeofenceInfo();
+            if (geofenceInfo.length() != 0){
+                String userID = ClientAuthentication.getClientId();
+                new SendStoreGeofenceInfoRequest().execute(userID, geofenceInfo.toString());
+            }
         }
     }
 
     @Override
     public void onTaskRemoved(Intent rootIntent){
         super.onTaskRemoved(rootIntent);
-        //TODO: send geofence info
-        //new SendStoreGeofenceInfoRequest().execute();
         stopSelf();
     }
 
@@ -86,6 +127,9 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
         } else {
             handleNewLocation(location);
         }
+
+        LocationServices.GeofencingApi.addGeofences(mGoogleApiClient, getGeofencingRequest(),
+                getGeofencePendingIntent()).setResultCallback(this);
     }
 
     @Override
@@ -101,5 +145,46 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
     @Override
     public void onLocationChanged(Location location) {
         handleNewLocation(location);
+    }
+
+    private GeofencingRequest getGeofencingRequest() {
+        GeofencingRequest.Builder builder = new GeofencingRequest.Builder();
+        builder.setInitialTrigger(GeofencingRequest.INITIAL_TRIGGER_ENTER);
+        builder.addGeofences(mGeofenceList);
+        return builder.build();
+    }
+
+    private PendingIntent getGeofencePendingIntent() {
+        if (mGeofencePendingIntent != null) {
+            return mGeofencePendingIntent;
+        }
+        Intent intent = new Intent(this, GeofenceTransitionsIntentService.class);
+        return PendingIntent.getService(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+    }
+
+    public void populateGeofenceList() {
+        for (Map.Entry<String, LatLng> entry : Constants.UPPSALA_LANDMARKS.entrySet()) {
+            mGeofenceList.add(new Geofence.Builder()
+                    .setRequestId(entry.getKey())
+                    .setCircularRegion(
+                            entry.getValue().latitude,
+                            entry.getValue().longitude,
+                            Constants.GEOFENCE_RADIUS_IN_METERS
+                    )
+                    .setExpirationDuration(Constants.GEOFENCE_EXPIRATION_IN_MILLISECONDS)
+                    .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER | Geofence.GEOFENCE_TRANSITION_EXIT)
+                    .build());
+        }
+    }
+
+    public void onResult(Status status) {
+        if (status.isSuccess()) {
+            SharedPreferences.Editor editor = mSharedPreferences.edit();
+            editor.putBoolean(Constants.GEOFENCES_ADDED_KEY, mGeofencesAdded);
+            editor.apply();
+        } else {
+            String errorMessage = GeofenceErrorMessages.getErrorString(this, status.getStatusCode());
+            Log.e(TAG, errorMessage);
+        }
     }
 }

@@ -19,13 +19,10 @@ package se.uu.csproject.monadclient.geofences;
 import android.app.IntentService;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
-import android.database.sqlite.SQLiteDatabase;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.location.Location;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 import android.text.TextUtils;
@@ -36,15 +33,14 @@ import com.google.android.gms.location.GeofencingEvent;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import se.uu.csproject.monadclient.R;
+import se.uu.csproject.monadclient.activities.MainActivity;
 import se.uu.csproject.monadclient.storage.Storage;
-import se.uu.csproject.monadclient.recyclerviews.UserLocation;
-
-import static se.uu.csproject.monadclient.storage.Storage.addLocation;
+import se.uu.csproject.monadclient.storage.UserLocation;
 
 /**
  * Listener for geofence transition changes.
@@ -133,8 +129,11 @@ public class GeofenceTransitionsIntentService extends IntentService {
         ArrayList triggeringGeofencesIdsList = new ArrayList();
         for (Geofence geofence : triggeringGeofences) {
             triggeringGeofencesIdsList.add(geofence.getRequestId());
-            UserLocation location = new UserLocation(geofence.getRequestId(), new Date());
+            Date now = new Date();
+            SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
+            UserLocation location = new UserLocation(geofence.getRequestId(), df.format(now));
             Storage.addLocation(location);
+            Storage.printLocations();
         }
 
         String triggeringGeofencesIdsString = TextUtils.join(", ",  triggeringGeofencesIdsList);
@@ -149,13 +148,13 @@ public class GeofenceTransitionsIntentService extends IntentService {
      */
     private void sendNotification(String notificationDetails) {
         // Create an explicit content Intent that starts the main Activity.
-        Intent notificationIntent = new Intent(getApplicationContext(), GeofenceActivity.class);
+        Intent notificationIntent = new Intent(getApplicationContext(), MainActivity.class);
 
         // Construct a task stack.
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
 
         // Add the main Activity to the task stack as the parent.
-        stackBuilder.addParentStack(GeofenceActivity.class);
+        stackBuilder.addParentStack(MainActivity.class);
 
         // Push the content Intent onto the stack.
         stackBuilder.addNextIntent(notificationIntent);

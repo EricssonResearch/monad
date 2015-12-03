@@ -71,8 +71,6 @@ public class MenuedActivity extends AppCompatActivity {
 
         if (id == R.id.action_signout) {
             stopService(new Intent(this, LocationService.class));
-            //TODO: send geofence info
-            //new SendStoreGeofenceInfoRequest().execute();
             Intent intent = new Intent(this, MainActivity.class);
             intent.putExtra("FINISH", true);
             //To clean up all activities

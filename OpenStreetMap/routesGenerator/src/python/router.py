@@ -13,17 +13,10 @@ under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
 CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
-from heapq import heappop, heappush
-import threading
 import sys
-# import math
 import time
 
-# import Image
-# import ImageDraw
 from xml.sax import make_parser, handler
-# from Tkinter import Tk, Canvas, Frame, BOTH
-from multiprocessing import Process
 
 from aStar import AStar
 from busStop import BusStop
@@ -62,6 +55,7 @@ class RouteHandler(handler.ContentHandler):
 
         self.roadMapGraph = {}
         self.roadIntersectionGraph = {}
+        self.roadNodes = []
 
         # Roads
         self.roads = {}
@@ -233,6 +227,7 @@ class Map:
         self.nodes = {}
         self.busStopList = []
         self.edges = {}
+        self.roadNodes = []
 
     def parsData(self):
         """
@@ -248,6 +243,12 @@ class Map:
         self.edges = self.handler.roadMapGraph
         self.handler.makeRoadIntersectionGraph()
 
+        # make a list of all node that belong to the road network
+        for node in self.handler.nodeID:
+            if self.inEdgeList(self.handler.nodeID[node]):
+                self.roadNodes.append(node)
+        list.sort(self.roadNodes)
+
     def getNodeIdFromCoordinates(self, coordinates):
         """
         :param coordinates: (longitude, latitude)
@@ -255,38 +256,51 @@ class Map:
         """
         if coordinates in self.handler.nodeID and self.inEdgeList(
                 self.handler.nodeID[coordinates]):
-
-            return self.handler.nodeID[coordinates]
+            node = self.handler.nodeID[coordinates]
         else:
-            return self.closestRoadNode(coordinates)
+            node = self.closestRoadNode(coordinates)
+        return node
 
     def getNodeIdFromCoordinatesList(self, coordinatesList):
         """
+
         :param coordinates: [(longitude, latitude)]
         :return: nodeID
         """
         nodeIdList = []
         for coordinates in coordinatesList:
             nodeIdList.append(self.getNodeIdFromCoordinates(coordinates))
+
         return nodeIdList
 
     def closestRoadNode(self, coordinates):
-        coord = Coordinate(longitude=coordinates[0], latitude=coordinates[1])
-        node = self.edges.keys()[0]
-        dist = coordinate.measure(coord, self.nodes[node])
-        for nd in self.edges.keys():
-            if dist > coordinate.measure(coord, self.nodes[nd]):
-                dist = coordinate.measure(coord, self.nodes[nd])
-                node = nd
-        return node
+        """
+
+        :param coordinates:
+        :return:
+        """
+        node = coordinate.closestTo(coordinates, self.roadNodes)
+
+        return self.handler.nodeID[node]
 
     def findBusStopName(self, lon, lat):
+        """
+
+        :param lon:
+        :param lat:
+        :return:
+        """
         for nd in self.busStopList:
             if nd.longitude == lon and nd.latitude == lat:
                 return nd.name
         return None
 
     def findBusStopPosition(self, name):
+        """
+
+        :param name:
+        :return:
+        """
         name = name.decode('utf-8').lower()
         for nd in self.busStopList:
             if nd.name.lower() == name:
@@ -390,6 +404,7 @@ class Map:
         """
         # Get the node IDs of the coordinates.
         nodeIDList = self.getNodeIdFromCoordinatesList(coordinateList)
+
         path = []
         cost = [0]
         # If at least one coordinates does not have an ID
@@ -456,6 +471,9 @@ class Map:
         return nodeList
 
     def getBusStopConnections(self):
+        """
+
+        """
         bus_stop_connections = {}
         bus_stop_ids = []
         for busStop in self.busStopList:
@@ -464,7 +482,11 @@ class Map:
             pass
 
     def inEdgeList(self, sid):
-        return self.handler.roadMapGraph.has_key(sid)
+        """
+
+        """
+        return sid in self.handler.roadMapGraph
+        # return self.handler.roadMapGraph.has_key(sid)
 
     def timeBetweenStops(self, stopA, stopB):
         path, cost = self.astar.findRoute(stopA, stopB)
