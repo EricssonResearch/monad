@@ -74,14 +74,8 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
             LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
             mGoogleApiClient.disconnect();
         }
-    }
 
-    @Override
-    public void onTaskRemoved(Intent rootIntent){
-        super.onTaskRemoved(rootIntent);
-        ArrayList<UserLocation> locations = Storage.getLocations();
-
-        if (!locations.isEmpty()){
+        if (!Storage.isEmptyLocations()){
             Storage.turnLocationsToJson();
             JSONObject geofenceInfo = Storage.getGeofenceInfo();
             if (geofenceInfo.length() != 0){
@@ -89,7 +83,11 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
                 new SendStoreGeofenceInfoRequest().execute(userID, geofenceInfo.toString());
             }
         }
+    }
 
+    @Override
+    public void onTaskRemoved(Intent rootIntent){
+        super.onTaskRemoved(rootIntent);
         stopSelf();
     }
 

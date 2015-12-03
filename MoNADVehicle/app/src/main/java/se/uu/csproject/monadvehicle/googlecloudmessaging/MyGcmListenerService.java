@@ -21,10 +21,6 @@ public class  MyGcmListenerService extends GcmListenerService {
 
     private static final String TAG = "MyGcmListenerService";
 
-    /**
-     * Called when message is received.
-     */
-    // [START receive_message]
     @Override
     public void onMessageReceived(String from, Bundle data) {
         String message = data.getString("message");
