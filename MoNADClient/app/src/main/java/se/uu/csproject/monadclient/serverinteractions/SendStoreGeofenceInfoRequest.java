@@ -8,7 +8,7 @@ public class SendStoreGeofenceInfoRequest extends AsyncTask<String, Void, String
     @Override
     protected String doInBackground(String... params) {
         String request = "/storeGeofenceInfo";
-        String urlParameters = "userID=" + params[0] + "geofenceInfo=" + params[1];
+        String urlParameters = "userID=" + params[0] + "&geofenceInfo=" + params[1];
         return ConnectToRequestHandler.postRequestString(request, urlParameters);
     }
 

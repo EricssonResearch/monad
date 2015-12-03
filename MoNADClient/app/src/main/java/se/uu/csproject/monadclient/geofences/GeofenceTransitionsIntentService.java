@@ -31,9 +31,11 @@ import android.util.Log;
 import com.google.android.gms.location.Geofence;
 import com.google.android.gms.location.GeofencingEvent;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import se.uu.csproject.monadclient.R;
 import se.uu.csproject.monadclient.activities.MainActivity;
@@ -127,7 +129,9 @@ public class GeofenceTransitionsIntentService extends IntentService {
         ArrayList triggeringGeofencesIdsList = new ArrayList();
         for (Geofence geofence : triggeringGeofences) {
             triggeringGeofencesIdsList.add(geofence.getRequestId());
-            UserLocation location = new UserLocation(geofence.getRequestId(), new Date());
+            Date now = new Date();
+            SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
+            UserLocation location = new UserLocation(geofence.getRequestId(), df.format(now));
             Storage.addLocation(location);
             Storage.printLocations();
         }

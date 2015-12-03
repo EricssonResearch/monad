@@ -5,11 +5,11 @@ import java.util.Date;
 
 public class UserLocation {
     private String locationId;
-    private Date time;
+    private String time;
     private double latitude = 0.0;
     private double longitude = 0.0;
 
-    public UserLocation(String locationId, Date time) {
+    public UserLocation(String locationId, String time) {
         ArrayList<BusStop> busStops = Storage.getBusStops();
         for (int i = 0; i < busStops.size(); i++){
             if (locationId.equals(busStops.get(i).getName())){
@@ -34,7 +34,7 @@ public class UserLocation {
         return locationId;
     }
 
-    public Date getTime() {
+    public String getTime() {
         return time;
     }
 }
