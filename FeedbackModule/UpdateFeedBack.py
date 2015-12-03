@@ -66,8 +66,8 @@ def RetrieveDB():
         print type(destinationTime)
         diff = currentTime - destinationTime
         print diff
- 
-   	 """ The feedback request should be send after endTime"""
+
+   	""" The feedback request should be send after endTime"""
    		if (diff) > timedelta(seconds = 100):
    			send_notification_to_authentication()
 
