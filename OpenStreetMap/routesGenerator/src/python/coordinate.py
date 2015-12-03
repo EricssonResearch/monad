@@ -43,8 +43,15 @@ def measure(coordinate1, coordinate2):
     Measure the distance between to points in lon and lat and returns the
     distance in meters.
     """
-    lon1, lat1 = coordinate1.coordinates
-    lon2, lat2 = coordinate2.coordinates
+    if isinstance(coordinate1, Coordinate):
+        lon1, lat1 = coordinate1.coordinates
+    else:
+        lon1, lat1 = coordinate1
+
+    if isinstance(coordinate2, Coordinate):
+        lon2, lat2 = coordinate2.coordinates
+    else:
+        lon2, lat2 = coordinate2
 
     # Radius of the earth in meters
     earthRadius = 6371000
