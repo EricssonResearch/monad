@@ -82,9 +82,51 @@ class getTrafficInformation():
 					trafficDic[index]["StopPoint Longitude: "] = TrafficIncident[i][1].text
 			index = index + 1
 
-		print trafficDic
+		return trafficDic
 
-getTrafficInformation().postRequest()
+	def postReuqestOnParams(self,SouthLatitude,WestLongitude,NorthLatitude,EastLongitude):
+
+		securekey = 'AvlEK4dxNCW1GZRjhXQq1S57gprUKWV2-DXms3TrExBfxO1vSxLDoYxSDDLBFcMp'
+		#URL = "http://dev.virtualearth.net/REST/V1/Traffic/Incidents/59.818882,17.472703,59.949800,17.818773/true?t=9,2&s=2,3&o=xml&key=" + securekey
+		URL = "http://dev.virtualearth.net/REST/V1/Traffic/Incidents/" + SouthLatitude + "," + WestLongitude + "," + NorthLatitude + "," + EastLongitude + "/true?t=9&s=2,3&o=xml&key=" + securekey
+
+		response = urllib.urlopen(URL).read()
+		root = ET.fromstring(response)
+		trafficDic = {}
+		index = 0
+		
+		response = urllib.urlopen(URL).read()
+		root = ET.fromstring(response)
+		trafficDic = {}
+		index = 0
+		
+		for TrafficIncident in root.iter('{http://schemas.microsoft.com/search/local/ws/rest/v1}TrafficIncident'):
+			trafficDic[index] = {}
+			for i in range(13): 
+				if i == 0:
+					trafficDic[index]["StartPoint Latitude: "] = TrafficIncident[i][0].text
+					trafficDic[index]["StartPoint Longitude: "] = TrafficIncident[i][1].text
+				if i == 3:
+					trafficDic[index]["LastModifiedUTC: "] = TrafficIncident[i].text
+				if i == 4:
+					trafficDic[index]["StartTimeUTC: "] = TrafficIncident[i].text
+				if i == 5:
+					trafficDic[index]["EndTimeUTC: "] = TrafficIncident[i].text
+				if i == 6:
+					trafficDic[index]["Incident Type: "] = TrafficIncident[i].text
+				if i == 7:
+					trafficDic[index]["Incident Severity: "] = TrafficIncident[i].text
+				if i == 9:
+					trafficDic[index]["Road Closed: "] = TrafficIncident[i].text
+				if i == 10:
+					trafficDic[index]["Description: "] = TrafficIncident[i].text
+				if i == 11:
+					trafficDic[index]["StopPoint Latitude: "] = TrafficIncident[i][0].text
+					trafficDic[index]["StopPoint Longitude: "] = TrafficIncident[i][1].text
+			index = index + 1
+
+		return trafficDic
+
 
 
 
