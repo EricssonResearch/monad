@@ -30,13 +30,7 @@ class getTrafficInformation():
 	4: MassTransit... 
 	'''
 	def __init__(self):
-		SouthLatitude = 59.1995
-    	WestLongitude = -18.3894
-    	NorthLatitude = 59.1957
-    	EastLongitude = -18.0353
-    	l = 120
-    	SouthLatitude = 45.219
-
+		pass
 	def postRequest(self):
 		a = str(59.818882)
 		b = str(17.472703)
@@ -49,7 +43,7 @@ class getTrafficInformation():
 		#f = urllib.quote(self.WestLongitude)
 
 		#URL = "http://dev.virtualearth.net/REST/V1/Traffic/Incidents/59.818882,17.472703,59.949800,17.818773/true?t=9,2&s=2,3&o=xml&key=" + securekey
-		URL = "http://dev.virtualearth.net/REST/V1/Traffic/Incidents/" + a + "," + b + "," + c + "," + d + "/true?t=9&s=2,3&o=xml&key=" + securekey
+		URL = "http://dev.virtualearth.net/REST/V1/Traffic/Incidents/" + a + "," + b + "," + c + "," + d + "/true?&o=xml&key=" + securekey
 
 		response = urllib.urlopen(URL).read()
 		root = ET.fromstring(response)
@@ -81,7 +75,7 @@ class getTrafficInformation():
 					trafficDic[index]["StopPoint Latitude: "] = TrafficIncident[i][0].text
 					trafficDic[index]["StopPoint Longitude: "] = TrafficIncident[i][1].text
 			index = index + 1
-
+		print trafficDic
 		return trafficDic
 
 	def postReuqestOnParams(self,SouthLatitude,WestLongitude,NorthLatitude,EastLongitude):
@@ -128,6 +122,6 @@ class getTrafficInformation():
 		return trafficDic
 
 
-
+getTrafficInformation().postRequest()
 
 
