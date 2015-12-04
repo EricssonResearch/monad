@@ -238,16 +238,9 @@ public class VehicleAdministration extends Administration {
                 if (i < busTrip.getBusStops().size() - 1) {
                     list = list + ", ";
                 }
-//                Log.d("TEST", busTrip.getBusStops().get(i).coordinatesToString());
             }
             list = list + "]";
             data = "list=" + list;
-//            data = "list:" + list;
-//            Log.d("VehicleAdministration", data);
-//            JSONObject listObj = new JSONObject();
-//            listObj.put("list", list);
-//            data = listObj.toJSONString();
-//            Log.d("VehicleAdministration", listObj.toJSONString());
         }
         return data;
     }
@@ -281,6 +274,53 @@ public class VehicleAdministration extends Administration {
             }
             busTrip.setTrajectory(trajectory);
             busTrip.printTrajectory();
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            return "0";
+        }
+        return "1";
+    }
+
+    public static String postGetPassengersRequest(String busTripID, String currentBusStop, String nextBusStop) {
+        String request = ROUTES_ADMINISTRATOR_HOST + ROUTES_ADMINISTRATOR_PORT + "/get_passengers";
+        String urlParameters = "bus_trip_id=" + busTripID
+                             + "&current_bus_stop=" + currentBusStop
+                             + "&next_bus_stop=" + nextBusStop;
+
+        /* Send the request to the RoutesAdministrator */
+        String response = postRequest(request, urlParameters);
+
+        /* Handle response in case of exception */
+        if (response.equals("-1")) {
+            return exceptionMessage();
+        }
+
+        /*
+         * By default, Erlang adds the newline '\n' character at the beginning of response.
+         * For this reason substring() function is used
+         */
+        response = response.substring(1);
+        // response = response.trim();
+
+        /* Process response */
+        return processGetPassengersResponse(response);
+    }
+
+    public static String processGetPassengersResponse(String response) {
+        JSONParser parser = new JSONParser();
+
+        try {
+            JSONObject getPassengersObject = (JSONObject) parser.parse(response);
+
+            long tempBoarding = (long) getPassengersObject.get("boarding");
+            int boarding = new BigDecimal(tempBoarding).intValueExact();
+
+            long tempDeparting = (long) getPassengersObject.get("departing");
+            int departing = new BigDecimal(tempDeparting).intValueExact();
+
+            Storage.getBusTrip().setBoardingPassengers(boarding);
+            Storage.getBusTrip().setDepartingPassengers(departing);
         }
         catch (Exception e) {
             e.printStackTrace();

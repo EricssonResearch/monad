@@ -1,28 +1,32 @@
 package se.uu.csproject.monadvehicle;
 
 import android.util.Log;
-
 import org.mapsforge.core.model.LatLong;
-
 import java.util.ArrayList;
 import java.util.Date;
 
 public class BusTrip {
-    String busTripID;
-    int capacity;
+    private String busTripID;
+    private int capacity;
     private ArrayList<BusStop> busStops;
     private ArrayList<LatLong> trajectory;
+    private int boardingPassengers;
+    private int departingPassengers;
 
     public BusTrip(String busTripID, int capacity, ArrayList<BusStop> busStops) {
         this.busTripID = busTripID;
         this.capacity = capacity;
         this.busStops = busStops;
+        this.boardingPassengers = 0;
+        this.departingPassengers = 0;
     }
 
     public void printValues() {
         Log.d("BusTrip", "-- Printing Values --");
-        Log.d("BusTrip", "ID: " + getBusTripID());
-        Log.d("BusTrip", "Capacity: " + getCapacity());
+        Log.d("BusTrip", "ID: " + busTripID);
+        Log.d("BusTrip", "Capacity: " + capacity);
+        Log.d("BusTrip", "Boarding: " + boardingPassengers);
+        Log.d("BusTrip", "Departing: " + departingPassengers);
         printBusStops();
         printTrajectory();
     }
@@ -95,5 +99,21 @@ public class BusTrip {
             return busStops.get(busStops.size() - 1).getArrivalTime();
         }
         return null;
+    }
+
+    public int getBoardingPassengers() {
+        return boardingPassengers;
+    }
+
+    public void setBoardingPassengers(int boardingPassengers) {
+        this.boardingPassengers = boardingPassengers;
+    }
+
+    public int getDepartingPassengers() {
+        return departingPassengers;
+    }
+
+    public void setDepartingPassengers(int departingPassengers) {
+        this.departingPassengers = departingPassengers;
     }
 }
