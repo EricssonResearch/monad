@@ -656,7 +656,7 @@ class DB():
             tripObjectList.append(objID)
             capacity = individual[i][1]
             #startTime = individual[i][3] + timedelta(1)
-            startTime = individual[i][2] + timedelta(1)   # TODO seek better solution
+            startTime = individual[i][2] + timedelta(timeFrame)   # TODO seek better solution
             busID = BUSID  # Need to assign busID for every Trip
             trajectory = self.getRoute(line, "trajectory")
             '''
