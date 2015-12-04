@@ -496,12 +496,13 @@ def application(env, start_response):
                 database = serverConfig.MONGO_DATABASE
                 collection = database.Geofence
                 
-                for busStop in geofenceInfo:                    
+                for busStop in geofenceInfo:
+                    time = datetime.strptime(geofenceInfo[busStop]["time"], serverConfig.DATE_FORMAT)                    
                     document = {
                         "userID": userID,                        
                         "latitude": geofenceInfo[busStop]["latitude"],
                         "longitude": geofenceInfo[busStop]["longitude"],
-                        "time": geofenceInfo[busStop]["time"]
+                        "time": time
                     }
                     collection.insert_one(document)
                 

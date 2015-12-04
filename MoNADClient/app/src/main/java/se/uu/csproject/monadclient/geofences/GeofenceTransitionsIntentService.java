@@ -17,14 +17,8 @@
 package se.uu.csproject.monadclient.geofences;
 
 import android.app.IntentService;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.BitmapFactory;
-import android.graphics.Color;
-import android.support.v4.app.NotificationCompat;
-import android.support.v4.app.TaskStackBuilder;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -38,7 +32,6 @@ import java.util.List;
 import java.util.Locale;
 
 import se.uu.csproject.monadclient.R;
-import se.uu.csproject.monadclient.activities.MainActivity;
 import se.uu.csproject.monadclient.storage.Storage;
 import se.uu.csproject.monadclient.storage.UserLocation;
 
@@ -46,8 +39,7 @@ import se.uu.csproject.monadclient.storage.UserLocation;
  * Listener for geofence transition changes.
  *
  * Receives geofence transition events from Location Services in the form of an Intent containing
- * the transition type and geofence id(s) that triggered the transition. Creates a notification
- * as the output.
+ * the transition type and geofence id(s) that triggered the transition.
  */
 public class GeofenceTransitionsIntentService extends IntentService {
 
@@ -99,13 +91,8 @@ public class GeofenceTransitionsIntentService extends IntentService {
                     triggeringGeofences
             );
 
-
-
-            // Send notification and log the transition details.
-            sendNotification(geofenceTransitionDetails);
             Log.i(TAG, geofenceTransitionDetails);
         } else {
-            // Log the error.
             Log.e(TAG, getString(R.string.geofence_transition_invalid_type, geofenceTransition));
         }
     }
@@ -118,10 +105,8 @@ public class GeofenceTransitionsIntentService extends IntentService {
      * @param triggeringGeofences   The geofence(s) triggered.
      * @return                      The transition details formatted as String.
      */
-    private String getGeofenceTransitionDetails(
-            Context context,
-            int geofenceTransition,
-            List<Geofence> triggeringGeofences) {
+    private String getGeofenceTransitionDetails(Context context, int geofenceTransition,
+                                                List<Geofence> triggeringGeofences) {
 
         String geofenceTransitionString = getTransitionString(geofenceTransition);
 
@@ -133,59 +118,11 @@ public class GeofenceTransitionsIntentService extends IntentService {
             SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
             UserLocation location = new UserLocation(geofence.getRequestId(), df.format(now));
             Storage.addLocation(location);
-            Storage.printLocations();
         }
 
         String triggeringGeofencesIdsString = TextUtils.join(", ",  triggeringGeofencesIdsList);
-//        System.out.println(geofenceTransitionString + ": " + triggeringGeofencesIdsString);
 
         return geofenceTransitionString + ": " + triggeringGeofencesIdsString;
-    }
-
-    /**
-     * Posts a notification in the notification bar when a transition is detected.
-     * If the user clicks the notification, control goes to the MainActivity.
-     */
-    private void sendNotification(String notificationDetails) {
-        // Create an explicit content Intent that starts the main Activity.
-        Intent notificationIntent = new Intent(getApplicationContext(), MainActivity.class);
-
-        // Construct a task stack.
-        TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
-
-        // Add the main Activity to the task stack as the parent.
-        stackBuilder.addParentStack(MainActivity.class);
-
-        // Push the content Intent onto the stack.
-        stackBuilder.addNextIntent(notificationIntent);
-
-        // Get a PendingIntent containing the entire back stack.
-        PendingIntent notificationPendingIntent =
-                stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
-
-        // Get a notification builder that's compatible with platform versions >= 4
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
-
-        // Define the notification settings.
-        builder.setSmallIcon(R.drawable.gold_star_full)
-                // In a real app, you may want to use a library like Volley
-                // to decode the Bitmap.
-                .setLargeIcon(BitmapFactory.decodeResource(getResources(),
-                        R.drawable.gold_star_full))
-                .setColor(Color.RED)
-                .setContentTitle(notificationDetails)
-                .setContentText(getString(R.string.geofence_transition_notification_text))
-                .setContentIntent(notificationPendingIntent);
-
-        // Dismiss notification once the user touches it.
-        builder.setAutoCancel(true);
-
-        // Get an instance of the Notification manager
-        NotificationManager mNotificationManager =
-                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-
-        // Issue the notification
-        mNotificationManager.notify(0, builder.build());
     }
 
     /**
