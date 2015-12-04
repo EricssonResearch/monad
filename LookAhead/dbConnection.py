@@ -815,3 +815,15 @@ class DB():
     def selectBusTrip(self, date):
         ''' '''
         return self.db.BusTrip.find({"startTime": {"$gte": date, "$lt": date + timedelta(minutes=60)}}).sort([("line", 1), ("startTime", 1)])
+
+    def selectTimeTablebyBusTrip(self, busTrip):
+        ''' '''
+        # return self.db.TimeTable.find({"timetable": {"$in": busTrip}})
+        # { field: { $in: [<value1>, <value2>, ... <valueN> ] } }
+        # return self.db.TimeTable.update({"timetable": {"$in": busTrip}},{"$unset": {"timetable": "monadlmao"}})
+        # print self.db.TimeTable.find({"timetable": {"$in": busTrip}}).count()
+        return self.db.TimeTable.find({"timetable": {"$in": busTrip}})
+
+    def updateTimetable(self, id, timetable):
+        return self.db.TimeTable.update({"_id": {"$eq": id}}, {"timetable": timetable})
+
