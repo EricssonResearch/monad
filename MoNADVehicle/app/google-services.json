@@ -1,0 +1,51 @@
+{
+  "project_info": {
+    "project_id": "monad-3c05e",
+    "project_number": "81265551950",
+    "name": "MoNAD"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:81265551950:android:edb48746bece72cf",
+        "client_id": "android:se.uu.csproject.monadclient",
+        "client_type": 1,
+        "android_client_info": {
+          "package_name": "se.uu.csproject.monadclient"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "46087854555-ftof1bsounf67kn7b0pamnchvgo2lb6c.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "se.uu.csproject.monadclient",
+            "certificate_hash": "db6b90a837f4bb45220aa118bdf59fef14fe4f00"
+          }
+        }
+      ],
+      "api_key": [],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "cloud_messaging_service": {
+          "status": 2,
+          "apns_config": []
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": []
+        },
+        "google_signin_service": {
+          "status": 2
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    }
+  ],
+  "client_info": [],
+  "ARTIFACT_VERSION": "1"
+}

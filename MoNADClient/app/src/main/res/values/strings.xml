@@ -165,15 +165,15 @@
     <string name="java_googleplayloginwarning">If you do not enable Google Play Services then you cannot log in with your Google account</string>
     <string name="java_confirmcode_error">Invalid code, please try again</string>
     <string name="java_forgotpassword_codesent">The code has been sent to your email address, please check your email and enter the code</string>
-    <string name="java_main_noresults">Could not find any trips for this destination. Please try the advanced search</string>
+    <string name="java_main_noresults">Could not find any trips for this destination, please try the advanced search</string>
     <string name="java_main_exitmonad">Do you want to exit MoNAD?</string>
     <string name="java_main_leftmonad">You have left MoNAD</string>
-    <string name="java_search_locationfailed">Failed to get your current position. Please turn on your location settings and/or give us location permission</string>
+    <string name="java_search_locationfailed">Failed to get your current position, please turn on your location settings and/or give us location permission</string>
     <string name="java_search_currentposition">Current Position</string>
     <string name="java_search_enterdeparture">Please enter a departure address</string>
     <string name="java_search_enterdestination">Please enter a destination address</string>
     <string name="java_search_emptysearch">Could not find any trips matching your criteria</string>
-    <string name="java_search_locationdisabled">It seems your location settings are off. Please use the advanced search and specify a departure address</string>
+    <string name="java_search_locationdisabled">It seems your location settings are off, please use the advanced search and specify a departure address</string>
     <string name="java_settings_themechanged_light">Theme changed to light</string>
     <string name="java_settings_themechanged_default">Theme changed to default</string>
     <string name="java_settings_themechanged_dark">Theme changed to dark</string>
@@ -187,4 +187,33 @@
     <string name="java_pswd_resetsuccess">Password reset successfully</string>
     <string name="java_pswd_updatesuccess">Password updated successfully</string>
     <string name="java_settings_updatesuccess">Settings updated successfully</string>
+
+    <!-- Buttons strings -->
+    <string name="add_geofences">Add geofences</string>
+    <string name="remove_geofences">Remove geofences</string>
+
+    <string name="geofences_added">Geofences added</string>
+    <string name="geofences_removed">Geofences removed</string>
+
+    <!-- Error strings -->
+    <string name="not_connected">GoogleApiClient no yet connected. Try again.</string>
+    <string name="geofence_not_available">Geofence service is not available now</string>
+    <string name="geofence_too_many_geofences">Your app has registered too many geofences</string>
+    <string name="geofence_too_many_pending_intents">
+        You have provided too many PendingIntents to the addGeofences() call
+    </string>
+    <string name="unknown_geofence_error">
+        Unknown error: the Geofence service is not available now
+    </string>
+    <string name="geofence_transition_invalid_type">
+        Geofence transition error: invalid transition type %1$d
+    </string>
+
+    <!-- Transition type strings -->
+    <string name="geofence_transition_entered">Entered</string>
+    <string name="geofence_transition_exited">Exited</string>
+    <string name="unknown_geofence_transition">Unknown Transition</string>
+
+    <string name="geofence_transition_notification_text">Click notification to return to app</string>
+    <string name="title_activity_geofence">GeofenceActivity</string>
 </resources>

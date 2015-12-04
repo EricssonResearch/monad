@@ -15,9 +15,7 @@ import java.util.List;
 import java.util.Locale;
 
 import se.uu.csproject.monadclient.ClientAuthentication;
-import se.uu.csproject.monadclient.MainActivity;
 import se.uu.csproject.monadclient.R;
-import se.uu.csproject.monadclient.SettingsActivity;
 
 public class LanguageRecyclerViewAdapter
         extends RecyclerView.Adapter<LanguageRecyclerViewAdapter.LanguageViewHolder> {

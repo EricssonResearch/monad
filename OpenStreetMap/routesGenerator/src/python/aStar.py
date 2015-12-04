@@ -44,8 +44,8 @@ class AStar:
             cost[goal] = 0
             return self.reconstruct_path(path, start, goal), cost
 
-        # A high value that a real path should not have.
-        cost[goal] = 300000
+        # A value that a real path should not have.
+        cost[goal] = None
 
         # As long as there are paths to be explored
         while not (len(openSet) == 0):
@@ -71,7 +71,7 @@ class AStar:
 
                 newCost = cost[current] + timeOnRoad
 
-                if nextNode not in cost or newCost < cost[nextNode]:
+                if nextNode not in cost or (newCost < cost[nextNode] or cost[nextNode] is None):
                     cost[nextNode] = newCost
 
                     weight = (newCost + (roadInt ** 1) +
@@ -81,7 +81,13 @@ class AStar:
                     heappush(openSet, (weight, nextNode))
                     path[nextNode] = current
 
-        return self.reconstruct_path(path, start, goal), cost
+        # Is there a shortest path
+        if cost[goal] is None:
+            shortestpath = []
+        else:
+            shortestpath = self.reconstruct_path(path, start, goal)
+
+        return shortestpath, cost
 
     def heuristic(self, node, goal):
         """
@@ -100,7 +106,10 @@ class AStar:
         current = goal
         path = [current]
         while current != start:
-            current = came_from[current]
+            if current not in came_from:
+                current = start
+            else:
+                current = came_from[current]
             path.append(current)
         path.reverse()
         return path

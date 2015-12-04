@@ -13,18 +13,10 @@ under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
 CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
-# from heapq import heappop, heappush
-import threading
 import sys
-# import math
 import time
 
-# import Image
-# import ImageDraw
 from xml.sax import make_parser, handler
-# from Tkinter import Tk, Canvas, Frame, BOTH
-from multiprocessing import Process
-
 
 from aStar import AStar
 from busStop import BusStop
@@ -32,6 +24,7 @@ from coordinate import Coordinate
 from address import Address
 import coordinate
 from mapDrawing import DrawImage
+from busNetwork import BusNetwork
 
 
 # The size width of the produced image in pixels
@@ -41,7 +34,8 @@ standardSpeed = 50
 # Roads buses can drive on
 busRoadTypes = ('motorway', 'motorway_link', 'trunk', 'trunk_link', 'primary',
                 'primary_link', 'secondary', 'secondary_link', 'tertiary',
-                'tertiary_link', 'unclassified', 'residential', 'service')
+                'tertiary_link', 'unclassified', 'residential', 'bus_road')
+# , 'service')
 
 
 class RouteHandler(handler.ContentHandler):
@@ -61,6 +55,7 @@ class RouteHandler(handler.ContentHandler):
 
         self.roadMapGraph = {}
         self.roadIntersectionGraph = {}
+        self.roadNodes = []
 
         # Roads
         self.roads = {}
@@ -209,16 +204,14 @@ class RouteHandler(handler.ContentHandler):
                 self.addresses[key] = Address(street)
                 self.addresses[key].addNumber(number, self.nodes[node])
 
+    def rmEdge(self, edgeList, id):
+        for x in edgeList:
+            if x[0] == id:
+                edgeList.remove(x)
+                break
+
     def makeRoadIntersectionGraph(self):
-        # print len(self.roadMapGraph)
-
-        for road in self.roads:
-            # print "--", road
-            for nodeID in self.roads[road][2]:
-                # print nodeID, self.roadMapGraph[nodeID]
-                pass
-
-        print len(self.roads)
+        pass
 
 
 class Map:
@@ -234,6 +227,7 @@ class Map:
         self.nodes = {}
         self.busStopList = []
         self.edges = {}
+        self.roadNodes = []
 
     def parsData(self):
         """
@@ -249,6 +243,12 @@ class Map:
         self.edges = self.handler.roadMapGraph
         self.handler.makeRoadIntersectionGraph()
 
+        # make a list of all node that belong to the road network
+        for node in self.handler.nodeID:
+            if self.inEdgeList(self.handler.nodeID[node]):
+                self.roadNodes.append(node)
+        list.sort(self.roadNodes)
+
     def getNodeIdFromCoordinates(self, coordinates):
         """
         :param coordinates: (longitude, latitude)
@@ -256,84 +256,51 @@ class Map:
         """
         if coordinates in self.handler.nodeID and self.inEdgeList(
                 self.handler.nodeID[coordinates]):
-
-            return self.handler.nodeID[coordinates]
+            node = self.handler.nodeID[coordinates]
         else:
-            return self.closestRoadNode(coordinates)
-
-    def makeBusGraph(self):
-
-        graph = {}
-
-        i = 0
-        l = len(self.busStopList)
-        timer = time.time()
-        for busStopA in self.handler.busStops:
-
-            if busStopA.name not in graph:
-                graph[busStopA.name] = {}
-
-            i = i + 1
-            print "\n%f s\n (%d / %d) - %s" % (time.time() - timer, i, l, busStopA.name)
-            timer = time.time()
-            for busStopB in self.handler.busStops:
-
-                if busStopB.name not in graph[busStopA.name] and busStopA != busStopB:
-                    print '\033[91m' + '.' + '\033[0m',
-                    path, cost = self.findRouteFromCoordinateList([
-                        busStopA.coordinates,
-                        busStopB.coordinates])
-
-                    start = busStopA.name
-                    _cameFrom = []
-                    for node in path[1:]:
-                        id = self.handler.nodeID[node]
-
-                        if id in self.handler.busStopNode:
-                            b = self.handler.busStopNode[id].name
-
-                            if start not in graph:
-                                graph[start] = {}
-
-                            graph[start][b] = []
-                            graph[busStopA.name][b] = False
-                            graph[start][busStopB.name] = False
-
-                            for name in _cameFrom:
-                                graph[name][b] = False
-
-                            _cameFrom.append(start)
-                            start = b
-
-        return graph
+            node = self.closestRoadNode(coordinates)
+        return node
 
     def getNodeIdFromCoordinatesList(self, coordinatesList):
         """
+
         :param coordinates: [(longitude, latitude)]
         :return: nodeID
         """
         nodeIdList = []
         for coordinates in coordinatesList:
             nodeIdList.append(self.getNodeIdFromCoordinates(coordinates))
+
         return nodeIdList
 
     def closestRoadNode(self, coordinates):
-        coord = Coordinate(longitude=coordinates[0], latitude=coordinates[1])
-        node = self.edges.keys()[0]
-        dist = coordinate.measure(coord, self.nodes[node])
-        for nd in self.edges.keys():
-            if dist > coordinate.measure(coord, self.nodes[nd]):
-                dist = coordinate.measure(coord, self.nodes[nd])
-                node = nd
-        return node
+        """
+
+        :param coordinates:
+        :return:
+        """
+        node = coordinate.closestTo(coordinates, self.roadNodes)
+
+        return self.handler.nodeID[node]
 
     def findBusStopName(self, lon, lat):
+        """
+
+        :param lon:
+        :param lat:
+        :return:
+        """
         for nd in self.busStopList:
             if nd.longitude == lon and nd.latitude == lat:
                 return nd.name
         return None
 
     def findBusStopPosition(self, name):
+        """
+
+        :param name:
+        :return:
+        """
         name = name.decode('utf-8').lower()
         for nd in self.busStopList:
             if nd.name.lower() == name:
@@ -437,6 +404,7 @@ class Map:
         """
         # Get the node IDs of the coordinates.
         nodeIDList = self.getNodeIdFromCoordinatesList(coordinateList)
+
         path = []
         cost = [0]
         # If at least one coordinates does not have an ID
@@ -503,6 +471,9 @@ class Map:
         return nodeList
 
     def getBusStopConnections(self):
+        """
+
+        """
         bus_stop_connections = {}
         bus_stop_ids = []
         for busStop in self.busStopList:
@@ -511,7 +482,11 @@ class Map:
             pass
 
     def inEdgeList(self, sid):
-        return self.handler.roadMapGraph.has_key(sid)
+        """
+
+        """
+        return sid in self.handler.roadMapGraph
+        # return self.handler.roadMapGraph.has_key(sid)
 
     def timeBetweenStops(self, stopA, stopB):
         path, cost = self.astar.findRoute(stopA, stopB)
@@ -551,14 +526,21 @@ if __name__ == '__main__':
     print "We have " + str(len(myMap.nodes)) + " nodes in total"
     print "We have " + str(len(myMap.busStopList)) + " bus stops in total\n"
 
+    """
     print "Draw image ..."
-    img = DrawImage(3000,
+    img = DrawImage(10000,
                     myMap.handler.minlon,
                     myMap.handler.minlat,
                     myMap.handler.maxlon,
                     myMap.handler.maxlat)
 
     img.drawRoads(myMap.edges, myMap.nodes)
+    # img.drawNodeList(myMap.nodes, 'blue')
+    # img.drawNodeList([myMap.nodes[x] for x in myMap.handler.NOD], 'red')
+    img.drawBusStops(myMap.busStopList, myMap.nodes)
     img.drawSave(sys.argv[1])
+    """
 
+    b = BusNetwork()
+    b.makeBusGraph(myMap.handler.nodes, myMap.handler.busStopNode, myMap.edges)
     # myMap.makeBusGraph()

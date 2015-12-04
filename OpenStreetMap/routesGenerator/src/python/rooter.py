@@ -38,30 +38,39 @@ def message_handler(message):
         if message[0] == Atom('get_nearest_stop') and message_length == 3:
             address = message[1]
             pid = message[2]
-            get_nearest_stop(address, pid)
+            perform(get_nearest_stop, address, pid)
         elif message[0] == Atom('get_nearest_stops_from_coordinates'):
             lon = message[1]
             lat = message[2]
             dist = message[3]
             pid = message[4]
-            get_nearest_stops_from_coordinates(lon, lat, dist, pid)
+            perform(get_nearest_stops_from_coordinates, lon, lat, dist, pid)
         elif message[0] == Atom('get_route_from_coordinates'):
             list = message[1]
             pid = message[2]
-            get_route_from_coordinates(list, pid)
+            perform(get_route_from_coordinates, list, pid)
         elif message[0] == Atom('get_coordinates_from_address'):
             address = message[1]
             street_no = message[2]
             pid = message[3]
-            get_coordinates_from_address(address, street_no, pid)
+            perform(get_coordinates_from_address, address, street_no, pid)
         elif message[0] == Atom('get_coordinates_from_string'):
             string = message[1]
             pid = message[2]
-            get_coordinates_from_string(string, pid)
+            # get_coordinates_from_string(string, pid)
+            perform(get_coordinates_from_string, string, pid)
         else:
             print message[0]
     else:
         print 'No'
+
+
+def perform(fun, *args):
+    try:
+        fun(*args)
+    except Exception as e:
+        respons = Atom('error'), e.message
+        cast(args[-1], respons)
 
 
 def get_nearest_stop(address, pid):
@@ -136,6 +145,7 @@ def get_route_from_coordinates(coordinates_str_list, pid):
 
 
 def get_coordinates_from_string(string, pid):
+
     string_str = ''.join(chr(i) for i in string)
     data = {}
     data['_id'] = 12312
@@ -150,7 +160,8 @@ def get_coordinates_from_string(string, pid):
         if coordinates_obj is not None:
             addr = True
             coordinates = coordinates_obj.coordinates
-    else:
+    if not addr:
+        string_str = re.sub('\d+[a-zA-Z]*', "", string_str).strip()
         coordinates = the_map.findBusStopPosition(string_str)
         if coordinates is not None:
             busStop = True
@@ -159,7 +170,6 @@ def get_coordinates_from_string(string, pid):
             if coordinates_obj is not None:
                 addr = True
                 coordinates = coordinates_obj.coordinates
-
     data['address'] = addr
     data['bus_stop'] = busStop
     if coordinates is not None:

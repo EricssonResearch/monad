@@ -71,11 +71,11 @@ start_emysql() ->
     application:start(emysql),
     emysql:add_pool(mysql_pool, [
         {size, 1},
-        {user, "root"},
-        {password, "p0l4x"},
-        {host, "localhost"},
+        {user, ""},
+        {password, ""},
+        {host, ""},
         {port, 3306},
-        {database, "clients"},
+        {database, ""},
         {encoding, utf8}]),
 
     Broadcaster = whereis(broadcaster),
@@ -124,6 +124,8 @@ loop(Req, DocRoot) ->
                     "send_notification" ->
                         Req:respond({200, [{"Content-Type", "text/plain"}], "OK"}),
                         send_notification(Req);
+                    "get_bus_stops" ->
+                        get_bus_stops(Req);
                     _ ->
                         Req:not_found()
                 end;
@@ -503,9 +505,7 @@ generate_notification(Req) ->
                 Broadcaster = whereis(broadcaster),
                 Broadcaster ! {broadcast, Msg},
                 PythonInstance = whereis(python_instance),
-                T = python:call(PythonInstance, mongodb_parser, generate_notification, [ClientID, Response, BookedTripID]);
-
-                % Req:respond({200, [{"Content-Type", "text/plain"}], Response});
+                python:call(PythonInstance, mongodb_parser, generate_notification, [ClientID, Response, BookedTripID]);
             _ ->
                 Msg = ["Unexpected Database Response",
                        {result, Result},
@@ -565,6 +565,24 @@ send_notification(Req) ->
                       {trace, erlang:get_stacktrace()}],
             error_logger:error_report(Report)
             % handle_error(Report, Req)
+    end.
+
+get_bus_stops(Req) ->
+    try
+        PythonInstance = whereis(python_instance),
+        Response = python:call(PythonInstance, mongodb_parser, get_bus_stops, []),
+        Req:respond({200, [{"Content-Type", "text/plain"}], Response}),
+        Msg = [{type, get_bus_stops},
+               {response, Response},
+               {process, self()}],
+        Broadcaster = whereis(broadcaster),
+        Broadcaster ! {broadcast, Msg}
+    catch
+        Type:What ->
+            Report = ["Failed Request: get_bus_stops",
+                      {type, Type}, {what, What},
+                      {trace, erlang:get_stacktrace()}],
+            handle_error(Report, Req)
     end.
 
 %% Internal API

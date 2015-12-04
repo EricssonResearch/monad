@@ -7,6 +7,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
 
+import se.uu.csproject.monadclient.activities.NotificationsActivity;
+import se.uu.csproject.monadclient.activities.RouteActivity;
+
 public class RecommendationAlarmReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {

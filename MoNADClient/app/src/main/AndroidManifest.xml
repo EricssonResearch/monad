@@ -23,7 +23,7 @@
         android:theme="@style/AppTheme"
         >
         <activity
-            android:name=".LoginActivity"
+            android:name=".activities.LoginActivity"
             android:label="@string/title_activity_login"
             android:screenOrientation="portrait">
             <intent-filter>
@@ -33,112 +33,112 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".MainActivity"
+            android:name=".activities.MainActivity"
             android:label="@string/title_activity_main"
             android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".LoginActivity" />
+                android:value=".activities.LoginActivity" />
         </activity>
         <activity
-            android:name=".SearchActivity"
+            android:name=".activities.SearchActivity"
             android:label="@string/title_activity_search"
             android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainActivity" />
+                android:value=".activities.MainActivity" />
         </activity>
         <activity
-            android:name=".NotificationsActivity"
+            android:name=".activities.NotificationsActivity"
             android:label="@string/title_activity_notifications"
             android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainActivity" />
+                android:value=".activities.MainActivity" />
         </activity>
         <activity
-            android:name=".TripsActivity"
+            android:name=".activities.TripsActivity"
             android:label="@string/title_activity_trips"
             android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainActivity" />
+                android:value=".activities.MainActivity" />
         </activity>
         <activity
-            android:name=".ProfileActivity"
+            android:name=".activities.ProfileActivity"
             android:label="@string/title_activity_profile"
             android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainActivity" />
+                android:value=".activities.MainActivity" />
         </activity>
         <activity
-            android:name=".SettingsActivity"
+            android:name=".activities.SettingsActivity"
             android:label="@string/title_activity_settings"
             android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainActivity" />
+                android:value=".activities.MainActivity" />
         </activity>
         <activity
-            android:name=".TripCancelPopup"
+            android:name=".activities.TripCancelPopup"
             android:label="@string/title_activity_trip_cancel_popup"
             android:theme="@style/AppTheme.CustomDialog"
             android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainActivity" />
+                android:value=".activities.MainActivity" />
         </activity>
         <activity
-            android:name=".RouteActivity"
+            android:name=".activities.RouteActivity"
             android:label="@string/title_activity_route"
             android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainActivity" />
+                android:value=".activities.MainActivity" />
         </activity>
         <activity
-            android:name=".RegisterActivity"
+            android:name=".activities.RegisterActivity"
             android:label="@string/title_activity_register"
             android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".LoginActivity" />
+                android:value=".activities.LoginActivity" />
         </activity>
         <activity
-            android:name=".RouteConfirmPopup"
+            android:name=".activities.RouteConfirmPopup"
             android:label="@string/title_activity_route_confirm_popup"
             android:theme="@style/AppTheme.CustomDialog"
             android:screenOrientation="portrait">
         </activity>
         <activity
-            android:name=".AboutUsActivity"
+            android:name=".activities.AboutUsActivity"
             android:label="@string/title_activity_about_us"
             android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainActivity" />
+                android:value=".activities.MainActivity" />
         </activity>
         <activity
-            android:name=".ForgotPasswordPopup"
+            android:name=".activities.ForgotPasswordPopup"
             android:label="@string/title_activity_forgot_password_popup"
             android:theme="@style/AppTheme.CustomDialog"
             android:screenOrientation="portrait">
             >
         </activity>
         <activity
-            android:name=".ConfirmCodePopup"
+            android:name=".activities.ConfirmCodePopup"
             android:label="@string/title_activity_confirm_code_popup"
             android:theme="@style/AppTheme.CustomDialog"
             android:screenOrientation="portrait">
         </activity>
         <activity
-            android:name=".ResetPasswordActivity"
+            android:name=".activities.ResetPasswordActivity"
             android:label="@string/title_activity_reset_password"
             android:screenOrientation="portrait">
         </activity>
         <activity
-            android:name=".GoogleLogIn"
+            android:name=".activities.GoogleLogIn"
             android:label="@string/title_activity_google_log_in"
             android:screenOrientation="portrait">
         </activity>
@@ -191,6 +191,13 @@
             android:exported="false">
         </service>
 
+        <service android:name=".services.LocationService" />
+
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+
+        <service android:name=".geofences.GeofenceTransitionsIntentService" />
     </application>
 
 </manifest>

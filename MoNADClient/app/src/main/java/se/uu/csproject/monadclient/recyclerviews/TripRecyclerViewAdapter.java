@@ -4,16 +4,12 @@ import android.content.Intent;
 import android.os.CountDownTimer;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
-
-import org.w3c.dom.Text;
 
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
@@ -23,8 +19,10 @@ import java.util.Date;
 import java.util.List;
 
 import se.uu.csproject.monadclient.R;
-import se.uu.csproject.monadclient.RouteActivity;
-import se.uu.csproject.monadclient.TripCancelPopup;
+import se.uu.csproject.monadclient.activities.RouteActivity;
+import se.uu.csproject.monadclient.activities.TripCancelPopup;
+import se.uu.csproject.monadclient.storage.FullTrip;
+import se.uu.csproject.monadclient.storage.Storage;
 
 import static java.lang.Math.floor;
 

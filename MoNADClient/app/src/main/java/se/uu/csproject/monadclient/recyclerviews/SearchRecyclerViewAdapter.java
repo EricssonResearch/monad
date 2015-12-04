@@ -14,7 +14,8 @@ import java.util.Calendar;
 import java.util.List;
 
 import se.uu.csproject.monadclient.R;
-import se.uu.csproject.monadclient.RouteActivity;
+import se.uu.csproject.monadclient.activities.RouteActivity;
+import se.uu.csproject.monadclient.storage.FullTrip;
 
 public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<SearchRecyclerViewAdapter.SearchViewHolder>{
 

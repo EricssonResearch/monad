@@ -1,9 +1,12 @@
 package se.uu.csproject.monadvehicle;
 
+import android.util.Log;
+
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import org.mapsforge.core.model.LatLong;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -188,7 +191,8 @@ public class VehicleAdministration extends Administration {
 
             BusTrip busTrip = new BusTrip(busTripID, capacity, trajectory);
             Storage.setBusTrip(busTrip);
-            busTrip.printValues();
+            busTrip.printBusStops();
+//            postGetTrajectoryRequest();
         }
         catch (Exception e) {
             e.printStackTrace();
@@ -197,25 +201,93 @@ public class VehicleAdministration extends Administration {
         return "1";
     }
 
-//    public static String getBusStopCoordinatesString() {
-//        BusTrip busTrip = Storage.getBusTrip();
-//
-//        if (busTrip != null && busTrip.getTrajectory() != null) {
-//
-//            for (int i = 0; i < busTrip.getTrajectory().size(); i++) {
-//                double lon = busTrip.getTrajectory().get(i).getLongitude();
-//                double lat = busTrip.getTrajectory().get(i).getLatitude();
-//                String.valueOf();
-//                String res = "(" + String.valueOf()
-//            }
-//
-//            Storage.getBusTrip().getTrajectory()
-//        }
-//        else {
-//
-//        }
-//
-//    }
+    public static String postGetTrajectoryRequest() {
+        String request = ROUTES_GENERATOR_HOST + ROUTES_GENERATOR_PORT + "/get_route_from_coordinates";
+        String urlParameters = getBusStopCoordinates();
+
+        /* Send the request to the Route Generator */
+        String response = postRequest(request, urlParameters);
+
+        /* Handle response in case of exception */
+        if (response.equals("-1")) {
+            return exceptionMessage();
+        }
+
+        /*
+         * By default, Erlang adds the newline '\n' character at the beginning of response.
+         * For this reason substring() function is used
+         */
+        response = response.substring(1);
+        // response = response.trim();
+
+        /* Process Route Generator's response */
+        return processGetTrajectoryResponse(response);
+    }
+
+    public static String getBusStopCoordinates() {
+        String data = "";
+        BusTrip busTrip = Storage.getBusTrip();
+
+        if (busTrip != null && busTrip.getBusStops() != null) {
+
+            String list = "[";
+
+            for (int i = 0; i < busTrip.getBusStops().size(); i++) {
+                list = list + busTrip.getBusStops().get(i).coordinatesToString();
+
+                if (i < busTrip.getBusStops().size() - 1) {
+                    list = list + ", ";
+                }
+//                Log.d("TEST", busTrip.getBusStops().get(i).coordinatesToString());
+            }
+            list = list + "]";
+            data = "list=" + list;
+//            data = "list:" + list;
+//            Log.d("VehicleAdministration", data);
+//            JSONObject listObj = new JSONObject();
+//            listObj.put("list", list);
+//            data = listObj.toJSONString();
+//            Log.d("VehicleAdministration", listObj.toJSONString());
+        }
+        return data;
+    }
+
+    public static String processGetTrajectoryResponse(String response) {
+        JSONParser parser = new JSONParser();
+
+        try {
+            JSONObject trajectoryObject = (JSONObject) parser.parse(response);
+            String route = (String) trajectoryObject.get("route");
+            ArrayList<String> trajectoryPoints = new ArrayList<>();
+            String coordinate = "";
+
+            for (int i = 0; i < route.length(); i++) {
+
+                if ((route.charAt(i) >= '0' && route.charAt(i) <= '9') || route.charAt(i) == '.') {
+                    coordinate = coordinate + route.charAt(i);
+                }
+                else if ((route.charAt(i) == ',' || route.charAt(i) == ')') && !coordinate.equals("")) {
+                    trajectoryPoints.add(coordinate);
+                    coordinate = "";
+                }
+                else {}
+            }
+            BusTrip busTrip = Storage.getBusTrip();
+            ArrayList<LatLong> trajectory = new ArrayList<>();
+
+            for (int i = 0; i < trajectoryPoints.size() - 1; i = i + 2) {
+                trajectory.add(new LatLong(Double.parseDouble(trajectoryPoints.get(i + 1)),
+                                           Double.parseDouble(trajectoryPoints.get(i))));
+            }
+            busTrip.setTrajectory(trajectory);
+            busTrip.printTrajectory();
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            return "0";
+        }
+        return "1";
+    }
 
 
     public static String exceptionMessage() {
