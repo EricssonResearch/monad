@@ -190,6 +190,8 @@ class RouteHandler(handler.ContentHandler):
             self.roadMapGraph[toNode] = []
 
     def addAddress(self, street, node, number=None):
+        """
+        """
         key = street.lower()
         if key in self.addresses:
             if number is None:
@@ -264,7 +266,7 @@ class Map:
     def getNodeIdFromCoordinatesList(self, coordinatesList):
         """
 
-        :param coordinates: [(longitude, latitude)]
+        :param coordinatesList: [(longitude, latitude)]
         :return: nodeID
         """
         nodeIdList = []
@@ -389,7 +391,10 @@ class Map:
         """
         path, cost = self.astar.findPath(self.nodes, self.edges, startNode,
                                          endNode)
-        return path, cost[endNode]
+
+        travelTime = cost[endNode][0]
+        travelDistance = cost[endNode][1]
+        return path, travelTime
 
     def findRouteFromCoordinateList(self, coordinateList):
         """
@@ -470,16 +475,16 @@ class Map:
                 nodeList.append(path[n])
         return nodeList
 
-    def getBusStopConnections(self):
-        """
-
-        """
-        bus_stop_connections = {}
-        bus_stop_ids = []
-        for busStop in self.busStopList:
-            bus_stop_ids.append(self.handler.nodeID[busStop.coordinates])
-        for busStop in bus_stop_ids:
-            pass
+#    def getBusStopConnections(self):
+#        """
+#
+#        """
+#        bus_stop_connections = {}
+#        bus_stop_ids = []
+#        for busStop in self.busStopList:
+#            bus_stop_ids.append(self.handler.nodeID[busStop.coordinates])
+#        for busStop in bus_stop_ids:
+#            pass
 
     def inEdgeList(self, sid):
         """
@@ -488,9 +493,9 @@ class Map:
         return sid in self.handler.roadMapGraph
         # return self.handler.roadMapGraph.has_key(sid)
 
-    def timeBetweenStops(self, stopA, stopB):
-        path, cost = self.astar.findRoute(stopA, stopB)
-        return cost[stopB]
+#    def timeBetweenStops(self, stopA, stopB):
+#        path, cost = self.astar.findRoute(stopA, stopB)
+#        return cost[stopB]
 
 
 #class drawApp(threading.Thread):
@@ -526,7 +531,18 @@ if __name__ == '__main__':
     print "We have " + str(len(myMap.nodes)) + " nodes in total"
     print "We have " + str(len(myMap.busStopList)) + " bus stops in total\n"
 
-    """
+
+    print "\nFinding path... "
+    # Flogsta vårdcentral
+    nTo = 2198905720
+    # Polacksbacken
+    nFrom = 1125461154
+
+    timer = time.time()
+    myPath, cost = myMap.findRoute(nFrom, nTo)
+    print "Found path in: %f sec, cost: %f sec\n" % (
+        (time.time() - timer), cost)
+
     print "Draw image ..."
     img = DrawImage(10000,
                     myMap.handler.minlon,
@@ -537,10 +553,12 @@ if __name__ == '__main__':
     img.drawRoads(myMap.edges, myMap.nodes)
     # img.drawNodeList(myMap.nodes, 'blue')
     # img.drawNodeList([myMap.nodes[x] for x in myMap.handler.NOD], 'red')
+    img.drawPath(myPath, myMap.nodes, 'red')
     img.drawBusStops(myMap.busStopList, myMap.nodes)
     img.drawSave(sys.argv[1])
-    """
 
-    b = BusNetwork()
-    b.makeBusGraph(myMap.handler.nodes, myMap.handler.busStopNode, myMap.edges)
+
+    # b = BusNetwork()
+    # b.makeBusGraph(myMap.handler.nodes, myMap.handler.busStopNode, myMap.edges)
     # myMap.makeBusGraph()
+

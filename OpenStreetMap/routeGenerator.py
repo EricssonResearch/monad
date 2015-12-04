@@ -16,7 +16,7 @@ import multiprocessing
 import requests
 import six
 
-ROUTES_GENERATOR_HOST = 'http://130.238.15.241:'
+ROUTES_GENERATOR_HOST = 'http://130.238.15.114:'
 ROUTES_GENERATOR_PORT = '9998'
 
 headers = {'Content-type': 'application/x-www-form-urlencoded'}
@@ -36,6 +36,8 @@ def string_to_coordinates(string):
                             latitude: float|None
                             longitude: float|None
                             }
+                            or
+                            {'error', 'yes'} if something when wrong
     """
     if not isinstance(string, six.string_types):
         raise ValueError("%r is not a string." % (string,))
@@ -68,6 +70,8 @@ def coordinates_to_nearest_stops(longitude, latitude, distance):
                             longitude: float
                             distance: float
                             }
+                            or
+                            {'error', 'yes'} if something when wrong
     """
     url = (ROUTES_GENERATOR_HOST +
            ROUTES_GENERATOR_PORT +
@@ -88,10 +92,17 @@ def coordinates_to_nearest_stops(longitude, latitude, distance):
 
 def coordinates_to_nearest_stop(longitude, latitude):
     """
+    Finds the nearest bus stop according to the coordinates supplied.
 
-    :param longitude:
-    :param latitude:
-    :return:
+    :param longitude: float
+    :param latitude: float
+    :return: a dictionary: {_id: integer
+                            name: string, name of the bus stop
+                            longitude: float
+                            latitude: float
+                            }
+                            or
+                            {'error', 'yes'} if something when wrong
     """
     url = (ROUTES_GENERATOR_HOST +
            ROUTES_GENERATOR_PORT +
@@ -134,6 +145,8 @@ def get_route(coordinates_list):
                         the route. cost[0] = cost for route between points[0]
                         and points[1].
                     }
+                    or
+                    {'error', 'yes'} if something when wrong
     """
     for item in coordinates_list:
         if not len(item) == 2:
@@ -148,9 +161,7 @@ def get_route(coordinates_list):
 
     data = {'list': str(coordinates_list)}
 
-
     response = requests.post(url, data=data, headers=headers)
-
     if response.status_code == 500:
         response = {'error': "Yes"}
     else:
@@ -165,7 +176,7 @@ def get_route(coordinates_list):
 
 
 if __name__ == '__main__':
-    print string_to_coordinates("Polacksbacken 10")
+    print string_to_coordinates("Polacksbacken")
     print string_to_coordinates("SernandeRs VäG 10")
     print get_route([(17.6130204, 59.8545318),
                      (17.5817552, 59.8507556),
