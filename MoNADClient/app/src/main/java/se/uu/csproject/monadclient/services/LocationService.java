@@ -52,7 +52,7 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
     @Override
     public int onStartCommand(Intent intent, int flags, int startId){
         super.onStartCommand(intent, flags, startId);
-        return START_STICKY;
+        return START_NOT_STICKY;
     }
 
     @Override
@@ -98,15 +98,7 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
                     .setResultCallback(this);
             mGoogleApiClient.disconnect();
         }
-
-        if (!Storage.isEmptyLocations()){
-            Storage.turnLocationsToJson();
-            JSONObject geofenceInfo = Storage.getGeofenceInfo();
-            if (geofenceInfo.length() != 0){
-                String userID = ClientAuthentication.getClientId();
-                new SendStoreGeofenceInfoRequest().execute(userID, geofenceInfo.toString());
-            }
-        }
+        sendGeofenceInfo();
     }
 
     @Override
@@ -159,7 +151,7 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
         return PendingIntent.getService(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
     }
 
-    public void populateGeofenceList() {
+    private void populateGeofenceList() {
         for (Map.Entry<String, LatLng> entry : Constants.UPPSALA_LANDMARKS.entrySet()) {
             mGeofenceList.add(new Geofence.Builder()
                     .setRequestId(entry.getKey())
@@ -182,6 +174,17 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
         } else {
             String errorMessage = GeofenceErrorMessages.getErrorString(this, status.getStatusCode());
             Log.e(TAG, errorMessage);
+        }
+    }
+
+    private void sendGeofenceInfo(){
+        if (!Storage.isEmptyLocations()){
+            Storage.turnLocationsToJson();
+            JSONObject geofenceInfo = Storage.getGeofenceInfo();
+            if (geofenceInfo.length() != 0){
+                String userID = ClientAuthentication.getClientId();
+                new SendStoreGeofenceInfoRequest().execute(userID, geofenceInfo.toString());
+            }
         }
     }
 }

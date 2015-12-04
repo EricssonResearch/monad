@@ -718,6 +718,46 @@ class DB():
         # print timeTable
         self.db.TimeTable.insert_one(timeTable) 
 
+    def insertBusTrip2(self, individual):
+        ''' Insert trip details to BusTrip by best individual
+
+        @param: individual, best individual selected by GA
+        '''
+        tripObjectList = []
+        # requestLeftIn = []
+        BUSID = 1
+        for i in range(len(individual)):
+            line = individual[i][0]
+            if i > 0:
+                if line != individual[i-1][0]:
+                    # selectTimetable
+                    # Merge all busTrips
+                    # self.updateTimetable(individual[i-1][0], startTime, tripObjectList)
+                    tripObjectList[:] = []
+            objID = ObjectId()
+            tripObjectList.append(objID)
+            capacity = individual[i][1]
+            startTime = individual[i][2] + timedelta(1)   # TODO seek better solution
+            busID = BUSID  # TODO Need to assign busID for every Trip
+            trajectory = self.getRoute(line, "trajectory")
+            for j in range(len(trajectory)):
+                interval = int(trajectory[j]["interval"])
+                if j == 0:
+                    trajectory[j]["time"] = startTime + datetime.timedelta(minutes=interval)
+                else:
+                    trajectory[j]["time"] = trajectory[j-1]["time"] + datetime.timedelta(minutes=interval)
+                trajectory[j]["totalPassengers"] = 0
+                trajectory[j]["boardingPassengers"] = 0
+                trajectory[j]["departingPassengers"] = 0
+                del trajectory[j]["interval"]
+            trip = {"_id": objID, "capacity": capacity, "line": line, "startTime": startTime, "busID": busID, "endTime": trajectory[len(trajectory)-1]["time"], "trajectory": trajectory}
+            self.db.BusTrip.insert_one(trip)
+            if i == len(individual) - 1:
+                # selectTimetable
+                # Merge all busTrips
+                # self.updateTimetable(individual[i-1][0], startTime, tripObjectList)
+                print "Hello"
+
     # ---------------------------------------------------------------------------------------------------------------------------------------
     # Bus Stop Location
     # ---------------------------------------------------------------------------------------------------------------------------------------
@@ -824,5 +864,17 @@ class DB():
         # print self.db.TimeTable.find({"timetable": {"$in": busTrip}}).count()
         return self.db.TimeTable.find({"timetable": {"$in": busTrip}})
 
-    def updateTimetable(self, id, timetable):
-        return self.db.TimeTable.update({"_id": {"$eq": id}}, {"timetable": timetable})
+    def updateTimetable(self, id, date, line, timetable):
+        return self.db.TimeTable.update({"_id": {"$eq": id}}, {"_id": id, "date": date, "line": line, "timetable": timetable})
+
+    def deleteBusTrip(self, id):
+        return self.db.BusTrip.remove({"_id": id})
+
+    def selectBusTrip2(sef, date):
+        ''' TO DELETE '''
+        busTrip = self.db.BusTrip.find({"startTime": {"$gte": datetime.datetime.combine(date, datetime.time(0, 0)), "$lt": datetime.datetime.combine(date, datetime.time(23, 59))}}).sort([("line", 1), ("startTime", 1)])
+        # print busTrip.count()
+        for bt in busTrip:
+            print bt
+        return busTrip
+        # return self.db.BusTrip.find({"startTime": {"$gte": datetime.datetime.combine(date, datetime.time(0, 0)), "$lt": datetime.datetime.combine(date, datetime.time(23, 59))}}).sort([("line", 1), ("startTime", 1)])
