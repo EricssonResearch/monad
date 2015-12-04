@@ -19,6 +19,7 @@ import collections
 import datetime
 import time
 import itertools
+import math
 import sys
 sys.path.append('../OpenStreetMap')
 
@@ -64,6 +65,9 @@ class DB():
     busLine = []
     initBusLine = []
     noOfslices = 0
+    timeFrame = 1 #one day's timeFrame
+    connectedBusStopBound = 1500 #bound in meters for search connected bus stop
+
     # Could we store datetime here, instead of integers ?????????????
     timeSliceArray = [[3, 5], [6, 8], [9, 11], [12, 14], [15, 17], [18, 20], [21, 23]]
 
@@ -652,7 +656,7 @@ class DB():
             tripObjectList.append(objID)
             capacity = individual[i][1]
             #startTime = individual[i][3] + timedelta(1)
-            startTime = individual[i][2] + timedelta(1)   # TODO seek better solution
+            startTime = individual[i][2] + timedelta(timeFrame)   # TODO seek better solution
             busID = BUSID  # Need to assign busID for every Trip
             trajectory = self.getRoute(line, "trajectory")
             '''
@@ -762,7 +766,6 @@ class DB():
 
         busStopNameList = {}
         tmpList = []
-        print allBusStop.count()
         for bs in allBusStop:
             busStopNameList[bs['name']] = bs['_id']
         dictKey = ['busStop', 'condinates', 'distance', '_id', 'timeCost']
@@ -771,20 +774,17 @@ class DB():
         for b in busstop:
             connectedBusStop = []
             connectedNameList = []
-            nearStop = coordinates_to_nearest_stops(float(b['longitude']), float(b['latitude']), 300)
-            #print list(nearStop['bus_stops'])[:1]
+            nearStop = coordinates_to_nearest_stops(float(b['longitude']), float(b['latitude']), DB.connectedBusStopBound)
             for j in range(len(nearStop['bus_stops'])):
                 if nearStop['bus_stops'][j][0] in busStopNameList.keys() and len(nearStop['bus_stops'][j][0]) > 0 \
                 and nearStop['bus_stops'][j][0] not in connectedNameList and nearStop['bus_stops'][j][0] != b['name']:
                     condinatesList = [(float(b['longitude']), float(b['latitude'])), (nearStop['bus_stops'][j][1][0], nearStop['bus_stops'][j][1][1])]
-                    #print condinatesList
                     timeDict = get_route(condinatesList)
                     timeCost = timeDict['cost'][1]
-                    #print timeC
+                    timeCostInMin = int(math.ceil(float(timeCost)/float(DB.minutesHour)))
                     tmpList = list(nearStop['bus_stops'][j])
                     tmpList.append(busStopNameList.get(nearStop['bus_stops'][j][0]))
-                    #print tmpList
-                    tmpList.append(timeCost)
+                    tmpList.append(timeCostInMin)
                     busStopDict = dict(zip(dictKey, tmpList))
                     connectedBusStop.append(busStopDict)
                     connectedNameList.append(nearStop['bus_stops'][j][0])
@@ -826,4 +826,3 @@ class DB():
 
     def updateTimetable(self, id, timetable):
         return self.db.TimeTable.update({"_id": {"$eq": id}}, {"timetable": timetable})
-
