@@ -8,11 +8,13 @@ def start(host):
     global db
     global bus_trip_collection
     global bus_stop_collection
+    global user_trip_collection
 
     mongo_client = MongoClient(host, 27017)
     db = mongo_client.monad1
     bus_trip_collection = db.BusTrip
     bus_stop_collection = db.BusStop
+    user_trip_collection = db.UserTrip
 
 def vehicle_get_next_trip(bus_id):
     trips = list(bus_trip_collection.find({'busID' : bus_id}))
@@ -94,3 +96,17 @@ def send_notification(user_to_send_to, message_title_to_send, message_body_to_se
         template = "An exception of type {0} occured. Arguments:\n{1!r}"
         message = template.format(type(ex).__name__, ex.args)
         print message
+
+def get_passengers(bus_trip_id, current_bus_stop, next_bus_stop):
+    boarding = 0
+    departing = 0
+    user_trips = user_trip_collection.find({'busTripID' : ObjectId(bus_trip_id)})
+
+    for user_trip in user_trips:
+        if user_trip['startBusStop'] == next_bus_stop:
+            boarding = boarding + 1
+        elif user_trip['endBusStop'] == current_bus_stop:
+            departing = departing + 1
+
+    response = {'boarding' : boarding, 'deparing' : departing}
+    return json.dumps(response)

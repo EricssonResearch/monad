@@ -12,9 +12,9 @@ under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
 CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
+
 import math
 import numpy as np
-import time
 
 
 class Coordinate(object):
@@ -72,21 +72,24 @@ def measure(coordinate1, coordinate2):
 
 def average(coordinateList):
     """
+    Finds the average value for the longitude and latitude values in the
+    coordinateList.
 
-    :param coordinateList:
-    :return:
+    :param coordinateList: [Coordinate]
+    :return: Coordinate
     """
     tuplelist = [coordinate.coordinates for coordinate in coordinateList]
     avg = [sum(y) / len(y) for y in zip(*tuplelist)]
 
-    return Coordinate(avg[0], avg[1])  # tuple(avg)
+    return Coordinate(avg[0], avg[1])
 
 
 def center(coordinateList):
     """
+    Finds the center of multiple geographic coordinates.
 
-    :param coordinateList:
-    :return:
+    :param coordinateList: [Coordinate]
+    :return: Coordinate
     """
     tuplelist = [coordinate.coordinates for coordinate in coordinateList]
     _max = reduce(lambda x, y: (max(x[0], y[0]), max(x[1], y[1])), tuplelist)
@@ -102,7 +105,7 @@ def closestTo(coord, coodinateList):
     Finds the closest coordinate to the coordinate coord in a coordinate list.
 
     :param coord: tuple of two floats, (longitude, latitude)
-    :param coodinateList: list of tuples of two floats, [(lon, lat)]
+    :param coordinateList: list of tuples of two floats, [(lon, lat)]
     :return: tuple of two floats, an element in coordinateList
     """
     coordinates = np.asarray(coodinateList)
@@ -112,11 +115,25 @@ def closestTo(coord, coodinateList):
     return coodinateList[np.argmin(dist)]
 
 
-def y2lat(a):
-    return 180.0 / math.pi * (2.0 * math.atan(math.exp(a * math.pi / 180.0)) -
+def y2lat(y):
+    """
+    Translates a y-axis coordinate to longitude geographic coordinate, assuming
+    a spherical Mercator projection.
+
+    :param y: float
+    :return: float
+    """
+    return 180.0 / math.pi * (2.0 * math.atan(math.exp(y * math.pi / 180.0)) -
                               math.pi / 2.0)
 
 
-def lat2y(a):
-    return 180.0 / math.pi * (math.log(math.tan(math.pi / 4.0 + a *
+def lat2y(latitude):
+    """
+    Translates a latitude coordinate to a projection on the y-axis, using
+    spherical Mercator projection.
+
+    :param latitude: float
+    :return: float
+    """
+    return 180.0 / math.pi * (math.log(math.tan(math.pi / 4.0 + latitude *
                                                 (math.pi / 180.0) / 2.0)))

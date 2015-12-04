@@ -340,17 +340,19 @@ public class MainActivity extends MenuedActivity implements AsyncResponse, Async
 
     @Override
     public void processReceivedGetBusStopsResponse() {
-        // Start the location service if the user has given permission
-        if (checkPlayServices()){
-            if (Build.VERSION.SDK_INT >= 23){
-                checkForPermission();
+        if (!Storage.isEmptyBusStops()){
+            // Start the location and geofences service if the user has given permission
+            if (checkPlayServices()){
+                if (Build.VERSION.SDK_INT >= 23){
+                    checkForPermission();
+                } else {
+                    startService(new Intent(this, LocationService.class));
+                }
             } else {
-                startService(new Intent(this, LocationService.class));
+                CharSequence text = getString(R.string.java_googleplaywarning);
+                Toast toast = Toast.makeText(context, text, Toast.LENGTH_LONG);
+                toast.show();
             }
-        } else {
-            CharSequence text = getString(R.string.java_googleplaywarning);
-            Toast toast = Toast.makeText(context, text, Toast.LENGTH_LONG);
-            toast.show();
         }
     }
 }

@@ -15,7 +15,6 @@ public class Constants {
     public static final long GEOFENCE_EXPIRATION_IN_HOURS = 12;
     public static final long GEOFENCE_EXPIRATION_IN_MILLISECONDS = GEOFENCE_EXPIRATION_IN_HOURS * 60 * 60 * 1000;
     public static final float GEOFENCE_RADIUS_IN_METERS = 50;
-
     public static final HashMap<String, LatLng> UPPSALA_LANDMARKS = new HashMap<String, LatLng>();
 
     public static void initializeGeofences(){
@@ -25,14 +24,4 @@ public class Constants {
                                    busStops.get(i).getLongitude()));
         }
     }
-
-    /*static {
-        // Polacksbacken Hus 4
-        UPPSALA_LANDMARKS.put("HUS4", new LatLng(59.841016, 17.648589));
-
-        // Rullan
-        UPPSALA_LANDMARKS.put("RULLAN", new LatLng(59.840851, 17.650110));
-
-
-    }   */
 }
