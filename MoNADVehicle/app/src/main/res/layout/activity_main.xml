@@ -100,6 +100,7 @@
                 android:theme="@style/darkTheme"
                 style="@style/mediumText"
                 android:layout_marginBottom="@dimen/action_button_vertical_margin"
+                android:id="@+id/text_distanceRemaining"
                 />
 
             <TextView
@@ -115,6 +116,7 @@
                 android:layout_height="wrap_content"
                 android:theme="@style/darkTheme"
                 style="@style/mediumText"
+                android:id="@+id/text_timeRemaining"
                 />
             <TextView
                 android:text="@string/label_main_arrivaltime_value"

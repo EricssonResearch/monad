@@ -292,6 +292,7 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
                 }
             }
         });
+
     }
 
     @Override
@@ -373,6 +374,10 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
 
         //commented since simulation is used now instead of real location
         //startLocationUpdates();
+
+        //updates the distance and time
+        calculateDistance();
+        calculateTimeDifference();
     }
 
     @Override
@@ -476,8 +481,8 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
     }
 
     //gets the current location of the bus and the next bus stop
-    //calculates the distance between them and returns it.
-    double calculateDistance() {
+    //calculates the distance between them and sets it to the text box.
+    public void calculateDistance() {
         Location destLocation = new Location("");
         myLocationOverlay.onLocationChanged(location);
         double currentLat = location.getLatitude();
@@ -486,16 +491,20 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
         //location.setLongitude(currentLong);
         destLocation.setLatitude(Storage.getBusTrip().getBusStops().get(1).getLatitude());
         destLocation.setLongitude(Storage.getBusTrip().getBusStops().get(1).getLongitude());
-        return location.distanceTo(destLocation);
+        TextView textViewDistance = (TextView)findViewById(R.id.text_distanceRemaining);
+        String distance = Double.toString(location.distanceTo(destLocation));
+        textViewDistance.setText(distance);
     }
 
     //gets the current time of the bus and the next bus stop
     //arrival time and calculates the remaining time between
-    //current location time and next bus stop.
-    long calculateTimeDifference() {
+    //current location time and next bus stop and sets it to the text box.
+    public void calculateTimeDifference() {
         myLocationOverlay.onLocationChanged(location);
         Calendar cal = Calendar.getInstance();
         long currentTime = cal.get(Calendar.MILLISECOND);
-        return TimeUnit.MILLISECONDS.toMinutes(Storage.getBusTrip().getBusStops().get(1).getArrivalTime().getTime() - currentTime);
+        TextView textViewMinutes = (TextView)findViewById(R.id.text_timeRemaining);
+        String minutes = Long.toString(TimeUnit.MILLISECONDS.toMinutes(Storage.getBusTrip().getBusStops().get(1).getArrivalTime().getTime() - currentTime));
+        textViewMinutes.setText(minutes);
     }
 }
