@@ -107,6 +107,10 @@ loop(Req, DocRoot) ->
                         send_notification(Req);
                     "get_passengers" ->
                         get_passengers(Req);
+                    "get_traffic_information" ->
+                        get_traffic_information(Req);
+                    "get_traffic_information_with_params" ->
+                        get_traffic_information_with_params(Req);
                     _ ->
                         Req:not_found()
                 end;
@@ -255,6 +259,58 @@ get_passengers(Req) ->
     catch
         Type:What ->
             Report = ["Failed Request: get_passengers",
+                      {type, Type}, {what, What},
+                      {trace, erlang:get_stacktrace()}],
+            error_logger:error_report(Report),
+            handle_error(Report, Req)
+    end.
+
+get_traffic_information(Req) ->
+    try
+        PythonInstance = whereis(python_instance),
+        Response = python:call(PythonInstance, mongodb_parser, get_traffic_information, []),
+        Msg = [{type, get_traffic_information},
+               {response, Response},
+               {process, self()}],
+        Broadcaster = whereis(broadcaster),
+        Broadcaster ! {broadcast, Msg},
+        Req:respond({200, [{"Content-Type", "text/plain"}], Response})
+    catch
+        Type:What ->
+            Report = ["Failed Request: get_traffic_information",
+                      {type, Type}, {what, What},
+                      {trace, erlang:get_stacktrace()}],
+            error_logger:error_report(Report),
+            handle_error(Report, Req)
+    end.
+
+get_traffic_information_with_params(Req) ->
+    PostData = Req:parse_post(),
+    SouthLatitude = proplists:get_value("south_latitude", PostData, "Anonymous"),
+    % io:format("SouthLatitude: ~p~n", [SouthLatitude]),
+    WestLongitude = proplists:get_value("west_longitude", PostData, "Anonymous"),
+    % io:format("WestLongitude: ~p~n", [WestLongitude]),
+    NorthLatitude = proplists:get_value("north_latitude", PostData, "Anonymous"),
+    % io:format("NorthLatitude: ~p~n", [NorthLatitude]),
+    EastLongitude = proplists:get_value("east_longitude", PostData, "Anonymous"),
+    % io:format("EastLongitude: ~p~n", [EastLongitude]),
+    try
+        PythonInstance = whereis(python_instance),
+        Response = python:call(PythonInstance, mongodb_parser, get_traffic_information_with_params,
+                               [SouthLatitude, WestLongitude, NorthLatitude, EastLongitude]),
+        Msg = [{type, get_traffic_information_with_params},
+               {southLatitude, SouthLatitude},
+               {westLongitude, WestLongitude},
+               {northLatitude, NorthLatitude},
+               {eastLongitude, EastLongitude},
+               {response, Response},
+               {process, self()}],
+        Broadcaster = whereis(broadcaster),
+        Broadcaster ! {broadcast, Msg},
+        Req:respond({200, [{"Content-Type", "text/plain"}], Response})
+    catch
+        Type:What ->
+            Report = ["Failed Request: get_traffic_information_with_params",
                       {type, Type}, {what, What},
                       {trace, erlang:get_stacktrace()}],
             error_logger:error_report(Report),
