@@ -15,8 +15,9 @@ import ast
 import multiprocessing
 import requests
 import six
+import time
 
-ROUTES_GENERATOR_HOST = 'http://130.238.15.241:'
+ROUTES_GENERATOR_HOST = 'http://130.238.15.114:'
 ROUTES_GENERATOR_PORT = '9998'
 
 headers = {'Content-type': 'application/x-www-form-urlencoded'}
@@ -148,9 +149,7 @@ def get_route(coordinates_list):
 
     data = {'list': str(coordinates_list)}
 
-
     response = requests.post(url, data=data, headers=headers)
-
     if response.status_code == 500:
         response = {'error': "Yes"}
     else:
@@ -165,7 +164,7 @@ def get_route(coordinates_list):
 
 
 if __name__ == '__main__':
-    print string_to_coordinates("Polacksbacken 10")
+    print string_to_coordinates("Polacksbacken")
     print string_to_coordinates("SernandeRs VäG 10")
     print get_route([(17.6130204, 59.8545318),
                      (17.5817552, 59.8507556),
@@ -174,3 +173,4 @@ if __name__ == '__main__':
     print coordinates_to_nearest_stops(latitude=59.8710848,
                                        longitude=17.6546528,
                                        distance=300.0)
+
