@@ -221,6 +221,8 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
             }
         });
 
+
+
         ImageButton showNotificationsList =(ImageButton)findViewById(R.id.notificationButton);
         showNotificationsList.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -483,6 +485,7 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
     //gets the current location of the bus and the next bus stop
     //calculates the distance between them and sets it to the text box.
     public void calculateDistance() {
+        Location location=new Location("");
         Location destLocation = new Location("");
         myLocationOverlay.onLocationChanged(location);
         double currentLat = location.getLatitude();
@@ -500,6 +503,7 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
     //arrival time and calculates the remaining time between
     //current location time and next bus stop and sets it to the text box.
     public void calculateTimeDifference() {
+        Location location=new Location("");
         myLocationOverlay.onLocationChanged(location);
         Calendar cal = Calendar.getInstance();
         long currentTime = cal.get(Calendar.MILLISECOND);
