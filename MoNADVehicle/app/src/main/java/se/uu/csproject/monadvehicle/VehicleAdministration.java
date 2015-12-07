@@ -1,14 +1,20 @@
 package se.uu.csproject.monadvehicle;
 
+import android.util.Log;
+
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import org.mapsforge.core.model.LatLong;
 
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.Locale;
+import java.util.TimeZone;
 
 
 /**
@@ -188,7 +194,8 @@ public class VehicleAdministration extends Administration {
 
             BusTrip busTrip = new BusTrip(busTripID, capacity, trajectory);
             Storage.setBusTrip(busTrip);
-            busTrip.printValues();
+            busTrip.printBusStops();
+//            postGetTrajectoryRequest();
         }
         catch (Exception e) {
             e.printStackTrace();
@@ -197,26 +204,216 @@ public class VehicleAdministration extends Administration {
         return "1";
     }
 
-//    public static String getBusStopCoordinatesString() {
-//        BusTrip busTrip = Storage.getBusTrip();
-//
-//        if (busTrip != null && busTrip.getTrajectory() != null) {
-//
-//            for (int i = 0; i < busTrip.getTrajectory().size(); i++) {
-//                double lon = busTrip.getTrajectory().get(i).getLongitude();
-//                double lat = busTrip.getTrajectory().get(i).getLatitude();
-//                String.valueOf();
-//                String res = "(" + String.valueOf()
-//            }
-//
-//            Storage.getBusTrip().getTrajectory()
-//        }
-//        else {
-//
-//        }
-//
-//    }
+    public static String postGetTrajectoryRequest() {
+        String request = ROUTES_GENERATOR_HOST + ROUTES_GENERATOR_PORT + "/get_route_from_coordinates";
+        String urlParameters = getBusStopCoordinates();
 
+        /* Send the request to the Route Generator */
+        String response = postRequest(request, urlParameters);
+
+        /* Handle response in case of exception */
+        if (response.equals("-1")) {
+            return exceptionMessage();
+        }
+
+        /*
+         * By default, Erlang adds the newline '\n' character at the beginning of response.
+         * For this reason substring() function is used
+         */
+        response = response.substring(1);
+        // response = response.trim();
+
+        /* Process Route Generator's response */
+        return processGetTrajectoryResponse(response);
+    }
+
+    public static String getBusStopCoordinates() {
+        String data = "";
+        BusTrip busTrip = Storage.getBusTrip();
+
+        if (busTrip != null && busTrip.getBusStops() != null) {
+
+            String list = "[";
+
+            for (int i = 0; i < busTrip.getBusStops().size(); i++) {
+                list = list + busTrip.getBusStops().get(i).coordinatesToString();
+
+                if (i < busTrip.getBusStops().size() - 1) {
+                    list = list + ", ";
+                }
+            }
+            list = list + "]";
+            data = "list=" + list;
+        }
+        return data;
+    }
+
+    public static String processGetTrajectoryResponse(String response) {
+        JSONParser parser = new JSONParser();
+
+        try {
+            JSONObject trajectoryObject = (JSONObject) parser.parse(response);
+            String route = (String) trajectoryObject.get("route");
+            ArrayList<String> trajectoryPoints = new ArrayList<>();
+            String coordinate = "";
+
+            for (int i = 0; i < route.length(); i++) {
+
+                if ((route.charAt(i) >= '0' && route.charAt(i) <= '9') || route.charAt(i) == '.') {
+                    coordinate = coordinate + route.charAt(i);
+                }
+                else if ((route.charAt(i) == ',' || route.charAt(i) == ')') && !coordinate.equals("")) {
+                    trajectoryPoints.add(coordinate);
+                    coordinate = "";
+                }
+                else {}
+            }
+            BusTrip busTrip = Storage.getBusTrip();
+            ArrayList<LatLong> trajectory = new ArrayList<>();
+
+            for (int i = 0; i < trajectoryPoints.size() - 1; i = i + 2) {
+                trajectory.add(new LatLong(Double.parseDouble(trajectoryPoints.get(i + 1)),
+                                           Double.parseDouble(trajectoryPoints.get(i))));
+            }
+            busTrip.setTrajectory(trajectory);
+            busTrip.printTrajectory();
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            return "0";
+        }
+        return "1";
+    }
+
+    public static String postGetPassengersRequest(String busTripID, String currentBusStop, String nextBusStop) {
+        String request = ROUTES_ADMINISTRATOR_HOST + ROUTES_ADMINISTRATOR_PORT + "/get_passengers";
+        String urlParameters = "bus_trip_id=" + busTripID
+                             + "&current_bus_stop=" + currentBusStop
+                             + "&next_bus_stop=" + nextBusStop;
+
+        /* Send the request to the RoutesAdministrator */
+        String response = postRequest(request, urlParameters);
+
+        /* Handle response in case of exception */
+        if (response.equals("-1")) {
+            return exceptionMessage();
+        }
+
+        /*
+         * By default, Erlang adds the newline '\n' character at the beginning of response.
+         * For this reason substring() function is used
+         */
+        response = response.substring(1);
+        // response = response.trim();
+
+        /* Process response */
+        return processGetPassengersResponse(response);
+    }
+
+    public static String processGetPassengersResponse(String response) {
+        JSONParser parser = new JSONParser();
+
+        try {
+            JSONObject getPassengersObject = (JSONObject) parser.parse(response);
+
+            long tempBoarding = (long) getPassengersObject.get("boarding");
+            int boarding = new BigDecimal(tempBoarding).intValueExact();
+
+            long tempDeparting = (long) getPassengersObject.get("departing");
+            int departing = new BigDecimal(tempDeparting).intValueExact();
+
+            Storage.getBusTrip().setBoardingPassengers(boarding);
+            Storage.getBusTrip().setDepartingPassengers(departing);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            return "0";
+        }
+        return "1";
+    }
+
+    public static String postGetTrafficInformationRequest() {
+        String request = ROUTES_ADMINISTRATOR_HOST + ROUTES_ADMINISTRATOR_PORT + "/get_traffic_information";
+        String urlParameters = "";
+
+        /* Send the request to the RoutesAdministrator */
+        String response = postRequest(request, urlParameters);
+
+        /* Handle response in case of exception */
+        if (response.equals("-1")) {
+            return exceptionMessage();
+        }
+
+        /*
+         * By default, Erlang adds the newline '\n' character at the beginning of response.
+         * For this reason substring() function is used
+         */
+        response = response.substring(1);
+        // response = response.trim();
+
+        /* Process response */
+        return processGetTrafficInformationResponse(response);
+    }
+
+    public static String processGetTrafficInformationResponse(String response) {
+//        System.out.println("Response: " + response);
+        JSONParser parser = new JSONParser();
+
+        try {
+            JSONArray trafficInformationArray = (JSONArray) parser.parse(response);
+            Iterator<JSONObject> trafficInformationArrayIterator = trafficInformationArray.iterator();
+            ArrayList<TrafficInformation> trafficIncidents = new ArrayList<>();
+
+            while (trafficInformationArrayIterator.hasNext()) {
+                JSONObject trafficInformationObject = (JSONObject) trafficInformationArrayIterator.next();
+
+                String temp = (String) trafficInformationObject.get("StartPointLatitude");
+                double startPointLatitude = Double.parseDouble(temp);
+
+                temp = (String) trafficInformationObject.get("StartPointLongitude");
+                double startPointLongitude = Double.parseDouble(temp);
+
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+                sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
+
+                temp = ((String) trafficInformationObject.get("LastModifiedUTC")).substring(0, 19);
+                Date lastModifiedUTC = sdf.parse(temp);
+
+                temp = ((String) trafficInformationObject.get("StartTimeUTC")).substring(0, 19);
+                Date startTimeUTC = sdf.parse(temp);
+
+                temp = ((String) trafficInformationObject.get("EndTimeUTC")).substring(0, 19);
+                Date endTimeUTC = sdf.parse(temp);
+
+                String incidentType = (String) trafficInformationObject.get("IncidentType");
+                String incidentSeverity = (String) trafficInformationObject.get("IncidentSeverity");
+
+                temp = (String) trafficInformationObject.get("RoadClosed");
+                boolean roadClosed = Boolean.parseBoolean(temp);
+
+                String description = (String) trafficInformationObject.get("Description");
+
+                temp = (String) trafficInformationObject.get("StopPointLatitude");
+                double stopPointLatitude = Double.parseDouble(temp);
+
+                temp = (String) trafficInformationObject.get("StopPointLongitude");
+                double stopPointLongitude = Double.parseDouble(temp);
+
+                TrafficInformation trafficInformation = new TrafficInformation(
+                        startPointLatitude, startPointLongitude, lastModifiedUTC, startTimeUTC,
+                        endTimeUTC, incidentType, incidentSeverity, roadClosed, description,
+                        stopPointLatitude, stopPointLongitude);
+
+                trafficIncidents.add(trafficInformation);
+            }
+            Storage.setTrafficIncidents(trafficIncidents);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            return "0";
+        }
+        return "1";
+    }
 
     public static String exceptionMessage() {
         return "ERROR - An Exception was thrown";

@@ -421,7 +421,7 @@ def application(env, start_response):
                                                                                                                              
                         partialTrip = {
                             "_id": str(partialTripCursor["_id"]),
-                            "userID" : partialTripCursor["userID"],
+                            "userID": partialTripCursor["userID"],
                             "line": partialTripCursor["line"],
                             "busID": partialTripCursor["busID"],
                             "startBusStop": partialTripCursor["startBusStop"],
@@ -487,7 +487,43 @@ def application(env, start_response):
             responseCode = "500 INTERNAL ERROR"  
             logging.error("Update feedback request: Something went wrong with the data sent by the user's request.")
             response = serverConfig.ERROR_MESSAGE            
-            
+    
+    elif (data_env["PATH_INFO"] == "/storeGeofenceInfo"):       
+        if ("userID" and "geofenceInfo" in data):
+            try:
+                userID = int(escape(data.getvalue("userID")))            
+                geofenceInfo = json.loads(data.getvalue("geofenceInfo"))
+                database = serverConfig.MONGO_DATABASE
+                collection = database.Geofence
+                
+                for busStop in geofenceInfo:
+                    time = datetime.strptime(geofenceInfo[busStop]["time"], serverConfig.DATE_FORMAT)                    
+                    document = {
+                        "userID": userID,                        
+                        "latitude": geofenceInfo[busStop]["latitude"],
+                        "longitude": geofenceInfo[busStop]["longitude"],
+                        "time": time
+                    }
+                    collection.insert_one(document)
+                
+            except pymongo.errors.PyMongoError as e:
+                responseCode = "500 INTERNAL ERROR"  
+                logging.error("Something went wrong: {0}".format(e))
+                response = serverConfig.ERROR_MESSAGE
+            except ValueError as e:
+                responseCode = "500 INTERNAL ERROR"
+                logging.error("Something went wrong: {0}".format(e)) 
+                response = serverConfig.ERROR_MESSAGE       
+            else:                              
+                response = serverConfig.GEOFENCE_UPDATE_SUCCESSFUL_MESSAGE
+            finally:                    
+                serverConfig.MONGO_CLIENT.close()
+                
+        else:
+            responseCode = "500 INTERNAL ERROR"  
+            logging.error("Store geofence request: Something went wrong with the data sent by the user's request.")
+            response = serverConfig.ERROR_MESSAGE
+                          
     else:
         responseCode = "403 FORBIDDEN"        
         logging.warning("Someone is trying to access the server outside the app.")      

@@ -14,6 +14,7 @@ specific language governing permissions and limitations under the License.
 import ast
 import multiprocessing
 import requests
+import six
 
 ROUTES_GENERATOR_HOST = 'http://130.238.15.114:'
 ROUTES_GENERATOR_PORT = '9998'
@@ -35,7 +36,12 @@ def string_to_coordinates(string):
                             latitude: float|None
                             longitude: float|None
                             }
+                            or
+                            {'error', 'yes'} if something when wrong
     """
+    if not isinstance(string, six.string_types):
+        raise ValueError("%r is not a string." % (string,))
+
     url = (ROUTES_GENERATOR_HOST +
            ROUTES_GENERATOR_PORT +
            '/get_coordinates_from_string')
@@ -43,7 +49,12 @@ def string_to_coordinates(string):
     data = {'string': string}
     response = requests.post(url, data=data, headers=headers)
 
-    return response.json()
+    if response.status_code == 500:
+        response = {'error': "Yes"}
+    else:
+        response = response.json()
+
+    return response
 
 
 def coordinates_to_nearest_stops(longitude, latitude, distance):
@@ -59,43 +70,61 @@ def coordinates_to_nearest_stops(longitude, latitude, distance):
                             longitude: float
                             distance: float
                             }
+                            or
+                            {'error', 'yes'} if something when wrong
     """
     url = (ROUTES_GENERATOR_HOST +
            ROUTES_GENERATOR_PORT +
            '/get_nearest_stops_from_coordinates')
 
-    data = {'lat': latitude, 'lon': longitude, 'distance': distance}
+    data = {'lat': float(latitude), 'lon': float(longitude),
+            'distance': float(distance)}
     response = requests.post(url, data=data, headers=headers)
 
-    responseJson = response.json()
+    if response.status_code == 500:
+        response = {'error': "Yes"}
+    else:
+        response = response.json()
+        response['bus_stops'] = ast.literal_eval(response['bus_stops'])
 
-    responseJson['bus_stops'] = ast.literal_eval(responseJson['bus_stops'])
-
-    return responseJson
+    return response
 
 
 def coordinates_to_nearest_stop(longitude, latitude):
     """
+    Finds the nearest bus stop according to the coordinates supplied.
 
-    :param longitude:
-    :param latitude:
-    :return:
+    :param longitude: float
+    :param latitude: float
+    :return: a dictionary: {_id: integer
+                            name: string, name of the bus stop
+                            longitude: float
+                            latitude: float
+                            }
+                            or
+                            {'error', 'yes'} if something when wrong
     """
     url = (ROUTES_GENERATOR_HOST +
            ROUTES_GENERATOR_PORT +
            '/get_nearest_stops_from_coordinates')
 
-    data = {'lat': latitude, 'lon': longitude, 'distance': 0.0}
+    data = {'lat': float(latitude), 'lon': float(longitude), 'distance': 0.0}
     response = requests.post(url, data=data, headers=headers)
 
-    responseJson = response.json()
-    responseJson['bus_stops'] = ast.literal_eval(responseJson['bus_stops'])
-
     busStop = {}
-    busStop['_id'] = responseJson['_id']
-    busStop['name'] = responseJson['bus_stops'][0][0]
-    busStop['longitude'] = responseJson['bus_stops'][0][1][0]
-    busStop['latitude'] = responseJson['bus_stops'][0][1][1]
+
+    if response.status_code == 500:
+        busStop = {'error': "Yes"}
+    else:
+
+        response = response.json()
+        response['bus_stops'] = ast.literal_eval(response['bus_stops'])
+
+        busStop['_id'] = response['_id']
+        busStop['name'] = response['bus_stops'][0][0]
+        busStop['longitude'] = response['bus_stops'][0][1][0]
+        busStop['latitude'] = response['bus_stops'][0][1][1]
+
     return busStop
 
 
@@ -116,22 +145,34 @@ def get_route(coordinates_list):
                         the route. cost[0] = cost for route between points[0]
                         and points[1].
                     }
+                    or
+                    {'error', 'yes'} if something when wrong
     """
+    for item in coordinates_list:
+        if not len(item) == 2:
+            raise ValueError("Not a tuple of two")
+        a, b = item
+        if not abs(float(a)) < 181 and not abs(float(b)) < 181:
+            raise ValueError("Out of range")
+
     url = (ROUTES_GENERATOR_HOST +
            ROUTES_GENERATOR_PORT +
            '/get_route_from_coordinates')
 
     data = {'list': str(coordinates_list)}
+
     response = requests.post(url, data=data, headers=headers)
-    responseJson = response.json()
+    if response.status_code == 500:
+        response = {'error': "Yes"}
+    else:
+        response = response.json()
+        response['route'] = ast.literal_eval(response['route'])
+        response['end'] = ast.literal_eval(response['end'])
+        response['points'] = ast.literal_eval(response['points'])
+        response['start'] = ast.literal_eval(response['start'])
+        response['cost'] = ast.literal_eval(response['cost'])
 
-    responseJson['route'] = ast.literal_eval(responseJson['route'])
-    responseJson['end'] = ast.literal_eval(responseJson['end'])
-    responseJson['points'] = ast.literal_eval(responseJson['points'])
-    responseJson['start'] = ast.literal_eval(responseJson['start'])
-    responseJson['cost'] = ast.literal_eval(responseJson['cost'])
-
-    return responseJson
+    return response
 
 
 if __name__ == '__main__':
@@ -143,4 +184,4 @@ if __name__ == '__main__':
     print get_route([])
     print coordinates_to_nearest_stops(latitude=59.8710848,
                                        longitude=17.6546528,
-                                       distance=1300.0)
+                                       distance=300.0)

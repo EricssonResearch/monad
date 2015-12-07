@@ -18,7 +18,7 @@ def start(host):
     db = mongo_client.monad1
     recommendations_collection = db.TravelRecommendation
     user_trips_collection = db.UserTrip
-    bus_stops_collection = db.BusStop
+    bus_stop_collection = db.BusStop
     notifications_collection = db.Notifications
     bookings_collection = db.BookedTrip
 
@@ -143,3 +143,7 @@ def send_notification(user_to_send_to, message_title_to_send, message_body_to_se
         template = "An exception of type {0} occured. Arguments:\n{1!r}"
         message = template.format(type(ex).__name__, ex.args)
         print message
+
+def get_bus_stops():
+    bus_stops = list(bus_stop_collection.find())
+    return dumps(bus_stops)

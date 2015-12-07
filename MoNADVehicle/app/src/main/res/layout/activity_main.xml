@@ -4,9 +4,7 @@
     android:layout_height="match_parent"
     tools:context="se.uu.csproject.monadvehicle.MainActivity">
 
-
-
-    <android.support.v7.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
+    <android.support.v7.widget.Toolbar
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="?attr/colorPrimary"
@@ -26,7 +24,6 @@
     </android.support.v7.widget.Toolbar>
 
     <LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="horizontal"
@@ -40,8 +37,6 @@
             android:orientation="vertical"
             android:layout_gravity="start"
             android:padding="@dimen/sideframe_padding"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
             >
 
             <ImageButton
@@ -105,6 +100,7 @@
                 android:theme="@style/darkTheme"
                 style="@style/mediumText"
                 android:layout_marginBottom="@dimen/action_button_vertical_margin"
+                android:id="@+id/text_distanceRemaining"
                 />
 
             <TextView
@@ -120,6 +116,7 @@
                 android:layout_height="wrap_content"
                 android:theme="@style/darkTheme"
                 style="@style/mediumText"
+                android:id="@+id/text_timeRemaining"
                 />
             <TextView
                 android:text="@string/label_main_arrivaltime_value"
@@ -147,28 +144,32 @@
                 android:background="@color/accentColor"/>
 
             <ScrollView
+                android:id="@+id/side_list_notifications_scroll"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:visibility="gone"
+                >
                 <LinearLayout
                     android:id="@+id/side_list_notifications"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:visibility="gone"
                     android:padding="@dimen/sideframe_padding"
                     >
                 </LinearLayout>
             </ScrollView>
 
             <ScrollView
+                android:id="@+id/side_list_busstops_scroll"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:visibility="gone"
+                >
                 <LinearLayout
                     android:id="@+id/side_list_busstops"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:visibility="gone"
                     android:padding="@dimen/sideframe_padding"
                     >
                 </LinearLayout>
@@ -187,8 +188,9 @@
                     android:id="@+id/text_emergencytype"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/label_emergencytype"
+                    android:text="@string/label_emergency_type"
                     android:theme="@style/darkTheme"
+                    style="@style/mediumText"
                     android:layout_marginBottom="@dimen/list_margin"
                     />
 
@@ -198,10 +200,11 @@
                     android:layout_height="wrap_content"
                     android:padding="2dp"
                     android:orientation="vertical"
-                    android:theme="@style/darkTheme">
+                    android:theme="@style/darkTheme"
+                    >
 
                     <RadioButton
-                        android:id="@+id/accident"
+                        android:id="@+id/radio_accident"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/label_emergency_accident"
@@ -210,7 +213,7 @@
                         />
 
                     <RadioButton
-                        android:id="@+id/trafficjam"
+                        android:id="@+id/radio_trafficjam"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/label_emergency_trafficjam"
@@ -218,7 +221,7 @@
                         android:layout_marginBottom="@dimen/action_button_vertical_margin"
                         />
                     <RadioButton
-                        android:id="@+id/mechanical_issue"
+                        android:id="@+id/radio_mechanicalissue"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/label_emergency_mechanicalissue"
@@ -226,7 +229,7 @@
                         android:layout_marginBottom="@dimen/action_button_vertical_margin"
                         />
                     <RadioButton
-                        android:id="@+id/driver_health"
+                        android:id="@+id/radio_driverhealth"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/label_emergency_driverhealth"
@@ -234,7 +237,7 @@
                         android:layout_marginBottom="@dimen/action_button_vertical_margin"
                         />
                     <RadioButton
-                        android:id="@+id/flat_tire"
+                        android:id="@+id/radio_otherissue"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/label_emergency_other"
@@ -253,7 +256,7 @@
                 <CheckBox android:id="@+id/other_possiblity"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:onClick="onCheckboxClicked"
+                    android:checked="false"
                     android:text="@string/label_emergency_description"
                     android:textAppearance="@android:style/TextAppearance.Medium"
                     android:theme="@style/darkTheme"
@@ -262,10 +265,12 @@
                     android:id="@+id/text_description"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:enabled="false"
                     android:inputType="textMultiLine"
                     android:lines="5"
                     android:ems="18"
                     android:gravity="start"
+                    style="@style/Base.V12.Widget.AppCompat.EditText"
                     android:background="@color/notificationsColor"
                     android:textColor="@color/black"
                     android:padding="@dimen/sideframe_padding"
@@ -277,7 +282,7 @@
                     android:id="@+id/button_submit"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/button_emergency_submit"
+                    android:text="@string/label_emergency_submit"
                     android:textAllCaps="true"
                     android:theme="@style/darkTheme"
                     android:background="?attr/colorPrimary"

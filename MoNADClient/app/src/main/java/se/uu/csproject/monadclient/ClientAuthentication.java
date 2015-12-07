@@ -5,17 +5,17 @@ package se.uu.csproject.monadclient;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 
-import se.uu.csproject.monadclient.recyclerviews.FullTrip;
-import se.uu.csproject.monadclient.recyclerviews.Notify;
-import se.uu.csproject.monadclient.recyclerviews.PartialTrip;
-import se.uu.csproject.monadclient.recyclerviews.Storage;
+import se.uu.csproject.monadclient.storage.BusStop;
+import se.uu.csproject.monadclient.storage.FullTrip;
+import se.uu.csproject.monadclient.storage.Notify;
+import se.uu.csproject.monadclient.storage.PartialTrip;
+import se.uu.csproject.monadclient.storage.Storage;
 
 /**
  *
@@ -929,18 +929,56 @@ public class ClientAuthentication extends Authentication {
         }
     }
 
-    /* TODO: Will be changed */
-//    public static String postGetNearestBusStopRequest() {
-//        String request = ROUTES_GENERATOR_HOST + ROUTES_GENERATOR_PORT + "/get_nearest_stop_from_coordinates";
-//        // String urlParameters = "client_id=" + getClientId();
-//        String urlParameters = "lon=17.6093985&lat=59.8578199";
-//
-//        /* Send the request to the Authentication Module */
-//        String response = postRequest(request, urlParameters);
-//
-//        System.out.println("--------RRRR_--------------: " + response);
-//        return "ok";
-//    }
+    public static String postGetBusStopsRequest() {
+        String request = AUTHENTICATION_HOST + AUTHENTICATION_PORT + "/get_bus_stops";
+        String urlParameters = "";
+
+        /* Send the request to the Authentication Module */
+        String response = postRequest(request, urlParameters);
+
+        /* Handle response in case of exception */
+        if (response.equals("-1")) {
+            return exceptionMessage();
+        }
+
+        /*
+         * By default, Erlang adds the newline '\n' character at the beginning of response.
+         * For this reason substring() function is used
+         */
+        response = response.substring(1);
+        return processGetBusStopsResponse(response);
+    }
+
+    public static String processGetBusStopsResponse(String response) {
+        JSONParser parser = new JSONParser();
+
+        try {
+            JSONArray busStopsArray = (JSONArray) parser.parse(response);
+            Iterator<JSONObject> busStopsIterator = busStopsArray.iterator();
+
+            ArrayList<BusStop> busStops = new ArrayList<>();
+
+            while (busStopsIterator.hasNext()) {
+                JSONObject busStopObject = busStopsIterator.next();
+
+                JSONObject busStopObjectID = (JSONObject) busStopObject.get("_id");
+                String busStopID = (String) busStopObjectID.get("$oid");
+
+                String busStopName = (String) busStopObject.get("name");
+                double busStopLatitude = (double) busStopObject.get("latitude");
+                double busStopLongitude = (double) busStopObject.get("longitude");
+
+                BusStop busStop = new BusStop(busStopID, busStopName, busStopLatitude, busStopLongitude);
+                busStops.add(busStop);
+            }
+            Storage.setBusStops(busStops);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            return "0";
+        }
+        return "1";
+    }
 
     public static String exceptionMessage() {
         return "ERROR - An Exception was thrown";

@@ -19,6 +19,7 @@ import collections
 import datetime
 import time
 import itertools
+import math
 import sys
 sys.path.append('../OpenStreetMap')
 
@@ -44,6 +45,7 @@ class DB():
     # Bus
     # Time Table
     # Bus Stop Location
+    # Weather
 
     # ---------------------------------------------------------------------------------------------------------------------------------------
     # Class variables
@@ -63,6 +65,9 @@ class DB():
     busLine = []
     initBusLine = []
     noOfslices = 0
+    timeFrame = 1 #one day's timeFrame
+    connectedBusStopBound = 1500 #bound in meters for search connected bus stop
+
     # Could we store datetime here, instead of integers ?????????????
     timeSliceArray = [[3, 5], [6, 8], [9, 11], [12, 14], [15, 17], [18, 20], [21, 23]]
 
@@ -651,7 +656,7 @@ class DB():
             tripObjectList.append(objID)
             capacity = individual[i][1]
             #startTime = individual[i][3] + timedelta(1)
-            startTime = individual[i][2] + timedelta(1) 
+            startTime = individual[i][2] + timedelta(timeFrame)   # TODO seek better solution
             busID = BUSID  # Need to assign busID for every Trip
             trajectory = self.getRoute(line, "trajectory")
             '''
@@ -713,6 +718,58 @@ class DB():
         # print timeTable
         self.db.TimeTable.insert_one(timeTable) 
 
+    def insertBusTrip2(self, individual):
+        ''' Insert trip details to BusTrip by best individual
+
+        @param: individual, best individual selected by GA
+        '''
+        timetable = []
+        busTrip = []
+        tripObjectList = []
+        BUSID = 1
+        for i in range(len(individual)):
+            line = individual[i][0]
+            if i > 0:
+                if line != individual[i-1][0]:
+                    # Select timetable by line and date
+                    timetable = self.selectTimetablebyLine(individual[i-1][0], startTime)
+                    # Merge all busTrips
+                    for tt in timetable:
+                        timetableId = tt["_id"]
+                        busTrip = tripObjectList + tt["timetable"]
+                    # Update time table
+                    self.updateTimetable(timetableId, startTime, individual[i-1][0], busTrip)
+                    tripObjectList[:] = []
+            objID = ObjectId()
+            tripObjectList.append(objID)
+            capacity = individual[i][1]
+            # startTime = individual[i][2] + timedelta(1)
+            startTime = individual[i][2]
+            busID = BUSID  # TODO Need to assign busID for every Trip
+            trajectory = self.getRoute(line, "trajectory")
+            for j in range(len(trajectory)):
+                interval = int(trajectory[j]["interval"])
+                if j == 0:
+                    # trajectory[j]["time"] = startTime + datetime.timedelta(minutes=interval)
+                    trajectory[j]["time"] = startTime
+                else:
+                    trajectory[j]["time"] = trajectory[j-1]["time"] + datetime.timedelta(minutes=interval)
+                trajectory[j]["totalPassengers"] = 0
+                trajectory[j]["boardingPassengers"] = 0
+                trajectory[j]["departingPassengers"] = 0
+                del trajectory[j]["interval"]
+            trip = {"_id": objID, "capacity": capacity, "line": line, "startTime": startTime, "busID": busID, "endTime": trajectory[len(trajectory)-1]["time"], "trajectory": trajectory}
+            self.db.BusTrip.insert_one(trip)
+            if i == len(individual) - 1:
+                # Select timetable by line and date
+                timetable = self.selectTimetablebyLine(line, startTime)
+                # Merge all busTrips
+                for tt in timetable:
+                    timetableId = tt["_id"]
+                    busTrip = tripObjectList + tt["timetable"]
+                # Update time table
+                self.updateTimetable(timetableId, startTime, line, busTrip)
+
     # ---------------------------------------------------------------------------------------------------------------------------------------
     # Bus Stop Location
     # ---------------------------------------------------------------------------------------------------------------------------------------
@@ -761,7 +818,6 @@ class DB():
 
         busStopNameList = {}
         tmpList = []
-        print allBusStop.count()
         for bs in allBusStop:
             busStopNameList[bs['name']] = bs['_id']
         dictKey = ['busStop', 'condinates', 'distance', '_id', 'timeCost']
@@ -770,20 +826,17 @@ class DB():
         for b in busstop:
             connectedBusStop = []
             connectedNameList = []
-            nearStop = coordinates_to_nearest_stops(float(b['longitude']), float(b['latitude']), 300)
-            #print list(nearStop['bus_stops'])[:1]
+            nearStop = coordinates_to_nearest_stops(float(b['longitude']), float(b['latitude']), DB.connectedBusStopBound)
             for j in range(len(nearStop['bus_stops'])):
                 if nearStop['bus_stops'][j][0] in busStopNameList.keys() and len(nearStop['bus_stops'][j][0]) > 0 \
                 and nearStop['bus_stops'][j][0] not in connectedNameList and nearStop['bus_stops'][j][0] != b['name']:
                     condinatesList = [(float(b['longitude']), float(b['latitude'])), (nearStop['bus_stops'][j][1][0], nearStop['bus_stops'][j][1][1])]
-                    #print condinatesList
                     timeDict = get_route(condinatesList)
                     timeCost = timeDict['cost'][1]
-                    #print timeC
+                    timeCostInMin = int(math.ceil(float(timeCost)/float(DB.minutesHour)))
                     tmpList = list(nearStop['bus_stops'][j])
                     tmpList.append(busStopNameList.get(nearStop['bus_stops'][j][0]))
-                    #print tmpList
-                    tmpList.append(timeCost)
+                    tmpList.append(timeCostInMin)
                     busStopDict = dict(zip(dictKey, tmpList))
                     connectedBusStop.append(busStopDict)
                     connectedNameList.append(nearStop['bus_stops'][j][0])
@@ -799,3 +852,41 @@ class DB():
             }
             #print newRoute
             self.db.RouteGraph.insert_one(newRoute)
+
+    # ---------------------------------------------------------------------------------------------------------------------------------------
+    # Weather
+    # ---------------------------------------------------------------------------------------------------------------------------------------
+    def insertWeather(self, weather):
+        ''' '''
+        self.db.Weather.insert_one(weather)
+
+    def selectWeather(self, date):
+        ''' '''
+        return self.db.Weather.find({"time": {"$gte": datetime.datetime.combine(date, datetime.time(0, 0)), "$lt": datetime.datetime.combine(date, datetime.time(23, 59))}})
+
+    def selectBusTrip(self, date):
+        ''' '''
+        return self.db.BusTrip.find({"startTime": {"$gte": date, "$lt": date + timedelta(minutes=60)}}).sort([("line", 1), ("startTime", 1)])
+
+    def selectTimeTablebyBusTrip(self, busTrip):
+        ''' '''
+        return self.db.TimeTable.find({"timetable": {"$in": busTrip}})
+
+    def selectTimetablebyLine(self, line, date):
+        return self.db.TimeTable.find({"line": line, "date": datetime.datetime.combine(date, datetime.time(0, 0))})
+
+    def updateTimetable(self, id, date, line, timetable):
+        return self.db.TimeTable.update({"_id": {"$eq": id}}, {"_id": id, "date": date, "line": line, "timetable": timetable})
+
+    def deleteBusTrip(self, id):
+        return self.db.BusTrip.remove({"_id": id})
+
+    def selectBusTrip2(sef, date):
+        ''' TO DELETE '''
+        busTrip = self.db.BusTrip.find({"startTime": {"$gte": datetime.datetime.combine(date, datetime.time(0, 0)), "$lt": datetime.datetime.combine(date, datetime.time(23, 59))}}).sort([("line", 1), ("startTime", 1)])
+        for bt in busTrip:
+            print bt
+        return busTrip
+
+    def deleteTimeTable(self, date):
+        return self.db.TimeTable.remove({"date": datetime.datetime.combine(date, datetime.time(0, 0))})

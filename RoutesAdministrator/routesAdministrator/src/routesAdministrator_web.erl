@@ -105,6 +105,14 @@ loop(Req, DocRoot) ->
                     "send_notification" ->
                         Req:respond({200, [{"Content-Type", "text/plain"}], "OK"}),
                         send_notification(Req);
+                    "get_passengers" ->
+                        get_passengers(Req);
+                    "get_traffic_information" ->
+                        get_traffic_information(Req);
+                    "get_traffic_information_with_params" ->
+                        get_traffic_information_with_params(Req);
+                    "set_google_registration_token" ->
+                        set_google_registration_token(Req);
                     _ ->
                         Req:not_found()
                 end;
@@ -227,6 +235,122 @@ send_notification(Req) ->
                       {trace, erlang:get_stacktrace()}],
             error_logger:error_report(Report)
             % handle_error(Report, Req)
+    end.
+
+get_passengers(Req) ->
+    PostData = Req:parse_post(),
+    BusTripID = proplists:get_value("bus_trip_id", PostData, "Anonymous"),
+    % io:format("BusTripID: ~p~n", [BusTripID]),
+    CurrentBusStop = proplists:get_value("current_bus_stop", PostData, "Anonymous"),
+    % io:format("CurrentBusStop: ~p~n", [CurrentBusStop]),
+    NextBusStop = proplists:get_value("next_bus_stop", PostData, "Anonymous"),
+    % io:format("NextBusStop: ~p~n", [NextBusStop]),
+    try
+        PythonInstance = whereis(python_instance),
+        Response = python:call(PythonInstance, mongodb_parser, get_passengers,
+                               [BusTripID, CurrentBusStop, NextBusStop]),
+        Msg = [{type, get_passengers},
+               {busTripID, BusTripID},
+               {currentBusStop, CurrentBusStop},
+               {nextBusStop, NextBusStop},
+               {response, Response},
+               {process, self()}],
+        Broadcaster = whereis(broadcaster),
+        Broadcaster ! {broadcast, Msg},
+        Req:respond({200, [{"Content-Type", "text/plain"}], Response})
+    catch
+        Type:What ->
+            Report = ["Failed Request: get_passengers",
+                      {type, Type}, {what, What},
+                      {trace, erlang:get_stacktrace()}],
+            error_logger:error_report(Report),
+            handle_error(Report, Req)
+    end.
+
+get_traffic_information(Req) ->
+    try
+        PythonInstance = whereis(python_instance),
+        Response = python:call(PythonInstance, mongodb_parser, get_traffic_information, []),
+        Msg = [{type, get_traffic_information},
+               {response, Response},
+               {process, self()}],
+        Broadcaster = whereis(broadcaster),
+        Broadcaster ! {broadcast, Msg},
+        Req:respond({200, [{"Content-Type", "text/plain"}], Response})
+    catch
+        Type:What ->
+            Report = ["Failed Request: get_traffic_information",
+                      {type, Type}, {what, What},
+                      {trace, erlang:get_stacktrace()}],
+            error_logger:error_report(Report),
+            handle_error(Report, Req)
+    end.
+
+get_traffic_information_with_params(Req) ->
+    PostData = Req:parse_post(),
+    SouthLatitude = proplists:get_value("south_latitude", PostData, "Anonymous"),
+    % io:format("SouthLatitude: ~p~n", [SouthLatitude]),
+    WestLongitude = proplists:get_value("west_longitude", PostData, "Anonymous"),
+    % io:format("WestLongitude: ~p~n", [WestLongitude]),
+    NorthLatitude = proplists:get_value("north_latitude", PostData, "Anonymous"),
+    % io:format("NorthLatitude: ~p~n", [NorthLatitude]),
+    EastLongitude = proplists:get_value("east_longitude", PostData, "Anonymous"),
+    % io:format("EastLongitude: ~p~n", [EastLongitude]),
+    try
+        PythonInstance = whereis(python_instance),
+        Response = python:call(PythonInstance, mongodb_parser, get_traffic_information_with_params,
+                               [SouthLatitude, WestLongitude, NorthLatitude, EastLongitude]),
+        Msg = [{type, get_traffic_information_with_params},
+               {southLatitude, SouthLatitude},
+               {westLongitude, WestLongitude},
+               {northLatitude, NorthLatitude},
+               {eastLongitude, EastLongitude},
+               {response, Response},
+               {process, self()}],
+        Broadcaster = whereis(broadcaster),
+        Broadcaster ! {broadcast, Msg},
+        Req:respond({200, [{"Content-Type", "text/plain"}], Response})
+    catch
+        Type:What ->
+            Report = ["Failed Request: get_traffic_information_with_params",
+                      {type, Type}, {what, What},
+                      {trace, erlang:get_stacktrace()}],
+            error_logger:error_report(Report),
+            handle_error(Report, Req)
+    end.
+
+set_google_registration_token(Req) ->
+    PostData = Req:parse_post(),
+    VehicleID_str = proplists:get_value("vehicle_id", PostData, "Anonymous"),
+    {VehicleID, _} = string:to_integer(VehicleID_str),
+    % io:format("VehicleID: ~p~n", [VehicleID]),
+    Token = proplists:get_value("google_registration_token", PostData, "Anonymous"),
+    % io:format("Token: ~p~n", [Token]),
+    try
+        emysql:prepare(set_google_registration_token_statement, <<"SELECT set_google_registration_token(?, ?)">>),
+        Result = emysql:execute(mysql_pool, set_google_registration_token_statement, [VehicleID, Token]),
+        case Result of
+            {_, _, _, [[Response]], _} ->
+                Msg = [{type, set_google_registration_token},
+                       {vehicleID, VehicleID},
+                       {token, Token},
+                       {response, Response},
+                       {process, self()}],
+                Broadcaster = whereis(broadcaster),
+                Broadcaster ! {broadcast, Msg},
+                Req:respond({200, [{"Content-Type", "text/plain"}], Response});
+            _ ->
+                Msg = ["Unexpected Database Response",
+                       {result, Result},
+                       {trace, erlang:get_stacktrace()}],
+                handle_error(Msg, Req)
+        end
+    catch
+        Type:What ->
+            Report = ["Failed Request: set_google_registration_token",
+                      {type, Type}, {what, What},
+                      {trace, erlang:get_stacktrace()}],
+            handle_error(Report, Req)
     end.
 
 %% Internal API

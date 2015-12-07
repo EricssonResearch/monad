@@ -13,12 +13,16 @@ Unless required by applicable law or agreed to in writing, software distributed 
 See the License for the specific language governing permissions and limitations under the License.
 
 """
+import forecastio
+import copy
+import sys
+sys.path.append('../OpenStreetMap')
 from datetime import date
 from datetime import timedelta
 from dbConnection import DB
-import forecastio
-
-db = DB()
+from fitness import Fitness
+from routeGenerator import string_to_coordinates
+from operator import itemgetter
 
 class Weather(object):
     """Implements a class to modify timetables based on weather"""
@@ -27,23 +31,25 @@ class Weather(object):
     # ------------------------------------------------------------
     # Forecastio API Credentials
     apiKey = "664dfbd4b12d75c56aab4503f2ddda01"
-    # This values can be replaced by Open Maps coordenates values
-    latitude = 59.8552777778
-    longitude = 17.6319444444
+    # Uppsala central address
+    address = "Kungsgatan"
+    # Special weather conditions
+    # conditions = ["clear-day", "clear-night", "rain", "snow", "sleet", "wind", "fog", "cloudy", "partly-cloudy-day", "partly-cloudy-night"]
+    conditions = ["rain", "snow", "fog", "cloudy", "clear-night"]
 
     def __init__(self):
-        super(Weather, self).__init__()
+        # super(Weather, self).__init__()
         # self.arg = arg
-        self.getWeatherData()
+        self.processWeather(self.getAffectedTrip(self.getWeather(Weather.address, Weather.apiKey, -4), Weather.conditions))
 
-    def setQueryDay(self, days):
-        """Depending on how workflow is gonna be, pass days to query as a
-        parameter"""
-        return date.today() + timedelta(days)
+    def getCoordinates(self, address):
+        """Uses the Route Generator to search for an address"""
+        coordinates = string_to_coordinates(address)
+        return coordinates["latitude"], coordinates["longitude"]
 
-    def callWeatherAPI(self):
+    def callWeatherAPI(self, apiKey, latitude, longitude):
         """Calls API to get weather information"""
-        return forecastio.load_forecast(Weather.apiKey, Weather.latitude, Weather.longitude)
+        return forecastio.load_forecast(apiKey, latitude, longitude)
 
     def getWeatherHourly(self, forecast):
         """Returns the weather info on a specific frequency
@@ -52,18 +58,158 @@ class Weather(object):
         """
         return forecast.hourly()
 
-    '''
-    def getWeatherData(self):
-        """Calls API to get weather information"""
-        forecast = self.getWeatherHourly(self.callWeatherAPI())
+    def setQueryDay(self, days):
+        """Depending on how workflow is gonna be, pass days to query as a
+        parameter
+        """
+        return date.today() + timedelta(days)
+
+    def queryWeather(self, date):
+        """
+        """
+        db = DB()
+        return db.selectWeather(date)
+
+    def countWeather(self, weather):
+        """
+        """
+        return weather.count()
+
+    def insertWeather(self, address, apiKey, days):
+        """ Calls API to get weather information
+        """
+        db = DB()
+        coordinates = self.getCoordinates(address)
+        forecast = self.getWeatherHourly(self.callWeatherAPI(apiKey, coordinates[0], coordinates[1]))
         for data in forecast.data:
-            if data.time.date() == self.setQueryDay(2):
-                print "========================"
-                print data.icon
-                print data.time
-                print data.temperature
-    '''
+            if data.time.date() == self.setQueryDay(days):
+                weather = {'icon': data.icon, 'time': data.time, 'temperature': data.temperature}
+                db.insertWeather(weather)
 
+    def getWeather(self, address, apiKey, days):
+        """ This is the function to be called if someone wants to know the weather :D
+        """
+        if self.countWeather(self.queryWeather(self.setQueryDay(days))) == 0:
+            self.insertWeather(address, apiKey, days)
+        return self.queryWeather(self.setQueryDay(days))
 
-#if __name__ == '__main__':
-#    Weather().__init__()    
+    def getAffectedTrip(self, weather, conditions):
+        """ Looks trips on DB that are gonna be affected by the weather
+        """
+        trip = []
+        db = DB()
+        # Running trough the weather
+        for i in weather:
+            # Search for pre defined special weather conditions
+            # This can be a function that evaluates temperature and time
+            if self.evaluateWeather(i["icon"], i["temperature"], i["time"], conditions):
+                # Query related trips between i["time"] and an hour later
+                trips = db.selectBusTrip(i["time"])
+                # Append them on the trips array
+                trip.append([i["icon"], i["temperature"], i["time"], trips])
+        return trip
+
+    def evaluateWeather(self, icon, temperature, time, conditions):
+        """ Evaluates if a result from the weather is part of a 
+        special weather condition
+        """
+        if icon in conditions:
+            return True
+        else:
+            return False
+
+    def processWeather(self, trip):
+        """ This functions is like a main process.
+        From here, functions to modify the timetable and bustrips are called
+        """
+        if len(trip) > 0:
+            # Create a copy of the structure
+            trip2 = copy.deepcopy(trip)
+            # This function deletes busTrips and references & notifies users
+            self.modifyTimeTable(trip)
+            # Generates new busTrips and updates the timetable
+            self.generateBusTrip(trip2)
+
+    def modifyTimeTable(self, trip):
+        timetable = []
+        busId = []
+        busTrip = []
+        db = DB()
+        for i in xrange(len(trip)):
+            for j in trip[i][3]:
+                busTrip.append([j["line"], j["_id"]])
+        busTrip = sorted(busTrip, key=itemgetter(0))
+        line = busTrip[0][0]
+        busId.append(busTrip[0][1])
+        for i in xrange(1, len(busTrip)):
+            if line != busTrip[i][0]:
+                timetable = db.selectTimeTablebyBusTrip(busId)
+                newTimetable = self.generateTimetable(timetable, busId)
+                db.updateTimetable(newTimetable[0], newTimetable[1], newTimetable[2], newTimetable[3])
+                self.deleteBusTrip(newTimetable[3])
+                # notifyUsers(timetable2[1])
+                busId = []
+            line = busTrip[i][0]
+            busId.append(busTrip[i][1])
+        timetable = db.selectTimeTablebyBusTrip(busId)
+        newTimetable = self.generateTimetable(timetable, busId)
+        db.updateTimetable(newTimetable[0], newTimetable[1], newTimetable[2], newTimetable[3])
+        self.deleteBusTrip(newTimetable[3])
+        # notifyUsers(timetable2[1])
+
+    def generateTimetable(self, timetable, busId):
+        '''
+        '''
+        for t in timetable:
+            tt = [t["_id"], t["date"], t["line"], self.getArrayDifference(t["timetable"], busId)]
+        return tt
+
+    def getArrayDifference(self, a, b):
+        '''
+        http://stackoverflow.com/questions/6486450/python-compute-list-difference
+        b = set(b)
+        return [aa for aa in a if aa not in b]
+        '''
+        b = set(b)
+        return [instanceA for instanceA in a if instanceA not in b]
+
+    def deleteBusTrip(self, busTrip):
+        db = DB()
+        for bt in busTrip:
+            db.deleteBusTrip(bt)
+
+    def generateBusTrip(self, trip):
+        fitness = Fitness()
+        db = DB()
+        line = 0
+        count = 0
+        chromosome = []
+        for tripInstance in trip:
+            for busInstance in tripInstance[3]:
+                if line != busInstance["line"] and count != 0:
+                    chromosome.append([line, capacity, self.calculateFrequency(count), startTime])
+                    count = 0
+                if count == 0:
+                    capacity = busInstance["capacity"]
+                    startTime = busInstance["startTime"]
+                line = busInstance["line"]
+                count += 1
+        chromosome.append([line, capacity, self.calculateFrequency(count), startTime])
+        individual = fitness.genTimetable(chromosome)
+        db.insertBusTrip2(individual)
+
+    def calculateFrequency(self, count):
+        minutes = 60
+        factor = 2
+        minFreq = 10
+        # Calculate frequency: divided 60 by count
+        frequency = int(round(minutes/count))
+        # Change buses frequency: >freq <buses | <freq >buses
+        frequency = frequency - factor
+        # if frequency <= 0:
+        if frequency <= minFreq:
+            frequency = minFreq
+        return frequency
+
+if __name__ == '__main__':
+    Weather()

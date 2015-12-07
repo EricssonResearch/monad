@@ -13,6 +13,7 @@ CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
 from heapq import heappush, heappop
+import numpy as np
 import coordinate
 
 
@@ -22,15 +23,15 @@ class AStar:
     def __init__(self, standardSpeed):
         self.standardSpeed = standardSpeed
 
-    def getNodeById(self, nodes, nodeId):
-        for nd in nodes:
-            if nd.id == nodeId:
-                return nd
-        return -1
+#    def getNodeById(self, nodes, nodeId):
+#        for nd in nodes:
+#            if nd.id == nodeId:
+#                return nd
+#        return -1
 
     def findPath(self, nodes, edges, start, goal):
         """
-        Finds a path between start and goal using a*. The search is done in the
+        Finds a path between start and goal using A*. The search is done in the
         graph self.edges.
         """
         openSet = []
@@ -38,14 +39,14 @@ class AStar:
         path = {}
         cost = {}
         path[start] = 0
-        cost[start] = 0
+        cost[start] = np.asarray([0, 0])
+
+        # A value that a real path should not have.
+        cost[goal] = np.asarray([float('Inf'), float('Inf')])
 
         if start == goal:
-            cost[goal] = 0
-            return self.reconstruct_path(path, start, goal), cost
-
-        # A high value that a real path should not have.
-        cost[goal] = 300000
+            cost[goal] = np.asarray([0, 0])
+            openSet = []
 
         # As long as there are paths to be explored
         while not (len(openSet) == 0):
@@ -69,38 +70,49 @@ class AStar:
                 timeOnRoad = (roadLength /
                               (speedDecrease * (float(speed) * 1000 / 3600)))
 
-                newCost = cost[current] + timeOnRoad
+                newCost = cost[current] + [timeOnRoad, roadLength]
 
-                if nextNode not in cost or newCost < cost[nextNode]:
+                if nextNode not in cost or (newCost[0] < cost[nextNode][0]):
                     cost[nextNode] = newCost
 
-                    weight = (newCost + (roadInt ** 1) +
-                              (self.heuristic(nodes[nextNode], nodes[goal]) /
+                    weight = (newCost[0] + (roadInt ** 1) +
+                              (heuristic(nodes[nextNode], nodes[goal]) /
                                (float(self.standardSpeed) * 1000 / 3600)))
 
                     heappush(openSet, (weight, nextNode))
                     path[nextNode] = current
 
-        return self.reconstruct_path(path, start, goal), cost
+        # Is there a shortest path
+        if cost[goal][0] is float('Inf'):
+            shortestpath = []
+        else:
+            shortestpath = reconstruct_path(path, start, goal)
 
-    def heuristic(self, node, goal):
-        """
-        The heuristic used by A*. It measures the length between node and goal
-        in meters.
-        :param node a Coordinate object
-        :param goal a Coordinate object
-        :return the distance in meters
-        """
-        return coordinate.measure(node, goal)
+        return shortestpath, cost
 
-    def reconstruct_path(self, came_from, start, goal):
-        """
 
-        """
-        current = goal
-        path = [current]
-        while current != start:
+def heuristic(node, goal):
+    """
+    The heuristic used by A*. It measures the length between node and goal
+    in meters.
+    :param node a Coordinate object
+    :param goal a Coordinate object
+    :return the distance in meters
+    """
+    return coordinate.measure(node, goal)
+
+
+def reconstruct_path(came_from, start, goal):
+    """
+
+    """
+    current = goal
+    path = [current]
+    while current != start:
+        if current not in came_from:
+            current = start
+        else:
             current = came_from[current]
-            path.append(current)
-        path.reverse()
-        return path
+        path.append(current)
+    path.reverse()
+    return path

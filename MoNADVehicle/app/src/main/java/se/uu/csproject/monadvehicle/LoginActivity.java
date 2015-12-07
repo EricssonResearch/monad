@@ -13,15 +13,25 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
+
 import org.mapsforge.map.android.graphics.AndroidGraphicFactory;
 
-public class LoginActivity extends AppCompatActivity implements AsyncLoginInteraction, AsyncGetNextTripInteraction {
+import se.uu.csproject.monadvehicle.googlecloudmessaging.RegistrationIntentService;
+
+public class LoginActivity extends AppCompatActivity implements AsyncLoginInteraction, AsyncGetNextTripInteraction,
+        AsyncGetTrajectoryInteraction {
     private EditText usernameField;
     private EditText passwordField;
     private EditText busNumberField;
     private Button loginButton;
     //ToggleButton emergencyButton;
 
+
+    //Google Cloud Services
+    private static final String TAG = "MainActivity";
+    private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,16 +44,16 @@ public class LoginActivity extends AppCompatActivity implements AsyncLoginIntera
         loginButton = (Button) findViewById(R.id.loginButton);
         //emergencyButton = (ToggleButton) findViewById(R.id.emergencyButton);
 
-        //// TODO: add login authentication for vehicle app, similar to that in client app
+        if (checkPlayServices()) {
+            Intent intent = new Intent(this,RegistrationIntentService.class);
+            startService(intent);
+        }
+
+
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 login();
-//                if(usernameField.getText().length() >= 0
-//                        && passwordField.getText().length() >= 0
-//                        && busNumberField.getText().length() >= 0) {
-//                    startActivity(new Intent(v.getContext(), MainActivity.class));
-//                }
             }
         });
 
@@ -114,16 +124,7 @@ public class LoginActivity extends AppCompatActivity implements AsyncLoginIntera
 
         if (response.equals("1")) {
             Log.d("LoginActivity", "Successfully received BusTrip data");
-
-            try {
-                LoginActivity.this.startActivity(new Intent(LoginActivity.this, MainActivity.class));
-            }
-            catch (Exception e) {
-                e.printStackTrace();
-            }
-            finally {
-                finish();
-            }
+            getTrajectory();
         }
         else {
             Log.d("LoginActivity", "Error while receiving BusTrip data");
@@ -131,4 +132,41 @@ public class LoginActivity extends AppCompatActivity implements AsyncLoginIntera
             finish();
         }
     }
+
+    public void getTrajectory() {
+        new GetTrajectoryTask(this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+    }
+
+    @Override
+    public void processGetTrajectoryResponse(String response) {
+        try {
+            Log.d("LoginActivity", "Received trajectory response");
+            LoginActivity.this.startActivity(new Intent(LoginActivity.this, MainActivity.class));
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+        finally {
+            finish();
+        }
+
+    }
+
+    private boolean checkPlayServices() {
+        GoogleApiAvailability apiAvailability = GoogleApiAvailability.getInstance();
+        int resultCode = apiAvailability.isGooglePlayServicesAvailable(this);
+        if (resultCode != ConnectionResult.SUCCESS) {
+            if (apiAvailability.isUserResolvableError(resultCode)) {
+                apiAvailability.getErrorDialog(this, resultCode, PLAY_SERVICES_RESOLUTION_REQUEST)
+                        .show();
+            } else {
+                Log.i(TAG, "This device is not supported.");
+                finish();
+            }
+            return false;
+        }
+        return true;
+    }
+
 }
+
