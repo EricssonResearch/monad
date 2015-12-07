@@ -71,12 +71,11 @@ public class VehicleAdministration extends Administration {
     }
 
     public static String profileToString() {
-        String strProfile = "\nVehicleID: " + getVehicleID()
+        return "\nVehicleID: " + getVehicleID()
                 + "\nDriverID: " + getDriverID()
                 + "\nPassword: " + getPassword()
                 + "\nBusLine: " + getBusLine()
                 + "\nGoogleRegistrationToken: " + getGoogleRegistrationToken();
-        return strProfile;
     }
 
     public static String postSignInRequest(String driverID, String password, String busLine) {
@@ -107,7 +106,6 @@ public class VehicleAdministration extends Administration {
     }
 
     public static String processSignInResponse(String driverID, String password, String busLine, String response) {
-        String responseMessage = "";
         /*
          * Successful signIn request
          * Response: "1|vehicleID"
@@ -115,15 +113,14 @@ public class VehicleAdministration extends Administration {
         if (response.startsWith("1|")) {
             String vehicleID = response.substring(2);
             updateProfileAfterSignIn(vehicleID, driverID, password, busLine);
-            responseMessage = "Success (1) - VehicleID: " + getVehicleID();
+            return "Success (1) - VehicleID: " + getVehicleID();
         }
         else if (response.equals("0")) {
-            responseMessage = "Wrong Credentials (0)";
+            return "Wrong Credentials (0)";
         }
         else {
-            responseMessage = "ERROR - " + response;
+            return "ERROR - " + response;
         }
-        return responseMessage;
     }
 
     public static String postGetNextTripRequest() {

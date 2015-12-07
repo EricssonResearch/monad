@@ -27,7 +27,6 @@
             android:screenOrientation="sensor" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -45,15 +44,6 @@
                 <category android:name="se.uu.csproject.monadvehicle" />
             </intent-filter>
         </receiver >
-
-        <service
-            android:name="se.uu.csproject.monadvehicle.googlecloudmessaging.MyGcmListenerService"
-            android:exported="false" >
-            <intent-filter>
-                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
-            </intent-filter>
-        </service>
-
 
         <service
             android:name="se.uu.csproject.monadvehicle.googlecloudmessaging.MyGcmListenerService"

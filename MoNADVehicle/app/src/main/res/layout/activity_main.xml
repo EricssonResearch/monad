@@ -12,6 +12,7 @@
         android:id="@+id/toolBar">
 
         <TextView
+            android:id="@+id/nextstop_name"
             android:text="@string/label_main_nextdestination"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -94,13 +95,13 @@
                 style="@style/mediumText"
                 />
             <TextView
+                android:id="@+id/nextstop_distance"
                 android:text="@string/label_main_distance_value"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:theme="@style/darkTheme"
                 style="@style/mediumText"
                 android:layout_marginBottom="@dimen/action_button_vertical_margin"
-                android:id="@+id/text_distanceRemaining"
                 />
 
             <TextView
@@ -111,14 +112,15 @@
                 style="@style/mediumText"
                 />
             <TextView
+                android:id="@+id/nextstop_timeremaining"
                 android:text="@string/label_main_arrivaltime_duration"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:theme="@style/darkTheme"
                 style="@style/mediumText"
-                android:id="@+id/text_timeRemaining"
                 />
             <TextView
+                android:id="@+id/nextstop_arrivaltime"
                 android:text="@string/label_main_arrivaltime_value"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -322,20 +324,19 @@
             android:orientation="vertical">
 
             <TextView
+                android:id="@+id/nextstop_boarding"
                 android:text="@string/label_main_boardingnumber"
                 android:textColor="@color/boardingPassengersColor"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:theme="@style/darkTheme"
                 style="@style/bigBoldText"
-                android:id="@+id/boarding_number"
                 android:layout_weight="2"
                 />
             <TextView
                 android:text="@string/label_main_boardingpassengers"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/boarding_passengers"
                 android:gravity="center_horizontal"
                 android:layout_weight="1"
                 />
@@ -348,20 +349,19 @@
             android:orientation="vertical">
 
             <TextView
+                android:id="@+id/nextstop_leaving"
                 android:text="@string/label_main_leavingnumber"
                 android:textColor="@color/leavingPassengersColor"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:theme="@style/darkTheme"
                 style="@style/bigBoldText"
-                android:id="@+id/leaving_number"
                 android:layout_weight="2"
                 />
             <TextView
                 android:text="@string/label_main_leavingpassengers"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/leaving_passengers"
                 android:gravity="center_horizontal"
                 android:layout_weight="1"
                 />

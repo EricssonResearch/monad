@@ -34,7 +34,24 @@ public class MyLocationOverlay extends Layer implements LocationListener {
 	private static final GraphicFactory GRAPHIC_FACTORY = AndroidGraphicFactory.INSTANCE;
 	private final int RADIUS = 40;
 
-	public ArrayList<LatLong> trajectory;
+	private ArrayList<LatLong> trajectory;
+
+    /**
+     * The listener interface is used in MainActivity
+     * It updates the bus stop data based on the LocationChanged function
+     */
+    public interface Listener {
+        void onLocationChange(Location location);
+    }
+
+    private Listener mListener = null;
+    public void registerListener (Listener listener) {
+        mListener = listener;
+    }
+
+    LatLong tmp;
+    ListIterator<LatLong> ite;
+
 	/**
 	 * @param location
 	 *            the location whose geographical coordinates should be converted.
@@ -103,6 +120,15 @@ public class MyLocationOverlay extends Layer implements LocationListener {
 		this.circle = new Circle(null, 0, circleFill, circleStroke);
 	}
 
+    public ArrayList<LatLong> getTrajectory() {
+        return trajectory;
+    }
+
+    public void setTrajectory(ArrayList<LatLong> trajectory) {
+        this.trajectory = trajectory;
+        ite = trajectory.listIterator();
+    }
+
 	@Override
 	public synchronized void draw(BoundingBox boundingBox, byte zoomLevel, Canvas canvas, Point topLeftPoint) {
 		this.circle.draw(boundingBox, zoomLevel, canvas, topLeftPoint);
@@ -135,22 +161,38 @@ public class MyLocationOverlay extends Layer implements LocationListener {
 			//remove it when necessary
 			//Log.i("current location", location.getLatitude() + ", " + location.getLongitude());
 
-			LatLong latLong = locationToLatLong(location);
-			this.marker.setLatLong(latLong);
-			this.circle.setLatLong(latLong);
-			if (location.getAccuracy() != 0) {
-				this.circle.setRadius(location.getAccuracy());
-			} else {
-				// on the emulator we do not get an accuracy
-				this.circle.setRadius(RADIUS);
-			}
+            //TODO: Remove the if check and the currPos initialization when deploying the app
+            if(ite.hasNext()) {
+                tmp = ite.next();
+                Location currPos = new Location("");
+                currPos.setLatitude(tmp.latitude);
+                currPos.setLongitude(tmp.longitude);
+            //end of removal task
 
-			if (this.centerAtNextFix || this.snapToLocationEnabled) {
-				this.centerAtNextFix = false;
-				this.mapViewPosition.setCenter(latLong);
-			}
+            //TODO: Replace "currPos" occurrences with "location"
+                Storage.setCurrentLocation(currPos);
+                if (mListener != null) {
+                    mListener.onLocationChange(currPos);
+                }
 
-			requestRedraw();
+                LatLong latLong = locationToLatLong(currPos);
+
+                this.marker.setLatLong(latLong);
+                this.circle.setLatLong(latLong);
+                if (location.getAccuracy() != 0) {
+                    this.circle.setRadius(location.getAccuracy());
+                } else {
+                    // on the emulator we do not get an accuracy
+                    this.circle.setRadius(RADIUS);
+                }
+
+                if (this.centerAtNextFix || this.snapToLocationEnabled) {
+                    this.centerAtNextFix = false;
+                    this.mapViewPosition.setCenter(latLong);
+                }
+
+                requestRedraw();
+            }
 		}
 	}
 
@@ -162,28 +204,26 @@ public class MyLocationOverlay extends Layer implements LocationListener {
 		this.snapToLocationEnabled = snapToLocationEnabled;
 	}
 
+	/* testing with fake coordinates
 	public void moveSimulate(){
 		SimulateThread simulateThread = new SimulateThread();
 		simulateThread.start();
 	}
 
 	class SimulateThread extends Thread {
-		public void run() {
-			LatLong tmp;
-			ListIterator<LatLong> ite = trajectory.listIterator();
+        public void run() {
+
 			while(ite.hasNext()){
-				tmp = ite.next();
-				//Log.i("move", tmp.getLatitude() + ", " + tmp.getLongitude());
+                tmp = ite.next();
+                Log.w("move", tmp.latitude + ", " + tmp.longitude);
 
-				//redraw the location
-				marker.setLatLong(tmp);
-				circle.setLatLong(tmp);
-
-				//uncomment it if you want the map's center set to the current location every time its location gets updated
-				//mapViewPosition.setCenter(tmp);
-
-				requestRedraw();
-
+                Location currPos = new Location("");
+                currPos.setLatitude(tmp.latitude);
+                currPos.setLongitude(tmp.longitude);
+                Storage.setCurrentLocation(currPos);
+                if (mListener != null) {
+                    mListener.onLocationChange(currPos);
+                }
 				try {
 					sleep(500);
 				} catch (InterruptedException e) {
@@ -191,5 +231,5 @@ public class MyLocationOverlay extends Layer implements LocationListener {
 				}
 			}
 		}
-	}
+	}*/
 }
