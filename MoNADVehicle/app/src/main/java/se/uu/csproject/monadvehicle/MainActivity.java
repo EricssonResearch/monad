@@ -201,6 +201,8 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
 
         buildGoogleApiClient();
 
+        getTrafficInformation();
+
         /*
          * Click listeners to manage the side list buttons
          */
@@ -317,7 +319,6 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
             //commented since simulation is used now instead of real location
             //startLocationUpdates();
         }
-        getTrafficInformation();
     }
 
     @Override
@@ -516,7 +517,9 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
     }
 
     public void getTrafficInformation() {
-        if (Storage.getTrafficInformation() != null) {
+
+        if (Storage.getTrafficInformation() == null) {
+            Log.d("MainActivity", "---------------------------------HELLO2--------");
             new GetTrafficInformationTask(this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
         }
     }
@@ -527,8 +530,7 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
         if (response.equals("1")) {
             Log.d("MainActivity", "Successfully received TrafficInformation data");
             Storage.getTrafficInformation().printValues();
-        }
-        else {
+        } else {
             Log.d("MainActivity", "Error while receiving TrafficInformation data");
         }
     }

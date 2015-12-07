@@ -356,6 +356,7 @@ public class VehicleAdministration extends Administration {
     }
 
     public static String processGetTrafficInformationResponse(String response) {
+        System.out.println("Response: " + response);
         JSONParser parser = new JSONParser();
 
         try {
