@@ -60,7 +60,7 @@ import java.util.concurrent.TimeUnit;
 
 
 public class MainActivity extends Activity implements ConnectionCallbacks, OnConnectionFailedListener,
-        AsyncGetTrafficInformationInteraction {
+        AsyncGetTrafficInformationInteraction, AsyncSetGoogleRegistrationTokenInteraction {
 
     // Interface variables
     LinearLayout sideList, notificationsList, busStopsList, emergencyList;
@@ -298,7 +298,6 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
                 }
             }
         });
-
     }
 
     @Override
@@ -532,5 +531,10 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
         } else {
             Log.d("MainActivity", "Error while receiving TrafficInformation data");
         }
+    }
+
+    @Override
+    public void processSetGoogleRegistrationTokenResponse(String response) {
+
     }
 }

@@ -1,11 +1,8 @@
 package se.uu.csproject.monadvehicle;
 
-import android.util.Log;
-
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 import org.mapsforge.core.model.LatLong;
 
 import java.math.BigDecimal;
@@ -13,7 +10,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
-import java.util.Locale;
 import java.util.TimeZone;
 
 
@@ -415,9 +411,29 @@ public class VehicleAdministration extends Administration {
         return "1";
     }
 
+    public static String postSetGoogleRegistrationTokenRequest() {
+        String request = ROUTES_ADMINISTRATOR_HOST + ROUTES_ADMINISTRATOR_PORT + "/set_google_registration_token";
+        String urlParameters = "vehicle_id=" + getVehicleID()
+                             + "&google_registration_token=" + getGoogleRegistrationToken();
+
+        /* Send the request to the RoutesAdministrator */
+        String response = postRequest(request, urlParameters);
+
+        /* Handle response in case of exception */
+        if (response.equals("-1")) {
+            return exceptionMessage();
+        }
+
+        /*
+         * By default, Erlang adds the newline '\n' character at the beginning of response.
+         * For this reason substring() function is used
+         */
+        response = response.substring(1);
+        return response;
+    }
+
     public static String exceptionMessage() {
         return "ERROR - An Exception was thrown";
     }
-
 
 }
