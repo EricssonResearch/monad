@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
+import android.os.AsyncTask;
 import android.os.Environment;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
@@ -58,7 +59,8 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 
-public class MainActivity extends Activity implements ConnectionCallbacks, OnConnectionFailedListener {
+public class MainActivity extends Activity implements ConnectionCallbacks, OnConnectionFailedListener,
+        AsyncGetTrafficInformationInteraction {
 
     // Interface variables
     LinearLayout sideList, notificationsList, busStopsList, emergencyList;
@@ -313,6 +315,7 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
             //commented since simulation is used now instead of real location
             //startLocationUpdates();
         }
+        getTrafficInformation();
     }
 
     @Override
@@ -506,5 +509,23 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
         TextView textViewMinutes = (TextView)findViewById(R.id.text_timeRemaining);
         String minutes = Long.toString(TimeUnit.MILLISECONDS.toMinutes(Storage.getBusTrip().getBusStops().get(1).getArrivalTime().getTime() - currentTime));
         textViewMinutes.setText(minutes);
+    }
+
+    public void getTrafficInformation() {
+        if (Storage.getTrafficInformation() != null) {
+            new GetTrafficInformationTask(this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        }
+    }
+
+    @Override
+    public void processReceivedGetTrafficInformationResponse(String response) {
+
+        if (response.equals("1")) {
+            Log.d("MainActivity", "Successfully received TrafficInformation data");
+            Storage.getTrafficInformation().printValues();
+        }
+        else {
+            Log.d("MainActivity", "Error while receiving TrafficInformation data");
+        }
     }
 }
