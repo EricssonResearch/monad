@@ -59,14 +59,11 @@ class TestTravelPlanner(unittest.TestCase):
         busStopDBString = mongoString + self.dbName + "'), u'BusStop')"
 
         self.assertEqual(self.tp.fittingRoutes, [])
-        self.assertEqual(self.tp.startingWaypoint, [])
-        self.assertEqual(self.tp.endingWaypoint, [])
         self.assertEqual(self.tp.doubleRoutes, [])
+        self.assertEqual(self.tp.tripleRoutes, [])
         self.assertEqual(self.tp.possibleRoutes, [])
         self.assertEqual(self.tp.tripTuples, [])
         self.assertEqual(self.tp.lineTuples, [])
-        self.assertEqual(self.tp.bestFirstTrip, None)
-        self.assertEqual(self.tp.bestSecondTrip, None)
 
         self.assertEqual(str(self.tp.travelRequest), requestDBString)
         self.assertEqual(str(self.tp.route), routeDBString)
@@ -74,10 +71,6 @@ class TestTravelPlanner(unittest.TestCase):
         self.assertEqual(str(self.tp.userTrip), usertripDBString)
         self.assertEqual(str(self.tp.busTrip), busTripDBString)
         self.assertEqual(str(self.tp.busStop), busStopDBString)
-
-    def test_isDoubleRoute(self):
-        self.assertTrue(self.tp._isDoubleRoute(("trip A", "trip B")))
-        self.assertFalse(self.tp._isDoubleRoute("trip A"))
 
     # Database dependency
     def test_findFittingRoutes(self):
@@ -235,6 +228,13 @@ class TestTravelPlanner(unittest.TestCase):
         trip2 = (trip, TIMEDIFF_0MIN, TIME_1345H, TIME_1400H)
         self.assertEqual(self.tp.tripTuples, [trip2, trip1])
 
+    def test_isFastRoute(self):
+        self.tp.tripTuples = []
+        self.assertFalse(self.tp._isFastRoute())
+        self.tp.tripTuples = [("trip", TIMEDIFF_15MIN, TIME_1305H, TIME_1315H)]
+        self.assertTrue(self.tp._isFastRoute())
+        self.tp.tripTuples = [("trip", TIMEDIFF_30MIN, TIME_1305H, TIME_1330H)]
+        self.assertFalse(self.tp._isFastRoute())
 
     # Database dependency
     def test_findBestRoute(self):

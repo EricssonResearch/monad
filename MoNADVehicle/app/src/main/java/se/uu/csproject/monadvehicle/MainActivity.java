@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
+import android.os.AsyncTask;
 import android.os.Environment;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
@@ -58,7 +59,8 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 
-public class MainActivity extends Activity implements ConnectionCallbacks, OnConnectionFailedListener, MyLocationOverlay.Listener {
+public class MainActivity extends Activity implements ConnectionCallbacks, OnConnectionFailedListener, MyLocationOverlay.Listener,
+        AsyncGetTrafficInformationInteraction, AsyncSetGoogleRegistrationTokenInteraction {
 
     // Interface variables
     TextView nextStopName, nextStopBoarding, nextStopLeaving, nextStopDistance, nextStopRemainingTime, nextStopArrivalTime;
@@ -93,6 +95,9 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
 
     //Stores parameters for requests to the FusedLocationProviderApi.
     protected LocationRequest mLocationRequest;
+
+    // Represents a geographical location.
+    //protected Location mCurrentLocation;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -211,6 +216,8 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
 
         buildGoogleApiClient();
 
+        getTrafficInformation();
+
         /*
          * Click listeners to manage the side list buttons
          */
@@ -306,7 +313,6 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
                 }
             }
         });
-
     }
 
     @Override
@@ -529,5 +535,28 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
         Calendar cal = Calendar.getInstance();
         long currentTime = cal.get(Calendar.MILLISECOND);
         return Long.toString(TimeUnit.MILLISECONDS.toMinutes(Storage.getNextBusStop().getArrivalTime().getTime() - currentTime));
+    }
+
+    public void getTrafficInformation() {
+
+        if (Storage.isEmptyTrafficIncidents()) {
+            new GetTrafficInformationTask(this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        }
+    }
+
+    @Override
+    public void processReceivedGetTrafficInformationResponse(String response) {
+
+        if (response.equals("1")) {
+            Log.d("MainActivity", "Successfully received TrafficInformation data");
+            Storage.printTrafficIncidents();
+        } else {
+            Log.d("MainActivity", "Error while receiving TrafficInformation data");
+        }
+    }
+
+    @Override
+    public void processSetGoogleRegistrationTokenResponse(String response) {
+
     }
 }

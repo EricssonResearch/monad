@@ -67,7 +67,7 @@ def parse_root(root):
         traffic_dic[index]['EndTimeUTC'] = traffic_incident[5].text
         traffic_dic[index]['IncidentType'] = traffic_incident[6].text
         traffic_dic[index]['IncidentSeverity'] = traffic_incident[7].text
-        traffic_dic[index]['Road Closed'] = traffic_incident[9].text
+        traffic_dic[index]['RoadClosed'] = traffic_incident[9].text
         traffic_dic[index]['Description'] = traffic_incident[10].text
         traffic_dic[index]['StopPointLatitude'] = traffic_incident[11][0].text
         traffic_dic[index]['StopPointLongitude'] = traffic_incident[11][1].text

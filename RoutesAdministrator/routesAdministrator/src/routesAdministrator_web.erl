@@ -111,6 +111,8 @@ loop(Req, DocRoot) ->
                         get_traffic_information(Req);
                     "get_traffic_information_with_params" ->
                         get_traffic_information_with_params(Req);
+                    "set_google_registration_token" ->
+                        set_google_registration_token(Req);
                     _ ->
                         Req:not_found()
                 end;
@@ -314,6 +316,40 @@ get_traffic_information_with_params(Req) ->
                       {type, Type}, {what, What},
                       {trace, erlang:get_stacktrace()}],
             error_logger:error_report(Report),
+            handle_error(Report, Req)
+    end.
+
+set_google_registration_token(Req) ->
+    PostData = Req:parse_post(),
+    VehicleID_str = proplists:get_value("vehicle_id", PostData, "Anonymous"),
+    {VehicleID, _} = string:to_integer(VehicleID_str),
+    % io:format("VehicleID: ~p~n", [VehicleID]),
+    Token = proplists:get_value("google_registration_token", PostData, "Anonymous"),
+    % io:format("Token: ~p~n", [Token]),
+    try
+        emysql:prepare(set_google_registration_token_statement, <<"SELECT set_google_registration_token(?, ?)">>),
+        Result = emysql:execute(mysql_pool, set_google_registration_token_statement, [VehicleID, Token]),
+        case Result of
+            {_, _, _, [[Response]], _} ->
+                Msg = [{type, set_google_registration_token},
+                       {vehicleID, VehicleID},
+                       {token, Token},
+                       {response, Response},
+                       {process, self()}],
+                Broadcaster = whereis(broadcaster),
+                Broadcaster ! {broadcast, Msg},
+                Req:respond({200, [{"Content-Type", "text/plain"}], Response});
+            _ ->
+                Msg = ["Unexpected Database Response",
+                       {result, Result},
+                       {trace, erlang:get_stacktrace()}],
+                handle_error(Msg, Req)
+        end
+    catch
+        Type:What ->
+            Report = ["Failed Request: set_google_registration_token",
+                      {type, Type}, {what, What},
+                      {trace, erlang:get_stacktrace()}],
             handle_error(Report, Req)
     end.
 

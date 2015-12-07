@@ -28,8 +28,8 @@ from operator import itemgetter
 # Variables
 MUTATION_PROB = 0.0
 CROSS_OVER_PROB = 0.5
-NO_OF_GENERATION = 5
-POPULATION_SIZE = 10
+NO_OF_GENERATION = 1
+POPULATION_SIZE = 5
 
 def main():
     # Generate the population
@@ -79,7 +79,7 @@ def main():
     fitnessClass = Fitness()
     timetable = fitnessClass.genTimetable(best_ind)
     databaseClass = DB()
-    databaseClass.insertBusTrip(timetable)
+    #databaseClass.insertBusTrip(timetable)
 
 
 # def crossover(offspring):

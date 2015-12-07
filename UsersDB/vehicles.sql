@@ -108,7 +108,6 @@ CREATE FUNCTION set_google_registration_token (
 )
 RETURNS TEXT
 BEGIN
-    DECLARE ret_google_registration_token VARCHAR(255);
     DECLARE code CHAR(5) DEFAULT '00000';
     DECLARE rows INT;
     DECLARE CONTINUE HANDLER FOR SQLEXCEPTION

@@ -1,17 +1,16 @@
 package se.uu.csproject.monadvehicle;
 
-import android.util.Log;
-
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 import org.mapsforge.core.model.LatLong;
 
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.TimeZone;
 
 
 /**
@@ -326,10 +325,112 @@ public class VehicleAdministration extends Administration {
         return "1";
     }
 
+    public static String postGetTrafficInformationRequest() {
+        String request = ROUTES_ADMINISTRATOR_HOST + ROUTES_ADMINISTRATOR_PORT + "/get_traffic_information";
+        String urlParameters = "";
+
+        /* Send the request to the RoutesAdministrator */
+        String response = postRequest(request, urlParameters);
+
+        /* Handle response in case of exception */
+        if (response.equals("-1")) {
+            return exceptionMessage();
+        }
+
+        /*
+         * By default, Erlang adds the newline '\n' character at the beginning of response.
+         * For this reason substring() function is used
+         */
+        response = response.substring(1);
+        // response = response.trim();
+
+        /* Process response */
+        return processGetTrafficInformationResponse(response);
+    }
+
+    public static String processGetTrafficInformationResponse(String response) {
+//        System.out.println("Response: " + response);
+        JSONParser parser = new JSONParser();
+
+        try {
+            JSONArray trafficInformationArray = (JSONArray) parser.parse(response);
+            Iterator<JSONObject> trafficInformationArrayIterator = trafficInformationArray.iterator();
+            ArrayList<TrafficInformation> trafficIncidents = new ArrayList<>();
+
+            while (trafficInformationArrayIterator.hasNext()) {
+                JSONObject trafficInformationObject = (JSONObject) trafficInformationArrayIterator.next();
+
+                String temp = (String) trafficInformationObject.get("StartPointLatitude");
+                double startPointLatitude = Double.parseDouble(temp);
+
+                temp = (String) trafficInformationObject.get("StartPointLongitude");
+                double startPointLongitude = Double.parseDouble(temp);
+
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+                sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
+
+                temp = ((String) trafficInformationObject.get("LastModifiedUTC")).substring(0, 19);
+                Date lastModifiedUTC = sdf.parse(temp);
+
+                temp = ((String) trafficInformationObject.get("StartTimeUTC")).substring(0, 19);
+                Date startTimeUTC = sdf.parse(temp);
+
+                temp = ((String) trafficInformationObject.get("EndTimeUTC")).substring(0, 19);
+                Date endTimeUTC = sdf.parse(temp);
+
+                String incidentType = (String) trafficInformationObject.get("IncidentType");
+                String incidentSeverity = (String) trafficInformationObject.get("IncidentSeverity");
+
+                temp = (String) trafficInformationObject.get("RoadClosed");
+                boolean roadClosed = Boolean.parseBoolean(temp);
+
+                String description = (String) trafficInformationObject.get("Description");
+
+                temp = (String) trafficInformationObject.get("StopPointLatitude");
+                double stopPointLatitude = Double.parseDouble(temp);
+
+                temp = (String) trafficInformationObject.get("StopPointLongitude");
+                double stopPointLongitude = Double.parseDouble(temp);
+
+                TrafficInformation trafficInformation = new TrafficInformation(
+                        startPointLatitude, startPointLongitude, lastModifiedUTC, startTimeUTC,
+                        endTimeUTC, incidentType, incidentSeverity, roadClosed, description,
+                        stopPointLatitude, stopPointLongitude);
+
+                trafficIncidents.add(trafficInformation);
+            }
+            Storage.setTrafficIncidents(trafficIncidents);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            return "0";
+        }
+        return "1";
+    }
+
+    public static String postSetGoogleRegistrationTokenRequest() {
+        String request = ROUTES_ADMINISTRATOR_HOST + ROUTES_ADMINISTRATOR_PORT + "/set_google_registration_token";
+        String urlParameters = "vehicle_id=" + getVehicleID()
+                             + "&google_registration_token=" + getGoogleRegistrationToken();
+
+        /* Send the request to the RoutesAdministrator */
+        String response = postRequest(request, urlParameters);
+
+        /* Handle response in case of exception */
+        if (response.equals("-1")) {
+            return exceptionMessage();
+        }
+
+        /*
+         * By default, Erlang adds the newline '\n' character at the beginning of response.
+         * For this reason substring() function is used
+         */
+        response = response.substring(1);
+        return response;
+    }
 
     public static String exceptionMessage() {
         return "ERROR - An Exception was thrown";
     }
-
 
 }

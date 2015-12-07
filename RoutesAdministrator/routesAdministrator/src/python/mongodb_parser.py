@@ -15,6 +15,7 @@ specific language governing permissions and limitations under the License.
 import json
 import datetime
 from pymongo import MongoClient
+from bson.json_util import dumps
 from bson.objectid import ObjectId
 import urllib2, urllib
 import string
@@ -55,7 +56,7 @@ def vehicle_get_next_trip(bus_id):
     for trajectory_point in trajectory:
         trajectory_point['busStop']= bus_stop_collection.find_one({'_id' : ObjectId(trajectory_point['busStop'])})
 
-    return json.dumps(nearest_trip)
+    return dumps(nearest_trip)
 
 def send_notification_binary(user_to_send_to, message_title, message_body):
 	message_title_to_send = ''.join([chr(c) for c in message_title])
@@ -87,7 +88,7 @@ def send_notification(user_to_send_to, message_title_to_send, message_body_to_se
     }
 
     try:
-        response = requests.post(url, headers = custom_header, data = json.dumps(message_body))
+        response = requests.post(url, headers = custom_header, data = dumps(message_body))
 
         if (response.status_code == 200):
             print(response.content)
@@ -111,7 +112,7 @@ def get_passengers(bus_trip_id, current_bus_stop, next_bus_stop):
             departing = departing + 1
 
     response = {'boarding' : boarding, 'deparing' : departing}
-    return json.dumps(response)
+    return dumps(response)
 
 def get_traffic_information():
     south_latitude = '59.818882'
@@ -144,22 +145,21 @@ def get_traffic_information_with_params(south_latitude, west_longitude, north_la
     return parse_root(root)
 
 def parse_root(root):
-    traffic_dic = {}
-    index = 0
+    traffic_incidents = []
 
     for traffic_incident in root.iter('{http://schemas.microsoft.com/search/local/ws/rest/v1}TrafficIncident'):
-        traffic_dic[index] = {}
-        traffic_dic[index]['StartPointLatitude'] = traffic_incident[0][0].text
-        traffic_dic[index]['StartPointLongitude'] = traffic_incident[0][1].text
-        traffic_dic[index]['LastModifiedUTC'] = traffic_incident[3].text
-        traffic_dic[index]['StartTimeUTC'] = traffic_incident[4].text
-        traffic_dic[index]['EndTimeUTC'] = traffic_incident[5].text
-        traffic_dic[index]['IncidentType'] = traffic_incident[6].text
-        traffic_dic[index]['IncidentSeverity'] = traffic_incident[7].text
-        traffic_dic[index]['Road Closed'] = traffic_incident[9].text
-        traffic_dic[index]['Description'] = traffic_incident[10].text
-        traffic_dic[index]['StopPointLatitude'] = traffic_incident[11][0].text
-        traffic_dic[index]['StopPointLongitude'] = traffic_incident[11][1].text
-        index = index + 1
+        traffic_dic = {}
+        traffic_dic['StartPointLatitude'] = traffic_incident[0][0].text
+        traffic_dic['StartPointLongitude'] = traffic_incident[0][1].text
+        traffic_dic['LastModifiedUTC'] = traffic_incident[3].text
+        traffic_dic['StartTimeUTC'] = traffic_incident[4].text
+        traffic_dic['EndTimeUTC'] = traffic_incident[5].text
+        traffic_dic['IncidentType'] = traffic_incident[6].text
+        traffic_dic['IncidentSeverity'] = traffic_incident[7].text
+        traffic_dic['RoadClosed'] = traffic_incident[9].text
+        traffic_dic['Description'] = traffic_incident[10].text
+        traffic_dic['StopPointLatitude'] = traffic_incident[11][0].text
+        traffic_dic['StopPointLongitude'] = traffic_incident[11][1].text
+        traffic_incidents.append(traffic_dic)
 
-    return json.dumps(traffic_dic)
+    return dumps(traffic_incidents)
