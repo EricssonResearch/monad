@@ -723,21 +723,28 @@ class DB():
 
         @param: individual, best individual selected by GA
         '''
+        timetable = []
+        busTrip = []
         tripObjectList = []
-        # requestLeftIn = []
         BUSID = 1
         for i in range(len(individual)):
             line = individual[i][0]
             if i > 0:
                 if line != individual[i-1][0]:
-                    # selectTimetable
+                    # Select timetable by line and date
+                    timetable = self.selectTimetablebyLine(individual[i-1][0], startTime)
                     # Merge all busTrips
-                    # self.updateTimetable(individual[i-1][0], startTime, tripObjectList)
+                    for tt in timetable:
+                        timetableId = tt["_id"]
+                        busTrip = tripObjectList + tt["timetable"]
+                    # Update time table
+                    self.updateTimetable(timetableId, startTime, individual[i-1][0], busTrip)
                     tripObjectList[:] = []
             objID = ObjectId()
             tripObjectList.append(objID)
             capacity = individual[i][1]
-            startTime = individual[i][2] + timedelta(1)   # TODO seek better solution
+            # startTime = individual[i][2] + timedelta(1)
+            startTime = individual[i][2]
             busID = BUSID  # TODO Need to assign busID for every Trip
             trajectory = self.getRoute(line, "trajectory")
             for j in range(len(trajectory)):
@@ -753,10 +760,14 @@ class DB():
             trip = {"_id": objID, "capacity": capacity, "line": line, "startTime": startTime, "busID": busID, "endTime": trajectory[len(trajectory)-1]["time"], "trajectory": trajectory}
             self.db.BusTrip.insert_one(trip)
             if i == len(individual) - 1:
-                # selectTimetable
+                # Select timetable by line and date
+                timetable = self.selectTimetablebyLine(line, startTime)
                 # Merge all busTrips
-                # self.updateTimetable(individual[i-1][0], startTime, tripObjectList)
-                print "Hello"
+                for tt in timetable:
+                    timetableId = tt["_id"]
+                    busTrip = tripObjectList + tt["timetable"]
+                # Update time table
+                self.updateTimetable(timetableId, startTime, line, busTrip)
 
     # ---------------------------------------------------------------------------------------------------------------------------------------
     # Bus Stop Location
@@ -858,11 +869,10 @@ class DB():
 
     def selectTimeTablebyBusTrip(self, busTrip):
         ''' '''
-        # return self.db.TimeTable.find({"timetable": {"$in": busTrip}})
-        # { field: { $in: [<value1>, <value2>, ... <valueN> ] } }
-        # return self.db.TimeTable.update({"timetable": {"$in": busTrip}},{"$unset": {"timetable": "monadlmao"}})
-        # print self.db.TimeTable.find({"timetable": {"$in": busTrip}}).count()
         return self.db.TimeTable.find({"timetable": {"$in": busTrip}})
+
+    def selectTimetablebyLine(self, line, date):
+        return self.db.TimeTable.find({"line": line, "date": datetime.datetime.combine(date, datetime.time(0, 0))})
 
     def updateTimetable(self, id, date, line, timetable):
         return self.db.TimeTable.update({"_id": {"$eq": id}}, {"_id": id, "date": date, "line": line, "timetable": timetable})
@@ -873,8 +883,6 @@ class DB():
     def selectBusTrip2(sef, date):
         ''' TO DELETE '''
         busTrip = self.db.BusTrip.find({"startTime": {"$gte": datetime.datetime.combine(date, datetime.time(0, 0)), "$lt": datetime.datetime.combine(date, datetime.time(23, 59))}}).sort([("line", 1), ("startTime", 1)])
-        # print busTrip.count()
         for bt in busTrip:
             print bt
         return busTrip
-        # return self.db.BusTrip.find({"startTime": {"$gte": datetime.datetime.combine(date, datetime.time(0, 0)), "$lt": datetime.datetime.combine(date, datetime.time(23, 59))}}).sort([("line", 1), ("startTime", 1)])
