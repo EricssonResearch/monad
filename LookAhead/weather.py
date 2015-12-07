@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and limitations 
 
 """
 import forecastio
+import copy
 import sys
 sys.path.append('../OpenStreetMap')
 from datetime import date
@@ -39,7 +40,7 @@ class Weather(object):
     def __init__(self):
         # super(Weather, self).__init__()
         # self.arg = arg
-        self.processWeather(self.getAffectedTrip(self.getWeather(Weather.address, Weather.apiKey, -1), Weather.conditions))
+        self.processWeather(self.getAffectedTrip(self.getWeather(Weather.address, Weather.apiKey, -4), Weather.conditions))
 
     def getCoordinates(self, address):
         """Uses the Route Generator to search for an address"""
@@ -106,7 +107,6 @@ class Weather(object):
                 trips = db.selectBusTrip(i["time"])
                 # Append them on the trips array
                 trip.append([i["icon"], i["temperature"], i["time"], trips])
-        # print trip
         return trip
 
     def evaluateWeather(self, icon, temperature, time, conditions):
@@ -123,8 +123,15 @@ class Weather(object):
         From here, functions to modify the timetable and bustrips are called
         """
         if len(trip) > 0:
-            # self.modifyTimeTable(trip)  # This function deletes all the busTrips, and its references, also notifies users
-            self.generateBusTrip(trip)  # Generates new busTrips and updates the timetable
+            trip2 = copy.deepcopy(trip)
+            fitness = Fitness()
+            db = DB()
+            # Generates new busTrips and updates the timetable
+            chromosome = self.generateBusTrip(trip)
+            # This function deletes busTrips and references & notifies users
+            self.modifyTimeTable(trip2)
+            individual = fitness.genTimetable(chromosome)
+            db.insertBusTrip2(individual)
 
     def modifyTimeTable(self, trip):
         timetable = []
@@ -157,12 +164,18 @@ class Weather(object):
         '''
         '''
         for t in timetable:
-            tt = [t["_id"], t["date"], t["line"], self.diff(t["timetable"], busId)]
+            tt = [t["_id"], t["date"], t["line"], self.getArrayDifference(t["timetable"], busId)]
         return tt
 
-    def diff(self, a, b):
+    def getArrayDifference(self, a, b):
+        '''
+        http://stackoverflow.com/questions/6486450/python-compute-list-difference
         b = set(b)
         return [aa for aa in a if aa not in b]
+        '''
+        b = set(b)
+        return [instanceA for instanceA in a if instanceA not in b]
+
 
     def deleteBusTrip(self, busTrip):
         db = DB()
@@ -170,9 +183,27 @@ class Weather(object):
             db.deleteBusTrip(bt)
 
     def generateBusTrip(self, trip):
+        line = 0
+        count = 0
+        chromosome = []
+        for tripInstance in trip:
+            for busInstance in tripInstance[3]:
+                if line != busInstance["line"] and count !=0:
+                    chromosome.append([line, capacity, self.calculateFrequency(count), startTime])
+                    count = 0
+                if count == 0:
+                    capacity = busInstance["capacity"]
+                    startTime = busInstance["startTime"]
+                line = busInstance["line"]
+                count += 1
+        chromosome.append([line, capacity, self.calculateFrequency(count), startTime])
+        return chromosome
+        '''
         fitness = Fitness()
         db = DB()
         count = 0
+        capacity = 0
+        startTime = 0
         chromosome = []
         line = None
         # Loop trough the whole trip structure
@@ -188,6 +219,7 @@ class Weather(object):
                 if line != j["line"]:
                     chromosome.append([line, capacity, self.calculateFrequency(count), startTime])
                     startTime = j["startTime"]
+                    capacity = j["capacity"]
                     count = 0
                 count = count + 1
                 line = j["line"]
@@ -195,14 +227,16 @@ class Weather(object):
         # It will generate one chromosome per each bus line
         # As long as the conditions are not good, the frequency
         # will be the same on a particular line
-        individual = fitness.genTimetable(chromosome)
-        print individual
+        print chromosome
+        # individual = fitness.genTimetable(chromosome)
+        # print individual
         # db.insertBusTrip2(individual)  # Increase functionality to update on the timetable
+        '''
 
     def calculateFrequency(self, count):
         minutes = 60
         factor = 2
-        minFreq = 5
+        minFreq = 10
         # Calculate frequency: divided 60 by count
         frequency = int(round(minutes/count))
         # Change buses frequency: >freq <buses | <freq >buses
