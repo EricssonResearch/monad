@@ -518,8 +518,7 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
 
     public void getTrafficInformation() {
 
-        if (Storage.getTrafficInformation() == null) {
-            Log.d("MainActivity", "---------------------------------HELLO2--------");
+        if (Storage.isEmptyTrafficIncidents()) {
             new GetTrafficInformationTask(this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
         }
     }
@@ -529,7 +528,7 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
 
         if (response.equals("1")) {
             Log.d("MainActivity", "Successfully received TrafficInformation data");
-            Storage.getTrafficInformation().printValues();
+            Storage.printTrafficIncidents();
         } else {
             Log.d("MainActivity", "Error while receiving TrafficInformation data");
         }

@@ -356,49 +356,57 @@ public class VehicleAdministration extends Administration {
     }
 
     public static String processGetTrafficInformationResponse(String response) {
-        System.out.println("Response: " + response);
+//        System.out.println("Response: " + response);
         JSONParser parser = new JSONParser();
 
         try {
-            JSONObject trafficInformationObject = (JSONObject) parser.parse(response);
+            JSONArray trafficInformationArray = (JSONArray) parser.parse(response);
+            Iterator<JSONObject> trafficInformationArrayIterator = trafficInformationArray.iterator();
+            ArrayList<TrafficInformation> trafficIncidents = new ArrayList<>();
 
-            String temp = (String) trafficInformationObject.get("StartPointLatitude");
-            double startPointLatitude = Double.parseDouble(temp);
+            while (trafficInformationArrayIterator.hasNext()) {
+                JSONObject trafficInformationObject = (JSONObject) trafficInformationArrayIterator.next();
 
-            temp = (String) trafficInformationObject.get("StartPointLongitude");
-            double startPointLongitude = Double.parseDouble(temp);
+                String temp = (String) trafficInformationObject.get("StartPointLatitude");
+                double startPointLatitude = Double.parseDouble(temp);
 
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSSSSS'Z'");
-            sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
+                temp = (String) trafficInformationObject.get("StartPointLongitude");
+                double startPointLongitude = Double.parseDouble(temp);
 
-            temp = (String) trafficInformationObject.get("LastModifiedUTC");
-            Date lastModifiedUTC = sdf.parse(temp);
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+                sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
 
-            temp = (String) trafficInformationObject.get("LastModifiedUTC");
-            Date startTimeUTC = sdf.parse(temp);
+                temp = ((String) trafficInformationObject.get("LastModifiedUTC")).substring(0, 19);
+                Date lastModifiedUTC = sdf.parse(temp);
 
-            temp = (String) trafficInformationObject.get("EndTimeUTC");
-            Date endTimeUTC = sdf.parse(temp);
+                temp = ((String) trafficInformationObject.get("StartTimeUTC")).substring(0, 19);
+                Date startTimeUTC = sdf.parse(temp);
 
-            String incidentType = (String) trafficInformationObject.get("IncidentType");
-            String incidentSeverity = (String) trafficInformationObject.get("IncidentSeverity");
+                temp = ((String) trafficInformationObject.get("EndTimeUTC")).substring(0, 19);
+                Date endTimeUTC = sdf.parse(temp);
 
-            temp = (String) trafficInformationObject.get("RoadClosed");
-            boolean roadClosed = Boolean.parseBoolean(temp);
+                String incidentType = (String) trafficInformationObject.get("IncidentType");
+                String incidentSeverity = (String) trafficInformationObject.get("IncidentSeverity");
 
-            String description = (String) trafficInformationObject.get("Description");
+                temp = (String) trafficInformationObject.get("RoadClosed");
+                boolean roadClosed = Boolean.parseBoolean(temp);
 
-            temp = (String) trafficInformationObject.get("StopPointLatitude");
-            double stopPointLatitude = Double.parseDouble(temp);
+                String description = (String) trafficInformationObject.get("Description");
 
-            temp = (String) trafficInformationObject.get("StopPointLongitude");
-            double stopPointLongitude = Double.parseDouble(temp);
+                temp = (String) trafficInformationObject.get("StopPointLatitude");
+                double stopPointLatitude = Double.parseDouble(temp);
 
-            TrafficInformation trafficInformation = new TrafficInformation(
-                    startPointLatitude, startPointLongitude, lastModifiedUTC, startTimeUTC, endTimeUTC, incidentType,
-                    incidentSeverity, roadClosed, description, stopPointLatitude, stopPointLongitude);
+                temp = (String) trafficInformationObject.get("StopPointLongitude");
+                double stopPointLongitude = Double.parseDouble(temp);
 
-            Storage.setTrafficInformation(trafficInformation);
+                TrafficInformation trafficInformation = new TrafficInformation(
+                        startPointLatitude, startPointLongitude, lastModifiedUTC, startTimeUTC,
+                        endTimeUTC, incidentType, incidentSeverity, roadClosed, description,
+                        stopPointLatitude, stopPointLongitude);
+
+                trafficIncidents.add(trafficInformation);
+            }
+            Storage.setTrafficIncidents(trafficIncidents);
         }
         catch (Exception e) {
             e.printStackTrace();
