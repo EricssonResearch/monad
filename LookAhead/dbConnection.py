@@ -750,7 +750,8 @@ class DB():
             for j in range(len(trajectory)):
                 interval = int(trajectory[j]["interval"])
                 if j == 0:
-                    trajectory[j]["time"] = startTime + datetime.timedelta(minutes=interval)
+                    # trajectory[j]["time"] = startTime + datetime.timedelta(minutes=interval)
+                    trajectory[j]["time"] = startTime
                 else:
                     trajectory[j]["time"] = trajectory[j-1]["time"] + datetime.timedelta(minutes=interval)
                 trajectory[j]["totalPassengers"] = 0
@@ -886,3 +887,6 @@ class DB():
         for bt in busTrip:
             print bt
         return busTrip
+
+    def deleteTimeTable(self, date):
+        return self.db.TimeTable.remove({"date": datetime.datetime.combine(date, datetime.time(0, 0))})

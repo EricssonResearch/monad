@@ -123,15 +123,12 @@ class Weather(object):
         From here, functions to modify the timetable and bustrips are called
         """
         if len(trip) > 0:
+            # Create a copy of the structure
             trip2 = copy.deepcopy(trip)
-            fitness = Fitness()
-            db = DB()
-            # Generates new busTrips and updates the timetable
-            chromosome = self.generateBusTrip(trip)
             # This function deletes busTrips and references & notifies users
-            self.modifyTimeTable(trip2)
-            individual = fitness.genTimetable(chromosome)
-            db.insertBusTrip2(individual)
+            self.modifyTimeTable(trip)
+            # Generates new busTrips and updates the timetable
+            self.generateBusTrip(trip2)
 
     def modifyTimeTable(self, trip):
         timetable = []
@@ -176,19 +173,20 @@ class Weather(object):
         b = set(b)
         return [instanceA for instanceA in a if instanceA not in b]
 
-
     def deleteBusTrip(self, busTrip):
         db = DB()
         for bt in busTrip:
             db.deleteBusTrip(bt)
 
     def generateBusTrip(self, trip):
+        fitness = Fitness()
+        db = DB()
         line = 0
         count = 0
         chromosome = []
         for tripInstance in trip:
             for busInstance in tripInstance[3]:
-                if line != busInstance["line"] and count !=0:
+                if line != busInstance["line"] and count != 0:
                     chromosome.append([line, capacity, self.calculateFrequency(count), startTime])
                     count = 0
                 if count == 0:
@@ -197,41 +195,8 @@ class Weather(object):
                 line = busInstance["line"]
                 count += 1
         chromosome.append([line, capacity, self.calculateFrequency(count), startTime])
-        return chromosome
-        '''
-        fitness = Fitness()
-        db = DB()
-        count = 0
-        capacity = 0
-        startTime = 0
-        chromosome = []
-        line = None
-        # Loop trough the whole trip structure
-        # trip structure: icon, temperature, time and trips cursor
-        for i in xrange(len(trip)):
-            # Loop trough trips cursor
-            # trips cursor: startTime, line and capacity
-            for j in trip[i][3]:
-                if line is None:
-                    line = j["line"]
-                    startTime = j["startTime"]
-                    capacity = j["capacity"]
-                if line != j["line"]:
-                    chromosome.append([line, capacity, self.calculateFrequency(count), startTime])
-                    startTime = j["startTime"]
-                    capacity = j["capacity"]
-                    count = 0
-                count = count + 1
-                line = j["line"]
-        chromosome.append([line, capacity, self.calculateFrequency(count), startTime])
-        # It will generate one chromosome per each bus line
-        # As long as the conditions are not good, the frequency
-        # will be the same on a particular line
-        print chromosome
-        # individual = fitness.genTimetable(chromosome)
-        # print individual
-        # db.insertBusTrip2(individual)  # Increase functionality to update on the timetable
-        '''
+        individual = fitness.genTimetable(chromosome)
+        db.insertBusTrip2(individual)
 
     def calculateFrequency(self, count):
         minutes = 60
@@ -245,7 +210,6 @@ class Weather(object):
         if frequency <= minFreq:
             frequency = minFreq
         return frequency
-
 
 if __name__ == '__main__':
     Weather()
