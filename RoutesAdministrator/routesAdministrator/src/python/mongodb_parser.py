@@ -145,22 +145,21 @@ def get_traffic_information_with_params(south_latitude, west_longitude, north_la
     return parse_root(root)
 
 def parse_root(root):
-    traffic_dic = {}
-    index = 0
+    traffic_incidents = []
 
     for traffic_incident in root.iter('{http://schemas.microsoft.com/search/local/ws/rest/v1}TrafficIncident'):
-        traffic_dic[index] = {}
-        traffic_dic[index]['StartPointLatitude'] = traffic_incident[0][0].text
-        traffic_dic[index]['StartPointLongitude'] = traffic_incident[0][1].text
-        traffic_dic[index]['LastModifiedUTC'] = traffic_incident[3].text
-        traffic_dic[index]['StartTimeUTC'] = traffic_incident[4].text
-        traffic_dic[index]['EndTimeUTC'] = traffic_incident[5].text
-        traffic_dic[index]['IncidentType'] = traffic_incident[6].text
-        traffic_dic[index]['IncidentSeverity'] = traffic_incident[7].text
-        traffic_dic[index]['RoadClosed'] = traffic_incident[9].text
-        traffic_dic[index]['Description'] = traffic_incident[10].text
-        traffic_dic[index]['StopPointLatitude'] = traffic_incident[11][0].text
-        traffic_dic[index]['StopPointLongitude'] = traffic_incident[11][1].text
-        index = index + 1
+        traffic_dic = {}
+        traffic_dic['StartPointLatitude'] = traffic_incident[0][0].text
+        traffic_dic['StartPointLongitude'] = traffic_incident[0][1].text
+        traffic_dic['LastModifiedUTC'] = traffic_incident[3].text
+        traffic_dic['StartTimeUTC'] = traffic_incident[4].text
+        traffic_dic['EndTimeUTC'] = traffic_incident[5].text
+        traffic_dic['IncidentType'] = traffic_incident[6].text
+        traffic_dic['IncidentSeverity'] = traffic_incident[7].text
+        traffic_dic['RoadClosed'] = traffic_incident[9].text
+        traffic_dic['Description'] = traffic_incident[10].text
+        traffic_dic['StopPointLatitude'] = traffic_incident[11][0].text
+        traffic_dic['StopPointLongitude'] = traffic_incident[11][1].text
+        traffic_incidents.append(traffic_dic)
 
-    return dumps(traffic_dic)
+    return dumps(traffic_incidents)
