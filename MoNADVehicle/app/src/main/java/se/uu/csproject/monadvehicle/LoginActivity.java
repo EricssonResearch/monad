@@ -13,7 +13,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
+
 import org.mapsforge.map.android.graphics.AndroidGraphicFactory;
+
+import se.uu.csproject.monadvehicle.googlecloudmessaging.RegistrationIntentService;
 
 public class LoginActivity extends AppCompatActivity implements AsyncLoginInteraction, AsyncGetNextTripInteraction,
         AsyncGetTrajectoryInteraction {
@@ -23,6 +28,10 @@ public class LoginActivity extends AppCompatActivity implements AsyncLoginIntera
     private Button loginButton;
     //ToggleButton emergencyButton;
 
+
+    //Google Cloud Services
+    private static final String TAG = "MainActivity";
+    private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,6 +43,12 @@ public class LoginActivity extends AppCompatActivity implements AsyncLoginIntera
         busNumberField = (EditText) findViewById(R.id.busNumberField);
         loginButton = (Button) findViewById(R.id.loginButton);
         //emergencyButton = (ToggleButton) findViewById(R.id.emergencyButton);
+
+        if (checkPlayServices()) {
+            Intent intent = new Intent(this,RegistrationIntentService.class);
+            startService(intent);
+        }
+
 
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -136,4 +151,22 @@ public class LoginActivity extends AppCompatActivity implements AsyncLoginIntera
         }
 
     }
+
+    private boolean checkPlayServices() {
+        GoogleApiAvailability apiAvailability = GoogleApiAvailability.getInstance();
+        int resultCode = apiAvailability.isGooglePlayServicesAvailable(this);
+        if (resultCode != ConnectionResult.SUCCESS) {
+            if (apiAvailability.isUserResolvableError(resultCode)) {
+                apiAvailability.getErrorDialog(this, resultCode, PLAY_SERVICES_RESOLUTION_REQUEST)
+                        .show();
+            } else {
+                Log.i(TAG, "This device is not supported.");
+                finish();
+            }
+            return false;
+        }
+        return true;
+    }
+
 }
+

@@ -87,11 +87,6 @@ public class MainActivity extends MenuedActivity implements AsyncResponse, Async
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getBaseContext());
         recyclerView.setLayoutManager(linearLayoutManager);
 
-        /* GetBusStops */
-        if (Storage.isEmptyBusStops() && !getIntent().getBooleanExtra("FINISH", false)) {
-            getBusStops();
-        }
-
         String[] addresses = getAddressesFromFileAsset();
         if (addresses != null){
             ArrayAdapter<String> adapterString =
@@ -237,14 +232,19 @@ public class MainActivity extends MenuedActivity implements AsyncResponse, Async
             Storage.clearAll();
             startActivity(new Intent(MainActivity.this, LoginActivity.class));
             finish();
-        }
+        } else {
+            /* GetBusStops */
+            if (Storage.isEmptyBusStops() ) {
+                getBusStops();
+            }
 
-        /* GetRecommendations */
-        if (!Storage.isEmptyRecommendations()) {
-            displayRecommendations();
-        }
-        else {
-            getRecommendations();
+            /* GetRecommendations */
+            if (!Storage.isEmptyRecommendations()) {
+                displayRecommendations();
+            }
+            else {
+                getRecommendations();
+            }
         }
     }
 
