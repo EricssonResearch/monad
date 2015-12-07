@@ -31,20 +31,11 @@ TT_ROUTE = 0
 TT_TIME_DIFFERENCE = 1
 TT_DEPARTURE_TIME = 2
 TT_ARRIVAL_TIME = 3
-# possibleRoutes
+# partialRoutes
 PR_ROUTE = 0
 PR_START = 1
 PR_END   = 2
 PR_LINE  = 3
-# doubleRoute
-DR_ROUTE1 = 0
-DR_START1 = 1
-DR_END1   = 2
-DR_LINE1  = 3
-DR_ROUTE2 = 4
-DR_START2 = 5
-DR_END2   = 6
-DR_LINE2  = 7
 # position
 POS_LATITUDE  = 0
 POS_LONGITUDE = 1
@@ -69,16 +60,12 @@ class TravelPlanner:
         self.busStop = self.db.BusStop
 
         self.fittingRoutes = []
-        self.startingWaypoint = []
-        self.endingWaypoint = []
         self.doubleRoutes = []
+        self.tripleRoutes = []
         self.possibleRoutes = []
         self.tripTuples = []
         self.lineTuples = []
         self.lineSchedules = []
-
-        self.bestSecondTrip = None
-        self.bestFirstTrip = None
 
         self.debug = debug
 
@@ -86,16 +73,13 @@ class TravelPlanner:
             self.lineSchedules.append(None)
 
 
-    def _isDoubleRoute(self, trip):
-        if (isinstance(trip, tuple)):
-            return True
-        else:
-            return False
+################### Finding fitting Routes ######################
 
     def _searchOtherRoutes(self, busLine, busStopID):
         cursor = self.route.find({"$and": [
                 {"trajectory.busStop": busStopID}, 
                 {"trajectory.busStop": self.endBusStop},
+                {"date": self.searchDay},
                 {"line": {"$ne": busLine}},
                 {"trajectory.busStop": {"$nin": [self.startBusStop]}}]})
         if (cursor is None):
@@ -105,7 +89,7 @@ class TravelPlanner:
         for route in cursor:
             fits = False
             if ((route["line"] == (busLine - 100)) or (route["line"] == (busLine + 100))):
-                continue 
+                continue
             for i in range(len(route["trajectory"])):
                 if (route["trajectory"][i]["busStop"] == busStopID):
                     fits = True
@@ -116,45 +100,93 @@ class TravelPlanner:
                     break
         return possibilities
 
+    def _searchIntermediate(self, busLine, busStopID):
+        middleLines = self.route.find({"$and": [
+                {"trajectory.busStop": busStopID},
+                {"date": self.searchDay},
+                {"line": {"$ne": busLine}},
+                {"trajectory.busStop": {"$nin": [self.startBusStop]}}]})
+        if (middleLines is None):
+            return []
+        possible = []
+        startNumber = 0
+        for route in middleLines:
+            fits = False
+            if ((route["line"] == (busLine - 100)) or (route["line"] == (busLine + 100))):
+                continue
+            for i in range(len(route["trajectory"])):
+                if (fits):
+                    third = self._searchOtherRoutes(route["line"], 
+                            route["trajectory"][i]["busStop"])
+                    if (third == []):
+                        continue
+                    for last in third:
+                        middle = (route, startNumber, i, route["line"])
+                        possible.append([middle, last])
+                elif (route["trajectory"][i]["busStop"] == busStopID):
+                    fits = True
+                    startNumber = i
+        return possible
+
     def _searchTriple(self):
-        pass
+        firstLines = self.route.find({"trajectory.busStop": self.startBusStop,
+                "date": self.searchDay})
+        for firstLine in firstLines:
+            maybe = False
+            startNumber = 0
+            for i in range(len(firstLine["trajectory"])):
+                if (firstLine["trajectory"][i]["busStop"] == self.startBusStop):
+                    maybe = True
+                    startNumber = i
+                elif (maybe):
+                    options = self._searchIntermediate(firstLine["line"],
+                            firstLine["trajectory"][i]["busStop"])
+                    if (options == []):
+                        continue
+                    for entry in options:
+                        temp = [(firstLine, startNumber, i, firstLine["line"])]
+                        temp.extend(entry)
+                        self.tripleRoutes.append(temp)
 
     def _findFittingRoutes(self):
         request = self.travelRequest.find_one({"_id": self.requestID})
         self.startBusStop = request["startBusStop"]
         self.endBusStop   = request["endBusStop"]
-        self.userID = request["userID"]
-        self.requestTime = request["requestTime"]
+        self.userID       = request["userID"]
+        self.requestTime  = request["requestTime"]
 
         if (request["endTime"] == "null"):
             self.startTime = request["startTime"]
             self.endTime   = 0
             self.timeMode  = Mode.startTime
-            self.searchDay = request["startTime"].replace(hour = 0, minute = 0)
+            self.searchDay = request["startTime"].replace(hour = 0, minute = 0, second = 0)
         elif (request["startTime"] == "null"):
             self.startTime = 0
             self.endTime   = request["endTime"]
             self.timeMode  = Mode.arrivalTime
-            self.searchDay = request["endTime"].replace(hour = 0, minute = 0)
+            self.searchDay = request["endTime"].replace(hour = 0, minute = 0, second = 0)
         else:
             return
 
         cursor = self.route.find({"trajectory.busStop": self.startBusStop,
-                "trajectory.busStop": self.endBusStop})
+                "trajectory.busStop": self.endBusStop, "date": self.searchDay})
         for route in cursor:
             fits = False
+            startNumber = 0
             for i in range(len(route["trajectory"])):
                 if (route["trajectory"][i]["busStop"] == self.startBusStop):
-                    self.startingWaypoint.append(i)
-                    self.fittingRoutes.append(route)
+                    startNumber = i
                     fits = True
                 elif (route["trajectory"][i]["busStop"] == self.endBusStop):
                     if (fits):
-                        self.endingWaypoint.append(i)
+                        self.fittingRoutes.append([(route, startNumber, i, route["line"])])
                     break
 
-        self.startLines = self.route.find({"trajectory.busStop": self.startBusStop})
-        for startLine in self.startLines:
+        startLines = self.route.find({"$and": [
+                {"trajectory.busStop": self.startBusStop},
+                {"date": self.searchDay},
+                {"trajectory.busStop": {"$nin": [self.endBusStop]}}]})
+        for startLine in startLines:
             maybe = False
             startNumber = 0
             for i in range(len(startLine["trajectory"])):
@@ -163,17 +195,20 @@ class TravelPlanner:
                     startNumber = i
                 elif (startLine["trajectory"][i]["busStop"] == self.endBusStop):
                     break
-                elif (maybe): 
+                elif (maybe):
                     self.possibleRoutes = self._searchOtherRoutes(startLine["line"], 
                             startLine["trajectory"][i]["busStop"])
                     if (self.possibleRoutes == []):
                         continue
                     for entry in self.possibleRoutes:
-                        self.doubleRoutes.append((startLine, startNumber, i, startLine["line"],
-                                entry[PR_ROUTE], entry[PR_START], entry[PR_END], entry[PR_LINE]))
+                        self.doubleRoutes.append([(startLine, startNumber, i, startLine["line"]),
+                                (entry[PR_ROUTE], entry[PR_START], entry[PR_END], entry[PR_LINE])])
 
         if ((self.fittingRoutes == []) and (self.doubleRoutes == [])):
             self._searchTriple()
+
+
+################### Evaluate found Routes ######################
 
     def _isBetterTrip(self, i):
         if (self.timeMode == Mode.startTime):
@@ -224,8 +259,6 @@ class TravelPlanner:
 
     def _insertTrip(self, trip):
         if (self.timeMode == Mode.startTime):
-            if (self._isDoubleRoute(trip)):
-                self.arrTime = self.bestArrivalTime
             self.timeToArrival = self.arrTime - self.startTime
             if (self.tripTuples == []):
                 self.tripTuples.append((trip, self.timeToArrival, self.dptTime, self.arrTime))
@@ -233,8 +266,6 @@ class TravelPlanner:
             self._rankTrip(trip)
 
         elif (self.timeMode == Mode.arrivalTime):
-            if (self._isDoubleRoute(trip)):
-                self.dptTime = self.bestDepartureTime
             self.diffToArrTime = self.endTime - self.arrTime
             if (self.tripTuples == []):
                 self.tripTuples.append((trip, self.diffToArrTime, self.dptTime, self.arrTime))
@@ -244,31 +275,38 @@ class TravelPlanner:
     def _getBusTrips(self, line):
         if (self.lineSchedules[line] == None):
             ttColl = self.timeTable.find_one({"line": line, "date": self.searchDay})
-            trips = list(self.busTrip.find({"_id": {"$in": ttColl["timetable"]}}))
-            self.lineSchedules[line] = trips
+            if (ttColl == None):
+                trips = []
+            else:
+                trips = list(self.busTrip.find({"_id": {"$in": ttColl["timetable"]}}))
+                self.lineSchedules[line] = trips
         else:
             trips = self.lineSchedules[line]
         return trips
 
-    def _findSecondTrip(self, route, startTrip):
-        trips = self._getBusTrips(route[DR_LINE2])
-        self.bestArrivalTime = datetime.datetime.max
+    def _findNextTrip(self, route, part, arrSwitch):
+        trips = self._getBusTrips(route[part][PR_LINE])
+        bestArrivalTime = datetime.datetime.max
+        bestNextTrip    = None
         for trip in trips:
-            self.dptSwitch = trip["trajectory"][route[DR_START2]]["time"]
-            self.arrTime   = trip["trajectory"][route[DR_END2]]["time"]
-            if ((self.arrSwitch < self.dptSwitch) and (self.arrTime < self.bestArrivalTime)):
-                self.bestSecondTrip = trip
-                self.bestArrivalTime = self.arrTime
+            dptSwitch = trip["trajectory"][route[part][PR_START]]["time"]
+            arrTime   = trip["trajectory"][route[part][PR_END]]["time"]
+            if ((arrSwitch < dptSwitch) and (arrTime < bestArrivalTime)):
+                bestNextTrip = trip
+                bestArrivalTime = arrTime
+        return (bestNextTrip, bestArrivalTime)
 
-    def _findFirstTrip(self, route, trip):
-        trips = self._getBusTrips(route[DR_LINE1])
-        self.bestDepartureTime = datetime.datetime.min
+    def _findPreviousTrip(self, route, part, dptSwitch):
+        trips = self._getBusTrips(route[part][PR_LINE])
+        bestDepartureTime = datetime.datetime.min
+        bestPreviousTrip  = None
         for trip in trips:
-            self.dptTime   = trip["trajectory"][route[DR_START1]]["time"]
-            self.arrSwitch = trip["trajectory"][route[DR_END1]]["time"]
-            if ((self.arrSwitch < self.dptSwitch) and (self.dptTime > self.bestDepartureTime)):
-                self.bestFirstTrip = trip
-                self.bestDepartureTime = self.dptTime
+            dptTime   = trip["trajectory"][route[part][PR_START]]["time"]
+            arrSwitch = trip["trajectory"][route[part][PR_END]]["time"]
+            if ((arrSwitch < dptSwitch) and (dptTime > bestDepartureTime)):
+                bestPreviousTrip = trip
+                bestDepartureTime = dptTime
+        return (bestPreviousTrip, bestDepartureTime)
 
     def _isFastRoute(self):
         if (len(self.tripTuples) > 0):
@@ -281,16 +319,16 @@ class TravelPlanner:
     def _findBestRoute(self):
         counter = 0
         for route in self.fittingRoutes:
-            trips = self._getBusTrips(route["line"])
+            trips = self._getBusTrips(route[0][PR_LINE])
             for trip in trips:
-                self.dptTime = trip["trajectory"][self.startingWaypoint[counter]]["time"]
-                self.arrTime = trip["trajectory"][self.endingWaypoint[counter]]["time"]
+                self.dptTime = trip["trajectory"][route[0][PR_START]]["time"]
+                self.arrTime = trip["trajectory"][route[0][PR_END]]["time"]
                 if (self.timeMode == Mode.startTime):
                     if (self.dptTime > self.startTime):
-                        self._insertTrip(trip)
+                        self._insertTrip((route, [trip]))
                 elif (self.timeMode == Mode.arrivalTime):
                     if (self.arrTime < self.endTime):
-                        self._insertTrip(trip)
+                        self._insertTrip((route, [trip]))
 
             counter = counter + 1
 
@@ -298,31 +336,59 @@ class TravelPlanner:
             return
 
         for route in self.doubleRoutes:
-            if ((route[DR_LINE1], route[DR_LINE2]) in self.lineTuples):
+            (start, end) = route
+            if ((start[PR_LINE], end[PR_LINE]) in self.lineTuples):
                 continue
             else:
-                self.lineTuples.append((route[DR_LINE1], route[DR_LINE2]))
-            if (self.debug):
-                print "Line 1: " + str(route[DR_LINE1]) + " - Line 2: " + str(route[DR_LINE2])
+                self.lineTuples.append((start[PR_LINE], end[PR_LINE]))
 
             if (self.timeMode == Mode.startTime):
-                trips = self._getBusTrips(route[DR_LINE1])
+                trips = self._getBusTrips(route[0][PR_LINE])
                 for trip in trips:
-                    self.dptTime   = trip["trajectory"][route[DR_START1]]["time"]
-                    self.arrSwitch = trip["trajectory"][route[DR_END1]]["time"]
+                    self.dptTime = trip["trajectory"][start[PR_START]]["time"]
+                    arrSwitch    = trip["trajectory"][start[PR_END]]["time"]
                     if (self.dptTime > self.startTime):
-                        self._findSecondTrip(route, trip)
-                        self._insertTrip((route, trip, self.bestSecondTrip))
+                        (secondTrip, self.arrTime) = self._findNextTrip(route, 1, arrSwitch)
+                        self._insertTrip((route, [trip, secondTrip]))
 
             elif (self.timeMode == Mode.arrivalTime):
-                trips = self._getBusTrips(route[DR_LINE2])
+                trips = self._getBusTrips(route[1][PR_LINE])
                 for trip in trips:
-                    self.dptSwitch = trip["trajectory"][route[DR_START2]]["time"]
-                    self.arrTime   = trip["trajectory"][route[DR_END2]]["time"]
+                    dptSwitch    = trip["trajectory"][end[PR_START]]["time"]
+                    self.arrTime = trip["trajectory"][end[PR_END]]["time"]
                     if (self.arrTime < self.endTime):
-                        self._findFirstTrip(route, trip)
-                        self._insertTrip((route, self.bestFirstTrip, trip))
+                        (firstTrip, self.dptTime) = self._findPreviousTrip(route, 0, dptSwitch)
+                        self._insertTrip((route, [firstTrip, trip]))
 
+        for route in self.tripleRoutes:
+            (start, middle, end) = route
+            if ((start[PR_LINE], middle[PR_LINE], end[PR_LINE]) in self.lineTuples):
+                continue
+            else:
+                self.lineTuples.append((start[PR_LINE], middle[PR_LINE], end[PR_LINE]))
+
+            if (self.timeMode == Mode.startTime):
+                trips = self._getBusTrips(start[PR_LINE])
+                for trip in trips:
+                    self.dptTime = trip["trajectory"][start[PR_START]]["time"]
+                    arrSwitch    = trip["trajectory"][start[PR_END]]["time"]
+                    if (self.dptTime > self.startTime):
+                        (middleTrip, arrSwitch2) = self._findNextTrip(route, 1, arrSwitch)
+                        (lastTrip, self.arrTime) = self._findNextTrip(route, 2, arrSwitch2)
+                        self._insertTrip((route, [trip, middleTrip, lastTrip]))
+
+            elif (self.timeMode == Mode.arrivalTime):
+                trips = self._getBusTrips(end[PR_LINE])
+                for trip in trips:
+                    dptSwitch2   = trip["trajectory"][end[PR_START]]["time"]
+                    self.arrTime = trip["trajectory"][end[PR_END]]["time"]
+                    if (self.arrTime < self.endTime):
+                        (middleTrip, dptSwitch1) = self._findPreviousTrip(route, 1, dptSwitch2)
+                        (firstTrip, self.dptTime) = self._findPreviousTrip(route, 0, dptSwitch1)
+                        self._insertTrip((route, [firstTrip, middleTrip, trip]))
+
+
+################### Process Results ######################
 
     def _getBusStops(self):
         busStopDict = {}
@@ -335,105 +401,50 @@ class TravelPlanner:
         entryList = []
         self.userTripDict = {}
         busStops = self._getBusStops()
-        i = 0
-        for (trip, timeDiff, departureTime, arrivalTime) in self.tripTuples:
-            if (self._isDoubleRoute(trip)):
-                (route, startTrip, endTrip) = trip
-                startID = ObjectId()
-                endID = ObjectId()
-                switchBusStopID = startTrip["trajectory"][route[DR_END1]]["busStop"]
-                switchBusStop = busStops[switchBusStopID]
-                entryStart = {
-                        "_id": startID,
-                        "userID" : self.userID,
-                        "line": route[DR_LINE1],
-                        "busID": startTrip["busID"],
-                        "startBusStop": busStops[self.startBusStop],
-                        "endBusStop": switchBusStop,
-                        "startTime": departureTime,
-                        "endTime": startTrip["trajectory"][route[DR_END1]]["time"],
-                        "requestTime": self.requestTime,
-                        "feedback": -1,
-                        "requestID": self.requestID,
-                        "next": endID,
-                        "busTripID": startTrip["_id"],
-                        "booked": False
-                }
-                started = False
-                trajectory = []
-                for stop in startTrip["trajectory"]:
-                    if (stop["busStop"] == self.startBusStop):
-                        started = True
-                    if (not started):
-                        continue
-                    started = True
-                    trajectory.append(busStops[stop["busStop"]])
-                    if (stop["busStop"] == switchBusStopID):
-                        break
-                entryStart["trajectory"] = trajectory
-
-                entryEnd = {
-                        "_id": endID,
-                        "userID" : self.userID,
-                        "line": route[DR_LINE2],
-                        "busID": endTrip["busID"],
-                        "startBusStop": switchBusStop,
-                        "endBusStop": busStops[self.endBusStop],
-                        "startTime": endTrip["trajectory"][route[DR_START2]]["time"],
-                        "endTime": arrivalTime,
-                        "requestTime": self.requestTime,
-                        "feedback": -1,
-                        "requestID": self.requestID,
-                        "busTripID": endTrip["_id"],
-                        "booked": False
-                }
-                started = False
-                trajectory = []
-                for stop in endTrip["trajectory"]:
-                    if (stop["busStop"] == switchBusStopID):
-                        started = True
-                    if (not started):
-                        continue
-                    started = True
-                    trajectory.append(busStops[stop["busStop"]])
-                    if (stop["busStop"] == self.endBusStop):
-                        break
-                entryEnd["trajectory"] = trajectory
-                newEntry = [entryStart, entryEnd]
-
-            else:
-                userTripID = ObjectId()
+        rank = 0
+        for ((route, trips), timeDiff, departureTime, arrivalTime) in self.tripTuples:
+            newEntry = []
+            IDList = []
+            for i in range(len(trips)):
+                IDList.append(ObjectId())
+            ctr = 0
+            for trip in trips:
+                startStopID = trip["trajectory"][route[ctr][PR_START]]["busStop"]
+                endStopID   = trip["trajectory"][route[ctr][PR_END]]["busStop"]
                 entry = {
-                        "_id": userTripID,
-                        "userID": self.userID,
-                        "line": trip["line"],
+                        "_id": IDList[ctr],
+                        "userID" : self.userID,
+                        "line": route[ctr][PR_LINE],
                         "busID": trip["busID"],
-                        "startBusStop": busStops[self.startBusStop],
-                        "endBusStop": busStops[self.endBusStop],
-                        "startTime": departureTime,
-                        "endTime": arrivalTime,
+                        "startBusStop": busStops[startStopID],
+                        "endBusStop": busStops[endStopID],
+                        "startTime": trip["trajectory"][route[ctr][PR_START]]["time"],
+                        "endTime": trip["trajectory"][route[ctr][PR_END]]["time"],
                         "requestTime": self.requestTime,
                         "feedback": -1,
                         "requestID": self.requestID,
                         "busTripID": trip["_id"],
                         "booked": False
                 }
+                if (len(trips) > (ctr + 1)):
+                    entry["next"] = IDList[ctr + 1]
                 started = False
                 trajectory = []
-                for stop in trip["trajectory"]: 
+                for stop in trip["trajectory"]:
                     if (stop["busStop"] == self.startBusStop):
                         started = True
                     if (not started):
                         continue
                     trajectory.append(busStops[stop["busStop"]])
-                    if (stop["busStop"] == self.endBusStop):
-                        started = False
+                    if (stop["busStop"] == endStopID):
                         break
                 entry["trajectory"] = trajectory
-                newEntry = [entry]
-            i += 1
+                newEntry.append(entry)
+                ctr += 1
+            
+            rank += 1
             entryList.extend(newEntry)
-            self.userTripDict[i] = newEntry
+            self.userTripDict[rank] = newEntry
         if (entryList != []):
             self.userTrip.insert_many(entryList)
 
@@ -464,22 +475,25 @@ class TravelPlanner:
             self.jsonObject[ut] = entries
 
 
+################### Public interface ######################
+
     def getBestRoutes(self, requestID, mode = Mode.tripTime):
         self.requestID = requestID
         self.routeMode = mode
         self._findFittingRoutes()
         
-        if ((self.fittingRoutes == []) and (self.doubleRoutes == [])):
+        if ((self.fittingRoutes == []) and (self.doubleRoutes == []) and 
+                (self.tripleRoutes == [])):
             if (self.debug):
                 print "No fitting routes found"
             return None
         if (self.debug):
-            print "Found " + str(len(self.fittingRoutes)) + "/" + str(len(self.doubleRoutes)) + \
-                    " fitting/double Routes"
+            print "Found", str(len(self.fittingRoutes)), "/", str(len(self.doubleRoutes)), \
+                    "fitting/double Routes"
 
         self._findBestRoute()
         if (self.debug):
-            print "Found " + str(len(self.tripTuples)) + " tripTuples"
+            print "Found", str(len(self.tripTuples)), " tripTuples"
 
         if (self.tripTuples == []):
             if (self.debug):

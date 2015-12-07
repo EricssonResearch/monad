@@ -24,6 +24,7 @@ import org.json.JSONObject;
 
 import java.util.Map;
 import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
 
 import se.uu.csproject.monadclient.ClientAuthentication;
 import se.uu.csproject.monadclient.serverinteractions.SendStoreGeofenceInfoRequest;
@@ -52,7 +53,7 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
     @Override
     public int onStartCommand(Intent intent, int flags, int startId){
         super.onStartCommand(intent, flags, startId);
-        return START_NOT_STICKY;
+        return START_STICKY;
     }
 
     @Override
@@ -104,6 +105,16 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
     @Override
     public void onTaskRemoved(Intent rootIntent){
         super.onTaskRemoved(rootIntent);
+        sendGeofenceInfo();
+        Storage.clearLocations();
+        /* Wait for a second after sending the data because swiping the app off the recent app list
+         kills any background processes immediately and the data doesn't have time to get stored in
+         the database otherwise.*/
+        try{
+            TimeUnit.SECONDS.sleep(1);
+        } catch (java.lang.InterruptedException e){
+            Log.d(TAG, e.toString());
+        }
         stopSelf();
     }
 
@@ -177,7 +188,7 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
         }
     }
 
-    private void sendGeofenceInfo(){
+    public void sendGeofenceInfo(){
         if (!Storage.isEmptyLocations()){
             Storage.turnLocationsToJson();
             JSONObject geofenceInfo = Storage.getGeofenceInfo();
