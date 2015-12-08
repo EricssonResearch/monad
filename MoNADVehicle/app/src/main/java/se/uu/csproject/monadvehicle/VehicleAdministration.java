@@ -1,5 +1,7 @@
 package se.uu.csproject.monadvehicle;
 
+import android.util.Log;
+
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -181,13 +183,18 @@ public class VehicleAdministration extends Administration {
                 JSONObject arrivalTimeObject = (JSONObject) trajectoryPoint.get("time");
                 Date busStopArrivalTime = new Date((long) arrivalTimeObject.get("$date"));
 
+                /*TODO: Use these logs to check if the time is still one hour in advance
+                Log.w("VEHICLE ADMIN", "reading dates JSON: " + (long) arrivalTimeObject.get("$date"));
+                Log.w("VEHICLE ADMIN", "reading dates DATE: " + busStopArrivalTime);
+                */
+
                 BusStop busStop = new BusStop(busStopID, busStopName, busStopLatitude, busStopLongitude, busStopArrivalTime);
                 trajectory.add(busStop);
             }
 
             BusTrip busTrip = new BusTrip(busTripID, capacity, trajectory);
             Storage.setBusTrip(busTrip);
-            busTrip.printBusStops();
+            //busTrip.printBusStops();
 //            postGetTrajectoryRequest();
         }
         catch (Exception e) {

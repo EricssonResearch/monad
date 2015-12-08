@@ -3,6 +3,7 @@ package se.uu.csproject.monadvehicle;
 import android.location.Location;
 import android.util.Log;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 public class Storage {
     private static BusTrip busTrip;
@@ -40,6 +41,17 @@ public class Storage {
         nextBusStopIndex++;
         if(nextBusStopIndex < busTrip.getBusStops().size()) {
             nextBusStop = busTrip.getBusStops().get(nextBusStopIndex);
+        }
+    }
+
+    public static long getDurationToNextBusStop(){
+        if(nextBusStopIndex > 0){
+            return nextBusStop.getArrivalTime().getTime()
+                    - busTrip.getBusStops().get(nextBusStopIndex-1).getArrivalTime().getTime();
+        }
+        else{
+            return nextBusStop.getArrivalTime().getTime()
+                    - Calendar.getInstance().getTimeInMillis();
         }
     }
 

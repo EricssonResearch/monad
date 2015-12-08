@@ -56,6 +56,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
 
 
@@ -121,13 +122,17 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
         emergencyDescription = (EditText) findViewById(R.id.text_description);
 
         // Display the information about the next bus stop
-        Storage.getNextBusStop().printValues();
         nextStopName.setText(Storage.getNextBusStop().getName());
         nextStopBoarding.setText(Integer.toString(Storage.getNextBusStop().getBoardingPassengers()));
         nextStopLeaving.setText(Integer.toString(Storage.getNextBusStop().getLeavingPassengers()));
         nextStopDistance.setText("unknown");
-        nextStopRemainingTime.setText(calculateTimeDifference());
+        nextStopRemainingTime.setText( formatTime(new Date (Storage.getDurationToNextBusStop())));
         nextStopArrivalTime.setText( formatTime(Storage.getNextBusStop().getArrivalTime()) );
+
+        /*TODO: Use these logs to check if the time is still one hour in advance
+        Log.w("MAIN ACTIVITY", "Original date value is: " + Storage.getNextBusStop().getArrivalTime().getTime());
+        Log.w("MAIN ACTIVITY", "Original date value is: " + Storage.getNextBusStop().getArrivalTime().toString());
+        */
 
         //Fill the notifications list
         LayoutInflater inflater = (LayoutInflater) getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -500,7 +505,7 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
 
     public void onLocationChange(Location location){
         nextStopDistance.setText(Integer.toString(calculateDistance()));
-        nextStopRemainingTime.setText(calculateTimeDifference());
+        nextStopRemainingTime.setText( formatTime(new Date (Storage.getDurationToNextBusStop())));
         //TODO: determine the ideal distance to display next stop info
         if(calculateDistance() < 30){
             //takes to the next bus stop entry
@@ -514,7 +519,7 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
         nextStopBoarding.setText(Integer.toString(Storage.getNextBusStop().getBoardingPassengers()));
         nextStopLeaving.setText(Integer.toString(Storage.getNextBusStop().getLeavingPassengers()));
         nextStopDistance.setText(Double.toString(calculateDistance()));
-        nextStopRemainingTime.setText(calculateTimeDifference());
+        nextStopRemainingTime.setText( formatTime(new Date (Storage.getDurationToNextBusStop())));
         nextStopArrivalTime.setText(formatTime(Storage.getNextBusStop().getArrivalTime()));
     }
 
@@ -530,12 +535,14 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
     //gets the current time of the bus and the next bus stop
     //arrival time and calculates the remaining time between
     //current location time and next bus stop and sets it to the text box.
-    //TODO: fix the function
-    public String calculateTimeDifference() {
-        Calendar cal = Calendar.getInstance();
-        long currentTime = cal.get(Calendar.MILLISECOND);
-        return Long.toString(TimeUnit.MILLISECONDS.toMinutes(Storage.getNextBusStop().getArrivalTime().getTime() - currentTime));
-    }
+    /*TODO: fix the function
+    * compare this arrival time with prvious stop arrival time
+    * then use the duration with the current time to determine lateness*/
+//    public String calculateTimeDifference() {
+//        Calendar cal = Calendar.getInstance();
+//        long currentTime = cal.get(Calendar.MILLISECOND);
+//        return Long.toString(TimeUnit.MILLISECONDS.toMinutes(Storage.getDurationToNextBusStop() - currentTime));
+//    }
 
     public void getTrafficInformation() {
 

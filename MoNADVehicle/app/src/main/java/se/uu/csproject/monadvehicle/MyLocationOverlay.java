@@ -169,7 +169,7 @@ public class MyLocationOverlay extends Layer implements LocationListener {
                 currPos.setLongitude(tmp.longitude);
             //end of removal task
 
-            //TODO: Replace "currPos" occurrences with "location"
+            //TODO: Replace "currPos" occurrences with "location" when deploying the app
                 Storage.setCurrentLocation(currPos);
                 if (mListener != null) {
                     mListener.onLocationChange(currPos);
