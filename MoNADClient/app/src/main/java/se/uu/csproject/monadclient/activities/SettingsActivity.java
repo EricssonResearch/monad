@@ -282,7 +282,7 @@ public class SettingsActivity extends MenuedActivity {
             languages.add(new Language("English", "en", R.drawable.lang_en));
             languages.add(new Language("Svenska", "sv", R.drawable.lang_sv));
             languages.add(new Language("Français", "fr", R.drawable.lang_fr));
-            languages.add(new Language("Ελληνικά", "gr", R.drawable.lang_gr));
+            languages.add(new Language("Ελληνικά", "el", R.drawable.lang_el));
             languages.add(new Language("Norsk", "no", R.drawable.lang_no));
             languages.add(new Language("中文", "zh", R.drawable.lang_zh));
 //            languages.add(new Language("Dansk", "dk", R.drawable.lang_dk));
