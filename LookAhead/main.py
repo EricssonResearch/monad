@@ -25,11 +25,13 @@ from dbConnection import DB
 from fitness import Fitness
 from operator import itemgetter
 
+import evaluate_timetable
+
 # Variables
-MUTATION_PROB = 0.0
+MUTATION_PROB = 0.5
 CROSS_OVER_PROB = 0.5
-NO_OF_GENERATION = 1
-POPULATION_SIZE = 5
+NO_OF_GENERATION = 0
+POPULATION_SIZE = 1
 
 def main():
     # Generate the population
@@ -80,7 +82,7 @@ def main():
     timetable = fitnessClass.genTimetable(best_ind)
     databaseClass = DB()
     #databaseClass.insertBusTrip(timetable)
-
+    evaluate_timetable.eval(best_ind)
 
 # def crossover(offspring):
 #    # Apply Crossover

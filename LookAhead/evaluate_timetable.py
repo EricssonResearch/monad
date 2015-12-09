@@ -1,9 +1,24 @@
+import csv
 import PyPDF2
 import re
 import datetime
+from datetime import date, timedelta
 
 from fitness import Fitness
+from dbConnection import DB
 import toolBox
+
+def eval(individual):
+    ''' Evaluates best ind timetable'''
+
+    with open('timetable.csv', 'w') as csvfile1:
+        writer = csv.writer(csvfile1)
+        writer.writerow(['Line', 'Capacity', 'Headway', 'Departure time'])
+        for trip, item in enumerate(individual):
+            if trip % 7 == 0:
+                [writer.writerow(individual[trip+i]) for i in range(7)]
+                writer.writerow([])
+
 
 def evaluateTimetable():
     ''' Evaluates how well a current static timetable does in terms of waiting time. The purpose is to give some kind of
@@ -29,27 +44,37 @@ def evaluateTimetable():
             for i in range(4):
                 departures.append(pagesText[index+i])
 
-    departures[:] = sorted(['2015 12 07 ' + x for x in departures])
+    departures[:] = ['2015 12 09 ' + x for x in departures]
+    length = len(departures)
+    items = []
+    for i in range(8):
+        item = departures.pop()
+        items.append(item) 
+    items.reverse()
+    #departures[:] = items + departures
+
     individual = list()
     for t in departures:
         individual.append([1, 120, 1, datetime.datetime.strptime(t, '%Y %m %d %H.%M')]) 
 
+    phenotype = []
     ind = []
     for q in range(len(individual)):
         try:
             if q % 4 == 0:
+                ind.append(individual[q])
                 t = []
                 for x in range(4):
-                    t += individual[q+x]
-                ind.append(t)
+                    t.append(individual[q+x])
+                #phenotype.append(t)
         except IndexError, e:
-            t = []
+            t[:] = []
             for x in range(4):
-                t += individual[x+0]
-            ind.append(t)
+                t.append(individual[x+0])
+            #phenotype.append(t)
 
     print ind
-    #return toolBox.evaluateNewIndividualFormat(individual)
+
 
 if __name__ == "__main__":
     evaluateTimetable()

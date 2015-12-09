@@ -72,6 +72,7 @@ def evaluateNewIndividualFormat(individual):
     firstSliceHr = datetime.datetime.combine(Fitness.yesterday, datetime.time(db.timeSliceArray[0][0], 0, 0))
     # Initialize initial trip time
     initialTripTime = firstSliceHr
+    print individual
     for i in range(len(individual)):
         # phenotype = db.generatePhenotype(individual[i][0], individual[i][3])
         phenotype = db.generatePhenotype2(individual[i])

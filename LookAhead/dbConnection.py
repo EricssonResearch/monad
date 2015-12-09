@@ -388,7 +388,7 @@ class DB():
         @param: start - Initial datetime for the query
         @param: end - Final datetime for the query
         '''
-        pipeline = [{"$match": {"requestTime": {"$gte": start, "$lt": end}}},
+        pipeline = [{"$match": {"$and": [{"startTime": {"$gte": start, "$lt": end}}]}},
                    {"$group": {"_id": {"endTime": "$endTime", "busStop": "$endBusStop", "line": "$line"}, "total": {"$sum": 1}}},
                    {"$sort": {"_id.endTime": 1}}]
         return list(req for req in self.db.UserTrip.aggregate(pipeline))
@@ -656,7 +656,7 @@ class DB():
             tripObjectList.append(objID)
             capacity = individual[i][1]
             #startTime = individual[i][3] + timedelta(1)
-            startTime = individual[i][2] + timedelta(timeFrame)   # TODO seek better solution
+            startTime = individual[i][2] + timedelta(DB.timeFrame)   # TODO seek better solution
             busID = BUSID  # Need to assign busID for every Trip
             trajectory = self.getRoute(line, "trajectory")
             '''
