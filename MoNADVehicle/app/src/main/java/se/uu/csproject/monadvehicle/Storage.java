@@ -1,14 +1,15 @@
 package se.uu.csproject.monadvehicle;
 
+import android.location.Location;
 import android.util.Log;
-
 import java.util.ArrayList;
+import java.util.Calendar;
 
-/**
- *
- */
 public class Storage {
     private static BusTrip busTrip;
+    private static Location currentLocation;
+    private static BusStop nextBusStop;
+    private static int nextBusStopIndex = 0;
     private static ArrayList<TrafficInformation> trafficIncidents = new ArrayList<>();
 
     public static BusTrip getBusTrip() {
@@ -17,14 +18,40 @@ public class Storage {
 
     public static void setBusTrip(BusTrip busTrip) {
         Storage.busTrip = busTrip;
+        Storage.nextBusStop = busTrip.getBusStops().get(0);
     }
 
     public static boolean isEmptyBusTrip() {
-        if (busTrip == null) {
-            return true;
+        return busTrip == null;
+    }
+
+    public static Location getCurrentLocation(){
+        return currentLocation;
+    }
+
+    public static void setCurrentLocation(Location location){
+        currentLocation = location;
+    }
+
+    public static BusStop getNextBusStop(){
+        return nextBusStop;
+    }
+
+    public static void toNextBusStop(){
+        nextBusStopIndex++;
+        if(nextBusStopIndex < busTrip.getBusStops().size()) {
+            nextBusStop = busTrip.getBusStops().get(nextBusStopIndex);
         }
-        else {
-            return false;
+    }
+
+    public static long getDurationToNextBusStop(){
+        if(nextBusStopIndex > 0){
+            return nextBusStop.getArrivalTime().getTime()
+                    - busTrip.getBusStops().get(nextBusStopIndex-1).getArrivalTime().getTime();
+        }
+        else{
+            return nextBusStop.getArrivalTime().getTime()
+                    - Calendar.getInstance().getTimeInMillis();
         }
     }
 

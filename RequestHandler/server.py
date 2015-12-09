@@ -37,7 +37,7 @@ def escape(text):
 def send_email(from_addr, to_addr_list, subject, message): 
     """Send an email"""
     header  = "From: {0}\n".format(from_addr)
-    header += "To: %s\n" % ",".join(to_addr_list)    
+    header += "To: %s\n" % ",".join(to_addr_list)
     header += "Subject: {0}\n\n".format(subject)
     message = header + message
  
@@ -47,14 +47,6 @@ def send_email(from_addr, to_addr_list, subject, message):
     server.sendmail(from_addr, to_addr_list, message)
     server.quit()
     
-    
-def generate_notification(userID, bookedTripID):
-    """Send a notification to the notification server"""    
-    url = serverConfig.NOTIFICATIONS_SERVER
-    headers = {'Content-type': 'application/x-www-form-urlencoded'}
-    data = {"userID" : str(userID), "bookedTripID" : str(bookedTripID)} 
-    requests.post(url, data = data, headers = headers) 
-
 
 def get_search_results(database, priority, requestId):
     """Get the search results from the travel planner"""
@@ -69,10 +61,10 @@ def get_search_results(database, priority, requestId):
 
 def get_nearest_bus_stop_and_coordinates(address):
     """Get the nearest bus stop to the address and its coordinates"""
-    coordinates = string_to_coordinates(address)    
-    if (coordinates["latitude"] == None or coordinates["longitude"] == None):                                   
+    coordinates = string_to_coordinates(address)
+    if (coordinates["latitude"] == None or coordinates["longitude"] == None):
         raise ValueError("Could not find the coordinates for the address given.")
-    else:   
+    else:
         latitude = coordinates["latitude"]
         longitude = coordinates["longitude"]
         stop = coordinates_to_nearest_stop(longitude, latitude)
@@ -289,7 +281,8 @@ def application(env, start_response):
                 bookedTrips = collection.find({"userID": userId})
                 collection = database.UserTrip
                 
-                # Check if the user has already booked this trip
+                # Check if the user has already booked this trip. Unfortunately we can't just compare the trip IDs
+                # because they change every time the user makes a new search.
                 if (bookedTrips != None):
                     for bookedTrip in bookedTrips:
                         partialTrips = bookedTrip["partialTrips"]
@@ -316,11 +309,10 @@ def application(env, start_response):
                     document = collection.find_one_and_update({"_id": objectID}, {"$set": {"booked": True}})
                     
                 collection = database.BookedTrip
-                document = {"userID": userId, "partialTrips": partialTrips}
+                document = {"userID": userId, "partialTrips": partialTrips, "notified": False}
                 bookedTripID = collection.insert_one(document).inserted_id
                 
-                _update_number_of_passengers(busTripIDs, database, startBusStops, endBusStops, 1)               
-                generate_notification(userId, bookedTripID)             
+                _update_number_of_passengers(busTripIDs, database, startBusStops, endBusStops, 1)
                 
             except pymongo.errors.PyMongoError as e:
                 responseCode = "500 INTERNAL ERROR"  

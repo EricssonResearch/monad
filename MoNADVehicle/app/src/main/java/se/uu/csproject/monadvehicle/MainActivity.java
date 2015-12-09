@@ -56,13 +56,15 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
 
 
-public class MainActivity extends Activity implements ConnectionCallbacks, OnConnectionFailedListener,
-        AsyncGetTrafficInformationInteraction {
+public class MainActivity extends Activity implements ConnectionCallbacks, OnConnectionFailedListener, MyLocationOverlay.Listener,
+        AsyncGetTrafficInformationInteraction, AsyncSetGoogleRegistrationTokenInteraction {
 
     // Interface variables
+    TextView nextStopName, nextStopBoarding, nextStopLeaving, nextStopDistance, nextStopRemainingTime, nextStopArrivalTime;
     LinearLayout sideList, notificationsList, busStopsList, emergencyList;
     ScrollView notificationsScroll, busStopScroll;
     RadioGroup radioGroup;
@@ -97,14 +99,18 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
 
     // Represents a geographical location.
     //protected Location mCurrentLocation;
-
-    //for distance and time calculations
-    Location location;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        nextStopName = (TextView) findViewById(R.id.nextstop_name);
+        nextStopBoarding = (TextView) findViewById(R.id.nextstop_boarding);
+        nextStopLeaving = (TextView) findViewById(R.id.nextstop_leaving);
+        nextStopDistance = (TextView) findViewById(R.id.nextstop_distance);
+        nextStopRemainingTime = (TextView) findViewById(R.id.nextstop_timeremaining);
+        nextStopArrivalTime = (TextView) findViewById(R.id.nextstop_arrivaltime);
 
         sideList = (LinearLayout) findViewById(R.id.side_list);
         notificationsList = (LinearLayout) findViewById(R.id.side_list_notifications);
@@ -114,6 +120,19 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
         busStopScroll = (ScrollView) findViewById(R.id.side_list_busstops_scroll);
         notifications = new NotificationList(generateNotifications());
         emergencyDescription = (EditText) findViewById(R.id.text_description);
+
+        // Display the information about the next bus stop
+        nextStopName.setText(Storage.getNextBusStop().getName());
+        nextStopBoarding.setText(Integer.toString(Storage.getNextBusStop().getBoardingPassengers()));
+        nextStopLeaving.setText(Integer.toString(Storage.getNextBusStop().getLeavingPassengers()));
+        nextStopDistance.setText("unknown");
+        nextStopRemainingTime.setText( formatTime(new Date (Storage.getDurationToNextBusStop())));
+        nextStopArrivalTime.setText( formatTime(Storage.getNextBusStop().getArrivalTime()) );
+
+        /*TODO: Use these logs to check if the time is still one hour in advance
+        Log.w("MAIN ACTIVITY", "Original date value is: " + Storage.getNextBusStop().getArrivalTime().getTime());
+        Log.w("MAIN ACTIVITY", "Original date value is: " + Storage.getNextBusStop().getArrivalTime().toString());
+        */
 
         //Fill the notifications list
         LayoutInflater inflater = (LayoutInflater) getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -166,9 +185,10 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
 
         myLocationOverlay = new MyLocationOverlay(this, this.mapView.getModel().mapViewPosition, bitmap);
         myLocationOverlay.setSnapToLocationEnabled(false);
-
         //for simulation
-        myLocationOverlay.trajectory = Storage.getBusTrip().getTrajectory();
+        myLocationOverlay.setTrajectory(Storage.getBusTrip().getTrajectory());
+        // registering the location listener
+        myLocationOverlay.registerListener(this);
 
         // tile renderer layer using internal render theme
         MapDataStore mapDataStore = new MapFile(getMapFile());
@@ -298,7 +318,6 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
                 }
             }
         });
-
     }
 
     @Override
@@ -317,7 +336,7 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
         if (mGoogleApiClient.isConnected()) {
             myLocationOverlay.enableMyLocation(true);
             //commented since simulation is used now instead of real location
-            //startLocationUpdates();
+            startLocationUpdates();
         }
     }
 
@@ -376,14 +395,12 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
         myLocationOverlay.enableMyLocation(true);
 
         //manually simulate the movement of the bus
-        myLocationOverlay.moveSimulate();
+        //myLocationOverlay.moveSimulate();
 
         //commented since simulation is used now instead of real location
-        //startLocationUpdates();
+        startLocationUpdates();
 
         //updates the distance and time
-        calculateDistance();
-        calculateTimeDifference();
     }
 
     @Override
@@ -486,35 +503,46 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
         return notifications;
     }
 
+    public void onLocationChange(Location location){
+        nextStopDistance.setText(Integer.toString(calculateDistance()));
+        nextStopRemainingTime.setText( formatTime(new Date (Storage.getDurationToNextBusStop())));
+        //TODO: determine the ideal distance to display next stop info
+        if(calculateDistance() < 30){
+            //takes to the next bus stop entry
+            Storage.toNextBusStop();
+            updateRouteInfo();
+        }
+    }
+
+    public void updateRouteInfo(){
+        nextStopName.setText(Storage.getNextBusStop().getName());
+        nextStopBoarding.setText(Integer.toString(Storage.getNextBusStop().getBoardingPassengers()));
+        nextStopLeaving.setText(Integer.toString(Storage.getNextBusStop().getLeavingPassengers()));
+        nextStopDistance.setText(Double.toString(calculateDistance()));
+        nextStopRemainingTime.setText( formatTime(new Date (Storage.getDurationToNextBusStop())));
+        nextStopArrivalTime.setText(formatTime(Storage.getNextBusStop().getArrivalTime()));
+    }
+
     //gets the current location of the bus and the next bus stop
     //calculates the distance between them and sets it to the text box.
-    public void calculateDistance() {
-        Location location=new Location("");
+    public int calculateDistance() {
         Location destLocation = new Location("");
-        myLocationOverlay.onLocationChanged(location);
-        double currentLat = location.getLatitude();
-        double currentLong = location.getLongitude();
-        //location.setLatitude(currentLat);
-        //location.setLongitude(currentLong);
-        destLocation.setLatitude(Storage.getBusTrip().getBusStops().get(1).getLatitude());
-        destLocation.setLongitude(Storage.getBusTrip().getBusStops().get(1).getLongitude());
-        TextView textViewDistance = (TextView)findViewById(R.id.text_distanceRemaining);
-        String distance = Double.toString(location.distanceTo(destLocation));
-        textViewDistance.setText(distance);
+        destLocation.setLatitude(Storage.getNextBusStop().getLatitude());
+        destLocation.setLongitude(Storage.getNextBusStop().getLongitude());
+        return (int) Storage.getCurrentLocation().distanceTo(destLocation);
     }
 
     //gets the current time of the bus and the next bus stop
     //arrival time and calculates the remaining time between
     //current location time and next bus stop and sets it to the text box.
-    public void calculateTimeDifference() {
-        Location location=new Location("");
-        myLocationOverlay.onLocationChanged(location);
-        Calendar cal = Calendar.getInstance();
-        long currentTime = cal.get(Calendar.MILLISECOND);
-        TextView textViewMinutes = (TextView)findViewById(R.id.text_timeRemaining);
-        String minutes = Long.toString(TimeUnit.MILLISECONDS.toMinutes(Storage.getBusTrip().getBusStops().get(1).getArrivalTime().getTime() - currentTime));
-        textViewMinutes.setText(minutes);
-    }
+    /*TODO: fix the function
+    * compare this arrival time with prvious stop arrival time
+    * then use the duration with the current time to determine lateness*/
+//    public String calculateTimeDifference() {
+//        Calendar cal = Calendar.getInstance();
+//        long currentTime = cal.get(Calendar.MILLISECOND);
+//        return Long.toString(TimeUnit.MILLISECONDS.toMinutes(Storage.getDurationToNextBusStop() - currentTime));
+//    }
 
     public void getTrafficInformation() {
 
@@ -532,5 +560,10 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
         } else {
             Log.d("MainActivity", "Error while receiving TrafficInformation data");
         }
+    }
+
+    @Override
+    public void processSetGoogleRegistrationTokenResponse(String response) {
+
     }
 }

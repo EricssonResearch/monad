@@ -5,7 +5,6 @@ import android.util.Log;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 import org.mapsforge.core.model.LatLong;
 
 import java.math.BigDecimal;
@@ -13,7 +12,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
-import java.util.Locale;
 import java.util.TimeZone;
 
 
@@ -74,12 +72,11 @@ public class VehicleAdministration extends Administration {
     }
 
     public static String profileToString() {
-        String strProfile = "\nVehicleID: " + getVehicleID()
+        return "\nVehicleID: " + getVehicleID()
                 + "\nDriverID: " + getDriverID()
                 + "\nPassword: " + getPassword()
                 + "\nBusLine: " + getBusLine()
                 + "\nGoogleRegistrationToken: " + getGoogleRegistrationToken();
-        return strProfile;
     }
 
     public static String postSignInRequest(String driverID, String password, String busLine) {
@@ -110,7 +107,6 @@ public class VehicleAdministration extends Administration {
     }
 
     public static String processSignInResponse(String driverID, String password, String busLine, String response) {
-        String responseMessage = "";
         /*
          * Successful signIn request
          * Response: "1|vehicleID"
@@ -118,15 +114,14 @@ public class VehicleAdministration extends Administration {
         if (response.startsWith("1|")) {
             String vehicleID = response.substring(2);
             updateProfileAfterSignIn(vehicleID, driverID, password, busLine);
-            responseMessage = "Success (1) - VehicleID: " + getVehicleID();
+            return "Success (1) - VehicleID: " + getVehicleID();
         }
         else if (response.equals("0")) {
-            responseMessage = "Wrong Credentials (0)";
+            return "Wrong Credentials (0)";
         }
         else {
-            responseMessage = "ERROR - " + response;
+            return "ERROR - " + response;
         }
-        return responseMessage;
     }
 
     public static String postGetNextTripRequest() {
@@ -188,13 +183,18 @@ public class VehicleAdministration extends Administration {
                 JSONObject arrivalTimeObject = (JSONObject) trajectoryPoint.get("time");
                 Date busStopArrivalTime = new Date((long) arrivalTimeObject.get("$date"));
 
+                /*TODO: Use these logs to check if the time is still one hour in advance
+                Log.w("VEHICLE ADMIN", "reading dates JSON: " + (long) arrivalTimeObject.get("$date"));
+                Log.w("VEHICLE ADMIN", "reading dates DATE: " + busStopArrivalTime);
+                */
+
                 BusStop busStop = new BusStop(busStopID, busStopName, busStopLatitude, busStopLongitude, busStopArrivalTime);
                 trajectory.add(busStop);
             }
 
             BusTrip busTrip = new BusTrip(busTripID, capacity, trajectory);
             Storage.setBusTrip(busTrip);
-            busTrip.printBusStops();
+            //busTrip.printBusStops();
 //            postGetTrajectoryRequest();
         }
         catch (Exception e) {
@@ -415,9 +415,29 @@ public class VehicleAdministration extends Administration {
         return "1";
     }
 
+    public static String postSetGoogleRegistrationTokenRequest() {
+        String request = ROUTES_ADMINISTRATOR_HOST + ROUTES_ADMINISTRATOR_PORT + "/set_google_registration_token";
+        String urlParameters = "vehicle_id=" + getVehicleID()
+                             + "&google_registration_token=" + getGoogleRegistrationToken();
+
+        /* Send the request to the RoutesAdministrator */
+        String response = postRequest(request, urlParameters);
+
+        /* Handle response in case of exception */
+        if (response.equals("-1")) {
+            return exceptionMessage();
+        }
+
+        /*
+         * By default, Erlang adds the newline '\n' character at the beginning of response.
+         * For this reason substring() function is used
+         */
+        response = response.substring(1);
+        return response;
+    }
+
     public static String exceptionMessage() {
         return "ERROR - An Exception was thrown";
     }
-
 
 }
