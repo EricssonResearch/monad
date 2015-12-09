@@ -227,16 +227,16 @@ public class NotificationRecyclerViewAdapter extends RecyclerView.Adapter<Notifi
         int seconds = (int) millisecondsTime / 1000;
 
         if (minutes == 0) {
-            return seconds + " sec ago";
+            return seconds + " s ago";
         }
         else if (hours == 0) {
-            return minutes + " min ago";
+            return minutes + " m ago";
         }
         else if (hours == 1) {
-            return hours + " hr, " + minutes + "ago";
+            return hours + " h, " + minutes + " m ago";
         }
         else {
-            return hours + " hrs ago";
+            return hours + " h ago";
         }
     }
 
