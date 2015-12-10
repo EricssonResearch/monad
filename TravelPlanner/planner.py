@@ -50,7 +50,7 @@ class Mode:
 
 class TravelPlanner:
 
-    def __init__(self, client, debug = False):
+    def __init__(self, client):
         self.db = client
         self.travelRequest = self.db.TravelRequest
         self.route = self.db.Route
@@ -59,6 +59,7 @@ class TravelPlanner:
         self.busTrip = self.db.BusTrip
         self.busStop = self.db.BusStop
 
+    def _prepareSearch(self):
         self.fittingRoutes = []
         self.doubleRoutes = []
         self.tripleRoutes = []
@@ -66,8 +67,7 @@ class TravelPlanner:
         self.tripTuples = []
         self.lineTuples = []
         self.lineSchedules = []
-
-        self.debug = debug
+        self.routeTuples = []
 
         for i in range(MAXIMUM_NUMBER_OF_LINES):
             self.lineSchedules.append(None)
@@ -87,6 +87,10 @@ class TravelPlanner:
         possibilities = []
         startNumber = 0
         for route in cursor:
+            if ((busLine, route["line"]) in self.routeTuples):
+                continue
+            else:
+                self.routeTuples.append((busLine, route["line"]))
             fits = False
             if ((route["line"] == (busLine - 100)) or (route["line"] == (busLine + 100))):
                 continue
@@ -111,6 +115,10 @@ class TravelPlanner:
         possible = []
         startNumber = 0
         for route in middleLines:
+            if ((busLine, route["line"]) in self.routeTuples):
+                continue
+            else:
+                self.routeTuples.append((busLine, route["line"]))
             fits = False
             if ((route["line"] == (busLine - 100)) or (route["line"] == (busLine + 100))):
                 continue
@@ -324,10 +332,12 @@ class TravelPlanner:
                 self.dptTime = trip["trajectory"][route[0][PR_START]]["time"]
                 self.arrTime = trip["trajectory"][route[0][PR_END]]["time"]
                 if (self.timeMode == Mode.startTime):
-                    if (self.dptTime > self.startTime):
+                    if ((self.dptTime > self.startTime) and 
+                            (self.dptTime < (self.startTime + MAXIMUM_TIME_DIFFERENCE))):
                         self._insertTrip((route, [trip]))
                 elif (self.timeMode == Mode.arrivalTime):
-                    if (self.arrTime < self.endTime):
+                    if ((self.arrTime < self.endTime) and 
+                            (self.arrTime > (self.endTime - MAXIMUM_TIME_DIFFERENCE))):
                         self._insertTrip((route, [trip]))
 
             counter = counter + 1
@@ -347,7 +357,8 @@ class TravelPlanner:
                 for trip in trips:
                     self.dptTime = trip["trajectory"][start[PR_START]]["time"]
                     arrSwitch    = trip["trajectory"][start[PR_END]]["time"]
-                    if (self.dptTime > self.startTime):
+                    if ((self.dptTime > self.startTime) and 
+                            (self.dptTime < (self.startTime + MAXIMUM_TIME_DIFFERENCE))):
                         (secondTrip, self.arrTime) = self._findNextTrip(route, 1, arrSwitch)
                         self._insertTrip((route, [trip, secondTrip]))
 
@@ -356,7 +367,8 @@ class TravelPlanner:
                 for trip in trips:
                     dptSwitch    = trip["trajectory"][end[PR_START]]["time"]
                     self.arrTime = trip["trajectory"][end[PR_END]]["time"]
-                    if (self.arrTime < self.endTime):
+                    if ((self.arrTime < self.endTime) and 
+                            (self.arrTime > (self.endTime - MAXIMUM_TIME_DIFFERENCE))):
                         (firstTrip, self.dptTime) = self._findPreviousTrip(route, 0, dptSwitch)
                         self._insertTrip((route, [firstTrip, trip]))
 
@@ -372,7 +384,8 @@ class TravelPlanner:
                 for trip in trips:
                     self.dptTime = trip["trajectory"][start[PR_START]]["time"]
                     arrSwitch    = trip["trajectory"][start[PR_END]]["time"]
-                    if (self.dptTime > self.startTime):
+                    if ((self.dptTime > self.startTime) and 
+                            (self.dptTime < (self.startTime + MAXIMUM_TIME_DIFFERENCE))):
                         (middleTrip, arrSwitch2) = self._findNextTrip(route, 1, arrSwitch)
                         (lastTrip, self.arrTime) = self._findNextTrip(route, 2, arrSwitch2)
                         self._insertTrip((route, [trip, middleTrip, lastTrip]))
@@ -382,7 +395,8 @@ class TravelPlanner:
                 for trip in trips:
                     dptSwitch2   = trip["trajectory"][end[PR_START]]["time"]
                     self.arrTime = trip["trajectory"][end[PR_END]]["time"]
-                    if (self.arrTime < self.endTime):
+                    if ((self.arrTime < self.endTime) and 
+                            (self.arrTime > (self.endTime - MAXIMUM_TIME_DIFFERENCE))):
                         (middleTrip, dptSwitch1) = self._findPreviousTrip(route, 1, dptSwitch2)
                         (firstTrip, self.dptTime) = self._findPreviousTrip(route, 0, dptSwitch1)
                         self._insertTrip((route, [firstTrip, middleTrip, trip]))
@@ -480,24 +494,16 @@ class TravelPlanner:
     def getBestRoutes(self, requestID, mode = Mode.tripTime):
         self.requestID = requestID
         self.routeMode = mode
+        self._prepareSearch()
         self._findFittingRoutes()
         
         if ((self.fittingRoutes == []) and (self.doubleRoutes == []) and 
                 (self.tripleRoutes == [])):
-            if (self.debug):
-                print "No fitting routes found"
             return None
-        if (self.debug):
-            print "Found", str(len(self.fittingRoutes)), "/", str(len(self.doubleRoutes)), \
-                    "fitting/double Routes"
 
         self._findBestRoute()
-        if (self.debug):
-            print "Found", str(len(self.tripTuples)), " tripTuples"
 
         if (self.tripTuples == []):
-            if (self.debug):
-                print "No best route found"
             return None
 
         self._updateDatabase()

@@ -16,6 +16,7 @@ from planner import TravelPlanner, Mode
 import unittest
 import datetime
 import pytest
+import sys
 import pymongo
 from pymongo import MongoClient
 import bson
@@ -35,7 +36,7 @@ TIMEDIFF_45MIN = datetime.timedelta(minutes = 45)
 TIMEDIFF_60MIN = datetime.timedelta(minutes = 60)
 TIME_1255H = datetime.datetime(YEAR, MONTH, DAY, 12, 55)
 TIME_1300H = datetime.datetime(YEAR, MONTH, DAY, 13, 00)
-TIME_1305H = datetime.datetime(YEAR, MONTH, DAY, 13, 05)
+TIME_1305H = datetime.datetime(YEAR, MONTH, DAY, 13,  5)
 TIME_1315H = datetime.datetime(YEAR, MONTH, DAY, 13, 15)
 TIME_1320H = datetime.datetime(YEAR, MONTH, DAY, 13, 20)
 TIME_1330H = datetime.datetime(YEAR, MONTH, DAY, 13, 30)
@@ -48,15 +49,27 @@ class TestTravelPlanner(unittest.TestCase):
     dbName = "monad1"
     db = client[dbName]
     tp = TravelPlanner(db)
+    version = sys.version_info[0]
 
     def test_init(self):
-        mongoString = "Collection(Database(MongoClient('localhost', 27017), u'"
-        requestDBString = mongoString + self.dbName + "'), u'TravelRequest')"
-        routeDBString = mongoString + self.dbName + "'), u'Route')"
-        timetableDBString = mongoString + self.dbName + "'), u'TimeTable')"
-        usertripDBString = mongoString + self.dbName + "'), u'UserTrip')"
-        busTripDBString = mongoString + self.dbName + "'), u'BusTrip')"
-        busStopDBString = mongoString + self.dbName + "'), u'BusStop')"
+        self.tp._prepareSearch()
+        if (self.version == 2):
+            mongoString = "Collection(Database(MongoClient('localhost', 27017), u'"
+            requestDBString = mongoString + self.dbName + "'), u'TravelRequest')"
+            routeDBString = mongoString + self.dbName + "'), u'Route')"
+            timetableDBString = mongoString + self.dbName + "'), u'TimeTable')"
+            usertripDBString = mongoString + self.dbName + "'), u'UserTrip')"
+            busTripDBString = mongoString + self.dbName + "'), u'BusTrip')"
+            busStopDBString = mongoString + self.dbName + "'), u'BusStop')"
+        elif (self.version == 3):
+            mongoString = "Collection(Database(MongoClient(host=['localhost:27017'], " + \
+                    "document_class=dict, tz_aware=False, connect=True), '"
+            requestDBString = mongoString + self.dbName + "'), 'TravelRequest')"
+            routeDBString = mongoString + self.dbName + "'), 'Route')"
+            timetableDBString = mongoString + self.dbName + "'), 'TimeTable')"
+            usertripDBString = mongoString + self.dbName + "'), 'UserTrip')"
+            busTripDBString = mongoString + self.dbName + "'), 'BusTrip')"
+            busStopDBString = mongoString + self.dbName + "'), 'BusStop')"
 
         self.assertEqual(self.tp.fittingRoutes, [])
         self.assertEqual(self.tp.doubleRoutes, [])
@@ -64,6 +77,7 @@ class TestTravelPlanner(unittest.TestCase):
         self.assertEqual(self.tp.possibleRoutes, [])
         self.assertEqual(self.tp.tripTuples, [])
         self.assertEqual(self.tp.lineTuples, [])
+        self.assertEqual(self.tp.routeTuples, [])
 
         self.assertEqual(str(self.tp.travelRequest), requestDBString)
         self.assertEqual(str(self.tp.route), routeDBString)

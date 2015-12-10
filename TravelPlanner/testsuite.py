@@ -13,7 +13,7 @@ from subprocess import call
 class tester:
 
     def __init__(self):
-        print "Setting up test system..."
+        print ("Setting up test system...")
         client = MongoClient()
         self.db = client.monad
 
@@ -22,12 +22,12 @@ class tester:
         for stop in busStops:
             self.busStopDict[stop["name"]] = stop
 
-        print "Running UnitTests..."
+        print ("Running UnitTests...")
         call(["python", "test_planner.py"])
 
     def test(self, start, end, time, timeMode, routeMode, profiling = False):
         self.tp = TravelPlanner(self.db)
-        print "Testing..."
+        print ("Testing...")
         request = {
                 "_id": ObjectId(),
                 "userID": 4711,
@@ -46,9 +46,9 @@ class tester:
             request["startTime"] = "null"
             request["endTime"] = time
         else:
-            print "Error while preparing the test: timeMode is " + str(timeMode)
+            print ("Error while preparing the test: timeMode is " + str(timeMode))
             return None
-        print "Request ID: " + str(request["_id"])
+        print ("Request ID: " + str(request["_id"]))
         self.db.TravelRequest.insert_one(request)
 
         if (profiling):
@@ -64,7 +64,7 @@ class tester:
     #TODO: works only with single or double routes (just one change)
     def printBestResult(self, jsonObject):
         if (jsonObject == None or jsonObject == {}):
-            print "No route found!"
+            print ("No route found!")
             return
         best = jsonObject[1]
         trip = "Route from " + best[0]["startBusStop"] + " to " + best[-1]["endBusStop"]
@@ -74,20 +74,20 @@ class tester:
             trip += " via " + best[0]["endBusStop"]
             time += ". Waiting at intermediate busstop from " + best[0]["endTime"] + " to " + best[1]["startTime"]
             line += " and " + str(best[1]["line"])
-        print trip
-        print time
-        print line
+        print (trip)
+        print (time)
+        print (line)
 
     def printJson(self, jsonObject):
         if (jsonObject == None or jsonObject == {}):
-            print "No route found!"
+            print ("No route found!")
             return
         best = jsonObject[1]
-        print "Route from " + best[0]["startBusStop"] + " to " + best[-1]["endBusStop"]
+        print ("Route from " + best[0]["startBusStop"] + " to " + best[-1]["endBusStop"])
         for key in jsonObject.keys():
-            print '\nTrip', key
+            print ('\nTrip', key)
             for trip in jsonObject[key]:
-                print "From", trip["startBusStop"], "to", trip["endBusStop"]
-                print "Start", str(trip["startTime"]), "until", str(trip["endTime"])
-                print "Used line", str(trip["line"])
+                print ("From", trip["startBusStop"], "to", trip["endBusStop"])
+                print ("Start", str(trip["startTime"]), "until", str(trip["endTime"]))
+                print ("Used line", str(trip["line"]))
 
