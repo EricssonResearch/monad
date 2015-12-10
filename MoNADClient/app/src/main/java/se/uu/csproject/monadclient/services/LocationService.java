@@ -99,21 +99,25 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
                     .setResultCallback(this);
             mGoogleApiClient.disconnect();
         }
-        sendGeofenceInfo();
+        if (!Storage.isEmptyLocations()){
+            sendGeofenceInfo();
+        }
     }
 
     @Override
     public void onTaskRemoved(Intent rootIntent){
         super.onTaskRemoved(rootIntent);
-        sendGeofenceInfo();
-        Storage.clearLocations();
-        /* Wait for a second after sending the data because swiping the app off the recent app list
-         kills any background processes immediately and the data doesn't have time to get stored in
-         the database otherwise.*/
-        try{
-            TimeUnit.SECONDS.sleep(1);
-        } catch (java.lang.InterruptedException e){
-            Log.d(TAG, e.toString());
+        if (!Storage.isEmptyLocations()){
+            sendGeofenceInfo();
+            Storage.clearLocations();
+            /* Wait for a second after sending the data because swiping the app off the recent app list
+            kills any background processes immediately and the data doesn't have time to get stored in
+            the database otherwise.*/
+            try{
+                TimeUnit.SECONDS.sleep(1);
+            } catch (java.lang.InterruptedException e){
+                Log.d(TAG, e.toString());
+            }
         }
         stopSelf();
     }
@@ -189,13 +193,11 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
     }
 
     public void sendGeofenceInfo(){
-        if (!Storage.isEmptyLocations()){
-            Storage.turnLocationsToJson();
-            JSONObject geofenceInfo = Storage.getGeofenceInfo();
-            if (geofenceInfo.length() != 0){
-                String userID = ClientAuthentication.getClientId();
-                new SendStoreGeofenceInfoRequest().execute(userID, geofenceInfo.toString());
-            }
+        Storage.turnLocationsToJson();
+        JSONObject geofenceInfo = Storage.getGeofenceInfo();
+        if (geofenceInfo.length() != 0){
+            String userID = ClientAuthentication.getClientId();
+            new SendStoreGeofenceInfoRequest().execute(userID, geofenceInfo.toString());
         }
     }
 }

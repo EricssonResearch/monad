@@ -14,16 +14,17 @@
 
 
 import cgi
+import json
 import logging
 import pymongo
 import smtplib
-import json
-import serverConfig
 import requests
+import serverConfig
 
+from random import randint
 from pymongo import errors
 from datetime import datetime
-from random import randint
+from builtins import str, range
 from bson.objectid import ObjectId
 from planner import TravelPlanner, Mode
 from routeGenerator import string_to_coordinates, coordinates_to_nearest_stop
@@ -37,7 +38,7 @@ def escape(text):
 def send_email(from_addr, to_addr_list, subject, message): 
     """Send an email"""
     header  = "From: {0}\n".format(from_addr)
-    header += "To: %s\n" % ",".join(to_addr_list)
+    header += "To: {0}\n".format(",".join(to_addr_list))
     header += "Subject: {0}\n\n".format(subject)
     message = header + message
  
@@ -62,7 +63,8 @@ def get_search_results(database, priority, requestId):
 def get_nearest_bus_stop_and_coordinates(address):
     """Get the nearest bus stop to the address and its coordinates"""
     coordinates = string_to_coordinates(address)
-    if (coordinates["latitude"] == None or coordinates["longitude"] == None):
+    if (coordinates["latitude"] == None or coordinates["longitude"] == None): 
+        logging.error("Problematic address: {0}".format(address))       
         raise ValueError("Could not find the coordinates for the address given.")
     else:
         latitude = coordinates["latitude"]
@@ -171,8 +173,8 @@ def application(env, start_response):
             
     elif (data_env["PATH_INFO"] == "/resetPassword"):        
         if ("email" in data):
-            email = data.getvalue("email")          
-            email_list = [email]            
+            email = data.getvalue("email") 
+            email_list = [email]
             code = randint(1000, 9999)
             message = serverConfig.EMAIL_MESSAGE.format(code)
             send_email(serverConfig.EMAIL_ADDRESS, email_list, serverConfig.EMAIL_SUBJECT, message)
@@ -228,7 +230,7 @@ def application(env, start_response):
                 result = collection.insert_one(document)
                 requestId = result.inserted_id              
                 searchResults = get_search_results(database, priority, requestId)                                            
-            
+                
             except ValueError as e:
                 responseCode = "500 INTERNAL ERROR"
                 logging.error("Something went wrong: {0}".format(e))                 

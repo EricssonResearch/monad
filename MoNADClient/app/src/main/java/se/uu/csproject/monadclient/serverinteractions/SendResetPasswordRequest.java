@@ -5,7 +5,6 @@ import android.os.AsyncTask;
 import se.uu.csproject.monadclient.interfaces.AsyncResponseString;
 
 public class SendResetPasswordRequest extends AsyncTask<String, Void, String> {
-    public AsyncResponseString delegate = null;
 
     /* This is the function that is called by the button listener */
     @Override
@@ -18,6 +17,6 @@ public class SendResetPasswordRequest extends AsyncTask<String, Void, String> {
     /* Deal with the response returned by the server */
     @Override
     protected void onPostExecute(String response) {
-        delegate.processFinish(response);
+
     }
 }
