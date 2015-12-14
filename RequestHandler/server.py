@@ -1,3 +1,7 @@
+# -*- coding: utf-8 -*-
+from __future__ import unicode_literals
+
+
 # Copyright 2015 Ericsson AB
 #
 # Licensed under the Apache License, Version 2.0 (the "License"); you may not 
@@ -24,7 +28,7 @@ import serverConfig
 from random import randint
 from pymongo import errors
 from datetime import datetime
-from builtins import str, range
+from builtins import str, range, bytes
 from bson.objectid import ObjectId
 from planner import TravelPlanner, Mode
 from routeGenerator import string_to_coordinates, coordinates_to_nearest_stop
@@ -64,7 +68,7 @@ def get_nearest_bus_stop_and_coordinates(address):
     """Get the nearest bus stop to the address and its coordinates"""
     coordinates = string_to_coordinates(address)
     if (coordinates["latitude"] == None or coordinates["longitude"] == None): 
-        logging.error("Problematic address: {0}".format(address))       
+        logging.debug("Problematic address: {0}".format(address))       
         raise ValueError("Could not find the coordinates for the address given.")
     else:
         latitude = coordinates["latitude"]
@@ -109,8 +113,8 @@ def application(env, start_response):
             startTime = escape(data.getvalue("startTime"))
             endTime = escape(data.getvalue("endTime"))
             requestTime = escape(data.getvalue("requestTime"))
-            stPosition = escape(data.getvalue("stPosition"))
-            edPosition = escape(data.getvalue("edPosition"))
+            stPosition = escape(data.getvalue("stPosition").decode('utf-8'))
+            edPosition = escape(data.getvalue("edPosition").decode('utf-8'))           
             priority = escape(data.getvalue("priority"))
             startPositionLatitude = float(escape(data.getvalue("startPositionLatitude")))
             startPositionLongitude = float(escape(data.getvalue("startPositionLongitude"))) 
@@ -141,7 +145,7 @@ def application(env, start_response):
                 startBusStop = collection.find_one({"name": startStop})
                 endBusStop = collection.find_one({"name": endStop})
                 
-                if (startBusStop == None or endBusStop == None):
+                if (startBusStop == None or endBusStop == None):                    
                     start_response("200 OK", [("Content-Type", "application/json")])                            
                     return [json.dumps(searchResults)]                 
                 
@@ -157,10 +161,10 @@ def application(env, start_response):
             
             except ValueError as e:
                 responseCode = "500 INTERNAL ERROR"                
-                logging.error("Something went wrong: {0}".format(e))                
+                logging.exception("Something went wrong: {0}".format(e))                
             except pymongo.errors.PyMongoError as e:
                 responseCode = "500 INTERNAL ERROR"  
-                logging.error("Something went wrong: {0}".format(e))
+                logging.exception("Something went wrong: {0}".format(e))
             finally:                                    
                 serverConfig.MONGO_CLIENT.close()                
 
@@ -173,7 +177,7 @@ def application(env, start_response):
             
     elif (data_env["PATH_INFO"] == "/resetPassword"):        
         if ("email" in data):
-            email = data.getvalue("email") 
+            email = data.getvalue("email").decode('utf-8') 
             email_list = [email]
             code = randint(1000, 9999)
             message = serverConfig.EMAIL_MESSAGE.format(code)
@@ -194,7 +198,7 @@ def application(env, start_response):
             requestTime = escape(data.getvalue("requestTime"))
             startPositionLatitude = float(escape(data.getvalue("startPositionLatitude")))
             startPositionLongitude = float(escape(data.getvalue("startPositionLongitude")))
-            edPosition = escape(data.getvalue("edPosition"))
+            edPosition = escape(data.getvalue("edPosition").decode('utf-8'))
             priority = escape(data.getvalue("priority"))            
             
             try:
@@ -233,10 +237,10 @@ def application(env, start_response):
                 
             except ValueError as e:
                 responseCode = "500 INTERNAL ERROR"
-                logging.error("Something went wrong: {0}".format(e))                 
+                logging.exception("Something went wrong: {0}".format(e))                 
             except pymongo.errors.PyMongoError as e:
                 responseCode = "500 INTERNAL ERROR"  
-                logging.error("Something went wrong: {0}".format(e)) 
+                logging.exception("Something went wrong: {0}".format(e)) 
             finally:                    
                 serverConfig.MONGO_CLIENT.close()                                       
         else:
@@ -318,7 +322,7 @@ def application(env, start_response):
                 
             except pymongo.errors.PyMongoError as e:
                 responseCode = "500 INTERNAL ERROR"  
-                logging.error("Something went wrong: {0}".format(e))
+                logging.exception("Something went wrong: {0}".format(e))
                 response = serverConfig.ERROR_MESSAGE             
             else:                              
                 response = serverConfig.BOOKING_SUCCESSFUL_MESSAGE
@@ -366,7 +370,7 @@ def application(env, start_response):
                 
             except pymongo.errors.PyMongoError as e:
                 responseCode = "500 INTERNAL ERROR"  
-                logging.error("Something went wrong: {0}".format(e))
+                logging.exception("Something went wrong: {0}".format(e))
                 response = serverConfig.ERROR_MESSAGE     
             else:                              
                 response = serverConfig.BOOKING_CANCEL_SUCCESSFUL_MESSAGE
@@ -438,7 +442,7 @@ def application(env, start_response):
             except pymongo.errors.PyMongoError as e:
                 responseCode = "500 INTERNAL ERROR"
                 userTripJson = {}  
-                logging.error("Something went wrong: {0}".format(e)) 
+                logging.exception("Something went wrong: {0}".format(e)) 
             finally:                    
                 serverConfig.MONGO_CLIENT.close()
         else:
@@ -467,11 +471,11 @@ def application(env, start_response):
                 
             except pymongo.errors.PyMongoError as e:
                 responseCode = "500 INTERNAL ERROR"  
-                logging.error("Something went wrong: {0}".format(e))
+                logging.exception("Something went wrong: {0}".format(e))
                 response = serverConfig.ERROR_MESSAGE
             except ValueError as e:
                 responseCode = "500 INTERNAL ERROR"
-                logging.error("Something went wrong: {0}".format(e)) 
+                logging.exception("Something went wrong: {0}".format(e)) 
                 response = serverConfig.ERROR_MESSAGE       
             else:                              
                 response = serverConfig.FEEDBACK_UPDATE_SUCCESSFUL_MESSAGE
@@ -502,11 +506,11 @@ def application(env, start_response):
                 
             except pymongo.errors.PyMongoError as e:
                 responseCode = "500 INTERNAL ERROR"  
-                logging.error("Something went wrong: {0}".format(e))
+                logging.exception("Something went wrong: {0}".format(e))
                 response = serverConfig.ERROR_MESSAGE
             except ValueError as e:
                 responseCode = "500 INTERNAL ERROR"
-                logging.error("Something went wrong: {0}".format(e)) 
+                logging.exception("Something went wrong: {0}".format(e)) 
                 response = serverConfig.ERROR_MESSAGE       
             else:                              
                 response = serverConfig.GEOFENCE_UPDATE_SUCCESSFUL_MESSAGE
