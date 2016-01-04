@@ -42,7 +42,7 @@
     <string name="label_login_login">Είσοδος</string>
     <string name="label_login_username">Όνομα χρήστη</string>
     <string name="label_login_password">Κωδικός</string>
-    <string name="label_login_anonymous">Παραμείνετε ανώνυμος</string>
+    <!--string name="label_login_anonymous">Παραμείνετε ανώνυμος</string-->
     <string name="label_login_newuser">Νέος χρήστης; Δημιουργία λογαριασμού</string>
     <string name="label_login_forgottenpassword">Ξεχάσατε τον κωδικό σας;</string>
     <string name="label_login_wrongcredentials">Η είσοδος απέτυχε. Παρακαλούμε, προσπαθήστε ξανά</string>
@@ -98,7 +98,7 @@
     <string name="label_search_earliesttrip">Νωρίτερη αναχώρηση</string>
     <string name="label_search_results">Αποτελέσματα</string>
     <string name="label_search_search">Αναζήτηση</string>
-    <string name="label_search_moreresults">Περισσότερα αποτελέσματα</string>
+    <!--string name="label_search_moreresults">Περισσότερα αποτελέσματα</string-->
     <string name="label_searchresult_timeinfo">μ/δ - μ/δ (μ/δ λεπτά)</string>
     <string name="label_searchresult_routeinfo">μ/δ προς μ/δ</string>
 
@@ -144,7 +144,7 @@
     <!--MISCELLANEOUS-->
     <string name="img_description">Μη διαθέσιμη εικόνα</string>
     <string name="non_available">μ/δ</string>
-    <string name="hello_world">Γεια σου κόσμε!</string>
+    <!--string name="hello_world">Γεια σου κόσμε!</string-->
     <string name="java_to">προς</string>
     <string name="java_yes">Ναι</string>
     <string name="java_cancel">Ακύρο</string>
@@ -170,7 +170,7 @@
     <string name="java_settings_themechanged_default">Το θέμα άλλαξε σε "προεπιλεγμένο"</string>
     <string name="java_settings_themechanged_dark">Το θέμα άλλαξε σε "σκούρο"</string>
     <string name="java_trips_notripsbooked">Κανένα προγραμματισμένο ταξίδι</string>
-    <string name="java_trips_samebooking">Έχετε ήδη προγραμματίσει το συγκεκριμένο ταξίδι</string>
+    <!--string name="java_trips_samebooking">Έχετε ήδη προγραμματίσει το συγκεκριμένο ταξίδι</string-->
     <string name="java_languagerva_languagechanged">Η γλώσσα άλλαξε σε</string>
     <string name="java_notificationsrva_newmessages">Έχετε νέα μηνύματα</string>
     <string name="java_login_wrongcredential">Λάθος δεδομένα. Παρακαλούμε, προσπαθήστε ξανά.</string>
@@ -178,6 +178,6 @@
     <string name="java_signupsuccess">Εγγραφή επιτυχής</string>
     <string name="java_pswd_resetsuccess">Αναίρεση κωδικού επιτυχής</string>
     <string name="java_pswd_updatesuccess">Ενημέρωση κωδικού επιτυχής</string>
-    <string name="java_settings_updatesuccess">Οι ρυθμίσεις ενημερώθηκαν επιτυχώς</string>
+    <!--string name="java_settings_updatesuccess">Οι ρυθμίσεις ενημερώθηκαν επιτυχώς</string-->
     <string name="java_search_locationdisabled">Φαίνεται ότι οι ρυθμίσεις τοποθεσίας σας είναι απενεργοποιημένες. Παρακαλώ χρησιμοποιείστε την σύνθετη αναζήτηση και επιλέξτε διεύθυνση εκκίνησης</string>
 </resources>

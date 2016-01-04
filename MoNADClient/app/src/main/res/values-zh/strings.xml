@@ -33,7 +33,7 @@
     <string name="label_aboutus_projectName">项目名称</string>
     <string name="label_aboutus_texttitle">关于我们</string>
 
-    <string name="label_login_anonymous">匿名登录</string>
+    <!--string name="label_login_anonymous">匿名登录</string-->
     <string name="label_login_login">普通登录</string>
     <string name="label_login_newuser">新用户?创建新账户</string>
     <string name="label_login_password">密码</string>
@@ -78,7 +78,7 @@
     <string name="label_search_earliesttrip">最早出发</string>
     <string name="label_search_results">结果</string>
     <string name="label_search_priority">优先级</string>
-    <string name="label_search_moreresults">更多结果</string>
+    <!--string name="label_search_moreresults">更多结果</string-->
     <string name="label_search_hintposition">您的位置</string>
     <string name="label_search_hintdestination">您的目的地</string>
     <string name="label_search_from">从</string>
@@ -123,7 +123,7 @@
     <!--MISCELLANEOUS-->
     <string name="img_description">找不到图片</string>
     <string name="non_available">n/a</string>
-    <string name="hello_world">Hello world!</string>
+    <!--string name="hello_world">Hello world!</string-->
     <string name="java_to">到</string>
     <string name="java_yes">是</string>
     <string name="java_cancel">取消</string>
@@ -149,7 +149,7 @@
     <string name="java_settings_themechanged_default">主题切换至默认</string>
     <string name="java_settings_themechanged_dark">主题切换至深色</string>
     <string name="java_trips_notripsbooked">您没有预定任何线路</string>
-    <string name="java_trips_samebooking">您已经预定了该线路</string>
+    <!--string name="java_trips_samebooking">您已经预定了该线路</string-->
     <string name="java_languagerva_languagechanged">语言切换至</string>
     <string name="java_notificationsrva_newmessages">您收到了新信息</string>
     <string name="java_login_wrongcredential">用户名密码错误.请再次尝试</string>
@@ -157,5 +157,5 @@
     <string name="java_signupsuccess">注册成功</string>
     <string name="java_pswd_resetsuccess">密码重置成功</string>
     <string name="java_pswd_updatesuccess">密码更新成功</string>
-    <string name="java_settings_updatesuccess">设置更新成功</string>
+    <!--string name="java_settings_updatesuccess">设置更新成功</string-->
 </resources>

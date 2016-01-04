@@ -40,7 +40,7 @@
     <string name="label_login_login">Logga in</string>
     <string name="label_login_username">Användarnamn</string>
     <string name="label_login_password">Lösenord</string>
-    <string name="label_login_anonymous">Var anonym</string>
+    <!--string name="label_login_anonymous">Var anonym</string-->
     <string name="label_login_newuser">Ny användare? Skapa ett konto</string>
     <string name="label_login_forgottenpassword">Glömt lösenordet?</string>
     <string name="label_login_wrongcredentials">Inloggningen misslyckades. Försök igen</string>
@@ -95,7 +95,7 @@
     <string name="label_search_earliesttrip">Tidigaste resa</string>
     <string name="label_search_results">Resultat</string>
     <string name="label_search_search">Sök</string>
-    <string name="label_search_moreresults">Visa fler resor</string>
+    <!--string name="label_search_moreresults">Visa fler resor</string-->
 
     <!--Activity - Settings-->
     <string-array name="settings_tab_titles">
@@ -139,7 +139,7 @@
     <!--MISCELLANEOUS-->
     <string name="img_description">Ikon saknas</string>
     <string name="non_available">n/a</string>
-    <string name="hello_world">Hello world!</string>
+    <!--string name="hello_world">Hello world!</string-->
 
     <string name="java_to">till</string>
     <string name="java_yes">Ja</string>
@@ -166,7 +166,7 @@
     <string name="java_settings_themechanged_default">Temat har ändrats till Standard</string>
     <string name="java_settings_themechanged_dark">Temat har ändrats till Mörk</string>
     <string name="java_trips_notripsbooked">Ingen resa har blivit bokad</string>
-    <string name="java_trips_samebooking">Du har redan bokat den här resan</string>
+    <!--string name="java_trips_samebooking">Du har redan bokat den här resan</string-->
     <string name="java_languagerva_languagechanged">Språkinställningen har ändrats till</string>
     <string name="java_notificationsrva_newmessages">Du har ett nytt meddelande</string>
     <string name="java_login_wrongcredential">Felaktiga inloggningsuppgifter. Försök igen.</string>
@@ -174,7 +174,7 @@
     <string name="java_signupsuccess">Du är nu registrerad</string>
     <string name="java_pswd_resetsuccess">Lösenordet har återställts</string>
     <string name="java_pswd_updatesuccess">Lösenordet har uppdaterats</string>
-    <string name="java_settings_updatesuccess">Inställningarna har uppdaterats</string>
+    <!--string name="java_settings_updatesuccess">Inställningarna har uppdaterats</string-->
 
     <string name="label_searchresult_timeinfo">n/a - n/a (n/a min)</string>
     <string name="label_searchresult_routeinfo">n/a till n/a</string>

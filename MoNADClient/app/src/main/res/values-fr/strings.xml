@@ -8,8 +8,8 @@
     <string name="action_search">Accueil</string>
     <string name="action_settings">Paramètres</string>
     <string name="action_signout">Déconnexion</string>
-    <string name="hello_world">Hello world!</string>
-    <string name="label_login_anonymous">Rester anonyme</string>
+    <!--string name="hello_world">Hello world!</string-->
+    <!--string name="label_login_anonymous">Rester anonyme</string-->
     <string name="label_login_login">Connexion</string>
     <string name="label_login_newuser">Nouvel Utilisateur? Créer un compte</string>
     <string name="label_login_password">Mot de Passe</string>
@@ -65,7 +65,7 @@
     <string name="label_search_earliesttrip">Départ le plus proche</string>
     <string name="label_search_results">Résultats</string>
     <string name="label_search_priority">Priorité</string>
-    <string name="label_search_moreresults">Plus de Résultats</string>
+    <!--string name="label_search_moreresults">Plus de Résultats</string-->
     <string name="label_search_hintposition">Choisir votre position </string>
     <string name="label_search_hintdestination">Choisir votre destination</string>
     <string name="label_search_from">De</string>
@@ -124,7 +124,7 @@
     <string name="java_main_exitmonad">Voulez-vous quitter MoNAD?</string>
     <string name="java_passwordsnomatch">Les mots de passe ne correspondent pas!</string>
     <string name="java_googleplayloginwarning">Sans Google Play Services, vous ne pouvez pas vous connecter avec votre compte Google</string>
-    <string name="java_trips_samebooking">Vous avez déjà réservé ce voyage</string>
+    <!--string name="java_trips_samebooking">Vous avez déjà réservé ce voyage</string-->
     <string name="label_search_search">Recherche</string>
     <string name="java_accountpermissionwarning">Vous ne pouvez pas vous connecter avec votre compte Google sans nous donner accés aux informations de votre compte </string>
     <string-array name="settings_tab_titles">
@@ -136,7 +136,7 @@
     <string name="java_profile_updatesuccess">Votre profil a été mis à jour</string>
     <string name="java_pswd_resetsuccess">Votre mot de passe a réinitialisé</string>
     <string name="java_pswd_updatesuccess">Votre mot de passe a été mis à jour</string>
-    <string name="java_settings_updatesuccess">Vos paramétres ont été mis à jour</string>
+    <!--string name="java_settings_updatesuccess">Vos paramétres ont été mis à jour</string-->
     <string name="java_signupsuccess">Vous êtes connectés</string>
     <string name="java_search_locationdisabled">L\'option de localisation est désactivée. Veuillez utiliser la recherche avancée et choisir une adresse de départ</string>
 </resources>

@@ -184,6 +184,6 @@
     <string name="java_profile_updatesuccess">Profile updated successfully</string>
     <string name="java_signupsuccess">Signup succeeded</string>
     <string name="java_pswd_resetsuccess">Password reset successfully</string>
-    <!--string name="java_pswd_updatesuccess">Password updated successfully</string-->
-    <string name="java_settings_updatesuccess">Settings updated successfully</string>
+    <string name="java_pswd_updatesuccess">Password updated successfully</string>
+    <!--string name="java_settings_updatesuccess">Settings updated successfully</string-->
 </resources>

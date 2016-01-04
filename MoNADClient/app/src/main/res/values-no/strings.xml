@@ -40,7 +40,7 @@
     <string name="label_login_login">Logg inn</string>
     <string name="label_login_username">Brukenavn</string>
     <string name="label_login_password">Passord</string>
-    <string name="label_login_anonymous">Anonym innloggning</string>
+    <!--string name="label_login_anonymous">Anonym innloggning</string-->
     <string name="label_login_newuser">Ny bruker? Opprett en brukerkonto</string>
     <string name="label_login_forgottenpassword">Glemt passordet?</string>
     <string name="label_login_wrongcredentials">Innloggingen mislyktes. Prøv igjen</string>
@@ -95,7 +95,7 @@
     <string name="label_search_earliesttrip">Tidigste turen</string>
     <string name="label_search_results">Reiseforslag</string>
     <string name="label_search_search">Søk</string>
-    <string name="label_search_moreresults">Vis flere turer</string>
+    <!--string name="label_search_moreresults">Vis flere turer</string-->
 
     <!--Activity - Settings-->
     <string-array name="settings_tab_titles">
@@ -139,7 +139,7 @@
     <!--MISCELLANEOUS-->
     <string name="img_description">Ikon mangler</string>
     <string name="non_available">n/a</string>
-    <string name="hello_world">Hello world!</string>
+    <!--string name="hello_world">Hello world!</string-->
 
     <string name="java_to">til</string>
     <string name="java_yes">Ja</string>
@@ -166,7 +166,7 @@
     <string name="java_settings_themechanged_default">Temaet har blitt endret til Standard</string>
     <string name="java_settings_themechanged_dark">Temaet har blitt endret til Mørk</string>
     <string name="java_trips_notripsbooked">Ingen tur er booket</string>
-    <string name="java_trips_samebooking">Du har allerede bestilt denne turen</string>
+    <!--string name="java_trips_samebooking">Du har allerede bestilt denne turen</string-->
     <string name="java_languagerva_languagechanged">Språkinnstillingene har blitt endret til</string>
     <string name="java_notificationsrva_newmessages">Du har en ny melding</string>
     <string name="label_searchresult_timeinfo">n/a - n/a (n/a min)</string>
@@ -176,5 +176,5 @@
     <string name="java_signupsuccess">Registrering lyktes</string>
     <string name="java_pswd_resetsuccess">Passord er nullstilt</string>
     <string name="java_pswd_updatesuccess">Passord er oppdatert</string>
-    <string name="java_settings_updatesuccess">Innstillinger oppdatert</string>
+    <!--string name="java_settings_updatesuccess">Innstillinger oppdatert</string-->
 </resources>
