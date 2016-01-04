@@ -109,7 +109,7 @@ public class TripRecyclerViewAdapter
             }
             else{
                 if(trips.get(i).isToday()){
-                    tripViewHolder.date.setText("TODAY");
+                    tripViewHolder.date.setText(R.string.java_today);
                     tripViewHolder.date.setTextColor(ContextCompat.getColor(tripViewHolder.itemView.getContext(), R.color.warnColor));
                 }
                 else {

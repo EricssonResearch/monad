@@ -103,13 +103,6 @@ public class TripsActivity extends MenuedActivity implements AsyncResponse, Asyn
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-
-        if(id == R.id.action_mytrips){
-            return true;
-        }
-        else {
-            return super.onOptionsItemSelected(item);
-        }
+        return item.getItemId() == R.id.action_mytrips || super.onOptionsItemSelected(item);
     }
 }
