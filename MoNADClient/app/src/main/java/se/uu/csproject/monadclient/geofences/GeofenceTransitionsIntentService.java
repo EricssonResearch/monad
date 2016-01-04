@@ -93,7 +93,7 @@ public class GeofenceTransitionsIntentService extends IntentService {
 
             Log.i(TAG, geofenceTransitionDetails);
         } else {
-            Log.e(TAG, getString(R.string.geofence_transition_invalid_type, geofenceTransition));
+            Log.e(TAG, "Geofence transition error: invalid transition type " + geofenceTransition);
         }
     }
 
@@ -134,11 +134,11 @@ public class GeofenceTransitionsIntentService extends IntentService {
     private String getTransitionString(int transitionType) {
         switch (transitionType) {
             case Geofence.GEOFENCE_TRANSITION_ENTER:
-                return getString(R.string.geofence_transition_entered);
+                return "Entered";
             case Geofence.GEOFENCE_TRANSITION_EXIT:
-                return getString(R.string.geofence_transition_exited);
+                return "Exited";
             default:
-                return getString(R.string.unknown_geofence_transition);
+                return "Unknown Transition";
         }
     }
 }

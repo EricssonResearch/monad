@@ -179,4 +179,5 @@
     <string name="java_pswd_resetsuccess">Αναίρεση κωδικού επιτυχής</string>
     <string name="java_pswd_updatesuccess">Ενημέρωση κωδικού επιτυχής</string>
     <string name="java_settings_updatesuccess">Οι ρυθμίσεις ενημερώθηκαν επιτυχώς</string>
+    <string name="java_search_locationdisabled">Φαίνεται ότι οι ρυθμίσεις τοποθεσίας σας είναι απενεργοποιημένες. Παρακαλώ χρησιμοποιείστε την σύνθετη αναζήτηση και επιλέξτε διεύθυνση εκκίνησης</string>
 </resources>
