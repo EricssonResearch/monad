@@ -72,8 +72,7 @@ class TestTravelPlanner(unittest.TestCase):
             busStopDBString = mongoString + self.dbName + "'), 'BusStop')"
 
         self.assertEqual(self.tp.fittingRoutes, [])
-        self.assertEqual(self.tp.doubleRoutes, [])
-        self.assertEqual(self.tp.tripleRoutes, [])
+        self.assertEqual(self.tp.multiRoutes, [])
         self.assertEqual(self.tp.possibleRoutes, [])
         self.assertEqual(self.tp.tripTuples, [])
         self.assertEqual(self.tp.lineTuples, [])

@@ -61,7 +61,6 @@ class tester:
             json = self.tp.getBestRoutes(request["_id"], routeMode)
         return json
 
-    #TODO: works only with single or double routes (just one change)
     def printBestResult(self, jsonObject):
         if (jsonObject == None or jsonObject == {}):
             print ("No route found!")
@@ -71,9 +70,12 @@ class tester:
         time = "Trip starts at " + best[0]["startTime"] + " and ends at " + best[-1]["endTime"]
         line = "Taking line " + str(best[0]["line"])
         if (len(best) > 1):
-            trip += " via " + best[0]["endBusStop"]
-            time += ". Waiting at intermediate busstop from " + best[0]["endTime"] + " to " + best[1]["startTime"]
-            line += " and " + str(best[1]["line"])
+            for i in range(1, len(best)):
+                trip += " via " + best[i]["startBusStop"]
+                line += " and " + str(best[i]["line"])
+                if (i < len(best)):
+                    time += ". Waiting at intermediate busstop from " + best[i - 1]["endTime"] + \
+                            " to " + best[i]["startTime"]
         print (trip)
         print (time)
         print (line)
@@ -83,11 +85,16 @@ class tester:
             print ("No route found!")
             return
         best = jsonObject[1]
-        print ("Route from " + best[0]["startBusStop"] + " to " + best[-1]["endBusStop"])
+        route = "Route from " + best[0]["startBusStop"] + " to " + best[-1]["endBusStop"]
+        print (route)
         for key in jsonObject.keys():
-            print ('\nTrip', key)
+            tripLine = 'Trip ' + str(key)
+            print (tripLine)
             for trip in jsonObject[key]:
-                print ("From", trip["startBusStop"], "to", trip["endBusStop"])
-                print ("Start", str(trip["startTime"]), "until", str(trip["endTime"]))
-                print ("Used line", str(trip["line"]))
+                tour = "From " + trip["startBusStop"] + " to " + trip["endBusStop"]
+                time = "Start " + str(trip["startTime"]) + " until " + str(trip["endTime"])
+                line = "Used line " + str(trip["line"])
+                print (tour)
+                print (time)
+                print (line)
 
