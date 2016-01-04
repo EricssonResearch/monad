@@ -43,7 +43,7 @@
     <string name="label_login_login">Log In</string>
     <string name="label_login_username">Username</string>
     <string name="label_login_password">Password</string>
-    <string name="label_login_anonymous">Stay anonymous</string>
+    <!--string name="label_login_anonymous">Stay anonymous</string-->
     <string name="label_login_newuser">New user? Create an account</string>
     <string name="label_login_forgottenpassword">Forgot your password?</string>
     <string name="label_login_wrongcredentials">Login failed. Please try again</string>
@@ -99,7 +99,7 @@
     <string name="label_search_earliesttrip">Earliest trip</string>
     <string name="label_search_results">Results</string>
     <string name="label_search_search">Search</string>
-    <string name="label_search_moreresults">More Results</string>
+    <!--string name="label_search_moreresults">More Results</string-->
     <string name="label_searchresult_timeinfo">n/a - n/a (n/a min)</string>
     <string name="label_searchresult_routeinfo">n/a to n/a</string>
 
@@ -138,7 +138,7 @@
     <string name="label_trip_businfo">Bus </string>
     <string name="label_tripsactivity_from">From</string>
     <string name="label_tripsactivity_to">To</string>
-    <string name="label_tripsactivity_time" translatable="false">00:00</string>
+
     <string name="label_tripsactivity_countdown" translatable="false">00:00:00</string>
     <string name="label_tripsactivity_date" translatable="false">00/00/00</string>
 
@@ -150,7 +150,6 @@
     <!--MISCELLANEOUS-->
     <string name="img_description">Icon Missing</string>
     <string name="non_available">n/a</string>
-    <string name="hello_world">Hello world!</string>
     <string name="GoogleProjectID" translatable="false">81265551950</string>
     <string name="java_to">to</string>
     <string name="java_yes">Yes</string>
@@ -178,13 +177,13 @@
     <string name="java_settings_themechanged_default">Theme changed to default</string>
     <string name="java_settings_themechanged_dark">Theme changed to dark</string>
     <string name="java_trips_notripsbooked">No trips have been booked</string>
-    <string name="java_trips_samebooking">You have already booked this trip</string>
+    <!--string name="java_trips_samebooking">You have already booked this trip</string-->
     <string name="java_languagerva_languagechanged">Language changed to</string>
     <string name="java_notificationsrva_newmessages">You have received new messages</string>
     <string name="java_login_wrongcredential">Invalid credentials. Please, try again.</string>
     <string name="java_profile_updatesuccess">Profile updated successfully</string>
     <string name="java_signupsuccess">Signup succeeded</string>
     <string name="java_pswd_resetsuccess">Password reset successfully</string>
-    <string name="java_pswd_updatesuccess">Password updated successfully</string>
+    <!--string name="java_pswd_updatesuccess">Password updated successfully</string-->
     <string name="java_settings_updatesuccess">Settings updated successfully</string>
 </resources>
