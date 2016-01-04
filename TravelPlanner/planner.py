@@ -48,6 +48,7 @@ class Mode:
     startTime   = 3
     arrivalTime = 4
 
+# Documentation at the end of the file
 class TravelPlanner:
 
     def __init__(self, client):
@@ -510,5 +511,37 @@ class TravelPlanner:
         self._convertToJson()
 
         return self.jsonObject
+
+
+#################
+# Documentation #
+#################
+
+# Constructor: TravelPlanner(database)
+#  - Parameters: database: Database object
+#  - Return value: TravelPlanner object
+#
+# Public function: userTripObject getBestRoutes(requestID, mode)
+#  Parameters: 
+#   - requestID: ID of the request, will be used to find the request in the database
+#   - mode (default = Mode.tripTime): The mode the best route should be selected by,
+#                either tripTime (shortest time in the bus) or waitTime (shortest time until the
+#                bus starts from the selected waypoint). The preferred usage is through the Mode
+#                class (see below).
+#  Return value:
+#   - userTripObject: A JSON object containing the userTrip items marking the recommended trips.
+#                     The number of items is specified by the constant NUM_OF_ROUTES_RETURNED,
+#                     which is currently 5. 
+#
+# Mode class
+#  - tripTime = 1
+#        Puts the focus on finding the shortest route for the client
+#  - waitTime = 2
+#        Puts the focus on the soonest begin of the journey
+#  - startTime   = 3
+#        Shows that the client wants to start as soon as possible after a given point of time
+#  - arrivalTime = 4
+#        Shows that the client wants to arrive before a certain point of time
+
 
 
