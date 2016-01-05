@@ -6,11 +6,7 @@ import java.net.HttpURLConnection;
 import java.io.DataOutputStream;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.io.IOException;
 
-/**
- *
- */
 public abstract class Authentication {
     /* "http://localhost:" "http://130.238.15.114:" */
     public static final String AUTHENTICATION_HOST = "http://130.238.15.114:";

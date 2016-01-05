@@ -74,7 +74,7 @@ public class NotificationRecyclerViewAdapter extends RecyclerView.Adapter<Notifi
 
     @Override
     public void onBindViewHolder(final NotificationViewHolder notificationViewHolder, final int i) {
-        notificationViewHolder.notificationTime.setText(formatTime((Date) notifications.get(i).getTime(), notifications.get(i).isToday()));
+        notificationViewHolder.notificationTime.setText(formatTime(notifications.get(i).getTime(), notifications.get(i).isToday()));
         notificationViewHolder.notificationPhoto.setImageResource(notifications.get(i).getIconID());
 
         notificationViewHolder.notificationPhoto.setOnClickListener(new View.OnClickListener() {

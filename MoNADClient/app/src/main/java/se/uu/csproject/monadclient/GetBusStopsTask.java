@@ -3,11 +3,6 @@ package se.uu.csproject.monadclient;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import se.uu.csproject.monadclient.storage.Storage;
-
-/**
- *
- */
 public class GetBusStopsTask extends AsyncTask <Void, Void, String> {
     AsyncGetBusStopsInteraction callingClass;
 

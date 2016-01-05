@@ -23,42 +23,25 @@ public class Security {
     }
 
     public static boolean isNumber(int ascii) {
-        if (ascii > 47 && ascii < 58) {
-            return true;
-        }
-        return false;
+        return (ascii > 47 && ascii < 58);
     }
 
     public static boolean isCapital(int ascii) {
-        if (ascii > 64 && ascii < 91) {
-            return true;
-        }
-        return false;
+        return (ascii > 64 && ascii < 91);
     }
 
     public static boolean isSmallCase(int ascii) {
-        if (ascii > 96 && ascii < 123) {
-            return true;
-        }
-        return false;
+        return (ascii > 96 && ascii < 123);
     }
 
     public static boolean validateUsernameCharacter(Character c) {
         int ascii = (int) c;
 
-        if (isNumber(ascii) || isCapital(ascii) || isSmallCase(ascii)) {
-            return true;
-        }
-        return false;
+        return (isNumber(ascii) || isCapital(ascii) || isSmallCase(ascii));
     }
 
     public static boolean validatePassword(String password){
-        if(password.length() < 6) {
-            return false;
-        }
-        else {
-            return true;
-        }
+        return (password.length() < 6);
     }
 
     public static boolean validateEmail(String email) {

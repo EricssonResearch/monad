@@ -87,11 +87,11 @@ public class RouteActivity extends AppCompatActivity {
                     instructions = (TextView) busStopView.findViewById(R.id.label_instructions);
 
                     if (j == 0) {
-                        time.setText(formatTime((Date) timeStart));
+                        time.setText(formatTime(timeStart));
                         instructions.setText("Board Bus " + line + " at:");
                     } else {
                         ImageView busStopImage = (ImageView) busStopView.findViewById(R.id.bus_stop_image);
-                        time.setText(formatTime((Date) timeExit));
+                        time.setText(formatTime(timeExit));
                         busStopImage.setVisibility(View.INVISIBLE);
                         instructions.setText("Depart at:");
                     }

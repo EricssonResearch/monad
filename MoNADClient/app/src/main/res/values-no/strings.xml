@@ -178,4 +178,6 @@
     <string name="java_pswd_updatesuccess">Passord er oppdatert</string>
     <string name="java_search_locationdisabled">Det virker som du befinner tjenesten er slått av. Bruk avansert søk og angi en avgang adresse </string>
     <!--string name="java_settings_updatesuccess">Innstillinger oppdatert</string-->
+
+    <string name="gcm_defaultSenderId">46087854555</string>
 </resources>

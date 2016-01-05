@@ -190,7 +190,7 @@ public class MainActivity extends MenuedActivity implements AsyncResponse, Async
                     Toast toast = Toast.makeText(context, text, duration);
                     toast.show();
                 }
-                return;
+                break;
             }
         }
     }

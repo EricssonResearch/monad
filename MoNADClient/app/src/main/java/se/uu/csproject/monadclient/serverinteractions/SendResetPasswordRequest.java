@@ -2,8 +2,6 @@ package se.uu.csproject.monadclient.serverinteractions;
 
 import android.os.AsyncTask;
 
-import se.uu.csproject.monadclient.interfaces.AsyncResponseString;
-
 public class SendResetPasswordRequest extends AsyncTask<String, Void, String> {
 
     /* This is the function that is called by the button listener */
