@@ -8,33 +8,33 @@ from pymongo import MongoClient
 
 class TestStringMethods(unittest.TestCase):
 
-    def test_populateRequests(self):
+    def test_populate_requests(self):
         tr.users = []
-        req = tr.retrieveRequests()
-        tr.populateRequests(req)
+        req = tr.retrieve_requests()
+        tr.populate_requests(req)
         self.assertGreater(len(tr.users), 0)
         print "Test - OK ... Stored past requests"
 
-    def test_retrieveRequests(self):
-        req = tr.retrieveRequests()
+    def test_retrieve_requests(self):
+        req = tr.retrieve_requests()
         self.assertEqual(str(req), "Collection(Database(MongoClient(" \
         "'130.238.15.114', 27017), u'monad1'), u'TravelRequest')")
         print "Test - OK ... Retrieved past accessed"
 
-    def test_getTodayTimetable(self):
-        self.assertEqual(str(type(tr.getTodayTimeTable())),
+    def test_get_today_timetable(self):
+        self.assertEqual(str(type(tr.get_today_timetable())),
         "<class 'pymongo.cursor.Cursor'>")
         print "Test - OK ... Timetable accessed"
 
-    def test_populateTimeTable(self):
+    def test_populate_timetable(self):
         tr.routes = []
-        tr.populateTimeTable()
-        if tr.getTodayTimeTable().count() > 0:
+        tr.populate_timetable()
+        if tr.get_today_timetable().count() > 0:
             self.assertGreater(len(tr.routes), 0)
         else:
             self.assertEqual(len(tr.routes), 0)
         print "Test - OK ... Timetable stored"
-    
+
     def test_iterator(self):
         a = [(datetime.datetime(2015, 12, 11, 3, 22, 4), 59.8130431,
         17.6668168, u'Arrheniusplan'),
@@ -103,20 +103,20 @@ class TestStringMethods(unittest.TestCase):
         0.45668835686769677, u'Centralstationen')])
         print "Test - OK ... Iterator testing"
 
-    def test_nearestStops(self):
+    def test_nearest_stops(self):
         x1 = 59.851252
         x2 = 59.858052
         y1 = 17.59329
         y2 = 17.644739
         dist = 500
-        self.assertEqual(tr.nearestStops(x1,y1,dist),
+        self.assertEqual(tr.nearest_stops(x1,y1,dist),
         ['Reykjaviksgatan', 'Ekebyhus'])
-        self.assertEqual(tr.nearestStops(x2,y2,dist),
+        self.assertEqual(tr.nearest_stops(x2,y2,dist),
         ['Fyristorg', 'Stationsgatan', 'Samariterhemmet', 'Centralstationen',
         'Dragarbrunn', 'Stadshuset', 'Klostergatan'])
         print "Test - OK ... Finding nearest stops"
 
-    def test_calculateDistanceDeparture(self):
+    def test_calculate_distance_departure(self):
         tr.nearest_stops_dep = []
         tr.nearest_stops_arr = []
         tr.selected_centroids = [array([ 0.45161914,  0.52874184,  0.55135584,
@@ -128,13 +128,13 @@ class TestStringMethods(unittest.TestCase):
         array([ 0.56304867,  0.50875958,  0.49079012,  0.51340253,  0.38025537,
         0.03755701,  0.38917885,  0.04317823])]
         for i in range(len(tr.selected_centroids)):
-            cent_lat, cent_long = tr.backToCoordinates(
+            cent_lat, cent_long = tr.back_to_coordinates(
             tr.selected_centroids[i][0],tr.selected_centroids[i][1])
-            tr.nearest_stops_dep.append(tr.nearestStops(
+            tr.nearest_stops_dep.append(tr.nearest_stops(
             cent_lat, cent_long, 200))
-            cent_lat, cent_long = tr.backToCoordinates(
+            cent_lat, cent_long = tr.back_to_coordinates(
             tr.selected_centroids[i][2],tr.selected_centroids[i][3])
-            tr.nearest_stops_arr.append(tr.nearestStops(
+            tr.nearest_stops_arr.append(tr.nearest_stops(
             cent_lat, cent_long, 200))
         x = [(0.236022142857145, 0.6218945454545409, 0.40896343421923104,
         0.44295239459832625, u'Arrheniusplan'),
@@ -172,7 +172,7 @@ class TestStringMethods(unittest.TestCase):
         0.45607272866205456, u'B\xe4verns gr\xe4nd'),
         (0.5531264285714069, 0.5268077272727204, 0.3906411146689745,
         0.45668835686769677, u'Centralstationen')]
-        result = tr.calculateDistanceDeparture(x)
+        result = tr.calculate_distance_departure(x)
         result['dist_departure'][0] = round(result['dist_departure'][0],4)
         result['dist_departure'][1] = round(result['dist_departure'][1],4)
         result['dist_departure'][2] = round(result['dist_departure'][2],4)
@@ -183,7 +183,7 @@ class TestStringMethods(unittest.TestCase):
         round(0.35549964732135958,4), 1000, 1000]})
         print "Test - OK ... Distance departure function"
 
-    def test_calculateDistanceArrival(self):
+    def test_calculate_distance_arrival(self):
         tr.nearest_stops_dep = []
         tr.nearest_stops_arr = []
         tr.selected_centroids = [array([ 0.45161914,  0.52874184,  0.55135584,
@@ -195,13 +195,13 @@ class TestStringMethods(unittest.TestCase):
         array([ 0.56304867,  0.50875958,  0.49079012,  0.51340253,  0.38025537,
         0.03755701,  0.38917885,  0.04317823])]
         for i in range(len(tr.selected_centroids)):
-            cent_lat, cent_long = tr.backToCoordinates(
+            cent_lat, cent_long = tr.back_to_coordinates(
             tr.selected_centroids[i][0], tr.selected_centroids[i][1])
-            tr.nearest_stops_dep.append(tr.nearestStops(
+            tr.nearest_stops_dep.append(tr.nearest_stops(
             cent_lat, cent_long, 200))
-            cent_lat, cent_long = tr.backToCoordinates(
+            cent_lat, cent_long = tr.back_to_coordinates(
             tr.selected_centroids[i][2],tr.selected_centroids[i][3])
-            tr.nearest_stops_arr.append(tr.nearestStops(
+            tr.nearest_stops_arr.append(tr.nearest_stops(
             cent_lat, cent_long, 200))
         x = [(0.236022142857145, 0.6218945454545409, 0.40896343421923104,
         0.44295239459832625, u'Arrheniusplan'),
@@ -239,8 +239,8 @@ class TestStringMethods(unittest.TestCase):
         0.45607272866205456, u'B\xe4verns gr\xe4nd'),
         (0.5531264285714069, 0.5268077272727204, 0.3906411146689745,
         0.45668835686769677, u'Centralstationen')]
-        result = tr.calculateDistanceArrival(x,
-        tr.calculateDistanceDeparture(x)["pos_departure"])
+        result = tr.calculate_distance_arrival(x,
+        tr.calculate_distance_departure(x)["pos_departure"])
         result['dist_arrival'][0] = round(result['dist_arrival'][0],4)
         result['dist_arrival'][1] = round(result['dist_arrival'][1],4)
         result['dist_arrival'][2] = round(result['dist_arrival'][2],4)
@@ -249,7 +249,7 @@ class TestStringMethods(unittest.TestCase):
         [1000.0, 1000.0, 0.2384, 1000.0], 'pos_arrival': [0, 0, 10, 0]})
         print "Test - OK ... Distance arrival function"
 
-    def test_recommendationsToReturn(self):
+    def test_recommendations_to_return(self):
         tr.to_return = []
         rec = [[ObjectId('566a87b4f073975608b4d460'),
         0.056501097198321068, 7, 17], [ObjectId('566fef25f073971bc714d54b'),
@@ -262,7 +262,7 @@ class TestStringMethods(unittest.TestCase):
         0.27171498213820977, 0, 7], [ObjectId('566f3527d3d31e5f74a9721c'),
         0.27176310376158269, 0, 7], [ObjectId('56715f8cf073973ac777605a'),
         0.27191279288419545, 0, 7]]
-        tr.recommendationsToReturn(rec)
+        tr.recommendations_to_return(rec)
         self.assertEqual(tr.to_return, [(1, 1, u'Polacksbacken',
         u'Arrheniusplan', [u'Polacksbacken', u'Lundellska skolan',
         u'Uppsala Folkh\xf6gskola', u'Emmy Rappes v\xe4g',
@@ -337,69 +337,69 @@ class TestStringMethods(unittest.TestCase):
          ObjectId('56715f8cf073973ac777605a'))])
         print "Test - OK ... Recommendations to return"
 
-    def test_toSeconds(self):
+    def test_to_seconds(self):
         a = datetime.datetime(2015,1,1,0,0,1)
         b = datetime.datetime(2000,2,3,23,59,59)
-        self.assertTrue(tr.toSeconds(a), 1)
-        self.assertTrue(tr.toSeconds(b), 86399)
+        self.assertTrue(tr.to_seconds(a), 1)
+        self.assertTrue(tr.to_seconds(b), 86399)
         print "Test - OK ... Datetime conversion to seconds"
 
-    def test_toCoordinates(self):
+    def test_to_coordinates(self):
         a = 0
         b = 21600
         c = 43200
         d = 86400
-        self.assertTrue(tr.toCoordinates(a), (13750, 0))
-        self.assertTrue(tr.toCoordinates(b), (0, 13750))
-        self.assertTrue(tr.toCoordinates(c), (-13750, 0))
-        self.assertTrue(tr.toCoordinates(d), (0, -13750))
+        self.assertTrue(tr.to_coordinates(a), (13750, 0))
+        self.assertTrue(tr.to_coordinates(b), (0, 13750))
+        self.assertTrue(tr.to_coordinates(c), (-13750, 0))
+        self.assertTrue(tr.to_coordinates(d), (0, -13750))
         print "Test - OK ... Seconds conversion to coordinates"
 
-    def test_timeNormalizer(self):
+    def test_time_normalizer(self):
         a = 13750
         b = -12345
         c = 83000
-        self.assertTrue(tr.toCoordinates(a), 0.5)
-        self.assertTrue(tr.toCoordinates(b), 0.025545454545454545)
-        self.assertTrue(tr.toCoordinates(c), 1.759090909090909)
+        self.assertTrue(tr.to_coordinates(a), 0.5)
+        self.assertTrue(tr.to_coordinates(b), 0.025545454545454545)
+        self.assertTrue(tr.to_coordinates(c), 1.759090909090909)
         print "Test - OK ... Time normalization"
 
-    def test_latNormalizer(self):
+    def test_lat_normalizer(self):
         a = 59.851252
         b = 59.840427
         c = 0
-        self.assertTrue(tr.latNormalizer(a), 0.5089428571428637)
-        self.assertTrue(tr.latNormalizer(b), 0.4316214285714063)
-        self.assertTrue(tr.latNormalizer(c), -426.9999999999983)
+        self.assertTrue(tr.lat_normalizer(a), 0.5089428571428637)
+        self.assertTrue(tr.lat_normalizer(b), 0.4316214285714063)
+        self.assertTrue(tr.lat_normalizer(c), -426.9999999999983)
         print "Test - OK ... Latitude normalization"
 
-    def test_lonNormalizer(self):
+    def test_lon_normalizer(self):
         a = 59.851252
         b = 59.840427
         c = 0
-        self.assertTrue(tr.latNormalizer(a), 192.36932727272827)
-        self.assertTrue(tr.latNormalizer(b), 192.3201227272737)
-        self.assertTrue(tr.latNormalizer(c), -79.6818181818186)
+        self.assertTrue(tr.lat_normalizer(a), 192.36932727272827)
+        self.assertTrue(tr.lat_normalizer(b), 192.3201227272737)
+        self.assertTrue(tr.lat_normalizer(c), -79.6818181818186)
         print "Test - OK ... Longitude normalization"
 
-    def test_removeDuplicates(self):
+    def test_remove_duplicates(self):
         a = [(1,2,1,2), (1,2,1,2), (1,2,1,2), (2,3,4,5)]
         b = [(1,2,3,4), (1,2,3,4), (1,2,3,4)]
-        self.assertEqual(tr.removeDuplicates(a), [(2,4,5), (1,1,2)])
-        self.assertEqual(tr.removeDuplicates(b), [(1,3,4)])
+        self.assertEqual(tr.remove_duplicates(a), [(2,4,5), (1,1,2)])
+        self.assertEqual(tr.remove_duplicates(b), [(1,3,4)])
         print "Test - OK ... Removing duplicates"
 
-    def test_timeApproximation(self):
-        self.assertEqual(tr.timeApproximation(59.851252, 17.593290,
+    def test_time_approximation(self):
+        self.assertEqual(tr.time_approximation(59.851252, 17.593290,
                                               59.858052, 17.644739), 18)
-        self.assertEqual(tr.timeApproximation(59.851252, 17.593290,
+        self.assertEqual(tr.time_approximation(59.851252, 17.593290,
                                               59.840427, 17.647628), 20)
         print "Test - OK ... Approximating time"
 
-    def test_backToCoordinates(self):
+    def test_back_to_coordinates(self):
         a = 0.5089428571428637
         b = 0.28768181818181293
-        self.assertEqual(tr.backToCoordinates(a,b), (59.851252, 17.59329))
+        self.assertEqual(tr.back_to_coordinates(a,b), (59.851252, 17.59329))
         print "Test - OK ... Back to coordinates"
 
 if __name__ == "__main__":
