@@ -15,7 +15,6 @@ import com.google.android.gms.gcm.GcmListenerService;
 import se.uu.csproject.monadclient.activities.NotificationsActivity;
 import se.uu.csproject.monadclient.R;
 
-
 public class  MyGcmListenerService extends GcmListenerService {
 
     private static final String TAG = "MyGcmListenerService";
@@ -30,12 +29,6 @@ public class  MyGcmListenerService extends GcmListenerService {
         Log.d(TAG, "From: " + from);
         Log.d(TAG, "Message: " + message);
         String title=data.getString("title");
-
-//        if (from.startsWith("/topics/")) {
-//            // message received from some topic.
-//        } else {
-//            // normal downstream message.
-//        }
 
         // [Further improvements]
         /**
