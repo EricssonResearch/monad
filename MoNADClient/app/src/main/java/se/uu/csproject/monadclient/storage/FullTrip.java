@@ -9,15 +9,11 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
-
 public class FullTrip implements Parcelable {
-    /* TODO: Should be replaced by the method getID which returns the id of the first partial trip */
     private String id;                                              /* Same as the id of the first partial trip */
     private String travelRequestID;
     private String recommendationID;                                /* Same as the recommendation id in the database */
     private ArrayList<PartialTrip> partialTrips;
-    /* TODO: Duration should not be a variable - It should be estimated on the fly, based on the partial trips */
-    /* TODO: Should be replaced by the method getDuration */
     private long duration;                                          /* Corresponds to minutes */
     private boolean reserved;                                       /* Initially false | true in case of reservation */
     private int feedback;                                           /* initially -1 | Possible values [-1, 5] */
@@ -37,10 +33,6 @@ public class FullTrip implements Parcelable {
      * getPartialTripByID: Returns a partial trip with specific id
      */
 
-    /*
-     * TODO: This constructor should be changed, since id and duration variables will be removed,
-     * TODO: along with the corresponding call in the class StoreTrips
-     */
     public FullTrip(String id, String travelRequestID, ArrayList<PartialTrip> partialTrips, long duration,
                     boolean reserved, int feedback) {
         this.id = id;
@@ -57,7 +49,6 @@ public class FullTrip implements Parcelable {
         this.feedback = -1;
     }
 
-    /* TODO: Should be changed, since id and duration variables will be removed */
     protected FullTrip(Parcel in) {
         id = in.readString();
         travelRequestID = in.readString();
@@ -170,7 +161,7 @@ public class FullTrip implements Parcelable {
         return busLines.toString();
     }
 
-    // determines if the trip is happening now (true if: startTime < current time < endTime)
+    // Determines if the trip is happening right now (true if: startTime < current time < endTime)
     public boolean isInProgress() {
         if (partialTrips.get(0).getStartTime().before(Calendar.getInstance().getTime()) &&
                 partialTrips.get(partialTrips.size() - 1).getEndTime().after(Calendar.getInstance().getTime())) {
@@ -191,7 +182,7 @@ public class FullTrip implements Parcelable {
         }
     }
 
-    //returns a boolean: true if day, month and year are all identical
+    // Returns a boolean: true if day, month and year are all identical
     public boolean isToday() {
         Calendar today = Calendar.getInstance();
         Calendar startDate = Calendar.getInstance();
@@ -243,18 +234,3 @@ public class FullTrip implements Parcelable {
         }
     };
 }
-
-//    public void test() {
-//        Calendar calendar = new GregorianCalendar(2015, 10, 26, 10, 40, 0);
-//        Date startDate1 = calendar.getTime();
-//        ArrayList<String> trajectory = new ArrayList<String>() {{add("A"); add("B"); add("C");}};
-//
-//        PartialTrip partialTrip1 = new PartialTrip(21, "Polacks", startDate1, "Flogsta", startDate1, trajectory);
-//        PartialTrip partialTrip2 = new PartialTrip(5, "Flogsta", startDate1, "Centralstation", startDate1, trajectory);
-//
-//        ArrayList<PartialTrip> partialTrips = new ArrayList<>();
-//        partialTrips.add(partialTrip1);
-//        partialTrips.add(partialTrip2);
-//
-//        FullTrip fullTrip1 = new FullTrip("O1", partialTrips, 100, false, -1);
-//    }

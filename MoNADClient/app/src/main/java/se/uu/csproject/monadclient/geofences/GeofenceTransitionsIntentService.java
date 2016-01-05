@@ -14,6 +14,11 @@
  * limitations under the License.
  */
 
+/**
+ * This code was taken from: https://github.com/googlesamples/android-play-location/tree/master/Geofencing
+ * It was modified according to the needs of the project.
+ */
+
 package se.uu.csproject.monadclient.geofences;
 
 import android.app.IntentService;
@@ -31,7 +36,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import se.uu.csproject.monadclient.R;
 import se.uu.csproject.monadclient.storage.Storage;
 import se.uu.csproject.monadclient.storage.UserLocation;
 

@@ -8,7 +8,6 @@ import se.uu.csproject.monadclient.interfaces.AsyncResponse;
 import se.uu.csproject.monadclient.storage.FullTrip;
 import se.uu.csproject.monadclient.storage.Storage;
 
-
 public class SendQuickTravelRequest extends AsyncTask<String, Void, ArrayList<FullTrip>>{
     public AsyncResponse delegate = null;
 

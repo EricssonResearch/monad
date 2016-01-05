@@ -7,7 +7,6 @@ import android.util.Log;
 import java.util.ArrayList;
 import java.util.Date;
 
-
 public class PartialTrip implements Parcelable {
     private String id;                      /* Same as the user trip id in the database */
     private int line;
@@ -31,7 +30,6 @@ public class PartialTrip implements Parcelable {
         this.trajectory = trajectory;
     }
 
-    /* TODO: Do we need entries for id and busID ?? */
     protected PartialTrip(Parcel in) {
         id = in.readString();
         line = in.readInt();

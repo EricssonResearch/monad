@@ -28,9 +28,7 @@ public class GetRecommendationsTask extends AsyncTask<Void, Void, String> {
             Log.d(callingClass.getClass().getCanonicalName(), "Recommendations have been successfully loaded by the database");
         }
         else {
-            //initialize notifications, temporary
-            Storage.initializeRecommendationsData();
-            Log.d(callingClass.getClass().getCanonicalName(), "Fake recommendations have been generated");
+            Log.d(callingClass.getClass().getCanonicalName(), "Could not load recommendations");
         }
         callingClass.processReceivedRecommendations();
     }

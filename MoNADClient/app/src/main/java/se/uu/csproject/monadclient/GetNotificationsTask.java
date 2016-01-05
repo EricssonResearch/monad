@@ -30,9 +30,7 @@ public class GetNotificationsTask extends AsyncTask<Void, Void, String> {
                     "Notifications have been successfully loaded by the database");
         }
         else {
-            //initialize notifications, temporary
-            Storage.initializeNotificationData();
-            Log.d(callingClass.getClass().getCanonicalName(), "Fake notifications have been generated");
+            Log.d(callingClass.getClass().getCanonicalName(), "Could not load notifications");
         }
         callingClass.processReceivedNotifications();
     }

@@ -17,6 +17,7 @@ import se.uu.csproject.monadclient.FullTripsStartTimeComparator;
 public class StoreTrips {
 
     private int numberOfResults, numberOfPartialTrips;
+    private String TAG = "oops";
     private SimpleDateFormat format;
     private ArrayList<FullTrip> results;
 
@@ -76,10 +77,10 @@ public class StoreTrips {
             }
 
         } catch (java.text.ParseException e){
-            Log.d("oops", e.toString());
+            Log.d(TAG, e.toString());
 
         } catch (JSONException e) {
-            Log.d("oops", e.toString());
+            Log.d(TAG, e.toString());
         }
 
         // Sort the trips based on their start time and whether they're new or old
