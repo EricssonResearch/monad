@@ -38,29 +38,29 @@ MAX_LONGITUDE = 17.75
 MIN_COORDINATE = -13750
 MAX_COORDINATE = 13750
 CIRCLE_CONVERTER = math.pi / 43200
-NUMBER_OF_RECOMMENDATIONS = 2
+NUMBER_OF_RECOMMENDATIONS = 5
 client2 = MongoClient('130.238.15.114')
 db2 = client2.monad1
 client3 = MongoClient('130.238.15.114')
-#client3 = MongoClient()
+client3 = MongoClient()
 db3 = client3.monad1
 start = datetime.datetime.now()
 dontGoBehind = 0
 
-def timeApproximation(lat1, lon1, lat2, lon2):
+def time_approximation(lat1, lon1, lat2, lon2):
     point1 = (lat1, lon1)
     point2 = (lat2, lon2)
     distance = vincenty(point1, point2).kilometers
     return int(round(distance / 10 * 60))
 
-def retrieveRequests():
+def retrieve_requests():
     TravelRequest = db2.TravelRequest
     return TravelRequest
 
-def populateRequests(TravelRequest):
+def populate_requests(TravelRequest):
     results = db2.TravelRequest.find()
     for res in results:
-        dist = timeApproximation(res['startPositionLatitude'],
+        dist = time_approximation(res['startPositionLatitude'],
                                  res['startPositionLongitude'],
                                  res['endPositionLatitude'],
                                  res['endPositionLongitude'])
@@ -81,15 +81,15 @@ def populateRequests(TravelRequest):
             res['endPositionLongitude'], (res['startTime']).time(),
             (res['endTime']).time())))
 
-def getTodayTimeTable():
+def get_today_timetable():
     TimeTable = db2.TimeTable
     first = datetime.datetime.today()
     first = first.replace(hour = 0, minute = 0, second = 0, microsecond = 0)
     route = TimeTable.find({'date': {'$gte': first}})
     return route
 
-def populateTimeTable():
-    route = getTodayTimeTable()
+def populate_timetable():
+    route = get_today_timetable()
     waypoints = []
     for res in route:
         for res1 in res['timetable']:
@@ -104,36 +104,36 @@ def populateTimeTable():
 def iterator(waypoints):
     Waypoints = []
     for res in waypoints:
-        Waypoints.append((latNormalizer(res[1]), lonNormalizer(res[2]),
-                        timeNormalizer(toCoordinates(toSeconds(res[0]))[0]),
-                        timeNormalizer(toCoordinates(toSeconds(res[0]))[1]),
+        Waypoints.append((lat_normalizer(res[1]), lon_normalizer(res[2]),
+                        time_normalizer(to_coordinates(to_seconds(res[0]))[0]),
+                        time_normalizer(to_coordinates(to_seconds(res[0]))[1]),
                         res[3]))
     return Waypoints
 
 # Converting time object to seconds
-def toSeconds(dt):
+def to_seconds(dt):
     total_time = dt.hour * 3600 + dt.minute * 60 + dt.second
     return total_time
 
 # Mapping seconds value to (x, y) coordinates
-def toCoordinates(secs):
+def to_coordinates(secs):
     angle = float(secs) * CIRCLE_CONVERTER
     x = 13750 * math.cos(angle)
     y = 13750 * math.sin(angle)
     return x, y
 
 # Normalization functions
-def timeNormalizer(value):
+def time_normalizer(value):
     new_value = float((float(value) - MIN_COORDINATE) /
                       (MAX_COORDINATE - MIN_COORDINATE))
     return new_value /2
 
-def latNormalizer(value):
+def lat_normalizer(value):
     new_value = float((float(value) - MIN_LATITUDE) /
                       (MAX_LATITUDE - MIN_LATITUDE))
     return new_value
 
-def lonNormalizer(value):
+def lon_normalizer(value):
     new_value = float((float(value) - MIN_LONGITUDE) /
                       (MAX_LONGITUDE - MIN_LONGITUDE))
     return new_value
@@ -162,18 +162,17 @@ def optimalk(theRdd):
         optimal1.append(optimal[i] - optimal[i+1])
     return (optimal1.index(max(optimal1)) + 2)
 
-def backToCoordinates(lat, lon):
+def back_to_coordinates(lat, lon):
     new_lat = (lat * (MAX_LATITUDE - MIN_LATITUDE)) + MIN_LATITUDE
     new_lon = (lon * (MAX_LONGITUDE - MIN_LONGITUDE)) + MIN_LONGITUDE
     return new_lat, new_lon
 
-def nearestStops(lat, lon, dist):
+def nearest_stops(lat, lon, dist):
     stops = []
     url = "http://130.238.15.114:9998/get_nearest_stops_from_coordinates"
     data = {'lon': lon, 'lat': lat, 'distance': dist}
     headers = {'Content-type': 'application/x-www-form-urlencoded'}
     answer = requests.post(url, data = data, headers = headers)
-    #print answer.text
     p = re.compile("(u'\w*')")
     answer = p.findall(answer.text)
     answer = [x.encode('UTF8') for x in answer]
@@ -183,7 +182,7 @@ def nearestStops(lat, lon, dist):
 
 # The function that calculate the distance from the given tuple to all the
 # cluster centroids and returns the minimum disstance
-def calculateDistanceDeparture(tup1):
+def calculate_distance_departure(tup1):
     dist_departure = []
     pos_departure = []
     cent_num = 0
@@ -209,7 +208,7 @@ def calculateDistanceDeparture(tup1):
         cent_num += 1
     return {"dist_departure":dist_departure,"pos_departure":pos_departure}
 
-def calculateDistanceArrival(tup1,pos_departure):
+def calculate_distance_arrival(tup1,pos_departure):
     dist_arrival = []
     pos_arrival = []
     counter=-1
@@ -236,10 +235,10 @@ def calculateDistanceArrival(tup1,pos_departure):
         cent_num += 1
     return {"dist_arrival":dist_arrival,"pos_arrival":pos_arrival}
 
-def removeDuplicates(alist):
+def remove_duplicates(alist):
     return list(set(map(lambda (w, x, y, z): (w, y, z), alist)))
 
-def recommendationsToReturn(alist):
+def recommendations_to_return(alist):
     for rec in alist:
         trip = db2.BusTrip.find_one({'_id': rec[0]})
         traj = trip['trajectory'][rec[2]:rec[3]+1]
@@ -256,7 +255,7 @@ def recommendationsToReturn(alist):
                   names_only, trajectory[0][1], trajectory[-1][1], rec[0])
         to_return.append(result)
 
-def recommendationsToDB(user, alist):
+def recommendations_to_db(user, alist):
     rec_list = []
     for item in to_return:
         o_id = ObjectId()
@@ -294,89 +293,88 @@ def recommendationsToDB(user, alist):
         db3.UserTrip.insert(new_user_trip)
         db3.TravelRecommendation.insert(new_recommendation)
 
-def emptyPastRecommendations():
+def empty_past_recommendations():
     db3.TravelRecommendation.drop()
 
 if __name__ == "__main__":
-    start = datetime.datetime.now()
 
-    userIds = []
+    user_ids = []
     users = []
     routes = []
-    userIds = []
+    user_ids = []
 
-    #conf = (SparkConf().setAppName("travel_recommendation")
-                       #.setMaster("spark://<IP>"))
-    #sc = SparkContext(conf = conf)
     sc = SparkContext()
-    populateTimeTable()
-    myRoutes = sc.parallelize(routes).cache()
+    populate_timetable()
+    my_routes = sc.parallelize(routes, 8)
 
-    myRoutes = myRoutes.map(lambda (x,y): (x, iterator(y)))
+    my_routes = my_routes.map(lambda (x,y): (x, iterator(y))).cache()
 
-    req = retrieveRequests()
-    populateRequests(req)
-    initialRdd = sc.parallelize(users).cache()
-    userIdsRdd = (initialRdd.map(lambda (x,y): (x,1))
+    req = retrieve_requests()
+    populate_requests(req)
+
+    start = datetime.datetime.now()
+
+    initial_rdd = sc.parallelize(users, 4).cache()
+    user_ids_rdd = (initial_rdd.map(lambda (x,y): (x,1))
                             .reduceByKey(lambda a, b: a + b)
                             .collect())
 
-    for user in userIdsRdd:
-        userIds.append(user[0])
+    for user in user_ids_rdd:
+        user_ids.append(user[0])
 
-    emptyPastRecommendations()
-
-    userIds = []
-    userIds.append(1)
-    userIds.append(1111111)
-
-    for userId in userIds:
+    empty_past_recommendations()
+    '''
+    user_ids = []
+    user_ids.append(1)
+    '''
+    for userId in user_ids:
+        userId = 1
         recommendations = []
         transition = []
-        finalRecommendation = []
+        final_recommendation = []
         selected_centroids = []
-        routesDistances = []
+        routes_distances = []
         to_return = []
         nearest_stops_dep = []
         nearest_stops_arr = []
 
-        myRdd = (initialRdd.filter(lambda (x,y): x == userId)
-                           .map(lambda (x,y): y))
-        myRdd = (myRdd.map(lambda x: (x[0], x[1], x[2], x[3],
-                                     toCoordinates(toSeconds(x[4])),
-                                     toCoordinates(toSeconds(x[5]))))
+        my_rdd = (initial_rdd.filter(lambda (x,y): x == userId)
+                           .map(lambda (x,y): y)).cache()
+        my_rdd = (my_rdd.map(lambda x: (x[0], x[1], x[2], x[3],
+                                     to_coordinates(to_seconds(x[4])),
+                                     to_coordinates(to_seconds(x[5]))))
                       .map(lambda (x1, x2, x3, x4, (x5, x6), (x7, x8)):
-                                    (latNormalizer(x1), lonNormalizer(x2),
-                                     latNormalizer(x3), lonNormalizer(x4),
-                                     timeNormalizer(x5), timeNormalizer(x6),
-                                     timeNormalizer(x7), timeNormalizer(x8))))
+                                    (lat_normalizer(x1), lon_normalizer(x2),
+                                     lat_normalizer(x3), lon_normalizer(x4),
+                                     time_normalizer(x5), time_normalizer(x6),
+                                     time_normalizer(x7), time_normalizer(x8))))
 
-        selected_centroids = kmeans(5, myRdd)[1].centers
+        selected_centroids = kmeans(4, my_rdd)[1].centers
 
         for i in range(len(selected_centroids)):
-            cent_lat, cent_long = backToCoordinates(selected_centroids[i][0],
+            cent_lat, cent_long = back_to_coordinates(selected_centroids[i][0],
                                                     selected_centroids[i][1])
-            nearest_stops_dep.append(nearestStops(cent_lat, cent_long, 200))
-            cent_lat, cent_long = backToCoordinates(selected_centroids[i][2],
+            nearest_stops_dep.append(nearest_stops(cent_lat, cent_long, 200))
+            cent_lat, cent_long = back_to_coordinates(selected_centroids[i][2],
                                                     selected_centroids[i][3])
-            nearest_stops_arr.append(nearestStops(cent_lat, cent_long, 200))
+            nearest_stops_arr.append(nearest_stops(cent_lat, cent_long, 200))
 
-        routesDistances = myRoutes.map(lambda x: (x[0],
-        calculateDistanceDeparture(x[1])['dist_departure'],
-        calculateDistanceArrival(x[1],
-        calculateDistanceDeparture(x[1])['pos_departure'])['dist_arrival'],
-        calculateDistanceDeparture(x[1])['pos_departure'],
-        calculateDistanceArrival(x[1],
-        calculateDistanceDeparture(x[1])['pos_departure'])['pos_arrival']))
+        routes_distances = my_routes.map(lambda x: (x[0],
+        calculate_distance_departure(x[1])['dist_departure'],
+        calculate_distance_arrival(x[1],
+        calculate_distance_departure(x[1])['pos_departure'])['dist_arrival'],
+        calculate_distance_departure(x[1])['pos_departure'],
+        calculate_distance_arrival(x[1],
+        calculate_distance_departure(x[1])['pos_departure'])['pos_arrival']))
 
         for i in range(len(selected_centroids)):
-            sortRoute = (routesDistances.map(lambda (v, w, x, y, z):
+            sort_route = (routes_distances.map(lambda (v, w, x, y, z):
                                                 (v, w[i] + x[i], y[i], z[i]))
                                          .sortBy(lambda x:x[1]))
-            finalRecommendation.append((sortRoute
+            final_recommendation.append((sort_route
                                         .take(NUMBER_OF_RECOMMENDATIONS)))
 
-        for sug in finalRecommendation:
+        for sug in final_recommendation:
             for i in range(len(sug)):
                 temp = []
                 for j in range(len(sug[i])):
@@ -390,10 +388,5 @@ if __name__ == "__main__":
                 recommendations_final.append(rec)
 
         recommendations = recommendations_final[:10]
-        recommendationsToReturn(recommendations)
-        recommendationsToDB(userId, to_return)
-
-    # Counting performance time
-    end = datetime.datetime.now()
-    tdelta = end - start
-    print "The total time is: ", tdelta.total_seconds(), " seconds"
+        recommendations_to_return(recommendations)
+        recommendations_to_db(userId, to_return)
