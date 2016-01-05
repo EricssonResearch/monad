@@ -4,9 +4,6 @@ import java.security.MessageDigest;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 
-/**
- *
- */
 public class Security {
 
     public static boolean validateUsername(String username) {

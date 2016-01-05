@@ -61,7 +61,7 @@ public class Storage{
 
     public static void changeFeedback(String tripID, int feedback){
         try {
-            changedFeedback.put(tripID, new Integer(feedback));
+            changedFeedback.put(tripID, Integer.valueOf(feedback));
         } catch (JSONException e) {
             Log.d(TAG, e.toString());
         }

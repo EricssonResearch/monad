@@ -3,7 +3,7 @@ apply plugin: 'com.google.gms.google-services'
 
 android {
     compileSdkVersion 23
-    buildToolsVersion "23.0.1"
+    buildToolsVersion "23.0.2"
 
     defaultConfig {
         applicationId "se.uu.csproject.monadclient"
@@ -42,7 +42,7 @@ dependencies {
     compile 'com.google.android.gms:play-services-plus:7.+'
     compile 'com.google.android.gms:play-services-location:7.+'
 
-    //Testing lew libs for gcm
+    //Testing lew libs for gcm (check if base is needed))
     compile 'com.google.android.gms:play-services-gcm:7.+'
     compile 'com.google.android.gms:play-services-base:7.+'
 
