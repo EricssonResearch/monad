@@ -44,7 +44,7 @@ dependencies {
 
     //Testing lew libs for gcm (check if base is needed))
     compile 'com.google.android.gms:play-services-gcm:7.+'
-    //compile 'com.google.android.gms:play-services-base:7.+'
+    compile 'com.google.android.gms:play-services-base:7.+'
 
 }
 
