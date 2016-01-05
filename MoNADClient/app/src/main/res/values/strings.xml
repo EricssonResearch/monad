@@ -28,8 +28,7 @@
     <string name="action_aboutus">About Us</string>
     <string name="action_signout">Sign Out</string>
 
-    <!--Activity strings (content)-->
-    <!--Activity - AboutUs /yonatan -->
+    <!--Activity - About Us-->
     <string name="label_aboutus_projectName">Project Name</string>
     <string name="label_aboutus_project">Uppsala Student Project CS 2015 (MoNAD)</string>
     <string name="label_aboutus_productowner">Product Owner</string>
@@ -38,18 +37,16 @@
     <string name="label_aboutus_texttitle">About Us</string>
     <string name="label_aboutus_descriptiontext">MoNAD is a project under development by Uppsala University\'s Computer Science Master students.</string>
 
-
     <!--Activity - Login-->
     <string name="label_login_login">Log In</string>
     <string name="label_login_username">Username</string>
     <string name="label_login_password">Password</string>
-    <!--string name="label_login_anonymous">Stay anonymous</string-->
     <string name="label_login_newuser">New user? Create an account</string>
     <string name="label_login_forgottenpassword">Forgot your password?</string>
     <string name="label_login_wrongcredentials">Login failed. Please try again</string>
+    <!--string name="label_login_anonymous">Stay anonymous</string-->
 
     <!--Activity - Main (Search view)-->
-    <!--Activity - Main (Search view) /yonatan-->
     <string name="label_main_searchtext">Where do you want to go?</string>
     <string name="label_main_advancedsearch">Go to Advanced Search</string>
     <string name="label_main_recommendations">Recommendations</string>
@@ -67,7 +64,7 @@
     <string name="label_profile_savechanges">Save Changes</string>
     <string name="label_profile_changepassword">Change Password</string>
 
-    <!--Activity -Register-->
+    <!--Activity - Register-->
     <string name="label_register_newaccount">New Account</string>
     <string name="label_register_username">Username</string>
     <string name="label_register_password">Password</string>
@@ -138,7 +135,6 @@
     <string name="label_trip_businfo">Bus </string>
     <string name="label_tripsactivity_from">From</string>
     <string name="label_tripsactivity_to">To</string>
-
     <string name="label_tripsactivity_countdown" translatable="false">00:00:00</string>
     <string name="label_tripsactivity_date" translatable="false">00/00/00</string>
 
@@ -147,10 +143,7 @@
     <string name="label_tripcancel_buttoncancel">Cancel Trip</string>
     <string name="label_tripcancel_cancellation">Confirm your cancellation</string>
 
-    <!--MISCELLANEOUS-->
-    <string name="img_description">Icon Missing</string>
-    <string name="non_available">n/a</string>
-    <string name="GoogleProjectID" translatable="false">81265551950</string>
+    <!--Java String Occurences-->
     <string name="java_to">to</string>
     <string name="java_yes">Yes</string>
     <string name="java_cancel">Cancel</string>
@@ -172,12 +165,11 @@
     <string name="java_search_enterdeparture">Please enter a departure address</string>
     <string name="java_search_enterdestination">Please enter a destination address</string>
     <string name="java_search_emptysearch">Could not find any trips matching your criteria</string>
-    <string name="java_search_locationdisabled">It seems your location settings are off, please use the advanced search and specify a departure address</string>
+    <string name="java_search_locationdisabled">It seems your location settings are off. Please use the advanced search and specify a departure address</string>
     <string name="java_settings_themechanged_light">Theme changed to light</string>
     <string name="java_settings_themechanged_default">Theme changed to default</string>
     <string name="java_settings_themechanged_dark">Theme changed to dark</string>
     <string name="java_trips_notripsbooked">No trips have been booked</string>
-    <!--string name="java_trips_samebooking">You have already booked this trip</string-->
     <string name="java_languagerva_languagechanged">Language changed to</string>
     <string name="java_notificationsrva_newmessages">You have received new messages</string>
     <string name="java_login_wrongcredential">Invalid credentials. Please, try again.</string>
@@ -186,4 +178,11 @@
     <string name="java_pswd_resetsuccess">Password reset successfully</string>
     <string name="java_pswd_updatesuccess">Password updated successfully</string>
     <!--string name="java_settings_updatesuccess">Settings updated successfully</string-->
+    <!--string name="java_trips_samebooking">You have already booked this trip</string-->
+
+    <!--MISCELLANEOUS-->
+    <string name="img_description">Icon Missing</string>
+    <string name="non_available">n/a</string>
+    <string name="GoogleProjectID" translatable="false">81265551950</string>
+
 </resources>

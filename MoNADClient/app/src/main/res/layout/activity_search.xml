@@ -74,16 +74,6 @@
                 android:textSize="@dimen/header_textlarge"
                 android:textColorHint="@drawable/hint_hide_selector"/>
 
-            <!--ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="0"
-                android:background="@color/primaryColor"
-                android:contentDescription="@string/img_description"
-                android:src="@drawable/ic_search_white_48dp"
-
-                /-->
-
         </LinearLayout>
 
         <RadioGroup

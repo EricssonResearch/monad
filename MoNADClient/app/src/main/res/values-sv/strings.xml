@@ -178,4 +178,5 @@
 
     <string name="label_searchresult_timeinfo">n/a - n/a (n/a min)</string>
     <string name="label_searchresult_routeinfo">n/a till n/a</string>
+    <string name="java_search_locationdisabled">Det verkar som din lokaliseringstjänst är avstängd. Använd avancerad sökning och specificera en avgångsadress.</string>
 </resources>
