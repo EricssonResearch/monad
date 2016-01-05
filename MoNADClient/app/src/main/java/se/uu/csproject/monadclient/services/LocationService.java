@@ -33,7 +33,6 @@ import se.uu.csproject.monadclient.geofences.GeofenceErrorMessages;
 import se.uu.csproject.monadclient.geofences.GeofenceTransitionsIntentService;
 import se.uu.csproject.monadclient.storage.Storage;
 
-
 public class LocationService extends Service implements GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener, LocationListener, ResultCallback<Status> {
     private static final String TAG = "oops";

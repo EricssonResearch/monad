@@ -1,8 +1,8 @@
 package se.uu.csproject.monadclient.storage;
 
-/* This class is derived from the TravelRequest collection
- * The focus is on the assigned route rather than the request itself
- * Therefore, the class attributes are not comprehensive
+/* This class is derived from the TravelRequest collection.
+ * The focus is on the assigned route rather than the request itself.
+ * Therefore, the class attributes are not comprehensive.
  */
 
 import android.os.Parcel;
@@ -148,6 +148,4 @@ public class Trip implements Parcelable {
             return new Trip[size];
         }
     };
-
-
 }

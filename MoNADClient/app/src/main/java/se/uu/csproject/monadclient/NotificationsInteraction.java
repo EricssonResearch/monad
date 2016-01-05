@@ -44,16 +44,13 @@ public class NotificationsInteraction {
                 Log.d(this.callingClassName, "Notifications have been successfully loaded by the database");
             }
             else {
-                //initialize notifications, temporary
-                Storage.initializeNotificationData();
-                Log.d(this.callingClassName, "Fake notifications have been generated");
+                Log.d(this.callingClassName, "Could not load notifications");
             }
         }
         catch (Exception e) {
             e.printStackTrace();
-            Storage.initializeNotificationData();
             Log.d(this.callingClassName,
-                    "Exception while loading notifications - Fake notifications have been generated");
+                    "Exception while loading notifications - Could not load notifications");
         }
     }
 

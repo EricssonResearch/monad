@@ -13,13 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+/**
+ * This code was taken from: https://github.com/googlesamples/android-play-location/tree/master/Geofencing
+ * It was modified according to the needs of the project.
+ */
+
 package se.uu.csproject.monadclient.geofences;
+
 import android.content.Context;
 import android.content.res.Resources;
 
 import com.google.android.gms.location.GeofenceStatusCodes;
-
-import se.uu.csproject.monadclient.R;
 
 /**
  * Geofence error codes mapped to error messages.
