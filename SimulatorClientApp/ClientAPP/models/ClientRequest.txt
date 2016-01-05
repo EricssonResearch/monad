@@ -1,0 +1,543 @@
+userId=296531&2016-00-12 15:32:19&null&2016-00-11 10:19:38&stPosition=Sernanders väg&edPosition=Oslogatan&priority=time&startPositionLatitude=59.858782899999994&startPositionLongitude=17.6447829
+userId=403&null&2016-00-12 16:19:48&2016-00-11 10:19:38&stPosition=Stadshuset&edPosition=Kungshögarna&priority=distance&startPositionLatitude=59.858993&startPositionLongitude=17.644993
+userId=296531&2016-00-12 15:32:19&null&2016-00-11 10:19:38&stPosition=Sernanders väg&edPosition=Oslogatan&priority=time&startPositionLatitude=59.858782899999994&startPositionLongitude=17.6447829
+userId=229676&2016-00-12 15:24:37&null&2016-00-11 10:19:38&stPosition=Ekonomikum&edPosition=Oslogatan&priority=time&startPositionLatitude=59.8588387&startPositionLongitude=17.644838699999998
+userId=191610&null&2016-00-12 06:34:50&2016-00-11 10:19:38&stPosition=Sernanders väg&edPosition=Ihres väg&priority=time&startPositionLatitude=59.858633399999995&startPositionLongitude=17.6446334
+userId=1&2016-00-12 08:00:00&null&2016-00-11 07:00:00&stPosition=Centralstationen&edPosition=Polacksbacken&priority=time&startPositionLatitude=59.858401&startPositionLongitude=17.645222
+userId=1&2016-00-12 17:00:00&null&2016-00-11 16:00:00&stPosition=Polacksbacken&edPosition=Centralstationen&priority=time&startPositionLatitude=59.8407238&startPositionLongitude=17.6467723
+userId=219497&2016-00-12 14:43:05&null&2016-00-11 13:56:49&stPosition=Svartbäckens vårdcentral&edPosition=Valhalls väg&priority=distance&startPositionLatitude=59.858553199999996&startPositionLongitude=17.644553199999997
+userId=361530&2016-00-12 08:35:22&null&2016-00-11 13:56:49&stPosition=Torbjörnsgatan&edPosition=Cellovägen&priority=time&startPositionLatitude=59.8585541&startPositionLongitude=17.644554099999997
+userId=211281&null&2016-00-12 05:17:04&2016-00-11 13:56:49&stPosition=Rosendals skola&edPosition=Torbjörnsgatan&priority=distance&startPositionLatitude=59.8584408&startPositionLongitude=17.644440799999998
+userId=361677&2016-00-12 20:01:11&null&2016-00-11 13:56:49&stPosition=Startgatan&edPosition=Svartbäckens vårdcentral&priority=distance&startPositionLatitude=59.858936&startPositionLongitude=17.644935999999998
+userId=33466&2016-00-12 07:05:29&null&2016-00-11 13:56:49&stPosition=Fjärdhundragatan&edPosition=Fyrishovs entré&priority=distance&startPositionLatitude=59.8581873&startPositionLongitude=17.6441873
+userId=288100&2016-00-12 13:17:54&null&2016-00-11 13:56:49&stPosition=Sköldungagatan&edPosition=Fyrishovs entré&priority=distance&startPositionLatitude=59.8584676&startPositionLongitude=17.6444676
+userId=486673&2016-00-12 15:30:38&null&2016-00-11 13:56:49&stPosition=Flygargatan&edPosition=Levertinsgatan&priority=distance&startPositionLatitude=59.858929999999994&startPositionLongitude=17.64493
+userId=329485&2016-00-12 16:37:01&null&2016-00-11 13:56:49&stPosition=Väderkvarnsgatan&edPosition=Akademiska sjukhuset södra&priority=time&startPositionLatitude=59.858163999999995&startPositionLongitude=17.644164
+userId=262678&2016-00-12 15:17:42&null&2016-00-11 13:56:49&stPosition=Tallbacksvägen&edPosition=Kronparksgården&priority=time&startPositionLatitude=59.8585436&startPositionLongitude=17.6445436
+userId=492826&2016-00-12 14:24:14&null&2016-00-11 13:56:49&stPosition=Djäknegatan&edPosition=Rosendals skola&priority=time&startPositionLatitude=59.858676499999994&startPositionLongitude=17.6446765
+userId=493279&null&2016-00-12 07:59:21&2016-00-11 13:56:49&stPosition=Götgatan&edPosition=Startgatan&priority=distance&startPositionLatitude=59.8589407&startPositionLongitude=17.6449407
+userId=236830&null&2016-00-12 16:29:38&2016-00-11 13:56:49&stPosition=Campus Ultuna&edPosition=Gottsunda Centrum&priority=time&startPositionLatitude=59.8588628&startPositionLongitude=17.6448628
+userId=65002&2016-00-12 09:07:33&null&2016-00-11 13:56:49&stPosition=Polishuset&edPosition=Regins väg&priority=distance&startPositionLatitude=59.858115999999995&startPositionLongitude=17.644115999999997
+userId=195626&2016-00-12 07:55:01&null&2016-00-11 13:56:49&stPosition=Centralstationen&edPosition=Kronparksgården&priority=time&startPositionLatitude=59.858228999999994&startPositionLongitude=17.644229
+userId=59633&2016-00-12 06:23:59&null&2016-00-11 13:56:50&stPosition=Flottiljgatan&edPosition=Bandstolsvägen&priority=distance&startPositionLatitude=59.8589578&startPositionLongitude=17.644957799999997
+userId=390178&2016-00-12 06:01:02&null&2016-00-11 13:56:50&stPosition=Sernanders väg&edPosition=Oslogatan&priority=distance&startPositionLatitude=59.8588816&startPositionLongitude=17.644881599999998
+userId=46782&null&2016-00-12 14:58:18&2016-00-11 13:56:50&stPosition=Gottsunda Centrum&edPosition=Ferlinsgatan&priority=time&startPositionLatitude=59.858553199999996&startPositionLongitude=17.644553199999997
+userId=42478&2016-00-12 13:42:03&null&2016-00-11 13:56:50&stPosition=Levertinsgatan&edPosition=Uppsala Science Park&priority=distance&startPositionLatitude=59.8585541&startPositionLongitude=17.644554099999997
+userId=114546&null&2016-00-12 16:17:20&2016-00-11 13:56:50&stPosition=Vaksala torg&edPosition=Centralstationen&priority=distance&startPositionLatitude=59.8584408&startPositionLongitude=17.644440799999998
+userId=152933&2016-00-12 10:52:26&null&2016-00-11 13:56:50&stPosition=Stadshuset&edPosition=Valhalls väg&priority=distance&startPositionLatitude=59.858936&startPositionLongitude=17.644935999999998
+userId=25667&2016-00-12 13:40:55&null&2016-00-11 13:56:50&stPosition=Sernanders väg&edPosition=Linrepevägen&priority=time&startPositionLatitude=59.8581873&startPositionLongitude=17.6441873
+userId=112140&2016-00-12 16:24:40&null&2016-00-11 13:56:50&stPosition=Huges väg&edPosition=Gottsunda Centrum&priority=distance&startPositionLatitude=59.8584676&startPositionLongitude=17.6444676
+userId=101621&null&2016-00-12 13:16:03&2016-00-11 13:56:50&stPosition=Rickomberga&edPosition=Heidenstamstorg&priority=time&startPositionLatitude=59.858929999999994&startPositionLongitude=17.64493
+userId=366379&2016-00-12 11:49:53&null&2016-00-11 13:56:50&stPosition=Barkspadevägen&edPosition=Slädvägen&priority=distance&startPositionLatitude=59.858163999999995&startPositionLongitude=17.644164
+userId=453862&2016-00-12 14:51:01&null&2016-00-11 13:56:50&stPosition=Ferlinsgatan&edPosition=Fyrishovs entré&priority=time&startPositionLatitude=59.8585436&startPositionLongitude=17.6445436
+userId=389905&2016-00-12 08:11:35&null&2016-00-11 13:56:50&stPosition=Gottsunda Centrum&edPosition=Heidenstamstorg&priority=time&startPositionLatitude=59.858676499999994&startPositionLongitude=17.6446765
+userId=8720&2016-00-12 04:24:47&null&2016-00-11 13:56:50&stPosition=Rosendals skola&edPosition=Heidenstamstorg&priority=distance&startPositionLatitude=59.8589407&startPositionLongitude=17.6449407
+userId=209306&2016-00-12 06:27:45&null&2016-00-11 13:56:50&stPosition=Veterinärvägen&edPosition=Huges väg&priority=time&startPositionLatitude=59.8588628&startPositionLongitude=17.6448628
+userId=452066&2016-00-12 17:05:35&null&2016-00-11 13:56:50&stPosition=Stadshuset&edPosition=Levertinsgatan&priority=time&startPositionLatitude=59.858115999999995&startPositionLongitude=17.644115999999997
+userId=6444&2016-00-12 09:03:54&null&2016-00-11 13:56:50&stPosition=Polishuset&edPosition=Huges väg&priority=time&startPositionLatitude=59.858228999999994&startPositionLongitude=17.644229
+userId=113297&2016-00-12 05:03:47&null&2016-00-11 13:56:50&stPosition=Tallbacksvägen&edPosition=Barkspadevägen&priority=distance&startPositionLatitude=59.8589578&startPositionLongitude=17.644957799999997
+userId=257166&2016-00-12 03:18:48&null&2016-00-11 13:56:50&stPosition=Stadshuset&edPosition=Oslogatan&priority=distance&startPositionLatitude=59.8588816&startPositionLongitude=17.644881599999998
+userId=405419&2016-00-12 06:30:48&null&2016-00-11 13:56:50&stPosition=Fyrishovs entré&edPosition=Regins väg&priority=time&startPositionLatitude=59.858553199999996&startPositionLongitude=17.644553199999997
+userId=237158&2016-00-12 04:48:47&null&2016-00-11 13:56:50&stPosition=Uppsala Science Park&edPosition=Väderkvarnsgatan&priority=time&startPositionLatitude=59.8585541&startPositionLongitude=17.644554099999997
+userId=346924&2016-00-12 07:31:13&null&2016-00-11 13:56:50&stPosition=Flottiljgatan&edPosition=Rosendals skola&priority=distance&startPositionLatitude=59.8584408&startPositionLongitude=17.644440799999998
+userId=336065&2016-00-12 08:54:17&null&2016-00-11 13:56:50&stPosition=Bandstolsvägen&edPosition=Oslogatan&priority=distance&startPositionLatitude=59.858936&startPositionLongitude=17.644935999999998
+userId=442396&null&2016-00-12 13:53:47&2016-00-11 13:56:50&stPosition=Götgatan&edPosition=Noreens väg&priority=distance&startPositionLatitude=59.8581873&startPositionLongitude=17.6441873
+userId=141952&null&2016-00-12 16:03:03&2016-00-11 13:56:50&stPosition=Kungshögarna&edPosition=Akademiska sjukhuset södra&priority=time&startPositionLatitude=59.8584676&startPositionLongitude=17.6444676
+userId=152027&2016-00-12 12:25:44&null&2016-00-11 13:56:50&stPosition=Grindstugan&edPosition=Sernanders väg&priority=distance&startPositionLatitude=59.858929999999994&startPositionLongitude=17.64493
+userId=378002&null&2016-00-12 16:16:47&2016-00-11 13:56:50&stPosition=Rickomberga&edPosition=Oslogatan&priority=time&startPositionLatitude=59.858163999999995&startPositionLongitude=17.644164
+userId=189632&null&2016-00-12 10:26:55&2016-00-11 13:56:50&stPosition=Gottsunda Centrum&edPosition=Slädvägen&priority=distance&startPositionLatitude=59.8585436&startPositionLongitude=17.6445436
+userId=434579&2016-00-12 16:10:38&null&2016-00-11 13:56:50&stPosition=Centralstationen&edPosition=Ekebyhus&priority=time&startPositionLatitude=59.858676499999994&startPositionLongitude=17.6446765
+userId=107056&2016-00-12 03:22:13&null&2016-00-11 13:56:50&stPosition=Centralstationen&edPosition=Rosendals skola&priority=time&startPositionLatitude=59.8589407&startPositionLongitude=17.6449407
+userId=365609&2016-00-12 15:05:26&null&2016-00-11 13:56:50&stPosition=Rosendals skola&edPosition=Lundellska skolan&priority=time&startPositionLatitude=59.8588628&startPositionLongitude=17.6448628
+userId=355381&2016-00-12 08:06:08&null&2016-00-11 13:56:50&stPosition=Flottörgatan&edPosition=Reykjaviksgatan&priority=distance&startPositionLatitude=59.858115999999995&startPositionLongitude=17.644115999999997
+userId=391143&2016-00-12 15:46:46&null&2016-00-11 13:56:50&stPosition=Startgatan&edPosition=Polacksbacken&priority=distance&startPositionLatitude=59.858228999999994&startPositionLongitude=17.644229
+userId=327144&2016-00-12 07:01:50&null&2016-00-11 13:56:50&stPosition=Torbjörnsgatan&edPosition=Kantorsgatan&priority=distance&startPositionLatitude=59.8589578&startPositionLongitude=17.644957799999997
+userId=98830&null&2016-00-12 07:48:25&2016-00-11 13:56:50&stPosition=Stadshuset&edPosition=Akademiska sjukhuset södra&priority=time&startPositionLatitude=59.8588816&startPositionLongitude=17.644881599999998
+userId=176039&2016-00-12 16:56:51&null&2016-00-11 13:56:50&stPosition=Flottiljgatan&edPosition=Centralstationen&priority=distance&startPositionLatitude=59.858553199999996&startPositionLongitude=17.644553199999997
+userId=253584&2016-00-12 18:43:07&null&2016-00-11 13:56:50&stPosition=Väpnargatan&edPosition=Ferlinsgatan&priority=time&startPositionLatitude=59.8585541&startPositionLongitude=17.644554099999997
+userId=70913&null&2016-00-12 16:39:45&2016-00-11 13:56:50&stPosition=Flottiljgatan&edPosition=Vackra Birgers väg&priority=time&startPositionLatitude=59.8584408&startPositionLongitude=17.644440799999998
+userId=342314&null&2016-00-12 18:15:36&2016-00-11 13:56:50&stPosition=Flottiljgatan&edPosition=Värnlundsgatan&priority=distance&startPositionLatitude=59.858936&startPositionLongitude=17.644935999999998
+userId=67444&null&2016-00-12 14:31:00&2016-00-11 13:56:50&stPosition=Almqvistgatan&edPosition=Centralstationen&priority=distance&startPositionLatitude=59.8581873&startPositionLongitude=17.6441873
+userId=177851&2016-00-12 16:36:28&null&2016-00-11 13:56:50&stPosition=Fältvägen&edPosition=Almqvistgatan&priority=time&startPositionLatitude=59.8584676&startPositionLongitude=17.6444676
+userId=342990&2016-00-12 19:06:02&null&2016-00-11 13:56:50&stPosition=Götgatan&edPosition=Fyrishovs entré&priority=time&startPositionLatitude=59.858929999999994&startPositionLongitude=17.64493
+userId=63826&2016-00-12 15:54:15&null&2016-00-11 13:56:50&stPosition=Bäverns gränd&edPosition=Almqvistgatan&priority=time&startPositionLatitude=59.858163999999995&startPositionLongitude=17.644164
+userId=350019&2016-00-12 10:37:06&null&2016-00-11 13:56:50&stPosition=Flottiljgatan&edPosition=Sernanders väg&priority=distance&startPositionLatitude=59.8585436&startPositionLongitude=17.6445436
+userId=220230&2016-00-12 12:25:23&null&2016-00-11 13:56:50&stPosition=Flogsta vårdcentral&edPosition=Kantorsgatan&priority=distance&startPositionLatitude=59.858676499999994&startPositionLongitude=17.6446765
+userId=46431&2016-00-12 05:45:42&null&2016-00-11 13:56:51&stPosition=Topeliusgatan&edPosition=Oslogatan&priority=time&startPositionLatitude=59.8589407&startPositionLongitude=17.6449407
+userId=423063&2016-00-12 13:30:09&null&2016-00-11 13:56:51&stPosition=Väderkvarnsgatan&edPosition=Polacksbacken&priority=time&startPositionLatitude=59.8588628&startPositionLongitude=17.6448628
+userId=108950&2016-00-12 07:26:21&null&2016-00-11 13:56:51&stPosition=Sernanders väg&edPosition=Polacksbacken&priority=distance&startPositionLatitude=59.858115999999995&startPositionLongitude=17.644115999999997
+userId=56495&2016-00-12 17:10:18&null&2016-00-11 13:56:51&stPosition=Bäverns gränd&edPosition=Oslogatan&priority=time&startPositionLatitude=59.858228999999994&startPositionLongitude=17.644229
+userId=106687&2016-00-12 10:29:53&null&2016-00-11 13:56:51&stPosition=Polishuset&edPosition=Kronparksgården&priority=time&startPositionLatitude=59.8589578&startPositionLongitude=17.644957799999997
+userId=89211&2016-00-12 15:00:44&null&2016-00-11 13:56:51&stPosition=Startgatan&edPosition=Centralstationen&priority=distance&startPositionLatitude=59.8588816&startPositionLongitude=17.644881599999998
+userId=76978&2016-00-12 18:45:04&null&2016-00-11 13:56:51&stPosition=Slädvägen&edPosition=Gottsunda Centrum&priority=distance&startPositionLatitude=59.858553199999996&startPositionLongitude=17.644553199999997
+userId=302485&null&2016-00-12 15:06:19&2016-00-11 13:56:51&stPosition=Vaksala torg&edPosition=Gustaf Kjellbergs väg&priority=time&startPositionLatitude=59.8585541&startPositionLongitude=17.644554099999997
+userId=443064&2016-00-12 19:55:40&null&2016-00-11 13:56:51&stPosition=Startgatan&edPosition=Almqvistgatan&priority=distance&startPositionLatitude=59.8584408&startPositionLongitude=17.644440799999998
+userId=162162&2016-00-12 07:53:52&null&2016-00-11 13:56:51&stPosition=Torbjörnsgatan&edPosition=Campus Ultuna&priority=distance&startPositionLatitude=59.858936&startPositionLongitude=17.644935999999998
+userId=141375&2016-00-12 18:11:11&null&2016-00-11 13:56:51&stPosition=Gottsunda Centrum&edPosition=Lundellska skolan&priority=distance&startPositionLatitude=59.8581873&startPositionLongitude=17.6441873
+userId=267872&null&2016-00-12 06:39:43&2016-00-11 13:56:51&stPosition=Ekudden&edPosition=Reykjaviksgatan&priority=distance&startPositionLatitude=59.8584676&startPositionLongitude=17.6444676
+userId=204905&2016-00-12 17:09:51&null&2016-00-11 13:56:51&stPosition=Portalgatan&edPosition=Fyrishovs entré&priority=distance&startPositionLatitude=59.858929999999994&startPositionLongitude=17.64493
+userId=194993&null&2016-00-12 08:54:21&2016-00-11 13:56:51&stPosition=Ekonomikum&edPosition=Uppsala Science Park&priority=time&startPositionLatitude=59.858163999999995&startPositionLongitude=17.644164
+userId=335815&null&2016-00-12 17:33:41&2016-00-11 13:56:51&stPosition=Kantorsgatan&edPosition=Barkspadevägen&priority=time&startPositionLatitude=59.8585436&startPositionLongitude=17.6445436
+userId=72997&null&2016-00-12 12:08:17&2016-00-11 13:56:51&stPosition=Rosendals skola&edPosition=Fyrishovs entré&priority=distance&startPositionLatitude=59.858676499999994&startPositionLongitude=17.6446765
+userId=155766&2016-00-12 07:00:55&null&2016-00-11 13:56:51&stPosition=Flottörgatan&edPosition=Tallbacksvägen&priority=time&startPositionLatitude=59.8589407&startPositionLongitude=17.6449407
+userId=241964&2016-00-12 18:02:49&null&2016-00-11 13:56:51&stPosition=Polishuset&edPosition=Kantorsgatan&priority=time&startPositionLatitude=59.8588628&startPositionLongitude=17.6448628
+userId=234389&2016-00-12 13:16:33&null&2016-00-11 13:56:51&stPosition=Idrottsgatan&edPosition=Polacksbacken&priority=time&startPositionLatitude=59.858115999999995&startPositionLongitude=17.644115999999997
+userId=485188&2016-00-12 19:02:45&null&2016-00-11 13:56:51&stPosition=Flottörgatan&edPosition=Rosendals skola&priority=distance&startPositionLatitude=59.858228999999994&startPositionLongitude=17.644229
+userId=19167&2016-00-12 18:32:35&null&2016-00-11 13:56:51&stPosition=Flogsta vårdcentral&edPosition=Ferlinsgatan&priority=distance&startPositionLatitude=59.8589578&startPositionLongitude=17.644957799999997
+userId=497796&2016-00-12 15:19:06&null&2016-00-11 13:56:51&stPosition=Vaksala torg&edPosition=Kronparksgården&priority=time&startPositionLatitude=59.8588816&startPositionLongitude=17.644881599999998
+userId=217355&2016-00-12 15:01:26&null&2016-00-11 13:56:51&stPosition=Kantorsgatan&edPosition=Värnlundsgatan&priority=time&startPositionLatitude=59.858553199999996&startPositionLongitude=17.644553199999997
+userId=432104&2016-00-12 05:20:31&null&2016-00-11 13:56:51&stPosition=Flottiljgatan&edPosition=Ferlinsgatan&priority=time&startPositionLatitude=59.8585541&startPositionLongitude=17.644554099999997
+userId=5602&2016-00-12 05:20:33&null&2016-00-11 13:56:51&stPosition=Vaksala torg&edPosition=Heidenstamstorg&priority=time&startPositionLatitude=59.8584408&startPositionLongitude=17.644440799999998
+userId=152223&2016-00-12 18:09:13&null&2016-00-11 13:56:51&stPosition=Polacksbacken&edPosition=Flygargatan&priority=distance&startPositionLatitude=59.858936&startPositionLongitude=17.644935999999998
+userId=312596&2016-00-12 07:14:06&null&2016-00-11 13:56:51&stPosition=Fyrishovs entré&edPosition=Sernanders väg&priority=time&startPositionLatitude=59.8581873&startPositionLongitude=17.6441873
+userId=172151&2016-00-12 16:53:42&null&2016-00-11 13:56:51&stPosition=Portalgatan&edPosition=Kronparksgården&priority=time&startPositionLatitude=59.8584676&startPositionLongitude=17.6444676
+userId=375917&2016-00-12 08:07:13&null&2016-00-11 13:56:51&stPosition=Flogsta vårdcentral&edPosition=Heidenstamstorg&priority=time&startPositionLatitude=59.858929999999994&startPositionLongitude=17.64493
+userId=281274&null&2016-00-12 08:31:08&2016-00-11 13:56:51&stPosition=Torbjörnsgatan&edPosition=Regins väg&priority=distance&startPositionLatitude=59.858163999999995&startPositionLongitude=17.644164
+userId=413761&2016-00-12 15:45:33&null&2016-00-11 13:56:51&stPosition=Polacksbacken&edPosition=Kronparksgården&priority=distance&startPositionLatitude=59.8585436&startPositionLongitude=17.6445436
+userId=491099&2016-00-12 16:10:13&null&2016-00-11 13:56:51&stPosition=Torbjörnsgatan&edPosition=Polacksbacken&priority=distance&startPositionLatitude=59.858676499999994&startPositionLongitude=17.6446765
+userId=317468&2016-00-12 08:57:54&null&2016-00-11 13:56:51&stPosition=Rickomberga&edPosition=Polacksbacken&priority=distance&startPositionLatitude=59.8589407&startPositionLongitude=17.6449407
+userId=448536&2016-00-12 13:30:04&null&2016-00-11 13:56:51&stPosition=Torbjörnsgatan&edPosition=Huges väg&priority=time&startPositionLatitude=59.8588628&startPositionLongitude=17.6448628
+userId=253835&2016-00-12 15:38:37&null&2016-00-11 13:56:51&stPosition=Campus Ultuna&edPosition=Cellovägen&priority=distance&startPositionLatitude=59.858115999999995&startPositionLongitude=17.644115999999997
+userId=23289&2016-00-12 18:03:29&null&2016-00-11 13:56:51&stPosition=Levertinsgatan&edPosition=Almqvistgatan&priority=distance&startPositionLatitude=59.858228999999994&startPositionLongitude=17.644229
+userId=330421&2016-00-12 18:34:11&null&2016-00-11 13:56:51&stPosition=Kantorsgatan&edPosition=Akademiska sjukhuset södra&priority=time&startPositionLatitude=59.8589578&startPositionLongitude=17.644957799999997
+userId=47513&2016-00-12 05:57:17&null&2016-00-11 13:56:51&stPosition=Gottsunda Centrum&edPosition=Lundellska skolan&priority=distance&startPositionLatitude=59.8588816&startPositionLongitude=17.644881599999998
+userId=77565&2016-00-12 07:32:00&null&2016-00-11 13:56:51&stPosition=Bäverns gränd&edPosition=Kronparksgården&priority=time&startPositionLatitude=59.858553199999996&startPositionLongitude=17.644553199999997
+userId=277495&2016-00-12 11:14:27&null&2016-00-11 13:56:51&stPosition=Vaksala torg&edPosition=Topeliusgatan&priority=distance&startPositionLatitude=59.8585541&startPositionLongitude=17.644554099999997
+userId=333333&null&2016-00-12 16:44:30&2016-00-11 13:56:51&stPosition=Sernanders väg&edPosition=Värnlundsgatan&priority=time&startPositionLatitude=59.8584408&startPositionLongitude=17.644440799999998
+userId=131009&2016-00-12 08:43:41&null&2016-00-11 13:56:51&stPosition=Campus Ultuna&edPosition=Rosendals skola&priority=time&startPositionLatitude=59.858936&startPositionLongitude=17.644935999999998
+userId=486330&null&2016-00-12 18:42:05&2016-00-11 13:56:51&stPosition=Torbjörnsgatan&edPosition=Kronparksgården&priority=distance&startPositionLatitude=59.8581873&startPositionLongitude=17.6441873
+userId=494400&2016-00-12 13:39:33&null&2016-00-11 13:56:52&stPosition=Flogsta vårdcentral&edPosition=Kungshögarna&priority=distance&startPositionLatitude=59.858929999999994&startPositionLongitude=17.64493
+userId=313181&2016-00-12 04:20:40&null&2016-00-11 13:56:52&stPosition=Ekebyhus&edPosition=Sernanders väg&priority=distance&startPositionLatitude=59.858163999999995&startPositionLongitude=17.644164
+userId=271424&2016-00-12 08:18:49&null&2016-00-11 13:56:52&stPosition=Flottörgatan&edPosition=Valsätraskolan&priority=time&startPositionLatitude=59.8585436&startPositionLongitude=17.6445436
+userId=401966&2016-00-12 07:29:45&null&2016-00-11 13:56:52&stPosition=Centralstationen&edPosition=Heidenstamstorg&priority=distance&startPositionLatitude=59.858676499999994&startPositionLongitude=17.6446765
+userId=351026&2016-00-12 09:13:13&null&2016-00-11 13:56:52&stPosition=Veterinärvägen&edPosition=Centralstationen&priority=distance&startPositionLatitude=59.8589407&startPositionLongitude=17.6449407
+userId=444567&2016-00-12 07:02:27&null&2016-00-11 13:56:52&stPosition=Väpnargatan&edPosition=Noreens väg&priority=distance&startPositionLatitude=59.8588628&startPositionLongitude=17.6448628
+userId=385969&2016-00-12 07:09:30&null&2016-00-11 13:56:52&stPosition=Flygargatan&edPosition=Ferlinsgatan&priority=time&startPositionLatitude=59.858115999999995&startPositionLongitude=17.644115999999997
+userId=154036&2016-00-12 15:39:28&null&2016-00-11 13:56:52&stPosition=Götgatan&edPosition=Ekebyhus&priority=time&startPositionLatitude=59.858228999999994&startPositionLongitude=17.644229
+userId=480386&2016-00-12 16:56:05&null&2016-00-11 13:56:52&stPosition=Fjärdhundragatan&edPosition=Lundellska skolan&priority=time&startPositionLatitude=59.8589578&startPositionLongitude=17.644957799999997
+userId=316642&2016-00-12 06:17:27&null&2016-00-11 13:56:52&stPosition=Rosendals skola&edPosition=Ferlinsgatan&priority=distance&startPositionLatitude=59.8588816&startPositionLongitude=17.644881599999998
+userId=92567&2016-00-12 17:01:29&null&2016-00-11 13:56:52&stPosition=Campus Ultuna&edPosition=Reykjaviksgatan&priority=distance&startPositionLatitude=59.858553199999996&startPositionLongitude=17.644553199999997
+userId=177753&2016-00-12 04:53:26&null&2016-00-11 13:56:52&stPosition=Ekudden&edPosition=Kantorsgatan&priority=time&startPositionLatitude=59.8585541&startPositionLongitude=17.644554099999997
+userId=74506&2016-00-12 18:18:37&null&2016-00-11 13:56:52&stPosition=Garnisonen&edPosition=Rosendals skola&priority=distance&startPositionLatitude=59.8584408&startPositionLongitude=17.644440799999998
+userId=230134&2016-00-12 17:43:36&null&2016-00-11 13:56:52&stPosition=Torbjörnsgatan&edPosition=Sköldungagatan&priority=time&startPositionLatitude=59.858936&startPositionLongitude=17.644935999999998
+userId=138613&null&2016-00-12 15:58:44&2016-00-11 13:56:52&stPosition=Torbjörnsgatan&edPosition=Heidenstamstorg&priority=distance&startPositionLatitude=59.8581873&startPositionLongitude=17.6441873
+userId=381296&2016-00-12 20:25:30&null&2016-00-11 13:56:52&stPosition=Portalgatan&edPosition=Centralstationen&priority=time&startPositionLatitude=59.8584676&startPositionLongitude=17.6444676
+userId=473869&2016-00-12 15:49:45&null&2016-00-11 13:56:52&stPosition=Polishuset&edPosition=Kvarntorget&priority=distance&startPositionLatitude=59.858929999999994&startPositionLongitude=17.64493
+userId=442928&null&2016-00-12 14:55:52&2016-00-11 13:56:52&stPosition=Veterinärvägen&edPosition=Polacksbacken&priority=time&startPositionLatitude=59.858163999999995&startPositionLongitude=17.644164
+userId=402345&2016-00-12 18:04:51&null&2016-00-11 13:56:52&stPosition=Sernanders väg&edPosition=Flogsta vårdcentral&priority=time&startPositionLatitude=59.8585436&startPositionLongitude=17.6445436
+userId=497910&2016-00-12 14:26:08&null&2016-00-11 13:56:52&stPosition=Arrheniusplan&edPosition=Idrottsgatan&priority=time&startPositionLatitude=59.858676499999994&startPositionLongitude=17.6446765
+userId=119062&2016-00-12 19:58:22&null&2016-00-11 13:56:52&stPosition=Gottsunda Centrum&edPosition=Centralstationen&priority=distance&startPositionLatitude=59.8589407&startPositionLongitude=17.6449407
+userId=272547&2016-00-12 17:00:49&null&2016-00-11 13:56:52&stPosition=Campus Ultuna&edPosition=Svartbäckens vårdcentral&priority=distance&startPositionLatitude=59.8588628&startPositionLongitude=17.6448628
+userId=226303&2016-00-12 16:15:53&null&2016-00-11 13:56:52&stPosition=Polishuset&edPosition=Kronparksgården&priority=distance&startPositionLatitude=59.858115999999995&startPositionLongitude=17.644115999999997
+userId=99184&2016-00-12 08:58:46&null&2016-00-11 13:56:52&stPosition=Bandstolsvägen&edPosition=Ekebyhus&priority=time&startPositionLatitude=59.858228999999994&startPositionLongitude=17.644229
+userId=402055&2016-00-12 15:03:09&null&2016-00-11 13:56:52&stPosition=Djäknegatan&edPosition=Uppsala Science Park&priority=distance&startPositionLatitude=59.8589578&startPositionLongitude=17.644957799999997
+userId=392231&2016-00-12 16:30:48&null&2016-00-11 13:56:52&stPosition=Akademiska sjukhuset&edPosition=Kungshögarna&priority=time&startPositionLatitude=59.8588816&startPositionLongitude=17.644881599999998
+userId=269813&2016-00-12 16:03:41&null&2016-00-11 13:56:52&stPosition=Studentstaden&edPosition=Uppsala Science Park&priority=time&startPositionLatitude=59.858553199999996&startPositionLongitude=17.644553199999997
+userId=18510&null&2016-00-12 08:14:20&2016-00-11 13:56:52&stPosition=Väderkvarnsgatan&edPosition=Oslogatan&priority=time&startPositionLatitude=59.8585541&startPositionLongitude=17.644554099999997
+userId=214216&2016-00-12 07:34:25&null&2016-00-11 13:56:52&stPosition=Sernanders väg&edPosition=Rosendals skola&priority=distance&startPositionLatitude=59.8584408&startPositionLongitude=17.644440799999998
+userId=108782&2016-00-12 06:18:27&null&2016-00-11 13:56:52&stPosition=Sernanders väg&edPosition=Flöjtvägen&priority=time&startPositionLatitude=59.858936&startPositionLongitude=17.644935999999998
+userId=320973&2016-00-12 16:34:11&null&2016-00-11 13:56:52&stPosition=Värnlundsgatan&edPosition=Lundellska skolan&priority=distance&startPositionLatitude=59.8581873&startPositionLongitude=17.6441873
+userId=126936&2016-00-12 19:44:22&null&2016-00-11 13:56:52&stPosition=Portalgatan&edPosition=Ekebyhus&priority=time&startPositionLatitude=59.8584676&startPositionLongitude=17.6444676
+userId=331569&null&2016-00-12 16:25:28&2016-00-11 13:56:52&stPosition=Polacksbacken&edPosition=Topeliusgatan&priority=time&startPositionLatitude=59.858929999999994&startPositionLongitude=17.64493
+userId=216538&2016-00-12 14:44:45&null&2016-00-11 13:56:52&stPosition=Barkspadevägen&edPosition=Oslogatan&priority=time&startPositionLatitude=59.858163999999995&startPositionLongitude=17.644164
+userId=312274&null&2016-00-12 04:02:48&2016-00-11 13:56:52&stPosition=Flottiljgatan&edPosition=Reykjaviksgatan&priority=distance&startPositionLatitude=59.8585436&startPositionLongitude=17.6445436
+userId=113697&2016-00-12 04:56:14&null&2016-00-11 13:56:52&stPosition=Vaksala torg&edPosition=Centralstationen&priority=time&startPositionLatitude=59.858676499999994&startPositionLongitude=17.6446765
+userId=42749&2016-00-12 08:41:04&null&2016-00-11 13:56:52&stPosition=Rosendals skola&edPosition=Linrepevägen&priority=time&startPositionLatitude=59.8589407&startPositionLongitude=17.6449407
+userId=186441&2016-00-12 07:41:50&null&2016-00-11 13:56:52&stPosition=Polishuset&edPosition=Lagerlöfsgatan&priority=time&startPositionLatitude=59.8588628&startPositionLongitude=17.6448628
+userId=389601&null&2016-00-12 05:03:09&2016-00-11 13:56:52&stPosition=Djäknegatan&edPosition=Arrheniusplan&priority=distance&startPositionLatitude=59.858115999999995&startPositionLongitude=17.644115999999997
+userId=240390&2016-00-12 08:25:42&null&2016-00-11 13:56:52&stPosition=Flogsta vårdcentral&edPosition=Djäknegatan&priority=distance&startPositionLatitude=59.858228999999994&startPositionLongitude=17.644229
+userId=297229&2016-00-12 05:03:51&null&2016-00-11 13:56:52&stPosition=Bärbyparken&edPosition=Rickomberga&priority=distance&startPositionLatitude=59.8589578&startPositionLongitude=17.644957799999997
+userId=29259&2016-00-12 10:58:38&null&2016-00-11 13:56:52&stPosition=Centralstationen&edPosition=Levertinsgatan&priority=time&startPositionLatitude=59.8588816&startPositionLongitude=17.644881599999998
+userId=204415&2016-00-12 17:24:51&null&2016-00-11 13:56:52&stPosition=Svartbäckens vårdcentral&edPosition=Levertinsgatan&priority=time&startPositionLatitude=59.858553199999996&startPositionLongitude=17.644553199999997
+userId=133735&2016-00-12 20:26:23&null&2016-00-11 13:56:52&stPosition=Ekonomikum&edPosition=Lundellska skolan&priority=time&startPositionLatitude=59.8585541&startPositionLongitude=17.644554099999997
+userId=486528&2016-00-12 19:31:40&null&2016-00-11 13:56:52&stPosition=Startgatan&edPosition=Uppsala Science Park&priority=time&startPositionLatitude=59.8584408&startPositionLongitude=17.644440799999998
+userId=306381&2016-00-12 04:18:33&null&2016-00-11 13:56:52&stPosition=Flottörgatan&edPosition=Rosendals skola&priority=time&startPositionLatitude=59.858936&startPositionLongitude=17.644935999999998
+userId=115511&2016-00-12 14:35:25&null&2016-00-11 13:56:53&stPosition=Reykjaviksgatan&edPosition=Topeliusgatan&priority=time&startPositionLatitude=59.8581873&startPositionLongitude=17.6441873
+userId=129750&null&2016-00-12 15:57:05&2016-00-11 13:56:53&stPosition=Vaksala torg&edPosition=Barkspadevägen&priority=distance&startPositionLatitude=59.8584676&startPositionLongitude=17.6444676
+userId=81515&2016-00-12 14:47:28&null&2016-00-11 13:56:53&stPosition=Flottiljgatan&edPosition=Akademiska sjukhuset södra&priority=time&startPositionLatitude=59.858929999999994&startPositionLongitude=17.64493
+userId=317639&2016-00-12 07:46:25&null&2016-00-11 13:56:53&stPosition=Polacksbacken&edPosition=Studentstaden&priority=distance&startPositionLatitude=59.858163999999995&startPositionLongitude=17.644164
+userId=238809&2016-00-12 18:06:03&null&2016-00-11 13:56:53&stPosition=Flottiljgatan&edPosition=Linrepevägen&priority=distance&startPositionLatitude=59.8585436&startPositionLongitude=17.6445436
+userId=54475&2016-00-12 09:11:05&null&2016-00-11 13:56:53&stPosition=Torbjörnsgatan&edPosition=Centralstationen&priority=distance&startPositionLatitude=59.858676499999994&startPositionLongitude=17.6446765
+userId=113686&2016-00-12 04:14:09&null&2016-00-11 13:56:53&stPosition=Startgatan&edPosition=Oslogatan&priority=time&startPositionLatitude=59.8589407&startPositionLongitude=17.6449407
+userId=462569&null&2016-00-12 08:43:51&2016-00-11 13:56:53&stPosition=Stadshuset&edPosition=Polacksbacken&priority=time&startPositionLatitude=59.8588628&startPositionLongitude=17.6448628
+userId=36490&null&2016-00-12 07:41:13&2016-00-11 13:56:53&stPosition=Portalgatan&edPosition=Rosendals skola&priority=time&startPositionLatitude=59.858115999999995&startPositionLongitude=17.644115999999997
+userId=37197&2016-00-12 17:07:45&null&2016-00-11 13:56:53&stPosition=Polishuset&edPosition=Sköldungagatan&priority=time&startPositionLatitude=59.858228999999994&startPositionLongitude=17.644229
+userId=181792&null&2016-00-12 16:46:05&2016-00-11 13:56:53&stPosition=Polacksbacken&edPosition=Slädvägen&priority=time&startPositionLatitude=59.8589578&startPositionLongitude=17.644957799999997
+userId=472555&2016-00-12 08:23:22&null&2016-00-11 13:56:53&stPosition=Grindstugan&edPosition=Gottsunda Centrum&priority=time&startPositionLatitude=59.8588816&startPositionLongitude=17.644881599999998
+userId=202668&null&2016-00-12 05:51:23&2016-00-11 13:56:53&stPosition=Levertinsgatan&edPosition=Polacksbacken&priority=time&startPositionLatitude=59.858553199999996&startPositionLongitude=17.644553199999997
+userId=376854&null&2016-00-12 16:55:08&2016-00-11 13:56:53&stPosition=Ekebyhus&edPosition=Sköldungagatan&priority=distance&startPositionLatitude=59.8585541&startPositionLongitude=17.644554099999997
+userId=474488&null&2016-00-12 13:14:26&2016-00-11 13:56:53&stPosition=Startgatan&edPosition=Djäknegatan&priority=time&startPositionLatitude=59.8584408&startPositionLongitude=17.644440799999998
+userId=131482&2016-00-12 16:25:08&null&2016-00-11 13:56:53&stPosition=Gottsunda Centrum&edPosition=Regins väg&priority=time&startPositionLatitude=59.858936&startPositionLongitude=17.644935999999998
+userId=248511&2016-00-12 13:03:57&null&2016-00-11 13:56:53&stPosition=Centralstationen&edPosition=Heidenstamstorg&priority=time&startPositionLatitude=59.8581873&startPositionLongitude=17.6441873
+userId=453735&2016-00-12 12:22:47&null&2016-00-11 13:56:53&stPosition=Vaksala torg&edPosition=Värnlundsgatan&priority=time&startPositionLatitude=59.8584676&startPositionLongitude=17.6444676
+userId=488277&null&2016-00-12 07:14:17&2016-00-11 13:56:53&stPosition=Djäknegatan&edPosition=Huges väg&priority=distance&startPositionLatitude=59.858929999999994&startPositionLongitude=17.64493
+userId=441574&2016-00-12 08:19:50&null&2016-00-11 13:56:53&stPosition=Sernanders väg&edPosition=Regins väg&priority=distance&startPositionLatitude=59.858163999999995&startPositionLongitude=17.644164
+userId=415126&null&2016-00-12 15:57:46&2016-00-11 13:56:53&stPosition=Värnlundsgatan&edPosition=Regins väg&priority=distance&startPositionLatitude=59.8585436&startPositionLongitude=17.6445436
+userId=255526&2016-00-12 17:11:28&null&2016-00-11 13:56:53&stPosition=Bärbyparken&edPosition=Valhalls väg&priority=time&startPositionLatitude=59.858676499999994&startPositionLongitude=17.6446765
+userId=44813&null&2016-00-12 15:09:27&2016-00-11 13:56:53&stPosition=Flogsta vårdcentral&edPosition=Lundellska skolan&priority=distance&startPositionLatitude=59.8589407&startPositionLongitude=17.6449407
+userId=477863&2016-00-12 15:49:39&null&2016-00-11 13:56:53&stPosition=Startgatan&edPosition=Ferlinsgatan&priority=time&startPositionLatitude=59.8588628&startPositionLongitude=17.6448628
+userId=38632&2016-00-12 19:36:52&null&2016-00-11 13:56:53&stPosition=Götgatan&edPosition=Sernanders väg&priority=distance&startPositionLatitude=59.858115999999995&startPositionLongitude=17.644115999999997
+userId=451673&2016-00-12 02:50:14&null&2016-00-11 13:56:53&stPosition=Rosendals skola&edPosition=Sernanders väg&priority=distance&startPositionLatitude=59.858228999999994&startPositionLongitude=17.644229
+userId=176938&2016-00-12 17:05:25&null&2016-00-11 13:56:53&stPosition=Bäverns gränd&edPosition=Polacksbacken&priority=distance&startPositionLatitude=59.8589578&startPositionLongitude=17.644957799999997
+userId=338618&2016-00-12 16:22:57&null&2016-00-11 13:56:53&stPosition=Polacksbacken&edPosition=Regins väg&priority=time&startPositionLatitude=59.8588816&startPositionLongitude=17.644881599999998
+userId=394363&2016-00-12 14:05:29&null&2016-00-11 13:56:53&stPosition=Centralstationen&edPosition=Stadshuset&priority=distance&startPositionLatitude=59.858553199999996&startPositionLongitude=17.644553199999997
+userId=149735&2016-00-12 15:31:40&null&2016-00-11 13:56:53&stPosition=Flygargatan&edPosition=Oslogatan&priority=time&startPositionLatitude=59.8585541&startPositionLongitude=17.644554099999997
+userId=281128&null&2016-00-12 14:43:42&2016-00-11 13:56:53&stPosition=Vaksala torg&edPosition=Arrheniusplan&priority=distance&startPositionLatitude=59.8584408&startPositionLongitude=17.644440799999998
+userId=71796&2016-00-12 05:03:50&null&2016-00-11 13:56:53&stPosition=Flottörgatan&edPosition=Oslogatan&priority=time&startPositionLatitude=59.858936&startPositionLongitude=17.644935999999998
+userId=298281&2016-00-12 10:22:50&null&2016-00-11 13:56:53&stPosition=Torbjörnsgatan&edPosition=Polishuset&priority=time&startPositionLatitude=59.8581873&startPositionLongitude=17.6441873
+userId=133782&2016-00-12 03:52:32&null&2016-00-11 13:56:53&stPosition=Rosendals skola&edPosition=Heidenstamstorg&priority=distance&startPositionLatitude=59.8584676&startPositionLongitude=17.6444676
+userId=283119&null&2016-00-12 19:03:44&2016-00-11 13:56:53&stPosition=Fyrishovs entré&edPosition=Valsätraskolan&priority=distance&startPositionLatitude=59.858929999999994&startPositionLongitude=17.64493
+userId=409602&2016-00-12 15:39:35&null&2016-00-11 13:56:53&stPosition=Vaksala torg&edPosition=Kungshögarna&priority=time&startPositionLatitude=59.858163999999995&startPositionLongitude=17.644164
+userId=488915&null&2016-00-12 08:53:43&2016-00-11 13:56:53&stPosition=Fältvägen&edPosition=Barkspadevägen&priority=time&startPositionLatitude=59.8585436&startPositionLongitude=17.6445436
+userId=47919&null&2016-00-12 12:55:53&2016-00-11 13:56:53&stPosition=Portalgatan&edPosition=Oslogatan&priority=distance&startPositionLatitude=59.858676499999994&startPositionLongitude=17.6446765
+userId=24594&2016-00-12 05:00:43&null&2016-00-11 13:56:53&stPosition=Gottsunda Centrum&edPosition=Kantorsgatan&priority=distance&startPositionLatitude=59.8589407&startPositionLongitude=17.6449407
+userId=377262&2016-00-12 06:34:24&null&2016-00-11 13:56:53&stPosition=Flogsta vårdcentral&edPosition=Kungshögarna&priority=distance&startPositionLatitude=59.8588628&startPositionLongitude=17.6448628
+userId=29132&2016-00-12 08:39:42&null&2016-00-11 13:56:53&stPosition=Flogsta vårdcentral&edPosition=Akademiska sjukhuset södra&priority=time&startPositionLatitude=59.858115999999995&startPositionLongitude=17.644115999999997
+userId=38280&2016-00-12 09:07:35&null&2016-00-11 13:56:53&stPosition=Sernanders väg&edPosition=Reykjaviksgatan&priority=distance&startPositionLatitude=59.858228999999994&startPositionLongitude=17.644229
+userId=441144&2016-00-12 09:04:46&null&2016-00-11 13:56:53&stPosition=Flogsta vårdcentral&edPosition=Uppsala Science Park&priority=distance&startPositionLatitude=59.8589578&startPositionLongitude=17.644957799999997
+userId=403736&2016-00-12 15:28:38&null&2016-00-11 13:56:53&stPosition=Gottsunda Centrum&edPosition=Slädvägen&priority=time&startPositionLatitude=59.8588816&startPositionLongitude=17.644881599999998
+userId=41585&2016-00-12 05:53:38&null&2016-00-11 13:56:53&stPosition=Flottörgatan&edPosition=Almqvistgatan&priority=time&startPositionLatitude=59.858553199999996&startPositionLongitude=17.644553199999997
+userId=126880&2016-00-12 07:44:36&null&2016-00-11 13:56:54&stPosition=Arrheniusplan&edPosition=Huges väg&priority=time&startPositionLatitude=59.8585541&startPositionLongitude=17.644554099999997
+userId=42179&2016-00-12 13:14:08&null&2016-00-11 13:56:54&stPosition=Väpnargatan&edPosition=Centralstationen&priority=time&startPositionLatitude=59.8584408&startPositionLongitude=17.644440799999998
+userId=260438&2016-00-12 18:40:48&null&2016-00-11 13:56:54&stPosition=Gottsunda Centrum&edPosition=Rosendals skola&priority=time&startPositionLatitude=59.858936&startPositionLongitude=17.644935999999998
+userId=294354&null&2016-00-12 07:50:05&2016-00-11 13:56:54&stPosition=Väpnargatan&edPosition=Kantorsgatan&priority=time&startPositionLatitude=59.8581873&startPositionLongitude=17.6441873
+userId=412920&2016-00-12 17:48:04&null&2016-00-11 13:56:54&stPosition=Studentstaden&edPosition=Rosendals skola&priority=time&startPositionLatitude=59.8584676&startPositionLongitude=17.6444676
+userId=156772&2016-00-12 17:54:23&null&2016-00-11 13:56:54&stPosition=Levertinsgatan&edPosition=Djäknegatan&priority=distance&startPositionLatitude=59.858929999999994&startPositionLongitude=17.64493
+userId=468302&2016-00-12 08:38:35&null&2016-00-11 13:56:54&stPosition=Vaksala torg&edPosition=Väderkvarnsgatan&priority=distance&startPositionLatitude=59.858163999999995&startPositionLongitude=17.644164
+userId=227985&2016-00-12 06:05:42&null&2016-00-11 13:56:54&stPosition=Flygargatan&edPosition=Väpnargatan&priority=time&startPositionLatitude=59.8585436&startPositionLongitude=17.6445436
+userId=319482&2016-00-12 06:54:23&null&2016-00-11 13:56:54&stPosition=Flottörgatan&edPosition=Polacksbacken&priority=time&startPositionLatitude=59.858676499999994&startPositionLongitude=17.6446765
+userId=167186&null&2016-00-12 15:03:58&2016-00-11 13:56:54&stPosition=Bärbyparken&edPosition=Kungshögarna&priority=distance&startPositionLatitude=59.8589407&startPositionLongitude=17.6449407
+userId=52734&2016-00-12 10:10:42&null&2016-00-11 13:56:54&stPosition=Torbjörnsgatan&edPosition=Rosendals skola&priority=time&startPositionLatitude=59.8588628&startPositionLongitude=17.6448628
+userId=168240&2016-00-12 14:48:17&null&2016-00-11 13:56:54&stPosition=Huges väg&edPosition=Ekebyhus&priority=distance&startPositionLatitude=59.858115999999995&startPositionLongitude=17.644115999999997
+userId=198170&null&2016-00-12 05:27:08&2016-00-11 13:56:54&stPosition=Almqvistgatan&edPosition=Levertinsgatan&priority=time&startPositionLatitude=59.858228999999994&startPositionLongitude=17.644229
+userId=236418&2016-00-12 16:57:32&null&2016-00-11 13:56:54&stPosition=Gottsunda Centrum&edPosition=Levertinsgatan&priority=time&startPositionLatitude=59.8589578&startPositionLongitude=17.644957799999997
+userId=437304&2016-00-12 10:34:09&null&2016-00-11 13:56:54&stPosition=Vaksala torg&edPosition=Almqvistgatan&priority=distance&startPositionLatitude=59.8588816&startPositionLongitude=17.644881599999998
+userId=337405&null&2016-00-12 06:53:40&2016-00-11 13:56:54&stPosition=Campus Ultuna&edPosition=Väpnargatan&priority=distance&startPositionLatitude=59.858553199999996&startPositionLongitude=17.644553199999997
+userId=222350&2016-00-12 15:46:33&null&2016-00-11 13:56:54&stPosition=Polishuset&edPosition=Polacksbacken&priority=distance&startPositionLatitude=59.8585541&startPositionLongitude=17.644554099999997
+userId=57971&2016-00-12 14:05:34&null&2016-00-11 13:56:54&stPosition=Torbjörnsgatan&edPosition=Svartbäckens vårdcentral&priority=distance&startPositionLatitude=59.8584408&startPositionLongitude=17.644440799999998
+userId=337998&2016-00-12 17:15:28&null&2016-00-11 13:56:54&stPosition=Campus Ultuna&edPosition=Uppsala Science Park&priority=time&startPositionLatitude=59.858936&startPositionLongitude=17.644935999999998
+userId=460132&2016-00-12 06:08:37&null&2016-00-11 13:56:54&stPosition=Campus Ultuna&edPosition=Huges väg&priority=time&startPositionLatitude=59.8581873&startPositionLongitude=17.6441873
+userId=194302&2016-00-12 06:49:45&null&2016-00-11 13:56:54&stPosition=Svartbäckens vårdcentral&edPosition=Djäknegatan&priority=time&startPositionLatitude=59.8584676&startPositionLongitude=17.6444676
+userId=259115&2016-00-12 11:10:45&null&2016-00-11 13:56:54&stPosition=Stadshuset&edPosition=Flogsta vårdcentral&priority=distance&startPositionLatitude=59.858929999999994&startPositionLongitude=17.64493
+userId=56835&2016-00-12 08:13:23&null&2016-00-11 13:56:54&stPosition=Campus Ultuna&edPosition=Heidenstamstorg&priority=time&startPositionLatitude=59.858163999999995&startPositionLongitude=17.644164
+userId=220901&2016-00-12 18:51:08&null&2016-00-11 13:56:54&stPosition=Studentstaden&edPosition=Reykjaviksgatan&priority=distance&startPositionLatitude=59.8585436&startPositionLongitude=17.6445436
+userId=78600&2016-00-12 20:28:41&null&2016-00-11 13:56:54&stPosition=Flottiljgatan&edPosition=Lundellska skolan&priority=distance&startPositionLatitude=59.858676499999994&startPositionLongitude=17.6446765
+userId=372149&2016-00-12 16:29:24&null&2016-00-11 13:56:54&stPosition=Bäverns gränd&edPosition=Idrottsgatan&priority=distance&startPositionLatitude=59.8589407&startPositionLongitude=17.6449407
+userId=227536&2016-00-12 09:31:16&null&2016-00-11 13:56:54&stPosition=Emmy Rappes väg&edPosition=Sernanders väg&priority=time&startPositionLatitude=59.8588628&startPositionLongitude=17.6448628
+userId=41119&2016-00-12 03:10:13&null&2016-00-11 13:56:54&stPosition=Ferlinsgatan&edPosition=Polacksbacken&priority=time&startPositionLatitude=59.858115999999995&startPositionLongitude=17.644115999999997
+userId=342024&2016-00-12 15:10:05&null&2016-00-11 13:56:54&stPosition=Vaksala torg&edPosition=Almqvistgatan&priority=distance&startPositionLatitude=59.858228999999994&startPositionLongitude=17.644229
+userId=409324&2016-00-12 15:14:14&null&2016-00-11 13:56:54&stPosition=Veterinärvägen&edPosition=Arrheniusplan&priority=time&startPositionLatitude=59.8589578&startPositionLongitude=17.644957799999997
+userId=324609&2016-00-12 18:52:43&null&2016-00-11 13:56:54&stPosition=Flottiljgatan&edPosition=Bandstolsvägen&priority=time&startPositionLatitude=59.8588816&startPositionLongitude=17.644881599999998
+userId=423086&2016-00-12 04:45:11&null&2016-00-11 13:56:54&stPosition=Campus Ultuna&edPosition=Ekebyhus&priority=time&startPositionLatitude=59.858553199999996&startPositionLongitude=17.644553199999997
+userId=452734&null&2016-00-12 14:16:41&2016-00-11 13:56:54&stPosition=Slädvägen&edPosition=Rosendals skola&priority=distance&startPositionLatitude=59.8585541&startPositionLongitude=17.644554099999997
+userId=209004&2016-00-12 16:27:51&null&2016-00-11 13:56:54&stPosition=Väpnargatan&edPosition=Cellovägen&priority=distance&startPositionLatitude=59.8584408&startPositionLongitude=17.644440799999998
+userId=440029&2016-00-12 17:56:51&null&2016-00-11 13:56:54&stPosition=Polacksbacken&edPosition=Rosendals skola&priority=time&startPositionLatitude=59.858936&startPositionLongitude=17.644935999999998
+userId=206069&2016-00-12 16:24:04&null&2016-00-11 13:56:54&stPosition=Fältvägen&edPosition=Akademiska sjukhuset södra&priority=distance&startPositionLatitude=59.8581873&startPositionLongitude=17.6441873
+userId=374259&2016-00-12 08:31:22&null&2016-00-11 13:56:54&stPosition=Götgatan&edPosition=Regins väg&priority=distance&startPositionLatitude=59.8584676&startPositionLongitude=17.6444676
+userId=251072&2016-00-12 15:35:56&null&2016-00-11 13:56:54&stPosition=Stadshuset&edPosition=Polacksbacken&priority=distance&startPositionLatitude=59.858929999999994&startPositionLongitude=17.64493
+userId=36116&2016-00-12 14:06:35&null&2016-00-11 13:56:54&stPosition=Fyrishovs entré&edPosition=Regins väg&priority=time&startPositionLatitude=59.858163999999995&startPositionLongitude=17.644164
+userId=134280&null&2016-00-12 06:10:29&2016-00-11 13:56:54&stPosition=Flogsta vårdcentral&edPosition=Ekebyhus&priority=distance&startPositionLatitude=59.8585436&startPositionLongitude=17.6445436
+userId=417190&2016-00-12 08:43:48&null&2016-00-11 13:56:54&stPosition=Rickomberga&edPosition=Rosendals skola&priority=time&startPositionLatitude=59.858676499999994&startPositionLongitude=17.6446765
+userId=29884&2016-00-12 07:52:29&null&2016-00-11 13:56:54&stPosition=Campus Ultuna&edPosition=Värnlundsgatan&priority=distance&startPositionLatitude=59.8589407&startPositionLongitude=17.6449407
+userId=45704&null&2016-00-12 16:50:09&2016-00-11 13:56:54&stPosition=Väpnargatan&edPosition=Flottörgatan&priority=time&startPositionLatitude=59.8588628&startPositionLongitude=17.6448628
+userId=414141&2016-00-12 06:45:18&null&2016-00-11 13:56:54&stPosition=Centralstationen&edPosition=Almqvistgatan&priority=time&startPositionLatitude=59.858115999999995&startPositionLongitude=17.644115999999997
+userId=356228&2016-00-12 08:12:23&null&2016-00-11 13:56:55&stPosition=Sernanders väg&edPosition=Heidenstamstorg&priority=time&startPositionLatitude=59.858228999999994&startPositionLongitude=17.644229
+userId=33495&null&2016-00-12 18:03:27&2016-00-11 13:56:55&stPosition=Flogsta vårdcentral&edPosition=Huges väg&priority=distance&startPositionLatitude=59.8589578&startPositionLongitude=17.644957799999997
+userId=240174&2016-00-12 07:52:25&null&2016-00-11 13:56:55&stPosition=Tallbacksvägen&edPosition=Fyrishovs entré&priority=distance&startPositionLatitude=59.8588816&startPositionLongitude=17.644881599999998
+userId=276642&2016-00-12 17:58:30&null&2016-00-11 13:56:55&stPosition=Polishuset&edPosition=Centralstationen&priority=time&startPositionLatitude=59.858553199999996&startPositionLongitude=17.644553199999997
+userId=235130&2016-00-12 02:28:41&null&2016-00-11 13:56:55&stPosition=Djäknegatan&edPosition=Akademiska sjukhuset södra&priority=distance&startPositionLatitude=59.8585541&startPositionLongitude=17.644554099999997
+userId=405900&2016-00-12 06:06:59&null&2016-00-11 13:56:55&stPosition=Studentstaden&edPosition=Akademiska sjukhuset&priority=distance&startPositionLatitude=59.8584408&startPositionLongitude=17.644440799999998
+userId=261335&2016-00-12 17:11:07&null&2016-00-11 13:56:55&stPosition=Fältvägen&edPosition=Valhalls väg&priority=time&startPositionLatitude=59.858936&startPositionLongitude=17.644935999999998
+userId=409588&null&2016-00-12 04:05:06&2016-00-11 13:56:55&stPosition=Studentstaden&edPosition=Almqvistgatan&priority=time&startPositionLatitude=59.8581873&startPositionLongitude=17.6441873
+userId=106588&null&2016-00-12 07:21:55&2016-00-11 13:56:55&stPosition=Ihres väg&edPosition=Valhalls väg&priority=distance&startPositionLatitude=59.8584676&startPositionLongitude=17.6444676
+userId=210746&null&2016-00-12 08:07:40&2016-00-11 13:56:55&stPosition=Gottsunda Centrum&edPosition=Oslogatan&priority=time&startPositionLatitude=59.858929999999994&startPositionLongitude=17.64493
+userId=187283&2016-00-12 08:00:11&null&2016-00-11 13:56:55&stPosition=Stadshuset&edPosition=Säves väg&priority=time&startPositionLatitude=59.858163999999995&startPositionLongitude=17.644164
+userId=211121&2016-00-12 18:15:00&null&2016-00-11 13:56:55&stPosition=Veterinärvägen&edPosition=Centralstationen&priority=distance&startPositionLatitude=59.8585436&startPositionLongitude=17.6445436
+userId=172784&2016-00-12 07:41:07&null&2016-00-11 13:56:55&stPosition=Bärbyparken&edPosition=Flygargatan&priority=distance&startPositionLatitude=59.858676499999994&startPositionLongitude=17.6446765
+userId=89754&2016-00-12 05:53:12&null&2016-00-11 13:56:55&stPosition=Centralstationen&edPosition=Rosendals skola&priority=time&startPositionLatitude=59.8589407&startPositionLongitude=17.6449407
+userId=103269&2016-00-12 07:04:02&null&2016-00-11 13:56:55&stPosition=Rosendals skola&edPosition=Huges väg&priority=distance&startPositionLatitude=59.8588628&startPositionLongitude=17.6448628
+userId=491908&2016-00-12 16:00:31&null&2016-00-11 13:56:55&stPosition=Sernanders väg&edPosition=Sernanders väg&priority=time&startPositionLatitude=59.858115999999995&startPositionLongitude=17.644115999999997
+userId=9213&2016-00-12 18:50:54&null&2016-00-11 13:56:55&stPosition=Gottsunda Centrum&edPosition=Valhalls väg&priority=distance&startPositionLatitude=59.858228999999994&startPositionLongitude=17.644229
+userId=340086&2016-00-12 14:18:05&null&2016-00-11 13:56:55&stPosition=Stadshuset&edPosition=Barkspadevägen&priority=time&startPositionLatitude=59.8589578&startPositionLongitude=17.644957799999997
+userId=411543&2016-00-12 06:15:33&null&2016-00-11 13:56:55&stPosition=Flogsta vårdcentral&edPosition=Polacksbacken&priority=time&startPositionLatitude=59.8588816&startPositionLongitude=17.644881599999998
+userId=150966&2016-00-12 17:45:22&null&2016-00-11 13:56:55&stPosition=Startgatan&edPosition=Rosendals skola&priority=time&startPositionLatitude=59.858553199999996&startPositionLongitude=17.644553199999997
+userId=426235&null&2016-00-12 17:01:09&2016-00-11 13:56:55&stPosition=Slädvägen&edPosition=Fältvägen&priority=distance&startPositionLatitude=59.8585541&startPositionLongitude=17.644554099999997
+userId=349070&2016-00-12 16:04:09&null&2016-00-11 13:56:55&stPosition=Slädvägen&edPosition=Kungshögarna&priority=time&startPositionLatitude=59.8584408&startPositionLongitude=17.644440799999998
+userId=412928&null&2016-00-12 13:18:37&2016-00-11 13:56:55&stPosition=Fjärdhundragatan&edPosition=Centralstationen&priority=distance&startPositionLatitude=59.858936&startPositionLongitude=17.644935999999998
+userId=94566&null&2016-00-12 07:50:35&2016-00-11 13:56:55&stPosition=Almqvistgatan&edPosition=Polacksbacken&priority=time&startPositionLatitude=59.8581873&startPositionLongitude=17.6441873
+userId=370807&2016-00-12 07:43:51&null&2016-00-11 13:56:55&stPosition=Bandstolsvägen&edPosition=Ferlinsgatan&priority=distance&startPositionLatitude=59.8584676&startPositionLongitude=17.6444676
+userId=55887&2016-00-12 18:08:30&null&2016-00-11 13:56:55&stPosition=Almqvistgatan&edPosition=Lundellska skolan&priority=distance&startPositionLatitude=59.858929999999994&startPositionLongitude=17.64493
+userId=428383&2016-00-12 08:27:39&null&2016-00-11 13:56:55&stPosition=Flygargatan&edPosition=Reykjaviksgatan&priority=distance&startPositionLatitude=59.858163999999995&startPositionLongitude=17.644164
+userId=425257&null&2016-00-12 05:51:48&2016-00-11 13:56:55&stPosition=Väpnargatan&edPosition=Cellovägen&priority=distance&startPositionLatitude=59.8585436&startPositionLongitude=17.6445436
+userId=81764&null&2016-00-12 07:51:46&2016-00-11 13:56:55&stPosition=Ekudden&edPosition=Arrheniusplan&priority=time&startPositionLatitude=59.858676499999994&startPositionLongitude=17.6446765
+userId=307628&null&2016-00-12 18:57:03&2016-00-11 13:56:55&stPosition=Stadshuset&edPosition=Kvarntorget&priority=time&startPositionLatitude=59.8589407&startPositionLongitude=17.6449407
+userId=394518&null&2016-00-12 08:35:12&2016-00-11 13:56:55&stPosition=Flottiljgatan&edPosition=Kungshögarna&priority=distance&startPositionLatitude=59.8588628&startPositionLongitude=17.6448628
+userId=106003&null&2016-00-12 16:27:27&2016-00-11 13:56:55&stPosition=Bandstolsvägen&edPosition=Uppsala Science Park&priority=distance&startPositionLatitude=59.858115999999995&startPositionLongitude=17.644115999999997
+userId=4126&2016-00-12 05:57:10&null&2016-00-11 13:56:55&stPosition=Veterinärvägen&edPosition=Gottsunda Centrum&priority=time&startPositionLatitude=59.858228999999994&startPositionLongitude=17.644229
+userId=317152&null&2016-00-12 17:32:19&2016-00-11 13:56:55&stPosition=Kvarntorget&edPosition=Reykjaviksgatan&priority=distance&startPositionLatitude=59.8589578&startPositionLongitude=17.644957799999997
+userId=274769&2016-00-12 12:34:07&null&2016-00-11 13:56:55&stPosition=Rosendals skola&edPosition=Uppsala Science Park&priority=distance&startPositionLatitude=59.8588816&startPositionLongitude=17.644881599999998
+userId=391970&2016-00-12 16:11:30&null&2016-00-11 13:56:55&stPosition=Rosendals skola&edPosition=Arrheniusplan&priority=time&startPositionLatitude=59.858553199999996&startPositionLongitude=17.644553199999997
+userId=1068&null&2016-00-12 06:18:31&2016-00-11 13:56:55&stPosition=Flygargatan&edPosition=Almqvistgatan&priority=distance&startPositionLatitude=59.8585541&startPositionLongitude=17.644554099999997
+userId=113067&2016-00-12 15:46:44&null&2016-00-11 13:56:55&stPosition=Rosendals skola&edPosition=Fyrishovs entré&priority=time&startPositionLatitude=59.8584408&startPositionLongitude=17.644440799999998
+userId=174461&2016-00-12 06:57:13&null&2016-00-11 13:56:55&stPosition=Kvarntorget&edPosition=Cellovägen&priority=distance&startPositionLatitude=59.858936&startPositionLongitude=17.644935999999998
+userId=376816&2016-00-12 19:02:12&null&2016-00-11 13:56:55&stPosition=Stadshuset&edPosition=Gottsunda Centrum&priority=distance&startPositionLatitude=59.8581873&startPositionLongitude=17.6441873
+userId=69794&2016-00-12 07:13:50&null&2016-00-11 13:56:55&stPosition=Fältvägen&edPosition=Levertinsgatan&priority=distance&startPositionLatitude=59.858929999999994&startPositionLongitude=17.64493
+userId=3669&2016-00-12 08:46:11&null&2016-00-11 13:56:55&stPosition=Torbjörnsgatan&edPosition=Väpnargatan&priority=time&startPositionLatitude=59.858163999999995&startPositionLongitude=17.644164
+userId=123988&2016-00-12 07:33:33&null&2016-00-11 13:56:55&stPosition=Centralstationen&edPosition=Oslogatan&priority=distance&startPositionLatitude=59.8585436&startPositionLongitude=17.6445436
+userId=333401&2016-00-12 20:10:44&null&2016-00-11 13:56:55&stPosition=Vaksala torg&edPosition=Polacksbacken&priority=distance&startPositionLatitude=59.858676499999994&startPositionLongitude=17.6446765
+userId=333926&null&2016-00-12 16:12:57&2016-00-11 13:56:55&stPosition=Rosendals skola&edPosition=Idrottsgatan&priority=distance&startPositionLatitude=59.8589407&startPositionLongitude=17.6449407
+userId=130765&null&2016-00-12 15:10:04&2016-00-11 13:56:56&stPosition=Vaksala torg&edPosition=Rosendals skola&priority=time&startPositionLatitude=59.8588628&startPositionLongitude=17.6448628
+userId=197381&null&2016-00-12 15:19:01&2016-00-11 13:56:56&stPosition=Bandstolsvägen&edPosition=Barkspadevägen&priority=time&startPositionLatitude=59.858115999999995&startPositionLongitude=17.644115999999997
+userId=61413&2016-00-12 04:45:42&null&2016-00-11 13:56:56&stPosition=Ekonomikum&edPosition=Oslogatan&priority=time&startPositionLatitude=59.858228999999994&startPositionLongitude=17.644229
+userId=148028&2016-00-12 06:53:32&null&2016-00-11 13:56:56&stPosition=Flygargatan&edPosition=Levertinsgatan&priority=time&startPositionLatitude=59.8589578&startPositionLongitude=17.644957799999997
+userId=461979&2016-00-12 15:22:00&null&2016-00-11 13:56:56&stPosition=Vaksala torg&edPosition=Valhalls väg&priority=distance&startPositionLatitude=59.8588816&startPositionLongitude=17.644881599999998
+userId=371446&2016-00-12 18:10:05&null&2016-00-11 13:56:56&stPosition=Arrheniusplan&edPosition=Uppsala Science Park&priority=distance&startPositionLatitude=59.858553199999996&startPositionLongitude=17.644553199999997
+userId=312082&2016-00-12 18:02:50&null&2016-00-11 13:56:56&stPosition=Flogsta vårdcentral&edPosition=Kronparksgården&priority=time&startPositionLatitude=59.8585541&startPositionLongitude=17.644554099999997
+userId=352475&null&2016-00-12 20:34:18&2016-00-11 13:56:56&stPosition=Fyrishovs entré&edPosition=Lundellska skolan&priority=time&startPositionLatitude=59.8584408&startPositionLongitude=17.644440799999998
+userId=276051&2016-00-12 07:27:45&null&2016-00-11 13:56:56&stPosition=Campus Ultuna&edPosition=Lundellska skolan&priority=time&startPositionLatitude=59.858936&startPositionLongitude=17.644935999999998
+userId=466173&2016-00-12 15:09:08&null&2016-00-11 13:56:56&stPosition=Torbjörnsgatan&edPosition=Centralstationen&priority=distance&startPositionLatitude=59.8581873&startPositionLongitude=17.6441873
+userId=43418&2016-00-12 03:40:04&null&2016-00-11 13:56:56&stPosition=Uppsala Science Park&edPosition=Kungshögarna&priority=distance&startPositionLatitude=59.8584676&startPositionLongitude=17.6444676
+userId=308675&2016-00-12 17:13:29&null&2016-00-11 13:56:56&stPosition=Campus Ultuna&edPosition=Reykjaviksgatan&priority=distance&startPositionLatitude=59.858929999999994&startPositionLongitude=17.64493
+userId=288382&2016-00-12 12:38:44&null&2016-00-11 13:56:56&stPosition=Stadshuset&edPosition=Oslogatan&priority=distance&startPositionLatitude=59.858163999999995&startPositionLongitude=17.644164
+userId=246464&2016-00-12 08:30:39&null&2016-00-11 13:56:56&stPosition=Gottsunda Centrum&edPosition=Ekebyhus&priority=time&startPositionLatitude=59.8585436&startPositionLongitude=17.6445436
+userId=36680&2016-00-12 08:42:41&null&2016-00-11 13:56:56&stPosition=Centralstationen&edPosition=Emmy Rappes väg&priority=distance&startPositionLatitude=59.858676499999994&startPositionLongitude=17.6446765
+userId=102071&2016-00-12 18:26:41&null&2016-00-11 13:56:56&stPosition=Säves väg&edPosition=Värnlundsgatan&priority=distance&startPositionLatitude=59.8589407&startPositionLongitude=17.6449407
+userId=167470&null&2016-00-12 14:25:24&2016-00-11 13:56:56&stPosition=Fyrishovs entré&edPosition=Heidenstamstorg&priority=time&startPositionLatitude=59.8588628&startPositionLongitude=17.6448628
+userId=206617&null&2016-00-12 17:29:35&2016-00-11 13:56:56&stPosition=Gottsunda Centrum&edPosition=Akademiska sjukhuset södra&priority=distance&startPositionLatitude=59.858115999999995&startPositionLongitude=17.644115999999997
+userId=223583&2016-00-12 17:06:23&null&2016-00-11 13:56:56&stPosition=Slädvägen&edPosition=Cellovägen&priority=time&startPositionLatitude=59.858228999999994&startPositionLongitude=17.644229
+userId=304743&null&2016-00-12 17:01:04&2016-00-11 13:56:56&stPosition=Arrheniusplan&edPosition=Heidenstamstorg&priority=distance&startPositionLatitude=59.8589578&startPositionLongitude=17.644957799999997
+userId=333712&2016-00-12 07:04:07&null&2016-00-11 13:56:56&stPosition=Gottsunda Centrum&edPosition=Ferlinsgatan&priority=distance&startPositionLatitude=59.8588816&startPositionLongitude=17.644881599999998
+userId=82178&2016-00-12 08:08:17&null&2016-00-11 13:56:56&stPosition=Götgatan&edPosition=Rickomberga&priority=distance&startPositionLatitude=59.858553199999996&startPositionLongitude=17.644553199999997
+userId=374200&null&2016-00-12 09:53:57&2016-00-11 13:56:56&stPosition=Bäverns gränd&edPosition=Lundellska skolan&priority=time&startPositionLatitude=59.8585541&startPositionLongitude=17.644554099999997
+userId=191835&2016-00-12 08:48:40&null&2016-00-11 13:56:56&stPosition=Polishuset&edPosition=Värnlundsgatan&priority=distance&startPositionLatitude=59.8584408&startPositionLongitude=17.644440799999998
+userId=143207&2016-00-12 05:39:52&null&2016-00-11 13:56:56&stPosition=Bäverns gränd&edPosition=Kantorsgatan&priority=time&startPositionLatitude=59.858936&startPositionLongitude=17.644935999999998
+userId=44325&2016-00-12 18:03:28&null&2016-00-11 13:56:56&stPosition=Fjärdhundragatan&edPosition=Linrepevägen&priority=distance&startPositionLatitude=59.8581873&startPositionLongitude=17.6441873
+userId=400371&2016-00-12 07:29:39&null&2016-00-11 13:56:56&stPosition=Emmy Rappes väg&edPosition=Slädvägen&priority=time&startPositionLatitude=59.8584676&startPositionLongitude=17.6444676
+userId=445995&2016-00-12 11:24:30&null&2016-00-11 13:56:56&stPosition=Flottiljgatan&edPosition=Kantorsgatan&priority=distance&startPositionLatitude=59.858929999999994&startPositionLongitude=17.64493
+userId=165766&2016-00-12 09:34:33&null&2016-00-11 13:56:56&stPosition=Huges väg&edPosition=Kungshögarna&priority=distance&startPositionLatitude=59.858163999999995&startPositionLongitude=17.644164
+userId=484205&null&2016-00-12 08:10:04&2016-00-11 13:56:56&stPosition=Akademiska sjukhuset&edPosition=Centralstationen&priority=distance&startPositionLatitude=59.8585436&startPositionLongitude=17.6445436
+userId=142841&2016-00-12 10:40:37&null&2016-00-11 13:56:56&stPosition=Flogsta vårdcentral&edPosition=Gottsunda Centrum&priority=time&startPositionLatitude=59.858676499999994&startPositionLongitude=17.6446765
+userId=340332&2016-00-12 17:33:29&null&2016-00-11 13:56:56&stPosition=Studentstaden&edPosition=Kungshögarna&priority=time&startPositionLatitude=59.8589407&startPositionLongitude=17.6449407
+userId=495930&2016-00-12 07:07:38&null&2016-00-11 13:56:56&stPosition=Akademiska sjukhuset&edPosition=Regins väg&priority=distance&startPositionLatitude=59.8588628&startPositionLongitude=17.6448628
+userId=328224&null&2016-00-12 15:47:50&2016-00-11 13:56:56&stPosition=Rosendals skola&edPosition=Valhalls väg&priority=distance&startPositionLatitude=59.858115999999995&startPositionLongitude=17.644115999999997
+userId=406350&2016-00-12 06:52:02&null&2016-00-11 13:56:56&stPosition=Idrottsgatan&edPosition=Slädvägen&priority=time&startPositionLatitude=59.858228999999994&startPositionLongitude=17.644229
+userId=282625&2016-00-12 13:06:59&null&2016-00-11 13:56:56&stPosition=Djäknegatan&edPosition=Fyrishovs entré&priority=distance&startPositionLatitude=59.8589578&startPositionLongitude=17.644957799999997
+userId=257877&null&2016-00-12 08:27:58&2016-00-11 13:56:56&stPosition=Kungshögarna&edPosition=Polacksbacken&priority=distance&startPositionLatitude=59.8588816&startPositionLongitude=17.644881599999998
+userId=218626&null&2016-00-12 10:27:44&2016-00-11 13:56:56&stPosition=Djäknegatan&edPosition=Levertinsgatan&priority=time&startPositionLatitude=59.858553199999996&startPositionLongitude=17.644553199999997
+userId=428469&2016-00-12 17:50:09&null&2016-00-11 13:56:56&stPosition=Fyrishovs entré&edPosition=Svartbäckens vårdcentral&priority=time&startPositionLatitude=59.8585541&startPositionLongitude=17.644554099999997
+userId=80340&2016-00-12 07:39:31&null&2016-00-11 13:56:56&stPosition=Götgatan&edPosition=Valhalls väg&priority=distance&startPositionLatitude=59.8584408&startPositionLongitude=17.644440799999998
+userId=224524&2016-00-12 19:30:23&null&2016-00-11 13:56:56&stPosition=Centralstationen&edPosition=Lundellska skolan&priority=time&startPositionLatitude=59.858936&startPositionLongitude=17.644935999999998
+userId=476436&2016-00-12 15:29:39&null&2016-00-11 13:56:56&stPosition=Gottsunda Centrum&edPosition=Almqvistgatan&priority=time&startPositionLatitude=59.8581873&startPositionLongitude=17.6441873
+userId=72472&null&2016-00-12 15:41:00&2016-00-11 13:56:56&stPosition=Rosendals skola&edPosition=Tallbacksvägen&priority=distance&startPositionLatitude=59.8584676&startPositionLongitude=17.6444676
+userId=241921&2016-00-12 05:38:36&null&2016-00-11 13:56:56&stPosition=Gustaf Kjellbergs väg&edPosition=Oslogatan&priority=distance&startPositionLatitude=59.858929999999994&startPositionLongitude=17.64493
+userId=298591&2016-00-12 05:38:21&null&2016-00-11 13:56:56&stPosition=Campus Ultuna&edPosition=Flöjtvägen&priority=time&startPositionLatitude=59.858163999999995&startPositionLongitude=17.644164
+userId=302491&2016-00-12 15:39:36&null&2016-00-11 13:56:56&stPosition=Slädvägen&edPosition=Emmy Rappes väg&priority=time&startPositionLatitude=59.8585436&startPositionLongitude=17.6445436
+userId=182018&2016-00-12 06:31:33&null&2016-00-11 13:56:56&stPosition=Torbjörnsgatan&edPosition=Svartbäckens vårdcentral&priority=distance&startPositionLatitude=59.858676499999994&startPositionLongitude=17.6446765
+userId=230581&2016-00-12 18:35:26&null&2016-00-11 13:56:57&stPosition=Värnlundsgatan&edPosition=Kungshögarna&priority=time&startPositionLatitude=59.8589407&startPositionLongitude=17.6449407
+userId=162307&2016-00-12 15:32:12&null&2016-00-11 13:56:57&stPosition=Stadshuset&edPosition=Heidenstamstorg&priority=distance&startPositionLatitude=59.8588628&startPositionLongitude=17.6448628
+userId=386397&null&2016-00-12 05:49:02&2016-00-11 13:56:57&stPosition=Topeliusgatan&edPosition=Slädvägen&priority=distance&startPositionLatitude=59.858115999999995&startPositionLongitude=17.644115999999997
+userId=381087&2016-00-12 07:24:29&null&2016-00-11 13:56:57&stPosition=Vaksala torg&edPosition=Uppsala Science Park&priority=distance&startPositionLatitude=59.858228999999994&startPositionLongitude=17.644229
+userId=48018&null&2016-00-12 19:35:25&2016-00-11 13:56:57&stPosition=Vaksala torg&edPosition=Slädvägen&priority=distance&startPositionLatitude=59.8589578&startPositionLongitude=17.644957799999997
+userId=78268&2016-00-12 05:55:11&null&2016-00-11 13:56:57&stPosition=Rosendals skola&edPosition=Polacksbacken&priority=distance&startPositionLatitude=59.8588816&startPositionLongitude=17.644881599999998
+userId=357020&2016-00-12 05:15:04&null&2016-00-11 13:56:57&stPosition=Polacksbacken&edPosition=Valhalls väg&priority=distance&startPositionLatitude=59.858553199999996&startPositionLongitude=17.644553199999997
+userId=155665&2016-00-12 16:11:05&null&2016-00-11 13:56:57&stPosition=Torbjörnsgatan&edPosition=Ferlinsgatan&priority=time&startPositionLatitude=59.8585541&startPositionLongitude=17.644554099999997
+userId=483187&2016-00-12 07:48:41&null&2016-00-11 13:56:57&stPosition=Bandstolsvägen&edPosition=Kronparksgården&priority=distance&startPositionLatitude=59.8584408&startPositionLongitude=17.644440799999998
+userId=394737&2016-00-12 14:59:49&null&2016-00-11 13:56:57&stPosition=Kvarntorget&edPosition=Gottsunda Centrum&priority=time&startPositionLatitude=59.858936&startPositionLongitude=17.644935999999998
+userId=211855&2016-00-12 05:39:04&null&2016-00-11 13:56:57&stPosition=Torbjörnsgatan&edPosition=Slädvägen&priority=distance&startPositionLatitude=59.8581873&startPositionLongitude=17.6441873
+userId=439614&2016-00-12 16:41:39&null&2016-00-11 13:56:57&stPosition=Uppsala Science Park&edPosition=Flöjtvägen&priority=distance&startPositionLatitude=59.858929999999994&startPositionLongitude=17.64493
+userId=148085&2016-00-12 15:08:14&null&2016-00-11 13:56:57&stPosition=Centralstationen&edPosition=Akademiska sjukhuset södra&priority=distance&startPositionLatitude=59.858163999999995&startPositionLongitude=17.644164
+userId=50295&2016-00-12 11:34:08&null&2016-00-11 13:56:57&stPosition=Sköldungagatan&edPosition=Rosendals skola&priority=time&startPositionLatitude=59.8585436&startPositionLongitude=17.6445436
+userId=176651&2016-00-12 08:05:51&null&2016-00-11 13:56:57&stPosition=Gottsunda Centrum&edPosition=Heidenstamstorg&priority=distance&startPositionLatitude=59.858676499999994&startPositionLongitude=17.6446765
+userId=389589&2016-00-12 06:37:51&null&2016-00-11 13:56:57&stPosition=Gottsunda Centrum&edPosition=Linrepevägen&priority=distance&startPositionLatitude=59.8589407&startPositionLongitude=17.6449407
+userId=21911&null&2016-00-12 06:17:39&2016-00-11 13:56:57&stPosition=Fjärdhundragatan&edPosition=Uppsala Science Park&priority=time&startPositionLatitude=59.858115999999995&startPositionLongitude=17.644115999999997
+userId=346047&2016-00-12 18:06:00&null&2016-00-11 13:56:57&stPosition=Sernanders väg&edPosition=Barkspadevägen&priority=time&startPositionLatitude=59.858228999999994&startPositionLongitude=17.644229
+userId=212789&2016-00-12 09:48:17&null&2016-00-11 13:56:57&stPosition=Idrottsgatan&edPosition=Ferlinsgatan&priority=distance&startPositionLatitude=59.8589578&startPositionLongitude=17.644957799999997
+userId=307435&null&2016-00-12 13:55:54&2016-00-11 13:56:57&stPosition=Väpnargatan&edPosition=Djäknegatan&priority=distance&startPositionLatitude=59.8588816&startPositionLongitude=17.644881599999998
+userId=146647&2016-00-12 14:19:55&null&2016-00-11 13:56:57&stPosition=Skolgatan&edPosition=Idrottsgatan&priority=time&startPositionLatitude=59.858553199999996&startPositionLongitude=17.644553199999997
+userId=85637&2016-00-12 07:37:08&null&2016-00-11 13:56:57&stPosition=Polacksbacken&edPosition=Sköldungagatan&priority=time&startPositionLatitude=59.8585541&startPositionLongitude=17.644554099999997
+userId=31788&null&2016-00-12 08:48:14&2016-00-11 13:56:57&stPosition=Almqvistgatan&edPosition=Gottsunda Centrum&priority=time&startPositionLatitude=59.8584408&startPositionLongitude=17.644440799999998
+userId=113218&2016-00-12 06:31:55&null&2016-00-11 13:56:57&stPosition=Fältvägen&edPosition=Gottsunda Centrum&priority=distance&startPositionLatitude=59.858936&startPositionLongitude=17.644935999999998
+userId=455289&2016-00-12 14:13:54&null&2016-00-11 13:56:57&stPosition=Flogsta vårdcentral&edPosition=Reykjaviksgatan&priority=distance&startPositionLatitude=59.8581873&startPositionLongitude=17.6441873
+userId=469463&null&2016-00-12 17:44:20&2016-00-11 13:56:57&stPosition=Fyrishovs entré&edPosition=Rosendals skola&priority=time&startPositionLatitude=59.8584676&startPositionLongitude=17.6444676
+userId=55015&null&2016-00-12 17:20:51&2016-00-11 13:56:57&stPosition=Ekudden&edPosition=Levertinsgatan&priority=distance&startPositionLatitude=59.858929999999994&startPositionLongitude=17.64493
+userId=298120&2016-00-12 07:58:38&null&2016-00-11 13:56:57&stPosition=Gottsunda Centrum&edPosition=Heidenstamstorg&priority=time&startPositionLatitude=59.858163999999995&startPositionLongitude=17.644164
+userId=452361&2016-00-12 07:09:51&null&2016-00-11 13:56:57&stPosition=Väpnargatan&edPosition=Huges väg&priority=distance&startPositionLatitude=59.8585436&startPositionLongitude=17.6445436
+userId=27244&2016-00-12 08:21:29&null&2016-00-11 13:56:57&stPosition=Ferlinsgatan&edPosition=Uppsala Science Park&priority=distance&startPositionLatitude=59.858676499999994&startPositionLongitude=17.6446765
+userId=396416&2016-00-12 09:49:23&null&2016-00-11 13:56:57&stPosition=Slädvägen&edPosition=Flogsta centrum&priority=time&startPositionLatitude=59.8589407&startPositionLongitude=17.6449407
+userId=9022&null&2016-00-12 13:51:47&2016-00-11 13:56:57&stPosition=Gottsunda Centrum&edPosition=Djäknegatan&priority=distance&startPositionLatitude=59.8588628&startPositionLongitude=17.6448628
+userId=260477&2016-00-12 08:52:28&null&2016-00-11 13:56:57&stPosition=Flottörgatan&edPosition=Almqvistgatan&priority=distance&startPositionLatitude=59.858115999999995&startPositionLongitude=17.644115999999997
+userId=46280&2016-00-12 10:38:18&null&2016-00-11 13:56:57&stPosition=Bäverns gränd&edPosition=Värnlundsgatan&priority=distance&startPositionLatitude=59.858228999999994&startPositionLongitude=17.644229
+userId=306058&2016-00-12 16:45:27&null&2016-00-11 13:56:57&stPosition=Gottsunda Centrum&edPosition=Polacksbacken&priority=distance&startPositionLatitude=59.8589578&startPositionLongitude=17.644957799999997
+userId=181109&null&2016-00-12 07:59:11&2016-00-11 13:56:57&stPosition=Campus Ultuna&edPosition=Fyrishovs entré&priority=distance&startPositionLatitude=59.8588816&startPositionLongitude=17.644881599999998
+userId=398531&2016-00-12 04:01:07&null&2016-00-11 13:56:57&stPosition=Stadshuset&edPosition=Gottsunda Centrum&priority=distance&startPositionLatitude=59.858553199999996&startPositionLongitude=17.644553199999997
+userId=341336&null&2016-00-12 16:05:44&2016-00-11 13:56:57&stPosition=Kantorsgatan&edPosition=Valhalls väg&priority=distance&startPositionLatitude=59.8585541&startPositionLongitude=17.644554099999997
+userId=457597&2016-00-12 15:45:44&null&2016-00-11 13:56:57&stPosition=Polacksbacken&edPosition=Kungshögarna&priority=time&startPositionLatitude=59.8584408&startPositionLongitude=17.644440799999998
+userId=247793&2016-00-12 19:32:52&null&2016-00-11 13:56:57&stPosition=Vaksala torg&edPosition=Akademiska sjukhuset södra&priority=time&startPositionLatitude=59.858936&startPositionLongitude=17.644935999999998
+userId=111033&2016-00-12 17:48:18&null&2016-00-11 13:56:57&stPosition=Stadshuset&edPosition=Huges väg&priority=time&startPositionLatitude=59.8581873&startPositionLongitude=17.6441873
+userId=250990&2016-00-12 10:08:39&null&2016-00-11 13:56:57&stPosition=Barkspadevägen&edPosition=Ekebyhus&priority=distance&startPositionLatitude=59.8584676&startPositionLongitude=17.6444676
+userId=486104&2016-00-12 06:25:08&null&2016-00-11 13:56:57&stPosition=Reykjaviksgatan&edPosition=Idrottsgatan&priority=time&startPositionLatitude=59.858929999999994&startPositionLongitude=17.64493
+userId=311083&2016-00-12 09:42:57&null&2016-00-11 13:56:57&stPosition=Centralstationen&edPosition=Arrheniusplan&priority=time&startPositionLatitude=59.858163999999995&startPositionLongitude=17.644164
+userId=69739&2016-00-12 09:16:56&null&2016-00-11 13:56:58&stPosition=Svartbäckens vårdcentral&edPosition=Flogsta vårdcentral&priority=distance&startPositionLatitude=59.8585436&startPositionLongitude=17.6445436
+userId=109114&2016-00-12 15:35:14&null&2016-00-11 13:56:58&stPosition=Bandstolsvägen&edPosition=Barkspadevägen&priority=distance&startPositionLatitude=59.858676499999994&startPositionLongitude=17.6446765
+userId=376354&null&2016-00-12 17:09:53&2016-00-11 13:56:58&stPosition=Idrottsgatan&edPosition=Rosendals skola&priority=time&startPositionLatitude=59.8589407&startPositionLongitude=17.6449407
+userId=87053&null&2016-00-12 19:26:15&2016-00-11 13:56:58&stPosition=Polacksbacken&edPosition=Almqvistgatan&priority=time&startPositionLatitude=59.8588628&startPositionLongitude=17.6448628
+userId=398704&null&2016-00-12 08:46:57&2016-00-11 13:56:58&stPosition=Polacksbacken&edPosition=Levertinsgatan&priority=time&startPositionLatitude=59.858115999999995&startPositionLongitude=17.644115999999997
+userId=415551&2016-00-12 08:13:25&null&2016-00-11 13:56:58&stPosition=Stadshuset&edPosition=Kantorsgatan&priority=distance&startPositionLatitude=59.858228999999994&startPositionLongitude=17.644229
+userId=50254&null&2016-00-12 15:49:30&2016-00-11 13:56:58&stPosition=Campus Ultuna&edPosition=Centralstationen&priority=distance&startPositionLatitude=59.8589578&startPositionLongitude=17.644957799999997
+userId=26288&2016-00-12 07:17:55&null&2016-00-11 13:56:58&stPosition=Gustaf Kjellbergs väg&edPosition=Centralstationen&priority=distance&startPositionLatitude=59.8588816&startPositionLongitude=17.644881599999998
+userId=205610&2016-00-12 03:24:06&null&2016-00-11 13:56:58&stPosition=Slädvägen&edPosition=Huges väg&priority=distance&startPositionLatitude=59.858553199999996&startPositionLongitude=17.644553199999997
+userId=456853&null&2016-00-12 16:49:51&2016-00-11 13:56:58&stPosition=Campus Ultuna&edPosition=Lundellska skolan&priority=distance&startPositionLatitude=59.8585541&startPositionLongitude=17.644554099999997
+userId=347057&null&2016-00-12 13:53:53&2016-00-11 13:56:58&stPosition=Centralstationen&edPosition=Idrottsgatan&priority=time&startPositionLatitude=59.8584408&startPositionLongitude=17.644440799999998
+userId=391151&2016-00-12 14:41:45&null&2016-00-11 13:56:58&stPosition=Fjärdhundragatan&edPosition=Barkspadevägen&priority=time&startPositionLatitude=59.858936&startPositionLongitude=17.644935999999998
+userId=132102&2016-00-12 09:35:27&null&2016-00-11 13:56:58&stPosition=Akademiska sjukhuset&edPosition=Säves väg&priority=time&startPositionLatitude=59.8581873&startPositionLongitude=17.6441873
+userId=58684&2016-00-12 17:45:40&null&2016-00-11 13:56:58&stPosition=Flottörgatan&edPosition=Kantorsgatan&priority=time&startPositionLatitude=59.8584676&startPositionLongitude=17.6444676
+userId=439677&null&2016-00-12 08:47:05&2016-00-11 13:56:58&stPosition=Rosendals skola&edPosition=Fyrishovs entré&priority=time&startPositionLatitude=59.858929999999994&startPositionLongitude=17.64493
+userId=313545&2016-00-12 06:41:37&null&2016-00-11 13:56:58&stPosition=Polacksbacken&edPosition=Polacksbacken&priority=time&startPositionLatitude=59.858163999999995&startPositionLongitude=17.644164
+userId=234873&2016-00-12 09:40:14&null&2016-00-11 13:56:58&stPosition=Ekonomikum&edPosition=Topeliusgatan&priority=distance&startPositionLatitude=59.8585436&startPositionLongitude=17.6445436
+userId=168513&2016-00-12 17:47:56&null&2016-00-11 13:56:58&stPosition=Centralstationen&edPosition=Gottsunda Centrum&priority=distance&startPositionLatitude=59.858676499999994&startPositionLongitude=17.6446765
+userId=249874&2016-00-12 05:26:33&null&2016-00-11 13:56:58&stPosition=Värnlundsgatan&edPosition=Kungshögarna&priority=time&startPositionLatitude=59.8589407&startPositionLongitude=17.6449407
+userId=372624&2016-00-12 07:24:10&null&2016-00-11 13:56:58&stPosition=Portalgatan&edPosition=Centralstationen&priority=distance&startPositionLatitude=59.8588628&startPositionLongitude=17.6448628
+userId=142795&2016-00-12 18:36:57&null&2016-00-11 13:56:58&stPosition=Centralstationen&edPosition=Cellovägen&priority=time&startPositionLatitude=59.858115999999995&startPositionLongitude=17.644115999999997
+userId=70204&2016-00-12 05:18:05&null&2016-00-11 13:56:58&stPosition=Flottörgatan&edPosition=Gottsunda Centrum&priority=time&startPositionLatitude=59.858228999999994&startPositionLongitude=17.644229
+userId=115219&2016-00-12 16:05:49&null&2016-00-11 13:56:58&stPosition=Grindstugan&edPosition=Idrottsgatan&priority=distance&startPositionLatitude=59.8589578&startPositionLongitude=17.644957799999997
+userId=91353&2016-00-12 15:43:40&null&2016-00-11 13:56:58&stPosition=Campus Ultuna&edPosition=Lundellska skolan&priority=time&startPositionLatitude=59.8588816&startPositionLongitude=17.644881599999998
+userId=165145&2016-00-12 07:49:30&null&2016-00-11 13:56:58&stPosition=Flottörgatan&edPosition=Slädvägen&priority=time&startPositionLatitude=59.858553199999996&startPositionLongitude=17.644553199999997
+userId=323059&2016-00-12 19:11:51&null&2016-00-11 13:56:58&stPosition=Campus Ultuna&edPosition=Gottsunda Centrum&priority=distance&startPositionLatitude=59.8585541&startPositionLongitude=17.644554099999997
+userId=201211&null&2016-00-12 09:54:29&2016-00-11 13:56:58&stPosition=Vaksala torg&edPosition=Oslogatan&priority=distance&startPositionLatitude=59.8584408&startPositionLongitude=17.644440799999998
+userId=114273&2016-00-12 16:16:47&null&2016-00-11 13:56:58&stPosition=Gottsunda Centrum&edPosition=Linrepevägen&priority=time&startPositionLatitude=59.858936&startPositionLongitude=17.644935999999998
+userId=313504&2016-00-12 07:56:51&null&2016-00-11 13:56:58&stPosition=Polishuset&edPosition=Gottsunda Centrum&priority=time&startPositionLatitude=59.8581873&startPositionLongitude=17.6441873
+userId=189557&2016-00-12 16:36:47&null&2016-00-11 13:56:58&stPosition=Slädvägen&edPosition=Regins väg&priority=time&startPositionLatitude=59.8584676&startPositionLongitude=17.6444676
+userId=329361&null&2016-00-12 15:36:13&2016-00-11 13:56:58&stPosition=Flogsta vårdcentral&edPosition=Rosendals skola&priority=time&startPositionLatitude=59.858929999999994&startPositionLongitude=17.64493
+userId=273632&2016-00-12 15:54:03&null&2016-00-11 13:56:58&stPosition=Flottörgatan&edPosition=Centralstationen&priority=distance&startPositionLatitude=59.858163999999995&startPositionLongitude=17.644164
+userId=392516&2016-00-12 07:06:43&null&2016-00-11 13:56:58&stPosition=Torbjörnsgatan&edPosition=Fältvägen&priority=time&startPositionLatitude=59.8585436&startPositionLongitude=17.6445436
+userId=240375&2016-00-12 17:24:58&null&2016-00-11 13:56:58&stPosition=Flogsta vårdcentral&edPosition=Gustaf Kjellbergs väg&priority=distance&startPositionLatitude=59.858676499999994&startPositionLongitude=17.6446765
+userId=92780&2016-00-12 19:22:40&null&2016-00-11 13:56:58&stPosition=Fyrishovs entré&edPosition=Oslogatan&priority=time&startPositionLatitude=59.8589407&startPositionLongitude=17.6449407
+userId=9196&2016-00-12 08:41:20&null&2016-00-11 13:56:58&stPosition=Gottsunda Centrum&edPosition=Kungshögarna&priority=time&startPositionLatitude=59.8588628&startPositionLongitude=17.6448628
+userId=254392&2016-00-12 09:29:45&null&2016-00-11 13:56:58&stPosition=Veterinärvägen&edPosition=Centralstationen&priority=distance&startPositionLatitude=59.858115999999995&startPositionLongitude=17.644115999999997
+userId=264198&2016-00-12 07:29:15&null&2016-00-11 13:56:58&stPosition=Campus Ultuna&edPosition=Linrepevägen&priority=time&startPositionLatitude=59.858228999999994&startPositionLongitude=17.644229
+userId=209615&null&2016-00-12 16:43:20&2016-00-11 13:56:58&stPosition=Polishuset&edPosition=Oslogatan&priority=time&startPositionLatitude=59.8589578&startPositionLongitude=17.644957799999997
+userId=350436&2016-00-12 19:11:55&null&2016-00-11 13:56:58&stPosition=Fjärdhundragatan&edPosition=Värnlundsgatan&priority=distance&startPositionLatitude=59.8588816&startPositionLongitude=17.644881599999998
+userId=62731&2016-00-12 09:34:41&null&2016-00-11 13:56:58&stPosition=Gustaf Kjellbergs väg&edPosition=Centralstationen&priority=distance&startPositionLatitude=59.858553199999996&startPositionLongitude=17.644553199999997
+userId=234510&2016-00-12 14:31:43&null&2016-00-11 13:56:58&stPosition=Ekudden&edPosition=Rosendals skola&priority=distance&startPositionLatitude=59.8585541&startPositionLongitude=17.644554099999997
+userId=426615&2016-00-12 03:41:59&null&2016-00-11 13:56:58&stPosition=Startgatan&edPosition=Kronparksgården&priority=distance&startPositionLatitude=59.8584408&startPositionLongitude=17.644440799999998
+userId=96273&2016-00-12 14:17:30&null&2016-00-11 13:56:58&stPosition=Flogsta vårdcentral&edPosition=Gustaf Kjellbergs väg&priority=distance&startPositionLatitude=59.858936&startPositionLongitude=17.644935999999998
+userId=294529&2016-00-12 17:09:00&null&2016-00-11 13:56:58&stPosition=Stadshuset&edPosition=Topeliusgatan&priority=distance&startPositionLatitude=59.8581873&startPositionLongitude=17.6441873
+userId=181848&2016-00-12 16:16:04&null&2016-00-11 13:56:58&stPosition=Veterinärvägen&edPosition=Almqvistgatan&priority=distance&startPositionLatitude=59.8584676&startPositionLongitude=17.6444676
+userId=331662&2016-00-12 07:10:14&null&2016-00-11 13:56:59&stPosition=Stadshuset&edPosition=Kantorsgatan&priority=distance&startPositionLatitude=59.858929999999994&startPositionLongitude=17.64493
+userId=327003&2016-00-12 11:36:34&null&2016-00-11 13:56:59&stPosition=Fjärdhundragatan&edPosition=Almqvistgatan&priority=time&startPositionLatitude=59.858163999999995&startPositionLongitude=17.644164
+userId=253515&2016-00-12 07:46:41&null&2016-00-11 13:56:59&stPosition=Polacksbacken&edPosition=Kungshögarna&priority=time&startPositionLatitude=59.8585436&startPositionLongitude=17.6445436
+userId=260180&null&2016-00-12 16:52:14&2016-00-11 13:56:59&stPosition=Stadshuset&edPosition=Rosendals skola&priority=time&startPositionLatitude=59.858676499999994&startPositionLongitude=17.6446765
+userId=106329&null&2016-00-12 18:07:19&2016-00-11 13:56:59&stPosition=Väpnargatan&edPosition=Huges väg&priority=distance&startPositionLatitude=59.8589407&startPositionLongitude=17.6449407
+userId=179707&2016-00-12 09:09:50&null&2016-00-11 13:56:59&stPosition=Stadshuset&edPosition=Uppsala Science Park&priority=distance&startPositionLatitude=59.8588628&startPositionLongitude=17.6448628
+userId=161901&2016-00-12 05:26:27&null&2016-00-11 13:56:59&stPosition=Vaksala torg&edPosition=Kronparksgården&priority=distance&startPositionLatitude=59.858115999999995&startPositionLongitude=17.644115999999997
+userId=327855&null&2016-00-12 10:14:23&2016-00-11 13:56:59&stPosition=Polishuset&edPosition=Slädvägen&priority=distance&startPositionLatitude=59.858228999999994&startPositionLongitude=17.644229
+userId=410894&2016-00-12 08:03:49&null&2016-00-11 13:56:59&stPosition=Rickomberga&edPosition=Flottörgatan&priority=time&startPositionLatitude=59.8589578&startPositionLongitude=17.644957799999997
+userId=335746&2016-00-12 07:32:27&null&2016-00-11 13:56:59&stPosition=Stadshuset&edPosition=Idrottsgatan&priority=distance&startPositionLatitude=59.8588816&startPositionLongitude=17.644881599999998
+userId=78745&2016-00-12 13:49:23&null&2016-00-11 13:56:59&stPosition=Ekonomikum&edPosition=Cellovägen&priority=time&startPositionLatitude=59.858553199999996&startPositionLongitude=17.644553199999997
+userId=356335&null&2016-00-12 18:16:23&2016-00-11 13:56:59&stPosition=Bandstolsvägen&edPosition=Valhalls väg&priority=time&startPositionLatitude=59.8585541&startPositionLongitude=17.644554099999997
+userId=310966&2016-00-12 16:06:13&null&2016-00-11 13:56:59&stPosition=Ekudden&edPosition=Huges väg&priority=distance&startPositionLatitude=59.8584408&startPositionLongitude=17.644440799999998
+userId=231222&2016-00-12 14:47:06&null&2016-00-11 13:56:59&stPosition=Uppsala Science Park&edPosition=Valhalls väg&priority=distance&startPositionLatitude=59.858936&startPositionLongitude=17.644935999999998
+userId=237811&null&2016-00-12 06:46:25&2016-00-11 13:56:59&stPosition=Fältvägen&edPosition=Slädvägen&priority=distance&startPositionLatitude=59.8581873&startPositionLongitude=17.6441873
+userId=392473&2016-00-12 17:38:13&null&2016-00-11 13:56:59&stPosition=Polishuset&edPosition=Värnlundsgatan&priority=time&startPositionLatitude=59.8584676&startPositionLongitude=17.6444676
+userId=298528&null&2016-00-12 17:10:11&2016-00-11 13:56:59&stPosition=Akademiska sjukhuset&edPosition=Uppsala Science Park&priority=time&startPositionLatitude=59.858929999999994&startPositionLongitude=17.64493
+userId=451300&2016-00-12 06:33:56&null&2016-00-11 13:56:59&stPosition=Flottiljgatan&edPosition=Bandstolsvägen&priority=time&startPositionLatitude=59.858163999999995&startPositionLongitude=17.644164
+userId=50513&2016-00-12 12:01:11&null&2016-00-11 13:56:59&stPosition=Stadshuset&edPosition=Fyrishovs entré&priority=distance&startPositionLatitude=59.8585436&startPositionLongitude=17.6445436
+userId=61640&2016-00-12 06:01:15&null&2016-00-11 13:56:59&stPosition=Uppsala Science Park&edPosition=Stadshuset&priority=distance&startPositionLatitude=59.858676499999994&startPositionLongitude=17.6446765
+userId=77133&null&2016-00-12 15:58:21&2016-00-11 13:56:59&stPosition=Bäverns gränd&edPosition=Akademiska sjukhuset&priority=distance&startPositionLatitude=59.8589407&startPositionLongitude=17.6449407
+userId=179095&2016-00-12 08:23:31&null&2016-00-11 13:56:59&stPosition=Vaksala torg&edPosition=Reykjaviksgatan&priority=time&startPositionLatitude=59.8588628&startPositionLongitude=17.6448628
+userId=298072&null&2016-00-12 14:28:37&2016-00-11 13:56:59&stPosition=Arrheniusplan&edPosition=Valhalls väg&priority=time&startPositionLatitude=59.858115999999995&startPositionLongitude=17.644115999999997
+userId=405569&2016-00-12 17:49:17&null&2016-00-11 13:56:59&stPosition=Akademiska sjukhuset&edPosition=Regins väg&priority=time&startPositionLatitude=59.858228999999994&startPositionLongitude=17.644229
+userId=301417&2016-00-12 14:55:39&null&2016-00-11 13:56:59&stPosition=Startgatan&edPosition=Cellovägen&priority=distance&startPositionLatitude=59.8589578&startPositionLongitude=17.644957799999997
+userId=408645&2016-00-12 08:22:02&null&2016-00-11 13:56:59&stPosition=Bäverns gränd&edPosition=Centralstationen&priority=time&startPositionLatitude=59.8588816&startPositionLongitude=17.644881599999998
+userId=129777&2016-00-12 16:00:31&null&2016-00-11 13:56:59&stPosition=Vaksala torg&edPosition=Ekebyhus&priority=distance&startPositionLatitude=59.858553199999996&startPositionLongitude=17.644553199999997
+userId=294161&2016-00-12 15:24:59&null&2016-00-11 13:56:59&stPosition=Gustaf Kjellbergs väg&edPosition=Kungshögarna&priority=time&startPositionLatitude=59.8585541&startPositionLongitude=17.644554099999997
+userId=416038&2016-00-12 17:05:30&null&2016-00-11 13:56:59&stPosition=Stadshuset&edPosition=Gottsunda Centrum&priority=distance&startPositionLatitude=59.8584408&startPositionLongitude=17.644440799999998
+userId=136659&2016-00-12 18:34:05&null&2016-00-11 13:56:59&stPosition=Polishuset&edPosition=Centralstationen&priority=time&startPositionLatitude=59.858936&startPositionLongitude=17.644935999999998
+userId=5488&2016-00-12 11:37:11&null&2016-00-11 13:56:59&stPosition=Stadshuset&edPosition=Akademiska sjukhuset södra&priority=time&startPositionLatitude=59.8581873&startPositionLongitude=17.6441873
+userId=496618&2016-00-12 07:33:00&null&2016-00-11 13:56:59&stPosition=Flottiljgatan&edPosition=Startgatan&priority=time&startPositionLatitude=59.8584676&startPositionLongitude=17.6444676
+userId=98146&2016-00-12 08:13:40&null&2016-00-11 13:56:59&stPosition=Campus Ultuna&edPosition=Flottiljgatan&priority=distance&startPositionLatitude=59.858929999999994&startPositionLongitude=17.64493
+userId=422811&2016-00-12 06:35:36&null&2016-00-11 13:56:59&stPosition=Ekonomikum&edPosition=Almqvistgatan&priority=distance&startPositionLatitude=59.858163999999995&startPositionLongitude=17.644164
+userId=346124&2016-00-12 17:41:32&null&2016-00-11 13:56:59&stPosition=Fjärdhundragatan&edPosition=Noreens väg&priority=time&startPositionLatitude=59.8585436&startPositionLongitude=17.6445436
+userId=273704&2016-00-12 16:33:38&null&2016-00-11 13:56:59&stPosition=Centralstationen&edPosition=Barkspadevägen&priority=time&startPositionLatitude=59.858676499999994&startPositionLongitude=17.6446765
+userId=311033&2016-00-12 15:33:55&null&2016-00-11 13:56:59&stPosition=Kantorsgatan&edPosition=Lagerlöfsgatan&priority=time&startPositionLatitude=59.8589407&startPositionLongitude=17.6449407
+userId=362176&2016-00-12 11:22:10&null&2016-00-11 13:56:59&stPosition=Bandstolsvägen&edPosition=Värnlundsgatan&priority=distance&startPositionLatitude=59.8588628&startPositionLongitude=17.6448628
+userId=368569&null&2016-00-12 08:10:30&2016-00-11 13:56:59&stPosition=Startgatan&edPosition=Arrheniusplan&priority=distance&startPositionLatitude=59.858115999999995&startPositionLongitude=17.644115999999997
+userId=74051&2016-00-12 07:23:38&null&2016-00-11 13:56:59&stPosition=Kantorsgatan&edPosition=Ferlinsgatan&priority=distance&startPositionLatitude=59.858228999999994&startPositionLongitude=17.644229
+userId=62826&null&2016-00-12 07:27:17&2016-00-11 13:56:59&stPosition=Akademiska sjukhuset&edPosition=Almqvistgatan&priority=distance&startPositionLatitude=59.8589578&startPositionLongitude=17.644957799999997
+userId=400360&null&2016-00-12 16:54:03&2016-00-11 13:56:59&stPosition=Väpnargatan&edPosition=Fyrishovs entré&priority=time&startPositionLatitude=59.8588816&startPositionLongitude=17.644881599999998
+userId=440655&2016-00-12 17:24:43&null&2016-00-11 13:56:59&stPosition=Bandstolsvägen&edPosition=Topeliusgatan&priority=time&startPositionLatitude=59.858553199999996&startPositionLongitude=17.644553199999997
+userId=454140&2016-00-12 07:19:45&null&2016-00-11 13:56:59&stPosition=Polishuset&edPosition=Valhalls väg&priority=distance&startPositionLatitude=59.8585541&startPositionLongitude=17.644554099999997
+userId=238908&2016-00-12 07:58:53&null&2016-00-11 13:56:59&stPosition=Kantorsgatan&edPosition=Slädvägen&priority=time&startPositionLatitude=59.8584408&startPositionLongitude=17.644440799999998
+userId=183980&2016-00-12 16:34:42&null&2016-00-11 13:56:59&stPosition=Torbjörnsgatan&edPosition=Garnisonen&priority=distance&startPositionLatitude=59.858936&startPositionLongitude=17.644935999999998
+userId=418296&null&2016-00-12 09:20:10&2016-00-11 13:56:59&stPosition=Polishuset&edPosition=Uppsala Science Park&priority=time&startPositionLatitude=59.8581873&startPositionLongitude=17.6441873
+userId=58117&2016-00-12 18:23:18&null&2016-00-11 13:57:00&stPosition=Fältvägen&edPosition=Centralstationen&priority=distance&startPositionLatitude=59.8584676&startPositionLongitude=17.6444676
+userId=50373&2016-00-12 06:30:50&null&2016-00-11 13:57:00&stPosition=Bandstolsvägen&edPosition=Polacksbacken&priority=distance&startPositionLatitude=59.858163999999995&startPositionLongitude=17.644164
+userId=222619&2016-00-12 15:22:22&null&2016-00-11 13:57:00&stPosition=Campus Ultuna&edPosition=Cellovägen&priority=time&startPositionLatitude=59.8585436&startPositionLongitude=17.6445436
+userId=39761&2016-00-12 13:34:41&null&2016-00-11 13:57:00&stPosition=Gottsunda Centrum&edPosition=Ekebyhus&priority=distance&startPositionLatitude=59.858676499999994&startPositionLongitude=17.6446765
+userId=190947&2016-00-12 14:56:30&null&2016-00-11 13:57:00&stPosition=Centralstationen&edPosition=Kungshögarna&priority=time&startPositionLatitude=59.8589407&startPositionLongitude=17.6449407
+userId=154053&2016-00-12 14:22:12&null&2016-00-11 13:57:00&stPosition=Götgatan&edPosition=Säves väg&priority=time&startPositionLatitude=59.8588628&startPositionLongitude=17.6448628
+userId=442988&2016-00-12 17:41:46&null&2016-00-11 13:57:00&stPosition=Torbjörnsgatan&edPosition=Polacksbacken&priority=distance&startPositionLatitude=59.858115999999995&startPositionLongitude=17.644115999999997
+userId=229047&null&2016-00-12 15:31:57&2016-00-11 13:57:00&stPosition=Huges väg&edPosition=Bandstolsvägen&priority=time&startPositionLatitude=59.858228999999994&startPositionLongitude=17.644229
+userId=380505&2016-00-12 09:13:45&null&2016-00-11 13:57:00&stPosition=Flottiljgatan&edPosition=Oslogatan&priority=distance&startPositionLatitude=59.8589578&startPositionLongitude=17.644957799999997
+userId=216441&2016-00-12 15:43:11&null&2016-00-11 13:57:00&stPosition=Ferlinsgatan&edPosition=Rosendals skola&priority=time&startPositionLatitude=59.8588816&startPositionLongitude=17.644881599999998
+userId=19491&2016-00-12 07:55:49&null&2016-00-11 13:57:00&stPosition=Väpnargatan&edPosition=Cellovägen&priority=time&startPositionLatitude=59.858553199999996&startPositionLongitude=17.644553199999997
+userId=210817&2016-00-12 09:10:21&null&2016-00-11 13:57:00&stPosition=Vaksala torg&edPosition=Kvarntorget&priority=distance&startPositionLatitude=59.8585541&startPositionLongitude=17.644554099999997
+userId=453083&2016-00-12 14:37:15&null&2016-00-11 13:57:00&stPosition=Bandstolsvägen&edPosition=Portalgatan&priority=distance&startPositionLatitude=59.8584408&startPositionLongitude=17.644440799999998
+userId=142280&2016-00-12 03:56:41&null&2016-00-11 13:57:00&stPosition=Värnlundsgatan&edPosition=Reykjaviksgatan&priority=distance&startPositionLatitude=59.858936&startPositionLongitude=17.644935999999998
+userId=357424&2016-00-12 13:02:41&null&2016-00-11 13:57:00&stPosition=Väpnargatan&edPosition=Cellovägen&priority=distance&startPositionLatitude=59.8581873&startPositionLongitude=17.6441873
+userId=403484&null&2016-00-12 17:58:56&2016-00-11 13:57:00&stPosition=Väderkvarnsgatan&edPosition=Gottsunda Centrum&priority=time&startPositionLatitude=59.8584676&startPositionLongitude=17.6444676
+userId=448265&2016-00-12 16:15:46&null&2016-00-11 13:57:00&stPosition=Polacksbacken&edPosition=Slädvägen&priority=time&startPositionLatitude=59.858929999999994&startPositionLongitude=17.64493
+userId=477317&null&2016-00-12 18:03:55&2016-00-11 13:57:00&stPosition=Bäverns gränd&edPosition=Polacksbacken&priority=distance&startPositionLatitude=59.858163999999995&startPositionLongitude=17.644164
+userId=313270&2016-00-12 18:35:23&null&2016-00-11 13:57:00&stPosition=Startgatan&edPosition=Torbjörnsgatan&priority=distance&startPositionLatitude=59.8585436&startPositionLongitude=17.6445436
+userId=387503&2016-00-12 06:45:34&null&2016-00-11 13:57:00&stPosition=Flottörgatan&edPosition=Cellovägen&priority=time&startPositionLatitude=59.858676499999994&startPositionLongitude=17.6446765
+userId=19847&null&2016-00-12 05:34:33&2016-00-11 13:57:00&stPosition=Gottsunda Centrum&edPosition=Svartbäckens vårdcentral&priority=time&startPositionLatitude=59.8589407&startPositionLongitude=17.6449407
+userId=391283&null&2016-00-12 10:05:56&2016-00-11 13:57:00&stPosition=Uppsala Science Park&edPosition=Svartbäckens vårdcentral&priority=distance&startPositionLatitude=59.8588628&startPositionLongitude=17.6448628
+userId=438430&null&2016-00-12 09:37:36&2016-00-11 13:57:00&stPosition=Portalgatan&edPosition=Fyrishovs entré&priority=time&startPositionLatitude=59.858115999999995&startPositionLongitude=17.644115999999997
+userId=2789&2016-00-12 19:42:26&null&2016-00-11 13:57:00&stPosition=Topeliusgatan&edPosition=Heidenstamstorg&priority=distance&startPositionLatitude=59.858228999999994&startPositionLongitude=17.644229
+userId=308344&2016-00-12 11:35:48&null&2016-00-11 13:57:00&stPosition=Flygargatan&edPosition=Rosendals skola&priority=distance&startPositionLatitude=59.8589578&startPositionLongitude=17.644957799999997
+userId=82941&2016-00-12 16:46:19&null&2016-00-11 13:57:00&stPosition=Campus Ultuna&edPosition=Gottsunda Centrum&priority=time&startPositionLatitude=59.8588816&startPositionLongitude=17.644881599999998
+userId=224909&2016-00-12 15:23:29&null&2016-00-11 13:57:00&stPosition=Huges väg&edPosition=Almqvistgatan&priority=time&startPositionLatitude=59.858553199999996&startPositionLongitude=17.644553199999997
+userId=169306&2016-00-12 06:00:42&null&2016-00-11 13:57:00&stPosition=Polishuset&edPosition=Levertinsgatan&priority=distance&startPositionLatitude=59.8585541&startPositionLongitude=17.644554099999997
+userId=256081&null&2016-00-12 16:31:20&2016-00-11 13:57:00&stPosition=Flottiljgatan&edPosition=Linrepevägen&priority=time&startPositionLatitude=59.8584408&startPositionLongitude=17.644440799999998
+userId=385532&2016-00-12 13:50:48&null&2016-00-11 13:57:00&stPosition=Rosendals skola&edPosition=Gottsunda Centrum&priority=time&startPositionLatitude=59.858936&startPositionLongitude=17.644935999999998
+userId=460896&2016-00-12 13:25:27&null&2016-00-11 13:57:00&stPosition=Uppsala Science Park&edPosition=Sernanders väg&priority=time&startPositionLatitude=59.8581873&startPositionLongitude=17.6441873
+userId=465550&2016-00-12 06:15:45&null&2016-00-11 13:57:00&stPosition=Bärbyparken&edPosition=Kungshögarna&priority=time&startPositionLatitude=59.8584676&startPositionLongitude=17.6444676
+userId=322489&2016-00-12 09:07:12&null&2016-00-11 13:57:00&stPosition=Polacksbacken&edPosition=Sköldungagatan&priority=distance&startPositionLatitude=59.858929999999994&startPositionLongitude=17.64493
+userId=110965&2016-00-12 17:50:45&null&2016-00-11 13:57:00&stPosition=Flottiljgatan&edPosition=Almqvistgatan&priority=distance&startPositionLatitude=59.858163999999995&startPositionLongitude=17.644164
+userId=223825&null&2016-00-12 17:36:08&2016-00-11 13:57:00&stPosition=Rosendals skola&edPosition=Reykjaviksgatan&priority=distance&startPositionLatitude=59.8585436&startPositionLongitude=17.6445436
+userId=178542&2016-00-12 07:27:24&null&2016-00-11 13:57:00&stPosition=Götgatan&edPosition=Rosendals skola&priority=distance&startPositionLatitude=59.858676499999994&startPositionLongitude=17.6446765
+userId=151322&2016-00-12 15:51:16&null&2016-00-11 13:57:00&stPosition=Polishuset&edPosition=Kungshögarna&priority=distance&startPositionLatitude=59.8588628&startPositionLongitude=17.6448628
+userId=471123&2016-00-12 17:10:14&null&2016-00-11 13:57:00&stPosition=Fyrishovs entré&edPosition=Cellovägen&priority=time&startPositionLatitude=59.858115999999995&startPositionLongitude=17.644115999999997
+userId=323880&2016-00-12 13:19:30&null&2016-00-11 13:57:00&stPosition=Rosendals skola&edPosition=Almqvistgatan&priority=time&startPositionLatitude=59.858228999999994&startPositionLongitude=17.644229
+userId=97486&2016-00-12 21:17:20&null&2016-00-11 13:57:00&stPosition=Vaksala torg&edPosition=Idrottsgatan&priority=time&startPositionLatitude=59.8589578&startPositionLongitude=17.644957799999997
+userId=30412&2016-00-12 06:25:19&null&2016-00-11 13:57:00&stPosition=Polishuset&edPosition=Ekebyhus&priority=distance&startPositionLatitude=59.8588816&startPositionLongitude=17.644881599999998
+userId=36328&2016-00-12 15:43:37&null&2016-00-11 13:57:00&stPosition=Polacksbacken&edPosition=Gottsunda Centrum&priority=time&startPositionLatitude=59.858553199999996&startPositionLongitude=17.644553199999997
+userId=370313&2016-00-12 13:07:09&null&2016-00-11 13:57:00&stPosition=Centralstationen&edPosition=Rosendals skola&priority=distance&startPositionLatitude=59.8585541&startPositionLongitude=17.644554099999997
+userId=180988&2016-00-12 06:01:39&null&2016-00-11 13:57:00&stPosition=Flygargatan&edPosition=Cellovägen&priority=distance&startPositionLatitude=59.8584408&startPositionLongitude=17.644440799999998
+userId=203441&null&2016-00-12 07:38:48&2016-00-11 13:57:00&stPosition=Arrheniusplan&edPosition=Heidenstamstorg&priority=time&startPositionLatitude=59.8581873&startPositionLongitude=17.6441873
+userId=413008&null&2016-00-12 17:47:46&2016-00-11 13:57:01&stPosition=Väpnargatan&edPosition=Väderkvarnsgatan&priority=time&startPositionLatitude=59.8584676&startPositionLongitude=17.6444676
+userId=62169&2016-00-12 15:55:32&null&2016-00-11 13:57:01&stPosition=Rickomberga&edPosition=Huges väg&priority=distance&startPositionLatitude=59.858929999999994&startPositionLongitude=17.64493
+userId=135253&2016-00-12 16:42:58&null&2016-00-11 13:57:01&stPosition=Vaksala torg&edPosition=Centralstationen&priority=time&startPositionLatitude=59.858163999999995&startPositionLongitude=17.644164
+userId=27687&2016-00-12 17:22:41&null&2016-00-11 13:57:01&stPosition=Centralstationen&edPosition=Slädvägen&priority=time&startPositionLatitude=59.8585436&startPositionLongitude=17.6445436
+userId=100142&2016-00-12 09:33:03&null&2016-00-11 13:57:01&stPosition=Levertinsgatan&edPosition=Akademiska sjukhuset södra&priority=distance&startPositionLatitude=59.858676499999994&startPositionLongitude=17.6446765
+userId=379445&2016-00-12 07:01:10&null&2016-00-11 13:57:01&stPosition=Väpnargatan&edPosition=Ferlinsgatan&priority=time&startPositionLatitude=59.8589407&startPositionLongitude=17.6449407
+userId=27283&2016-00-12 07:38:53&null&2016-00-11 13:57:01&stPosition=Bäverns gränd&edPosition=Polacksbacken&priority=time&startPositionLatitude=59.8588628&startPositionLongitude=17.6448628
+userId=4098&2016-00-12 07:20:47&null&2016-00-11 13:57:01&stPosition=Bäverns gränd&edPosition=Fältvägen&priority=time&startPositionLatitude=59.858115999999995&startPositionLongitude=17.644115999999997
+userId=3385&2016-00-12 14:08:47&null&2016-00-11 13:57:01&stPosition=Flygargatan&edPosition=Oslogatan&priority=time&startPositionLatitude=59.858228999999994&startPositionLongitude=17.644229
+userId=340733&2016-00-12 09:54:36&null&2016-00-11 13:57:01&stPosition=Polishuset&edPosition=Sernanders väg&priority=time&startPositionLatitude=59.8589578&startPositionLongitude=17.644957799999997
+userId=139773&2016-00-12 08:12:00&null&2016-00-11 13:57:01&stPosition=Polacksbacken&edPosition=Topeliusgatan&priority=distance&startPositionLatitude=59.8588816&startPositionLongitude=17.644881599999998
+userId=97690&2016-00-12 18:03:45&null&2016-00-11 13:57:01&stPosition=Djäknegatan&edPosition=Slädvägen&priority=time&startPositionLatitude=59.858553199999996&startPositionLongitude=17.644553199999997
+userId=148777&2016-00-12 10:57:01&null&2016-00-11 13:57:01&stPosition=Veterinärvägen&edPosition=Lundellska skolan&priority=distance&startPositionLatitude=59.8585541&startPositionLongitude=17.644554099999997
+userId=111137&2016-00-12 10:19:08&null&2016-00-11 13:57:01&stPosition=Polishuset&edPosition=Gottsunda Centrum&priority=time&startPositionLatitude=59.8584408&startPositionLongitude=17.644440799999998
+userId=336959&null&2016-00-12 17:50:48&2016-00-11 13:57:01&stPosition=Fjärdhundragatan&edPosition=Gottsunda Centrum&priority=distance&startPositionLatitude=59.858936&startPositionLongitude=17.644935999999998
+userId=181591&2016-00-12 18:32:06&null&2016-00-11 13:57:01&stPosition=Akademiska sjukhuset&edPosition=Idrottsgatan&priority=distance&startPositionLatitude=59.8581873&startPositionLongitude=17.6441873
+userId=493973&2016-00-12 03:05:28&null&2016-00-11 13:57:01&stPosition=Sernanders väg&edPosition=Uppsala Science Park&priority=time&startPositionLatitude=59.8584676&startPositionLongitude=17.6444676
+userId=280400&null&2016-00-12 05:36:14&2016-00-11 13:57:01&stPosition=Cellovägen&edPosition=Fyrishovs entré&priority=distance&startPositionLatitude=59.858929999999994&startPositionLongitude=17.64493
+userId=26510&2016-00-12 06:21:18&null&2016-00-11 13:57:01&stPosition=Polacksbacken&edPosition=Bandstolsvägen&priority=time&startPositionLatitude=59.858163999999995&startPositionLongitude=17.644164
+userId=447637&null&2016-00-12 16:31:46&2016-00-11 13:57:01&stPosition=Flogsta vårdcentral&edPosition=Heidenstamstorg&priority=time&startPositionLatitude=59.8585436&startPositionLongitude=17.6445436
+userId=152278&2016-00-12 05:29:52&null&2016-00-11 13:57:01&stPosition=Bärbyparken&edPosition=Ferlinsgatan&priority=time&startPositionLatitude=59.858676499999994&startPositionLongitude=17.6446765
+userId=421737&2016-00-12 16:14:13&null&2016-00-11 13:57:01&stPosition=Campus Ultuna&edPosition=Rosendals skola&priority=time&startPositionLatitude=59.8589407&startPositionLongitude=17.6449407
+userId=369536&2016-00-12 08:15:01&null&2016-00-11 13:57:01&stPosition=Rosendals skola&edPosition=Centralstationen&priority=distance&startPositionLatitude=59.8588628&startPositionLongitude=17.6448628
+userId=257672&2016-00-12 09:32:19&null&2016-00-11 13:57:01&stPosition=Startgatan&edPosition=Fyrishovs entré&priority=distance&startPositionLatitude=59.858115999999995&startPositionLongitude=17.644115999999997
+userId=95745&2016-00-12 16:48:03&null&2016-00-11 13:57:01&stPosition=Rosendals skola&edPosition=Centralstationen&priority=time&startPositionLatitude=59.858228999999994&startPositionLongitude=17.644229
+userId=375117&2016-00-12 13:56:58&null&2016-00-11 13:57:01&stPosition=Rosendals skola&edPosition=Almqvistgatan&priority=time&startPositionLatitude=59.8589578&startPositionLongitude=17.644957799999997
