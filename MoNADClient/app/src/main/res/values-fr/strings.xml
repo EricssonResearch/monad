@@ -140,5 +140,4 @@
     <string name="java_signupsuccess">Vous êtes connectés</string>
     <string name="java_search_locationdisabled">L\'option de localisation est désactivée. Veuillez utiliser la recherche avancée et choisir une adresse de départ</string>
 
-    <string name="gcm_defaultSenderId">46087854555</string>
 </resources>

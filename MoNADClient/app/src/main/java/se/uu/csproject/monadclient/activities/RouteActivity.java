@@ -79,10 +79,10 @@ public class RouteActivity extends AppCompatActivity {
                 TextView instructions;
 
                 if (j > 0 && j < busStops.size() - 1) {
-                    busStopView = vi.inflate(R.layout.route_details, null);
+                    busStopView = vi.inflate(R.layout.route_details, insertPoint, false);
                     busStop = "\u2022 " + busStop;
                 } else {
-                    busStopView = vi.inflate(R.layout.bus_stop, null);
+                    busStopView = vi.inflate(R.layout.bus_stop, insertPoint, false);
                     time = (TextView) busStopView.findViewById(R.id.exit_time);
                     instructions = (TextView) busStopView.findViewById(R.id.label_instructions);
 

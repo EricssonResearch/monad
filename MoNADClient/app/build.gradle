@@ -44,8 +44,6 @@ dependencies {
 
     //Testing lew libs for gcm
     compile 'com.google.android.gms:play-services-gcm:7.+'
-//    compile 'com.google.android.gms:play-services-fitness:7.+'
-//    compile 'com.google.android.gms:play-services-wearable:7.+'
     compile 'com.google.android.gms:play-services-base:7.+'
 
 
