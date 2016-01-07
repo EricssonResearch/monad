@@ -113,7 +113,7 @@
     <string name="label_trip_depart">出发:</string>
     <string name="label_trip_confirmation">确认行程</string>
     <string name="label_trip_button_confirm">确认</string>
-    <string name="label_trip_businfo">公交车</string>
+    <string name="label_trip_businfo">公交车 %s</string>
     <string name="label_trip_arrive">到达:</string>
 
     <string name="label_tripcancel_cancellation">确定要取消吗</string>

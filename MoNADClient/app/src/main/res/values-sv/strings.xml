@@ -127,7 +127,7 @@
     <string name="label_trip_depart">Avresa</string>
     <string name="label_trip_arrive">Ankomst</string>
     <string name="label_trip_button_confirm">Bekräfta</string>
-    <string name="label_trip_businfo">Buss</string>
+    <string name="label_trip_businfo">Buss %s</string>
     <string name="label_tripsactivity_from">Från</string>
     <string name="label_tripsactivity_to">Till</string>
 
