@@ -57,7 +57,7 @@
     <string name="label_trip_depart">Départ:</string>
     <string name="label_trip_confirmation">Veuillez confirmer votre voyage</string>
     <string name="label_trip_button_confirm">Confirmer</string>
-    <string name="label_trip_businfo">Bus</string>
+    <string name="label_trip_businfo">Bus %s</string>
     <string name="label_trip_arrive">Arrivée:</string>
     <string name="label_searchresult_routeinfo">indisp. à indisp.</string>
     <string name="label_searchresult_timeinfo">indisp. - indisp. </string>
@@ -139,5 +139,6 @@
     <!--string name="java_settings_updatesuccess">Vos paramétres ont été mis à jour</string-->
     <string name="java_signupsuccess">Vous êtes connectés</string>
     <string name="java_search_locationdisabled">L\'option de localisation est désactivée. Veuillez utiliser la recherche avancée et choisir une adresse de départ</string>
+    <string name="java_route_board">Prenez le Bus %d de:</string>
 
 </resources>

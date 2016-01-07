@@ -132,7 +132,7 @@
     <string name="label_trip_depart">Depart:</string>
     <string name="label_trip_arrive">Arrive:</string>
     <string name="label_trip_button_confirm">Confirm</string>
-    <string name="label_trip_businfo">Bus </string>
+    <string name="label_trip_businfo">Bus %s</string>
     <string name="label_tripsactivity_from">From</string>
     <string name="label_tripsactivity_to">To</string>
     <string name="label_tripsactivity_countdown" translatable="false">00:00:00</string>
@@ -177,6 +177,8 @@
     <string name="java_signupsuccess">Signup succeeded</string>
     <string name="java_pswd_resetsuccess">Password reset successfully</string>
     <string name="java_pswd_updatesuccess">Password updated successfully</string>
+    <string name="java_route_board">Board Bus %d at:</string>
+
     <!--string name="java_settings_updatesuccess">Settings updated successfully</string-->
     <!--string name="java_trips_samebooking">You have already booked this trip</string-->
 

@@ -132,7 +132,7 @@
     <string name="label_trip_depart">Αναχωρηση:</string>
     <string name="label_trip_arrive">Άφιξη:</string>
     <string name="label_trip_button_confirm">Επιβεβαίωση</string>
-    <string name="label_trip_businfo">Λεωφορείο </string>
+    <string name="label_trip_businfo">Λεωφορείο %s</string>
     <string name="label_tripsactivity_from">Από</string>
     <string name="label_tripsactivity_to">Προς</string>
 
