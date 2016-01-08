@@ -220,42 +220,36 @@ class DynamicRoutes():
         return routesid
 
     def storeRoutesToDB(self,routes):
-        server = "130.238.15.114"
-        port = 27017
-        database = "monad1"
-        user = "monadStudent"
-        password = "M0nad2015"
-        client = MongoClient("mongodb://" + user + ":" + password + "@" + server, port, maxPoolSize=200, connectTimeoutMS=5000, serverSelectionTimeoutMS=5000)
-        db = client[database]
-        db.dynamicRoute.remove()
-        #routes = testdata()
-        #print routes
+        database = DB()
+        routes = testdata()
         duration = 0
         line = 1
         trajectory = []
         tmpList = []
         todayDate = datetime.datetime.now()
-        today = datetime.datetime(todayDate.year, todayDate.month, todayDate.day)
-        todayRoute = db.dynamicRoute.find({'date': today})
+        today = datetime.datetime(todayDate.year, todayDate.month, todayDate.day)        
+        todayRoute = database.db.dynamicRoute.find({'date': today})
         dictKey = ['interval', 'busStop']
         if todayRoute.count() == 0:
-            #print 'todays route is writing'
+            print 'todays route is writing'
             for i in range(len(routes)):
                 for j in range(len(routes[i])):
                     if j == 0:
                         tmpList.append(0)
                     else:
-                        tmpList.append(random.randint(1,4))
-                        duration += tmpList[0]
+                        adjointBusStopList = [(database.getBusStopLongitudeByID(routes[i][j]), database.getBusStopLatitudebyID(routes[i][j])), \
+                                                (database.getBusStopLongitudeByID(routes[i][j-1]), database.getBusStopLatitudebyID(routes[i][j-1]))]
+                        adjointBusStopRoute = get_route(adjointBusStopList)
+                        interval = int(math.ceil(float(adjointBusStopRoute['cost'][1])/float(database.minutesHour)))
+                        tmpList.append(interval)
+                        duration += interval
                     tmpList.append(routes[i][j])
-                    #print tmpList
                     trajectoryDict = dict(zip(dictKey, tmpList))
                     tmpList = []
                     trajectory.append(trajectoryDict)
                 objID = ObjectId()
                 route = {"_id": objID, "trajectory": trajectory, "date": today, "duration": duration, "line": line}
-                #print "the route is ", route
-                db.dynamicRoute.insert_one(route)
+                database.db.DynamicRoute.insert_one(route)
                 line += 1
                 duration = 0
                 tmpList = []

@@ -780,12 +780,26 @@ class DB():
         '''
         return self.parseData(self.db.BusStop.find({"name": busStop}, {"latitude": 1}), "latitude")
 
+    def getBusStopLatitudebyID(self, busStopID):
+        ''' Retrieves the latitude of a particular bus stop by bus stop ID
+
+        @param: busStopID - Bus stop ID that is gonna be queried
+        '''
+        return self.parseData(self.db.BusStop.find({"_id": busStopID}, {"latitude": 1}), "latitude")        
+
     def getBusStopLongitude(self, busStop):
         ''' Retrieves the longitude of a particular bus stop
 
         @param: busStop - Bus stop name that is gonna be queried
         '''
         return self.parseData(self.db.BusStop.find({"name": busStop}, {"longitude": 1}), "longitude")
+
+    def getBusStopLongitudeByID(self, busStopID):
+        ''' Retrieves the longitude of a particular bus stop by bus stop ID
+
+        @param: busStopID - Bus stop ID that is gonna be queried
+        '''
+        return self.parseData(self.db.BusStop.find({"_id": busStopID}, {"longitude": 1}), "longitude")        
 
     def getBusStopId(self, busStop):
         ''' Retrieves the id of a particular bus stop
