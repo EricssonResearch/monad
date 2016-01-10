@@ -4,11 +4,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import se.uu.csproject.monadclient.interfaces.AsyncNotificationsInteraction;
-import se.uu.csproject.monadclient.serverinteractions.ClientAuthentication;
 
-/**
- *
- */
 public class GetNotificationsTask extends AsyncTask<Void, Void, String> {
     private AsyncNotificationsInteraction callingClass;
 

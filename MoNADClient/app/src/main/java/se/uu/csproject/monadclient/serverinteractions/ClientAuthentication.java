@@ -18,14 +18,8 @@ import se.uu.csproject.monadclient.storage.Storage;
 
 public class ClientAuthentication extends Authentication {
     private static String[] profile = new String[11];
-
-    //only for local use, has nothing to do with database
-    private static boolean ifSettingsChanged = false;
-
-    private static boolean ifRecommendNotifyAdded = false;
-
     /*
-     * 0: clientId ("1", "2", ...)
+     * 0: clientID ("1", "2", ...)
      * 1: username
      * 2: password ("0" or "1")
      * 3: email
@@ -38,8 +32,13 @@ public class ClientAuthentication extends Authentication {
      * 10: googleRegistrationToken
      */
 
-    public static void setClientId(String clientId) {
-        profile[0] = clientId;
+    /* Required for local use */ 
+    private static boolean ifSettingsChanged = false;
+    /* Required for local use */
+    private static boolean ifRecommendNotifyAdded = false;
+    
+    public static void setClientId(String clientID) {
+        profile[0] = clientID;
     }
 
     public static String getClientId() {
@@ -141,7 +140,7 @@ public class ClientAuthentication extends Authentication {
         profile[9] = theme;
     }
 
-    //theme mappings: 0: light; 1: default; 2: dark
+    /* Theme mappings: 0: light; 1: default; 2: dark */
     public static String getTheme() {
         return profile[9];
     }
@@ -176,7 +175,7 @@ public class ClientAuthentication extends Authentication {
     }
 
     public static String profileToString() {
-        String strProfile = "\nclientId: " + getClientId()
+        String strProfile = "\nclientID: " + getClientId()
                           + "\nusername: " + getUsername()
                           + "\npassword: " + getPassword()
                           + "\nemail: " + getEmail()
@@ -208,10 +207,10 @@ public class ClientAuthentication extends Authentication {
         setTheme("1");
     }
 
-    public static void updateProfile(String clientId, String username, String password, String email, String phone,
+    public static void updateProfile(String clientID, String username, String password, String email, String phone,
                                      String language, String storeLocation, String notificationsAlert,
                                      String recommendationsAlert, String theme) {
-        setClientId(clientId);
+        setClientId(clientID);
         updateProfileData(username, email, phone);
         setPassword(password);
         updateSettings(language, storeLocation, notificationsAlert, recommendationsAlert, theme);
@@ -232,9 +231,9 @@ public class ClientAuthentication extends Authentication {
         setTheme(theme);
     }
 
-    public static void updateProfileAfterSignUp(String clientId, String username, String password,
+    public static void updateProfileAfterSignUp(String clientID, String username, String password,
                                                 String email, String phone) {
-        setClientId(clientId);
+        setClientId(clientID);
         setPassword(password);
         updateProfileData(username, email, phone);
         defaultSettings();
@@ -246,7 +245,8 @@ public class ClientAuthentication extends Authentication {
         if (!Security.validateUsername(username)) {
             return Security.invalidUsernameMessage();
         }
-        if(!Security.validatePassword(password)){
+        /* Validate password */
+        if (!Security.validatePassword(password)) {
             return Security.invalidPasswordMessage();
         }
         /* Validate email */
@@ -278,7 +278,6 @@ public class ClientAuthentication extends Authentication {
          * For this reason substring() function is used
          */
         response = response.substring(1);
-        // response = response.trim();
 
         /* Process Authentication Module's response */
         return processSignUpResponse(username, email, phone, response);
@@ -301,12 +300,12 @@ public class ClientAuthentication extends Authentication {
         }
         /*
          * Successful signUp request - New client registered to the database
-         * Response: "1|clientId"
+         * Response: "1|clientID"
          */
         else if (response.startsWith("1|")) {
-            String clientId = response.substring(2);
-            /* updateProfileAfterSignUp(clientId, username, password, email, phone) */
-            updateProfileAfterSignUp(clientId, username, "1", email, phone);
+            String clientID = response.substring(2);
+            /* updateProfileAfterSignUp(clientID, username, password, email, phone) */
+            updateProfileAfterSignUp(clientID, username, "1", email, phone);
             responseMessage = "Success (1) - User Id: " + getClientId();
         } else {
             responseMessage = "ERROR - " + response;
@@ -340,7 +339,6 @@ public class ClientAuthentication extends Authentication {
          * For this reason substring() function is used
          */
         response = response.substring(1);
-        // response = response.trim();
 
         /* Process Authentication Module's response */
         return processSignInResponse(username, response);
@@ -350,7 +348,7 @@ public class ClientAuthentication extends Authentication {
         String responseMessage = "";
         String[] responseData = new String[8];
         /*
-         * 0: clientId
+         * 0: clientID
          * 1: email
          * 2: phone
          * 3: language
@@ -364,7 +362,7 @@ public class ClientAuthentication extends Authentication {
 
         /*
          * Successful signIn request
-         * Response: "1|clientId|email|phone|language|
+         * Response: "1|clientID|email|phone|language|
          *              storeLocation|notificationsAlert|recommendationsAlert|theme"
          */
         if (response.startsWith("1|")) {
@@ -383,13 +381,13 @@ public class ClientAuthentication extends Authentication {
             }
             responseData[index] = temp;
 
-            /* Update profile: clientId, username, password, email, phone,
+            /* Update profile: clientID, username, password, email, phone,
              *                 language, storeLocation, notificationsAlert,
              *                 recommendationsAlert, theme
              */
             updateProfile(responseData[0], username, "1", responseData[1], responseData[2],
-                    responseData[3], responseData[4], responseData[5],
-                    responseData[6], responseData[7]);
+                          responseData[3], responseData[4], responseData[5],
+                          responseData[6], responseData[7]);
 
             responseMessage = "Success (1) - " + response + profileToString();
         }
@@ -421,7 +419,6 @@ public class ClientAuthentication extends Authentication {
          * For this reason substring() function is used
          */
         response = response.substring(1);
-        // response = response.trim();
 
         /* Process Authentication Module's response */
         return processGoogleSignInResponse(email, response);
@@ -431,7 +428,7 @@ public class ClientAuthentication extends Authentication {
         String responseMessage = "";
         String[] responseData = new String[9];
         /*
-         * 0: clientId
+         * 0: clientID
          * 1: username
          * 2: password
          * 3: phone
@@ -448,7 +445,7 @@ public class ClientAuthentication extends Authentication {
 
         /*
          * Successful GoogleSignIn request - Client already existed in database
-         * Response: "1|clientId|username|password|phone|
+         * Response: "1|clientID|username|password|phone|
          *              language|storeLocation|notificationsAlert|recommendationsAlert|theme"
          */
         if (response.startsWith("1|")) {
@@ -467,7 +464,7 @@ public class ClientAuthentication extends Authentication {
             }
             responseData[index] = temp;
 
-            /* Update profile: clientId, username, password, email, phone,
+            /* Update profile: clientID, username, password, email, phone,
              *                 language, storeLocation, notificationsAlert,
              *                 recommendationsAlert, theme
              */
@@ -480,12 +477,12 @@ public class ClientAuthentication extends Authentication {
 
         /*
          * Successful GoogleSignIn request - New client registered to the database
-         * Response: "2|clientId"
+         * Response: "2|clientID"
          */
         else if (response.startsWith("2|")) {
-            String clientId = response.substring(2);
-            /* updateProfileAfterSignUp(clientId, username, password, email, phone) */
-            updateProfileAfterSignUp(clientId, "", "0", email, "");
+            String clientID = response.substring(2);
+            /* updateProfileAfterSignUp(clientID, username, password, email, phone) */
+            updateProfileAfterSignUp(clientID, "", "0", email, "");
             responseMessage = "Success (1) - User Id: " + getClientId();
         } else {
             responseMessage = "ERROR - " + response;
@@ -493,7 +490,7 @@ public class ClientAuthentication extends Authentication {
         return responseMessage;
     }
 
-    public static String postProfileUpdateRequest(String clientId, String username, String email, String phone) {
+    public static String postProfileUpdateRequest(String clientID, String username, String email, String phone) {
 
         /* Validate username */
         if (!Security.validateUsername(username)) {
@@ -509,7 +506,7 @@ public class ClientAuthentication extends Authentication {
         }
 
         String request = AUTHENTICATION_HOST + AUTHENTICATION_PORT + "/client_profile_update";
-        String urlParameters = "client_id=" + clientId + "&username=" + username
+        String urlParameters = "client_id=" + clientID + "&username=" + username
                 + "&email=" + email + "&phone=" + phone;
 
         /* Send the request to the Authentication Module */
@@ -525,7 +522,6 @@ public class ClientAuthentication extends Authentication {
          * For this reason substring() function is used
          */
         response = response.substring(1);
-        // response = response.trim();
 
         /* Process Authentication Module's response */
         return processProfileUpdateResponse(username, email, phone, response);
@@ -558,12 +554,12 @@ public class ClientAuthentication extends Authentication {
         return responseMessage;
     }
 
-    public static String postSettingsUpdateRequest(String clientId, String language,
+    public static String postSettingsUpdateRequest(String clientID, String language,
                                                    String storeLocation, String notificationsAlert,
                                                    String recommendationsAlert, String theme) {
 
         String request = AUTHENTICATION_HOST + AUTHENTICATION_PORT + "/client_settings_update";
-        String urlParameters = "client_id=" + clientId
+        String urlParameters = "client_id=" + clientID
                 + "&language=" + language
                 + "&store_location=" + storeLocation
                 + "&notifications_alert=" + notificationsAlert
@@ -583,7 +579,6 @@ public class ClientAuthentication extends Authentication {
          * For this reason substring() function is used
          */
         response = response.substring(1);
-        // response = response.trim();
 
         /* Process Authentication Module's response */
         return processSettingsUpdateResponse(language, storeLocation, notificationsAlert,
@@ -607,7 +602,7 @@ public class ClientAuthentication extends Authentication {
         return responseMessage;
     }
 
-    public static String postExistingPasswordUpdateRequest(String clientId, String oldPassword, String newPassword) {
+    public static String postExistingPasswordUpdateRequest(String clientID, String oldPassword, String newPassword) {
         if(!Security.validatePassword(newPassword)){
             return Security.invalidPasswordMessage();
         }
@@ -617,7 +612,7 @@ public class ClientAuthentication extends Authentication {
         newPassword = Security.encryptPassword(newPassword);
 
         String request = AUTHENTICATION_HOST + AUTHENTICATION_PORT + "/client_existing_password_update";
-        String urlParameters = "client_id=" + clientId
+        String urlParameters = "client_id=" + clientID
                 + "&old_password=" + oldPassword
                 + "&new_password=" + newPassword;
 
@@ -634,7 +629,6 @@ public class ClientAuthentication extends Authentication {
          * For this reason substring() function is used
          */
         response = response.substring(1);
-        // response = response.trim();
 
         /* Process Authentication Module's response */
         return processExistingPasswordUpdateResponse(newPassword, response);
@@ -679,7 +673,6 @@ public class ClientAuthentication extends Authentication {
          * For this reason substring() function is used
          */
         response = response.substring(1);
-        // response = response.trim();
 
         /* Process Authentication Module's response */
         return processForgottenPasswordResetResponse(newPassword, response);
@@ -734,8 +727,6 @@ public class ClientAuthentication extends Authentication {
                 JSONObject recommendationObjectID = (JSONObject) recommendation.get("_id");
                 String recommendationID = (String) recommendationObjectID.get("$oid");
 
-//                String userID = recommendation.get("userID").toString();
-
                 JSONArray userTripsList = (JSONArray) recommendation.get("userTrip");
                 Iterator<JSONObject> userTripsIterator = userTripsList.iterator();
 
@@ -770,24 +761,16 @@ public class ClientAuthentication extends Authentication {
                         trajectory.add(busStopName);
                     }
 
-//                    Iterator<JSONArray> trajectoryObjectIterator = trajectoryArray.iterator();
-//
-//                    /* TODO: Parse specific time for each partial trip */
-//                    while (trajectoryObjectIterator.hasNext()) {
-//                        String busStopName = (String) trajectoryObjectIterator.next().get(0);
-//                        trajectory.add(busStopName);
-//                    }
-
                     PartialTrip partialTrip = new PartialTrip(tripID, line, busID, startBusStop, startTime,
                                                               endBusStop, endTime, trajectory);
 
                     partialTrips.add(partialTrip);
                 }
                 FullTrip fullTrip = new FullTrip(partialTrips);
+
                 if (!fullTrip.isHistory()) {
                     Storage.addRecommendation(fullTrip);
                 }
-//                Storage.addRecommendation(fullTrip);
             }
             Storage.sortRecommendations();
         }
@@ -854,7 +837,6 @@ public class ClientAuthentication extends Authentication {
                     int line = new BigDecimal(tempLine).intValueExact();
 
                     long tempBusID = (long) trip.get("busID");
-//                    double tempBusID = (double) trip.get("busID");
                     int busID = new BigDecimal(tempBusID).intValueExact();
 
                     String startBusStop = (String) trip.get("startBusStop");
@@ -869,7 +851,6 @@ public class ClientAuthentication extends Authentication {
                     JSONArray trajectoryArray = (JSONArray) trip.get("trajectory");
                     Iterator<String> trajectoryObjectIterator = trajectoryArray.iterator();
 
-                    /* TODO: Parse specific time for each partial trip */
                     while (trajectoryObjectIterator.hasNext()) {
                         String busStopName = trajectoryObjectIterator.next();
                         trajectory.add(busStopName);
@@ -886,7 +867,6 @@ public class ClientAuthentication extends Authentication {
                 Storage.addNotification(notify);
             }
             Storage.sortNotifications();
-//            Storage.printNotifications();
         }
         catch (Exception e) {
             e.printStackTrace();

@@ -8,22 +8,15 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
 public abstract class Authentication {
-    /* "http://localhost:" "http://130.238.15.114:" */
     public static final String AUTHENTICATION_HOST = "http://130.238.15.114:";
     public static final String AUTHENTICATION_PORT = "9999";
 
-    public static final String ROUTES_GENERATOR_HOST = "http://130.238.15.241:";
-    public static final String ROUTES_GENERATOR_PORT = "9998";
-
     public static String postRequest(String request, String urlParameters) {
         String response = "";
-        URL url = null;
         HttpURLConnection connection = null;
-        DataOutputStream dos = null;
-        BufferedReader br = null;
 
         try {
-            url = new URL(request);
+            URL url = new URL(request);
             byte[] postData = urlParameters.getBytes(Charsets.UTF_8);
             int postDataLength = postData.length;
 
@@ -36,14 +29,13 @@ public abstract class Authentication {
             connection.setRequestProperty("Content-Length", Integer.toString(postDataLength));
             connection.setUseCaches(false);
 
-            dos = new DataOutputStream(connection.getOutputStream());
+            DataOutputStream dos = new DataOutputStream(connection.getOutputStream());
             dos.write(postData);
 
             if (connection.getResponseCode() != 200) {
                 return "-1";
-                /* throw new RuntimeException("Failed : HTTP error code : " + connection.getResponseCode()); */
             }
-            br = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+            BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream()));
             String line = "";
 
             while ((line = br.readLine()) != null) {

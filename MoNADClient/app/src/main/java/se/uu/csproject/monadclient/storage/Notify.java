@@ -9,11 +9,11 @@ import se.uu.csproject.monadclient.R;
 
 public class Notify {
     private String tripID;
-    private String id;      /* Corresponds to the Notification _id value in the database  */
+    private String id;          /* Corresponds to the Notification _id value in the database  */
     private String text;
     private Date time;
     private int iconID;
-    private boolean reschedule; // notification includes reschedule option
+    private boolean reschedule; /* Indicates whether notification includes reschedule option */
     private FullTrip fullTrip;
 
     /* Used for generating notifications, which do not exist in the database */

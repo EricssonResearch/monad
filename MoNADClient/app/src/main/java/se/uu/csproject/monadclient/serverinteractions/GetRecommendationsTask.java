@@ -4,11 +4,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import se.uu.csproject.monadclient.interfaces.AsyncRecommendationsInteraction;
-import se.uu.csproject.monadclient.serverinteractions.ClientAuthentication;
 
-/**
- *
- */
 public class GetRecommendationsTask extends AsyncTask<Void, Void, String> {
     AsyncRecommendationsInteraction callingClass;
 
@@ -24,11 +20,14 @@ public class GetRecommendationsTask extends AsyncTask<Void, Void, String> {
 
     @Override
     protected void onPostExecute(String response) {
+
         if (response.equals("1")) {
-            Log.d(callingClass.getClass().getCanonicalName(), "Recommendations have been successfully loaded by the database");
+            Log.d(callingClass.getClass().getCanonicalName(),
+                    "Recommendations have been successfully loaded by the database");
         }
         else {
-            Log.d(callingClass.getClass().getCanonicalName(), "Could not load recommendations");
+            Log.d(callingClass.getClass().getCanonicalName(),
+                    "Could not load recommendations");
         }
         callingClass.processReceivedRecommendations();
     }
