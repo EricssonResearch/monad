@@ -1,10 +1,10 @@
-package se.uu.csproject.monadclient;
+package se.uu.csproject.monadclient.serverinteractions;
 
 import android.os.AsyncTask;
 import android.util.Log;
 
 import se.uu.csproject.monadclient.interfaces.AsyncNotificationsInteraction;
-import se.uu.csproject.monadclient.storage.Storage;
+import se.uu.csproject.monadclient.serverinteractions.ClientAuthentication;
 
 /**
  *

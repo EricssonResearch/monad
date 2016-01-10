@@ -16,7 +16,7 @@ import android.widget.Toast;
 import java.util.concurrent.ExecutionException;
 
 import se.uu.csproject.monadclient.R;
-import se.uu.csproject.monadclient.SignUpTask;
+import se.uu.csproject.monadclient.serverinteractions.SignUpTask;
 
 public class RegisterActivity extends AppCompatActivity {
 

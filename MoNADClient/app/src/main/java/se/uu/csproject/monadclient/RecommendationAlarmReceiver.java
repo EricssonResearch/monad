@@ -9,6 +9,7 @@ import android.support.v4.app.NotificationCompat;
 
 import se.uu.csproject.monadclient.activities.NotificationsActivity;
 import se.uu.csproject.monadclient.activities.RouteActivity;
+import se.uu.csproject.monadclient.serverinteractions.ClientAuthentication;
 
 public class RecommendationAlarmReceiver extends BroadcastReceiver {
     @Override

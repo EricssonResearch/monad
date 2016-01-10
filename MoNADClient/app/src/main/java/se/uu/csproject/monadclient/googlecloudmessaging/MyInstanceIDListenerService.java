@@ -4,7 +4,7 @@ import android.content.Intent;
 
 import com.google.android.gms.iid.InstanceIDListenerService;
 
-import se.uu.csproject.monadclient.Authentication;
+import se.uu.csproject.monadclient.serverinteractions.Authentication;
 
 public class MyInstanceIDListenerService extends InstanceIDListenerService {
 

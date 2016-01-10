@@ -1,8 +1,9 @@
-package se.uu.csproject.monadclient;
+package se.uu.csproject.monadclient.serverinteractions;
 
 import android.os.AsyncTask;
 
 import se.uu.csproject.monadclient.interfaces.AsyncLoginInteraction;
+import se.uu.csproject.monadclient.serverinteractions.ClientAuthentication;
 
 /* put the LogInRequest in the background and post it */
 public class LoginTask extends AsyncTask <String, Void, String> {

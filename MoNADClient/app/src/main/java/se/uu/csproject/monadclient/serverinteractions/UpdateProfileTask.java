@@ -1,7 +1,9 @@
-package se.uu.csproject.monadclient;
+package se.uu.csproject.monadclient.serverinteractions;
 
 import android.os.AsyncTask;
 import android.util.Log;
+
+import se.uu.csproject.monadclient.serverinteractions.ClientAuthentication;
 
 public class UpdateProfileTask extends AsyncTask<String, Void, String>{
     @Override

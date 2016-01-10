@@ -26,7 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
-import se.uu.csproject.monadclient.ClientAuthentication;
+import se.uu.csproject.monadclient.serverinteractions.ClientAuthentication;
 import se.uu.csproject.monadclient.R;
 import se.uu.csproject.monadclient.recyclerviews.LanguageRecyclerViewAdapter;
 import se.uu.csproject.monadclient.tabs.SlidingTabLayout;

@@ -1,4 +1,4 @@
-package se.uu.csproject.monadclient;
+package se.uu.csproject.monadclient.serverinteractions;
 
 import com.google.common.base.Charsets;
 import java.net.URL;

@@ -1,6 +1,4 @@
-package se.uu.csproject.monadclient;
-
-//import com.google.common.base.Charsets;
+package se.uu.csproject.monadclient.serverinteractions;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -11,15 +9,13 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 
+import se.uu.csproject.monadclient.tools.Security;
 import se.uu.csproject.monadclient.storage.BusStop;
 import se.uu.csproject.monadclient.storage.FullTrip;
 import se.uu.csproject.monadclient.storage.Notify;
 import se.uu.csproject.monadclient.storage.PartialTrip;
 import se.uu.csproject.monadclient.storage.Storage;
 
-/**
- *
- */
 public class ClientAuthentication extends Authentication {
     private static String[] profile = new String[11];
 

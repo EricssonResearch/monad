@@ -26,7 +26,7 @@ import java.util.Map;
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
-import se.uu.csproject.monadclient.ClientAuthentication;
+import se.uu.csproject.monadclient.serverinteractions.ClientAuthentication;
 import se.uu.csproject.monadclient.serverinteractions.SendStoreGeofenceInfoRequest;
 import se.uu.csproject.monadclient.geofences.Constants;
 import se.uu.csproject.monadclient.geofences.GeofenceErrorMessages;

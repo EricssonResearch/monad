@@ -1,7 +1,10 @@
-package se.uu.csproject.monadclient;
+package se.uu.csproject.monadclient.serverinteractions;
 
 import android.os.AsyncTask;
 import android.util.Log;
+
+import se.uu.csproject.monadclient.interfaces.AsyncGetBusStopsInteraction;
+import se.uu.csproject.monadclient.serverinteractions.ClientAuthentication;
 
 public class GetBusStopsTask extends AsyncTask <Void, Void, String> {
     AsyncGetBusStopsInteraction callingClass;

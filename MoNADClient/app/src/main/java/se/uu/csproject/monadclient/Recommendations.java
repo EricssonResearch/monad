@@ -10,6 +10,8 @@ import org.json.simple.parser.ParseException;
 import java.util.Date;
 import java.util.List;
 
+import se.uu.csproject.monadclient.serverinteractions.Authentication;
+import se.uu.csproject.monadclient.serverinteractions.ClientAuthentication;
 import se.uu.csproject.monadclient.storage.Trip;
 
 /**

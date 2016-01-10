@@ -1,4 +1,4 @@
-package se.uu.csproject.monadclient;
+package se.uu.csproject.monadclient.tools;
 
 import java.security.MessageDigest;
 import javax.mail.internet.AddressException;
