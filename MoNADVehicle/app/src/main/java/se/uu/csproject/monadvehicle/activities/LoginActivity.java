@@ -35,10 +35,10 @@ public class LoginActivity extends AppCompatActivity implements AsyncLoginIntera
     private Button loginButton;
     //ToggleButton emergencyButton;
 
-
-    //Google Cloud Services
+    /* Google Cloud Services */
     private static final String TAG = "MainActivity";
     private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,7 +56,6 @@ public class LoginActivity extends AppCompatActivity implements AsyncLoginIntera
             startService(intent);
         }
 
-
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -64,10 +63,11 @@ public class LoginActivity extends AppCompatActivity implements AsyncLoginIntera
             }
         });
 
-        // Hides the keyboard on display
+        /* Hides the keyboard on display */
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
-        /*emergencyButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        /*
+        emergencyButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
                     // The toggle is enabled
@@ -75,45 +75,47 @@ public class LoginActivity extends AppCompatActivity implements AsyncLoginIntera
                     // The toggle is disabled
                 }
             }
-        });*/
+        });
+        */
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
+        /* Inflate the menu; this adds items to the action bar if it is present. */
         getMenuInflater().inflate(R.menu.menu_login, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
+        /*
+         * Handle action bar item clicks here. The action bar will
+         * automatically handle clicks on the Home/Up button, so long
+         * as you specify a parent activity in AndroidManifest.xml.
+         */
         int id = item.getItemId();
-
         return super.onOptionsItemSelected(item);
     }
 
     public void login() {
-        new LoginTask(this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,
-                usernameField.getText().toString(),
-                passwordField.getText().toString(),
-                busNumberField.getText().toString());
+        new LoginTask(this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, usernameField.getText().toString(),
+                                              passwordField.getText().toString(), busNumberField.getText().toString());
     }
 
     @Override
     public void processReceivedLoginResponse(String response) {
 
-        /* If the response starts with the specific word, it means the user logged in successfully */
+        /* If the response starts with the specific string, it means the user logged in successfully */
         if (response.startsWith("Success (1)")) {
             Log.d("LoginActivity", "Successfully signed in");
             getNextTrip();
         }
+        /* Wrong credentials have been provided */
         else if (response.equals("Wrong Credentials (0)")) {
             Log.d("LoginActivity", "Wrong credentials");
             Toast.makeText(getApplicationContext(), "Wrong credentials", Toast.LENGTH_LONG).show();
         }
+        /* An exception occurred while interacting with the Route Administrator */
         else {
             Log.d("LoginActivity", "ERROR - login");
             Toast.makeText(getApplicationContext(), "ERROR - login", Toast.LENGTH_LONG).show();
@@ -129,10 +131,12 @@ public class LoginActivity extends AppCompatActivity implements AsyncLoginIntera
     @Override
     public void processReceivedGetNextTripResponse(String response) {
 
+        /* Successful interaction between the application and the Route Administrator */
         if (response.equals("1")) {
             Log.d("LoginActivity", "Successfully received BusTrip data");
             getTrajectory();
         }
+        /* An exception occurred while interacting with the Route Administrator */
         else {
             Log.d("LoginActivity", "Error while receiving BusTrip data");
             LoginActivity.this.startActivity(new Intent(LoginActivity.this, LoginActivity.class));
@@ -156,7 +160,6 @@ public class LoginActivity extends AppCompatActivity implements AsyncLoginIntera
         finally {
             finish();
         }
-
     }
 
     private boolean checkPlayServices() {

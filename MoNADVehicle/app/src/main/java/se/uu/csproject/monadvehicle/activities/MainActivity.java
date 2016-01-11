@@ -65,7 +65,6 @@ import se.uu.csproject.monadvehicle.interfaces.AsyncGetTrafficInformationInterac
 import se.uu.csproject.monadvehicle.interfaces.AsyncSetGoogleRegistrationTokenInteraction;
 import se.uu.csproject.monadvehicle.serverinteractions.GetTrafficInformationTask;
 
-
 public class MainActivity extends Activity implements ConnectionCallbacks, OnConnectionFailedListener, MyLocationOverlay.Listener,
         AsyncGetTrafficInformationInteraction, AsyncSetGoogleRegistrationTokenInteraction {
 
@@ -135,7 +134,7 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
         nextStopRemainingTime.setText( formatTime(new Date (Storage.getDurationToNextBusStop())));
         nextStopArrivalTime.setText( formatTime(Storage.getNextBusStop().getArrivalTime()) );
 
-        /*TODO: Use these logs to check if the time is still one hour in advance
+        /* TODO: Use these logs to check if the time is still one hour in advance
         Log.w("MAIN ACTIVITY", "Original date value is: " + Storage.getNextBusStop().getArrivalTime().getTime());
         Log.w("MAIN ACTIVITY", "Original date value is: " + Storage.getNextBusStop().getArrivalTime().toString());
         */
