@@ -75,12 +75,7 @@ public class ProfileActivity extends MenuedActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        if(id == R.id.action_profile){
-            return true;
-        }
-        else {
-            return super.onOptionsItemSelected(item);
-        }
+        return id == R.id.action_profile || super.onOptionsItemSelected(item);
     }
 
     public void editProfileInfo(View v){

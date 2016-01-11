@@ -45,6 +45,7 @@
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:paddingTop="@dimen/small_padding"
             android:paddingLeft="@dimen/layout_padding"
+            android:paddingStart="@dimen/layout_padding"
             android:layout_below="@id/info_text_from"
             />
 
@@ -83,6 +84,7 @@
             android:text="@string/non_available"
             android:paddingTop="@dimen/small_padding"
             android:paddingLeft="@dimen/layout_padding"
+            android:paddingStart="@dimen/layout_padding"
             android:layout_below="@id/info_text_to"
             android:layout_toRightOf="@id/bus"
             android:layout_toEndOf="@id/bus"
@@ -97,6 +99,7 @@
             android:text="@string/non_available"
             android:paddingTop="@dimen/small_padding"
             android:paddingLeft="@dimen/layout_padding"
+            android:paddingStart="@dimen/layout_padding"
             android:layout_below="@id/label_origin"
             />
 
@@ -109,6 +112,7 @@
             android:text="@string/non_available"
             android:paddingTop="@dimen/small_padding"
             android:paddingLeft="@dimen/layout_padding"
+            android:paddingStart="@dimen/layout_padding"
             android:layout_below="@id/label_destination"
             android:layout_toRightOf="@id/bus"
             android:layout_toEndOf="@id/bus"

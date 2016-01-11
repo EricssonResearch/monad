@@ -15,7 +15,7 @@ import se.uu.csproject.monadclient.NotificationsTimeComparator;
 public class Storage{
     private static ArrayList<FullTrip> searchResults = new ArrayList<>();
     private static ArrayList<FullTrip> bookings = new ArrayList<>();
-    private static ArrayList<FullTrip> recommendations = new ArrayList();
+    private static ArrayList<FullTrip> recommendations = new ArrayList<>();
     private static ArrayList<Notify> notifications = new ArrayList<>();
     private static ArrayList<BusStop> busStops = new ArrayList<>();
     private static ArrayList<UserLocation> locations = new ArrayList<>();

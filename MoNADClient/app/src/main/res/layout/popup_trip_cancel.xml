@@ -54,6 +54,7 @@
                     android:textAppearance="?android:attr/textAppearanceSmall"
                     android:paddingTop="@dimen/small_padding"
                     android:paddingLeft="@dimen/layout_padding"
+                    android:paddingStart="@dimen/layout_padding"
                     android:layout_below="@id/info_text_from1"
                     />
 
@@ -89,6 +90,7 @@
                     android:text="@string/non_available"
                     android:paddingTop="@dimen/small_padding"
                     android:paddingLeft="@dimen/layout_padding"
+                    android:paddingStart="@dimen/layout_padding"
                     android:layout_below="@id/info_text_to1"
                     android:layout_toRightOf="@id/bus1"
                     android:layout_toEndOf="@id/bus1"
@@ -103,6 +105,7 @@
                     android:text="@string/non_available"
                     android:paddingTop="@dimen/small_padding"
                     android:paddingLeft="@dimen/layout_padding"
+                    android:paddingStart="@dimen/layout_padding"
                     android:layout_below="@id/label_startbusstop"
                     />
 
@@ -115,6 +118,7 @@
                     android:text="@string/non_available"
                     android:paddingTop="@dimen/small_padding"
                     android:paddingLeft="@dimen/layout_padding"
+                    android:paddingStart="@dimen/layout_padding"
                     android:layout_below="@id/label_endbusstop"
                     android:layout_toRightOf="@id/bus1"
                     android:layout_toEndOf="@id/bus1"
@@ -164,16 +168,26 @@
             android:layout_height="wrap_content"
             android:background="@color/grayDark"
             android:layout_below="@id/popupinfo"
-            android:layout_centerHorizontal="true">
+            android:layout_centerHorizontal="true"
+            style="?android:attr/buttonBarStyle">
 
             <Button
                 android:id="@+id/button_trip_back"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="@string/label_tripcancel_buttonback"
+                android:textColor="@color/white"
+                style="?android:attr/buttonBarButtonStyle"
                 android:layout_gravity="center_vertical"
                 android:layout_weight="1"
                 android:onClick="backButtonClick"
+                />
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:background="@color/white"
+                android:layout_margin="@dimen/small_padding"
                 />
 
             <Button
@@ -185,6 +199,7 @@
                 android:layout_weight="1"
                 android:textColor="@color/warnColor"
                 android:onClick="dropTrip"
+                style="?android:attr/buttonBarButtonStyle"
                 />
 
         </LinearLayout>

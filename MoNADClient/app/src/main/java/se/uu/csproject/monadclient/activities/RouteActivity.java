@@ -24,9 +24,6 @@ import se.uu.csproject.monadclient.storage.PartialTrip;
 
 public class RouteActivity extends AppCompatActivity {
 
-//    RecyclerView recycler;
-//    boolean flagListVisible = false;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,19 +55,10 @@ public class RouteActivity extends AppCompatActivity {
         ViewGroup insertPoint = (ViewGroup) findViewById(R.id.layout1);
 
         for(int i = 0 ; i < partialTrips.size(); i++) {
-//            name = partialTrips.get(i).getStartBusStop();
             timeStart = partialTrips.get(i).getStartTime();
             timeExit = partialTrips.get(i).getEndTime();
             line = partialTrips.get(i).getLine();
             ArrayList<String> busStops = partialTrips.get(i).getTrajectory();
-
-//            View v = vi.inflate(R.layout.route_details, null);
-//
-//            TextView stopTime = (TextView) v.findViewById(R.id.label_first_time);
-//            stopTime.setText(formatTime(time));
-//            TextView stopName = (TextView) v.findViewById(R.id.label_first_stop);
-//            stopName.setText(name);
-//            insertPoint.addView(v);
 
             for(int j = 0 ; j < busStops.size(); j++) {
                 busStop = busStops.get(j);
@@ -93,7 +81,7 @@ public class RouteActivity extends AppCompatActivity {
                         ImageView busStopImage = (ImageView) busStopView.findViewById(R.id.bus_stop_image);
                         time.setText(formatTime(timeExit));
                         busStopImage.setVisibility(View.INVISIBLE);
-                        instructions.setText(getString(R.string.label_trip_depart));
+                        instructions.setText(getString(R.string.label_trip_arrive));
                     }
                 }
 
@@ -111,32 +99,6 @@ public class RouteActivity extends AppCompatActivity {
             }
         });
     }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
-//    public void expandBusStopList(View view){
-//        if(!flagListVisible){
-//            recycler.setVisibility(View.VISIBLE);
-//            flagListVisible = true;
-//        }
-//        else {
-//            recycler.setVisibility(View.GONE);
-//            flagListVisible = false;
-//        }
-//    }
 
     private String formatTime(Date date){
         Calendar calendar = Calendar.getInstance();

@@ -12,8 +12,7 @@ public class GetBusStopsTask extends AsyncTask <Void, Void, String> {
 
     @Override
     protected String doInBackground(Void... params) {
-        String response = ClientAuthentication.postGetBusStopsRequest();
-        return response;
+        return ClientAuthentication.postGetBusStopsRequest();
     }
 
     @Override

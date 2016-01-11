@@ -180,18 +180,17 @@ public class ClientAuthentication extends Authentication {
     }
 
     public static String profileToString() {
-        String strProfile = "\nclientId: " + getClientId()
-                          + "\nusername: " + getUsername()
-                          + "\npassword: " + getPassword()
-                          + "\nemail: " + getEmail()
-                          + "\nphone: " + getPhone()
-                          + "\nlanguage: " + getLanguage()
-                          + "\nstoreLocation: " + getStoreLocation()
-                          + "\nnotificationsAlert: " + getNotificationsAlert()
-                          + "\nrecommendationsAlert: " + getRecommendationsAlert()
-                          + "\ntheme: " + getTheme()
-                          + "\ngoogleRegistrationToken: " + getGoogleRegistrationToken();
-        return strProfile;
+        return "\nclientId: " + getClientId()
+                + "\nusername: " + getUsername()
+                + "\npassword: " + getPassword()
+                + "\nemail: " + getEmail()
+                + "\nphone: " + getPhone()
+                + "\nlanguage: " + getLanguage()
+                + "\nstoreLocation: " + getStoreLocation()
+                + "\nnotificationsAlert: " + getNotificationsAlert()
+                + "\nrecommendationsAlert: " + getRecommendationsAlert()
+                + "\ntheme: " + getTheme()
+                + "\ngoogleRegistrationToken: " + getGoogleRegistrationToken();
     }
 
     public static void initProfile() {
@@ -783,7 +782,7 @@ public class ClientAuthentication extends Authentication {
 //                    }
 
                     PartialTrip partialTrip = new PartialTrip(tripID, line, busID, startBusStop, startTime,
-                                                              endBusStop, endTime, trajectory);
+                            endBusStop, endTime, trajectory);
 
                     partialTrips.add(partialTrip);
                 }
@@ -880,7 +879,7 @@ public class ClientAuthentication extends Authentication {
                     }
 
                     PartialTrip partialTrip = new PartialTrip(tripID, line, busID, startBusStop, startTime,
-                                                              endBusStop, endTime, trajectory);
+                            endBusStop, endTime, trajectory);
 
                     partialTrips.add(partialTrip);
                 }

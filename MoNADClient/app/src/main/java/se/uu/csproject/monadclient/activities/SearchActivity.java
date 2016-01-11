@@ -47,11 +47,8 @@ public class SearchActivity extends MenuedActivity implements AsyncResponse {
     private RadioGroup tripTimeRadioGroup, priorityRadioGroup;
     private AutoCompleteTextView positionEditText, destinationEditText;
     private Context context;
-    private ArrayList<FullTrip> searchResults;
     private SearchRecyclerViewAdapter adapter;
-    private LinearLayoutManager linearLayoutManager;
     private RecyclerView recyclerView;
-    private Toolbar toolbar;
 
     public Calendar calendar;
 
@@ -59,7 +56,7 @@ public class SearchActivity extends MenuedActivity implements AsyncResponse {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
-        toolbar = (Toolbar) findViewById(R.id.actionToolBar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.actionToolBar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -79,7 +76,7 @@ public class SearchActivity extends MenuedActivity implements AsyncResponse {
         destinationEditText = (AutoCompleteTextView) findViewById(R.id.edittext_search_destination);
 
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view_search);
-        linearLayoutManager = new LinearLayoutManager(getApplicationContext());
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getApplicationContext());
         recyclerView.setLayoutManager(linearLayoutManager);
 
         String[] addresses = getAddressesFromFileAsset();
@@ -278,7 +275,7 @@ public class SearchActivity extends MenuedActivity implements AsyncResponse {
             destinationEditText.setText(getIntent().getStringExtra("destination"));
         }
 
-        searchResults = Storage.getSearchResults();
+        ArrayList<FullTrip> searchResults = Storage.getSearchResults();
         adapter = new SearchRecyclerViewAdapter(searchResults);
         recyclerView.setAdapter(adapter);
     }

@@ -20,10 +20,8 @@ import se.uu.csproject.monadclient.recyclerviews.NotificationRecyclerViewAdapter
 import se.uu.csproject.monadclient.storage.Notify;
 import se.uu.csproject.monadclient.storage.Storage;
 
-//// TODO (low priority): receive data from notification module (maybe not in this activity - TBD), display them in notification bar as well as in the recyclerview
 //public class NotificationsActivity extends MenuedActivity implements AsyncResponse, AsyncNotificationsInteraction {
 public class NotificationsActivity extends MenuedActivity implements AsyncNotificationsInteraction {
-    private Toolbar toolbar;
     public static ArrayList<Notify> notifications;
 //    private ArrayList<FullTrip> bookings;
     public static int NOTIFICATION_ID = 100;
@@ -36,7 +34,7 @@ public class NotificationsActivity extends MenuedActivity implements AsyncNotifi
 
         setContentView(R.layout.activity_notifications);
 
-        toolbar = (Toolbar) findViewById(R.id.actionToolBar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.actionToolBar);
         setSupportActionBar(toolbar);
 
         getSupportActionBar().setHomeButtonEnabled(true);

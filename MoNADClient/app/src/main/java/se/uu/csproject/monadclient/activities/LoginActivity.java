@@ -33,10 +33,8 @@ public class LoginActivity extends AppCompatActivity implements AsyncLoginIntera
 
     private EditText usernameField;
     private EditText passwordField;
-    private SignInButton googleLogInButton;
 
     private ProgressDialog pd;
-//    private TextView wrongCredentialsTextView;
 
     //Google Cloud Services
     private static final String TAG = "MainActivity";
@@ -72,8 +70,7 @@ public class LoginActivity extends AppCompatActivity implements AsyncLoginIntera
 
         TextView forgotPasswordTextView = (TextView) findViewById(R.id.forgotpassword_text_view);
         TextView registerTextView = (TextView) findViewById(R.id.textview_register);
-//        wrongCredentialsTextView = (TextView) findViewById(R.id.wrong_credentials);
-        googleLogInButton = (SignInButton) findViewById(R.id.google_login_button);
+        SignInButton googleLogInButton = (SignInButton) findViewById(R.id.google_login_button);
 
         googleLogInButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -170,7 +167,6 @@ public class LoginActivity extends AppCompatActivity implements AsyncLoginIntera
         }
         else if (response.equals("Wrong Credentials (0)")) {
             Toast.makeText(getApplicationContext(), getString(R.string.java_login_wrongcredential), Toast.LENGTH_LONG).show();
-//            wrongCredentialsTextView.setVisibility(View.VISIBLE);
         }
         else {
             LoginActivity.this.startActivity(new Intent(LoginActivity.this, LoginActivity.class));

@@ -24,21 +24,18 @@ import se.uu.csproject.monadclient.serverinteractions.SendUserBookingsRequest;
 
 
 public class TripsActivity extends MenuedActivity implements AsyncResponse, AsyncResponseString {
-    private Toolbar toolbar;
     private Context context;
     private RecyclerView recyclerView;
-    private LinearLayoutManager linearLayoutManager;
     private TripRecyclerViewAdapter adapter;
-    private ArrayList<FullTrip> bookings;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_trips);
         context = getApplicationContext();
-        toolbar = (Toolbar) findViewById(R.id.actionToolBar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.actionToolBar);
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view_active);
-        linearLayoutManager = new LinearLayoutManager(context);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context);
         recyclerView.setLayoutManager(linearLayoutManager);
 
         setSupportActionBar(toolbar);
@@ -50,7 +47,7 @@ public class TripsActivity extends MenuedActivity implements AsyncResponse, Asyn
     @Override
     protected void onResume() {
         super.onResume();
-        bookings = Storage.getBookings();
+        ArrayList<FullTrip> bookings = Storage.getBookings();
         if (bookings.isEmpty()){
             getBookings();
         } else {

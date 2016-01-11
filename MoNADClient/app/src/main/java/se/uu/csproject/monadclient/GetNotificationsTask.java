@@ -4,11 +4,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import se.uu.csproject.monadclient.interfaces.AsyncNotificationsInteraction;
-import se.uu.csproject.monadclient.storage.Storage;
 
-/**
- *
- */
 public class GetNotificationsTask extends AsyncTask<Void, Void, String> {
     private AsyncNotificationsInteraction callingClass;
 
@@ -18,8 +14,7 @@ public class GetNotificationsTask extends AsyncTask<Void, Void, String> {
 
     @Override
     protected String doInBackground(Void... params) {
-        String response = ClientAuthentication.postGetNotificationsRequest();
-        return response;
+        return ClientAuthentication.postGetNotificationsRequest();
     }
 
     @Override

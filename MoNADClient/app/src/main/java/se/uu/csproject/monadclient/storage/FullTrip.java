@@ -163,23 +163,13 @@ public class FullTrip implements Parcelable {
 
     // Determines if the trip is happening right now (true if: startTime < current time < endTime)
     public boolean isInProgress() {
-        if (partialTrips.get(0).getStartTime().before(Calendar.getInstance().getTime()) &&
-                partialTrips.get(partialTrips.size() - 1).getEndTime().after(Calendar.getInstance().getTime())) {
-            return true;
-        }
-        else {
-            return false;
-        }
+        return partialTrips.get(0).getStartTime().before(Calendar.getInstance().getTime()) &&
+                partialTrips.get(partialTrips.size() - 1).getEndTime().after(Calendar.getInstance().getTime());
     }
 
     // Determines if the trip has occurred already (true: endTime < current time)
     public boolean isHistory(){
-        if(partialTrips.get(partialTrips.size() - 1).getEndTime().before(Calendar.getInstance().getTime())) {
-            return true;
-        }
-        else {
-            return false;
-        }
+        return partialTrips.get(partialTrips.size() - 1).getEndTime().before(Calendar.getInstance().getTime());
     }
 
     // Returns a boolean: true if day, month and year are all identical

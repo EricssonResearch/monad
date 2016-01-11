@@ -22,7 +22,6 @@ import se.uu.csproject.monadclient.serverinteractions.SendBookingRequest;
 
 public class RouteConfirmPopup extends AppCompatActivity implements AsyncResponseString {
 
-    private TextView busIdView, startTimeView, endTimeView, startPositionView, endPositionView;
     private FullTrip trip;
     private Context context;
 
@@ -37,11 +36,11 @@ public class RouteConfirmPopup extends AppCompatActivity implements AsyncRespons
         int height = dm.heightPixels;
         getWindow().setLayout((int) (width * .9), (int) (height * .40));
 
-        busIdView = (TextView) findViewById(R.id.businfo);
-        startTimeView = (TextView) findViewById(R.id.departtime);
-        endTimeView = (TextView) findViewById(R.id.arrivetime);
-        startPositionView = (TextView) findViewById(R.id.departname);
-        endPositionView = (TextView) findViewById(R.id.arrivename);
+        TextView busIdView = (TextView) findViewById(R.id.businfo);
+        TextView startTimeView = (TextView) findViewById(R.id.departtime);
+        TextView endTimeView = (TextView) findViewById(R.id.arrivetime);
+        TextView startPositionView = (TextView) findViewById(R.id.departname);
+        TextView endPositionView = (TextView) findViewById(R.id.arrivename);
         context = getApplicationContext();
 
         Bundle b = getIntent().getExtras();

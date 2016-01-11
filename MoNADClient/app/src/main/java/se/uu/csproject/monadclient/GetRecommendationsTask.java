@@ -4,11 +4,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import se.uu.csproject.monadclient.interfaces.AsyncRecommendationsInteraction;
-import se.uu.csproject.monadclient.storage.Storage;
 
-/**
- *
- */
 public class GetRecommendationsTask extends AsyncTask<Void, Void, String> {
     AsyncRecommendationsInteraction callingClass;
 
@@ -18,8 +14,7 @@ public class GetRecommendationsTask extends AsyncTask<Void, Void, String> {
 
     @Override
     protected String doInBackground(Void... params) {
-        String response = ClientAuthentication.postGetRecommendationsRequest();
-        return response;
+        return ClientAuthentication.postGetRecommendationsRequest();
     }
 
     @Override
