@@ -64,6 +64,7 @@
             android:text="@string/non_available"
             android:paddingTop="@dimen/small_padding"
             android:paddingLeft="@dimen/layout_padding"
+            android:paddingStart="@dimen/layout_padding"
             android:layout_below="@id/info_tripsactivity_from3"
             />
 
@@ -76,6 +77,7 @@
             android:text="@string/non_available"
             android:paddingTop="@dimen/small_padding"
             android:paddingLeft="@dimen/layout_padding"
+            android:paddingStart="@dimen/layout_padding"
             android:layout_below="@id/info_tripsactivity_to3"
             android:layout_toRightOf="@id/bus3"
             android:layout_toEndOf="@id/bus3"
@@ -89,6 +91,7 @@
             android:text="@string/non_available"
             android:paddingTop="@dimen/small_padding"
             android:paddingLeft="@dimen/layout_padding"
+            android:paddingStart="@dimen/layout_padding"
             android:layout_below="@id/label_origin"
             />
 
@@ -100,6 +103,7 @@
             android:text="@string/non_available"
             android:paddingTop="@dimen/small_padding"
             android:paddingLeft="@dimen/layout_padding"
+            android:paddingStart="@dimen/layout_padding"
             android:layout_below="@id/label_destination"
             android:layout_toRightOf="@id/bus3"
             android:layout_toEndOf="@id/bus3"

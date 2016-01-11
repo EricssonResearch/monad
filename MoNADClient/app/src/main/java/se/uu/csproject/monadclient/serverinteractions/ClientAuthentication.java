@@ -32,11 +32,11 @@ public class ClientAuthentication extends Authentication {
      * 10: googleRegistrationToken
      */
 
-    /* Required for local use */ 
+    /* Required for local use */
     private static boolean ifSettingsChanged = false;
     /* Required for local use */
     private static boolean ifRecommendNotifyAdded = false;
-    
+
     public static void setClientId(String clientID) {
         profile[0] = clientID;
     }
@@ -175,18 +175,17 @@ public class ClientAuthentication extends Authentication {
     }
 
     public static String profileToString() {
-        String strProfile = "\nclientID: " + getClientId()
-                          + "\nusername: " + getUsername()
-                          + "\npassword: " + getPassword()
-                          + "\nemail: " + getEmail()
-                          + "\nphone: " + getPhone()
-                          + "\nlanguage: " + getLanguage()
-                          + "\nstoreLocation: " + getStoreLocation()
-                          + "\nnotificationsAlert: " + getNotificationsAlert()
-                          + "\nrecommendationsAlert: " + getRecommendationsAlert()
-                          + "\ntheme: " + getTheme()
-                          + "\ngoogleRegistrationToken: " + getGoogleRegistrationToken();
-        return strProfile;
+        return "\nclientID: " + getClientId()
+                + "\nusername: " + getUsername()
+                + "\npassword: " + getPassword()
+                + "\nemail: " + getEmail()
+                + "\nphone: " + getPhone()
+                + "\nlanguage: " + getLanguage()
+                + "\nstoreLocation: " + getStoreLocation()
+                + "\nnotificationsAlert: " + getNotificationsAlert()
+                + "\nrecommendationsAlert: " + getRecommendationsAlert()
+                + "\ntheme: " + getTheme()
+                + "\ngoogleRegistrationToken: " + getGoogleRegistrationToken();
     }
 
     public static void initProfile() {
@@ -386,8 +385,8 @@ public class ClientAuthentication extends Authentication {
              *                 recommendationsAlert, theme
              */
             updateProfile(responseData[0], username, "1", responseData[1], responseData[2],
-                          responseData[3], responseData[4], responseData[5],
-                          responseData[6], responseData[7]);
+                    responseData[3], responseData[4], responseData[5],
+                    responseData[6], responseData[7]);
 
             responseMessage = "Success (1) - " + response + profileToString();
         }
@@ -762,7 +761,7 @@ public class ClientAuthentication extends Authentication {
                     }
 
                     PartialTrip partialTrip = new PartialTrip(tripID, line, busID, startBusStop, startTime,
-                                                              endBusStop, endTime, trajectory);
+                            endBusStop, endTime, trajectory);
 
                     partialTrips.add(partialTrip);
                 }
@@ -857,7 +856,7 @@ public class ClientAuthentication extends Authentication {
                     }
 
                     PartialTrip partialTrip = new PartialTrip(tripID, line, busID, startBusStop, startTime,
-                                                              endBusStop, endTime, trajectory);
+                            endBusStop, endTime, trajectory);
 
                     partialTrips.add(partialTrip);
                 }

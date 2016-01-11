@@ -8,14 +8,12 @@ import se.uu.csproject.monadclient.R;
 
 public class AboutUsActivity extends MenuedActivity {
 
-    private Toolbar toolbar;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_about_us);
 
-        toolbar = (Toolbar) findViewById(R.id.actionToolBar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.actionToolBar);
         setSupportActionBar(toolbar);
 
         getSupportActionBar().setHomeButtonEnabled(true);
@@ -28,11 +26,6 @@ public class AboutUsActivity extends MenuedActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        if(id == R.id.action_aboutus){
-            return true;
-        }
-        else {
-            return super.onOptionsItemSelected(item);
-        }
+        return id == R.id.action_aboutus || super.onOptionsItemSelected(item);
     }
 }

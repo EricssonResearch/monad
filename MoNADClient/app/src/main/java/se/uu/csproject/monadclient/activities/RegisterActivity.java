@@ -20,8 +20,6 @@ import se.uu.csproject.monadclient.serverinteractions.SignUpTask;
 
 public class RegisterActivity extends AppCompatActivity {
 
-    private Toolbar toolbar;
-    private Button registerButton;
     private EditText username;
     private EditText password;
     private EditText passwordVerify;
@@ -33,10 +31,10 @@ public class RegisterActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
-        toolbar = (Toolbar) findViewById(R.id.actionToolBar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.actionToolBar);
         setSupportActionBar(toolbar);
 
-        registerButton = (Button) findViewById(R.id.button_register);
+        Button registerButton = (Button) findViewById(R.id.button_register);
         username = (EditText) findViewById(R.id.field_username);
         password = (EditText) findViewById(R.id.field_password);
         passwordVerify = (EditText) findViewById(R.id.field_verify_password);
@@ -50,7 +48,7 @@ public class RegisterActivity extends AppCompatActivity {
                 String passwordVerifyEntered = passwordVerify.getText().toString();
 
                 //check if the two passwords match or not
-                if(!passwordEntered.equals(passwordVerifyEntered)) {
+                if (!passwordEntered.equals(passwordVerifyEntered)) {
                     Toast.makeText(getApplicationContext(), getString(R.string.java_passwordsnomatch),
                             Toast.LENGTH_LONG).show();
                     return;
@@ -67,8 +65,7 @@ public class RegisterActivity extends AppCompatActivity {
                         RegisterActivity.this.startActivity(new Intent(RegisterActivity.this, MainActivity.class));
                         setResult(RESULT_OK);
                         finish();
-                    }
-                    else{
+                    } else {
                         Toast.makeText(getApplicationContext(), response, Toast.LENGTH_LONG).show();
                     }
                 } catch (InterruptedException e) {

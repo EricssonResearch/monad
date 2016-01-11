@@ -216,7 +216,7 @@ public class GoogleLogIn extends Activity implements
                     Toast toast = Toast.makeText(context, text, Toast.LENGTH_LONG);
                     toast.show();
                 }
-                return;
+                break;
             }
         }
     }

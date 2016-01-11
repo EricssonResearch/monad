@@ -14,8 +14,7 @@ public class GetNotificationsTask extends AsyncTask<Void, Void, String> {
 
     @Override
     protected String doInBackground(Void... params) {
-        String response = ClientAuthentication.postGetNotificationsRequest();
-        return response;
+        return ClientAuthentication.postGetNotificationsRequest();
     }
 
     @Override
