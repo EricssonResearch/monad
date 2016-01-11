@@ -1,6 +1,4 @@
-package se.uu.csproject.monadvehicle;
-
-import android.util.Log;
+package se.uu.csproject.monadvehicle.serverinteractions;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -13,6 +11,11 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.TimeZone;
+
+import se.uu.csproject.monadvehicle.storage.TrafficInformation;
+import se.uu.csproject.monadvehicle.storage.BusStop;
+import se.uu.csproject.monadvehicle.storage.BusTrip;
+import se.uu.csproject.monadvehicle.storage.Storage;
 
 
 /**

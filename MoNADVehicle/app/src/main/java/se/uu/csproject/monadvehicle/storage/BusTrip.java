@@ -1,9 +1,11 @@
-package se.uu.csproject.monadvehicle;
+package se.uu.csproject.monadvehicle.storage;
 
 import android.util.Log;
 import org.mapsforge.core.model.LatLong;
 import java.util.ArrayList;
 import java.util.Date;
+
+import se.uu.csproject.monadvehicle.storage.BusStop;
 
 public class BusTrip {
     private String busTripID;

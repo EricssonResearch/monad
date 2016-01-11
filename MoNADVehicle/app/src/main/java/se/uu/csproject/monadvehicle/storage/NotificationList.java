@@ -1,6 +1,8 @@
-package se.uu.csproject.monadvehicle;
+package se.uu.csproject.monadvehicle.storage;
 
 import java.util.ArrayList;
+
+import se.uu.csproject.monadvehicle.storage.Notification;
 
 
 public class NotificationList {

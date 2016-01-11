@@ -1,4 +1,4 @@
-package se.uu.csproject.monadvehicle;
+package se.uu.csproject.monadvehicle.storage;
 
 import java.util.Date;
 

@@ -1,4 +1,4 @@
-package se.uu.csproject.monadvehicle;
+package se.uu.csproject.monadvehicle.activities;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -15,7 +15,6 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
@@ -56,8 +55,15 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
-import java.util.TimeZone;
-import java.util.concurrent.TimeUnit;
+
+import se.uu.csproject.monadvehicle.services.MyLocationOverlay;
+import se.uu.csproject.monadvehicle.storage.Notification;
+import se.uu.csproject.monadvehicle.storage.NotificationList;
+import se.uu.csproject.monadvehicle.R;
+import se.uu.csproject.monadvehicle.storage.Storage;
+import se.uu.csproject.monadvehicle.interfaces.AsyncGetTrafficInformationInteraction;
+import se.uu.csproject.monadvehicle.interfaces.AsyncSetGoogleRegistrationTokenInteraction;
+import se.uu.csproject.monadvehicle.serverinteractions.GetTrafficInformationTask;
 
 
 public class MainActivity extends Activity implements ConnectionCallbacks, OnConnectionFailedListener, MyLocationOverlay.Listener,

@@ -1,6 +1,8 @@
-package se.uu.csproject.monadvehicle;
+package se.uu.csproject.monadvehicle.serverinteractions;
 
 import android.os.AsyncTask;
+
+import se.uu.csproject.monadvehicle.interfaces.AsyncLoginInteraction;
 
 public class LoginTask extends AsyncTask <String, Void, String> {
     private AsyncLoginInteraction callingClass;

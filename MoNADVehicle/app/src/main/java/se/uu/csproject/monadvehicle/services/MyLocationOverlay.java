@@ -1,4 +1,4 @@
-package se.uu.csproject.monadvehicle;
+package se.uu.csproject.monadvehicle.services;
 
 import org.mapsforge.core.graphics.Bitmap;
 import org.mapsforge.core.graphics.Canvas;
@@ -17,13 +17,13 @@ import org.mapsforge.map.model.MapViewPosition;
 import android.content.Context;
 import android.location.Location;
 import android.location.LocationProvider;
-import android.os.Handler;
-import android.util.Log;
 
 import com.google.android.gms.location.LocationListener;
 
 import java.util.ArrayList;
 import java.util.ListIterator;
+
+import se.uu.csproject.monadvehicle.storage.Storage;
 
 /**
  * A thread-safe {@link Layer} implementation to display the current location. Use the new location services provided by Google

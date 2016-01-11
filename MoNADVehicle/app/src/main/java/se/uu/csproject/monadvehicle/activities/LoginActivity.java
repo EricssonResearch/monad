@@ -1,4 +1,4 @@
-package se.uu.csproject.monadvehicle;
+package se.uu.csproject.monadvehicle.activities;
 
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -18,7 +18,14 @@ import com.google.android.gms.common.GoogleApiAvailability;
 
 import org.mapsforge.map.android.graphics.AndroidGraphicFactory;
 
+import se.uu.csproject.monadvehicle.serverinteractions.LoginTask;
+import se.uu.csproject.monadvehicle.R;
 import se.uu.csproject.monadvehicle.googlecloudmessaging.RegistrationIntentService;
+import se.uu.csproject.monadvehicle.interfaces.AsyncGetNextTripInteraction;
+import se.uu.csproject.monadvehicle.interfaces.AsyncGetTrajectoryInteraction;
+import se.uu.csproject.monadvehicle.interfaces.AsyncLoginInteraction;
+import se.uu.csproject.monadvehicle.serverinteractions.GetNextTripTask;
+import se.uu.csproject.monadvehicle.serverinteractions.GetTrajectoryTask;
 
 public class LoginActivity extends AppCompatActivity implements AsyncLoginInteraction, AsyncGetNextTripInteraction,
         AsyncGetTrajectoryInteraction {

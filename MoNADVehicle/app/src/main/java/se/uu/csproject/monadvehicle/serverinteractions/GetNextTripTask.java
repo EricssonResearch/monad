@@ -1,6 +1,8 @@
-package se.uu.csproject.monadvehicle;
+package se.uu.csproject.monadvehicle.serverinteractions;
 
 import android.os.AsyncTask;
+
+import se.uu.csproject.monadvehicle.interfaces.AsyncGetNextTripInteraction;
 
 /**
  *

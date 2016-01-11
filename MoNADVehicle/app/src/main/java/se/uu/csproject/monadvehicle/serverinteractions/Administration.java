@@ -1,4 +1,4 @@
-package se.uu.csproject.monadvehicle;
+package se.uu.csproject.monadvehicle.serverinteractions;
 
 import com.google.common.base.Charsets;
 import java.net.URL;
