@@ -14,6 +14,8 @@ from dbConnection import DB
 import networkx as nx
 import matplotlib.pyplot as plt
 from bson.objectid import ObjectId
+sys.path.append('../OpenStreetMap')
+from routeGenerator import coordinates_to_nearest_stops, get_route
 
 
 class DynamicRoutes():
@@ -221,7 +223,6 @@ class DynamicRoutes():
 
     def storeRoutesToDB(self,routes):
         database = DB()
-        routes = testdata()
         duration = 0
         line = 1
         trajectory = []
