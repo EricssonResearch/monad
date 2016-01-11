@@ -12,7 +12,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
-import se.uu.csproject.monadclient.FullTripsStartTimeComparator;
+import se.uu.csproject.monadclient.tools.FullTripsStartTimeComparator;
 
 public class StoreTrips {
 

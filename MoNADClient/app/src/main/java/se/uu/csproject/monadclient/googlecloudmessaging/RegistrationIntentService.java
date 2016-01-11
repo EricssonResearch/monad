@@ -11,7 +11,7 @@ import com.google.android.gms.gcm.GcmPubSub;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.google.android.gms.iid.InstanceID;
 
-import se.uu.csproject.monadclient.ClientAuthentication;
+import se.uu.csproject.monadclient.serverinteractions.ClientAuthentication;
 import se.uu.csproject.monadclient.R;
 import java.io.IOException;
 

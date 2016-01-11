@@ -1,5 +1,6 @@
 package se.uu.csproject.monadclient.storage;
 
+import android.os.AsyncTask;
 import android.util.Log;
 
 import org.json.JSONException;
@@ -8,9 +9,9 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Collections;
 
-import se.uu.csproject.monadclient.NotificationsInteraction;
-import se.uu.csproject.monadclient.FullTripsStartTimeComparator;
-import se.uu.csproject.monadclient.NotificationsTimeComparator;
+import se.uu.csproject.monadclient.serverinteractions.RemoveNotificationTask;
+import se.uu.csproject.monadclient.tools.FullTripsStartTimeComparator;
+import se.uu.csproject.monadclient.tools.NotificationsTimeComparator;
 
 public class Storage{
     private static ArrayList<FullTrip> searchResults = new ArrayList<>();
@@ -184,8 +185,7 @@ public class Storage{
     }
 
     public static void removeNotification(int i) {
-        new NotificationsInteraction("Storage").removeNotification(i);
-        notifications.remove(i);
+        new RemoveNotificationTask(i).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, notifications.get(i).getID());
     }
 
     public static void printNotifications() {

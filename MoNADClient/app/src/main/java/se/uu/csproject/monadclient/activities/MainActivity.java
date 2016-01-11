@@ -39,10 +39,10 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 
-import se.uu.csproject.monadclient.AsyncGetBusStopsInteraction;
-import se.uu.csproject.monadclient.ClientAuthentication;
-import se.uu.csproject.monadclient.GetBusStopsTask;
-import se.uu.csproject.monadclient.GetRecommendationsTask;
+import se.uu.csproject.monadclient.interfaces.AsyncGetBusStopsInteraction;
+import se.uu.csproject.monadclient.serverinteractions.ClientAuthentication;
+import se.uu.csproject.monadclient.serverinteractions.GetBusStopsTask;
+import se.uu.csproject.monadclient.serverinteractions.GetRecommendationsTask;
 import se.uu.csproject.monadclient.R;
 import se.uu.csproject.monadclient.RecommendationAlarmReceiver;
 import se.uu.csproject.monadclient.interfaces.AsyncRecommendationsInteraction;

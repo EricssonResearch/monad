@@ -33,7 +33,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
-import se.uu.csproject.monadclient.ClientAuthentication;
+import se.uu.csproject.monadclient.serverinteractions.ClientAuthentication;
 import se.uu.csproject.monadclient.R;
 import se.uu.csproject.monadclient.interfaces.AsyncResponse;
 import se.uu.csproject.monadclient.storage.FullTrip;

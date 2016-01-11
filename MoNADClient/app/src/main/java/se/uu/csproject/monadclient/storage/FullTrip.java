@@ -182,13 +182,14 @@ public class FullTrip implements Parcelable {
                 && today.get(Calendar.YEAR) == startDate.get(Calendar.YEAR);
     }
 
-    public void printValues(){
-        Log.d("oops", "ID: " + getId());
-        Log.d("oops", "Request ID: " + getTravelRequestID());
-        Log.d("oops", "Recommendation ID: " + getRecommendationID());
-        Log.d("oops", "Reserved: " + isReserved());
-        Log.d("oops", "Duration: " + getDuration());
-        Log.d("oops", "Feedback: " + getFeedback());
+    public void printValues() {
+        Log.d("FullTrip", "-- Printing Values --");
+        Log.d("FullTrip", "ID: " + getId());
+        Log.d("FullTrip", "Request ID: " + getTravelRequestID());
+        Log.d("FullTrip", "Recommendation ID: " + getRecommendationID());
+        Log.d("FullTrip", "Reserved: " + isReserved());
+        Log.d("FullTrip", "Duration: " + getDuration());
+        Log.d("FullTrip", "Feedback: " + getFeedback());
     }
 
     @Override

@@ -12,7 +12,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-import se.uu.csproject.monadclient.ClientAuthentication;
+import se.uu.csproject.monadclient.serverinteractions.ClientAuthentication;
 import se.uu.csproject.monadclient.R;
 import se.uu.csproject.monadclient.interfaces.AsyncResponse;
 import se.uu.csproject.monadclient.interfaces.AsyncResponseString;

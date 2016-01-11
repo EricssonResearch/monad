@@ -12,8 +12,8 @@ import android.view.View;
 
 import java.util.ArrayList;
 
-import se.uu.csproject.monadclient.ClientAuthentication;
-import se.uu.csproject.monadclient.GetNotificationsTask;
+import se.uu.csproject.monadclient.serverinteractions.ClientAuthentication;
+import se.uu.csproject.monadclient.serverinteractions.GetNotificationsTask;
 import se.uu.csproject.monadclient.R;
 import se.uu.csproject.monadclient.interfaces.AsyncNotificationsInteraction;
 import se.uu.csproject.monadclient.recyclerviews.NotificationRecyclerViewAdapter;

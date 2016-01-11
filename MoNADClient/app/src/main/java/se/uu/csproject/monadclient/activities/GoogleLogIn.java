@@ -26,7 +26,7 @@ import com.google.android.gms.plus.Plus;
 
 import java.util.concurrent.ExecutionException;
 
-import se.uu.csproject.monadclient.ClientAuthentication;
+import se.uu.csproject.monadclient.serverinteractions.ClientAuthentication;
 import se.uu.csproject.monadclient.R;
 
 public class GoogleLogIn extends Activity implements

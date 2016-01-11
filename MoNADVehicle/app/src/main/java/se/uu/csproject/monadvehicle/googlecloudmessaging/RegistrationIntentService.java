@@ -12,9 +12,8 @@ import com.google.android.gms.gcm.GcmPubSub;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.google.android.gms.iid.InstanceID;
 
-import se.uu.csproject.monadvehicle.LoginTask;
 import se.uu.csproject.monadvehicle.R;
-import se.uu.csproject.monadvehicle.VehicleAdministration;
+import se.uu.csproject.monadvehicle.serverinteractions.VehicleAdministration;
 
 import java.io.IOException;
 

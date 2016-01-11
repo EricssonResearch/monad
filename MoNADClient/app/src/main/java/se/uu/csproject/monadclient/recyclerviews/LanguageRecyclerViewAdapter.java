@@ -14,7 +14,7 @@ import android.widget.Toast;
 import java.util.List;
 import java.util.Locale;
 
-import se.uu.csproject.monadclient.ClientAuthentication;
+import se.uu.csproject.monadclient.serverinteractions.ClientAuthentication;
 import se.uu.csproject.monadclient.R;
 
 public class LanguageRecyclerViewAdapter

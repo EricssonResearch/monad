@@ -11,9 +11,9 @@ import android.widget.Toast;
 
 import java.util.concurrent.ExecutionException;
 
-import se.uu.csproject.monadclient.ClientAuthentication;
+import se.uu.csproject.monadclient.serverinteractions.ClientAuthentication;
 import se.uu.csproject.monadclient.R;
-import se.uu.csproject.monadclient.UpdateProfileTask;
+import se.uu.csproject.monadclient.serverinteractions.UpdateProfileTask;
 
 
 public class ProfileActivity extends MenuedActivity {

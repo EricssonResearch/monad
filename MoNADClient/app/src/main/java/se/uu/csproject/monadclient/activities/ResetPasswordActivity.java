@@ -13,7 +13,7 @@ import android.widget.Toast;
 
 import java.util.concurrent.ExecutionException;
 
-import se.uu.csproject.monadclient.ClientAuthentication;
+import se.uu.csproject.monadclient.serverinteractions.ClientAuthentication;
 import se.uu.csproject.monadclient.R;
 
 public class ResetPasswordActivity extends MenuedActivity {

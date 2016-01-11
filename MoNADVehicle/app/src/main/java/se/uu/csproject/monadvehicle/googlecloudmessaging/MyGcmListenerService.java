@@ -11,8 +11,8 @@ import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
 import com.google.android.gms.gcm.GcmListenerService;
-import se.uu.csproject.monadvehicle.LoginActivity;
-import se.uu.csproject.monadvehicle.MainActivity;
+
+import se.uu.csproject.monadvehicle.activities.MainActivity;
 //import se.uu.csproject.monadvehicle.NotificationsActivity;
 import se.uu.csproject.monadvehicle.R;
 
