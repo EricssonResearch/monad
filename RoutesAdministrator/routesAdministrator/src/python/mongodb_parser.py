@@ -12,6 +12,7 @@ under the License is distributed on an 'AS IS' BASIS, WITHOUT WARRANTIES OR
 CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 '''
+
 import json
 import datetime
 from pymongo import MongoClient
@@ -23,9 +24,9 @@ import xml.etree.ElementTree
 from xml.etree import ElementTree as ET
 from xml.etree.ElementTree import ElementTree
 
-def start(host):
+def start(host, port):
     global mongo_client
-    mongo_client = MongoClient(host, 27017)
+    mongo_client = MongoClient(host, port)
     global db
     db = mongo_client.monad1
     global bus_trip_collection
@@ -39,7 +40,7 @@ def start(host):
 
 def vehicle_get_next_trip(bus_id):
     trips = list(bus_trip_collection.find({'busID' : bus_id}))
-    now = datetime.datetime.now()# - datetime.timedelta(days = 1)
+    now = datetime.datetime.now()
     min = datetime.timedelta(weeks = 1)
 
     for trip in trips:
@@ -66,7 +67,6 @@ def send_notification_binary(user_to_send_to, message_title, message_body):
 def send_notification(user_to_send_to, message_title_to_send, message_body_to_send):
     API_KEY='key=AIzaSyAPIZuvmfsf8TZHz3q09G_9evAmGUekdrI'
     url = 'https://gcm-http.googleapis.com/gcm/send'
-
     message_title_to_send = surround_in_quotes(message_title_to_send)
     message_body_to_send = surround_in_quotes(message_body_to_send)
     user_to_send_to = surround_in_quotes(user_to_send_to)
@@ -76,12 +76,10 @@ def send_notification(user_to_send_to, message_title_to_send, message_body_to_se
         'Content-Type' : 'application/json',
         'Authorization' : API_KEY
     }
-
     message_payload = {
         'title' : message_title_to_send,
         'message' : message_body_to_send
     }
-
     message_body = {
         'to' : user_to_send_to,
         'data' : message_payload

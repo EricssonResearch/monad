@@ -16,7 +16,7 @@
 %%      @author Mochi Media <dev@mochimedia.com>
 %%      @copyright 2010 Mochi Media <dev@mochimedia.com>
 %%
-%%      It ensures that the relatively-installed dependencies are on the code loading path,
+%%      Ensures that the relatively-installed dependencies are on the code loading path,
 %%      and locates resources relative to this application's path.
 
 -module(authentication_deps).
