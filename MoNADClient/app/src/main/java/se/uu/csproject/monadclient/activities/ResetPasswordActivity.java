@@ -20,7 +20,6 @@ public class ResetPasswordActivity extends MenuedActivity {
 
     private EditText passwordField;
     private EditText confirmPasswordField;
-    private Button submitButton;
     private EditText oldPasswordField;
     private boolean resetMode;
 
@@ -34,7 +33,7 @@ public class ResetPasswordActivity extends MenuedActivity {
 
         passwordField = (EditText) findViewById(R.id.field_newpassword);
         confirmPasswordField= (EditText) findViewById(R.id.field_verify_password);
-        submitButton = (Button) findViewById(R.id.button_reset);
+        Button submitButton = (Button) findViewById(R.id.button_reset);
         TextView resetPasswordText = (TextView) findViewById(R.id.label_resetpassword);
         TextView oldPasswordText = (TextView) findViewById(R.id.label_oldpassword);
         oldPasswordField = (EditText) findViewById(R.id.field_oldpassword);
@@ -57,12 +56,12 @@ public class ResetPasswordActivity extends MenuedActivity {
                 String passwordValue = passwordField.getText().toString();
                 String confirmPasswordValue = confirmPasswordField.getText().toString();
 
-                if(!passwordValue.equals(confirmPasswordValue)){
+                if (!passwordValue.equals(confirmPasswordValue)) {
                     Toast.makeText(getApplicationContext(), getString(R.string.java_passwordsnomatch), Toast.LENGTH_LONG).show();
                     return;
                 }
 
-                if(resetMode){
+                if (resetMode) {
                     Bundle extras = getIntent().getExtras();
                     String email = null;
 
@@ -81,15 +80,13 @@ public class ResetPasswordActivity extends MenuedActivity {
                         e.printStackTrace();
                     }
 
-                    if(response.startsWith("Success (1)")) {
+                    if (response.startsWith("Success (1)")) {
                         Toast.makeText(getApplicationContext(), getString(R.string.java_pswd_resetsuccess), Toast.LENGTH_LONG).show();
                         finish();
-                    }
-                    else {
+                    } else {
                         Toast.makeText(getApplicationContext(), response, Toast.LENGTH_LONG).show();
                     }
-                }
-                else {
+                } else {
                     String oldPassword = oldPasswordField.getText().toString();
 
                     UpdatePasswordTask task = new UpdatePasswordTask();
@@ -103,11 +100,10 @@ public class ResetPasswordActivity extends MenuedActivity {
                         e.printStackTrace();
                     }
 
-                    if(response.startsWith("Success (1)")) {
+                    if (response.startsWith("Success (1)")) {
                         Toast.makeText(getApplicationContext(), getString(R.string.java_pswd_updatesuccess), Toast.LENGTH_LONG).show();
                         finish();
-                    }
-                    else {
+                    } else {
                         Toast.makeText(getApplicationContext(), response, Toast.LENGTH_LONG).show();
                     }
                 }
@@ -127,11 +123,8 @@ public class ResetPasswordActivity extends MenuedActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        if (id == R.id.action_settings) {
-            return true;
-        }
+        return id == R.id.action_settings || super.onOptionsItemSelected(item);
 
-        return super.onOptionsItemSelected(item);
     }
 
     private class ResetPasswordTask extends AsyncTask<String, Void, String>{

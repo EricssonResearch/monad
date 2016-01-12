@@ -27,7 +27,8 @@ import se.uu.csproject.monadclient.serverinteractions.SendBookingCancelRequest;
 import static java.lang.Math.floor;
 
 public class TripCancelPopup extends AppCompatActivity implements AsyncResponseString {
-    private TextView startBusStop, endBusStop, startTime, endTime, date, countdown;
+    private TextView date;
+    private TextView countdown;
     private ImageView clockIcon;
     private FullTrip trip;
     private Context context;
@@ -37,10 +38,10 @@ public class TripCancelPopup extends AppCompatActivity implements AsyncResponseS
         super.onCreate(savedInstanceState);
         setContentView(R.layout.popup_trip_cancel);
 
-        startBusStop = (TextView) findViewById(R.id.label_startbusstop);
-        endBusStop = (TextView) findViewById(R.id.label_endbusstop);
-        startTime = (TextView) findViewById(R.id.label_starttime);
-        endTime = (TextView) findViewById(R.id.label_endtime);
+        TextView startBusStop = (TextView) findViewById(R.id.label_startbusstop);
+        TextView endBusStop = (TextView) findViewById(R.id.label_endbusstop);
+        TextView startTime = (TextView) findViewById(R.id.label_starttime);
+        TextView endTime = (TextView) findViewById(R.id.label_endtime);
         date = (TextView) findViewById(R.id.label_date);
         countdown = (TextView) findViewById(R.id.label_countdown);
         clockIcon = (ImageView) findViewById(R.id.icon_clock);

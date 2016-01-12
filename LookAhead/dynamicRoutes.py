@@ -14,8 +14,13 @@ from dbConnection import DB
 import networkx as nx
 import matplotlib.pyplot as plt
 from bson.objectid import ObjectId
+<<<<<<< HEAD
 import math
 import sys
+=======
+import sys
+import math
+>>>>>>> db3ecfc018c05fd7f78c3736de8b99f28f764bfe
 sys.path.append('../OpenStreetMap')
 from routeGenerator import coordinates_to_nearest_stops, get_route
 

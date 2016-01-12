@@ -71,12 +71,11 @@ class TestTravelPlanner(unittest.TestCase):
             busTripDBString = mongoString + self.dbName + "'), 'BusTrip')"
             busStopDBString = mongoString + self.dbName + "'), 'BusStop')"
 
-        self.assertEqual(self.tp.fittingRoutes, [])
+        self.assertEqual(self.tp.singleRoutes, [])
         self.assertEqual(self.tp.multiRoutes, [])
         self.assertEqual(self.tp.possibleRoutes, [])
         self.assertEqual(self.tp.tripTuples, [])
         self.assertEqual(self.tp.lineTuples, [])
-        self.assertEqual(self.tp.routeTuples, [])
 
         self.assertEqual(str(self.tp.travelRequest), requestDBString)
         self.assertEqual(str(self.tp.route), routeDBString)
@@ -85,9 +84,11 @@ class TestTravelPlanner(unittest.TestCase):
         self.assertEqual(str(self.tp.busTrip), busTripDBString)
         self.assertEqual(str(self.tp.busStop), busStopDBString)
 
-    # Database dependency
-    def test_findFittingRoutes(self):
-        pass
+    def test_range(self):
+        r1 = [2, 1, 0]
+        r2 = [0, 1, 2]
+        self.assertEqual(r1, self.tp._range(4))
+        self.assertNotEqual(r2, self.tp._range(4))
 
     def test_isBetterTripStartTime(self):
         self.tp.tripTuples = [("trip", TIMEDIFF_30MIN, TIME_1300H, TIME_1315H)]
@@ -249,14 +250,6 @@ class TestTravelPlanner(unittest.TestCase):
         self.tp.tripTuples = [("trip", TIMEDIFF_30MIN, TIME_1305H, TIME_1330H)]
         self.assertFalse(self.tp._isFastRoute())
 
-    # Database dependency
-    def test_findBestRoute(self):
-        pass
-
-    # Database dependency
-    def test_updateDatabase(self):
-        pass
-
     def test_convertToJason(self):
         stops = ["Stora Torget", "Centralstationen"]
         objectID = ObjectId()
@@ -327,10 +320,6 @@ class TestTravelPlanner(unittest.TestCase):
 
         self.assertTrue("next" in jsonObject[1][0])
         self.assertFalse("next" in jsonObject[1][1])
-
-    # Database dependency
-    def test_getBestRoutes(self):
-        pass
 
     # The number of tests is very important!
     def test_hereIsOneMoreTestThatWillSucceed(self):

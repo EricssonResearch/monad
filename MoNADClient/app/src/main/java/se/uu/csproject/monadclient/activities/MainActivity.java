@@ -58,10 +58,8 @@ public class MainActivity extends MenuedActivity implements AsyncResponse, Async
 
     private AutoCompleteTextView destination;
     private Context context;
-    private Toolbar toolbar;
     private AlertDialog.Builder builder;
     private RecyclerView recyclerView;
-    private SearchRecyclerViewAdapter adapter;
 
     private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
     private final int MY_PERMISSIONS_REQUEST = 123;
@@ -78,7 +76,7 @@ public class MainActivity extends MenuedActivity implements AsyncResponse, Async
         setContentView(R.layout.activity_main);
         initAlertDialog();
 
-        toolbar = (Toolbar) findViewById(R.id.actionToolBar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.actionToolBar);
         destination = (AutoCompleteTextView) findViewById(R.id.main_search_destination);
         context = getApplicationContext();
         setSupportActionBar(toolbar);
@@ -134,13 +132,12 @@ public class MainActivity extends MenuedActivity implements AsyncResponse, Async
         endTime = "null";
         priority = "distance";
 
-        if (edPosition != null && !edPosition.trim().isEmpty() &&
-                Storage.getLatitude() != 0.0 && Storage.getLongitude() != 0.0){
+        if (!edPosition.trim().isEmpty() && Storage.getLatitude() != 0.0 && Storage.getLongitude() != 0.0){
             SendQuickTravelRequest asyncTask = new SendQuickTravelRequest();
             asyncTask.delegate = this;
             asyncTask.execute(userId, startTime, endTime, requestTime, startPositionLatitude,
                     startPositionLongitude, edPosition, priority);
-        } else if (edPosition == null || edPosition.trim().isEmpty()){
+        } else if (edPosition.trim().isEmpty()){
             CharSequence text = getString(R.string.java_search_enterdestination);
             Toast toast = Toast.makeText(context, text, Toast.LENGTH_SHORT);
             toast.show();
@@ -205,12 +202,7 @@ public class MainActivity extends MenuedActivity implements AsyncResponse, Async
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        if(id == R.id.action_search){
-            return true;
-        }
-        else {
-            return super.onOptionsItemSelected(item);
-        }
+        return id == R.id.action_search || super.onOptionsItemSelected(item);
     }
 
     public void goToAdvancedSearch(View v) {
@@ -330,7 +322,7 @@ public class MainActivity extends MenuedActivity implements AsyncResponse, Async
     }
 
     public void displayRecommendations() {
-        adapter = new SearchRecyclerViewAdapter(Storage.getRecommendations());
+        SearchRecyclerViewAdapter adapter = new SearchRecyclerViewAdapter(Storage.getRecommendations());
         recyclerView.setAdapter(adapter);
     }
 

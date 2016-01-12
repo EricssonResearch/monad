@@ -14,8 +14,7 @@ public class GetRecommendationsTask extends AsyncTask<Void, Void, String> {
 
     @Override
     protected String doInBackground(Void... params) {
-        String response = ClientAuthentication.postGetRecommendationsRequest();
-        return response;
+        return ClientAuthentication.postGetRecommendationsRequest();
     }
 
     @Override
