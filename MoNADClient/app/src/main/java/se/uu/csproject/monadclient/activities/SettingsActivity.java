@@ -163,7 +163,7 @@ public class SettingsActivity extends MenuedActivity {
                 LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
                 recyclerView.setLayoutManager(linearLayoutManager);
                 initializeLanguages(languages);
-                LanguageRecyclerViewAdapter adapter = new LanguageRecyclerViewAdapter(context, languages);
+                LanguageRecyclerViewAdapter adapter = new LanguageRecyclerViewAdapter(languages);
                 recyclerView.setAdapter(adapter);
                 recyclerView.setItemAnimator(new DefaultItemAnimator());
             }

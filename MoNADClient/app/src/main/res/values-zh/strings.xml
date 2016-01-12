@@ -39,7 +39,6 @@
     <string name="label_login_password">密码</string>
     <string name="label_login_username">用户名</string>
     <string name="label_login_forgottenpassword">忘记密码?</string>
-    <string name="label_login_wrongcredentials">登录失败。请再试一次</string>
 
     <string name="label_main_searchtext">您想要去哪?</string>
     <string name="label_main_advancedsearch">高级搜索</string>

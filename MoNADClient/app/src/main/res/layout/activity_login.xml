@@ -31,123 +31,86 @@
         </View>
 
         <LinearLayout
+            android:id="@+id/login_box_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_marginTop="@dimen/login_vertical_margin"
+            android:paddingLeft="@dimen/layout_padding"
+            android:paddingRight="@dimen/layout_padding"
+            android:paddingBottom="@dimen/layout_padding"
             android:orientation="vertical"
-            android:layout_gravity="center"
-            android:id="@+id/linearLayout"
+            android:weightSum="10"
             android:baselineAligned="false"
-            android:weightSum="1"
-            >
+            android:focusableInTouchMode="false">
 
-            <LinearLayout
-                android:id="@+id/login_box_layout"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_marginTop="@dimen/login_vertical_margin"
-                android:paddingLeft="@dimen/layout_padding"
-                android:paddingRight="@dimen/layout_padding"
-                android:paddingBottom="@dimen/layout_padding"
-                android:orientation="vertical"
-                android:layout_weight="1"
-                android:weightSum="9"
-                android:focusableInTouchMode="false">
-
-                <TextView
-                    android:id="@+id/wrong_credentials"
-                    android:visibility="gone"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/warnColor"
-                    android:gravity="center_horizontal"
-                    android:text="@string/label_login_wrongcredentials"
-                    android:layout_weight="2"
-                />
-
-                <TextView
-                    android:id="@+id/username_text_view"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/label_login_username"
-                    android:layout_marginTop="@dimen/medium_padding"
-                    android:gravity="center_vertical"
-                    android:layout_weight="2"
-                    />
-                <EditText
-                    android:id="@+id/field_username"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    style="@style/blackText"
-                    android:inputType="textNoSuggestions"
-                    android:layout_marginBottom="@dimen/edittext_vertical_margin"
-                    android:layout_weight="1"
-                    android:focusableInTouchMode="false"/>
-                <TextView
-                    android:id="@+id/password_text_view"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/label_login_password"
-                    android:gravity="center_vertical"
-                    android:layout_weight="2"
-                    />
-                <EditText
-                    android:id="@+id/field_password"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="textPassword"
-                    style="@style/blackText"
-                    android:layout_marginBottom="@dimen/edittext_vertical_margin"
-                    android:layout_weight="1"
-                    android:focusableInTouchMode="false"/>
-
-                <Button
-                    android:id="@+id/button_login"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/label_login_login"
-                    android:theme="@style/ToolbarTheme"
-                    android:background="?attr/colorPrimary"
-                    android:gravity="center"
-                    android:layout_marginTop="@dimen/edittext_vertical_margin"
-                    android:layout_weight="1"
-                    />
-
-                <com.google.android.gms.common.SignInButton
-                    android:id="@+id/google_login_button"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:layout_marginTop="@dimen/edittext_vertical_margin"
-                    android:layout_marginBottom="@dimen/edittext_vertical_margin"
-                    android:layout_weight="1"
-                    />
-
-                <TextView
-                    android:id="@+id/forgotpassword_text_view"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/label_login_forgottenpassword"
-                    android:gravity="center"
-                    android:linksClickable="true"
-                    android:layout_marginBottom="@dimen/activity_vertical_margin"
-                    android:layout_weight="2"
-                    />
-
-            </LinearLayout>
-
-
-
-
-
-            <!--TextView
-                android:id="@+id/anonymous_text_view"
+            <TextView
+                android:id="@+id/username_text_view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/label_login_anonymous"
-                android:layout_gravity="center_horizontal|bottom"
+                android:text="@string/label_login_username"
+                android:layout_marginTop="@dimen/medium_padding"
+                android:gravity="center_vertical"
+                android:layout_weight="2"
+                />
+            <EditText
+                android:id="@+id/field_username"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/blackText"
+                android:inputType="textNoSuggestions"
+                android:layout_marginBottom="@dimen/edittext_vertical_margin"
+                android:layout_weight="1"
+                android:focusableInTouchMode="false"/>
+            <TextView
+                android:id="@+id/password_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/label_login_password"
+                android:gravity="center_vertical"
+                android:layout_weight="2"
+                />
+            <EditText
+                android:id="@+id/field_password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPassword"
+                style="@style/blackText"
+                android:layout_marginBottom="@dimen/edittext_vertical_margin"
+                android:layout_weight="1"
+                android:focusableInTouchMode="false"/>
+
+            <Button
+                android:id="@+id/button_login"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/label_login_login"
+                android:theme="@style/ToolbarTheme"
+                android:background="?attr/colorPrimary"
+                android:gravity="center"
+                android:layout_marginTop="@dimen/edittext_vertical_margin"
+                android:layout_weight="1"
+                />
+
+            <com.google.android.gms.common.SignInButton
+                android:id="@+id/google_login_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_marginTop="@dimen/edittext_vertical_margin"
+                android:layout_marginBottom="@dimen/edittext_vertical_margin"
+                android:layout_weight="1"
+                />
+
+            <TextView
+                android:id="@+id/forgotpassword_text_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/label_login_forgottenpassword"
+                android:gravity="center"
                 android:linksClickable="true"
                 android:layout_marginBottom="@dimen/activity_vertical_margin"
-                /-->
+                android:layout_weight="2"
+                />
 
             <TextView
                 android:id="@+id/textview_register"
@@ -161,10 +124,10 @@
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textColor="@color/primaryColor"
                 android:layout_marginBottom="@dimen/activity_vertical_margin"
+                android:layout_weight="1"
                 />
 
         </LinearLayout>
-
 
     </LinearLayout>
 

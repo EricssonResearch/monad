@@ -43,7 +43,6 @@
     <string name="label_login_password">Password</string>
     <string name="label_login_newuser">New user? Create an account</string>
     <string name="label_login_forgottenpassword">Forgot your password?</string>
-    <string name="label_login_wrongcredentials">Login failed. Please try again</string>
     <!--string name="label_login_anonymous">Stay anonymous</string-->
 
     <!--Activity - Main (Search view)-->
