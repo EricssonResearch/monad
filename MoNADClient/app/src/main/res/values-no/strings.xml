@@ -43,7 +43,6 @@
     <!--string name="label_login_anonymous">Anonym innloggning</string-->
     <string name="label_login_newuser">Ny bruker? Opprett en brukerkonto</string>
     <string name="label_login_forgottenpassword">Glemt passordet?</string>
-    <string name="label_login_wrongcredentials">Innloggingen mislyktes. Prøv igjen</string>
 
     <!--Activity - Main (Search view)-->
     <string name="label_main_searchtext">Hvor vil du reise?</string>

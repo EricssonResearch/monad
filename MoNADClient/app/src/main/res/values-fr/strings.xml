@@ -32,7 +32,6 @@
     <string name="label_forgotpassword_email">Adresse Email</string>
     <string name="label_forgotpassword_enteremail">Veuillez entrer votre adresse email</string>
     <string name="label_login_forgottenpassword">Mot de passe oublié?</string>
-    <string name="label_login_wrongcredentials">Echec de connexion. Veuillez réessayer</string>
     <string name="label_main_recommendations">Recommendations</string>
     <string name="title_activity_route_confirm_popup">Confirmer?</string>
     <string name="title_activity_trip_cancel_popup">Annuler?</string>

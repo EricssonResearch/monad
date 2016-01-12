@@ -45,7 +45,6 @@
     <!--string name="label_login_anonymous">Παραμείνετε ανώνυμος</string-->
     <string name="label_login_newuser">Νέος χρήστης; Δημιουργία λογαριασμού</string>
     <string name="label_login_forgottenpassword">Ξεχάσατε τον κωδικό σας;</string>
-    <string name="label_login_wrongcredentials">Η είσοδος απέτυχε. Παρακαλούμε, προσπαθήστε ξανά</string>
 
     <!--Activity - Main (Search view)-->
     <!--Activity - Main (Search view) /yonatan-->
