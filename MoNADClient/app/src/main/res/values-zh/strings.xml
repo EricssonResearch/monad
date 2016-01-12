@@ -158,6 +158,7 @@
     <string name="java_pswd_resetsuccess">密码重置成功</string>
     <string name="java_pswd_updatesuccess">密码更新成功</string>
     <string name="java_search_locationdisabled">您的位置设置处于关闭状态。请使用高级搜索并指明出发位置。</string>
+    <string name="java_route_board">在%d上车:</string>
     <!--string name="java_settings_updatesuccess">设置更新成功</string-->
 
 </resources>

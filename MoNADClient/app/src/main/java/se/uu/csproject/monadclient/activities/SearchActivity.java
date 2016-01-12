@@ -33,6 +33,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
+import se.uu.csproject.monadclient.interfaces.GedUpdatedTime;
+import se.uu.csproject.monadclient.interfaces.GetUpdatedDate;
 import se.uu.csproject.monadclient.serverinteractions.ClientAuthentication;
 import se.uu.csproject.monadclient.R;
 import se.uu.csproject.monadclient.interfaces.AsyncResponse;
@@ -41,16 +43,17 @@ import se.uu.csproject.monadclient.recyclerviews.SearchRecyclerViewAdapter;
 import se.uu.csproject.monadclient.storage.Storage;
 import se.uu.csproject.monadclient.serverinteractions.SendTravelRequest;
 
-public class SearchActivity extends MenuedActivity implements AsyncResponse {
+public class SearchActivity extends MenuedActivity implements AsyncResponse, GetUpdatedDate, GedUpdatedTime {
     private TextView textViewTripDate, textViewTripTime;
-    DialogFragment dateFragment, timeFragment;
+    DatePickerFragment dateFragment;
+    TimePickerFragment timeFragment;
     private RadioGroup tripTimeRadioGroup, priorityRadioGroup;
     private AutoCompleteTextView positionEditText, destinationEditText;
     private Context context;
     private SearchRecyclerViewAdapter adapter;
     private RecyclerView recyclerView;
 
-    public Calendar calendar;
+    public static Calendar calendar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -113,11 +116,13 @@ public class SearchActivity extends MenuedActivity implements AsyncResponse {
 
     public void showDatePickerDialog(View v) {
         dateFragment = new DatePickerFragment();
+        dateFragment.registerListener(this);
         dateFragment.show(getFragmentManager(), "datePicker");
     }
 
     public void showTimePickerDialog(View v) {
         timeFragment = new TimePickerFragment();
+        timeFragment.registerListener(this);
         timeFragment.show(getFragmentManager(), "timePicker");
     }
 
@@ -135,13 +140,18 @@ public class SearchActivity extends MenuedActivity implements AsyncResponse {
         textViewTripTime.setText(selectedTime);
     }
 
-    public class DatePickerFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener {
+    public static class DatePickerFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener {
+        private GetUpdatedDate dateListener = null;
+
+        public void registerListener (GetUpdatedDate listener) {
+            dateListener = listener;
+        }
+
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
-            final Calendar c = Calendar.getInstance();
-            int year = c.get(Calendar.YEAR);
-            int month = c.get(Calendar.MONTH);
-            int day = c.get(Calendar.DAY_OF_MONTH);
+            int year = calendar.get(Calendar.YEAR);
+            int month = calendar.get(Calendar.MONTH);
+            int day = calendar.get(Calendar.DAY_OF_MONTH);
             DatePickerDialog dialog = new DatePickerDialog(getActivity(), this, year, month, day);
             dialog.getDatePicker().setMinDate(new Date().getTime() - 1000);
             return dialog;
@@ -151,18 +161,24 @@ public class SearchActivity extends MenuedActivity implements AsyncResponse {
             calendar.set(Calendar.YEAR, year);
             calendar.set(Calendar.MONTH, month);
             calendar.set(Calendar.DAY_OF_MONTH, day);
-            updateDate();
+            if (dateListener != null) {
+                dateListener.updateDate();
+            }
         }
     }
 
-    public class TimePickerFragment extends DialogFragment implements TimePickerDialog.OnTimeSetListener {
+    public static class TimePickerFragment extends DialogFragment implements TimePickerDialog.OnTimeSetListener {
+        private GedUpdatedTime timeListener = null;
+
+        public void registerListener (GedUpdatedTime listener) {
+            timeListener = listener;
+        }
 
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
             // Use the current time as the default values for the picker
-            final Calendar c = Calendar.getInstance();
-            int hour = c.get(Calendar.HOUR_OF_DAY);
-            int minute = c.get(Calendar.MINUTE);
+            int hour = calendar.get(Calendar.HOUR_OF_DAY);
+            int minute = calendar.get(Calendar.MINUTE);
 
             // Create a new instance of TimePickerDialog and return it
             return new TimePickerDialog(getActivity(), this, hour, minute,
@@ -172,7 +188,9 @@ public class SearchActivity extends MenuedActivity implements AsyncResponse {
         public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
             calendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
             calendar.set(Calendar.MINUTE, minute);
-            updateTime();
+            if (timeListener != null) {
+                timeListener.updateTime();
+            }
         }
     }
 
@@ -236,19 +254,19 @@ public class SearchActivity extends MenuedActivity implements AsyncResponse {
                 break;
         }
 
-        if(stPosition != null && !stPosition.trim().isEmpty() && edPosition != null && !edPosition.trim().isEmpty()){
+        if(!stPosition.trim().isEmpty() && !edPosition.trim().isEmpty()){
             Storage.clearSearchResults();
             SendTravelRequest asyncTask = new SendTravelRequest();
             asyncTask.delegate = this;
             asyncTask.execute(userId, startTime, endTime, requestTime, stPosition, edPosition, priority,
                     startPositionLatitude, startPositionLongitude);
         }
-        else if (stPosition == null || stPosition.trim().isEmpty()) {
+        else if (stPosition.trim().isEmpty()) {
             CharSequence text = getString(R.string.java_search_enterdeparture);
             Toast toast = Toast.makeText(context, text, Toast.LENGTH_SHORT);
             toast.show();
         }
-        else if (edPosition == null || edPosition.trim().isEmpty()) {
+        else if (edPosition.trim().isEmpty()) {
             CharSequence text = getString(R.string.java_search_enterdestination);
             Toast toast = Toast.makeText(context, text, Toast.LENGTH_SHORT);
             toast.show();
