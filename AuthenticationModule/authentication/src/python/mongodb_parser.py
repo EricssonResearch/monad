@@ -1,8 +1,21 @@
+# Copyright 2015 Ericsson AB
+#
+# Licensed under the Apache License, Version 2.0 (the "License"); you may not
+# use this file except in compliance with the License. You may obtain a copy
+# of the License at
+#
+#    http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+# WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+# License for the specific language governing permissions and limitations
+# under the License.
+
 from pymongo import MongoClient
 from bson.json_util import dumps
 from bson.objectid import ObjectId
 import datetime
-
 import requests
 import json
 
@@ -23,14 +36,12 @@ def start(host):
     bookings_collection = db.BookedTrip
 
 def parse_recommendations(user_id):
-    # print user_id
     initially_formatted_recommendations = list(recommendations_collection.find({'userID' : user_id}))
     final_recommendations = list()
 
     for recommendation in initially_formatted_recommendations:
         user_trip_reference = recommendation['userTrip']
         user_trip = user_trips_collection.find_one({'_id' : ObjectId(user_trip_reference)})
-        # print user_trip
         user_trips_list = parse_user_trip(list(), user_trip)
         recommendation['userTrip'] = user_trips_list
         final_recommendations.append(recommendation)
@@ -54,15 +65,10 @@ def create_notification(user_id, partial_trips, icon_id):
     notification = {}
     notification['userID'] = user_id
     notification['partialTrips'] = partial_trips
-    # notification['text'] = 'Trip to ' + str(partial_trips[0]['endBusStop']) \
-    #                      + ' starts at: ' + str(partial_trips[0]['startTime'])
     notification['text'] = 'Booking Confirmation: Enjoy your trip to ' + str(partial_trips[0]['endBusStop'])
     notification['time'] = datetime.datetime.now() - datetime.timedelta(hours = 2)
     notification['iconID'] = icon_id
     return notification
-
-# def add_notification(user_id, google_token, partial_trips):
-
 
 def remove_notification(notification_id_binary):
     notification_id = ''.join([chr(c) for c in notification_id_binary])
@@ -71,10 +77,7 @@ def remove_notification(notification_id_binary):
 
 def generate_notification(user_id, token, booked_trip_id_binary):
     booked_trip_id = ''.join([chr(c) for c in booked_trip_id_binary])
-    print booked_trip_id
     booking = bookings_collection.find_one({'_id' : ObjectId(booked_trip_id)})
-    print booking
-
     partial_trips = list()
     partial_trip_ids = booking['partialTrips']
 
@@ -83,17 +86,9 @@ def generate_notification(user_id, token, booked_trip_id_binary):
         partial_trips.append(partial_trip)
 
     notifications_collection.insert_one(create_notification(user_id, partial_trips, 1))
-
-    # text = 'Trip to ' + str(partial_trips[0]['endBusStop']) \
-    #      + ' starts at: ' + str(partial_trips[0]['startTime'])
-
     text = 'Booking Confirmation: Enjoy your trip to ' + str(partial_trips[0]['endBusStop'])
-
-    # print token
     send_notification(token, 'MoNAD', text)
     return 'ok'
-    # token = ''.join([chr(c) for c in token_binary])
-    # send_notification(token, 'Notyfication', 'Hello')
 
 def surround_in_quotes(astring):
     return "'%s'" % astring
@@ -106,31 +101,24 @@ def send_notification_binary(user_to_send_to, message_title, message_body):
 def send_notification(user_to_send_to, message_title_to_send, message_body_to_send):
     API_KEY='key=AIzaSyAPIZuvmfsf8TZHz3q09G_9evAmGUekdrI'
     url = 'https://gcm-http.googleapis.com/gcm/send'
-
     message_title_to_send = surround_in_quotes(message_title_to_send)
     message_body_to_send = surround_in_quotes(message_body_to_send)
     user_to_send_to = surround_in_quotes(user_to_send_to)
-
-    # print repr(message_body_to_send)
-    # print repr(message_title_to_send)
-
     user_to_send_to = user_to_send_to[1:-1]
 
     custom_header = {
         'Content-Type' : 'application/json',
         'Authorization' : API_KEY
     }
-
     message_payload = {
         'title' : message_title_to_send,
         'message' : message_body_to_send
     }
-
     message_body = {
         'to' : user_to_send_to,
         'data' : message_payload
     }
-
+    
     try:
         response = requests.post(url, headers = custom_header, data = json.dumps(message_body))
 

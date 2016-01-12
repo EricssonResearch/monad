@@ -1,14 +1,24 @@
-%% @author Mochi Media <dev@mochimedia.com>
-%% @copyright 2010 Mochi Media <dev@mochimedia.com>
+%% Copyright 2015 Ericsson AB
+%%
+%% Licensed under the Apache License, Version 2.0 (the "License"); you may not
+%% use this file except in compliance with the License. You may obtain a copy
+%% of the License at
+%%
+%%    http://www.apache.org/licenses/LICENSE-2.0
+%%
+%% Unless required by applicable law or agreed to in writing, software
+%% distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+%% WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+%% License for the specific language governing permissions and limitations
+%% under the License.
 
-%% @doc Web server for authentication.
+%% @doc The following file is based on MochiWeb (Available at: https://github.com/mochi/mochiweb)
+%%      @author Mochi Media <dev@mochimedia.com>
+%%      @copyright 2010 Mochi Media <dev@mochimedia.com>
 
 -module(authentication_web).
--author("Mochi Media <dev@mochimedia.com>").
 
 -export([start/1, stop/0, loop/2, broadcast_server/0]).
-
-%% External API
 
 start(Options) ->
     start_broadcaster(),
