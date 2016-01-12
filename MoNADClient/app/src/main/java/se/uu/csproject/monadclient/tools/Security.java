@@ -37,8 +37,8 @@ public class Security {
         return (isNumber(ascii) || isCapital(ascii) || isSmallCase(ascii));
     }
 
-    public static boolean validatePassword(String password){
-        return (password.length() < 6);
+    public static boolean validatePassword(String password) {
+        return !(password.length() < 6);
     }
 
     public static boolean validateEmail(String email) {

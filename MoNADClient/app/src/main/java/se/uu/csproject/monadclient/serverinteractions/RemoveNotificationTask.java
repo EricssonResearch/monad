@@ -22,7 +22,7 @@ public class RemoveNotificationTask extends AsyncTask<String, Void, String> {
     protected void onPostExecute(String response) {
 
         if (response.equals("1")) {
-            Storage.removeNotification(index);
+            Storage.getNotifications().remove(index);
             Log.d("Storage", "Notification was successfully removed from the database");
         }
         else {

@@ -474,7 +474,7 @@ remove_notification(Req) ->
     try
         PythonInstance = whereis(python_instance),
         Response = python:call(PythonInstance, mongodb_parser, remove_notification, [NotificationID]),
-        Msg = [{type, get_notifications},
+        Msg = [{type, remove_notification},
                {notificationID, NotificationID},
                {response, Response},
                {process, self()}],
