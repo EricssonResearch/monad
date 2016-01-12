@@ -1,0 +1,30 @@
+The following experiments were done for a population size of 25 and for 5 generations.
+Individual size [30, 90]
+
+Experiment 1: Both single-point crossover and mutation
+gen nevals  avg     std     min     max   
+0   25      97787.1 22376.8 57977   150107
+1   15      70976.2 11703.2 57547   95213 
+2   17      61077.3 5416.02 52273   75965 
+3   21      56336.4 3328.25 51302   64861 
+4   16      54279   3204.45 48713   61371 
+5   16      52541.4 2813.69 48056   57658
+
+Experiment 2: Crossover operator only
+gen nevals  avg     std     min     max   
+0   25      87237   25595.4 42718   145348
+1   12      74525.2 18104   42615   101514
+2   16      58476.6 10357   42718   83843 
+3   20      48627.1 4890.56 42718   60291 
+4   12      45092.5 2541.03 42615   51726 
+5   14      43226.9 966.221 42615   46286
+
+
+Experiment 3: Mutation operator only
+gen nevals  avg     std     min     max   
+0   25      89456.5 27430.3 41551   145798
+1   12      69401.9 18621.8 41551   124325
+2   10      53659.5 10055.3 40458   79363 
+3   14      45735.7 5899.32 40458   63498 
+4   14      41671.4 619.334 40149   42759 
+5   14      41280.6 743.229 39393   42745
