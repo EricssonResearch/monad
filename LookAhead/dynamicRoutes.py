@@ -14,6 +14,8 @@ from dbConnection import DB
 import networkx as nx
 import matplotlib.pyplot as plt
 from bson.objectid import ObjectId
+import math
+import sys
 sys.path.append('../OpenStreetMap')
 from routeGenerator import coordinates_to_nearest_stops, get_route
 
@@ -222,6 +224,11 @@ class DynamicRoutes():
         return routesid
 
     def storeRoutesToDB(self,routes):
+        '''store routes(a bus stop id list) from generateRoutes into DB, should be written to collection Routes
+        for timebeing, it be stored into DynamicRoute for testing
+        @param: routes: a list of new dynamic routes in list of bus stop id
+        output: new route will be written into DynamicRoute 
+        '''
         database = DB()
         duration = 0
         line = 1
@@ -263,7 +270,6 @@ if __name__ == '__main__':
         startdate = datetime.datetime(2015, 11, 11, 0, 0, 0)
         enddate = datetime.datetime(2015, 11, 12, 0, 0, 0)
         routes = DR.generateRoutes(DG, startdate, enddate)
-        #print routes
         DR.storeRoutesToDB(routes)
 
 
