@@ -63,7 +63,7 @@ stop_broadcaster() ->
 start_python() ->
     {ok, PythonInstance} = python:start([{python_path, "src/python"}]),
     register(python_instance, PythonInstance),
-    python:call(PythonInstance, mongodb_parser, start, [<<"130.238.15.114">>]),
+    python:call(PythonInstance, mongodb_parser, start, [<<"130.238.15.114">>, 27017]),
     Broadcaster = whereis(broadcaster),
     Msg = [{message, "PythonInstance: started"},
            {process, PythonInstance}],

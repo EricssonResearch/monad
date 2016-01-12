@@ -19,7 +19,7 @@ import datetime
 import requests
 import json
 
-def start(host):
+def start(host, port):
     global mongo_client
     global db
     global recommendations_collection
@@ -27,7 +27,7 @@ def start(host):
     global bus_stop_collection
     global notifications_collection
     global bookings_collection
-    mongo_client = MongoClient(host, 27017)
+    mongo_client = MongoClient(host, port)
     db = mongo_client.monad1
     recommendations_collection = db.TravelRecommendation
     user_trips_collection = db.UserTrip
@@ -118,7 +118,7 @@ def send_notification(user_to_send_to, message_title_to_send, message_body_to_se
         'to' : user_to_send_to,
         'data' : message_payload
     }
-    
+
     try:
         response = requests.post(url, headers = custom_header, data = json.dumps(message_body))
 
