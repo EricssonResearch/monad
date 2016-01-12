@@ -177,6 +177,7 @@
     <string name="java_pswd_resetsuccess">Passord er nullstilt</string>
     <string name="java_pswd_updatesuccess">Passord er oppdatert</string>
     <string name="java_search_locationdisabled">Det virker som du befinner tjenesten er slått av. Bruk avansert søk og angi en avgang adresse </string>
+    <string name="java_route_board">Ta buss %d fra:</string>
     <!--string name="java_settings_updatesuccess">Innstillinger oppdatert</string-->
 
 </resources>
