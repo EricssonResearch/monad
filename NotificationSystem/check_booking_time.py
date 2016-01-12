@@ -8,6 +8,8 @@ import time
 
 AUTHENTICATION_MODULE_HOST = 'http://130.238.15.114:'
 AUTHENTICATION_MODULE_PORT = '9999'
+SYSTEM_DATABASE_HOST = 'http://130.238.15.114'
+SYSTEM_DATABASE_PORT = 27017
 
 def send_notification_to_authentication(user_id, message_title, message_body):
     headers = {'Content-type': 'application/x-www-form-urlencoded'}
@@ -44,7 +46,7 @@ def create_notification(user_id, partial_trips, icon_id):
 
 def main():
     global mongo_client
-    mongo_client = MongoClient('130.238.15.114', 27017)
+    mongo_client = MongoClient(SYSTEM_DATABASE_HOST, SYSTEM_DATABASE_PORT)
     global db
     db = mongo_client.monad1
     global bookings_collection
@@ -53,7 +55,7 @@ def main():
     notifications_collection = db.Notifications
     global user_trips
     user_trips = db.UserTrip
-    
+
     while True:
         now = datetime.datetime.now()
 
