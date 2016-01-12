@@ -1,12 +1,8 @@
 package se.uu.csproject.monadvehicle.storage;
 
 import android.util.Log;
-
 import java.util.Date;
 
-/**
- *
- */
 public class TrafficInformation {
     private double startPointLatitude;
     private double startPointLongitude;
@@ -24,6 +20,7 @@ public class TrafficInformation {
                               Date startTimeUTC, Date endTimeUTC, String incidentType, String incidentSeverity,
                               boolean roadClosed, String description, double stopPointLatitude,
                               double stopPointLongitude) {
+
         this.startPointLatitude = startPointLatitude;
         this.startPointLongitude = startPointLongitude;
         this.lastModifiedUTC = lastModifiedUTC;

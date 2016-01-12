@@ -1,9 +1,7 @@
 package se.uu.csproject.monadvehicle.storage;
 
 import android.util.Log;
-
 import org.mapsforge.core.model.LatLong;
-
 import java.util.Date;
 
 public class BusStop {

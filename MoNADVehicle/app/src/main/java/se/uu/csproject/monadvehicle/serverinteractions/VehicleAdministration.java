@@ -16,11 +16,8 @@ import se.uu.csproject.monadvehicle.storage.TrafficInformation;
 import se.uu.csproject.monadvehicle.storage.BusStop;
 import se.uu.csproject.monadvehicle.storage.BusTrip;
 import se.uu.csproject.monadvehicle.storage.Storage;
+import se.uu.csproject.monadvehicle.tools.Security;
 
-
-/**
- *
- */
 public class VehicleAdministration extends Administration {
     public static String[] profile = new String[5];
     /*
@@ -76,16 +73,16 @@ public class VehicleAdministration extends Administration {
 
     public static String profileToString() {
         return "\nVehicleID: " + getVehicleID()
-                + "\nDriverID: " + getDriverID()
-                + "\nPassword: " + getPassword()
-                + "\nBusLine: " + getBusLine()
-                + "\nGoogleRegistrationToken: " + getGoogleRegistrationToken();
+             + "\nDriverID: " + getDriverID()
+             + "\nPassword: " + getPassword()
+             + "\nBusLine: " + getBusLine()
+             + "\nGoogleRegistrationToken: " + getGoogleRegistrationToken();
     }
 
     public static String postSignInRequest(String driverID, String password, String busLine) {
 
-        /* Encrypt password */
-//        password = Security.encryptPassword(password);
+        /* Encrypt password - Uncomment the next line in order to activate this option */
+        /* password = Security.encryptPassword(password); */
 
         String request = ROUTES_ADMINISTRATOR_HOST + ROUTES_ADMINISTRATOR_PORT + "/vehicle_sign_in";
         String urlParameters = "driver_id=" + driverID + "&password=" + password + "&bus_line=" + busLine;
@@ -103,7 +100,6 @@ public class VehicleAdministration extends Administration {
          * For this reason substring() function is used
          */
         response = response.substring(1);
-        // response = response.trim();
 
         /* Process Routes Administrator's response */
         return processSignInResponse(driverID, password, busLine, response);
@@ -144,7 +140,6 @@ public class VehicleAdministration extends Administration {
          * For this reason substring() function is used
          */
         response = response.substring(1);
-        // response = response.trim();
 
         /* Process Routes Administrator's response */
         return processGetNextTripResponse(response);
@@ -162,8 +157,13 @@ public class VehicleAdministration extends Administration {
             long tempCapacity = (long) busTripObject.get("capacity");
             int capacity = new BigDecimal(tempCapacity).intValueExact();
 
-//            long tempLine = (long) busTripObject.get("line");
-//            int line = new BigDecimal(tempLine).intValueExact();
+            /*
+             * Bus trip has also a line attribute which is currently not used by the application
+             * Uncomment the next two lines in order to parse it
+             *
+             * long tempLine = (long) busTripObject.get("line");
+             * int line = new BigDecimal(tempLine).intValueExact();
+             */
 
             JSONArray trajectoryArray = (JSONArray) busTripObject.get("trajectory");
             Iterator<JSONObject> trajectoryArrayIterator = trajectoryArray.iterator();
@@ -186,19 +186,26 @@ public class VehicleAdministration extends Administration {
                 JSONObject arrivalTimeObject = (JSONObject) trajectoryPoint.get("time");
                 Date busStopArrivalTime = new Date((long) arrivalTimeObject.get("$date"));
 
-                /*TODO: Use these logs to check if the time is still one hour in advance
-                Log.w("VEHICLE ADMIN", "reading dates JSON: " + (long) arrivalTimeObject.get("$date"));
-                Log.w("VEHICLE ADMIN", "reading dates DATE: " + busStopArrivalTime);
-                */
+                /*
+                 * The following lines could be used for debugging purposes, in order to check
+                 * whether the application date is synchronized with the database date
+                 *
+                 * Log.w("VehicleAdministration", "Reading dates JSON: " + (long) arrivalTimeObject.get("$date"));
+                 * Log.w("VehicleAdministration", "Reading dates DATE: " + busStopArrivalTime);
+                 */
 
-                BusStop busStop = new BusStop(busStopID, busStopName, busStopLatitude, busStopLongitude, busStopArrivalTime);
+                BusStop busStop = new BusStop(busStopID, busStopName, busStopLatitude,
+                                              busStopLongitude, busStopArrivalTime);
                 trajectory.add(busStop);
             }
 
             BusTrip busTrip = new BusTrip(busTripID, capacity, trajectory);
             Storage.setBusTrip(busTrip);
-            //busTrip.printBusStops();
-//            postGetTrajectoryRequest();
+            /*
+             * The following line could be used for debugging purposes
+             *
+             * busTrip.printBusStops();
+             */
         }
         catch (Exception e) {
             e.printStackTrace();
@@ -224,7 +231,6 @@ public class VehicleAdministration extends Administration {
          * For this reason substring() function is used
          */
         response = response.substring(1);
-        // response = response.trim();
 
         /* Process Route Generator's response */
         return processGetTrajectoryResponse(response);
@@ -307,7 +313,6 @@ public class VehicleAdministration extends Administration {
          * For this reason substring() function is used
          */
         response = response.substring(1);
-        // response = response.trim();
 
         /* Process response */
         return processGetPassengersResponse(response);
@@ -352,14 +357,12 @@ public class VehicleAdministration extends Administration {
          * For this reason substring() function is used
          */
         response = response.substring(1);
-        // response = response.trim();
 
         /* Process response */
         return processGetTrafficInformationResponse(response);
     }
 
     public static String processGetTrafficInformationResponse(String response) {
-//        System.out.println("Response: " + response);
         JSONParser parser = new JSONParser();
 
         try {
@@ -368,7 +371,7 @@ public class VehicleAdministration extends Administration {
             ArrayList<TrafficInformation> trafficIncidents = new ArrayList<>();
 
             while (trafficInformationArrayIterator.hasNext()) {
-                JSONObject trafficInformationObject = (JSONObject) trafficInformationArrayIterator.next();
+                JSONObject trafficInformationObject = trafficInformationArrayIterator.next();
 
                 String temp = (String) trafficInformationObject.get("StartPointLatitude");
                 double startPointLatitude = Double.parseDouble(temp);

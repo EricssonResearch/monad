@@ -4,9 +4,6 @@ import android.os.AsyncTask;
 
 import se.uu.csproject.monadvehicle.interfaces.AsyncGetPassengersInteraction;
 
-/**
- *
- */
 public class GetPassengersTask extends AsyncTask<String, Void, String> {
     AsyncGetPassengersInteraction callingClass;
 

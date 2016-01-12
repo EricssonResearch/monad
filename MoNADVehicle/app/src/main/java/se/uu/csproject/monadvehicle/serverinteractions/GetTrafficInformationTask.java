@@ -4,9 +4,6 @@ import android.os.AsyncTask;
 
 import se.uu.csproject.monadvehicle.interfaces.AsyncGetTrafficInformationInteraction;
 
-/**
- *
- */
 public class GetTrafficInformationTask extends AsyncTask<Void, Void, String> {
     AsyncGetTrafficInformationInteraction callingClass;
 

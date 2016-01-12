@@ -35,7 +35,7 @@ public abstract class Administration {
             DataOutputStream dos = new DataOutputStream(connection.getOutputStream());
             dos.write(postData);
 
-            /* Case of exception, while interacting with the server */
+            /* Case of exception */
             if (connection.getResponseCode() != 200) {
                 return "-1";
             }

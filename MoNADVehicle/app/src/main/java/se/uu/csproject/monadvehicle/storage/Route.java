@@ -2,8 +2,6 @@ package se.uu.csproject.monadvehicle.storage;
 
 import java.util.ArrayList;
 
-import se.uu.csproject.monadvehicle.storage.BusStop;
-
 public class Route {
     private ArrayList<BusStop> busStopList;
     private boolean completed;

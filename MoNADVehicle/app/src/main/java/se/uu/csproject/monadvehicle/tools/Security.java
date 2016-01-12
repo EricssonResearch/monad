@@ -2,9 +2,6 @@ package se.uu.csproject.monadvehicle.tools;
 
 import java.security.MessageDigest;
 
-/**
- *
- */
 public class Security {
 
     public static String encryptPassword(String password) {

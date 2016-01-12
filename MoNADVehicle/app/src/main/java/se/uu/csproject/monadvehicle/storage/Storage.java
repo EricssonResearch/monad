@@ -39,17 +39,19 @@ public class Storage {
 
     public static void toNextBusStop(){
         nextBusStopIndex++;
-        if(nextBusStopIndex < busTrip.getBusStops().size()) {
+
+        if (nextBusStopIndex < busTrip.getBusStops().size()) {
             nextBusStop = busTrip.getBusStops().get(nextBusStopIndex);
         }
     }
 
     public static long getDurationToNextBusStop(){
-        if(nextBusStopIndex > 0){
+
+        if (nextBusStopIndex > 0) {
             return nextBusStop.getArrivalTime().getTime()
                     - busTrip.getBusStops().get(nextBusStopIndex-1).getArrivalTime().getTime();
         }
-        else{
+        else {
             return nextBusStop.getArrivalTime().getTime()
                     - Calendar.getInstance().getTimeInMillis();
         }

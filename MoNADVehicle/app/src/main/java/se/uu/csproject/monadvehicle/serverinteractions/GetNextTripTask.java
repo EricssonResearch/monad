@@ -4,9 +4,6 @@ import android.os.AsyncTask;
 
 import se.uu.csproject.monadvehicle.interfaces.AsyncGetNextTripInteraction;
 
-/**
- *
- */
 public class GetNextTripTask extends AsyncTask<Void, Void, String> {
     private AsyncGetNextTripInteraction callingClass;
 
