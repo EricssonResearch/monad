@@ -1,8 +1,22 @@
+/*
+Copyright 2015 Ericsson AB
+
+Licensed under the Apache License, Version 2.0 (the 'License'); you may not use
+this file except in compliance with the License. You may obtain a copy of the
+License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software distributed
+under the License is distributed on an 'AS IS' BASIS, WITHOUT WARRANTIES OR
+CONDITIONS OF ANY KIND, either express or implied. See the License for the
+specific language governing permissions and limitations under the License.
+*/
+
 DROP DATABASE IF EXISTS vehicles;
 CREATE DATABASE vehicles;
 USE vehicles;
 
--- DROP TABLE IF EXISTS vehicle_profile;
 CREATE TABLE vehicle_profile (
     vehicle_id INT NOT NULL AUTO_INCREMENT,
     driver_id VARCHAR(255),
@@ -13,7 +27,6 @@ CREATE TABLE vehicle_profile (
 );
 
 DELIMITER $$
--- DROP FUNCTION IF EXISTS vehicle_sign_up;
 CREATE FUNCTION vehicle_sign_up (
     in_driver_id VARCHAR(255),
     in_pass CHAR(40),
@@ -41,7 +54,6 @@ BEGIN
     END IF;
 END $$
 
--- DROP FUNCTION IF EXISTS vehicle_sign_in;
 CREATE FUNCTION vehicle_sign_in (
     in_driver_id VARCHAR(255),
     in_pass CHAR(40),
@@ -72,7 +84,6 @@ BEGIN
     END IF;
 END $$
 
--- DROP FUNCTION IF EXISTS get_google_registration_token;
 CREATE FUNCTION get_google_registration_token (
     in_vehicle_id INT
 )
@@ -101,7 +112,6 @@ BEGIN
     END IF;
 END $$
 
--- DROP FUNCTION IF EXISTS set_google_registration_token;
 CREATE FUNCTION set_google_registration_token (
     in_vehicle_id INT,
     in_google_registration_token VARCHAR(255)

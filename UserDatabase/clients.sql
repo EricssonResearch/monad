@@ -1,8 +1,22 @@
+/*
+Copyright 2015 Ericsson AB
+
+Licensed under the Apache License, Version 2.0 (the 'License'); you may not use
+this file except in compliance with the License. You may obtain a copy of the
+License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software distributed
+under the License is distributed on an 'AS IS' BASIS, WITHOUT WARRANTIES OR
+CONDITIONS OF ANY KIND, either express or implied. See the License for the
+specific language governing permissions and limitations under the License.
+*/
+
 DROP DATABASE IF EXISTS clients;
 CREATE DATABASE clients;
 USE clients;
 
--- DROP TABLE IF EXISTS client_profile;
 CREATE TABLE client_profile (
     id INT NOT NULL AUTO_INCREMENT,
     username VARCHAR(255),
@@ -20,7 +34,6 @@ CREATE TABLE client_profile (
 );
 
 DELIMITER $$
--- DROP FUNCTION IF EXISTS client_sign_up;
 CREATE FUNCTION client_sign_up (
     in_username VARCHAR(255),
     in_pass CHAR(40),
@@ -73,7 +86,6 @@ BEGIN
     END IF;
 END $$
 
--- DROP FUNCTION IF EXISTS client_sign_in;
 CREATE FUNCTION client_sign_in (
     in_username VARCHAR(255),
     in_pass CHAR(40),
@@ -124,7 +136,6 @@ BEGIN
     END IF;
 END $$
 
--- DROP FUNCTION IF EXISTS google_sign_in;
 CREATE FUNCTION google_sign_in (
     in_email VARCHAR(255)
 )
@@ -186,7 +197,6 @@ BEGIN
     END IF;
 END $$
 
--- DROP FUNCTION IF EXISTS google_sign_up;
 CREATE FUNCTION google_sign_up (
     in_email VARCHAR(255)
 )
@@ -212,7 +222,6 @@ BEGIN
     END IF;
 END $$
 
--- DROP FUNCTION IF EXISTS client_profile_update;
 CREATE FUNCTION client_profile_update (
     in_id INT,
     in_username VARCHAR(255),
@@ -266,7 +275,6 @@ BEGIN
     END IF;
 END $$
 
--- DROP FUNCTION IF EXISTS client_settings_update;
 CREATE FUNCTION client_settings_update (
     in_id INT,
     in_language VARCHAR(2),
@@ -302,7 +310,6 @@ BEGIN
     END IF;
 END $$
 
--- DROP FUNCTION IF EXISTS client_existing_password_update;
 CREATE FUNCTION client_existing_password_update (
     in_id INT,
     in_old_pass CHAR(40),
@@ -331,7 +338,6 @@ BEGIN
     END IF;
 END $$
 
--- DROP FUNCTION IF EXISTS client_forgotten_password_reset;
 CREATE FUNCTION client_forgotten_password_reset (
     in_email VARCHAR(255),
     in_new_pass CHAR(40)
@@ -359,7 +365,6 @@ BEGIN
     END IF;
 END $$
 
--- DROP FUNCTION IF EXISTS get_google_registration_token;
 CREATE FUNCTION get_google_registration_token (
     in_id INT
 )
