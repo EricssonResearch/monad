@@ -185,7 +185,9 @@ public class Storage{
     }
 
     public static void removeNotification(int i) {
-        new RemoveNotificationTask(i).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, notifications.get(i).getID());
+        new RemoveNotificationTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, notifications.get(i).getID());
+//        new RemoveNotificationTask().execute(notifications.get(i).getID());
+        notifications.remove(i);
     }
 
     public static void printNotifications() {
