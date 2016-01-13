@@ -3,16 +3,12 @@ package se.uu.csproject.monadvehicle.googlecloudmessaging;
 
 import android.app.IntentService;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 import android.util.Log;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.google.android.gms.iid.InstanceID;
-import com.google.android.gms.iid.InstanceIDListenerService;
 
 import se.uu.csproject.monadvehicle.R;
-import java.io.IOException;
 
 
 

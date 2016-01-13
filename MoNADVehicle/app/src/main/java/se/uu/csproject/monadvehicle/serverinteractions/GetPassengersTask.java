@@ -13,8 +13,7 @@ public class GetPassengersTask extends AsyncTask<String, Void, String> {
 
     @Override
     protected String doInBackground(String... params) {
-        String response = VehicleAdministration.postGetPassengersRequest(params[0], params[1], params[2]);
-        return response;
+        return VehicleAdministration.postGetPassengersRequest(params[0], params[1], params[2]);
     }
 
     @Override

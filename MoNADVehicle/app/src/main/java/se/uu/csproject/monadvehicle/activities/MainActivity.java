@@ -81,10 +81,6 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
     private static final String MAPFILE = "uppsala.map";
     // MapView provided by mapsforge instead of native MapView in Android
     private MapView mapView;
-    // cache to store tiles
-    private TileCache tileCache;
-    // this layer displays tiles from local map file
-    private TileRendererLayer tileRendererLayer;
     // this layer shows the current location of the bus
     private MyLocationOverlay myLocationOverlay;
 
@@ -176,7 +172,7 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
                 new BoundingBox(59.7541, 17.392, 59.9086, 17.9039)
         );
         // create a tile cache of suitable size
-        this.tileCache = AndroidUtil.createTileCache(this, "mapcache",
+        TileCache tileCache = AndroidUtil.createTileCache(this, "mapcache",
                 mapView.getModel().displayModel.getTileSize(), 1f,
                 this.mapView.getModel().frameBufferModel.getOverdrawFactor());
 
@@ -195,9 +191,9 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
         // registering the location listener
         myLocationOverlay.registerListener(this);
 
-        // tile renderer layer using internal render theme
         MapDataStore mapDataStore = new MapFile(getMapFile());
-        this.tileRendererLayer = new TileRendererLayer(tileCache, mapDataStore,
+        // tile renderer layer using internal render theme
+        TileRendererLayer tileRendererLayer = new TileRendererLayer(tileCache, mapDataStore,
                 this.mapView.getModel().mapViewPosition, false, true, AndroidGraphicFactory.INSTANCE);
         tileRendererLayer.setXmlRenderTheme(InternalRenderTheme.OSMARENDER);
 

@@ -42,7 +42,6 @@ NUMBER_OF_RECOMMENDATIONS = 5
 client2 = MongoClient('130.238.15.114')
 db2 = client2.monad1
 client3 = MongoClient('130.238.15.114')
-client3 = MongoClient()
 db3 = client3.monad1
 start = datetime.datetime.now()
 dontGoBehind = 0
@@ -318,15 +317,15 @@ if __name__ == "__main__":
     user_ids_rdd = (initial_rdd.map(lambda (x,y): (x,1))
                             .reduceByKey(lambda a, b: a + b)
                             .collect())
-
+    '''
     for user in user_ids_rdd:
         user_ids.append(user[0])
-
-    empty_past_recommendations()
     '''
+    empty_past_recommendations()
+
     user_ids = []
     user_ids.append(1)
-    '''
+
     for userId in user_ids:
         userId = 1
         recommendations = []

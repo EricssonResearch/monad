@@ -16,7 +16,6 @@ import se.uu.csproject.monadvehicle.storage.TrafficInformation;
 import se.uu.csproject.monadvehicle.storage.BusStop;
 import se.uu.csproject.monadvehicle.storage.BusTrip;
 import se.uu.csproject.monadvehicle.storage.Storage;
-import se.uu.csproject.monadvehicle.tools.Security;
 
 public class VehicleAdministration extends Administration {
     public static String[] profile = new String[5];
@@ -275,7 +274,6 @@ public class VehicleAdministration extends Administration {
                     trajectoryPoints.add(coordinate);
                     coordinate = "";
                 }
-                else {}
             }
             BusTrip busTrip = Storage.getBusTrip();
             ArrayList<LatLong> trajectory = new ArrayList<>();
