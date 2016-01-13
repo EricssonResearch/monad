@@ -19,7 +19,6 @@ import re
 
 from router import Map
 
-# the_map = Map("testmap.xml")
 the_map = Map("../UppsalaTest.osm")
 
 
@@ -34,12 +33,7 @@ def stop():
 
 def message_handler(message):
     if isinstance(message, tuple):
-        message_length = len(message)
-        if message[0] == Atom('get_nearest_stop') and message_length == 3:
-            address = message[1]
-            pid = message[2]
-            perform(get_nearest_stop, address, pid)
-        elif message[0] == Atom('get_nearest_stops_from_coordinates'):
+        if message[0] == Atom('get_nearest_stops_from_coordinates'):
             lon = message[1]
             lat = message[2]
             dist = message[3]
@@ -57,7 +51,6 @@ def message_handler(message):
         elif message[0] == Atom('get_coordinates_from_string'):
             string = message[1]
             pid = message[2]
-            # get_coordinates_from_string(string, pid)
             perform(get_coordinates_from_string, string, pid)
         else:
             print message[0]
@@ -69,21 +62,8 @@ def perform(fun, *args):
     try:
         fun(*args)
     except Exception as e:
-        respons = Atom('error'), e.message
-        cast(args[-1], respons)
-
-
-def get_nearest_stop(address, pid):
-    # Initially address is in binary list format thus, needs processing
-    address_str = ''.join(chr(i) for i in address)
-    busStop = {}
-    busStop['_id'] = "1234"
-    busStop['name'] = "foo"
-    busStop['latitude'] = 100.00
-    busStop['longitude'] = 200.00
-    busStop['address'] = address_str
-    response = Atom("ok"), dumps(busStop)
-    cast(pid, response)
+        response = Atom('error'), e.message
+        cast(args[-1], response)
 
 
 def get_nearest_stops_from_coordinates(lon, lat, distance, pid):
@@ -98,8 +78,6 @@ def get_nearest_stops_from_coordinates(lon, lat, distance, pid):
     busStop = {}
     busStop['_id'] = "1234"
     busStop['bus_stops'] = str(bus_stop_list)
-    #busStop['longitude'] = "lon" #"bus_stop.longitude
-    #busStop['latitude'] = "lat " #bus_stop.latitude
     response = Atom("ok"), dumps(busStop)
     cast(pid, response)
 

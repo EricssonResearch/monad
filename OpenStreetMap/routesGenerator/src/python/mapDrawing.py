@@ -54,6 +54,10 @@ class DrawImage:
             pointY = y - (coordinate.lat2y(n.latitude) - y1) * self.imgScaling
             self.draw.point((pointX, pointY), colour)
 
+            #pointCX = (stop.longitude - self.minlon) * self.imgScaling
+            #pointCY = y - ((coordinate.lat2y(stop.latitude) - y1) * self.imgScaling)
+            self.draw.text((pointX, pointY), str(id).encode('utf-8'), fill=(0,0,0,255))
+
     def drawNodeList(self, nodes, colour):
         y1 = coordinate.lat2y(self.minlat)
         y2 = coordinate.lat2y(self.maxlat)
@@ -77,25 +81,28 @@ class DrawImage:
             self.draw.point((pointX, pointY), colour)
     """
 
-    def drawRoads(self, edges, nodes):
+    def drawRoads(self, edges):
         y1 = coordinate.lat2y(self.minlat)
         y2 = coordinate.lat2y(self.maxlat)
         y = (y2 - y1) * self.imgScaling
 
-        for id, n in edges.items():
-            a = nodes[id].coordinates
+        for fromCoord, n in edges.items():
+            #a = nodes[fromCoord].coordinates
 
-            for k, z, i, _ in n:
-                b = nodes[k].coordinates
+            for toCoord, z, i, _ in n:
+                #b = nodes[toCoord].coordinates
 
                 colr = 255 - min(int(255 * (float(z) / 120)), 255)
                 if int(z) < 31:
                     colr = 220
-                self.drawLine(y, y1, a[0], a[1], b[0], b[1], self.imgScaling,
+                self.drawLine(y, y1,
+                              fromCoord[0], fromCoord[1],
+                              toCoord[0], toCoord[1],
+                              self.imgScaling,
                               (colr, colr, colr, 255))
                 # self.drawPoint(y, y1, a[0], a[1], self.imgScaling, 'blue')
 
-    def drawBusStops(self, busStops, nodes):
+    def drawBusStops(self, busStops):
         y1 = coordinate.lat2y(self.minlat)
         y2 = coordinate.lat2y(self.maxlat)
         y = (y2 - y1) * self.imgScaling
@@ -114,14 +121,14 @@ class DrawImage:
             pointCY = y - ((coordinate.lat2y(stop.latitude) - y1) * self.imgScaling)
             self.draw.text((pointCX, pointCY), stop.name.encode('utf-8'), fill=(0,0,0,255))
 
-    def drawPath(self, path, nodes, colour):
+    def drawPath(self, path, colour):
         y1 = coordinate.lat2y(self.minlat)
         y2 = coordinate.lat2y(self.maxlat)
         y = (y2 - y1) * self.imgScaling
 
         fromNode = 0
         for pid in path:
-            toNode = nodes[pid].coordinates
+            toNode = pid
             if fromNode == 0:
                 fromNode = toNode
             else:

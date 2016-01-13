@@ -13,107 +13,126 @@ under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
 CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 """
+
 from heapq import heappush, heappop
-import time
+import numpy as np
+
 import coordinate
+import aStar
 
 
 class BusNetwork:
 
     def __init__(self):
+        self.graph = {}
+        self.busStopDict = []
         pass
 
-    def busStar(self, nodes, edges, start, goal):
-        pass
 
-    def makeBusGraph(self, nodes, busStopNode, edges):
+    def makeBusStopDict(self, busStops):
+        """
+        Makes a bus stop dictionary from a list of bus stops. The key is the
+        coordinates to the bus stop. The values is the bus stop.
 
-        graph = {}
+        :param busStops: the list of bus stops, [<busstop>]
+        :return: dictonary,
+        """
+        dict = {}
 
-        i = 0
-        l = len(busStopNode)
-        timer = time.time()
-        for idA, busStopA in busStopNode.items():
-            #if busStopA.name not in [u'Akademiska ingång 10', u'Akademiska ingång 30-50']:
-            #    continue
+        for busstop in busStops:
+            dict[busstop.coordinates] = busstop
 
-            if busStopA.name not in graph:
-                graph[busStopA.name] = {}
+        return dict
 
-            i += 1
-            print "\n%f s\n (%d / %d) - %s" % (time.time() - timer, i, l, busStopA.name)
-            timer = time.time()
-            for idB, busStopB in busStopNode.items():
+    def addEdges(self, path, cost):
+        """
+        Added edges to the bus stop graph. Uses the self.graph.
 
-                if busStopB.name not in graph[busStopA.name] and busStopA != busStopB:
+        :param path: A path of coordinates.
+        """
 
-                    print '\033[91m' + '.' + '\033[0m',
+        for idxA, from_stop_coord_A in enumerate(path):
 
-                    path, cost = self.findPath(nodes, edges, graph, idA, idB, busStopNode)
+            if from_stop_coord_A in self.busStopDict:
+                from_bus = self.busStopDict[from_stop_coord_A]
 
-                    start = busStopA.name
-                    startID = idA
-                    _cameFrom = []
-                    for node in path[1:]:
-                        id = node
+                if from_bus not in self.graph:
+                    self.graph[from_bus] = {}
 
-                        if id in busStopNode:
-                            b = busStopNode[id].name
+                next_stop = True
+                pass_through = None
 
-                            if start not in graph:
-                                graph[start] = {}
+                for idxB in range(idxA+1, len(path)):
 
-                            graph[start][b] = (cost[id] - cost[startID], True)
+                    if path[idxB] not in self.busStopDict:
+                        continue
 
-                            if b not in graph[busStopA.name]:
-                                graph[busStopA.name][b] = (cost[id] - cost[idA], False)
-                                if busStopA.name in [u'Akademiska ingång 10']:
-                                    print "!",
-                                pass
-                            if busStopB.name not in graph[start]:
-                                graph[start][busStopB.name] = (cost[id] - cost[idA], False)
-                                if start in [u'Akademiska ingång 10']:
-                                    print "!",
-                                pass
+                    to_bus = self.busStopDict[path[idxB]]
 
-                            for Cid in _cameFrom:
-                                if b not in graph[busStopNode[Cid].name]:
-                                    graph[busStopNode[Cid].name][b] = (cost[id] - cost[Cid], False)
-                                    if busStopNode[Cid].name in [u'Akademiska ingång 10']:
-                                        print "!",
-                                    pass
+                    if to_bus not in self.graph[from_bus]:
 
-                            _cameFrom.append(startID)
-                            start = b
-                            startID = id
+                        if next_stop:
+                            _tuple = (True, path[idxA:(idxB+1)],
+                                      cost[idxA:(idxB+1)] - cost[idxA])
 
-        for nodeA in graph:
-            for nodeB in graph[nodeA]:
-                if graph[nodeA][nodeB][1]:
-                    print nodeA, "->", nodeB, " : ", graph[nodeA][nodeB]
+                            self.graph[from_bus][to_bus] = _tuple
 
-        return graph
+                        else:
+                            _tuple = (False, pass_through, None)
+                            self.graph[from_bus][to_bus] = _tuple
 
+                        if next_stop:
+                            next_stop = False
+                            pass_through = [to_bus]
 
-    def findPath(self, nodes, edges, graph, start, goal, busStops):
+    def edgeInGraph(self, frm, to):
+        """
+
+        :param frm:
+        :param to:
+        :return:
+        """
+        val = False
+        if frm in self.graph:
+            if to in self.graph[frm]:
+                val = True
+
+        return val
+
+    def makeBusGraph(self, busStops, edges):
+        """
+        Creates the bus network as a graph.
+        """
+
+        self.busStopDict = self.makeBusStopDict(busStops)
+
+        for busStopA in busStops:
+
+            for busStopB in busStops:
+
+                if not self.edgeInGraph(busStopA, busStopB) and busStopA != busStopB:
+
+                    path, cost = self.findPath(edges, busStopA, busStopB)
+                    self.addEdges(path, cost)
+
+        return self.graph
+
+    def findPath(self, edges, startBusStop, goalBusStop):
         """
 
         """
+        start = startBusStop.coordinates
+        goal = goalBusStop.coordinates
 
         standardSpeed = 50
         openSet = []
         heappush(openSet, (0, start))
         path = {}
         cost = {}
+        # A value that a real path does not have.
+        cost[goal] = np.asarray([float('Inf'), float('Inf')])
         path[start] = 0
-        cost[start] = 0
-
-        if start == goal:
-            cost[goal] = 0
-            return self.reconstruct_path(path, start, goal), cost
-
-        # A high value that a real path should not have.
-        cost[goal] = 300000
+        cost[start] = np.asarray([0, 0])
 
         # As long as there are paths to be explored
         while not (len(openSet) == 0):
@@ -123,52 +142,93 @@ class BusNetwork:
             if current == goal:
                 break
 
+            if current in self.busStopDict and self.busStopDict[current] in self.graph:
+                if self.busStopDict[goal] in self.graph[self.busStopDict[current]]:
 
-            if current in busStops and busStops[current].name in graph:
-                if busStops[goal].name in graph[busStops[current].name]:
-                    c, _ = graph[busStops[current].name][busStops[goal].name]
-                    # TODO
-                    #cost[goal] = cost[current] + c
-                    #path[goal] = current
-                    goal = current
-                    break
+                    openSet = []
+
+                    if not self.graph[self.busStopDict[current]][self.busStopDict[goal]][0]:
+
+                        sub_station = self.graph[self.busStopDict[current]][goalBusStop]
+                        sub_station = sub_station[1]
+
+                        sub_path = self.graph[self.busStopDict[current]][sub_station[0]]
+                        sub_path = sub_path[1]
+                    else:
+                        sub_path = self.graph[self.busStopDict[current]][self.busStopDict[goal]][1]
+
+                    previous_node = sub_path[0]
+                    for node in sub_path:
+
+                        if node not in path:
+                            path[node] = previous_node
+
+                            newCost = cost[previous_node] + [1, 1]
+                            cost[node] = newCost
+
+                        previous_node = node
+
+                    heappush(openSet, (0, previous_node))
+                    continue
 
             # For all nodes connected to the one we are looking at for the
             # moment.
-            for nextNode, speed, roadInt, _ in edges[current]:
+            for nextCoord, speed, roadInt, _ in edges[current]:
                 # How fast you can go on a road matters on the type of the road
                 # It can be seen as a penalty for "smaller" roads.
                 speedDecrease = (1 - (float(roadInt) / 50))
-                fromCoordinate = nodes[current]
-                toCoordinate = nodes[nextNode]
 
-                roadLength = coordinate.measure(fromCoordinate, toCoordinate)
+                roadLength = coordinate.measure(current, nextCoord)
 
                 timeOnRoad = (roadLength /
                               (speedDecrease * (float(speed) * 1000 / 3600)))
 
-                newCost = cost[current] + timeOnRoad
+                newCost = cost[current] + [timeOnRoad, roadLength]
 
-                if nextNode not in cost or newCost < cost[nextNode]:
-                    cost[nextNode] = newCost
+                if nextCoord not in cost or newCost[0] < cost[nextCoord][0]:
+                    cost[nextCoord] = newCost
 
-                    weight = (newCost + (roadInt ** 1) +
-                              (self.heuristic(nodes[nextNode], nodes[goal])*2 /
+                    weight = (newCost[0] + (roadInt ** 2) +
+                              (self.heuristic(nextCoord, goal)*2 /
                                (float(standardSpeed) * 1000 / 3600)))
 
-                    heappush(openSet, (weight, nextNode))
-                    path[nextNode] = current
+                    heappush(openSet, (weight, nextCoord))
+                    path[nextCoord] = current
 
-        return self.reconstruct_path(path, start, goal), cost
+        _path = aStar.reconstruct_path(path, start, goal)
+
+        _keys = []
+        for k in cost:
+            if k not in _path:
+                _keys.append(k)
+        for k in _keys:
+            cost.pop(k)
+
+        return _path, self.reconstruct_cost(_path, cost)
 
     def heuristic(self, node, goal):
         return coordinate.measure(node, goal)
 
-    def reconstruct_path(self, came_from, start, goal):
-        current = goal
-        path = [current]
-        while current != start:
-            current = came_from[current]
-            path.append(current)
-        path.reverse()
-        return path
+    def reconstruct_cost(self, path, cost):
+
+        _cost = []
+
+        for coord in path:
+            _cost.append(cost[coord])
+
+        return np.asarray(_cost)
+
+
+def graphData(path, cost, a, b, direct):
+
+    if direct:
+        pass
+    subpath = path[path.index(a):path.index(b) + 1]
+    subcost = {}
+
+    startCost = cost[subpath[0]]
+    for nd in subpath:
+        subcost[nd] = cost[nd] - startCost
+
+    return direct, subpath, subcost
+
