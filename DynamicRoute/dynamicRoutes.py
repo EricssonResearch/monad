@@ -6,6 +6,11 @@ import datetime
 import itertools
 import numpy
 import datetime
+import sys
+import math
+sys.path.append('../OpenStreetMap')
+sys.path.append('../LookAhead')
+
 from datetime import timedelta
 from pymongo import MongoClient
 from bson.objectid import ObjectId
@@ -14,9 +19,6 @@ from dbConnection import DB
 import networkx as nx
 import matplotlib.pyplot as plt
 from bson.objectid import ObjectId
-import math
-import sys
-sys.path.append('../OpenStreetMap')
 from routeGenerator import coordinates_to_nearest_stops, get_route
 
 
