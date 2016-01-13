@@ -159,8 +159,6 @@ class DynamicRoutes():
             for j in range(0, len(i)):
                 temp = client.monad1.BusStop.find_one({"name": i[j]})
                 tempids.append(temp['_id'])
-                #print "strange number line..."
-                #1 
             routesid.append(tempids)
             tempids = []
         return routesid
@@ -174,7 +172,6 @@ class DynamicRoutes():
         @param: routes: a list of new dynamic routes in list of bus stop id
         output: new route will be written into DynamicRoute 
         '''
-        #database = DB()
         duration = 0
         line = 1
         trajectory = []
@@ -208,13 +205,17 @@ class DynamicRoutes():
                 tmpList = []
                 trajectory = []
 
-if __name__ == '__main__':
-        DR = DynamicRoutes()
-        DG = DR.creategraph()
+    def dynamicRoutesGenerator(self):
+        DG = self.creategraph()
+        #define a test date bound
         startdate = datetime.datetime(2015, 11, 11, 0, 0, 0)
         enddate = datetime.datetime(2015, 11, 12, 0, 0, 0)
-        routes = DR.generateRoutes(DG, startdate, enddate)
-        DR.storeRoutesToDB(routes)
+        routes = self.generateRoutes(DG, startdate, enddate)
+        self.storeRoutesToDB(routes)
+
+if __name__ == '__main__':
+    DR = DynamicRoutes()
+    DR.dynamicRoutesGenerator()
 
 
 
