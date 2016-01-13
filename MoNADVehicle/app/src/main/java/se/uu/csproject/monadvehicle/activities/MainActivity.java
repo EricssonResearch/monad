@@ -100,7 +100,7 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
 
     // Represents a geographical location.
     //protected Location mCurrentLocation;
-    
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -124,11 +124,12 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
 
         // Display the information about the next bus stop
         nextStopName.setText(Storage.getNextBusStop().getName());
-        nextStopBoarding.setText(Integer.toString(Storage.getNextBusStop().getBoardingPassengers()));
-        nextStopLeaving.setText(Integer.toString(Storage.getNextBusStop().getLeavingPassengers()));
-        nextStopDistance.setText("unknown");
-        nextStopRemainingTime.setText( formatTime(new Date (Storage.getDurationToNextBusStop())));
-        nextStopArrivalTime.setText( formatTime(Storage.getNextBusStop().getArrivalTime()) );
+        nextStopBoarding.setText(String.format("%d", Storage.getNextBusStop().getBoardingPassengers()));
+        nextStopLeaving.setText(String.format("%d", Storage.getNextBusStop().getLeavingPassengers()));
+        nextStopDistance.setText(R.string.label_main_distanceunknown);
+        nextStopRemainingTime.setText(String.format(getString(R.string.label_main_duration_unit),
+                formatTime(new Date(Storage.getDurationToNextBusStop()), "minutes")));
+        nextStopArrivalTime.setText( formatTime(Storage.getNextBusStop().getArrivalTime(), "default") );
 
         /* TODO: Use these logs to check if the time is still one hour in advance
         Log.w("MAIN ACTIVITY", "Original date value is: " + Storage.getNextBusStop().getArrivalTime().getTime());
@@ -138,20 +139,20 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
         //Fill the notifications list
         LayoutInflater inflater = (LayoutInflater) getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         for (int j = 0; j < notifications.getNotificationsList().size(); j++) {
-            View notificationView = inflater.inflate(R.layout.list_item_notification, null);
+            View notificationView = inflater.inflate(R.layout.list_item_notification, notificationsList, false);
             TextView incomingTime = (TextView) notificationView.findViewById(R.id.text_incomingtime);
             TextView message = (TextView) notificationView.findViewById(R.id.text_message);
-            incomingTime.setText(formatTime(notifications.getNotificationsList().get(j).getIncomingTime()));
+            incomingTime.setText(formatTime(notifications.getNotificationsList().get(j).getIncomingTime(), "default"));
             message.setText(notifications.getNotificationsList().get(j).getMessage());
             notificationsList.addView(notificationView);
         }
 
         //Fill the bus stop list
         for (int j = 0; j < Storage.getBusTrip().getBusStops().size(); j++) {
-            View busStopView = inflater.inflate(R.layout.list_item_busstop, null);
+            View busStopView = inflater.inflate(R.layout.list_item_busstop, busStopsList, false);
             TextView busStopTime = (TextView) busStopView.findViewById(R.id.text_busstoptime);
             TextView busStopName = (TextView) busStopView.findViewById(R.id.text_busstopname);
-            busStopTime.setText(formatTime(Storage.getBusTrip().getBusStops().get(j).getArrivalTime()));
+            busStopTime.setText(formatTime(Storage.getBusTrip().getBusStops().get(j).getArrivalTime(), "default"));
             busStopName.setText(Storage.getBusTrip().getBusStops().get(j).getName());
             busStopsList.addView(busStopView);
         }
@@ -294,7 +295,7 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
         otherCheckBox = (CheckBox) findViewById(R.id.other_possiblity);
         otherCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
-                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
                     emergencyDescription.setEnabled(true);
                 }
@@ -481,9 +482,18 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
         LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, myLocationOverlay);
     }
 
-    private String formatTime(Date arrival) {
+    private String formatTime(Date arrival, String format) {
         final String TIME_FORMAT = "HH:mm";
-        SimpleDateFormat timeFormat = new SimpleDateFormat(TIME_FORMAT);
+        final String TIME_FORMAT_MINUTES = "mm";
+        SimpleDateFormat timeFormat;
+
+        if(format.equals("minutes")){
+            timeFormat = new SimpleDateFormat(TIME_FORMAT_MINUTES);
+        }
+        else{
+            timeFormat = new SimpleDateFormat(TIME_FORMAT);
+        }
+
         return timeFormat.format(arrival);
     }
 
@@ -505,8 +515,10 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
     }
 
     public void onLocationChange(Location location){
-        nextStopDistance.setText(Integer.toString(calculateDistance()));
-        nextStopRemainingTime.setText( formatTime(new Date (Storage.getDurationToNextBusStop())));
+        nextStopDistance.setText(String.format(getString(R.string.label_main_distance_unit),
+                calculateDistance()));
+        nextStopRemainingTime.setText( String.format(getString(R.string.label_main_duration_unit),
+                formatTime(new Date(Storage.getDurationToNextBusStop()), "minutes")));
         //TODO: determine the ideal distance to display next stop info
         if(calculateDistance() < 30){
             //takes to the next bus stop entry
@@ -517,11 +529,13 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
 
     public void updateRouteInfo(){
         nextStopName.setText(Storage.getNextBusStop().getName());
-        nextStopBoarding.setText(Integer.toString(Storage.getNextBusStop().getBoardingPassengers()));
-        nextStopLeaving.setText(Integer.toString(Storage.getNextBusStop().getLeavingPassengers()));
-        nextStopDistance.setText(Double.toString(calculateDistance()));
-        nextStopRemainingTime.setText( formatTime(new Date (Storage.getDurationToNextBusStop())));
-        nextStopArrivalTime.setText(formatTime(Storage.getNextBusStop().getArrivalTime()));
+        nextStopBoarding.setText(String.format("%d", Storage.getNextBusStop().getBoardingPassengers()));
+        nextStopLeaving.setText(String.format("%d", Storage.getNextBusStop().getLeavingPassengers()));
+        nextStopDistance.setText(String.format(getString(R.string.label_main_distance_unit),
+                calculateDistance()));
+        nextStopRemainingTime.setText( String.format(getString(R.string.label_main_duration_unit),
+                formatTime(new Date(Storage.getDurationToNextBusStop()), "minutes")));
+        nextStopArrivalTime.setText(formatTime(Storage.getNextBusStop().getArrivalTime(), "default"));
     }
 
     //gets the current location of the bus and the next bus stop
@@ -537,7 +551,7 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
     //arrival time and calculates the remaining time between
     //current location time and next bus stop and sets it to the text box.
     /*TODO: fix the function
-    * compare this arrival time with prvious stop arrival time
+    * compare this arrival time with previous stop arrival time
     * then use the duration with the current time to determine lateness*/
 //    public String calculateTimeDifference() {
 //        Calendar cal = Calendar.getInstance();

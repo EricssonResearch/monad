@@ -3,7 +3,6 @@
     <string name="title_activity_login">MoNAD - The Driver\'s Best Friend</string>
     <string name="title_activity_main">MainActivity</string>
 
-    <string name="hello_world">Hello world!</string>
     <string name="label_emergency">S.O.S</string>
     <string name="img_description">missing icon</string>
     <string name="non_available">n/a</string>
@@ -23,8 +22,11 @@
     <string name="label_main_leavingnumber">00</string>
     <string name="label_main_distance">Distance</string>
     <string name="label_main_distance_value">000 m</string>
+    <string name="label_main_distance_unit">%d m</string>
+    <string name="label_main_distanceunknown">unknown</string>
     <string name="label_main_arrivaltime">Arrival Time</string>
     <string name="label_main_arrivaltime_duration">(0 min)</string>
+    <string name="label_main_duration_unit">(%s min)</string>
     <string name="label_main_arrivaltime_value">00:00</string>
 
     <!--Main - Emergency Layout-->
@@ -35,8 +37,9 @@
     <string name="label_emergency_driverhealth">Driver Health</string>
     <string name="label_emergency_other">Other (Please specify)</string>
     <string name="label_emergency_description">Description:</string>
-    <string name="label_emergency_description_hint">Please enter the necessary information for your request...</string>
+    <string name="label_emergency_description_hint">Please enter the necessary information for your request…</string>
     <string name="label_emergency_submit">Submit</string>
 
     <string name="action_settings">Settings</string>
+
 </resources>

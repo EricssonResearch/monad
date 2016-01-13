@@ -78,7 +78,10 @@ public class BusStop {
     }
 
     public Date getArrivalTime() {
-        return arrivalTime;
+        //TODO: Replace with the commented code once the server time is set to the local clock
+        //return arrivalTime;
+        final long SYSTEM_SERVER_TIME_DIFFERENCE_MILLISECONDS = 3600000;
+        return new Date(arrivalTime.getTime() - SYSTEM_SERVER_TIME_DIFFERENCE_MILLISECONDS);
     }
 
     public void setArrivalTime(Date arrivalTime) {
