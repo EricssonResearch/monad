@@ -35,7 +35,7 @@ class Weather(object):
     address = "Kungsgatan"
     # Special weather conditions
     # conditions = ["clear-day", "clear-night", "rain", "snow", "sleet", "wind", "fog", "cloudy", "partly-cloudy-day", "partly-cloudy-night"]
-    conditions = ["rain", "snow", "fog", "cloudy", "clear-night"]
+    conditions = ["rain", "snow"]
 
     def __init__(self):
         # super(Weather, self).__init__()
@@ -200,15 +200,15 @@ class Weather(object):
 
     def calculateFrequency(self, count):
         minutes = 60
-        factor = 2
-        minFreq = 10
+        factor = 0.5
+        # minFreq = 10
         # Calculate frequency: divided 60 by count
         frequency = int(round(minutes/count))
         # Change buses frequency: >freq <buses | <freq >buses
-        frequency = frequency - factor
+        frequency = frequency * factor
         # if frequency <= 0:
-        if frequency <= minFreq:
-            frequency = minFreq
+        # if frequency <= minFreq:
+        # frequency = minFreq
         return frequency
 
 if __name__ == '__main__':
