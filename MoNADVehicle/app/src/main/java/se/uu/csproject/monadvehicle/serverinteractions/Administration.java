@@ -40,7 +40,7 @@ public abstract class Administration {
                 return "-1";
             }
             BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-            String line = "";
+            String line;
 
             while ((line = br.readLine()) != null) {
                 response = response + "\n" + line;

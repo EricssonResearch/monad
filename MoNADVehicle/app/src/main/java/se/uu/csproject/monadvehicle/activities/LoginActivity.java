@@ -32,8 +32,6 @@ public class LoginActivity extends AppCompatActivity implements AsyncLoginIntera
     private EditText usernameField;
     private EditText passwordField;
     private EditText busNumberField;
-    private Button loginButton;
-    //ToggleButton emergencyButton;
 
     /* Google Cloud Services */
     private static final String TAG = "MainActivity";
@@ -48,8 +46,7 @@ public class LoginActivity extends AppCompatActivity implements AsyncLoginIntera
         usernameField = (EditText) findViewById(R.id.usernameField);
         passwordField = (EditText) findViewById(R.id.passwordField);
         busNumberField = (EditText) findViewById(R.id.busNumberField);
-        loginButton = (Button) findViewById(R.id.loginButton);
-        //emergencyButton = (ToggleButton) findViewById(R.id.emergencyButton);
+        Button loginButton = (Button) findViewById(R.id.loginButton);
 
         if (checkPlayServices()) {
             Intent intent = new Intent(this,RegistrationIntentService.class);
@@ -65,18 +62,6 @@ public class LoginActivity extends AppCompatActivity implements AsyncLoginIntera
 
         /* Hides the keyboard on display */
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-
-        /*
-        emergencyButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    // The toggle is enabled
-                } else {
-                    // The toggle is disabled
-                }
-            }
-        });
-        */
     }
 
     @Override
@@ -93,7 +78,6 @@ public class LoginActivity extends AppCompatActivity implements AsyncLoginIntera
          * automatically handle clicks on the Home/Up button, so long
          * as you specify a parent activity in AndroidManifest.xml.
          */
-        int id = item.getItemId();
         return super.onOptionsItemSelected(item);
     }
 
