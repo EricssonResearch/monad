@@ -87,10 +87,11 @@ class BusNetwork:
 
     def edgeInGraph(self, frm, to):
         """
+        Checks if an edge is in self.graph.
 
-        :param frm:
-        :param to:
-        :return:
+        :param frm: Coordinate
+        :param to: Coordinate
+        :return: True | False
         """
         val = False
         if frm in self.graph:
@@ -119,7 +120,8 @@ class BusNetwork:
 
     def findPath(self, edges, startBusStop, goalBusStop):
         """
-
+        A*, with the added search in the self.graph to speed up the process
+        of creating the graph.
         """
         start = startBusStop.coordinates
         goal = goalBusStop.coordinates
@@ -210,7 +212,14 @@ class BusNetwork:
         return coordinate.measure(node, goal)
 
     def reconstruct_cost(self, path, cost):
+        """
+        Makes a list corresponding to the cost to take the steps in the list
+        path.
 
+        :param path: list of coordinates
+        :param cost: the cost dictionary from finding the path
+        :return: list of costs
+        """
         _cost = []
 
         for coord in path:
@@ -220,7 +229,9 @@ class BusNetwork:
 
 
 def graphData(path, cost, a, b, direct):
-
+    """
+    Arranges data in the right format for the graph.
+    """
     if direct:
         pass
     subpath = path[path.index(a):path.index(b) + 1]

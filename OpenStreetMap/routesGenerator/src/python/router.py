@@ -142,7 +142,6 @@ class RouteHandler(handler.ContentHandler):
             # on the house ways.
             if street != '' and housenumber != '':
                 self.addAddress(street, self.nd[0], housenumber)
-                # TODO Add a better thing then nd[0]
 
         elif name == 'node':
             # Look for nodes that are bus stops
@@ -333,7 +332,6 @@ class Map:
         """
         Translates an address into coordinates.
         """
-        # TODO Add fuzzy logic
         address = address.decode('utf-8').lower()
         if address in self.handler.addresses:
             if number is None:
@@ -346,7 +344,6 @@ class Map:
                     noCoord = self.handler.addresses[address].numbers[number]
                     return noCoord
                 else:
-                    # TODO Find closest housenumber to number
                     return self.findCoordinatesFromAdress(address)
         else:
             return None
