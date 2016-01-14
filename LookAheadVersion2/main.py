@@ -47,7 +47,7 @@ def main():
     individual = sorted(individual, key=itemgetter(0))
     #print("Best individual is %s, %s" % (individual, best_ind.fitness.values))
     timetable = fitnessClass.genTimetable(individual)
-    #databaseClass.insertBusTrip(timetable)
+    databaseClass.insertBusTrip(timetable)
 
 
 if __name__ == '__main__':

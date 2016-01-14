@@ -35,8 +35,8 @@ class Fitness():
     requestOut = []
     requestIndexOut = []
     totalRequestsBusline = {}
-    yesterdayDate = datetime.datetime(2015, 11, 12)
-    #yesterdayDate = datetime.datetime.now() - timedelta(1)
+    #yesterdayDate = datetime.datetime(2015, 11, 12)
+    yesterdayDate = datetime.datetime.now() - timedelta(1)
     yesterday = datetime.datetime(yesterdayDate.year, yesterdayDate.month, yesterdayDate.day)
 
 

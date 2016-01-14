@@ -29,7 +29,7 @@ class AStar:
 #                return nd
 #        return -1
 
-    def findPath(self, nodes, edges, start, goal):
+    def findPath(self, edges, start, goal):
         """
         Finds a path between start and goal using A*. The search is done in the
         graph self.edges.
@@ -62,10 +62,10 @@ class AStar:
                 # How fast you can go on a road matters on the type of the road
                 # It can be seen as a penalty for "smaller" roads.
                 speedDecrease = (1 - (float(roadInt) / 50))
-                fromCoordinate = nodes[current]
-                toCoordinate = nodes[nextNode]
+                #fromCoordinate = nodes[current]
+                #toCoordinate = nodes[nextNode]
 
-                roadLength = coordinate.measure(fromCoordinate, toCoordinate)
+                roadLength = coordinate.measure(current, nextNode)
 
                 timeOnRoad = (roadLength /
                               (speedDecrease * (float(speed) * 1000 / 3600)))
@@ -76,7 +76,7 @@ class AStar:
                     cost[nextNode] = newCost
 
                     weight = (newCost[0] + (roadInt ** 1) +
-                              (heuristic(nodes[nextNode], nodes[goal]) /
+                              (heuristic(nextNode, goal) /
                                (float(self.standardSpeed) * 1000 / 3600)))
 
                     heappush(openSet, (weight, nextNode))
@@ -111,8 +111,17 @@ def reconstruct_path(came_from, start, goal):
     while current != start:
         if current not in came_from:
             current = start
+            path = []
         else:
             current = came_from[current]
-        path.append(current)
+            path.append(current)
     path.reverse()
     return path
+
+
+def pathLenght(path):
+    l = 0
+    for n in range(len(path) - 2):
+        l += coordinate.measure(path[n], path[n+1])
+
+    return l

@@ -46,14 +46,17 @@ public class Storage {
     }
 
     public static long getDurationToNextBusStop(){
-
+        //TODO: Remove the variable SYSTEM_SERVER_TIME_DIFFERENCE when the server is set on the right local clock
+        final long SYSTEM_SERVER_TIME_DIFFERENCE_MILLISECONDS = 3600000;
         if (nextBusStopIndex > 0) {
             return nextBusStop.getArrivalTime().getTime()
-                    - busTrip.getBusStops().get(nextBusStopIndex-1).getArrivalTime().getTime();
+                    - busTrip.getBusStops().get(nextBusStopIndex-1).getArrivalTime().getTime()
+                    - SYSTEM_SERVER_TIME_DIFFERENCE_MILLISECONDS;
         }
         else {
             return nextBusStop.getArrivalTime().getTime()
-                    - Calendar.getInstance().getTimeInMillis();
+                    - Calendar.getInstance().getTimeInMillis()
+                    - SYSTEM_SERVER_TIME_DIFFERENCE_MILLISECONDS;
         }
     }
 
