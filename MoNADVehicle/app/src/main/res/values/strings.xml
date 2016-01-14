@@ -3,7 +3,6 @@
     <string name="title_activity_login">MoNAD - The Driver\'s Best Friend</string>
     <string name="title_activity_main">MainActivity</string>
 
-    <string name="label_emergency">S.O.S</string>
     <string name="img_description">missing icon</string>
     <string name="non_available">n/a</string>
     <string name="GoogleProjectID" translatable="false">81265551950</string>
